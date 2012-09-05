@@ -6,7 +6,6 @@ Bee framework
 
 Bee 从根本上解决了iOS开发者长期困扰的各种问题，诸如：分层架构如何设计，层与层之间消息传递与处理，网络操作及缓存，异步及多线程，以及适配产品多变的UI布局需求。
 
-
 特点
 --------------------
 
@@ -56,6 +55,16 @@ Bee 从根本上解决了iOS开发者长期困扰的各种问题，诸如：分�
        * 界面状态：界面存活，数据，状态
        * 沙盒浏览：在线查看沙箱目录中所有文件
        * 异常模拟等功能
+
+![Debugger](http://blog.whatsbug.com/wp-content/uploads/2012/08/screenshot1.png)
+![Debugger](http://blog.whatsbug.com/wp-content/uploads/2012/08/screenshot2.png)
+![Debugger](http://blog.whatsbug.com/wp-content/uploads/2012/08/screenshot3.png)
+![Debugger](http://blog.whatsbug.com/wp-content/uploads/2012/08/screenshot4.png)
+![Debugger](http://blog.whatsbug.com/wp-content/uploads/2012/08/screenshot5.png)
+![Debugger](http://blog.whatsbug.com/wp-content/uploads/2012/08/screenshot6.png)
+![Debugger](http://blog.whatsbug.com/wp-content/uploads/2012/08/screenshot7.png)
+![Debugger](http://blog.whatsbug.com/wp-content/uploads/2012/08/screenshot8.png)
+![Debugger](http://blog.whatsbug.com/wp-content/uploads/2012/08/screenshot9.png)
 
 主要模块
 --------------------
