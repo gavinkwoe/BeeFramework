@@ -47,7 +47,7 @@ Bee 从根本上解决了iOS开发者长期困扰的各种问题，诸如：分�
      基于State，重新定义了UIViewController的实现方式，统一称为UIBoard，同样的，UINavigationController统一称为UIStack。   
      开发者只需关注UIBoard状态变化时该做什么事，以及子级控件的UISignal该怎样处理。
 
-   * In-App Debugger（正在开发，即将完成，暂时不开源）
+   * In-App Debugger
      不依赖于XCode instrument，Bee自身提供了App内调试工具。  
      您可以随时观察APP运行状态，诸如：  
        * 网络请求：请求详情，成功失败率，网速限制（模拟3G、2G），开网断网
