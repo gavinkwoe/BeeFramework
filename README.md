@@ -11,12 +11,12 @@ Bee 从根本上解决了iOS开发者长期困扰的各种问题，诸如：分�
 
    * 代码注入    
      借助于OC语言特性，Bee将核心逻辑注入到NSObject基类中去，在使用Bee时，大多数情况下可以不必修改现有类继承关系，这样设计是把双刃剑，也有可能与您现有方法名冲突。
-     在您代码中任何位置都可以这样做：
-     [self GET:@"http://www.qq.com/logo.png"];
-     [self POST:@"http://api.qq.com/" data:[NSData data]];
-     [self postNotification:@"SOME_NOTIFICATION"];
-     [self sendMessage:@"SOME_MESSAGE" timeoutSeconds:10.0f];
-     [self sendUISignal:@"SOME_SIGNAL"];
+     在您代码中任何位置都可以这样做：    
+     [self GET:@"http://www.qq.com/logo.png"];    
+     [self POST:@"http://api.qq.com/" data:[NSData data]];    
+     [self postNotification:@"SOME_NOTIFICATION"];    
+     [self sendMessage:@"SOME_MESSAGE" timeoutSeconds:10.0f];    
+     [self sendUISignal:@"SOME_SIGNAL"];    
 
    * 基于MVC模型    
      典型的MVC架构，清楚的分为View、Controller、Model三个层次，业务数据、业务逻辑、界面展现、交互逻辑完全分离。
