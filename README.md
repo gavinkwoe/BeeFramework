@@ -9,7 +9,7 @@ Bee 从根本上解决了iOS开发者长期困扰的各种问题，诸如：分�
 特点
 --------------------
 
-   * 代码注入  
+   * 代码注入    
      借助于OC语言特性，Bee将核心逻辑注入到NSObject基类中去，在使用Bee时，大多数情况下可以不必修改现有类继承关系，这样设计是把双刃剑，也有可能与您现有方法名冲突。
      在您代码中任何位置都可以这样做：
      [self GET:@"http://www.qq.com/logo.png"];
@@ -18,13 +18,13 @@ Bee 从根本上解决了iOS开发者长期困扰的各种问题，诸如：分�
      [self sendMessage:@"SOME_MESSAGE" timeoutSeconds:10.0f];
      [self sendUISignal:@"SOME_SIGNAL"];
 
-   * 基于MVC模型  
+   * 基于MVC模型    
      典型的MVC架构，清楚的分为View、Controller、Model三个层次，业务数据、业务逻辑、界面展现、交互逻辑完全分离。
 
-   * 事件驱动
+   * 事件驱动    
      对于Controller、Model均与状态无关（Stateless），因此由三种Event驱动：Message、Request、Notification。对于View，我们抛弃掉了老旧的Delegate（语言级实现方式），引入新概念UISignal（框架级实现方式）用来驱动界面交互事件或状态改变。  
 
-   * UISignal  
+   * UISignal    
      UISignal拥有极强的路由能力，可以在UIView <-> UIView <-> UIViewController <-> UINavigationController <-> UIViewController 之间完成复杂且高效的的UI信号路由。
  
      那么，我们来看一个关于UISignal的实际运行的例子：  
@@ -43,15 +43,15 @@ Bee 从根本上解决了iOS开发者长期困扰的各种问题，诸如：分�
 
      神奇吗？
  
-   * 哪里发送哪里接收   
+   * 哪里发送哪里接收    
      尽可能允许您将UISignal、Message、Request、Notification相关处理逻辑内嵌到物理位置上相同的代码中，型成整体，方便维护及并行开发。  
      典型的例子是一个APP界面即收发网络请求，又处理控制器相关消息，同时又处理子控件发来的信号。不用担心，这些代码优美而秩序的展现在您面前。
 
-   * 基于状态的新UIBoard  
+   * 基于状态的新UIBoard    
      基于State，重新定义了UIViewController的实现方式，统一称为UIBoard，同样的，UINavigationController统一称为UIStack。   
      开发者只需关注UIBoard状态变化时该做什么事，以及子级控件的UISignal该怎样处理。
 
-   * 内置Debugger
+   * 内置Debugger    
      不依赖于XCode instrument，Bee自身提供了App内调试工具。  
      您可以随时观察APP运行状态，诸如：  
        * 网络请求：请求详情，成功失败率，网速限制（模拟3G、2G），开网断网
