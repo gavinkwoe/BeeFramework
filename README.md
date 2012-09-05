@@ -194,6 +194,9 @@ Bee 从根本上解决了iOS开发者长期困扰的各种问题，诸如：分�
 联系方式
 --------------------
 
+QQ: 5220509
+邮箱: gavinkwoe@gmail.com
+
 我们架构了论坛 [bbs.whatsbug.com][4]，供大家讨论专用。
 
 [1]: http://www.whatsbug.com
