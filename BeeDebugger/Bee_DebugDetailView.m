@@ -82,7 +82,7 @@
 	else
 	{
 		NSData * data = [NSData dataWithContentsOfFile:path];
-		_content.text = [NSString stringWithCString:[data bytes] length:[data length]];
+        _content.text = [NSString stringWithCString:[data bytes] encoding:NSUTF8StringEncoding];
 	}
 }
 

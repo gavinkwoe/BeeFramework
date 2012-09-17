@@ -186,7 +186,7 @@
 	
 	for ( ;; )
 	{
-		NSObject * key = [dict count] ? va_arg( args, NSObject * ) : first;
+		NSObject<NSCopying> * key = [dict count] ? va_arg( args, NSObject * ) : first;
 		if ( nil == key )
 			break;
 		
@@ -209,7 +209,7 @@
 	
 	for ( ;; )
 	{
-		NSObject * key = [dict count] ? va_arg( args, NSObject * ) : first;
+		NSObject<NSCopying> * key = [dict count] ? va_arg( args, NSObject * ) : first;
 		if ( nil == key )
 			break;
 		

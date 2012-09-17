@@ -72,11 +72,11 @@
 
 - (id)init
 {
-	self = [super init];
+	self = [super init]; // will call initWithFrame
 	if ( self )
 	{
-		[self initSelf];
-		[self load];
+//		[self initSelf];
+//		[self load];
 	}
 	return self;	
 }

@@ -410,7 +410,7 @@
 	
 	for ( ;; )
 	{
-		NSObject * key = [self.input count] ? va_arg( args, NSObject * ) : first;
+		NSObject<NSCopying> * key = [self.input count] ? va_arg( args, NSObject * ) : first;
 		if ( nil == key )
 			break;
 		
@@ -433,7 +433,7 @@
 	
 	for ( ;; )
 	{
-		NSObject * key = [self.output count] ? va_arg( args, NSObject * ) : first;
+		NSObject<NSCopying> * key = [self.output count] ? va_arg( args, NSObject * ) : first;
 		if ( nil == key )
 			break;
 		
