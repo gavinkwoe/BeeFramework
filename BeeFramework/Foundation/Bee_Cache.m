@@ -131,7 +131,7 @@ DEF_SINGLETION( BeeFileCache );
 		return (NSData *)obj;
 	
 	if ( [obj respondsToSelector:@selector(JSONData)] )
-		return (NSData *)[obj JSONData];
+		return (NSData *)[(id)obj JSONData];
 	
 	return nil;
 }
