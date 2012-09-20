@@ -150,7 +150,7 @@
 
 @implementation BeeDebugSandboxBoard
 
-DEF_SINGLETION( BeeDebugSandboxBoard )
+DEF_SINGLETON( BeeDebugSandboxBoard )
 
 @synthesize folderDepth = _folderDepth;
 @synthesize filePath = _filePath;
@@ -272,7 +272,7 @@ DEF_SINGLETION( BeeDebugSandboxBoard )
 			
 			BeeDebugImageView * detailView = [[BeeDebugImageView alloc] initWithFrame:detailFrame];
 			[detailView setFilePath:path];
-			[self presentModalViewInBlack:detailView animationType:BEE_UIBOARD_ANIMATION_BOUNCE alpha:0.3f];
+			[self presentModalView:detailView animated:YES];
 			[detailView release];
 		}
 		else if ( [path hasSuffix:@".strings"] || [path hasSuffix:@".plist"] || [path hasSuffix:@".txt"] )
@@ -282,7 +282,7 @@ DEF_SINGLETION( BeeDebugSandboxBoard )
 			
 			BeeDebugTextView * detailView = [[BeeDebugTextView alloc] initWithFrame:detailFrame];
 			[detailView setFilePath:path];
-			[self presentModalViewInBlack:detailView animationType:BEE_UIBOARD_ANIMATION_BOUNCE alpha:0.3f];
+			[self presentModalView:detailView animated:YES];
 			[detailView release];
 		}
 		else
@@ -292,7 +292,7 @@ DEF_SINGLETION( BeeDebugSandboxBoard )
 			
 			BeeDebugTextView * detailView = [[BeeDebugTextView alloc] initWithFrame:detailFrame];
 			[detailView setFilePath:path];
-			[self presentModalViewInBlack:detailView animationType:BEE_UIBOARD_ANIMATION_BOUNCE alpha:0.3f];
+			[self presentModalView:detailView animated:YES];
 			[detailView release];
 		}
 	}

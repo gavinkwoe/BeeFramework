@@ -58,7 +58,7 @@
 	BeeFileCache *		_fileCache;
 }
 
-AS_SINGLETION( BeeImageCache )
+AS_SINGLETON( BeeImageCache )
 
 - (BOOL)hasCachedForURL:(NSString *)url;
 

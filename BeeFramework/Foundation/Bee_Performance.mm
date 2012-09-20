@@ -39,7 +39,7 @@
 
 @implementation BeePerformance
 
-DEF_SINGLETION( BeePerformance );
+DEF_SINGLETON( BeePerformance );
 
 @synthesize tags = _tags;
 

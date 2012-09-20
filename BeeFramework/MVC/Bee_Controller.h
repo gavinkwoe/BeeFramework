@@ -184,6 +184,8 @@ typedef void (^BeeMessageBlock)( BeeMessage * msg );
 - (BeeMessage *)output:(id)first, ...;
 - (BeeMessage *)inputJSON:(NSString *)json;
 - (BeeMessage *)outputJSON:(NSString *)json;
+- (BeeMessage *)inputDict:(NSDictionary *)dict;
+- (BeeMessage *)outputDict:(NSDictionary *)dict;
 - (BeeMessage *)cancel;
 - (BeeMessage *)reset;
 
@@ -217,7 +219,7 @@ typedef void (^BeeMessageBlock)( BeeMessage * msg );
 	BOOL			_pause;
 }
 
-AS_SINGLETION(BeeMessageQueue)
+AS_SINGLETON(BeeMessageQueue)
 
 @property (nonatomic, copy) BeeMessageBlock	whenCreate;
 @property (nonatomic, copy) BeeMessageBlock	whenUpdate;
@@ -256,7 +258,7 @@ AS_SINGLETION(BeeMessageQueue)
 @property (nonatomic, retain) NSString *			prefix;
 @property (nonatomic, retain) NSMutableDictionary *	mapping;
 
-AS_SINGLETION( BeeController );
+AS_SINGLETON( BeeController );
 
 + (NSString *)MESSAGE;	// 消息类别
 

@@ -33,13 +33,21 @@
 #import "Bee_Debug.h"
 #import "Bee_DebugWindow.h"
 
-@implementation Bee_Debug
+#import "Bee_DebugMemoryModel.h"
+#import "Bee_DebugMessageModel.h"
+#import "Bee_DebugNetworkModel.h"
+
+@implementation BeeDebugger
 
 + (void)show
 {
 #if __BEE_DEBUGGER__	
 	[BeeDebugShortcut sharedInstance].hidden = NO;
 	[BeeDebugWindow sharedInstance].hidden = YES;
+	
+	[BeeDebugMemoryModel sharedInstance];
+	[BeeDebugMessageModel sharedInstance];
+	[BeeDebugNetworkModel sharedInstance];
 #endif
 }
 

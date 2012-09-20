@@ -46,7 +46,7 @@
 	NSMutableArray *	_stacks;
 }
 
-AS_SINGLETION( BeeUIStackGroup );
+AS_SINGLETON( BeeUIStackGroup );
 
 AS_SIGNAL( INDEX_CHANGED );	// 显示顺序变了
 

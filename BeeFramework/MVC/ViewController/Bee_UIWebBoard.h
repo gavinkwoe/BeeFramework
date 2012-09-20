@@ -32,8 +32,15 @@
 
 #import "Bee_UIBoard.h"
 #import "Bee_UISignal.h"
+#import "Bee_UIWebView.h"
 
 #pragma mark -
 
-@interface BeeUIWebBoard : BeeUIBoard {}
+@interface BeeUIWebBoard : BeeUIBoard
+{
+	BeeUIWebView *	_webView;
+}
+
+@property (nonatomic, retain) BeeUIWebView *	webView;
+
 @end

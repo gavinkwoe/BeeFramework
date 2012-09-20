@@ -37,13 +37,13 @@
 #pragma mark -
 
 @interface BeeDebugShortcut : UIWindow
-AS_SINGLETION( BeeDebugShortcut )
+AS_SINGLETON( BeeDebugShortcut )
 @end
 
 #pragma mark -
 
 @interface BeeDebugWindow : UIWindow
-AS_SINGLETION( BeeDebugWindow )
+AS_SINGLETON( BeeDebugWindow )
 @end
 
 #endif	// #if __BEE_DEBUGGER__

@@ -38,6 +38,8 @@
 #import "Bee_UIStack.h"
 #import "Bee_Runtime.h"
 #import "Bee_Log.h"
+#import "Bee_UIFont.h"
+#import "Bee_UIView.h"
 
 #import "Bee_Network.h"
 #import "Bee_Controller.h"
@@ -158,7 +160,16 @@
 - (CGRect)viewFrame
 {
 	CGRect bounds = [UIScreen mainScreen].bounds;
+
+//	UIInterfaceOrientation orient = [UIApplication sharedApplication].statusBarOrientation;
+//	CGRect applicationframe = [UIScreen mainScreen].applicationFrame;
 	
+	if ( UIInterfaceOrientationIsLandscape(self.interfaceOrientation) )
+	{
+		bounds.origin = CGPointMake( bounds.origin.y, bounds.origin.x );
+		bounds.size = CGSizeMake( bounds.size.height, bounds.size.width );
+	}
+
 	if ( NO == [UIApplication sharedApplication].statusBarHidden )
 	{
 		bounds.origin.y += 20;
@@ -204,6 +215,8 @@
 	
 	[super setFrame:rect];
 	
+	[self fitBackgroundFrame];
+	
 	if ( _owner && NO == CGRectEqualToRect(prevFrame, rect) )
 	{
 		[_owner sendUISignal:BeeUIBoard.LAYOUT_VIEWS];
@@ -221,7 +234,7 @@
 }
 
 - (void)dealloc
-{
+{	
 	[super dealloc];
 }
 
@@ -277,11 +290,18 @@
 - (void)enablePanGesture;
 - (void)disablePanGesture;
 
+- (void)didSwipe:(UISwipeGestureRecognizer *)swipeGesture;
+- (void)enableSwipeGesture;
+- (void)disableSwipeGesture;
+
 @end
 
 #pragma mark -
 
 @implementation BeeUIBoard
+
+@synthesize popover = _popover;
+@synthesize stackAnimationType = _stackAnimationType;
 
 @synthesize lastSleep = _lastSleep;
 @synthesize lastWeekup = _lastWeekup;
@@ -303,10 +323,20 @@
 @synthesize panGesture = _panGesture;
 @synthesize panOffset = _panOffset;
 
+@synthesize swipeEnabled;
+@synthesize swipeDirection;
+@synthesize swipeGesture = _swipeGesture;
+
 @synthesize deactivated;
 @synthesize deactivating;
 @synthesize activating;
 @synthesize activated;
+
+@dynamic sleepDuration;
+@dynamic weekDuration;
+@dynamic stack;
+@dynamic previousBoard;
+@dynamic nextBoard;
 
 @synthesize titleString;
 @synthesize titleView;
@@ -326,11 +356,17 @@ DEF_SIGNAL( WILL_APPEAR )			// 将要显示
 DEF_SIGNAL( DID_APPEAR )			// 已经显示
 DEF_SIGNAL( WILL_DISAPPEAR )		// 将要隐藏
 DEF_SIGNAL( DID_DISAPPEAR )			// 已经隐藏
+DEF_SIGNAL( ORIENTATION_CHANGED )	// 方向变化
 
 DEF_SIGNAL( MODALVIEW_WILL_SHOW )	// ModalView将要显示
 DEF_SIGNAL( MODALVIEW_DID_SHOWN )	// ModalView已经显示
 DEF_SIGNAL( MODALVIEW_WILL_HIDE )	// ModalView将要隐藏
 DEF_SIGNAL( MODALVIEW_DID_HIDDEN )	// ModalView已经隐藏
+
+DEF_SIGNAL( POPOVER_WILL_PRESENT )	// Popover将要显示
+DEF_SIGNAL( POPOVER_DID_PRESENT )	// Popover已经显示
+DEF_SIGNAL( POPOVER_WILL_DISMISS )	// Popover将要隐藏
+DEF_SIGNAL( POPOVER_DID_DISMISSED )	// Popover已经隐藏
 
 DEF_SIGNAL( BACK_BUTTON_TOUCHED )	// NavigationBar左按钮被点击
 DEF_SIGNAL( DONE_BUTTON_TOUCHED )	// NavigationBar右按钮被点击
@@ -339,6 +375,11 @@ DEF_SIGNAL( PAN_START )				// 左右滑动手势开始
 DEF_SIGNAL( PAN_STOP )				// 左右滑动手势结束
 DEF_SIGNAL( PAN_CHANGED )			// 左右滑动手势位置变化
 DEF_SIGNAL( PAN_CANCELLED )			// 左右滑动手势取消
+
+DEF_SIGNAL( SWIPE_UP )				// 手势：瞬间向上滑动
+DEF_SIGNAL( SWIPE_DOWN )			// 手势：瞬间向下滑动
+DEF_SIGNAL( SWIPE_LEFT )			// 手势：瞬间向左滑动
+DEF_SIGNAL( SWIPE_RIGHT )			// 手势：瞬间向右滑动
 
 static NSMutableArray * __allBoards;
 
@@ -374,6 +415,8 @@ static NSMutableArray * __allBoards;
 		_state = BEE_UIBOARD_STATE_DEACTIVATED;
 		
 		_createDate = [[NSDate date] retain];
+		
+		_modalAnimationType = BEE_UIBOARD_ANIMATION_ALPHA;
 		
 	#ifdef __BEE_DEVELOPMENT__
 		_signalSeq = 0;
@@ -417,9 +460,10 @@ static NSMutableArray * __allBoards;
 	[_callstack removeAllObjects];
 	[_callstack release];
 #endif
-
+	
 	[_createDate release];
 	[_panGesture release];
+	[_swipeGesture release];
 	
 	if ( _modalBoard.viewBuilt )
 	{
@@ -593,9 +637,22 @@ static NSMutableArray * __allBoards;
 // Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-	//	// Return YES for supported orientations.
-	return (interfaceOrientation == UIInterfaceOrientationPortrait);
-	//	return YES;
+	// Return YES for supported orientations.
+//	return (interfaceOrientation == UIInterfaceOrientationPortrait);
+	return YES;
+}
+
+-(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+							   duration:(NSTimeInterval)duration
+{
+	if ( NO == _viewBuilt )
+	{
+//		[self sendUISignal:BeeUIBoard.CREATE_VIEWS];
+		[self sendUISignal:BeeUIBoard.LAYOUT_VIEWS];
+		[self sendUISignal:BeeUIBoard.ORIENTATION_CHANGED];
+		
+		_viewBuilt = YES;
+	}
 }
 
 - (void)didReceiveMemoryWarning
@@ -747,7 +804,7 @@ static NSMutableArray * __allBoards;
 	}	
 }
 
-- (BeeUIBoard *)prevBoard
+- (BeeUIBoard *)previousBoard
 {
 	BeeUIStack * stack = [self stack];
 	if ( stack )
@@ -810,10 +867,16 @@ static NSMutableArray * __allBoards;
 			{
 				[self enablePanGesture];
 			}
+
+			if ( _swipeEnabled )
+			{
+				[self enableSwipeGesture];
+			}
 		}
 		else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
 		{		
 			[self disablePanGesture];
+			[self disableSwipeGesture];
 			
 			SAFE_RELEASE_SUBVIEW( _modalMaskView );
 			SAFE_RELEASE_SUBVIEW( _modalContentView );
@@ -830,6 +893,11 @@ static NSMutableArray * __allBoards;
 			if ( _panEnabled )
 			{
 				[self enablePanGesture];
+			}
+			
+			if ( _swipeEnabled )
+			{
+				[self enableSwipeGesture];
 			}
 		}
 		else if ( [signal is:BeeUIBoard.DID_APPEAR] )
@@ -864,38 +932,51 @@ static NSMutableArray * __allBoards;
 	[self dismissModalViewAnimated:YES];
 }
 
-- (void)presentModalView:(UIView *)view animationType:(BeeUIBoardAnimationType)type
+- (void)presentModalView:(UIView *)view animated:(BOOL)animated
 {
-	BOOL animated = (BEE_UIBOARD_ANIMATION_NONE == type) ? NO : YES;
-	
+	[self presentModalView:view animated:animated animationType:BEE_UIBOARD_ANIMATION_BOUNCE];
+}
+
+- (void)presentModalView:(UIView *)view animated:(BOOL)animated animationType:(BeeUIBoardAnimationType)type
+{
 	if ( self.modalContentView || view.superview == self.view )
 		return;
 	
 	[self sendUISignal:BeeUIBoard.MODALVIEW_WILL_SHOW];
 	
 	self.modalMaskView.hidden = NO;
-	self.modalMaskView.alpha = 0.0f;
 	self.modalMaskView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.0f];
 	
 	self.modalContentView = view;
 	self.modalContentView.hidden = NO;
-	self.modalContentView.alpha = 0.0f;
 	
 	[self.view addSubview:self.modalContentView];
 	[self.view bringSubviewToFront:self.modalMaskView];
 	[self.view bringSubviewToFront:self.modalContentView];
 	
+	_modalAnimationType = type;
+	
 	if ( animated )
 	{		
 		if ( BEE_UIBOARD_ANIMATION_ALPHA == type )
 		{
+			self.modalMaskView.alpha = 0.0f;
+			self.modalContentView.alpha = 0.0f;
+
 			[UIView beginAnimations:nil context:nil];
 			[UIView setAnimationDuration:MODAL_ANIMATION_DURATION];
 			[UIView setAnimationDelegate:self];
-			[UIView setAnimationDidStopSelector:@selector(didAppearingAnimationDone)];					
+			[UIView setAnimationDidStopSelector:@selector(didAppearingAnimationDone)];	
+			
+			self.modalMaskView.alpha = 1.0f;
+			self.modalContentView.alpha = 1.0f;
+			
+			[UIView commitAnimations];				
 		}
 		else if ( BEE_UIBOARD_ANIMATION_BOUNCE == type )
 		{
+			self.modalMaskView.alpha = 0.0f;
+			self.modalContentView.alpha = 0.0f;
 			self.modalContentView.transform = CGAffineTransformScale( CGAffineTransformIdentity, 0.001, 0.001 );
 			
 			[UIView beginAnimations:nil context:nil];
@@ -904,81 +985,19 @@ static NSMutableArray * __allBoards;
 			[UIView setAnimationDidStopSelector:@selector(bounce1ForAppearingAnimationStopped)];
 			
 			self.modalContentView.transform = CGAffineTransformScale( CGAffineTransformIdentity, 1.05, 1.05 );
+			self.modalMaskView.alpha = 1.0f;
+			self.modalContentView.alpha = 1.0f;
+			
+			[UIView commitAnimations];
 		}
-	}
-	
-	self.modalMaskView.alpha = 1.0f;
-	self.modalContentView.alpha = 1.0f;
-	
-	if ( animated )
-	{
-		[UIView commitAnimations];				
 	}
 	else
 	{
-		[self didAppearingAnimationDone];
-	}
-}
+		self.modalMaskView.alpha = 1.0f;
+		self.modalContentView.alpha = 1.0f;
 
-- (void)presentModalViewInBlack:(UIView *)view animationType:(BeeUIBoardAnimationType)type
-{
-	[self presentModalViewInBlack:view animationType:type alpha:1.0f];
-}
-
-- (void)presentModalViewInBlack:(UIView *)view animationType:(BeeUIBoardAnimationType)type alpha:(CGFloat)alpha
-{
-	BOOL animated = (BEE_UIBOARD_ANIMATION_NONE == type) ? NO : YES;
-	
-	if ( self.modalContentView || view.superview == self.view )
-		return;
-	
-	[self sendUISignal:BeeUIBoard.MODALVIEW_WILL_SHOW];
-	
-	self.modalMaskView.hidden = NO;
-	self.modalMaskView.alpha = 0.0f;
-	self.modalMaskView.backgroundColor = [UIColor blackColor];
-	
-	self.modalContentView = view;
-	self.modalContentView.hidden = NO;
-	self.modalContentView.alpha = 0.0f;
-	
-	[self.view addSubview:self.modalContentView];
-	[self.view bringSubviewToFront:self.modalMaskView];
-	[self.view bringSubviewToFront:self.modalContentView];
-	
-	if ( animated )
-	{		
-		if ( BEE_UIBOARD_ANIMATION_ALPHA == type )
-		{
-			[UIView beginAnimations:nil context:nil];
-			[UIView setAnimationDuration:MODAL_ANIMATION_DURATION];
-			[UIView setAnimationDelegate:self];
-			[UIView setAnimationDidStopSelector:@selector(didAppearingAnimationDone)];					
-		}
-		else if ( BEE_UIBOARD_ANIMATION_BOUNCE == type )
-		{
-			self.modalContentView.transform = CGAffineTransformScale( CGAffineTransformIdentity, 0.001, 0.001 );
-			
-			[UIView beginAnimations:nil context:nil];
-			[UIView setAnimationDuration:(MODAL_ANIMATION_DURATION / 4.0f)];
-			[UIView setAnimationDelegate:self];
-			[UIView setAnimationDidStopSelector:@selector(bounce1ForAppearingAnimationStopped)];
-			
-			self.modalContentView.transform = CGAffineTransformScale( CGAffineTransformIdentity, 1.05, 1.05 );
-		}
-	}
-	
-	self.modalMaskView.alpha = alpha;
-	self.modalContentView.alpha = 1.0f;
-	
-	if ( animated )
-	{
-		[UIView commitAnimations];				
-	}
-	else
-	{
 		[self didAppearingAnimationDone];
-	}
+	}	
 }
 
 - (void)bounce1ForAppearingAnimationStopped
@@ -1019,19 +1038,31 @@ static NSMutableArray * __allBoards;
 	
 	if ( animated )
 	{
-		[UIView beginAnimations:nil context:nil];
-		[UIView setAnimationDuration:MODAL_ANIMATION_DURATION];
-		[UIView setAnimationDelegate:self];
-		[UIView setAnimationDidStopSelector:@selector(didDisappearingAnimationDone)];		
-	}
-	
-	self.modalMaskView.alpha = 0.0f;
-	self.modalContentView.alpha = 0.0f;
-	//	self.modalContentView.transform = CGAffineTransformScale( CGAffineTransformIdentity, 0.1, 0.1 );
-	
-	if ( animated )
-	{
-		[UIView commitAnimations];		
+		if ( BEE_UIBOARD_ANIMATION_ALPHA == _modalAnimationType )
+		{
+			[UIView beginAnimations:nil context:nil];
+			[UIView setAnimationDuration:MODAL_ANIMATION_DURATION];
+			[UIView setAnimationDelegate:self];
+			[UIView setAnimationDidStopSelector:@selector(didDisappearingAnimationDone)];	
+			
+			self.modalMaskView.alpha = 0.0f;
+			self.modalContentView.alpha = 0.0f;
+			
+			[UIView commitAnimations];				
+		}
+		else if ( BEE_UIBOARD_ANIMATION_BOUNCE == _modalAnimationType )
+		{
+			[UIView beginAnimations:nil context:nil];
+			[UIView setAnimationDuration:(MODAL_ANIMATION_DURATION / 4.0f)];
+			[UIView setAnimationDelegate:self];
+			[UIView setAnimationDidStopSelector:@selector(didDisappearingAnimationDone)];
+			
+			self.modalMaskView.alpha = 0.0f;
+			self.modalContentView.alpha = 0.0f;
+			self.modalContentView.transform = CGAffineTransformScale( CGAffineTransformIdentity, 0.001, 0.001 );
+			
+			[UIView commitAnimations];
+		}
 	}
 	else
 	{
@@ -1055,15 +1086,18 @@ static NSMutableArray * __allBoards;
 	if ( animated )
 	{
 		CATransition * transition = [CATransition animation];
-		[transition setDuration:0.3f];
+		[transition setDuration:0.2f];
 		[transition setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear]];
-		[transition setType:kCATransitionMoveIn];
-		[transition setSubtype:kCATransitionFromRight];
+//		[transition setType:kCATransitionMoveIn];
+//		[transition setSubtype:kCATransitionFromBottom];
+		[transition setType:kCATransitionFade];
 		[self.view.layer addAnimation:transition forKey:nil];
 	}
 	
 	self.modalBoard = board;
 	[self.view addSubview:self.modalBoard.view];
+	
+	board.parentBoard = self;
 }
 
 - (void)dismissModalBoardAnimated:(BOOL)animated
@@ -1071,14 +1105,16 @@ static NSMutableArray * __allBoards;
 	if ( animated )
 	{
 		CATransition * transition = [CATransition animation];
-		[transition setDuration:0.3f];
+		[transition setDuration:0.2f];
 		[transition setTimingFunction:[CAMediaTimingFunction functionWithName: kCAMediaTimingFunctionLinear]];
-		[transition setType:kCATransitionReveal];
-		[transition setSubtype:kCATransitionFromLeft];
+//		[transition setType:kCATransitionReveal];
+//		[transition setSubtype:kCATransitionFromTop];
+		[transition setType:kCATransitionFade];
 		[self.view.layer addAnimation:transition forKey:nil];		
 	}
 	
 	[self.modalBoard.view removeFromSuperview];
+	self.modalBoard.parentBoard = nil;
 	self.modalBoard = nil;
 }
 
@@ -1328,6 +1364,138 @@ static NSMutableArray * __allBoards;
 		
 		_panOffset = CGPointZero;
 	}
+}
+
+- (BOOL)swipeEnabled
+{
+	return _swipeEnabled;
+}
+
+- (void)setSwipeEnabled:(BOOL)flag
+{
+	if ( flag == _swipeEnabled )
+		return;
+	
+	if ( flag )
+	{
+		[self enableSwipeGesture];
+	}
+	else
+	{
+		[self disableSwipeGesture];
+	}
+	
+	_swipeEnabled = flag;
+}
+
+- (UISwipeGestureRecognizerDirection)direction
+{
+	return _swipeGesture ? _swipeGesture.direction : 0;
+}
+
+- (void)setSwipeDirection:(UISwipeGestureRecognizerDirection)direction
+{
+	_swipeGesture.direction = direction;
+}
+
+- (void)enableSwipeGesture
+{
+	if ( nil == _swipeGesture )
+	{
+		_swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipe:)];
+		_swipeGesture.numberOfTouchesRequired = 1;
+		_swipeGesture.delegate = self;		
+	}
+
+	if ( _viewBuilt )
+	{
+		[self.view removeGestureRecognizer:_swipeGesture];
+		[self.view addGestureRecognizer:_swipeGesture];			
+	}
+}
+
+- (void)disableSwipeGesture
+{
+	if ( _swipeGesture )
+	{
+		if ( _viewBuilt )
+		{
+			[self.view removeGestureRecognizer:_swipeGesture];		
+		}
+	}
+}
+
+- (void)didSwipe:(UISwipeGestureRecognizer *)swipeGesture
+{
+	if ( NO == _swipeEnabled )
+		return;
+	
+	if ( UIGestureRecognizerStateEnded == swipeGesture.state )
+	{		
+		if ( UISwipeGestureRecognizerDirectionUp == swipeGesture.direction )
+		{
+			CC( @"swipe up" );
+			
+			[self sendUISignal:BeeUIBoard.SWIPE_UP];
+		}
+		else if ( UISwipeGestureRecognizerDirectionDown == swipeGesture.direction )
+		{
+			CC( @"swipe down" );
+			
+			[self sendUISignal:BeeUIBoard.SWIPE_DOWN];
+		}
+		else if ( UISwipeGestureRecognizerDirectionLeft == swipeGesture.direction )
+		{
+			CC( @"swipe left" );
+			
+			[self sendUISignal:BeeUIBoard.SWIPE_LEFT];
+		}
+		else if ( UISwipeGestureRecognizerDirectionRight == swipeGesture.direction )
+		{
+			CC( @"swipe right" );
+			
+			[self sendUISignal:BeeUIBoard.SWIPE_RIGHT];
+		}
+	}
+}
+
+- (void)presentPopoverForView:(UIView *)view
+				  contentSize:(CGSize)size
+					direction:(UIPopoverArrowDirection)direction
+					 animated:(BOOL)animated
+{
+	self.view.frame = CGRectMake( 0.0f, 0.0f, size.width, size.height );
+
+	self.popover = [[[UIPopoverController alloc] initWithContentViewController:[BeeUIStack stackWithFirstBoard:self]] autorelease];
+	self.popover.delegate = self;
+    self.contentSizeForViewInPopover = size;
+	
+	[self sendUISignal:BeeUIBoard.POPOVER_WILL_PRESENT];
+	
+	[self.popover presentPopoverFromRect:view.frame
+								  inView:view.superview
+				permittedArrowDirections:direction
+								animated:animated];
+	
+	[self sendUISignal:BeeUIBoard.POPOVER_DID_PRESENT];
+}
+
+- (void)dismissPopoverAnimated:(BOOL)animated
+{
+	[self.popover dismissPopoverAnimated:animated];
+	self.popover = nil;
+}
+
+- (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController
+{
+	[self sendUISignal:BeeUIBoard.POPOVER_WILL_DISMISS];
+	return YES;
+}
+
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
+{
+	[self sendUISignal:BeeUIBoard.POPOVER_DID_DISMISSED];
+	self.popover = nil;
 }
 
 @end

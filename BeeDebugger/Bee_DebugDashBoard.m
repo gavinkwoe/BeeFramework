@@ -713,7 +713,7 @@
 
 @implementation BeeDebugDashBoard
 
-DEF_SINGLETION( BeeDebugDashBoard )
+DEF_SINGLETON( BeeDebugDashBoard )
 
 - (void)handleUISignal:(BeeUISignal *)signal
 {

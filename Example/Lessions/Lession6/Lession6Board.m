@@ -80,7 +80,7 @@
 
 @implementation Lession6Board
 
-DEF_SINGLETION( Lession6Board );
+DEF_SINGLETON( Lession6Board );
 
 - (void)load
 {

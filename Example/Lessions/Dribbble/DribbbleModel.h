@@ -30,13 +30,13 @@
 #pragma mark -
 
 @interface DribbbleEveryoneModel : DribbbleModel
-AS_SINGLETION( DribbbleEveryoneModel );
+AS_SINGLETON( DribbbleEveryoneModel );
 @end
 
 @interface DribbbleDebutsModel : DribbbleModel
-AS_SINGLETION( DribbbleDebutsModel );
+AS_SINGLETON( DribbbleDebutsModel );
 @end
 
 @interface DribbblePopularModel : DribbbleModel
-AS_SINGLETION( DribbblePopularModel );
+AS_SINGLETON( DribbblePopularModel );
 @end

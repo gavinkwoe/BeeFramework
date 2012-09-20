@@ -1534,7 +1534,10 @@ static NSOperationQueue *sharedQueue = nil;
 			[self setLastBytesSent:totalBytesSent];	
 			
 			// Find out how much data we've uploaded so far
-			[self setTotalBytesSent:[NSMakeCollectable([(NSNumber *)CFReadStreamCopyProperty((CFReadStreamRef)[self readStream], kCFStreamPropertyHTTPRequestBytesWrittenCount) autorelease]) unsignedLongLongValue]];
+			NSNumber * number = (NSNumber *)CFReadStreamCopyProperty((CFReadStreamRef)[self readStream], kCFStreamPropertyHTTPRequestBytesWrittenCount);
+			[self setTotalBytesSent:number.unsignedLongLongValue];
+			[number release];
+
 			if (totalBytesSent > lastBytesSent) {
 				
 				// We've uploaded more data,  reset the timeout
@@ -2257,7 +2260,7 @@ static NSOperationQueue *sharedQueue = nil;
 		
 		NSString *connectionHeader = [[[self responseHeaders] objectForKey:@"Connection"] lowercaseString];
 
-		NSString *httpVersion = NSMakeCollectable([(NSString *)CFHTTPMessageCopyVersion(message) autorelease]);
+		NSString *httpVersion = (NSString *)CFHTTPMessageCopyVersion(message);
 		
 		// Don't re-use the connection if the server is HTTP 1.0 and didn't send Connection: Keep-Alive
 		if (![httpVersion isEqualToString:(NSString *)kCFHTTPVersion1_0] || [connectionHeader isEqualToString:@"keep-alive"]) {
@@ -2294,6 +2297,8 @@ static NSOperationQueue *sharedQueue = nil;
 				}
 			}
 		}
+		
+		[httpVersion release];
 	}
 
 	CFRelease(message);
@@ -3404,7 +3409,11 @@ static NSOperationQueue *sharedQueue = nil;
 	[progressLock lock];	
 	// Find out how much data we've uploaded so far
 	[self setLastBytesSent:totalBytesSent];	
-	[self setTotalBytesSent:[NSMakeCollectable([(NSNumber *)CFReadStreamCopyProperty((CFReadStreamRef)[self readStream], kCFStreamPropertyHTTPRequestBytesWrittenCount) autorelease]) unsignedLongLongValue]];
+	
+	NSNumber * number = (NSNumber *)CFReadStreamCopyProperty((CFReadStreamRef)[self readStream], kCFStreamPropertyHTTPRequestBytesWrittenCount);
+	[self setTotalBytesSent:number.unsignedLongLongValue];
+	[number release];
+	
 	[self setComplete:YES];
 	if (![self contentLength]) {
 		[self setContentLength:[self totalBytesRead]];
@@ -3646,9 +3655,8 @@ static NSOperationQueue *sharedQueue = nil;
 }
 
 - (void)handleStreamError
-
 {
-	NSError *underlyingError = NSMakeCollectable([(NSError *)CFReadStreamCopyError((CFReadStreamRef)[self readStream]) autorelease]);
+	NSError *underlyingError = (NSError *)CFReadStreamCopyError((CFReadStreamRef)[self readStream]);
 
 	if (![self error]) { // We may already have handled this error
 		
@@ -3660,6 +3668,7 @@ static NSOperationQueue *sharedQueue = nil;
 		if (([[underlyingError domain] isEqualToString:NSPOSIXErrorDomain] && ([underlyingError code] == ENOTCONN || [underlyingError code] == EPIPE)) 
 			|| ([[underlyingError domain] isEqualToString:(NSString *)kCFErrorDomainCFNetwork] && [underlyingError code] == -1005)) {
 			if ([self retryUsingNewConnection]) {
+				[underlyingError release];
 				return;
 			}
 		}
@@ -3679,6 +3688,8 @@ static NSOperationQueue *sharedQueue = nil;
 	} else {
 		[self cancelLoad];
 	}
+	
+	[underlyingError release];
 	[self checkRequestStatus];
 }
 
@@ -3826,25 +3837,34 @@ static NSOperationQueue *sharedQueue = nil;
 		} else {
 
 #if TARGET_OS_IPHONE
-			NSDictionary *proxySettings = NSMakeCollectable([(NSDictionary *)CFNetworkCopySystemProxySettings() autorelease]);
+			NSDictionary *proxySettings = (NSDictionary *)CFNetworkCopySystemProxySettings();
 #else
-			NSDictionary *proxySettings = NSMakeCollectable([(NSDictionary *)SCDynamicStoreCopyProxies(NULL) autorelease]);
+			NSDictionary *proxySettings = (NSDictionary *)SCDynamicStoreCopyProxies(NULL);
 #endif
 
-			proxies = NSMakeCollectable([(NSArray *)CFNetworkCopyProxiesForURL((CFURLRef)[self url], (CFDictionaryRef)proxySettings) autorelease]);
+			proxies = (NSArray *)CFNetworkCopyProxiesForURL((CFURLRef)[self url], (CFDictionaryRef)proxySettings);
 
 			// Now check to see if the proxy settings contained a PAC url, we need to run the script to get the real list of proxies if so
 			NSDictionary *settings = [proxies objectAtIndex:0];
 			if ([settings objectForKey:(NSString *)kCFProxyAutoConfigurationURLKey]) {
 				[self setPACurl:[settings objectForKey:(NSString *)kCFProxyAutoConfigurationURLKey]];
 				[self fetchPACFile];
+				
+				[proxies release];
+				[proxySettings release];
 				return NO;
+			}
+			else
+			{
+				[proxySettings release];
 			}
 		}
 
 		if (!proxies) {
 			[self setReadStream:nil];
 			[self failWithError:[NSError errorWithDomain:NetworkRequestErrorDomain code:ASIInternalErrorWhileBuildingRequestType userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"Unable to obtain information on proxy servers needed for request",NSLocalizedDescriptionKey,nil]]];
+			
+			[proxies release];
 			return NO;
 		}
 		// I don't really understand why the dictionary returned by CFNetworkCopyProxiesForURL uses different key names from CFNetworkCopySystemProxySettings/SCDynamicStoreCopyProxies
@@ -3855,6 +3875,8 @@ static NSOperationQueue *sharedQueue = nil;
 			[self setProxyPort:[[settings objectForKey:(NSString *)kCFProxyPortNumberKey] intValue]];
 			[self setProxyType:[settings objectForKey:(NSString *)kCFProxyTypeKey]];
 		}
+		
+		[proxies release];
 	}
 	return YES;
 }
@@ -3983,13 +4005,15 @@ static NSOperationQueue *sharedQueue = nil;
 
 		// Obtain the list of proxies by running the autoconfiguration script
 		CFErrorRef err = NULL;
-		NSArray *proxies = NSMakeCollectable([(NSArray *)CFNetworkCopyProxiesForAutoConfigurationScript((CFStringRef)script,(CFURLRef)[self url], &err) autorelease]);
+		NSArray *proxies = (NSArray *)CFNetworkCopyProxiesForAutoConfigurationScript((CFStringRef)script,(CFURLRef)[self url], &err);
 		if (!err && [proxies count] > 0) {
 			NSDictionary *settings = [proxies objectAtIndex:0];
 			[self setProxyHost:[settings objectForKey:(NSString *)kCFProxyHostNameKey]];
 			[self setProxyPort:[[settings objectForKey:(NSString *)kCFProxyPortNumberKey] intValue]];
 			[self setProxyType:[settings objectForKey:(NSString *)kCFProxyTypeKey]];
 		}
+		
+		[proxies release];
 	}
 }
 
@@ -4460,7 +4484,12 @@ static NSOperationQueue *sharedQueue = nil;
 	if (!MIMEType) {
 		return @"application/octet-stream";
 	}
-    return NSMakeCollectable([(NSString *)MIMEType autorelease]);
+	
+	NSString * temp = (NSString *)MIMEType;
+	NSString * result = [NSString stringWithString:temp];
+	[temp release];
+	
+	return result;
 }
 
 #pragma mark bandwidth measurement / throttling

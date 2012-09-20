@@ -213,7 +213,7 @@
 
 @implementation BeeDebugViewBoard
 
-DEF_SINGLETION( BeeDebugViewBoard )
+DEF_SINGLETON( BeeDebugViewBoard )
 
 - (void)load
 {
@@ -291,7 +291,7 @@ DEF_SINGLETION( BeeDebugViewBoard )
 
 	BeeDebugViewDetailView * detailView = [[BeeDebugViewDetailView alloc] initWithFrame:detailFrame];
 	[detailView setBoard:board];
-	[self presentModalViewInBlack:detailView animationType:BEE_UIBOARD_ANIMATION_BOUNCE alpha:0.3f];
+	[self presentModalView:detailView animated:YES];
 	[detailView release];
 }
 

@@ -45,7 +45,7 @@
 
 @implementation BeeDebugShortcut
 
-DEF_SINGLETION( BeeDebugShortcut )
+DEF_SINGLETON( BeeDebugShortcut )
 
 - (id)init
 {
@@ -99,7 +99,7 @@ DEF_SINGLETION( BeeDebugShortcut )
 	UIView * _bottomView;
 }
 
-AS_SINGLETION( BeeDebugBoard );
+AS_SINGLETON( BeeDebugBoard );
 
 @end
 
@@ -107,7 +107,7 @@ AS_SINGLETION( BeeDebugBoard );
 
 @implementation BeeDebugBoard
 
-DEF_SINGLETION( BeeDebugBoard );
+DEF_SINGLETON( BeeDebugBoard );
 
 - (void)load
 {
@@ -212,7 +212,7 @@ DEF_SINGLETION( BeeDebugBoard );
 
 @implementation BeeDebugWindow
 
-DEF_SINGLETION( BeeDebugWindow )
+DEF_SINGLETON( BeeDebugWindow )
 
 - (id)init
 {

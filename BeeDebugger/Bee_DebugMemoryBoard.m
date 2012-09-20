@@ -47,7 +47,7 @@
 
 @implementation BeeDebugMemoryBoard
 
-DEF_SINGLETION( BeeDebugMemoryBoard )
+DEF_SINGLETON( BeeDebugMemoryBoard )
 
 - (void)handleUISignal:(BeeUISignal *)signal
 {

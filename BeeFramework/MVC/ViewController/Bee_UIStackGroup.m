@@ -56,7 +56,7 @@
 @synthesize topIndex;
 @synthesize topStack;
 
-DEF_SINGLETION(BeeUIStackGroup)
+DEF_SINGLETON(BeeUIStackGroup)
 
 DEF_SIGNAL( INDEX_CHANGED );
 

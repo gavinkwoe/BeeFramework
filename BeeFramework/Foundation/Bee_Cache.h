@@ -61,7 +61,7 @@
 @property (nonatomic, retain) NSString *			cachePath;
 @property (nonatomic, retain) NSString *			cacheUser;
 
-AS_SINGLETION( BeeFileCache );
+AS_SINGLETON( BeeFileCache );
 
 - (NSData *)serialize:(NSObject *)obj;
 - (NSObject *)unserialize:(NSData *)data;
@@ -85,6 +85,6 @@ AS_SINGLETION( BeeFileCache );
 @property (nonatomic, retain) NSMutableArray *		cacheKeys;
 @property (nonatomic, retain) NSMutableDictionary *	cacheObjs;
 
-AS_SINGLETION( BeeMemoryCache );
+AS_SINGLETON( BeeMemoryCache );
 
 @end

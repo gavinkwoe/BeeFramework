@@ -72,7 +72,7 @@
 
 @implementation CatelogBoard
 
-DEF_SINGLETION( CatelogBoard );
+DEF_SINGLETON( CatelogBoard );
 
 - (void)load
 {

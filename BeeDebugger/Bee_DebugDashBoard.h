@@ -99,7 +99,7 @@
 	BeeDebugNetworkView *	_networkView;
 }
 
-AS_SINGLETION( BeeDebugDashBoard )
+AS_SINGLETON( BeeDebugDashBoard )
 
 @end
 

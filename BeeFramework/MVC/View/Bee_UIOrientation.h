@@ -41,7 +41,7 @@
 	UIInterfaceOrientation	_orientation;
 }
 
-AS_SINGLETION( BeeUIOrientation );
+AS_SINGLETON( BeeUIOrientation );
 
 AS_NOTIFICATION( ANGLE_CHANGED );		// 设备角度改变
 AS_NOTIFICATION( DIRECTION_CHANGED );	// 设备方向改变

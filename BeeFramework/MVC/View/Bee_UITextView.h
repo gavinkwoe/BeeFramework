@@ -60,5 +60,5 @@ AS_SIGNAL( SELECTION_CHANGED )	// 光标位置
 + (BeeUITextView *)spawn;
 
 - (void)updatePlaceHolder;
-
+- (void)setActive:(BOOL)flag;
 @end

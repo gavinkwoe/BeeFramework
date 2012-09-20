@@ -37,6 +37,7 @@
 #import "Bee_UIBoard.h"
 #import "Bee_UIStack.h"
 #import "Bee_Runtime.h"
+#import "Bee_UINavigationBar.h"
 
 #pragma mark -
 
@@ -144,25 +145,320 @@
 	}
 }
 
-- (void)pushBoard:(BeeUIBoard *)newBoard animated:(BOOL)animated
+- (void)pushBoard:(BeeUIBoard *)board animated:(BOOL)animated
 {
-	[super pushViewController:newBoard animated:animated];
+	[self pushBoard:board animated:animated animationType:BEE_UISTACK_ANIMATION_DEFAULT];
+}
+
+- (void)pushBoard:(BeeUIBoard *)newBoard animated:(BOOL)animated animationType:(BeeUIStackAnimationType)type
+{
+	newBoard.popover = self.topBoard.popover;
+	newBoard.stackAnimationType = type;
+
+	if ( NO == animated )
+	{
+		[super pushViewController:newBoard animated:NO];
+	}
+	else
+	{
+		if ( BEE_UISTACK_ANIMATION_DEFAULT == type )
+		{
+			[super pushViewController:newBoard animated:YES];
+		}
+		else if ( BEE_UISTACK_ANIMATION_CUBE == type )
+		{
+			CATransition *animation = [CATransition animation];
+			[animation setDuration:0.6f];
+			[animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
+			[animation setType:@"cube"];
+			[animation setRemovedOnCompletion:YES];
+			[animation setSubtype:kCATransitionFromTop];
+			[self.view.layer addAnimation:animation forKey:@"cube"];
+
+			[super pushViewController:newBoard animated:NO];
+		}
+		else if ( BEE_UISTACK_ANIMATION_FADE == type )
+		{
+			CATransition *animation = [CATransition animation];
+			[animation setDuration:0.6f];
+			[animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
+			[animation setType:@"fade"];
+			[animation setSubtype:kCATransitionFromRight];
+			[animation setRemovedOnCompletion:YES];
+			
+			[self.view.layer addAnimation:animation forKey:@"fade"];
+			
+			[super pushViewController:newBoard animated:NO];
+		}
+		else if ( BEE_UISTACK_ANIMATION_PAGING == type )
+		{
+			CATransition * animation = [CATransition animation];
+			[animation setDuration:0.6f];
+			[animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
+			[animation setType:kCATransitionReveal];
+			[animation setSubtype:kCATransitionFromTop];
+			[animation setRemovedOnCompletion:YES];
+			
+			[self.view.layer removeAnimationForKey:@"paging_in"];
+			[self.view.layer addAnimation:animation forKey:@"paging_in"];
+
+			[super pushViewController:newBoard animated:NO];
+
+			newBoard.view.layer.transform = CATransform3DMakeScale( 0.9f, 0.9f, 1.0f );
+			newBoard.view.alpha = 0.0f;
+
+			[UIView beginAnimations:nil context:nil];
+			[UIView setAnimationDuration:0.6f];
+			[UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+			[UIView setAnimationBeginsFromCurrentState:NO];
+
+			newBoard.view.layer.transform = CATransform3DIdentity;
+			newBoard.view.alpha = 1.0f;
+
+			[UIView commitAnimations];
+		}
+	}
+		
 	UNUSED(newBoard.view);	// load view
 }
 
 - (void)popBoardAnimated:(BOOL)animated
 {
-	[super popViewControllerAnimated:animated];
+	BeeUIStackAnimationType animType = self.topBoard.stackAnimationType;
+	
+	if ( NO == animated )
+	{
+		[super popViewControllerAnimated:NO];
+	}
+	else
+	{
+		if ( BEE_UISTACK_ANIMATION_DEFAULT == animType )
+		{
+			[super popViewControllerAnimated:YES];
+		}
+		else if ( BEE_UISTACK_ANIMATION_CUBE == animType )
+		{
+			[super popViewControllerAnimated:NO];
+			
+			CATransition *animation = [CATransition animation];
+			[animation setDuration:0.6f];
+			[animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
+			[animation setType:@"cube"];
+			[animation setRemovedOnCompletion:YES];
+			[animation setSubtype:kCATransitionFromBottom];
+
+			[self.view.layer addAnimation:animation forKey:@"cube"];			
+		}
+		else if ( BEE_UISTACK_ANIMATION_FADE == animType )
+		{
+			[super popViewControllerAnimated:NO];
+			
+			CATransition *animation = [CATransition animation];
+			[animation setDuration:0.6f];
+			[animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
+			[animation setType:@"fade"];
+			[animation setSubtype:kCATransitionFromLeft];
+			[animation setRemovedOnCompletion:YES];
+			
+			[self.view.layer addAnimation:animation forKey:@"fade"];
+		}
+		else if ( BEE_UISTACK_ANIMATION_PAGING == animType )
+		{
+			UIView * topView = [self.topBoard.view retain];
+			[super popViewControllerAnimated:NO];
+			UIView * bottomView = self.topBoard.view;
+
+			[topView removeFromSuperview];
+			[self.view addSubview:topView];
+
+			bottomView.layer.transform = CATransform3DMakeTranslation( 0.0f, -bottomView.bounds.size.height, 0.0f);
+			bottomView.alpha = 1.0f;
+
+			[UIView animateWithDuration:0.4f
+							 animations:^{
+								 bottomView.layer.transform = CATransform3DIdentity;
+								 bottomView.alpha = 1.0f;
+
+								 topView.layer.transform = CATransform3DMakeScale( 0.9f, 0.9f, 1.0f );
+								 topView.alpha = 0.0f;
+							 }
+							 completion:^(BOOL finished) {
+								 topView.alpha = 0.0f;
+								 topView.layer.transform = CATransform3DIdentity;
+								 
+								 [topView removeFromSuperview];
+								 [topView release];
+							 }];
+		}
+	}
 }
 
 - (NSArray *)popToBoard:(BeeUIBoard *)board animated:(BOOL)animated
 {
-	return [super popToViewController:board animated:animated];
+	NSArray * result = nil;
+	
+	BeeUIStackAnimationType animType = self.topBoard.stackAnimationType;
+	
+	if ( NO == animated )
+	{
+		result = [super popToViewController:board animated:NO];
+	}
+	else
+	{
+		if ( BEE_UISTACK_ANIMATION_DEFAULT == animType )
+		{
+			result = [super popToViewController:board animated:YES];
+		}
+		else if ( BEE_UISTACK_ANIMATION_CUBE == animType )
+		{
+			result = [super popToViewController:board animated:NO];
+			
+			CATransition *animation = [CATransition animation];
+			[animation setDuration:0.6f];
+			[animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
+			[animation setType:@"cube"];
+			[animation setRemovedOnCompletion:YES];
+			[animation setSubtype:kCATransitionFromTop];
+
+			[self.view.layer addAnimation:animation forKey:@"cube"];			
+		}
+		else if ( BEE_UISTACK_ANIMATION_FADE == animType )
+		{
+			result = [super popToViewController:board animated:NO];
+			
+			CATransition *animation = [CATransition animation];
+			[animation setDuration:0.6f];
+			[animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
+			[animation setType:@"fade"];
+			[animation setSubtype:kCATransitionFromLeft];
+			[animation setRemovedOnCompletion:YES];
+			
+			[self.view.layer addAnimation:animation forKey:@"fade"];
+		}
+		else if ( BEE_UISTACK_ANIMATION_PAGING == animType )
+		{
+			UIView * topView = [self.topBoard.view retain];
+			result = [super popToViewController:board animated:NO];
+			UIView * bottomView = self.topBoard.view;
+			
+			[topView removeFromSuperview];
+			[self.view addSubview:topView];
+			
+			bottomView.layer.transform = CATransform3DMakeTranslation( 0.0f, -bottomView.bounds.size.height, 0.0f);
+			bottomView.alpha = 1.0f;
+			
+			[UIView animateWithDuration:0.4f
+							 animations:^{
+								 bottomView.layer.transform = CATransform3DIdentity;
+								 bottomView.alpha = 1.0f;
+								 
+								 topView.layer.transform = CATransform3DMakeScale( 0.9f, 0.9f, 1.0f );
+								 topView.alpha = 0.0f;
+							 }
+							 completion:^(BOOL finished) {
+								 topView.alpha = 0.0f;
+								 topView.layer.transform = CATransform3DIdentity;
+								 
+								 [topView removeFromSuperview];
+								 [topView release];
+							 }];			
+		}
+	}
+	
+	return result;
 }
 
 - (NSArray *)popToFirstBoardAnimated:(BOOL)animated
 {
-	return [super popToRootViewControllerAnimated:animated];
+	NSArray * result = nil;
+	
+	BeeUIStackAnimationType animType = self.topBoard.stackAnimationType;
+	
+	if ( NO == animated )
+	{
+		result = [super popToRootViewControllerAnimated:NO];
+	}
+	else
+	{
+		if ( BEE_UISTACK_ANIMATION_DEFAULT == animType )
+		{
+			result = [super popToRootViewControllerAnimated:YES];
+		}
+		else if ( BEE_UISTACK_ANIMATION_CUBE == animType )
+		{
+			result = [super popToRootViewControllerAnimated:NO];
+			
+			CATransition *animation = [CATransition animation];
+			[animation setDuration:0.6f];
+			[animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
+			[animation setType:@"cube"];
+			[animation setRemovedOnCompletion:YES];
+			[animation setSubtype:kCATransitionFromTop];
+
+			[self.view.layer addAnimation:animation forKey:@"cube"];			
+		}
+		else if ( BEE_UISTACK_ANIMATION_FADE == animType )
+		{
+			result = [super popToRootViewControllerAnimated:NO];
+			
+			CATransition *animation = [CATransition animation];
+			[animation setDuration:0.6f];
+			[animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
+			[animation setType:@"fade"];
+			[animation setSubtype:kCATransitionFromLeft];
+			[animation setRemovedOnCompletion:YES];
+			
+			[self.view.layer addAnimation:animation forKey:@"fade"];
+		}
+		else if ( BEE_UISTACK_ANIMATION_PAGING == animType )
+		{
+			UIView * topView = [self.topBoard.view retain];
+			result = [super popToRootViewControllerAnimated:NO];
+			UIView * bottomView = self.topBoard.view;
+			
+			[topView removeFromSuperview];
+			[self.view addSubview:topView];
+			
+			bottomView.layer.transform = CATransform3DMakeTranslation( 0.0f, -bottomView.bounds.size.height, 0.0f);
+			bottomView.alpha = 1.0f;
+			
+			[UIView animateWithDuration:0.4f
+							 animations:^{
+								 bottomView.layer.transform = CATransform3DIdentity;
+								 bottomView.alpha = 1.0f;
+								 
+								 topView.layer.transform = CATransform3DMakeScale( 0.9f, 0.9f, 1.0f );
+								 topView.alpha = 0.0f;
+							 }
+							 completion:^(BOOL finished) {
+								 topView.alpha = 0.0f;
+								 topView.layer.transform = CATransform3DIdentity;
+								 
+								 [topView removeFromSuperview];
+								 [topView release];
+							 }];
+		}
+	}
+	
+	return result;
+}
+
+- (void)popAllBoards
+{
+	self.viewControllers = [NSArray array];
+}
+
+- (BOOL)existsBoard:(BeeUIBoard *)board
+{
+	for ( UIViewController * controller in self.viewControllers )
+	{
+		if ( [controller isKindOfClass:[BeeUIBoard class]] && (BeeUIBoard *)controller == board )
+		{
+			return YES;
+		}
+	}
+	
+	return NO;
 }
 
 - (void)__enterBackground
@@ -186,6 +482,22 @@
 			BeeUIBoard * board = (BeeUIBoard *)viewController;
 			[board __enterForeground];
 		}
+	}
+}
+
+- (void)loadView
+{
+	[super loadView];
+
+	[self setValue:[BeeUINavigationBar spawn] forKey:@"navigationBar"];
+}
+
+- (void)setBarBackgroundImage:(UIImage *)image
+{
+	UINavigationBar * navBar = self.navigationBar;
+	if ( navBar && [navBar isKindOfClass:[BeeUINavigationBar class]] )
+	{
+		[(BeeUINavigationBar *)navBar setBackgroundImage:image];
 	}
 }
 

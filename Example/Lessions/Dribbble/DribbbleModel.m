@@ -110,13 +110,13 @@
 #pragma mark -
 
 @implementation DribbbleEveryoneModel
-DEF_SINGLETION(DribbbleEveryoneModel);
+DEF_SINGLETON(DribbbleEveryoneModel);
 @end
 
 @implementation DribbbleDebutsModel
-DEF_SINGLETION(DribbbleDebutsModel);
+DEF_SINGLETON(DribbbleDebutsModel);
 @end
 
 @implementation DribbblePopularModel
-DEF_SINGLETION(DribbblePopularModel);
+DEF_SINGLETON(DribbblePopularModel);
 @end

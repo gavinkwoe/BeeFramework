@@ -43,6 +43,7 @@
 @implementation BeeModel
 
 @synthesize name = _name;
+@synthesize observers = _observers;
 
 static NSMutableArray *	__models = nil;
 
@@ -100,6 +101,7 @@ static NSMutableArray *	__models = nil;
 		[__models addObjectNoRetain:self];
 
 		_name = [[[self class] description] retain];
+		_observers = [[NSMutableArray alloc] init];
 
 		[self load];
 	}
@@ -116,17 +118,58 @@ static NSMutableArray *	__models = nil;
 	
 }
 
+- (void)bind:(id)obj
+{
+	if ( [_observers containsObject:obj] )
+		return;
+	
+	[_observers addObjectNoRetain:obj];
+}
+
+- (void)unbind:(id)obj
+{
+	if ( [_observers containsObject:obj] )
+	{
+		[_observers removeObjectNoRelease:obj];
+	}
+}
+
 - (void)dealloc
 {
 	[self unload];
 	[self cancelMessages];
 	[self cancelRequests];
 
+	[_observers removeAllObjectsNoRelease];
+	[_observers release];
+	
 	[_name release];
 
 	[__models removeObjectNoRelease:self];
 	
 	[super dealloc];
+}
+
+- (void)handleMessage:(BeeMessage *)msg
+{
+	for ( NSObject * obj in _observers )
+	{
+		if ( [obj respondsToSelector:@selector(handleMessage:)] )
+		{
+			[obj handleMessage:msg];
+		}
+	}
+}
+
+- (void)handleRequest:(BeeRequest *)request
+{
+	for ( NSObject * obj in _observers )
+	{
+		if ( [obj respondsToSelector:@selector(handleRequest:)] )
+		{
+			[obj handleRequest:request];
+		}
+	}
 }
 
 @end

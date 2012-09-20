@@ -34,6 +34,16 @@
 
 #pragma mark -
 
+typedef enum
+{
+	BEE_UISTACK_ANIMATION_DEFAULT = 0,
+	BEE_UISTACK_ANIMATION_CUBE,
+	BEE_UISTACK_ANIMATION_FADE,
+	BEE_UISTACK_ANIMATION_PAGING,
+} BeeUIStackAnimationType;
+
+#pragma mark -
+
 @class BeeUIBoard;
 @class BeeUIStack;
 
@@ -63,10 +73,17 @@
 - (BeeUIStack *)initWithName:(NSString *)name andFirstBoardClass:(Class)clazz;
 - (BeeUIStack *)initWithName:(NSString *)name andFirstBoard:(BeeUIBoard *)board;
 
-- (void)pushBoard:(BeeUIBoard *)board animated:(BOOL)animted;
+- (void)pushBoard:(BeeUIBoard *)board animated:(BOOL)animated;
+- (void)pushBoard:(BeeUIBoard *)board animated:(BOOL)animated animationType:(BeeUIStackAnimationType)type;
+
 - (void)popBoardAnimated:(BOOL)animated;
 - (NSArray *)popToBoard:(BeeUIBoard *)board animated:(BOOL)animated;
 - (NSArray *)popToFirstBoardAnimated:(BOOL)animated;
+- (void)popAllBoards;
+
+- (BOOL)existsBoard:(BeeUIBoard *)board;
+
+- (void)setBarBackgroundImage:(UIImage *)image;
 
 @end
 

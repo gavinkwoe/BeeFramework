@@ -52,11 +52,15 @@ AS_SIGNAL( DID_DISMISS )	// 已经隐藏
 @property (nonatomic, retain) NSObject *			userData;
 
 + (BeeUIAlertView *)spawn;
++ (BeeUIAlertView *)showMessage:(NSString *)message
+					cancelTitle:(NSString *)cancel;
 
 - (void)presentForController:(UIViewController *)controller;
 
 - (void)addCancelTitle:(NSString *)title;
 - (void)addCancelTitle:(NSString *)title signal:(NSString *)signal object:(NSDictionary *)object;
+
+- (void)addButtonTitle:(NSString *)title signal:(NSString *)signal;
 - (void)addButtonTitle:(NSString *)title signal:(NSString *)signal object:(NSDictionary *)object;
 
 @end

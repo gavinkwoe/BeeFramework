@@ -56,7 +56,7 @@
 #pragma mark -
 
 @interface BeeDebugViewBoard : BeeUITableBoard
-AS_SINGLETION( BeeDebugViewBoard )
+AS_SINGLETON( BeeDebugViewBoard )
 @end
 
 #endif	// #if __BEE_DEBUGGER__

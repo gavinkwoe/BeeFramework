@@ -66,3 +66,5 @@ CGRect	CGRectCloseToRight( CGRect rect1, CGRect rect2 );		// 与右边缘靠近
 
 CGRect	CGRectMoveCenter( CGRect rect1, CGPoint offset );		// 移动中心点
 CGRect	CGRectMakeBound( CGFloat w, CGFloat h );
+
+CGRect	CGSizeMakeBound( CGSize size );

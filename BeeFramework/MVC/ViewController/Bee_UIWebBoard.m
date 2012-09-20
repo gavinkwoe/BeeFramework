@@ -40,6 +40,8 @@
 
 @implementation BeeUIWebBoard
 
+@synthesize webView = _webView;
+
 - (void)load
 {
 }
@@ -52,32 +54,45 @@
 {
 	[super handleUISignal:signal];
 
-	if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
+	if ( [signal isKindOf:BeeUIBoard.SIGNAL] )
 	{
+		if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
+		{
+			_webView = [[BeeUIWebView alloc] initWithFrame:self.viewBound];
+			[self.view addSubview:_webView];
+		}
+		else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
+		{
+			SAFE_RELEASE_SUBVIEW( _webView );
+		}
+		else if ( [signal is:BeeUIBoard.LAYOUT_VIEWS] )
+		{
+		}
+		else if ( [signal is:BeeUIBoard.LOAD_DATAS] )
+		{
+		}
+		else if ( [signal is:BeeUIBoard.FREE_DATAS] )
+		{
+		}
+		else if ( [signal is:BeeUIBoard.WILL_APPEAR] )
+		{
+		}
+		else if ( [signal is:BeeUIBoard.DID_APPEAR] )
+		{
+		}
+		else if ( [signal is:BeeUIBoard.WILL_DISAPPEAR] )
+		{	
+		}
+		else if ( [signal is:BeeUIBoard.DID_DISAPPEAR] )
+		{
+		}
 	}
-	else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
+	else if ( [signal isKindOf:BeeUIWebView.SIGNAL] )
 	{
-	}
-	else if ( [signal is:BeeUIBoard.LAYOUT_VIEWS] )
-	{
-	}
-	else if ( [signal is:BeeUIBoard.LOAD_DATAS] )
-	{
-	}
-	else if ( [signal is:BeeUIBoard.FREE_DATAS] )
-	{
-	}
-	else if ( [signal is:BeeUIBoard.WILL_APPEAR] )
-	{
-	}
-	else if ( [signal is:BeeUIBoard.DID_APPEAR] )
-	{
-	}
-	else if ( [signal is:BeeUIBoard.WILL_DISAPPEAR] )
-	{	
-	}
-	else if ( [signal is:BeeUIBoard.DID_DISAPPEAR] )
-	{
+		if ( [signal is:BeeUIWebView.DID_LOAD_FINISH] )
+		{
+			// TODO: change title
+		}
 	}
 }
 

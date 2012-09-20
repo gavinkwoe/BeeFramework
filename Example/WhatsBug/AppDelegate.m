@@ -25,7 +25,7 @@
 	self.window.rootViewController = stackGroup;
     [self.window makeKeyAndVisible];
 
-	[Bee_Debug show];
+	[BeeDebugger show];
     return YES;
 }
 

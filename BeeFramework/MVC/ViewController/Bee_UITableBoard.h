@@ -98,6 +98,7 @@ AS_SIGNAL( SEARCH_COMMIT )			// 搜索提交
 //AS_SIGNAL( SCROLL_REACH_BOTTOM )	// 触底
 
 - (BeeUITableViewCell *)dequeueWithContentClass:(Class)clazz;
+- (BeeUITableViewCell *)dequeueWithContentCell:(BeeUIGridCell *)cell;
 - (BeeUIGridCell *)contentForRowAtIndexPath:(NSIndexPath *)indexPath;
 
 - (float)getScrollPercent;

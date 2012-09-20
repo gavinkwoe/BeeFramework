@@ -36,10 +36,12 @@
 
 @interface BeeModel : NSObject
 {
-	NSString *	_name;
+	NSString *			_name;
+	NSMutableArray *	_observers;
 }
 
-@property (nonatomic, retain) NSString *	name;
+@property (nonatomic, retain) NSString *		name;
+@property (nonatomic, retain) NSMutableArray *	observers;
 
 + (NSMutableArray *)models;
 + (NSMutableArray *)modelByClass:(Class)clazz;
@@ -47,5 +49,8 @@
 
 - (void)load;
 - (void)unload;
+
+- (void)bind:(id)obj;
+- (void)unbind:(id)obj;
 
 @end

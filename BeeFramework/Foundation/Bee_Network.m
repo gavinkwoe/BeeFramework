@@ -717,6 +717,7 @@
 	request = [[BeeRequest alloc] initWithURL:[NSURL URLWithString:url]];
 	request.timeOutSeconds = DEFAULT_POST_TIMEOUT;
 	request.requestMethod = @"POST";
+	request.postFormat = ASIMultipartFormDataPostFormat;
 	request.postBody = [NSMutableData dataWithData:data];
 	[request setDelegate:self];
 	[request setDownloadProgressDelegate:self];
@@ -776,6 +777,7 @@
 	request = [[BeeRequest alloc] initWithURL:[NSURL URLWithString:url]];
 	request.timeOutSeconds = DEFAULT_POST_TIMEOUT;
 	request.requestMethod = @"POST";
+	request.postFormat = ASIMultipartFormDataPostFormat;
 	[request setDelegate:self];
 	[request setDownloadProgressDelegate:self];
 	[request setUploadProgressDelegate:self];
@@ -846,6 +848,7 @@
 	request = [[BeeRequest alloc] initWithURL:[NSURL URLWithString:url]];
 	request.timeOutSeconds = DEFAULT_UPLOAD_TIMEOUT;
 	request.requestMethod = @"POST";
+	request.postFormat = ASIMultipartFormDataPostFormat;
 	[request setDelegate:self];
 	[request setDownloadProgressDelegate:self];
 	[request setUploadProgressDelegate:self];

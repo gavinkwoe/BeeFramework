@@ -21,6 +21,6 @@
 	NSMutableArray * _lessions;
 }
 
-AS_SINGLETION( CatelogBoard );
+AS_SINGLETON( CatelogBoard );
 
 @end

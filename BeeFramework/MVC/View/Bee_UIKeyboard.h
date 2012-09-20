@@ -46,7 +46,7 @@
 	UIView *	_accessor;
 }
 
-AS_SINGLETION( BeeUIKeyboard )
+AS_SINGLETON( BeeUIKeyboard )
 
 AS_NOTIFICATION( SHOWN )			// 键盘弹出
 AS_NOTIFICATION( HIDDEN )			// 键盘收起

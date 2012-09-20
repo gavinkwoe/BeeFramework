@@ -131,7 +131,7 @@
 
 @implementation DribbbleBoard
 
-DEF_SINGLETION( DribbbleBoard );
+DEF_SINGLETON( DribbbleBoard );
 
 - (void)load
 {
@@ -266,7 +266,7 @@ DEF_SINGLETION( DribbbleBoard );
 		 @"page", __INT(0),
 		 @"size", __INT(COUNT_PER_PAGE),
 		 nil];
-	}	
+	}
 }
 
 - (NSArray *)shots

@@ -32,6 +32,6 @@
 
 #import "Bee.h"
 
-@interface Bee_Debug
+@interface BeeDebugger
 + (void)show;
 @end

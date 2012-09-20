@@ -42,7 +42,7 @@
 
 @implementation BeeUIFont
 
-DEF_SINGLETION( BeeUIFont );
+DEF_SINGLETON( BeeUIFont );
 
 @synthesize fontName = _fontName;
 @synthesize boldFontName = _boldFontName;

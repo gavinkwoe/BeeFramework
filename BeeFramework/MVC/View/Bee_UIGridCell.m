@@ -72,7 +72,11 @@
 
 - (id)init
 {
+<<<<<<< HEAD
 	self = [super init]; // will call initWithFrame
+=======
+	self = [super initWithFrame:CGRectZero];
+>>>>>>> 修改命名错误，修改内存泄露问题，增加UIScrollView、UINavigationBar、UICameraBoard
 	if ( self )
 	{
 //		[self initSelf];

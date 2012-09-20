@@ -57,7 +57,7 @@
 	NSMutableArray *	_fileArray;
 }
 
-AS_SINGLETION( BeeDebugSandboxBoard )
+AS_SINGLETON( BeeDebugSandboxBoard )
 
 @property (nonatomic, assign) NSUInteger	folderDepth;
 @property (nonatomic, retain) NSString *	filePath;

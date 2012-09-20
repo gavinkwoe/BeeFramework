@@ -418,7 +418,7 @@
 		if ( nil == value )
 			break;
 		
-		CC( @"input, %@ = %@", [key description], [value description] );
+//		CC( @"input, %@ = %@", [key description], [value description] );
 		
 		[self.input setObject:value forKey:key];
 	}
@@ -471,6 +471,18 @@
 	}
 	
 	return self;
+}
+
+- (BeeMessage *)inputDict:(NSDictionary *)dict
+{
+	[self.input addEntriesFromDictionary:dict];	
+	return self;
+}
+
+- (BeeMessage *)outputDict:(NSDictionary *)dict
+{
+	[self.output addEntriesFromDictionary:dict];	
+	return self;	
 }
 
 - (BeeMessage *)cancel
@@ -830,7 +842,7 @@ static NSMutableArray * __sharedQueue = nil;
 @synthesize runloopTimer = _runloopTimer;
 @synthesize pause = _pause;
 
-DEF_SINGLETION(BeeMessageQueue);
+DEF_SINGLETON(BeeMessageQueue);
 
 - (NSArray *)allMessages
 {
@@ -1143,7 +1155,7 @@ static NSMutableArray * __subControllers = nil;
 @synthesize prefix = _prefix;
 @synthesize mapping = _mapping;
 
-DEF_SINGLETION( BeeController );
+DEF_SINGLETON( BeeController );
 
 + (NSString *)MESSAGE
 {

@@ -50,6 +50,17 @@ DEF_SIGNAL( DID_DISMISS )
 	return [[[BeeUIAlertView alloc] init] autorelease];
 }
 
++ (BeeUIAlertView *)showMessage:(NSString *)message cancelTitle:(NSString *)cancel
+{
+	BeeUIAlertView * alert = [[[BeeUIAlertView alloc] initWithTitle:nil
+															message:message
+														   delegate:self
+												  cancelButtonTitle:cancel
+												  otherButtonTitles:nil] autorelease];
+	[alert show];
+	return alert;
+}
+
 - (id)init
 {
 	self = [super init];
@@ -85,6 +96,11 @@ DEF_SIGNAL( DID_DISMISS )
 	self.cancelButtonIndex = [self addButtonWithTitle:title];	
 }
 
+- (void)addCancelTitle:(NSString *)title signal:(NSString *)signal
+{
+	[self addCancelTitle:title signal:signal object:nil];
+}
+
 - (void)addCancelTitle:(NSString *)title signal:(NSString *)signal object:(NSDictionary *)object
 {
 	if ( nil == signal )
@@ -94,6 +110,11 @@ DEF_SIGNAL( DID_DISMISS )
 	
 	self.cancelButtonIndex = [self addButtonWithTitle:title];
 	[_actions addObject:[NSArray arrayWithObjects:title, [NSNumber numberWithInt:self.cancelButtonIndex], signal, object, nil]];
+}
+
+- (void)addButtonTitle:(NSString *)title signal:(NSString *)signal
+{
+	[self addButtonTitle:title signal:signal object:nil];
 }
 
 - (void)addButtonTitle:(NSString *)title signal:(NSString *)signal object:(NSDictionary *)object

@@ -30,12 +30,12 @@
 //  Bee_Singleton.h
 //
 
-#undef	AS_SINGLETION
-#define AS_SINGLETION( __class ) \
+#undef	AS_SINGLETON
+#define AS_SINGLETON( __class ) \
 		+ (__class *)sharedInstance;
 
-#undef	DEF_SINGLETION
-#define DEF_SINGLETION( __class ) \
+#undef	DEF_SINGLETON
+#define DEF_SINGLETON( __class ) \
 		+ (__class *)sharedInstance \
 		{ \
 			static dispatch_once_t once; \

@@ -101,6 +101,7 @@ AS_STATIC_PROPERTY( NO_VALUE );
 
 - (BOOL)is:(NSString *)name;
 - (BOOL)isKindOf:(NSString *)prefix;
+- (BOOL)isSentFrom:(id)source;
 
 - (BOOL)send;
 - (BOOL)forward:(id)target;

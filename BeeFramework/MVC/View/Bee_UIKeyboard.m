@@ -50,7 +50,7 @@ NSString * const UIKeyboardWillChangeFrameNotification = @"UIKeyboardWillChangeF
 
 @implementation BeeUIKeyboard
 
-DEF_SINGLETION( BeeUIKeyboard )
+DEF_SINGLETON( BeeUIKeyboard )
 
 DEF_NOTIFICATION( SHOWN );
 DEF_NOTIFICATION( HIDDEN );
@@ -92,10 +92,11 @@ DEF_NOTIFICATION( HEIGHT_CHANGED );
 		NSValue * value = [(NSDictionary *)[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey];
 		if ( value )
 		{
-			CGFloat newHeight = [value CGRectValue].size.height;
-			if ( newHeight != _height )
+			CGRect keyboardEndFrame = [value CGRectValue];
+			CGFloat _keyboardHeight = ([[UIDevice currentDevice] orientation] == UIDeviceOrientationPortrait || [[UIDevice currentDevice] orientation] == UIDeviceOrientationPortraitUpsideDown) ? keyboardEndFrame.size.height : keyboardEndFrame.size.width;
+			if ( _keyboardHeight != _height )
 			{
-				_height = newHeight;
+				_height = _keyboardHeight;
 				[self postNotification:BeeUIKeyboard.HEIGHT_CHANGED];
 				
 				animated = NO;
@@ -104,6 +105,7 @@ DEF_NOTIFICATION( HEIGHT_CHANGED );
 	}
 	else if ( [notification is:UIKeyboardWillChangeFrameNotification] )
 	{
+#if 0
 		NSValue * value1 = [(NSDictionary *)[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey];		
 		NSValue * value2 = [(NSDictionary *)[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey];		
 		if ( value1 && value2 )
@@ -140,14 +142,29 @@ DEF_NOTIFICATION( HEIGHT_CHANGED );
 				}
 			}
 		}
+#endif		
 	}
 	else if ( [notification is:UIKeyboardDidHideNotification] )
 	{
 		if ( _shown )
 		{
-			_shown = NO;
-			[self postNotification:BeeUIKeyboard.HIDDEN];		
+			_shown = NO;		
 		}
+		
+		NSValue * value = [(NSDictionary *)[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey];
+		if ( value )
+		{
+			CGRect keyboardEndFrame = [value CGRectValue];
+			CGFloat _keyboardHeight = ([[UIDevice currentDevice] orientation] == UIDeviceOrientationPortrait || [[UIDevice currentDevice] orientation] == UIDeviceOrientationPortraitUpsideDown) ? keyboardEndFrame.size.height : keyboardEndFrame.size.width;
+			if ( _keyboardHeight != _height )
+			{
+				_height = _keyboardHeight;
+			//	[self postNotification:BeeUIKeyboard.HEIGHT_CHANGED];
+				animated = NO;
+			}
+		}
+		
+		[self postNotification:BeeUIKeyboard.HIDDEN];
 	}
 
 	[self updateAccessorAnimated:animated];

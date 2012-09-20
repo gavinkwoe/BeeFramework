@@ -7,11 +7,11 @@
 #pragma mark -
 
 @interface Lession5CellLayout1 : NSObject
-AS_SINGLETION(Lession5CellLayout1);
+AS_SINGLETON(Lession5CellLayout1);
 @end
 
 @interface Lession5CellLayout2 : NSObject
-AS_SINGLETION(Lession5CellLayout2);
+AS_SINGLETON(Lession5CellLayout2);
 @end
 
 @interface Lession5Cell : BeeUIGridCell

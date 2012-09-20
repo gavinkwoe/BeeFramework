@@ -82,7 +82,11 @@
 	else
 	{
 		NSData * data = [NSData dataWithContentsOfFile:path];
+<<<<<<< HEAD
         _content.text = [NSString stringWithCString:[data bytes] encoding:NSUTF8StringEncoding];
+=======
+		_content.text = [NSString stringWithUTF8String:[data bytes]];
+>>>>>>> 修改命名错误，修改内存泄露问题，增加UIScrollView、UINavigationBar、UICameraBoard
 	}
 }
 

@@ -54,7 +54,7 @@
 @synthesize cachePath = _cachePath;
 @synthesize cacheUser = _cacheUser;
 
-DEF_SINGLETION( BeeFileCache );
+DEF_SINGLETON( BeeFileCache );
 
 - (id)init
 {
@@ -130,9 +130,25 @@ DEF_SINGLETION( BeeFileCache );
 	if ( [obj isKindOfClass:[NSData class]] )
 		return (NSData *)obj;
 	
+<<<<<<< HEAD
 	if ( [obj respondsToSelector:@selector(JSONData)] )
 		return (NSData *)[(id)obj JSONData];
 	
+=======
+	if ( [obj isKindOfClass:[NSString class]] )
+	{
+		return [(NSString *)obj JSONData];
+	}
+	else if ( [obj isKindOfClass:[NSArray class]] )
+	{
+		return [(NSArray *)obj JSONData];
+	}
+	else if ( [obj isKindOfClass:[NSArray class]] )
+	{
+		return [(NSArray *)obj JSONData];
+	}
+
+>>>>>>> 修改命名错误，修改内存泄露问题，增加UIScrollView、UINavigationBar、UICameraBoard
 	return nil;
 }
 
@@ -196,7 +212,7 @@ DEF_SINGLETION( BeeFileCache );
 @synthesize cacheKeys = _cacheKeys;
 @synthesize cacheObjs = _cacheObjs;
 
-DEF_SINGLETION( BeeMemoryCache );
+DEF_SINGLETON( BeeMemoryCache );
 
 - (id)init
 {

@@ -38,7 +38,7 @@
 #pragma mark -
 
 @interface BeeUIProgressView(Private)
-- (void)initSelf;
+- (void)initSelf:(UIProgressViewStyle)style;
 @end
 
 @implementation BeeUIProgressView

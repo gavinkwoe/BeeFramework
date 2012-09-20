@@ -186,7 +186,7 @@
 
 @implementation BeeDebugNetworkBoard
 
-DEF_SINGLETION( BeeDebugNetworkBoard )
+DEF_SINGLETON( BeeDebugNetworkBoard )
 
 - (void)handleUISignal:(BeeUISignal *)signal
 {
@@ -259,7 +259,7 @@ DEF_SINGLETION( BeeDebugNetworkBoard )
 
 		BeeDebugImageView * detailView = [[BeeDebugImageView alloc] initWithFrame:detailFrame];
 		[detailView setURL:absoluteURL];
-		[self presentModalViewInBlack:detailView animationType:BEE_UIBOARD_ANIMATION_BOUNCE alpha:0.3f];
+		[self presentModalView:detailView animated:YES];
 		[detailView release];
 	}
 	else
@@ -269,7 +269,7 @@ DEF_SINGLETION( BeeDebugNetworkBoard )
 
 		BeeDebugNetworkDetailView * detailView = [[BeeDebugNetworkDetailView alloc] initWithFrame:detailFrame];
 		[detailView setRequest:request];
-		[self presentModalViewInBlack:detailView animationType:BEE_UIBOARD_ANIMATION_BOUNCE alpha:0.3f];
+		[self presentModalView:detailView animated:YES];
 		[detailView release];
 	}
 }

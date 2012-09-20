@@ -39,7 +39,7 @@
 	NSMutableDictionary *	_tags;
 }
 
-AS_SINGLETION( BeePerformance );
+AS_SINGLETON( BeePerformance );
 
 @property (nonatomic, retain) NSMutableDictionary *	tags;
 

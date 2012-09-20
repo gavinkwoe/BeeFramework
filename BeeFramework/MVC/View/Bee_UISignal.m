@@ -66,20 +66,6 @@
 
 #pragma mark -
 
-@interface ReturnValueYES : NSObject
-AS_SINGLETION( ReturnValueYES );
-@end
-
-@implementation ReturnValueYES
-DEF_SINGLETION( ReturnValueYES );
-@end
-
-@interface ReturnValueNO : NSObject
-@end
-
-@implementation ReturnValueNO
-@end
-
 @implementation BeeUISignal
 
 @synthesize dead = _dead;
@@ -125,6 +111,11 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 - (BOOL)isKindOf:(NSString *)prefix
 {
 	return [_name hasPrefix:prefix];
+}
+
+- (BOOL)isSentFrom:(id)source
+{
+	return (self.source == source) ? YES : NO;
 }
 
 - (BOOL)send
@@ -245,19 +236,11 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 	}
 	else
 	{
-		UIViewController * controller = [self viewController];
-		if ( controller )
-		{
-			[controller handleUISignal:signal];
-		}		
-		else
-		{
-			signal.reach = YES;
+		signal.reach = YES;
 
-		#if __BEE_DEVELOPMENT__
-			CC( @"[%@] > %@", signal.name, signal.callPath );
-		#endif	// #if __BEE_DEVELOPMENT__
-		}
+#if __BEE_DEVELOPMENT__
+		CC( @"[%@] > %@", signal.name, signal.callPath );
+#endif	// #if __BEE_DEVELOPMENT__
 	}
 }
 
@@ -295,9 +278,9 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 {
 	signal.reach = YES;
 	
-#if __BEE_DEVELOPMENT__
-	CC( @"[%@] > %@", signal.name, signal.callPath );
-#endif	// #if __BEE_DEVELOPMENT__
+//#if __BEE_DEVELOPMENT__
+//	CC( @"[%@] > %@", signal.name, signal.callPath );
+//#endif	// #if __BEE_DEVELOPMENT__
 }
 
 - (BeeUISignal *)sendUISignal:(NSString *)name

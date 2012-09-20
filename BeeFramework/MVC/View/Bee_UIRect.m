@@ -145,6 +145,14 @@ CGRect CGRectMakeBound( CGFloat w, CGFloat h )
 	return rect;
 }
 
+CGRect CGSizeMakeBound( CGSize size )
+{
+	CGRect rect;
+	rect.origin = CGPointZero;
+	rect.size = size;
+	return rect;	
+}
+
 CGRect CGRectAlignX( CGRect rect1, CGRect rect2 )
 {
 	rect1.origin.x = CGRectGetMidX( rect2 ) - rect1.size.width / 2.0f;

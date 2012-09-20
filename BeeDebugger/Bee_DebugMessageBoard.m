@@ -236,7 +236,7 @@
 
 @implementation BeeDebugMessageBoard
 
-DEF_SINGLETION( BeeDebugMessageBoard )
+DEF_SINGLETON( BeeDebugMessageBoard )
 
 - (void)handleUISignal:(BeeUISignal *)signal
 {
@@ -297,7 +297,7 @@ DEF_SINGLETION( BeeDebugMessageBoard )
 	
 	BeeDebugMessageDetailView * detailView = [[BeeDebugMessageDetailView alloc] initWithFrame:detailFrame];
 	[detailView setMessage:(BeeMessage *)[[BeeDebugMessageModel sharedInstance].history objectAtIndex:indexPath.row]];
-	[self presentModalViewInBlack:detailView animationType:BEE_UIBOARD_ANIMATION_BOUNCE alpha:0.3f];
+	[self presentModalView:detailView animated:YES];
 	[detailView release];
 }
 

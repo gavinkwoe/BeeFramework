@@ -8,7 +8,7 @@
 
 @interface DribbbleController : BeeController
 
-AS_SINGLETION( DribbbleController )
+AS_SINGLETON( DribbbleController )
 
 AS_MESSAGE( SHOTS )
 AS_MESSAGE( SHOTS_EVERYONE )

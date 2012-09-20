@@ -40,7 +40,7 @@
 
 @implementation BeeUIOrientation
 
-DEF_SINGLETION( BeeUIOrientation );
+DEF_SINGLETON( BeeUIOrientation );
 
 DEF_NOTIFICATION( ANGLE_CHANGED );
 DEF_NOTIFICATION( DIRECTION_CHANGED );

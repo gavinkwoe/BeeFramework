@@ -47,7 +47,7 @@
 @synthesize failedPlots = _failedPlots;
 @synthesize history = _history;
 
-DEF_SINGLETION( BeeDebugMessageModel )
+DEF_SINGLETON( BeeDebugMessageModel )
 
 - (void)load
 {

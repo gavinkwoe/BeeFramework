@@ -22,5 +22,5 @@
 #pragma mark -
 
 @interface DribbbleBoard : BeeUITableBoard
-AS_SINGLETION( DribbbleBoard );
+AS_SINGLETON( DribbbleBoard );
 @end

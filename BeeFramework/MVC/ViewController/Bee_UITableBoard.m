@@ -39,6 +39,7 @@
 #import "Bee_UIKeyboard.h"
 #import "Bee_Runtime.h"
 #import "Bee_Log.h"
+#import "Bee_UIRect.h"
 
 #pragma mark -
 
@@ -97,7 +98,7 @@
 
 - (void)setFrame:(CGRect)rc
 {
-	[super setFrame:rc];	
+	[super setFrame:CGRectZeroNan(rc)];	
 
 	[_innerCell setFrame:self.bounds];
 //	[_innerCell layoutAllSubcells];
@@ -214,11 +215,26 @@ DEF_SIGNAL( SEARCH_COMMIT )			// 搜索提交
 		
 		BeeUIGridCell * innerCell = [(BeeUIGridCell *)[[BeeRuntime allocByClass:clazz] init] autorelease];
 		[cell bindCell:innerCell];
-
-//		NSAssert( nil != cell.innerCell, @"out of memory" );
+		
+		//		NSAssert( nil != cell.innerCell, @"out of memory" );
 	}
 	
 	return cell;
+}
+
+- (BeeUITableViewCell *)dequeueWithContentCell:(BeeUIGridCell *)innerCell
+{
+	NSString * clazzName = [[innerCell class] description];
+	BeeUITableViewCell * cell = (BeeUITableViewCell *)[_tableView dequeueReusableCellWithIdentifier:clazzName];
+	if ( nil == cell )
+	{
+		cell = [[[BeeUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:clazzName] autorelease];
+		[cell bindCell:innerCell];
+		
+//		NSAssert( nil != cell.innerCell, @"out of memory" );
+	}
+	
+	return cell;	
 }
 
 - (BeeUIGridCell *)contentForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -368,11 +384,19 @@ DEF_SIGNAL( SEARCH_COMMIT )			// 搜索提交
 {
 	if ( [notification is:BeeUIKeyboard.HEIGHT_CHANGED] )
 	{
-		[UIView beginAnimations:nil context:nil];
-		[UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-		[UIView setAnimationDuration:0.15f];
 		
-		[self sendUISignal:BeeUIBoard.LAYOUT_VIEWS];
+		NSTimeInterval animationDuration;
+		UIViewAnimationCurve animationCurve;
+		
+		NSDictionary * userInfo =  (NSDictionary *)[notification userInfo];
+		[[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&animationCurve];
+		[[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
+				
+		// Animate up or down
+		[UIView beginAnimations:nil context:nil];
+		[UIView setAnimationDuration:animationDuration];
+		[UIView setAnimationCurve:animationCurve];
+		//[self sendUISignal:BeeUIBoard.LAYOUT_VIEWS];
 		
 		[UIView commitAnimations];
 	}

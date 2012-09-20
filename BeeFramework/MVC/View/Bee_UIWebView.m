@@ -58,6 +58,7 @@ DEF_SIGNAL( DID_LOAD_CANCELLED )	// 加载取消
 @synthesize html;
 @synthesize file;
 @synthesize resource;
+@synthesize url;
 
 + (BeeUIWebView *)spawn
 {
@@ -124,6 +125,11 @@ DEF_SIGNAL( DID_LOAD_CANCELLED )	// 加载取消
 	{
 		[self loadData:data MIMEType:@"text/html" textEncodingName:@"UTF8" baseURL:nil];
 	}
+}
+
+- (void)setUrl:(NSString *)path
+{
+	[self loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:path]]];
 }
 
 - (void)dealloc

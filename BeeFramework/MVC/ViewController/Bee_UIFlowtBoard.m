@@ -290,65 +290,68 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 {
 	[super handleUISignal:signal];
 	
-	if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
+	if ( [signal isKindOf:BeeUIBoard.SIGNAL] )
 	{
-		CGRect bounds = self.viewBound;
+		if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
+		{
+			CGRect bounds = self.viewBound;
 
-		_scrollView = [[UIScrollView alloc] initWithFrame:bounds];
-		_scrollView.backgroundColor = [UIColor clearColor];
-		_scrollView.contentSize = bounds.size;
-		_scrollView.contentInset = _baseInsets;
-//		_scrollView.decelerationRate = _scrollView.decelerationRate * 0.25f;
-		_scrollView.alwaysBounceVertical = YES;
-		_scrollView.bounces = YES;
-		_scrollView.scrollEnabled = YES;
-		_scrollView.showsVerticalScrollIndicator = NO;
-		_scrollView.showsHorizontalScrollIndicator = NO;
-		_scrollView.alpha = 1.0f;
-		_scrollView.delegate = self;
-		_scrollView.layer.masksToBounds = NO;
-		[self.view addSubview:_scrollView];
+			_scrollView = [[UIScrollView alloc] initWithFrame:bounds];
+			_scrollView.backgroundColor = [UIColor clearColor];
+			_scrollView.contentSize = bounds.size;
+			_scrollView.contentInset = _baseInsets;
+	//		_scrollView.decelerationRate = _scrollView.decelerationRate * 0.25f;
+			_scrollView.alwaysBounceVertical = YES;
+			_scrollView.bounces = YES;
+			_scrollView.scrollEnabled = YES;
+			_scrollView.showsVerticalScrollIndicator = NO;
+			_scrollView.showsHorizontalScrollIndicator = NO;
+			_scrollView.alpha = 1.0f;
+			_scrollView.delegate = self;
+			_scrollView.layer.masksToBounds = NO;
+			[self.view addSubview:_scrollView];
 
-		CGRect pullFrame;
-		pullFrame.origin.x = 0.0f;
-		pullFrame.origin.y = -60.0f;
-		pullFrame.size.width = bounds.size.width;
-		pullFrame.size.height = 60.0f;
+			CGRect pullFrame;
+			pullFrame.origin.x = 0.0f;
+			pullFrame.origin.y = -60.0f;
+			pullFrame.size.width = bounds.size.width;
+			pullFrame.size.height = 60.0f;
 
-		_pullLoader = [[BeeUIPullLoader alloc] initWithFrame:pullFrame];
-		_pullLoader.hidden = YES;
-		_pullLoader.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		[_scrollView addSubview:_pullLoader];
-	}
-	else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
-	{
-		[self releaseAllViews];
-		
-		SAFE_RELEASE_SUBVIEW( _scrollView );
-		SAFE_RELEASE_SUBVIEW( _pullLoader );
-	}
-	else if ( [signal is:BeeUIBoard.LAYOUT_VIEWS] )
-	{
-	}
-	else if ( [signal is:BeeUIBoard.LOAD_DATAS] )
-	{
-		[self asyncReloadData];
-	}
-	else if ( [signal is:BeeUIBoard.FREE_DATAS] )
-	{
-	}
-	else if ( [signal is:BeeUIBoard.WILL_APPEAR] )
-	{
-		[self syncReloadData];
-	}
-	else if ( [signal is:BeeUIBoard.DID_APPEAR] )
-	{
-	}
-	else if ( [signal is:BeeUIBoard.WILL_DISAPPEAR] )
-	{	
-	}
-	else if ( [signal is:BeeUIBoard.DID_DISAPPEAR] )
-	{
+			_pullLoader = [[BeeUIPullLoader alloc] initWithFrame:pullFrame];
+			_pullLoader.hidden = YES;
+			_pullLoader.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+			[_scrollView addSubview:_pullLoader];
+		}
+		else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
+		{
+			[self releaseAllViews];
+			
+			SAFE_RELEASE_SUBVIEW( _scrollView );
+			SAFE_RELEASE_SUBVIEW( _pullLoader );
+		}
+		else if ( [signal is:BeeUIBoard.LAYOUT_VIEWS] )
+		{
+		}
+		else if ( [signal is:BeeUIBoard.LOAD_DATAS] )
+		{
+			[self asyncReloadData];
+		}
+		else if ( [signal is:BeeUIBoard.FREE_DATAS] )
+		{
+		}
+		else if ( [signal is:BeeUIBoard.WILL_APPEAR] )
+		{
+			[self syncReloadData];
+		}
+		else if ( [signal is:BeeUIBoard.DID_APPEAR] )
+		{
+		}
+		else if ( [signal is:BeeUIBoard.WILL_DISAPPEAR] )
+		{	
+		}
+		else if ( [signal is:BeeUIBoard.DID_DISAPPEAR] )
+		{
+		}
 	}
 }
 

@@ -8,7 +8,7 @@
 
 @implementation LessionBaseBoard
 
-DEF_SINGLETION( LessionBaseBoard );
+DEF_SINGLETON( LessionBaseBoard );
 
 - (void)handleUISignal:(BeeUISignal *)signal
 {

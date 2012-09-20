@@ -9,7 +9,7 @@
 
 @implementation Lession5CellLayout1
 
-DEF_SINGLETION(Lession5CellLayout1)
+DEF_SINGLETON(Lession5CellLayout1)
 
 + (CGSize)cellSize:(NSObject *)data bound:(CGSize)bound
 {
@@ -34,7 +34,7 @@ DEF_SINGLETION(Lession5CellLayout1)
 
 @implementation Lession5CellLayout2
 
-DEF_SINGLETION(Lession5CellLayout2)
+DEF_SINGLETON(Lession5CellLayout2)
 
 + (CGSize)cellSize:(NSObject *)data bound:(CGSize)bound
 {
@@ -128,7 +128,7 @@ DEF_SINGLETION(Lession5CellLayout2)
 
 @implementation Lession5Board
 
-DEF_SINGLETION( Lession5Board );
+DEF_SINGLETON( Lession5Board );
 
 - (void)load
 {

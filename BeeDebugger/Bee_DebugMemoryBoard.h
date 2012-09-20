@@ -40,7 +40,7 @@
 #pragma mark -
 
 @interface BeeDebugMemoryBoard : BeeUIBoard
-AS_SINGLETION( BeeDebugMemoryBoard )
+AS_SINGLETON( BeeDebugMemoryBoard )
 @end
 
 #endif	// #if __BEE_DEBUGGER__

@@ -41,7 +41,7 @@
 	NSString *	_boldFontName;
 }
 
-AS_SINGLETION( BeeUIFont );
+AS_SINGLETON( BeeUIFont );
 
 @property (nonatomic, retain) NSString *	fontName;
 @property (nonatomic, retain) NSString *	boldFontName;

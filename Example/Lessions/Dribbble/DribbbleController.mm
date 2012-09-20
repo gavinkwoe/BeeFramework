@@ -10,7 +10,7 @@
 
 @implementation DribbbleController
 
-DEF_SINGLETION(DribbbleController)
+DEF_SINGLETON(DribbbleController)
 
 DEF_MESSAGE( SHOTS )
 DEF_MESSAGE( SHOTS_EVERYONE )

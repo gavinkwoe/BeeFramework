@@ -66,7 +66,7 @@
 
 @property (nonatomic, readonly) NSMutableArray *	history;
 
-AS_SINGLETION( BeeDebugMessageModel )
+AS_SINGLETON( BeeDebugMessageModel )
 
 @end
 

@@ -11,7 +11,7 @@
 	BeeUITextView *	_textView;
 }
 
-AS_SINGLETION( LessionBaseBoard );
+AS_SINGLETON( LessionBaseBoard );
 
 - (void)log:(NSString *)msg;
 
