@@ -130,11 +130,6 @@ DEF_SINGLETON( BeeFileCache );
 	if ( [obj isKindOfClass:[NSData class]] )
 		return (NSData *)obj;
 	
-<<<<<<< HEAD
-	if ( [obj respondsToSelector:@selector(JSONData)] )
-		return (NSData *)[(id)obj JSONData];
-	
-=======
 	if ( [obj isKindOfClass:[NSString class]] )
 	{
 		return [(NSString *)obj JSONData];
@@ -147,8 +142,6 @@ DEF_SINGLETON( BeeFileCache );
 	{
 		return [(NSArray *)obj JSONData];
 	}
-
->>>>>>> 修改命名错误，修改内存泄露问题，增加UIScrollView、UINavigationBar、UICameraBoard
 	return nil;
 }
 
