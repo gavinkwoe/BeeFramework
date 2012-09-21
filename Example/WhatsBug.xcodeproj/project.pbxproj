@@ -427,8 +427,8 @@
 		63A7924E157506E700C863F3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				63F8E910160C599B00A5FECC /* AVFoundation.framework */,
 				631600B0158B62410060743E /* libz.dylib */,
+				63F8E910160C599B00A5FECC /* AVFoundation.framework */,
 				63FE1DE015D119FF00432794 /* CoreGraphics.framework */,
 				631600C0158B62720060743E /* CFNetwork.framework */,
 				63A79251157506E700C863F3 /* Foundation.framework */,
