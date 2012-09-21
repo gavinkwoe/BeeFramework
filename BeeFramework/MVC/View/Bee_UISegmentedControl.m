@@ -79,8 +79,7 @@ DEF_SIGNAL( HIGHLIGHT_CHANGED )
 	self = [super initWithItems:items];
 	if ( self )
 	{
-//      initWithItems willl call initWithFrame
-//		[self initSelf];
+		[self initSelf];
 	}
 	return self;
 }
@@ -92,7 +91,7 @@ DEF_SIGNAL( HIGHLIGHT_CHANGED )
 	self.segmentedControlStyle = UISegmentedControlStyleBar;
 	self.selectedSegmentIndex = 0;
 //	self.tintColor = [UIColor darkGrayColor];
-	assert(nil == _tags);
+
 	_tags = [[NSMutableArray alloc] init];
 	
 	[self addTarget:self action:@selector(didSelectionChanged:) forControlEvents:UIControlEventValueChanged];	

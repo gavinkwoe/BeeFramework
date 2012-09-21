@@ -100,6 +100,8 @@
 		63F8E90C160C594200A5FECC /* Bee_UIView.m in Sources */ = {isa = PBXBuildFile; fileRef = 63F8E90B160C594200A5FECC /* Bee_UIView.m */; };
 		63F8E90F160C595300A5FECC /* Bee_UICameraBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 63F8E90E160C595300A5FECC /* Bee_UICameraBoard.m */; };
 		63F8E911160C599B00A5FECC /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63F8E910160C599B00A5FECC /* AVFoundation.framework */; };
+		63F8E916160C5B6A00A5FECC /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63F8E915160C5B6A00A5FECC /* CoreVideo.framework */; };
+		63F8E918160C5B8900A5FECC /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63F8E917160C5B8900A5FECC /* CoreMedia.framework */; };
 		63FE1C3415D0191C00432794 /* CatelogBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 63FE1C0415D0191C00432794 /* CatelogBoard.m */; };
 		63FE1C3515D0191C00432794 /* DribbbleBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 63FE1C0715D0191C00432794 /* DribbbleBoard.m */; };
 		63FE1C3615D0191C00432794 /* DribbbleController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63FE1C0915D0191C00432794 /* DribbbleController.mm */; };
@@ -303,6 +305,8 @@
 		63F8E90D160C595300A5FECC /* Bee_UICameraBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bee_UICameraBoard.h; sourceTree = "<group>"; };
 		63F8E90E160C595300A5FECC /* Bee_UICameraBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bee_UICameraBoard.m; sourceTree = "<group>"; };
 		63F8E910160C599B00A5FECC /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		63F8E915160C5B6A00A5FECC /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		63F8E917160C5B8900A5FECC /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		63FE1C0315D0191C00432794 /* CatelogBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CatelogBoard.h; sourceTree = "<group>"; };
 		63FE1C0415D0191C00432794 /* CatelogBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CatelogBoard.m; sourceTree = "<group>"; };
 		63FE1C0615D0191C00432794 /* DribbbleBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DribbbleBoard.h; sourceTree = "<group>"; };
@@ -345,6 +349,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63F8E918160C5B8900A5FECC /* CoreMedia.framework in Frameworks */,
+				63F8E916160C5B6A00A5FECC /* CoreVideo.framework in Frameworks */,
 				63F8E911160C599B00A5FECC /* AVFoundation.framework in Frameworks */,
 				63FE1DE115D11A0200432794 /* CoreGraphics.framework in Frameworks */,
 				631600B1158B62410060743E /* libz.dylib in Frameworks */,
@@ -428,6 +434,8 @@
 			isa = PBXGroup;
 			children = (
 				631600B0158B62410060743E /* libz.dylib */,
+				63F8E917160C5B8900A5FECC /* CoreMedia.framework */,
+				63F8E915160C5B6A00A5FECC /* CoreVideo.framework */,
 				63F8E910160C599B00A5FECC /* AVFoundation.framework */,
 				63FE1DE015D119FF00432794 /* CoreGraphics.framework */,
 				631600C0158B62720060743E /* CFNetwork.framework */,
