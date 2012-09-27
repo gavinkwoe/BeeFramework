@@ -308,18 +308,20 @@
 
 - (void)clearData
 {
-	
+	self.cellData = nil;
 }
 
 - (void)bindData:(NSObject *)data
 {
 	if ( nil == data )
+	{
+		[self clearData];
 		return;
+	}
 	
 //	if ( data != self.cellData )
 //	{
 		self.cellData = data;
-
 		[self layoutAllSubcells];		
 //	}
 }

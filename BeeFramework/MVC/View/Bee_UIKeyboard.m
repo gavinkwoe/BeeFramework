@@ -105,7 +105,6 @@ DEF_NOTIFICATION( HEIGHT_CHANGED );
 	}
 	else if ( [notification is:UIKeyboardWillChangeFrameNotification] )
 	{
-#if 0
 		NSValue * value1 = [(NSDictionary *)[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey];		
 		NSValue * value2 = [(NSDictionary *)[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey];		
 		if ( value1 && value2 )
@@ -142,7 +141,6 @@ DEF_NOTIFICATION( HEIGHT_CHANGED );
 				}
 			}
 		}
-#endif		
 	}
 	else if ( [notification is:UIKeyboardDidHideNotification] )
 	{
