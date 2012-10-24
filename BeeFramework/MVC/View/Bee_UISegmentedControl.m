@@ -60,7 +60,7 @@ DEF_SIGNAL( HIGHLIGHT_CHANGED )
 	{
 		[self initSelf];
 	}
-	return self;	
+	return self;
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -91,8 +91,8 @@ DEF_SIGNAL( HIGHLIGHT_CHANGED )
 	self.segmentedControlStyle = UISegmentedControlStyleBar;
 	self.selectedSegmentIndex = 0;
 //	self.tintColor = [UIColor darkGrayColor];
-
-	_tags = [[NSMutableArray alloc] init];
+    [_tags release];
+    _tags = [[NSMutableArray alloc] init];
 	
 	[self addTarget:self action:@selector(didSelectionChanged:) forControlEvents:UIControlEventValueChanged];	
 }

@@ -135,6 +135,7 @@ DEF_SIGNAL( TOUCH_UP_CANCEL )
 	self.adjustsImageWhenDisabled = YES;
 	self.adjustsImageWhenHighlighted = YES;
 	
+    [_actions release];
 	_actions = [[NSMutableArray alloc] init];
 	
 	[self addTarget:self action:@selector(didTouchDown) forControlEvents:UIControlEventTouchDown];		

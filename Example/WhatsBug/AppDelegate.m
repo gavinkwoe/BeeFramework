@@ -19,7 +19,7 @@
 
 	BeeUIStackGroup * stackGroup = [[[BeeUIStackGroup alloc] init] autorelease];
 	[stackGroup append:[BeeUIStack stack:@"WhatsBug" firstBoard:[CatelogBoard board]]];
-	
+    
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     self.window.backgroundColor = [UIColor whiteColor];
 	self.window.rootViewController = stackGroup;

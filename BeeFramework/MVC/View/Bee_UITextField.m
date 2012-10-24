@@ -151,6 +151,7 @@ DEF_SIGNAL( RETURN )
 
 - (void)initSelf
 {
+    [_agent release];
 	_agent = [[BeeUITextFieldAgent alloc] init];
 	_agent.target = self;
 	

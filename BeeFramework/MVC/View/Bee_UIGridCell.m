@@ -101,6 +101,8 @@
 	
 	_layout = self;
 	_autoLayout = YES;
+    
+    [_subCells release];
 	_subCells = [[NSMutableArray alloc] init];
 	_zoomsTouchWhenHighlighted = NO;
 }
