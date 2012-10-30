@@ -134,9 +134,9 @@ DEF_SINGLETON( BeeFileCache );
 	{
 		return [(NSString *)obj JSONData];
 	}
-	else if ( [obj isKindOfClass:[NSArray class]] )
+	else if ( [obj isKindOfClass:[NSDictionary class]] )
 	{
-		return [(NSArray *)obj JSONData];
+		return [(NSDictionary *)obj JSONData];
 	}
 	else if ( [obj isKindOfClass:[NSArray class]] )
 	{
