@@ -36,20 +36,6 @@
 #import "Bee_Network.h"
 #import "Bee_UISignal.h"
 
-#undef	__IMAGE
-#define __IMAGE( __name )	[UIImage imageNamed:__name]
-
-#pragma mark -
-
-@interface UIImage(BeeExtension)
-
-- (UIImage *)rounded;
-- (UIImage *)rounded:(CGRect)rect;
-
-- (UIImage *)stretched;
-
-@end
-
 #pragma mark -
 
 @interface BeeImageCache : NSObject
@@ -61,12 +47,10 @@
 AS_SINGLETON( BeeImageCache )
 
 - (BOOL)hasCachedForURL:(NSString *)url;
+- (UIImage *)imageForURL:(NSString *)url;
 
 - (void)saveImage:(UIImage *)image forURL:(NSString *)url;
 - (void)saveData:(NSData *)data forURL:(NSString *)url;
-
-- (UIImage *)imageForURL:(NSString *)url;
-
 - (void)deleteImageForURL:(NSString *)url;
 - (void)deleteAllImages;
 
@@ -78,10 +62,12 @@ AS_SINGLETON( BeeImageCache )
 
 @interface BeeUIImageView : UIImageView
 {
+	BOOL							_gray;
 	BOOL							_rounded;
 	BOOL							_loading;
 	BeeUIActivityIndicatorView *	_indicator;
 	NSString *						_loadedURL;
+	BOOL							_loaded;	
 }
 
 AS_SIGNAL( LOAD_START )			// 加载开始
@@ -89,8 +75,10 @@ AS_SIGNAL( LOAD_COMPLETED )		// 加载完成
 AS_SIGNAL( LOAD_FAILED )		// 加载失败
 AS_SIGNAL( LOAD_CANCELLED )		// 加载取消
 
+@property (nonatomic, assign) BOOL							gray;	// 是否变为灰色
 @property (nonatomic, assign) BOOL							rounded;		// 是否裁剪为圆型
 @property (nonatomic, assign) BOOL							loading;
+@property (nonatomic, assign) BOOL							loaded;
 @property (nonatomic, retain) BeeUIActivityIndicatorView *	indicator;
 @property (nonatomic, retain) NSString *					loadedURL;
 

@@ -40,20 +40,6 @@
 #import "Bee_UIGridCell.h"
 #import "Bee_UIBoard.h"
 
-typedef enum
-{
-	CAMERA_TORCH_NONE = 0,
-	CAMERA_TORCH_OFF,
-	CAMERA_TORCH_ON,
-	CAMERA_TORCH_AUTO
-} BeeUICameraTorchMode;
-
-typedef enum
-{
-	CAMERA_POSITION_FRONT = 0,
-	CAMERA_POSITION_BACK
-} BeeUICameraPosition;
-
 #pragma mark -
 
 @interface BeeUICameraBoard : BeeUIBoard
@@ -75,6 +61,14 @@ typedef enum
 	BOOL							_running;
 }
 
+AS_INT( TORCH_MODE_NONE )	// 闪光灯不可用
+AS_INT( TORCH_MODE_OFF )	// 闪光灯关
+AS_INT( TORCH_MODE_ON )		// 闪光灯开
+AS_INT( TORCH_MODE_AUTO )	// 闪光灯自动
+
+AS_INT( POSITION_FRONT )	// 前置
+AS_INT( POSITION_BACK )		// 后置
+
 #if !TARGET_IPHONE_SIMULATOR
 @property (nonatomic, retain) AVCaptureSession *			captureSession;
 @property (nonatomic, retain) AVCaptureVideoPreviewLayer *	previewLayer;	
@@ -84,8 +78,8 @@ typedef enum
 @property (nonatomic, retain) UIImage *						previewImage;
 
 @property (nonatomic, assign) BOOL							running;
-@property (nonatomic, assign) BeeUICameraTorchMode			torchMode;
-@property (nonatomic, assign) BeeUICameraPosition			position;
+@property (nonatomic, assign) NSInteger						torchMode;
+@property (nonatomic, assign) NSInteger						position;
 
 @property (nonatomic, readonly) BOOL						focusing;
 @property (nonatomic, readonly) CGPoint						focusPoint;

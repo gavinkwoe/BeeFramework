@@ -34,6 +34,7 @@
 #import "Bee_UIPullLoader.h"
 #import "Bee_UIActivityIndicatorView.h"
 #import "Bee_UISignal.h"
+#import "UIView+BeeQuery.h"
 
 #pragma mark -
 
@@ -45,7 +46,14 @@
 
 DEF_SIGNAL( STATE_CHANGED )
 
+DEF_INT( STATE_NORMAL,	0 )
+DEF_INT( STATE_PULLING,	1 )
+DEF_INT( STATE_LOADING,	2 )
+
 @synthesize state = _state;
+@synthesize normal = _normal;
+@synthesize pulling = _pulling;
+@synthesize loading = _loading;
 
 + (BeeUIPullLoader *)spawn
 {
@@ -90,7 +98,7 @@ DEF_SIGNAL( STATE_CHANGED )
 	_indicator.hidden = YES;
 	[self addSubview:_indicator];
 	
-	_state = BEE_UIPULLLOADER_STATE_NORMAL;
+	_state = BeeUIPullLoader.STATE_NORMAL;
 }
 
 - (void)setFrame:(CGRect)frame
@@ -120,19 +128,58 @@ DEF_SIGNAL( STATE_CHANGED )
     [super dealloc];
 }
 
-- (void)changeState:(BeeUIPullLoaderState)state
+- (BOOL)normal
+{
+	return (BeeUIPullLoader.STATE_NORMAL == _state) ? YES : NO;
+}
+
+- (void)setNormal:(BOOL)flag
+{
+	if ( flag )
+	{
+		[self changeState:BeeUIPullLoader.STATE_NORMAL];		
+	}
+}
+
+- (BOOL)pulling
+{
+	return (BeeUIPullLoader.STATE_PULLING == _state) ? YES : NO;
+}
+
+- (void)setPulling:(BOOL)flag
+{
+	if ( flag )
+	{
+		[self changeState:BeeUIPullLoader.STATE_PULLING];		
+	}
+}
+
+- (BOOL)loading
+{
+	return (BeeUIPullLoader.STATE_LOADING == _state) ? YES : NO;
+}
+
+- (void)setLoading:(BOOL)flag
+{
+	if ( flag )
+	{
+		[self changeState:BeeUIPullLoader.STATE_LOADING];
+	}
+}
+
+- (void)changeState:(NSInteger)state
 {
 	[self changeState:state animated:NO];
 }
 
-- (void)changeState:(BeeUIPullLoaderState)state animated:(BOOL)animated
+- (void)changeState:(NSInteger)state animated:(BOOL)animated
 {
 	if ( _state == state )
 		return;
 
 	_state = state;
 	
-	if ( BEE_UIPULLLOADER_STATE_NORMAL == state )
+	if ( BeeUIPullLoader.STATE_NORMAL == state )
 	{
 		[UIView beginAnimations:nil context:nil];
 		[UIView setAnimationDuration:0.3f];
@@ -142,7 +189,7 @@ DEF_SIGNAL( STATE_CHANGED )
 
 		[_indicator stopAnimating];		
 	}
-	else if ( BEE_UIPULLLOADER_STATE_PULLING == state )
+	else if ( BeeUIPullLoader.STATE_PULLING == state )
 	{
 		[UIView beginAnimations:nil context:nil];
 		[UIView setAnimationDuration:0.3f];
@@ -150,7 +197,7 @@ DEF_SIGNAL( STATE_CHANGED )
 		_arrowView.transform = CGAffineTransformRotate( CGAffineTransformIdentity, (M_PI / 360.0f) * -359.0f );
 		[UIView commitAnimations];		
 	}
-	else if ( BEE_UIPULLLOADER_STATE_LOADING == state )
+	else if ( BeeUIPullLoader.STATE_LOADING == state )
 	{
 		[_indicator startAnimating];
 

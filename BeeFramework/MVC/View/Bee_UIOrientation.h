@@ -39,6 +39,7 @@
 @interface BeeUIOrientation : NSObject<UIAccelerometerDelegate>
 {
 	UIInterfaceOrientation	_orientation;
+	// TODO: 显示方向指示器
 }
 
 AS_SINGLETON( BeeUIOrientation );

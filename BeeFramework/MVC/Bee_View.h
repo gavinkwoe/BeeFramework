@@ -40,7 +40,6 @@
 #import "Bee_UIKeyboard.h"
 #import "Bee_UIImageView.h"
 #import "Bee_UILabel.h"
-#import "Bee_UINavigationBar.h"
 #import "Bee_UIOrientation.h"
 #import "Bee_UIProgressView.h"
 #import "Bee_UIPageControl.h"
@@ -50,12 +49,17 @@
 #import "Bee_UITabBar.h"
 #import "Bee_UITextField.h"
 #import "Bee_UITextView.h"
-#import "Bee_UIView.h"
 #import "Bee_UIWebView.h"
 #import "Bee_UIZoomView.h"
-#import "Bee_UIRect.h"
-#import "Bee_UIFont.h"
-#import "Bee_UIColor.h"
+
+#import "CGRect+BeeExtension.h"
+#import "UIFont+BeeExtension.h"
+#import "UIColor+BeeExtension.h"
+#import "UIImage+BeeExtension.h"
+
+#import "UIView+BeeBackground.h"
+#import "UIView+BeeQuery.h"
+#import "UIView+BeeWireframe.h"
 
 // ViewController
 #import "Bee_UIBoard.h"

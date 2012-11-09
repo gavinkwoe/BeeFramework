@@ -37,6 +37,8 @@
 - (NSArray *)head:(NSUInteger)count;
 - (NSArray *)tail:(NSUInteger)count;
 
+- (id)safeObjectAtIndex:(NSUInteger)index;
+
 @end
 
 #pragma mark -

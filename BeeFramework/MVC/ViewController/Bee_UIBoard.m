@@ -38,12 +38,13 @@
 #import "Bee_UIStack.h"
 #import "Bee_Runtime.h"
 #import "Bee_Log.h"
-#import "Bee_UIFont.h"
-#import "Bee_UIView.h"
 
 #import "Bee_Network.h"
 #import "Bee_Controller.h"
 
+#import "UIView+BeeBackground.h"
+#import "UIView+BeeQuery.h"
+#import "UIFont+BeeExtension.h"
 #import "NSObject+BeeNotification.h"
 #import "NSObject+BeeTicker.h"
 #import "NSArray+BeeExtension.h"
@@ -67,7 +68,7 @@
 
 #pragma mark -
 
-@implementation UIView(BeeView)
+@implementation UIView(BeeUIBoard)
 
 - (BeeUIBoard *)board
 {
@@ -96,19 +97,6 @@
 	}
 }
 
-- (BeeUIStack *)stack
-{
-	UINavigationController * controller = [self navigationController];
-	if ( controller && [controller isKindOfClass:[BeeUIStack class]] )
-	{
-		return (BeeUIStack *)controller;
-	}
-	else
-	{
-		return nil;
-	}
-}
-
 - (UIViewController *)viewController
 {   
 	id nextResponder = [self nextResponder];   
@@ -121,35 +109,6 @@
 		return nil;   
 	}   
 } 
-
-- (UINavigationController *)navigationController
-{
-	UIViewController * controller = [self viewController];
-	if ( controller )
-	{
-		return controller.navigationController;
-	}
-	else
-	{
-		return nil;
-	}
-}
-
-- (UIView *)subview:(NSString *)name
-{
-	if ( nil == name || 0 == [name length] )
-		return nil;
-	
-	NSObject * view = [self valueForKey:name];
-	if ( [view isKindOfClass:[UIView class]] )
-	{
-		return (UIView *)view;
-	}
-	else
-	{
-		return nil;
-	}
-}
 
 @end
 
@@ -341,6 +300,8 @@
 @synthesize titleString;
 @synthesize titleView;
 
+@synthesize allowedOrientation = _allowedOrientation;
+
 #ifdef __BEE_DEVELOPMENT__
 @synthesize signalSeq = _signalSeq;
 @synthesize signals = _signals;
@@ -381,7 +342,19 @@ DEF_SIGNAL( SWIPE_DOWN )			// 手势：瞬间向下滑动
 DEF_SIGNAL( SWIPE_LEFT )			// 手势：瞬间向左滑动
 DEF_SIGNAL( SWIPE_RIGHT )			// 手势：瞬间向右滑动
 
-static NSMutableArray * __allBoards;
+DEF_INT( STATE_DEACTIVATED,			0 )
+DEF_INT( STATE_DEACTIVATING,		1 )
+DEF_INT( STATE_ACTIVATING,			2 )
+DEF_INT( STATE_ACTIVATED,			3 )
+
+DEF_INT( BARBUTTON_LEFT,			0 )
+DEF_INT( BARBUTTON_RIGHT,			1 )
+
+DEF_INT( ANIMATION_TYPE_DEFAULT,	0 )
+DEF_INT( ANIMATION_TYPE_ALPHA,		0 )
+DEF_INT( ANIMATION_TYPE_BOUNCE,		1 )
+
+static NSMutableArray *			__allBoards;
 
 + (NSArray *)allBoards
 {
@@ -412,11 +385,12 @@ static NSMutableArray * __allBoards;
 		_presenting = NO;
 		_viewBuilt = NO;
 		_dataLoaded = NO;
-		_state = BEE_UIBOARD_STATE_DEACTIVATED;
+		_state = BeeUIBoard.STATE_DEACTIVATED;
 		
 		_createDate = [[NSDate date] retain];
 		
-		_modalAnimationType = BEE_UIBOARD_ANIMATION_ALPHA;
+		_modalAnimationType = BeeUIBoard.ANIMATION_TYPE_ALPHA;
+		_allowedOrientation = UIInterfaceOrientationPortrait;
 		
 	#ifdef __BEE_DEVELOPMENT__
 		_signalSeq = 0;
@@ -481,9 +455,9 @@ static NSMutableArray * __allBoards;
 
 - (void)changeStateDeactivated
 {
-	if ( BEE_UIBOARD_STATE_DEACTIVATED != _state )
+	if ( BeeUIBoard.STATE_DEACTIVATED != _state )
 	{
-		_state = BEE_UIBOARD_STATE_DEACTIVATED;
+		_state = BeeUIBoard.STATE_DEACTIVATED;
 		
 		[self sendUISignal:BeeUIBoard.DID_DISAPPEAR];
 	}
@@ -491,9 +465,9 @@ static NSMutableArray * __allBoards;
 
 - (void)changeStateDeactivating
 {
-	if ( BEE_UIBOARD_STATE_DEACTIVATING != _state )
+	if ( BeeUIBoard.STATE_DEACTIVATING != _state )
 	{
-		_state = BEE_UIBOARD_STATE_DEACTIVATING;
+		_state = BeeUIBoard.STATE_DEACTIVATING;
 		
 		[self sendUISignal:BeeUIBoard.WILL_DISAPPEAR];
 	}
@@ -501,9 +475,9 @@ static NSMutableArray * __allBoards;
 
 - (void)changeStateActivated
 {
-	if ( BEE_UIBOARD_STATE_ACTIVATED != _state )
+	if ( BeeUIBoard.STATE_ACTIVATED != _state )
 	{
-		_state = BEE_UIBOARD_STATE_ACTIVATED;
+		_state = BeeUIBoard.STATE_ACTIVATED;
 		
 		[self sendUISignal:BeeUIBoard.DID_APPEAR];
 	}
@@ -511,9 +485,9 @@ static NSMutableArray * __allBoards;
 
 - (void)changeStateActivating
 {
-	if ( BEE_UIBOARD_STATE_ACTIVATING != _state )
+	if ( BeeUIBoard.STATE_ACTIVATING != _state )
 	{
-		_state = BEE_UIBOARD_STATE_ACTIVATING;
+		_state = BeeUIBoard.STATE_ACTIVATING;
 		
 		[self sendUISignal:BeeUIBoard.WILL_APPEAR];
 	}
@@ -637,9 +611,10 @@ static NSMutableArray * __allBoards;
 // Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-	// Return YES for supported orientations.
-//	return (interfaceOrientation == UIInterfaceOrientationPortrait);
-	return YES;
+	if ( (_allowedOrientation & interfaceOrientation) != 0 )
+		return YES;
+	
+	return NO;	
 }
 
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
@@ -654,6 +629,20 @@ static NSMutableArray * __allBoards;
 		_viewBuilt = YES;
 	}
 }
+
+#if defined(__IPHONE_6_0)
+-(NSUInteger)supportedInterfaceOrientations
+{
+	if ( IOS6_OR_LATER )
+	{
+		return UIInterfaceOrientationMaskPortrait;
+	}
+	else
+	{
+		return 0;
+	}
+}
+#endif	// #if defined(__IPHONE_6_0)
 
 - (void)didReceiveMemoryWarning
 {
@@ -934,10 +923,10 @@ static NSMutableArray * __allBoards;
 
 - (void)presentModalView:(UIView *)view animated:(BOOL)animated
 {
-	[self presentModalView:view animated:animated animationType:BEE_UIBOARD_ANIMATION_BOUNCE];
+	[self presentModalView:view animated:animated animationType:BeeUIBoard.ANIMATION_TYPE_BOUNCE];
 }
 
-- (void)presentModalView:(UIView *)view animated:(BOOL)animated animationType:(BeeUIBoardAnimationType)type
+- (void)presentModalView:(UIView *)view animated:(BOOL)animated animationType:(NSInteger)type
 {
 	if ( self.modalContentView || view.superview == self.view )
 		return;
@@ -958,7 +947,7 @@ static NSMutableArray * __allBoards;
 	
 	if ( animated )
 	{		
-		if ( BEE_UIBOARD_ANIMATION_ALPHA == type )
+		if ( BeeUIBoard.ANIMATION_TYPE_ALPHA == type )
 		{
 			self.modalMaskView.alpha = 0.0f;
 			self.modalContentView.alpha = 0.0f;
@@ -973,7 +962,7 @@ static NSMutableArray * __allBoards;
 			
 			[UIView commitAnimations];				
 		}
-		else if ( BEE_UIBOARD_ANIMATION_BOUNCE == type )
+		else if ( BeeUIBoard.ANIMATION_TYPE_BOUNCE == type )
 		{
 			self.modalMaskView.alpha = 0.0f;
 			self.modalContentView.alpha = 0.0f;
@@ -1038,7 +1027,7 @@ static NSMutableArray * __allBoards;
 	
 	if ( animated )
 	{
-		if ( BEE_UIBOARD_ANIMATION_ALPHA == _modalAnimationType )
+		if ( BeeUIBoard.ANIMATION_TYPE_ALPHA == _modalAnimationType )
 		{
 			[UIView beginAnimations:nil context:nil];
 			[UIView setAnimationDuration:MODAL_ANIMATION_DURATION];
@@ -1050,7 +1039,7 @@ static NSMutableArray * __allBoards;
 			
 			[UIView commitAnimations];				
 		}
-		else if ( BEE_UIBOARD_ANIMATION_BOUNCE == _modalAnimationType )
+		else if ( BeeUIBoard.ANIMATION_TYPE_BOUNCE == _modalAnimationType )
 		{
 			[UIView beginAnimations:nil context:nil];
 			[UIView setAnimationDuration:(MODAL_ANIMATION_DURATION / 4.0f)];
@@ -1175,9 +1164,9 @@ static NSMutableArray * __allBoards;
 	[self sendUISignal:BeeUIBoard.DONE_BUTTON_TOUCHED];
 }
 
-- (void)showBarButton:(BeeUIBoardBarButtonPosition)position title:(NSString *)name
+- (void)showBarButton:(NSInteger)position title:(NSString *)name
 {
-	if ( BEE_UIBOARD_BARBUTTON_LEFT == position )
+	if ( BeeUIBoard.BARBUTTON_LEFT == position )
 	{
 		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:name
 																				  style:UIBarButtonItemStylePlain
@@ -1193,14 +1182,14 @@ static NSMutableArray * __allBoards;
 	}
 }
 
-- (void)showBarButton:(BeeUIBoardBarButtonPosition)position image:(UIImage *)image
+- (void)showBarButton:(NSInteger)position image:(UIImage *)image
 {
 	UIButton * button = [[[UIButton alloc] initWithFrame:CGRectMake(0, 0, image.size.width, image.size.height)] autorelease];
 	button.contentMode = UIViewContentModeScaleAspectFit;
 	button.backgroundColor = [UIColor clearColor];
 	[button setImage:image forState:UIControlStateNormal];
 
-	if ( BEE_UIBOARD_BARBUTTON_LEFT == position )
+	if ( BeeUIBoard.BARBUTTON_LEFT == position )
 	{
 		[button addTarget:self action:@selector(didLeftBarButtonTouched) forControlEvents:UIControlEventTouchUpInside];
 		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:button] autorelease];
@@ -1227,9 +1216,9 @@ static NSMutableArray * __allBoards;
 //	}	
 }
 
-- (void)showBarButton:(BeeUIBoardBarButtonPosition)position system:(UIBarButtonSystemItem)index
+- (void)showBarButton:(NSInteger)position system:(UIBarButtonSystemItem)index
 {
-	if ( BEE_UIBOARD_BARBUTTON_LEFT == position )
+	if ( BeeUIBoard.BARBUTTON_LEFT == position )
 	{
 		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:index
 																							   target:self
@@ -1243,9 +1232,9 @@ static NSMutableArray * __allBoards;
 	}		
 }
 
-- (void)showBarButton:(BeeUIBoardBarButtonPosition)position custom:(UIView *)view
+- (void)showBarButton:(NSInteger)position custom:(UIView *)view
 {
-	if ( BEE_UIBOARD_BARBUTTON_LEFT == position )
+	if ( BeeUIBoard.BARBUTTON_LEFT == position )
 	{
 		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:view] autorelease];
 	}
@@ -1255,9 +1244,9 @@ static NSMutableArray * __allBoards;
 	}
 }
 
-- (void)hideBarButton:(BeeUIBoardBarButtonPosition)position
+- (void)hideBarButton:(NSInteger)position
 {
-	if ( BEE_UIBOARD_BARBUTTON_LEFT == position )
+	if ( BeeUIBoard.BARBUTTON_LEFT == position )
 	{
 		self.navigationItem.leftBarButtonItem = nil;
 	}
@@ -1269,22 +1258,22 @@ static NSMutableArray * __allBoards;
 
 - (BOOL)deactivated
 {
-	return BEE_UIBOARD_STATE_DEACTIVATED == _state ? YES : NO;
+	return BeeUIBoard.STATE_DEACTIVATED == _state ? YES : NO;
 }
 
 - (BOOL)deactivating
 {
-	return BEE_UIBOARD_STATE_DEACTIVATING == _state ? YES : NO;
+	return BeeUIBoard.STATE_DEACTIVATING == _state ? YES : NO;
 }
 
 - (BOOL)activating
 {
-	return BEE_UIBOARD_STATE_ACTIVATING == _state ? YES : NO;
+	return BeeUIBoard.STATE_ACTIVATING == _state ? YES : NO;
 }
 
 - (BOOL)activated
 {
-	return BEE_UIBOARD_STATE_ACTIVATED == _state ? YES : NO;
+	return BeeUIBoard.STATE_ACTIVATED == _state ? YES : NO;
 }
 
 - (BOOL)panEnabled
@@ -1469,6 +1458,7 @@ static NSMutableArray * __allBoards;
 	self.popover = [[[UIPopoverController alloc] initWithContentViewController:[BeeUIStack stackWithFirstBoard:self]] autorelease];
 	self.popover.delegate = self;
     self.contentSizeForViewInPopover = size;
+	[self.popover setPopoverContentSize:size];
 	
 	[self sendUISignal:BeeUIBoard.POPOVER_WILL_PRESENT];
 	

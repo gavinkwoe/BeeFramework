@@ -32,6 +32,7 @@
 
 #import "Bee_UIWebView.h"
 #import "Bee_UISignal.h"
+#import "Bee_Log.h"
 
 #pragma mark -
 
@@ -50,6 +51,7 @@ DEF_SIGNAL( USER_ACTION_BACK )		// 回退
 DEF_SIGNAL( USER_ACTION_RELOAD )	// 刷新
 DEF_SIGNAL( USER_ACTION_OTHER )		// 其他操作
 
+DEF_SIGNAL( WILL_START )			// 准备加载
 DEF_SIGNAL( DID_START )				// 开始加载
 DEF_SIGNAL( DID_LOAD_FINISH )		// 加载成功
 DEF_SIGNAL( DID_LOAD_FAILED )		// 加载失败
@@ -87,6 +89,7 @@ DEF_SIGNAL( DID_LOAD_CANCELLED )	// 加载取消
 {
 	self.opaque = NO;
 	self.backgroundColor = [UIColor clearColor];
+	self.delegate = self;
 	
 	for ( UIView * subView in self.subviews )
 	{
@@ -143,6 +146,11 @@ DEF_SIGNAL( DID_LOAD_CANCELLED )	// 加载取消
 {	
 	NSObject * result = nil;
 	
+	CC( @"BeeUIWebView, shouldStartLoadWithRequest, url = %@", request.URL.absoluteString );
+	
+	[self sendUISignal:BeeUIWebView.WILL_START
+			withObject:request.URL.absoluteString];
+
 	if ( UIWebViewNavigationTypeLinkClicked == navigationType )
 	{
 		result = [self sendUISignal:BeeUIWebView.USER_ACTION_CLICK
@@ -186,7 +194,8 @@ DEF_SIGNAL( DID_LOAD_CANCELLED )	// 加载取消
 
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
-	[self sendUISignal:BeeUIWebView.DID_START withObject:nil];
+	[self sendUISignal:BeeUIWebView.DID_START
+			withObject:webView.request.URL.absoluteString];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
@@ -211,6 +220,7 @@ DEF_SIGNAL( DID_LOAD_CANCELLED )	// 加载取消
 	}
 	else
 	{
+		CC( @"BeeUIWebView, error = %@", error );
 		[self sendUISignal:BeeUIWebView.DID_LOAD_FAILED withObject:error];
 	}
 }

@@ -32,7 +32,7 @@
 {
 	NSString * temp = (NSString *)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)string, NULL, CFSTR(":/?#[]@!$ &'()*+,;=\"<>%{}|\\^~`"), CFStringConvertNSStringEncodingToEncoding([self stringEncoding]));
 	NSString * str = [NSString stringWithString:temp];
-	[temp release];
+	[temp autorelease];
 
 	return str;
 }
@@ -197,9 +197,16 @@
 		[self setShouldStreamPostDataFromDisk:YES];
 	}
 	
-	if ([self postFormat] == ASIURLEncodedPostFormat) {
+	if ( [self postFormat] == ASIRawPostFormat )
+	{
+		NSLog( @"raw format" );
+	}
+	else if ( [self postFormat] == ASIURLEncodedPostFormat )
+	{
 		[self buildURLEncodedPostBody];
-	} else {
+	}
+	else if ( [self postFormat] == ASIMultipartFormDataPostFormat )
+	{
 		[self buildMultipartFormDataPostBody];
 	}
 

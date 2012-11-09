@@ -198,6 +198,20 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 #endif	// #if __BEE_DEVELOPMENT__
 }
 
+- (BOOL)boolValue
+{
+	if ( self.returnValue == BeeUISignal.YES_VALUE )
+	{
+		return YES;
+	}
+	else if ( self.returnValue == BeeUISignal.NO_VALUE )
+	{
+		return NO;
+	}
+	
+	return NO;
+}
+
 - (void)returnYES
 {
 	self.returnValue = BeeUISignal.YES_VALUE;
@@ -238,9 +252,9 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 	{
 		signal.reach = YES;
 
-#if __BEE_DEVELOPMENT__
+	#if __BEE_DEVELOPMENT__
 		CC( @"[%@] > %@", signal.name, signal.callPath );
-#endif	// #if __BEE_DEVELOPMENT__
+	#endif	// #if __BEE_DEVELOPMENT__
 	}
 }
 
@@ -278,9 +292,9 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 {
 	signal.reach = YES;
 	
-//#if __BEE_DEVELOPMENT__
-//	CC( @"[%@] > %@", signal.name, signal.callPath );
-//#endif	// #if __BEE_DEVELOPMENT__
+#if __BEE_DEVELOPMENT__
+	CC( @"[%@] > %@", signal.name, signal.callPath );
+#endif	// #if __BEE_DEVELOPMENT__
 }
 
 - (BeeUISignal *)sendUISignal:(NSString *)name
@@ -312,9 +326,22 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 #pragma mark -
 
 @interface UISingleTapGestureRecognizer : UITapGestureRecognizer
+{
+	NSString *	_signalName;
+	NSObject *	_signalObject;
+}
+
+@property (nonatomic, retain) NSString *	signalName;
+@property (nonatomic, assign) NSObject *	signalObject;
+
 @end
 
+#pragma mark -
+
 @implementation UISingleTapGestureRecognizer
+
+@synthesize signalName = _signalName;
+@synthesize signalObject = _signalObject;
 
 - (id)initWithTarget:(id)target action:(SEL)action
 {
@@ -345,13 +372,34 @@ DEF_SIGNAL( TAPPED );
 
 - (void)didSingleTapped:(UITapGestureRecognizer *)tapGesture
 {
-	if ( UIGestureRecognizerStateEnded == tapGesture.state )
+	if ( [tapGesture isKindOfClass:[UISingleTapGestureRecognizer class]] )
 	{
-		[self sendUISignal:UIView.TAPPED];
-	}
+		UISingleTapGestureRecognizer * gesture = (UISingleTapGestureRecognizer *)tapGesture;
+		if ( UIGestureRecognizerStateEnded == gesture.state )
+		{
+			if ( gesture.signalName )
+			{
+				[self sendUISignal:gesture.signalName withObject:gesture.signalObject];
+			}
+			else
+			{
+				[self sendUISignal:UIView.TAPPED];
+			}
+		}
+	}		
 }
 
 - (void)makeTappable
+{
+	[self makeTappable:nil];
+}
+
+- (void)makeTappable:(NSString *)signal
+{
+	[self makeTappable:signal withObject:nil];
+}
+
+- (void)makeTappable:(NSString *)signal withObject:(NSObject *)obj
 {
 	self.userInteractionEnabled = YES;
 	
@@ -366,10 +414,12 @@ DEF_SIGNAL( TAPPED );
 	
 	if ( nil == singleTapGesture )
 	{
-		singleTapGesture = [[UISingleTapGestureRecognizer alloc] initWithTarget:self action:@selector(didSingleTapped:)];
+		singleTapGesture = [[[UISingleTapGestureRecognizer alloc] initWithTarget:self action:@selector(didSingleTapped:)] autorelease];
 		[self addGestureRecognizer:singleTapGesture];
-		[singleTapGesture autorelease];
 	}
+	
+	singleTapGesture.signalName = signal;
+	singleTapGesture.signalObject = obj;
 }
 
 - (void)makeUntappable

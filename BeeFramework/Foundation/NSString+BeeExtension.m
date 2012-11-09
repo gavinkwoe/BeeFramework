@@ -297,7 +297,7 @@
 		
 		for ( unsigned long i = 0; i < length; ++i )
 		{
-			sprintf( tmp, "%02x", bytes[i] );
+			sprintf( tmp, "%02X", bytes[i] );
 			strcat( (char *)hex, tmp );
 		}
 		

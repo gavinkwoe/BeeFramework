@@ -35,6 +35,8 @@
 #import "Bee_UIPullLoader.h"
 #import "Bee_UIBoard.h"
 
+#pragma mark -
+
 #undef	FLOW_MAX_COLUMNS
 #define FLOW_MAX_COLUMNS	(6)
 

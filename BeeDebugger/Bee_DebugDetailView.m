@@ -48,7 +48,7 @@
 		contentFrame = CGRectInset(contentFrame, 10.0f, 10.0f);
 		
 		_content = [[BeeUITextView alloc] initWithFrame:contentFrame];
-		_content.font = [BeeUIFont height:12.0f bold:NO];
+		_content.font = [UIFont boldSystemFontOfSize:12.0f];
 		_content.textColor = [UIColor blackColor];
 		_content.textAlignment = UITextAlignmentLeft;
 		_content.editable = NO;

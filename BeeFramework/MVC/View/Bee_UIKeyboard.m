@@ -57,6 +57,7 @@ DEF_NOTIFICATION( HIDDEN );
 DEF_NOTIFICATION( HEIGHT_CHANGED );
 
 @synthesize shown = _shown;
+@synthesize animating = _animating;
 @synthesize height = _height;
 
 - (id)init
@@ -65,6 +66,7 @@ DEF_NOTIFICATION( HEIGHT_CHANGED );
 	if (self)
 	{
 		_shown = NO;
+		_animating = NO;
 		_height = DEFAULT_KEYBOARD_HEIGHT;
 
 		_accessorFrame = CGRectZero;
@@ -105,7 +107,6 @@ DEF_NOTIFICATION( HEIGHT_CHANGED );
 	}
 	else if ( [notification is:UIKeyboardWillChangeFrameNotification] )
 	{
-#if 0
 		NSValue * value1 = [(NSDictionary *)[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey];		
 		NSValue * value2 = [(NSDictionary *)[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey];		
 		if ( value1 && value2 )
@@ -142,7 +143,6 @@ DEF_NOTIFICATION( HEIGHT_CHANGED );
 				}
 			}
 		}
-#endif		
 	}
 	else if ( [notification is:UIKeyboardDidHideNotification] )
 	{

@@ -55,6 +55,14 @@
 
 @implementation BeeUICameraBoard
 
+DEF_INT( TORCH_MODE_NONE,	0 )
+DEF_INT( TORCH_MODE_OFF,	1 )
+DEF_INT( TORCH_MODE_ON,		2 )
+DEF_INT( TORCH_MODE_AUTO,	3 )
+
+DEF_INT( POSITION_FRONT,	0 )
+DEF_INT( POSITION_BACK,		1 )
+
 #if !TARGET_IPHONE_SIMULATOR
 @synthesize captureSession = _captureSession;
 @synthesize previewOrientation = _previewOrientation;
@@ -284,7 +292,7 @@ DEF_SIGNAL( MANUAL_FOCUS )	// 用户触屏手动对焦
 #endif	// #if !TARGET_IPHONE_SIMULATOR
 }
 
-- (BeeUICameraTorchMode)torchMode
+- (NSInteger)torchMode
 {
 #if !TARGET_IPHONE_SIMULATOR
 	AVCaptureDevice * device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
@@ -293,23 +301,23 @@ DEF_SIGNAL( MANUAL_FOCUS )	// 用户触屏手动对焦
 		AVCaptureTorchMode mode = [device torchMode];
 		if ( AVCaptureTorchModeOff == mode )
 		{	
-			return CAMERA_TORCH_OFF;
+			return BeeUICameraBoard.TORCH_MODE_OFF;
 		}
 		else if ( AVCaptureTorchModeOn == mode )
 		{
-			return CAMERA_TORCH_ON;
+			return BeeUICameraBoard.TORCH_MODE_ON;
 		}
 		else if ( AVCaptureTorchModeAuto == mode )
 		{
-			return CAMERA_TORCH_AUTO;
+			return BeeUICameraBoard.TORCH_MODE_AUTO;
 		}
 	}
 #endif	// #if !TARGET_IPHONE_SIMULATOR
 
-	return CAMERA_TORCH_NONE;
+	return BeeUICameraBoard.TORCH_MODE_NONE;
 }
 
-- (void)setTorchMode:(BeeUICameraTorchMode)mode
+- (void)setTorchMode:(NSInteger)mode
 {
 #if !TARGET_IPHONE_SIMULATOR
 	AVCaptureDevice * device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
@@ -317,15 +325,15 @@ DEF_SIGNAL( MANUAL_FOCUS )	// 用户触屏手动对焦
 	{		
 		if ( [device lockForConfiguration:nil] )
 		{
-			if ( CAMERA_TORCH_OFF == mode )
+			if ( BeeUICameraBoard.TORCH_MODE_OFF == mode )
 			{
 				[device setTorchMode:AVCaptureTorchModeOff];
 			}
-			else if ( CAMERA_TORCH_ON == mode )
+			else if ( BeeUICameraBoard.TORCH_MODE_ON == mode )
 			{
 				[device setTorchMode:AVCaptureTorchModeOn];
 			}
-			else if ( CAMERA_TORCH_AUTO == mode )
+			else if ( BeeUICameraBoard.TORCH_MODE_AUTO == mode )
 			{
 				[device setTorchMode:AVCaptureTorchModeAuto];
 			}		
@@ -338,7 +346,7 @@ DEF_SIGNAL( MANUAL_FOCUS )	// 用户触屏手动对焦
 #endif	// #if !TARGET_IPHONE_SIMULATOR
 }
 
-- (BeeUICameraPosition)position
+- (NSInteger)position
 {
 #if !TARGET_IPHONE_SIMULATOR
 	NSArray * inputs = self.captureSession.inputs;
@@ -349,20 +357,20 @@ DEF_SIGNAL( MANUAL_FOCUS )	// 用户触屏手动对焦
 		{
 			if ( device.position == AVCaptureDevicePositionBack )
 			{
-				return CAMERA_POSITION_BACK;
+				return BeeUICameraBoard.POSITION_BACK;
 			}
 			else
 			{
-				return CAMERA_POSITION_FRONT;
+				return BeeUICameraBoard.POSITION_FRONT;
 			}
 		}
 	}
 #endif	// #if !TARGET_IPHONE_SIMULATOR
 	
-	return CAMERA_POSITION_BACK;
+	return BeeUICameraBoard.POSITION_BACK;
 }
 
-- (void)setPosition:(BeeUICameraPosition)pos
+- (void)setPosition:(NSInteger)pos
 {
 #if !TARGET_IPHONE_SIMULATOR
 	NSArray * inputs = self.captureSession.inputs;
@@ -374,7 +382,7 @@ DEF_SIGNAL( MANUAL_FOCUS )	// 用户触屏手动对焦
 			AVCaptureDevice * newCamera = nil;
 			AVCaptureDeviceInput * newInput = nil;
 			
-			if ( pos == CAMERA_POSITION_BACK )
+			if ( pos == BeeUICameraBoard.POSITION_BACK )
 			{
 				newCamera = [self cameraWithPosition:AVCaptureDevicePositionBack];				
 			}
@@ -382,7 +390,7 @@ DEF_SIGNAL( MANUAL_FOCUS )	// 用户触屏手动对焦
 			{
 				newCamera = [ self cameraWithPosition:AVCaptureDevicePositionFront];				
 			}
-			
+
 			newInput = [AVCaptureDeviceInput deviceInputWithDevice:newCamera error:nil];
 			
 			[self.captureSession beginConfiguration];

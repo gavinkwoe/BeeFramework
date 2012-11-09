@@ -36,31 +36,29 @@
 
 #pragma mark -
 
-typedef enum
-{
-	BEE_UIPULLLOADER_STATE_NORMAL = 0,
-	BEE_UIPULLLOADER_STATE_PULLING,
-	BEE_UIPULLLOADER_STATE_LOADING
-} BeeUIPullLoaderState;
-
-#pragma mark -
-
 @class BeeUIActivityIndicatorView;
 
 @interface BeeUIPullLoader : UIView
 {
-	BeeUIPullLoaderState			_state;
+	NSInteger						_state;
 	UIImageView *					_arrowView;
 	BeeUIActivityIndicatorView *	_indicator;
 }
 
-AS_SIGNAL( STATE_CHANGED )	// 状态改变
+AS_INT( STATE_NORMAL )
+AS_INT( STATE_PULLING )
+AS_INT( STATE_LOADING )
 
-@property (nonatomic, readonly) BeeUIPullLoaderState	state;
+@property (nonatomic, readonly) NSInteger	state;
+@property (nonatomic, assign) BOOL			normal;
+@property (nonatomic, assign) BOOL			pulling;
+@property (nonatomic, assign) BOOL			loading;
+	   
+AS_SIGNAL( STATE_CHANGED )	// 状态改变
 
 + (BeeUIPullLoader *)spawn;
 
-- (void)changeState:(BeeUIPullLoaderState)state;
-- (void)changeState:(BeeUIPullLoaderState)state animated:(BOOL)animated;
+- (void)changeState:(NSInteger)state;
+- (void)changeState:(NSInteger)state animated:(BOOL)animated;
 
 @end

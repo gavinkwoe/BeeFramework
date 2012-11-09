@@ -40,6 +40,8 @@
 #import "Bee_SystemInfo.h"
 
 #import "NSString+BeeExtension.h"
+#import "UIImage+BeeExtension.h"
+#import "UIView+BeeQuery.h"
 
 #pragma mark -
 
@@ -134,162 +136,6 @@ DEF_SINGLETON( BeeImageCache );
 
 #pragma mark -
 
-@implementation UIImage(BeeExtension)
-
-- (UIImage *)alphaImage
-{
-	CGImageAlphaInfo alpha = CGImageGetAlphaInfo( self.CGImage );
-	if ( kCGImageAlphaFirst == alpha ||
-		kCGImageAlphaLast == alpha || 
-		kCGImageAlphaPremultipliedFirst == alpha ||
-		kCGImageAlphaPremultipliedLast == alpha )
-	{
-		return self;
-	}
-
-	CGImageRef imageRef = self.CGImage;
-	size_t width = CGImageGetWidth(imageRef);
-	size_t height = CGImageGetHeight(imageRef);
-
-	// The bitsPerComponent and bitmapInfo values are hard-coded to prevent an "unsupported parameter combination" error
-	CGContextRef offscreenContext = CGBitmapContextCreate(NULL,
-														  width,
-														  height,
-														  8,
-														  0,
-														  CGImageGetColorSpace(imageRef),
-														  kCGBitmapByteOrderDefault | kCGImageAlphaPremultipliedFirst);
-
-	// Draw the image into the context and retrieve the new image, which will now have an alpha layer
-	CGContextDrawImage(offscreenContext, CGRectMake(0, 0, width, height), imageRef);
-	CGImageRef imageRefWithAlpha = CGBitmapContextCreateImage(offscreenContext);
-	UIImage *imageWithAlpha = [UIImage imageWithCGImage:imageRefWithAlpha];
-
-	// Clean up
-	CGContextRelease(offscreenContext);
-	CGImageRelease(imageRefWithAlpha);
-
-	return imageWithAlpha;
-}
-
-// Adds a rectangular path to the given context and rounds its corners by the given extents
-// Original author: Björn Sållarp. Used with permission. See: http://blog.sallarp.com/iphone-uiimage-round-corners/
-- (void)addCircleRectToPath:(CGRect)rect context:(CGContextRef)context
-{
-    CGContextSaveGState(context);
-    CGContextTranslateCTM(context, CGRectGetMinX(rect), CGRectGetMinY(rect));
-	CGContextSetShouldAntialias(context, true);
-	CGContextSetAllowsAntialiasing(context, true);
-	CGContextAddEllipseInRect(context, rect);
-    CGContextClosePath(context);
-    CGContextRestoreGState(context);
-}
-
-- (UIImage *)rounded
-{
-    // If the image does not have an alpha layer, add one
-    UIImage * image = [self alphaImage];
-	CGSize imageSize = image.size;
-	imageSize.width = floorf(imageSize.width);
-	imageSize.height = floorf(imageSize.height);
-	
-	CGFloat imageWidth = fminf(imageSize.width, imageSize.height);
-	CGFloat imageHeight = imageWidth;
-    
-    // Build a context that's the same dimensions as the new size
-	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-	CGContextRef context = CGBitmapContextCreate(NULL,
-												 imageWidth,
-												 imageHeight,
-												 CGImageGetBitsPerComponent(image.CGImage),
-												 4 * imageWidth,
-												 colorSpace,
-												 kCGImageAlphaPremultipliedLast);
-	
-    // Create a clipping path with rounded corners
-    CGContextBeginPath(context);
-	CGRect circleRect;
-	circleRect.origin.x = 0; // (imageSize.width - imageWidth) / 2.0f;
-	circleRect.origin.y = 0; // (imageSize.height - imageHeight) / 2.0f;
-	circleRect.size.width = imageWidth;
-	circleRect.size.height = imageHeight;
-	//	circleRect = CGRectInset( circleRect, 4.0f, 4.0f );
-    [self addCircleRectToPath:circleRect context:context];
-    CGContextClosePath(context);
-    CGContextClip(context);
-	
-    // Draw the image to the context; the clipping path will make anything outside the rounded rect transparent
-	CGRect drawRect;
-	drawRect.origin.x = 0; //(imageSize.width - imageWidth) / 2.0f;
-	drawRect.origin.y = 0; //(imageSize.height - imageHeight) / 2.0f;
-	drawRect.size.width = imageWidth;
-	drawRect.size.height = imageHeight;
-    CGContextDrawImage(context, drawRect, image.CGImage);
-    
-    // Create a CGImage from the context
-    CGImageRef clippedImage = CGBitmapContextCreateImage(context);
-    CGContextRelease(context);
-	CGColorSpaceRelease( colorSpace );
-	
-    // Create a UIImage from the CGImage
-    UIImage * roundedImage = [UIImage imageWithCGImage:clippedImage];
-    CGImageRelease(clippedImage);
-	
-    return roundedImage;
-}
-
-- (UIImage *)rounded:(CGRect)circleRect
-{
-	// If the image does not have an alpha layer, add one
-    UIImage * image = [self alphaImage];
-	
-    // Build a context that's the same dimensions as the new size
-	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-	CGContextRef context = CGBitmapContextCreate(NULL,
-												 circleRect.size.width,
-												 circleRect.size.height,
-												 CGImageGetBitsPerComponent(image.CGImage),
-												 4 * circleRect.size.width,
-												 colorSpace,
-												 kCGImageAlphaPremultipliedLast);
-	
-    // Create a clipping path with rounded corners
-    CGContextBeginPath(context);
-    [self addCircleRectToPath:circleRect context:context];
-    CGContextClosePath(context);
-    CGContextClip(context);
-	
-    // Draw the image to the context; the clipping path will make anything outside the rounded rect transparent
-	CGRect drawRect;
-	drawRect.origin.x = 0; //(imageSize.width - imageWidth) / 2.0f;
-	drawRect.origin.y = 0; //(imageSize.height - imageHeight) / 2.0f;
-	drawRect.size.width = circleRect.size.width;
-	drawRect.size.height = circleRect.size.height;
-    CGContextDrawImage(context, drawRect, image.CGImage);
-	
-    // Create a CGImage from the context
-    CGImageRef clippedImage = CGBitmapContextCreateImage(context);
-    CGContextRelease(context);
-	CGColorSpaceRelease(colorSpace);
-	
-    // Create a UIImage from the CGImage
-    UIImage * roundedImage = [UIImage imageWithCGImage:clippedImage];
-    CGImageRelease(clippedImage);
-    
-    return roundedImage;
-}
-
-- (UIImage *)stretched
-{
-	CGFloat leftCap = floorf(self.size.width / 2.0f);
-	CGFloat topCap = floorf(self.size.height / 2.0f);
-	return [self stretchableImageWithLeftCapWidth:leftCap topCapHeight:topCap];
-}
-
-@end
-
-#pragma mark -
-
 @interface BeeUIImageView(Private)
 - (void)initSelf;
 - (void)changeImage:(UIImage *)image;
@@ -302,10 +148,12 @@ DEF_SIGNAL( LOAD_COMPLETED )
 DEF_SIGNAL( LOAD_FAILED )
 DEF_SIGNAL( LOAD_CANCELLED )
 
+@synthesize gray = _gray;
 @synthesize rounded = _rounded;
 @synthesize loading = _loading;
 @synthesize indicator = _indicator;
 @synthesize loadedURL = _loadedURL;
+@synthesize loaded	= _loaded;
 
 @synthesize url;
 @synthesize file;
@@ -355,6 +203,7 @@ DEF_SIGNAL( LOAD_CANCELLED )
 	self.contentMode = UIViewContentModeCenter;
 
 	_loading = NO;
+	_loaded	 = NO;
 }
 
 - (void)GET:(NSString *)string useCache:(BOOL)useCache
@@ -366,7 +215,7 @@ DEF_SIGNAL( LOAD_CANCELLED )
 {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 
-	if ( nil == string )
+	if ( nil == string || 0 == string.length )
 		return;
 
 	if ( NO == [string hasPrefix:@"http://"] )
@@ -384,17 +233,22 @@ DEF_SIGNAL( LOAD_CANCELLED )
 
 	self.loading = NO;
 	self.loadedURL = string;
+	self.loaded		= NO;
 
 	if ( useCache && [[BeeImageCache sharedInstance] hasCachedForURL:string] )
 	{
-		[self changeImage:[[BeeImageCache sharedInstance] imageForURL:string]];
+		UIImage * image = [[BeeImageCache sharedInstance] imageForURL:string];
+		if ( image )
+		{
+			[self changeImage:image];
+			self.loaded = YES;
+			return;
+		}
 	}
-	else
-	{
-		[self changeImage:defaultImage];
-		[self cancelRequests];
-		[self GET:string];
-	}
+
+	[self changeImage:defaultImage];
+	[self cancelRequests];
+	[self GET:string];
 }
 
 - (void)setUrl:(NSString *)string
@@ -437,6 +291,7 @@ DEF_SIGNAL( LOAD_CANCELLED )
 		self.loading = NO;
 		
 		[super setImage:nil];
+		[super setNeedsDisplay];
 		return;
 	}
 
@@ -447,6 +302,11 @@ DEF_SIGNAL( LOAD_CANCELLED )
 		if ( self.rounded )
 		{
 			image = [image rounded];
+		}
+
+		if ( self.gray )
+		{
+			image = [image grayscale];
 		}
 
 		CGAffineTransform transform = CGAffineTransformIdentity;
@@ -574,11 +434,13 @@ DEF_SIGNAL( LOAD_CANCELLED )
 			[[BeeImageCache sharedInstance] saveData:data forURL:string];
 
 			[self setLoading:NO];
+			self.loaded = YES;
 			[self sendUISignal:BeeUIImageView.LOAD_COMPLETED];
 		}
 		else
 		{
 			[self setLoading:NO];
+			self.loaded = NO;
 			[self sendUISignal:BeeUIImageView.LOAD_FAILED];
 		}
 	}
@@ -587,6 +449,7 @@ DEF_SIGNAL( LOAD_CANCELLED )
 		[_indicator stopAnimating];	
 		
 		[self setLoading:NO];
+		self.loaded = NO;
 		[self sendUISignal:BeeUIImageView.LOAD_FAILED];
 	}
 	else if ( request.cancelled )

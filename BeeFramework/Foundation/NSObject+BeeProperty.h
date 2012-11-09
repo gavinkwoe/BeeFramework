@@ -75,3 +75,42 @@
 			} \
 			return __local; \
 		}
+
+#undef	AS_STATIC_PROPERTY_INT
+#define AS_STATIC_PROPERTY_INT( __name ) \
+		@property (nonatomic, readonly) NSInteger __name; \
+		+ (NSInteger)__name;
+
+#undef	DEF_STATIC_PROPERTY_INT
+#define DEF_STATIC_PROPERTY_INT( __name, __value ) \
+		@dynamic __name; \
+		+ (NSInteger)__name \
+		{ \
+			return __value; \
+		}
+
+#undef	AS_INT
+#define AS_INT	AS_STATIC_PROPERTY_INT
+
+#undef	DEF_INT
+#define DEF_INT	DEF_STATIC_PROPERTY_INT
+
+
+#undef	AS_STATIC_PROPERTY_STRING
+#define AS_STATIC_PROPERTY_STRING( __name ) \
+		@property (nonatomic, readonly) NSString * __name; \
+		+ (NSString *)__name;
+
+#undef	DEF_STATIC_PROPERTY_STRING
+#define DEF_STATIC_PROPERTY_STRING( __name, __value ) \
+		@dynamic __name; \
+		+ (NSString *)__name \
+		{ \
+			return __value; \
+		}
+
+#undef	AS_STRING
+#define AS_STRING	AS_STATIC_PROPERTY_STRING
+
+#undef	DEF_STRING
+#define DEF_STRING	DEF_STATIC_PROPERTY_STRING

@@ -126,6 +126,12 @@ DEF_SIGNAL( RELOADED )		// 数据重新加载
 DEF_SIGNAL( REACH_TOP )		// 触顶
 DEF_SIGNAL( REACH_BOTTOM )	// 触底
 
+DEF_SIGNAL( DID_STOP )
+DEF_SIGNAL( DID_SCROLL )
+
+DEF_INT( DIRECTION_HORIZONTAL,	0 )
+DEF_INT( DIRECTION_VERTICAL,	1 )
+
 @synthesize dataSource = _dataSource;
 
 @dynamic horizontal;
@@ -170,7 +176,7 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 
 - (void)initSelf
 {
-	_direction = BEE_SCROLL_DIRECTION_VERTICAL;
+	_direction = BeeUIScrollView.DIRECTION_VERTICAL;
 	_dataSource = self;
 	
 	_lineCount = 0;
@@ -219,33 +225,39 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 
 - (BOOL)horizontal
 {
-	return BEE_SCROLL_DIRECTION_HORIZONTAL == _direction ? YES : NO;
+	return BeeUIScrollView.DIRECTION_HORIZONTAL == _direction ? YES : NO;
 }
 
 - (void)setHorizontal:(BOOL)horizonal
 {
 	if ( horizonal )
 	{
-		_direction = BEE_SCROLL_DIRECTION_HORIZONTAL;
+		_direction = BeeUIScrollView.DIRECTION_HORIZONTAL;
 		
 		self.alwaysBounceHorizontal = YES;
-		self.showsHorizontalScrollIndicator = YES;
+		self.showsHorizontalScrollIndicator = NO;
+		
+		self.alwaysBounceVertical = NO;
+		self.showsVerticalScrollIndicator = NO;
 	}
 }
 
 - (BOOL)vertical
 {
-	return BEE_SCROLL_DIRECTION_VERTICAL == _direction ? YES : NO;
+	return BeeUIScrollView.DIRECTION_VERTICAL == _direction ? YES : NO;
 }
 
 - (void)setVertical:(BOOL)vertical
 {
 	if ( vertical )
 	{
-		_direction = BEE_SCROLL_DIRECTION_VERTICAL;
+		_direction = BeeUIScrollView.DIRECTION_VERTICAL;
 		
 		self.alwaysBounceVertical = YES;
-		self.showsHorizontalScrollIndicator = YES;		
+		self.showsVerticalScrollIndicator = NO;
+
+		self.alwaysBounceHorizontal = NO;
+		self.showsHorizontalScrollIndicator = NO;		
 	}
 }
 
@@ -266,7 +278,7 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 
 - (NSUInteger)visiblePageIndex
 {
-	if ( BEE_SCROLL_DIRECTION_HORIZONTAL == _direction )
+	if ( BeeUIScrollView.DIRECTION_HORIZONTAL == _direction )
 	{
 		return (NSUInteger)floorf(self.contentOffset.x / self.contentSize.width);
 	}
@@ -280,7 +292,7 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 {
 	float percent = 0.0f;
 	
-	if ( BEE_SCROLL_DIRECTION_HORIZONTAL == _direction )
+	if ( BeeUIScrollView.DIRECTION_HORIZONTAL == _direction )
 	{
 		percent = self.contentOffset.x / self.contentSize.width;
 	}
@@ -351,27 +363,25 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 
 - (void)internalReloadData
 {
-	if ( _dataSource )
+	_lineCount = [_dataSource numberOfLinesInScrollView:self];
+	
+	for ( NSInteger i = 0; i < BEE_SCROLL_MAX_LINES; ++i )
 	{
-		_lineCount = [_dataSource numberOfLinesInScrollView:self];
-		
-		for ( NSInteger i = 0; i < BEE_SCROLL_MAX_LINES; ++i )
-		{
-			_lineHeights[i] = 0.0f;
-		}
-
-		_total = [_dataSource numberOfViewsInScrollView:self];
-
-		[self releaseAllViews];
-		[self calcPositions];
-		[self syncPositions];
+		_lineHeights[i] = 0.0f;
 	}
+
+	_total = [_dataSource numberOfViewsInScrollView:self];
+
+	[self releaseAllViews];
+	[self calcPositions];
+	[self syncPositions];
 }
 
 - (void)setFrame:(CGRect)frame
 {
 	[super setFrame:frame];
 
+	[self syncReloadData];
 	[self syncPositions];
 }
 
@@ -379,7 +389,7 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 {
 	CGPoint offset;
 
-	if ( BEE_SCROLL_DIRECTION_HORIZONTAL == _direction )
+	if ( BeeUIScrollView.DIRECTION_HORIZONTAL == _direction )
 	{
 		offset.x = -1.0f * _baseInsets.left;
 		offset.y = self.contentOffset.y;
@@ -397,7 +407,7 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 {
 	CGPoint offset;
 	
-	if ( BEE_SCROLL_DIRECTION_HORIZONTAL == _direction )
+	if ( BeeUIScrollView.DIRECTION_HORIZONTAL == _direction )
 	{
 		offset.x = self.contentOffset.x + self.contentSize.width + 1.0f * _baseInsets.right;
 		offset.y = self.contentOffset.y;
@@ -415,8 +425,11 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 {
 	CGPoint offset;
 	
-	if ( BEE_SCROLL_DIRECTION_HORIZONTAL == _direction )
+	if ( BeeUIScrollView.DIRECTION_HORIZONTAL == _direction )
 	{
+		if ( self.contentSize.width < self.bounds.size.width )
+			return;
+		
 		offset.x = self.contentOffset.x - self.bounds.size.width;
 		offset.y = self.contentOffset.y;
 		
@@ -427,6 +440,9 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 	}
 	else
 	{
+		if ( self.contentSize.height < self.bounds.size.height )
+			return;
+		
 		offset.x = self.contentOffset.x;
 		offset.y = self.contentOffset.y - self.bounds.size.height;
 		
@@ -440,23 +456,40 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 }
 
 - (void)scrollToNextPage:(BOOL)animated
-{
+{	
 	CGPoint offset;
 	
-	if ( BEE_SCROLL_DIRECTION_HORIZONTAL == _direction )
+	if ( BeeUIScrollView.DIRECTION_HORIZONTAL == _direction )
 	{
+		if ( self.contentSize.width < self.bounds.size.width )
+			return;
+		
 		offset.x = self.contentOffset.x + self.bounds.size.width;
 		offset.y = self.contentOffset.y;
 		
 		CGFloat rightBound = self.contentOffset.x + self.contentSize.width + 1.0f * _baseInsets.right;
 		
-		if ( offset.x > rightBound )
+		if ( self.contentSize.width > self.bounds.size.width )
 		{
-			offset.x = rightBound - self.bounds.size.width;
+			if (self.contentOffset.x < (self.contentSize.width - self.bounds.size.width)  )
+			{
+				offset.x = rightBound - self.bounds.size.width;
+			}
+			else
+			{
+				offset.x =  (self.contentSize.width - self.bounds.size.width + 1.0f * _baseInsets.right);
+			}
+		}
+		else
+		{
+			offset.x =  (self.contentSize.width - self.bounds.size.width + 1.0f * _baseInsets.right);
 		}
 	}
 	else
 	{
+		if ( self.contentSize.height < self.bounds.size.height )
+			return;
+		
 		offset.x = self.contentOffset.x;
 		offset.y = self.contentOffset.y + self.bounds.size.height;
 
@@ -506,7 +539,7 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 		item.visible = NO;
 
 		// 先找起始INDEX
-		if ( BEE_SCROLL_DIRECTION_HORIZONTAL == _direction )
+		if ( BeeUIScrollView.DIRECTION_HORIZONTAL == _direction )
 		{
 			if ( CGRectGetMaxX(item.rect) >= self.contentOffset.x )
 			{
@@ -538,7 +571,7 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 		BOOL itemFlag = NO;
 		BeeUIScrollItem * item = [_items objectAtIndex:j];
 				
-		if ( BEE_SCROLL_DIRECTION_HORIZONTAL == _direction )
+		if ( BeeUIScrollView.DIRECTION_HORIZONTAL == _direction )
 		{
 			if ( linePixels[item.line] < self.bounds.size.width )
 			{
@@ -637,6 +670,33 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 	
 	CC( @"start = %d, end = %d", _visibleStart, _visibleEnd );
 	
+//	if ( BEE_SCROLL_DIRECTION_HORIZONTAL == _direction )
+//	{
+//		CGFloat offset = self.contentOffset.x + self.bounds.size.width;
+//		CGFloat bound = self.contentSize.width;
+//		
+//		if ( offset <= bound )
+//		{
+//			if ( _reachEnd )
+//			{
+//				_reachEnd = NO;
+//			}
+//		}
+//	}
+//	else
+//	{
+//		CGFloat offset = self.contentOffset.y + self.bounds.size.height;
+//		CGFloat bound = self.contentSize.height;
+//		
+//		if ( offset <= bound )
+//		{
+//			if ( _reachEnd )
+//			{
+//				_reachEnd = NO;
+//			}
+//		}
+//	}
+	
 	if ( _total > 0 )
 	{
 		for ( NSInteger l = _visibleStart; l <= _visibleEnd; ++l )
@@ -647,11 +707,8 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 			
 			if ( nil == item.view )
 			{
-				if ( _dataSource )
-				{
-					item.view = [_dataSource scrollView:self viewForIndex:l scale:item.scale];
-					item.view.frame = item.rect;
-				}
+				item.view = [_dataSource scrollView:self viewForIndex:l scale:item.scale];
+				item.view.frame = item.rect;
 			}
 
 			if ( item.view && item.view.superview != self )
@@ -706,7 +763,7 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 	CGRect bounds = self.bounds;
 	CGFloat itemPixels = 0.0f;
 	
-	if ( BEE_SCROLL_DIRECTION_HORIZONTAL == _direction )
+	if ( BeeUIScrollView.DIRECTION_HORIZONTAL == _direction )
 	{
 		itemPixels = bounds.size.height / _lineCount;
 	}
@@ -733,14 +790,10 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 			item = [_items objectAtIndex:i];
 		}
 		
-		if ( _dataSource )
-		{
-			item.size = [_dataSource scrollView:self sizeForIndex:i];			
-		}
-		
+		item.size = [_dataSource scrollView:self sizeForIndex:i];
 		item.line = [self getShortestLine];
 		
-		if ( BEE_SCROLL_DIRECTION_HORIZONTAL == _direction )
+		if ( BeeUIScrollView.DIRECTION_HORIZONTAL == _direction )
 		{
 			item.scale = (0.0f == item.size.height) ? 1.0f : (itemPixels / item.size.height);
 			item.rect = CGRectMake( _lineHeights[item.line], item.line * itemPixels, item.size.width * item.scale, itemPixels );
@@ -773,7 +826,7 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 	NSInteger line = [self getLongestLine];
 	if ( line < _lineCount )
 	{
-		if ( BEE_SCROLL_DIRECTION_HORIZONTAL == _direction )
+		if ( BeeUIScrollView.DIRECTION_HORIZONTAL == _direction )
 		{
 			self.contentSize = CGSizeMake( _lineHeights[line], self.bounds.size.height );
 		}
@@ -784,7 +837,7 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 	}
 	else
 	{
-		if ( BEE_SCROLL_DIRECTION_HORIZONTAL == _direction )
+		if ( BeeUIScrollView.DIRECTION_HORIZONTAL == _direction )
 		{
 			self.contentSize = CGSizeMake( 0.0f, self.bounds.size.height );
 		}
@@ -865,7 +918,7 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 			[item.view removeFromSuperview];
 			item.view = nil;
 		}
-		
+
 		[_items removeAllObjects];		
 	}
 	
@@ -913,9 +966,9 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 {
 //	if ( scrollView.dragging )
 //	{
-//		if ( NO == _pullLoader.hidden && BEE_UIPULLLOADER_STATE_LOADING != _pullLoader.state )
+//		if ( NO == _pullLoader.hidden && BeeUIScrollView.STATE_LOADING != _pullLoader.state )
 //		{
-//			if ( BEE_UIPULLLOADER_STATE_NORMAL == _pullLoader.state )
+//			if ( BeeUIScrollView.STATE_NORMAL == _pullLoader.state )
 //			{
 //				_baseInsets = scrollView.contentInset;
 //			}
@@ -925,21 +978,21 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 //			
 //			if ( offset < boundY )
 //			{
-//				if ( BEE_UIPULLLOADER_STATE_PULLING != _pullLoader.state )
+//				if ( BeeUIScrollView.STATE_PULLING != _pullLoader.state )
 //				{
-//					[_pullLoader changeState:BEE_UIPULLLOADER_STATE_PULLING animated:YES];
+//					[_pullLoader changeState:BeeUIScrollView.STATE_PULLING animated:YES];
 //				}				
 //			}
 //			else if ( offset < 0.0f )
 //			{
-//				if ( BEE_UIPULLLOADER_STATE_NORMAL != _pullLoader.state )
+//				if ( BeeUIScrollView.STATE_NORMAL != _pullLoader.state )
 //				{
-//					[_pullLoader changeState:BEE_UIPULLLOADER_STATE_NORMAL animated:YES];
+//					[_pullLoader changeState:BeeUIScrollView.STATE_NORMAL animated:YES];
 //				}				
 //			}
 //		}
 //	}
-
+	[self sendUISignal:BeeUIScrollView.DID_SCROLL];
 	[self syncPositions];
 }
 
@@ -952,14 +1005,14 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 {
 //	if ( decelerate )
 //	{
-//		if ( NO == _pullLoader.hidden && BEE_UIPULLLOADER_STATE_LOADING != _pullLoader.state )
+//		if ( NO == _pullLoader.hidden && BeeUIScrollView.STATE_LOADING != _pullLoader.state )
 //		{
 //			CGFloat offset = scrollView.contentOffset.y;
 //			CGFloat boundY = -(_baseInsets.top + 80.0f);
 //			
 //			if ( offset <= boundY )
 //			{
-//				if ( BEE_UIPULLLOADER_STATE_LOADING != _pullLoader.state )
+//				if ( BeeUIScrollView.STATE_LOADING != _pullLoader.state )
 //				{
 //					[UIView beginAnimations:nil context:NULL];
 //					[UIView setAnimationDuration:0.3f];
@@ -968,26 +1021,27 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 //					scrollView.contentInset = insets;
 //					[UIView commitAnimations];
 //					
-//					[_pullLoader changeState:BEE_UIPULLLOADER_STATE_LOADING animated:YES];
+//					[_pullLoader changeState:BeeUIScrollView.STATE_LOADING animated:YES];
 //					
 //					[self sendUISignal:BeeUIFlowBoard.PULL_REFRESH];
 //				}
 //			}
 //			else
 //			{
-//				if ( BEE_UIPULLLOADER_STATE_NORMAL != _pullLoader.state )
+//				if ( BeeUIScrollView.STATE_NORMAL != _pullLoader.state )
 //				{
 //					[UIView beginAnimations:nil context:NULL];
 //					[UIView setAnimationDuration:0.3f];
 //					scrollView.contentInset = _baseInsets;				
 //					[UIView commitAnimations];
 //					
-//					[_pullLoader changeState:BEE_UIPULLLOADER_STATE_NORMAL animated:YES];
+//					[_pullLoader changeState:BeeUIScrollView.STATE_NORMAL animated:YES];
 //				}
 //			}
 //		}
 //	}
 	
+	[self sendUISignal:BeeUIScrollView.DID_STOP];
 	[self syncPositions];
 }
 
@@ -998,6 +1052,7 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
+	[self sendUISignal:BeeUIScrollView.DID_STOP];
 	[self syncPositions];
 }
 
