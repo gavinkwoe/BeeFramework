@@ -272,6 +272,13 @@
 
 @implementation BeeRequest
 
+DEF_INT( STATE_CREATED,		0 );
+DEF_INT( STATE_SENDING,		1 );
+DEF_INT( STATE_RECVING,		2 );
+DEF_INT( STATE_FAILED,		3 );
+DEF_INT( STATE_SUCCEED,		4 );
+DEF_INT( STATE_CANCELLED,	5 );
+
 @synthesize state = _state;
 @synthesize errorCode = _errorCode;
 @synthesize responder = _responder;
@@ -283,6 +290,11 @@
 @synthesize sendTimeStamp = _sendTimeStamp;
 @synthesize recvTimeStamp = _recvTimeStamp;
 @synthesize doneTimeStamp = _doneTimeStamp;
+
+@synthesize timeCostPending;	// 排队等待耗时
+@synthesize timeCostOverDNS;	// 网络连接耗时（DNS）
+@synthesize timeCostRecving;	// 网络收包耗时
+@synthesize timeCostOverAir;	// 网络整体耗时
 
 #ifdef __BEE_DEVELOPMENT__
 @synthesize callstack = _callstack;
@@ -297,12 +309,19 @@
 @synthesize sendProgressed = _sendProgressed;
 @synthesize recvProgressed = _recvProgressed;
 
+@synthesize uploadPercent;
+@synthesize uploadBytes;
+@synthesize uploadTotalBytes;
+@synthesize downloadPercent;
+@synthesize downloadBytes;
+@synthesize downloadTotalBytes;
+
 - (id)initWithURL:(NSURL *)newURL
 {
 	self = [super initWithURL:newURL];
 	if ( self )
 	{
-		_state = BEE_REQUEST_STATE_CREATED;
+		_state = BeeRequest.STATE_CREATED;
 		_errorCode = 0;
 		_userInfo = [[NSMutableDictionary alloc] init];
 		
@@ -348,14 +367,48 @@
 	[super dealloc];
 }
 
+- (CGFloat)uploadPercent
+{
+	NSUInteger bytes1 = self.uploadBytes;
+	NSUInteger bytes2 = self.uploadTotalBytes;
+	
+	return bytes2 ? ((CGFloat)bytes1 / (CGFloat)bytes2) : 0.0f;
+}
+
 - (NSUInteger)uploadBytes
 {
-	return self.postLength;
+	if ( [self.requestMethod isEqualToString:@"GET"] )
+	{
+		return 0;
+	}
+	else if ( [self.requestMethod isEqualToString:@"POST"] )
+	{
+		return self.postLength;		
+	}
+	
+	return 0;
 }
 
 - (NSUInteger)uploadTotalBytes
 {
-	return self.postLength;
+	if ( [self.requestMethod isEqualToString:@"GET"] )
+	{
+		return 0;
+	}
+	else if ( [self.requestMethod isEqualToString:@"POST"] )
+	{
+		return self.postLength;		
+	}
+	
+	return 0;
+}
+
+- (CGFloat)downloadPercent
+{
+	NSUInteger bytes1 = self.downloadBytes;
+	NSUInteger bytes2 = self.downloadTotalBytes;
+	
+	return bytes2 ? ((CGFloat)bytes1 / (CGFloat)bytes2) : 0.0f;
 }
 
 - (NSUInteger)downloadBytes
@@ -368,25 +421,30 @@
 	return self.contentLength;	
 }
 
-- (void)changeState:(BeeRequestState)state
+- (BOOL)is:(NSString *)text
+{
+	return [[self.url absoluteString] isEqualToString:text];
+}
+
+- (void)changeState:(NSUInteger)state
 {
 	if ( state != _state )
 	{
 		_state = state;
 		
-		if ( BEE_REQUEST_STATE_SENDING == _state )
+		if ( BeeRequest.STATE_SENDING == _state )
 		{
 			_sendTimeStamp = [NSDate timeIntervalSinceReferenceDate];
 		}
-		else if ( BEE_REQUEST_STATE_RECVING == _state )
+		else if ( BeeRequest.STATE_RECVING == _state )
 		{
 			_recvTimeStamp = [NSDate timeIntervalSinceReferenceDate];
 		}
-		else if ( BEE_REQUEST_STATE_FAILED == _state || BEE_REQUEST_STATE_SUCCEED == _state || BEE_REQUEST_STATE_CANCELLED == _state )
+		else if ( BeeRequest.STATE_FAILED == _state || BeeRequest.STATE_SUCCEED == _state || BeeRequest.STATE_CANCELLED == _state )
 		{
 			_doneTimeStamp = [NSDate timeIntervalSinceReferenceDate];
 		}
-		
+
 		if ( [_responder isRequestResponder] )
 		{
 			[_responder handleRequest:self];
@@ -418,6 +476,12 @@
 
 - (void)updateRecvProgress
 {
+	if ( _state == BeeRequest.STATE_SUCCEED || _state == BeeRequest.STATE_FAILED || _state == BeeRequest.STATE_CANCELLED )
+		return;
+    
+    if ( self.didUseCachedResponse )
+		return;
+    
 	_recvProgressed = YES;
 	
 	if ( [_responder isRequestResponder] )
@@ -455,32 +519,32 @@
 
 - (BOOL)created
 {
-	return BEE_REQUEST_STATE_CREATED == _state ? YES : NO;
+	return BeeRequest.STATE_CREATED == _state ? YES : NO;
 }
 
 - (BOOL)sending
 {
-	return BEE_REQUEST_STATE_SENDING == _state ? YES : NO;
+	return BeeRequest.STATE_SENDING == _state ? YES : NO;
 }
 
 - (BOOL)recving
 {
-	return BEE_REQUEST_STATE_RECVING == _state ? YES : NO;
+	return BeeRequest.STATE_RECVING == _state ? YES : NO;
 }
 
 - (BOOL)succeed
 {
-	return BEE_REQUEST_STATE_SUCCEED == _state ? YES : NO;
+	return BeeRequest.STATE_SUCCEED == _state ? YES : NO;
 }
 
 - (BOOL)failed
 {
-	return BEE_REQUEST_STATE_FAILED == _state ? YES : NO;
+	return BeeRequest.STATE_FAILED == _state ? YES : NO;
 }
 
 - (BOOL)cancelled
 {
-	return BEE_REQUEST_STATE_CANCELLED == _state ? YES : NO;
+	return BeeRequest.STATE_CANCELLED == _state ? YES : NO;
 }
 
 @end
@@ -717,7 +781,7 @@
 	request = [[BeeRequest alloc] initWithURL:[NSURL URLWithString:url]];
 	request.timeOutSeconds = DEFAULT_POST_TIMEOUT;
 	request.requestMethod = @"POST";
-	request.postFormat = ASIMultipartFormDataPostFormat;
+	request.postFormat = ASIMultipartFormDataPostFormat; // ASIRawPostFormat;
 	request.postBody = [NSMutableData dataWithData:data];
 	[request setDelegate:self];
 	[request setDownloadProgressDelegate:self];
@@ -1033,7 +1097,7 @@
 		if ( request.created || request.sending || request.recving )
 		{
 			[request clearDelegatesAndCancel];
-			[request changeState:BEE_REQUEST_STATE_CANCELLED];
+			[request changeState:BeeRequest.STATE_CANCELLED];
 		}
 		
 		[_requests removeObject:request];
@@ -1125,7 +1189,7 @@
 		return;
 
 	BeeRequest * networkRequest = (BeeRequest *)request;
-	[networkRequest changeState:BEE_REQUEST_STATE_SENDING];
+	[networkRequest changeState:BeeRequest.STATE_SENDING];
 
 	_bytesUpload += request.postLength;
 	
@@ -1153,7 +1217,7 @@
 		return;
 
 	BeeRequest * networkRequest = (BeeRequest *)request;
-	[networkRequest changeState:BEE_REQUEST_STATE_RECVING];
+	[networkRequest changeState:BeeRequest.STATE_RECVING];
 	
 	if ( self.whenUpdate )
 	{
@@ -1193,14 +1257,14 @@
 
 	if ( 200 == request.responseStatusCode )
 	{
-		[networkRequest changeState:BEE_REQUEST_STATE_SUCCEED];
+		[networkRequest changeState:BeeRequest.STATE_SUCCEED];
 	}
 	else
 	{
 //#if __BEE_DEVELOPMENT__
 //		CC( @"%@\n", [request responseString] );	
 //#endif
-		[networkRequest changeState:BEE_REQUEST_STATE_FAILED];
+		[networkRequest changeState:BeeRequest.STATE_FAILED];
 	}
 
 	[_requests removeObject:networkRequest];
@@ -1223,7 +1287,7 @@
 
 	BeeRequest * networkRequest = (BeeRequest *)request;	
 	networkRequest.errorCode = -1;
-	[networkRequest changeState:BEE_REQUEST_STATE_FAILED];
+	[networkRequest changeState:BeeRequest.STATE_FAILED];
 	[networkRequest cancel];
 	
 	[_requests removeObject:networkRequest];
@@ -1241,7 +1305,7 @@
 //#if __BEE_DEVELOPMENT__
 //	CC( @"%s, %p", __FUNCTION__, request );
 //#endif
-	
+
 	[self requestFailed:request];
 }
 

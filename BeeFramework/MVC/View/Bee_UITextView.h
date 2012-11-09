@@ -44,6 +44,8 @@
     NSString *				_placeholder;
     UIColor *				_placeHolderColor;
     UILabel *				_placeHolderLabel;
+	NSUInteger				_maxLength;
+	UIResponder *			_nextChain;
 }
 
 AS_SIGNAL( WILL_ACTIVE )		// 将要获取焦点
@@ -51,14 +53,19 @@ AS_SIGNAL( DID_ACTIVED )		// 已经获取焦点
 AS_SIGNAL( WILL_DEACTIVE )		// 已经丢失焦点
 AS_SIGNAL( DID_DEACTIVED )		// 已经丢失焦点
 AS_SIGNAL( TEXT_CHANGED )		// 文字变了
+AS_SIGNAL( TEXT_OVERFLOW )		// 文字超长
 AS_SIGNAL( SELECTION_CHANGED )	// 光标位置
+AS_SIGNAL( RETURN )				// 换行
 
+@property (nonatomic, assign) BOOL			active;
 @property (nonatomic, retain) NSString *	placeholder;
 @property (nonatomic, retain) UILabel *		placeHolderLabel;
 @property (nonatomic, retain) UIColor *		placeHolderColor;
+@property (nonatomic, assign) NSUInteger	maxLength;
+@property (nonatomic, assign) NSObject *	nextChain;
 
 + (BeeUITextView *)spawn;
 
 - (void)updatePlaceHolder;
-- (void)setActive:(BOOL)flag;
+
 @end

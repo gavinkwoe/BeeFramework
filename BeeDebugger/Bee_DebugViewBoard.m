@@ -146,19 +146,19 @@
 	_timeLabel = [[BeeUILabel alloc] init];
 	_timeLabel.textColor = [UIColor grayColor];
 	_timeLabel.textAlignment = UITextAlignmentCenter;
-	_timeLabel.font = [BeeUIFont height:12.0f bold:YES];
+	_timeLabel.font = [UIFont boldSystemFontOfSize:12.0f];
 	[self addSubview:_timeLabel];
 	
 	_nameLabel = [[BeeUILabel alloc] init];
 	_nameLabel.textAlignment = UITextAlignmentLeft;
-	_nameLabel.font = [BeeUIFont height:12.0f bold:YES];
+	_nameLabel.font = [UIFont boldSystemFontOfSize:12.0f];
 	_nameLabel.lineBreakMode = UILineBreakModeHeadTruncation;
 	_nameLabel.numberOfLines = 2;
 	[self addSubview:_nameLabel];
 	
 	_statusLabel = [[BeeUILabel alloc] init];
 	_statusLabel.textAlignment = UITextAlignmentCenter;
-	_statusLabel.font = [BeeUIFont height:12.0f bold:YES];
+	_statusLabel.font = [UIFont boldSystemFontOfSize:12.0f];
 	_statusLabel.lineBreakMode = UILineBreakModeClip;
 	_statusLabel.numberOfLines = 2;
 	[self addSubview:_statusLabel];

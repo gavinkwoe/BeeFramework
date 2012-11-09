@@ -93,19 +93,23 @@ static NSMutableArray *	__models = nil;
 	self = [super init];
 	if ( self )
 	{
-		if ( nil == __models )
-		{
-			__models = [[NSMutableArray alloc] init];
-		}
-		
-		[__models addObjectNoRetain:self];
-
-		_name = [[[self class] description] retain];
-		_observers = [[NSMutableArray alloc] init];
-
+		[self initSelf];
 		[self load];
 	}
 	return self;
+}
+
+- (void)initSelf
+{
+	if ( nil == __models )
+	{
+		__models = [[NSMutableArray alloc] init];
+	}
+	
+	[__models addObjectNoRetain:self];
+	
+	_name = [[[self class] description] retain];
+	_observers = [[NSMutableArray alloc] init];	
 }
 
 - (void)load

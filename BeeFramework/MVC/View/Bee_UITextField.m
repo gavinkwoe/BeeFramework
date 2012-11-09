@@ -95,13 +95,23 @@
 
 - (BOOL)textFieldShouldClear:(UITextField *)textField
 {
-	[_target sendUISignal:BeeUITextField.CLEAR];
+	BeeUISignal * signal = [_target sendUISignal:BeeUITextField.CLEAR];
+	if ( signal && signal.returnValue )
+	{
+		return signal.boolValue;
+	}
+
 	return YES;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-	[_target sendUISignal:BeeUITextField.RETURN];
+	BeeUISignal * signal = [_target sendUISignal:BeeUITextField.RETURN];
+	if ( signal && signal.returnValue )
+	{
+		return signal.boolValue;
+	}
+	
 	return YES;
 }
 
@@ -124,6 +134,7 @@ DEF_SIGNAL( TEXT_OVERFLOW )
 DEF_SIGNAL( CLEAR )
 DEF_SIGNAL( RETURN )
 
+@synthesize nextChain = _nextChain;
 @synthesize maxLength = _maxLength;
 
 + (BeeUITextField *)spawn
@@ -183,6 +194,20 @@ DEF_SIGNAL( RETURN )
 	{
 		[self resignFirstResponder];
 	}
+}
+
+- (void)handleUISignal:(BeeUISignal *)signal
+{
+	if ( [signal is:BeeUITextField.RETURN] )
+	{
+		if ( _nextChain && _nextChain != self )
+		{
+			[_nextChain becomeFirstResponder];
+			return;
+		}
+	}
+
+	[super handleUISignal:signal];
 }
 
 @end

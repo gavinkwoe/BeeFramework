@@ -41,30 +41,6 @@
 
 #pragma mark -
 
-#define BEE_ERROR_DOMAIN_UNKNOWN	@"domain.unknown"
-#define BEE_ERROR_DOMAIN_SERVER		@"domain.server"
-#define BEE_ERROR_DOMAIN_CLIENT		@"domain.client"
-#define BEE_ERROR_DOMAIN_NETWORK	@"domain.network"
-
-#define BEE_ERROR_CODE_OK			(0)		// OK
-#define BEE_ERROR_CODE_UNKNOWN		(-1)	// 非知错误
-#define BEE_ERROR_CODE_TIMEOUT		(-2)	// 超时
-#define BEE_ERROR_CODE_WRONG_PARAM	(-3)	// 参数错误
-#define BEE_ERROR_CODE_ROUTES		(-4)	// 路由错误
-
-#pragma mark -
-
-typedef enum
-{
-	BEE_MESSAGE_STATE_CREATED = 0,	// 消息被创建
-	BEE_MESSAGE_STATE_SENDING,		// 消息正在发送
-	BEE_MESSAGE_STATE_SUCCEED,		// 消息处理成功（本地或网络）
-	BEE_MESSAGE_STATE_FAILED,		// 消息处理失败（本地或网络）
-	BEE_MESSAGE_STATE_CANCELLED		// 消息被取消了
-} BeeMessageState;
-
-#pragma mark -
-
 @class BeeMessage;
 @class BeeMessageQueue;
 @class BeeController;
@@ -108,8 +84,8 @@ typedef void (^BeeMessageBlock)( BeeMessage * msg );
 	BOOL						_toldProgress;	// 是否告知进度
 	BOOL						_progressed;	// 是否有新进度
 
-	BeeMessageState				_nextState;		// 消息状态(下一状态)
-	BeeMessageState				_state;			// 消息状态
+	NSInteger					_nextState;		// 消息状态(下一状态)
+	NSInteger					_state;			// 消息状态
 	NSString *					_message;		// 消息名字，格式: @"xxx.yyy"
 	NSMutableDictionary *		_input;			// 输入参数字典
 	NSMutableDictionary *		_output;		// 输出数据字典
@@ -134,6 +110,23 @@ typedef void (^BeeMessageBlock)( BeeMessage * msg );
 #endif	// #ifdef __BEE_DEVELOPMENT__
 }
 
+AS_STRING( ERROR_DOMAIN_UNKNOWN )
+AS_STRING( ERROR_DOMAIN_SERVER )
+AS_STRING( ERROR_DOMAIN_CLIENT )
+AS_STRING( ERROR_DOMAIN_NETWORK )
+
+AS_INT( ERROR_CODE_OK )			// OK
+AS_INT( ERROR_CODE_UNKNOWN )	// 非知错误
+AS_INT( ERROR_CODE_TIMEOUT )	// 超时
+AS_INT( ERROR_CODE_PARAMS )		// 参数错误
+AS_INT( ERROR_CODE_ROUTES )		// 路由错误
+
+AS_INT( STATE_CREATED )			// 消息被创建
+AS_INT( STATE_SENDING )			// 消息正在发送
+AS_INT( STATE_SUCCEED )			// 消息处理成功（本地或网络）
+AS_INT( STATE_FAILED )			// 消息处理失败（本地或网络）
+AS_INT( STATE_CANCELLED )		// 消息被取消了
+
 @property (nonatomic, assign) BOOL						unique;
 @property (nonatomic, assign) BOOL						disabled;
 @property (nonatomic, assign) BOOL						async;
@@ -145,14 +138,15 @@ typedef void (^BeeMessageBlock)( BeeMessage * msg );
 @property (nonatomic, assign) BOOL						useCache;
 @property (nonatomic, assign) BOOL						toldProgress;
 @property (nonatomic, assign) id						responder;
-@property (nonatomic, assign) BeeMessageState			nextState;
-@property (nonatomic, assign) BeeMessageState			state;
+@property (nonatomic, assign) NSInteger					nextState;
+@property (nonatomic, assign) NSInteger					state;
 @property (nonatomic, retain) NSString *				message;
 @property (nonatomic, retain) NSMutableDictionary *		input;
 @property (nonatomic, retain) NSMutableDictionary *		output;
 @property (nonatomic, assign) BeeController *			executer;
 @property (nonatomic, retain) BeeRequest *				request;
 @property (nonatomic, retain) NSData *					response;
+
 @property (nonatomic, retain) NSString *				errorDomain;
 @property (nonatomic, assign) NSInteger					errorCode;
 @property (nonatomic, retain) NSString *				errorDesc;
@@ -174,6 +168,13 @@ typedef void (^BeeMessageBlock)( BeeMessage * msg );
 @property (nonatomic, assign) BOOL						failed;
 @property (nonatomic, assign) BOOL						cancelled;
 
+@property (nonatomic, readonly) float					uploadProgress;
+@property (nonatomic, readonly) float					downloadProgress;
+
+@property (nonatomic, readonly) NSTimeInterval			timeElapsed;		// 整体经过时间
+@property (nonatomic, readonly) NSTimeInterval			timeCostPending;	// 排队等待耗时
+@property (nonatomic, readonly) NSTimeInterval			timeCostOverAir;	// 网络处理耗时
+
 + (BeeMessage *)message:(NSString *)msg;
 + (BeeMessage *)message:(NSString *)msg timeoutSeconds:(NSUInteger)seconds;
 + (BeeMessage *)message:(NSString *)msg responder:(id)responder;
@@ -189,23 +190,17 @@ typedef void (^BeeMessageBlock)( BeeMessage * msg );
 - (BeeMessage *)cancel;
 - (BeeMessage *)reset;
 
-- (float)uploadProgress;
-- (float)downloadProgress;
-
-- (NSTimeInterval)timeElapsed;		// 整体经过时间
-- (NSTimeInterval)timeCostPending;	// 排队等待耗时
-- (NSTimeInterval)timeCostOverAir;	// 网络处理耗时
-
 - (BOOL)is:(NSString *)name;
 - (BOOL)isKindOf:(NSString *)prefix;
 - (BOOL)isTwinWith:(BeeMessage *)msg;	// 与某消息同属于一个发起源，相同NAME
 
 - (void)setLastError;
+- (void)setLastError:(NSInteger)code;
 - (void)setLastError:(NSInteger)code domain:(NSString *)domain;
 - (void)setLastError:(NSInteger)code domain:(NSString *)domain desc:(NSString *)desc;
 
 - (void)runloop;
-- (void)changeState:(BeeMessageState)newState;
+- (void)changeState:(NSInteger)newState;
 
 @end
 

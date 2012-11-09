@@ -86,14 +86,14 @@
 
 	_nameLabel = [[BeeUILabel alloc] init];
 	_nameLabel.textAlignment = UITextAlignmentLeft;
-	_nameLabel.font = [BeeUIFont height:13.0f bold:YES];
+	_nameLabel.font = [UIFont boldSystemFontOfSize:13.0f];
 	_nameLabel.lineBreakMode = UILineBreakModeHeadTruncation;
 	_nameLabel.numberOfLines = 2;
 	[self addSubview:_nameLabel];
 	
 	_sizeLabel = [[BeeUILabel alloc] init];
 	_sizeLabel.textAlignment = UITextAlignmentRight;
-	_sizeLabel.font = [BeeUIFont height:13.0f bold:YES];
+	_sizeLabel.font = [UIFont boldSystemFontOfSize:13.0f];
 	_sizeLabel.lineBreakMode = UILineBreakModeClip;
 	_sizeLabel.numberOfLines = 1;
 	[self addSubview:_sizeLabel];	

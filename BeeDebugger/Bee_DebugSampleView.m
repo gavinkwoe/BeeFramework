@@ -54,7 +54,7 @@
 		CGRect textFrame = CGRectMake( self.bounds.size.height + 4.0f, 0, self.bounds.size.width - self.bounds.size.height - 6.0f, self.bounds.size.height );
 		_textLabel = [[BeeUILabel alloc] initWithFrame:textFrame];
 		_textLabel.textAlignment = UITextAlignmentLeft;
-		_textLabel.font = [BeeUIFont height:12.0f bold:YES];
+		_textLabel.font = [UIFont boldSystemFontOfSize:12.0f];
 		_textLabel.lineBreakMode = UILineBreakModeClip;
 		_textLabel.numberOfLines = 1;
 		[self addSubview:_textLabel];

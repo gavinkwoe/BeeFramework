@@ -37,6 +37,8 @@
 #import "ASIDataDecompressor.h"
 #import "ASIFormDataRequest.h"
 
+#import "NSObject+BeeProperty.h"
+
 #pragma mark -
 
 @class ASIFormDataRequest;
@@ -71,16 +73,6 @@
 
 #pragma mark -
 
-typedef enum
-{
-	BEE_REQUEST_STATE_CREATED = 0,
-	BEE_REQUEST_STATE_SENDING,
-	BEE_REQUEST_STATE_RECVING,
-	BEE_REQUEST_STATE_FAILED,
-	BEE_REQUEST_STATE_SUCCEED,
-	BEE_REQUEST_STATE_CANCELLED
-} BeeRequestState;
-
 #pragma mark -
 
 typedef void (^BeeRequestBlock)( BeeRequest * req );
@@ -89,7 +81,7 @@ typedef void (^BeeRequestBlock)( BeeRequest * req );
 
 @interface BeeRequest : ASIFormDataRequest
 {
-	BeeRequestState			_state;
+	NSUInteger				_state;
 	id						_responder;
 
 	NSInteger				_errorCode;
@@ -109,7 +101,14 @@ typedef void (^BeeRequestBlock)( BeeRequest * req );
 #endif	// #ifdef __BEE_DEVELOPMENT__
 }
 
-@property (nonatomic, assign) BeeRequestState			state;
+AS_INT( STATE_CREATED );
+AS_INT( STATE_SENDING );
+AS_INT( STATE_RECVING );
+AS_INT( STATE_FAILED );
+AS_INT( STATE_SUCCEED );
+AS_INT( STATE_CANCELLED );
+
+@property (nonatomic, assign) NSUInteger				state;
 @property (nonatomic, assign) id						responder;
 
 @property (nonatomic, assign) NSInteger					errorCode;
@@ -121,6 +120,11 @@ typedef void (^BeeRequestBlock)( BeeRequest * req );
 @property (nonatomic, assign) NSTimeInterval			sendTimeStamp;
 @property (nonatomic, assign) NSTimeInterval			recvTimeStamp;
 @property (nonatomic, assign) NSTimeInterval			doneTimeStamp;
+
+@property (nonatomic, readonly) NSTimeInterval			timeCostPending;	// 排队等待耗时
+@property (nonatomic, readonly) NSTimeInterval			timeCostOverDNS;	// 网络连接耗时（DNS）
+@property (nonatomic, readonly) NSTimeInterval			timeCostRecving;	// 网络收包耗时
+@property (nonatomic, readonly) NSTimeInterval			timeCostOverAir;	// 网络整体耗时
 
 #ifdef __BEE_DEVELOPMENT__
 @property (nonatomic, readonly) NSMutableArray *		callstack;
@@ -135,18 +139,16 @@ typedef void (^BeeRequestBlock)( BeeRequest * req );
 @property (nonatomic, readonly) BOOL					sendProgressed;
 @property (nonatomic, readonly) BOOL					recvProgressed;
 
-- (void)changeState:(BeeRequestState)state;
+@property (nonatomic, readonly) CGFloat					uploadPercent;
+@property (nonatomic, readonly) NSUInteger				uploadBytes;
+@property (nonatomic, readonly) NSUInteger				uploadTotalBytes;
 
-- (NSTimeInterval)timeCostPending;	// 排队等待耗时
-- (NSTimeInterval)timeCostOverDNS;	// 网络连接耗时（DNS）
-- (NSTimeInterval)timeCostRecving;	// 网络收包耗时
-- (NSTimeInterval)timeCostOverAir;	// 网络整体耗时
+@property (nonatomic, readonly) CGFloat					downloadPercent;
+@property (nonatomic, readonly) NSUInteger				downloadBytes;
+@property (nonatomic, readonly) NSUInteger				downloadTotalBytes;
 
-- (NSUInteger)uploadBytes;
-- (NSUInteger)uploadTotalBytes;
-
-- (NSUInteger)downloadBytes;
-- (NSUInteger)downloadTotalBytes;
+- (BOOL)is:(NSString *)url;
+- (void)changeState:(NSUInteger)state;
 
 @end
 

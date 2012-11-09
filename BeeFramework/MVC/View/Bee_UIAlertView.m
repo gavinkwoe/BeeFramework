@@ -42,7 +42,7 @@ DEF_SIGNAL( DID_PRESENT )
 DEF_SIGNAL( WILL_DISMISS )
 DEF_SIGNAL( DID_DISMISS )
 
-@synthesize parentController = _parentController;
+@synthesize parentView = _parentView;
 @synthesize userData = _userData;
 
 + (BeeUIAlertView *)spawn
@@ -86,9 +86,14 @@ DEF_SIGNAL( DID_DISMISS )
 
 - (void)presentForController:(UIViewController *)controller
 {
-	_parentController = controller;
+	_parentView = controller.view;
 	
 	[self show];
+}
+
+- (void)dismissAnimated:(BOOL)animated
+{
+	[self dismissWithClickedButtonIndex:self.cancelButtonIndex animated:animated];
 }
 
 - (void)addCancelTitle:(NSString *)title
@@ -149,9 +154,9 @@ DEF_SIGNAL( DID_DISMISS )
 			if ( signal && [signal length] )
 			{
 				NSObject * object = ([array count] >= 4) ? [array objectAtIndex:3] : nil;
-				[_parentController sendUISignal:signal
-									 withObject:object
-										   from:self];
+				[_parentView sendUISignal:signal
+							   withObject:object
+									 from:self];
 			}
 			else if ( buttonIndex != self.cancelButtonIndex )
 			{
@@ -172,25 +177,25 @@ DEF_SIGNAL( DID_DISMISS )
 // before animation and showing view
 - (void)willPresentAlertView:(UIAlertView *)alertView
 {
-	[_parentController sendUISignal:BeeUIAlertView.WILL_PRESENT withObject:nil from:self];
+	[_parentView sendUISignal:BeeUIAlertView.WILL_PRESENT withObject:nil from:self];
 }
 
 // after animation
 - (void)didPresentAlertView:(UIAlertView *)alertView;
 {
-	[_parentController sendUISignal:BeeUIAlertView.DID_PRESENT withObject:nil from:self];	
+	[_parentView sendUISignal:BeeUIAlertView.DID_PRESENT withObject:nil from:self];	
 }
 
 // before animation and hiding view
 - (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-	[_parentController sendUISignal:BeeUIAlertView.WILL_DISMISS withObject:nil from:self];
+	[_parentView sendUISignal:BeeUIAlertView.WILL_DISMISS withObject:nil from:self];
 }
 
 // after animation
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-	[_parentController sendUISignal:BeeUIAlertView.DID_DISMISS withObject:nil from:self];
+	[_parentView sendUISignal:BeeUIAlertView.DID_DISMISS withObject:nil from:self];
 }
 
 // Called after edits in any of the default fields added by the style

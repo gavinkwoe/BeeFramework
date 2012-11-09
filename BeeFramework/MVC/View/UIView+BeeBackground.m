@@ -27,30 +27,84 @@
 //	IN THE SOFTWARE.
 //
 //
-//  Bee_UIWebView.h
+//  UIView+BeeBackground.m
 //
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import "UIView+BeeBackground.h"
 #import "Bee_UISignal.h"
 #import "Bee_UIImageView.h"
+#import "Bee_UILabel.h"
 
 #pragma mark -
 
-@interface UIView(Tint)
-
-- (void)setTintTitle:(NSString *)title;
-- (void)fitTintFrame;
-
+@interface BeeBackgroundImageView : BeeUIImageView
 @end
 
 #pragma mark -
 
-@interface UIView(Background)
+@implementation BeeBackgroundImageView
+@end
 
-@property (nonatomic, readonly) BeeUIImageView * backgroundImageView;
+#pragma mark -
 
-- (void)setBackgroundImage:(UIImage *)image;
-- (void)fitBackgroundFrame;
+@implementation UIView(BeeBackground)
+
+@dynamic backgroundImageView;
+
+- (BeeUIImageView *)backgroundImageView
+{
+	return [self __backgroundImageView];
+}
+
+- (BeeBackgroundImageView *)__backgroundImageView
+{
+	BeeBackgroundImageView * result = nil;
+	
+	for ( UIView * subView in self.subviews )
+	{
+		if ( [subView isKindOfClass:[BeeBackgroundImageView class]] )
+		{
+			result = (BeeBackgroundImageView *)subView;
+			break;
+		}
+	}
+
+	return result;
+}
+
+- (void)setBackgroundImage:(UIImage *)image
+{
+	if ( image )
+	{
+		BeeBackgroundImageView * imageView = [self __backgroundImageView];
+		if ( nil == imageView )
+		{
+			imageView = [[[BeeBackgroundImageView alloc] initWithFrame:self.bounds] autorelease];
+			[self addSubview:imageView];
+			[self sendSubviewToBack:imageView];
+		}
+
+		imageView.image = image;
+		imageView.frame = self.bounds;
+		[imageView setNeedsDisplay];
+	}
+	else
+	{
+		BeeBackgroundImageView * imageView = [self __backgroundImageView];
+		if ( imageView )
+		{
+			[imageView removeFromSuperview];
+		}
+	}
+}
+
+- (void)fitBackgroundFrame
+{
+	BeeBackgroundImageView * imageView = [self __backgroundImageView];
+	if ( imageView )
+	{
+		imageView.frame = self.bounds;
+	}
+}
 
 @end

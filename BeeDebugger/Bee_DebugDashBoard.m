@@ -77,7 +77,7 @@
 		_titleView = [[BeeUILabel alloc] initWithFrame:titleFrame];
 		_titleView.textColor = [UIColor orangeColor];
 		_titleView.textAlignment = UITextAlignmentLeft;
-		_titleView.font = [BeeUIFont height:12.0f bold:YES];
+		_titleView.font = [UIFont boldSystemFontOfSize:12.0f];
 		_titleView.lineBreakMode = UILineBreakModeClip;
 		_titleView.numberOfLines = 1;
 		_titleView.text = @"Memory";
@@ -92,7 +92,7 @@
 		_statusView = [[BeeUILabel alloc] initWithFrame:statusFrame];
 		_statusView.textColor = [UIColor colorWithWhite:0.85f alpha:1.0f];
 		_statusView.textAlignment = UITextAlignmentLeft;
-		_statusView.font = [BeeUIFont height:12.0f bold:YES];
+		_statusView.font = [UIFont boldSystemFontOfSize:12.0f];
 		_statusView.lineBreakMode = UILineBreakModeClip;
 		_statusView.numberOfLines = 1;
 		[self addSubview:_statusView];
@@ -107,7 +107,7 @@
 		_manualAlloc.backgroundColor = [UIColor darkGrayColor];
 		_manualAlloc.layer.borderColor = [UIColor lightGrayColor].CGColor;
 		_manualAlloc.layer.borderWidth = 2.0f;
-		_manualAlloc.titleLabel.font = [BeeUIFont height:12.0f bold:YES];
+		_manualAlloc.titleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
 		_manualAlloc.stateNormal.title = @"+50M";
 		_manualAlloc.stateNormal.titleColor = [UIColor whiteColor];
 		[_manualAlloc addSignal:@"ALLOC" forControlEvents:UIControlEventTouchUpInside];
@@ -119,7 +119,7 @@
 		_manualFree.backgroundColor = [UIColor darkGrayColor];
 		_manualFree.layer.borderColor = [UIColor lightGrayColor].CGColor;
 		_manualFree.layer.borderWidth = 2.0f;
-		_manualFree.titleLabel.font = [BeeUIFont height:12.0f bold:YES];
+		_manualFree.titleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
 		_manualFree.stateNormal.title = @"-50M";
 		_manualFree.stateNormal.titleColor = [UIColor whiteColor];
 		[_manualFree addSignal:@"FREE" forControlEvents:UIControlEventTouchUpInside];
@@ -131,7 +131,7 @@
 		_manualAllocAll.backgroundColor = [UIColor darkGrayColor];
 		_manualAllocAll.layer.borderColor = [UIColor lightGrayColor].CGColor;
 		_manualAllocAll.layer.borderWidth = 2.0f;
-		_manualAllocAll.titleLabel.font = [BeeUIFont height:12.0f bold:YES];
+		_manualAllocAll.titleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
 		_manualAllocAll.stateNormal.title = @"+ALL";
 		_manualAllocAll.stateNormal.titleColor = [UIColor whiteColor];
 		[_manualAllocAll addSignal:@"ALLOC_ALL" forControlEvents:UIControlEventTouchUpInside];
@@ -143,7 +143,7 @@
 		_manualFreeAll.backgroundColor = [UIColor darkGrayColor];
 		_manualFreeAll.layer.borderColor = [UIColor lightGrayColor].CGColor;
 		_manualFreeAll.layer.borderWidth = 2.0f;
-		_manualFreeAll.titleLabel.font = [BeeUIFont height:12.0f bold:YES];
+		_manualFreeAll.titleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
 		_manualFreeAll.stateNormal.title = @"-ALL";
 		_manualFreeAll.stateNormal.titleColor = [UIColor whiteColor];
 		[_manualFreeAll addSignal:@"FREE_ALL" forControlEvents:UIControlEventTouchUpInside];
@@ -159,7 +159,7 @@
 		_autoWarning.backgroundColor = [UIColor darkGrayColor];
 		_autoWarning.layer.borderColor = [UIColor lightGrayColor].CGColor;
 		_autoWarning.layer.borderWidth = 2.0f;
-		_autoWarning.titleLabel.font = [BeeUIFont height:12.0f bold:YES];
+		_autoWarning.titleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
 		_autoWarning.stateNormal.title = @"Warning(Off)";
 		_autoWarning.stateNormal.titleColor = [UIColor redColor];
 		[_autoWarning addSignal:@"WARNING" forControlEvents:UIControlEventTouchUpInside];
@@ -294,7 +294,7 @@
 		_titleView = [[BeeUILabel alloc] initWithFrame:titleFrame];
 		_titleView.textColor = [UIColor orangeColor];
 		_titleView.textAlignment = UITextAlignmentLeft;
-		_titleView.font = [BeeUIFont height:12.0f bold:YES];
+		_titleView.font = [UIFont boldSystemFontOfSize:12.0f];
 		_titleView.lineBreakMode = UILineBreakModeClip;
 		_titleView.numberOfLines = 1;
 		_titleView.text = @"Message";
@@ -309,7 +309,7 @@
 		_statusView = [[BeeUILabel alloc] initWithFrame:statusFrame];
 		_statusView.textColor = [UIColor colorWithWhite:0.85f alpha:1.0f];
 		_statusView.textAlignment = UITextAlignmentLeft;
-		_statusView.font = [BeeUIFont height:12.0f bold:YES];
+		_statusView.font = [UIFont boldSystemFontOfSize:12.0f];
 		_statusView.lineBreakMode = UILineBreakModeClip;
 		_statusView.numberOfLines = 1;
 		[self addSubview:_statusView];
@@ -357,7 +357,7 @@
 		_cancelAll.backgroundColor = [UIColor darkGrayColor];
 		_cancelAll.layer.borderColor = [UIColor lightGrayColor].CGColor;
 		_cancelAll.layer.borderWidth = 2.0f;
-		_cancelAll.titleLabel.font = [BeeUIFont height:12.0f bold:YES];
+		_cancelAll.titleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
 		_cancelAll.stateNormal.title = @"Cancel all";
 		_cancelAll.stateNormal.titleColor = [UIColor whiteColor];
 		[_cancelAll addSignal:@"CANCEL_ALL" forControlEvents:UIControlEventTouchUpInside];
@@ -373,7 +373,7 @@
 		_freezeAll.backgroundColor = [UIColor darkGrayColor];
 		_freezeAll.layer.borderColor = [UIColor lightGrayColor].CGColor;
 		_freezeAll.layer.borderWidth = 2.0f;
-		_freezeAll.titleLabel.font = [BeeUIFont height:12.0f bold:YES];
+		_freezeAll.titleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
 		_freezeAll.stateNormal.title = @"Freeze(Off)";
 		_freezeAll.stateNormal.titleColor = [UIColor redColor];
 		[_freezeAll addSignal:@"FREEZE_ALL" forControlEvents:UIControlEventTouchUpInside];
@@ -473,7 +473,7 @@
 		_titleView = [[BeeUILabel alloc] initWithFrame:titleFrame];
 		_titleView.textColor = [UIColor orangeColor];
 		_titleView.textAlignment = UITextAlignmentLeft;
-		_titleView.font = [BeeUIFont height:12.0f bold:YES];
+		_titleView.font = [UIFont boldSystemFontOfSize:12.0f];
 		_titleView.lineBreakMode = UILineBreakModeClip;
 		_titleView.numberOfLines = 1;
 		_titleView.text = @"Network";
@@ -488,7 +488,7 @@
 		_statusView = [[BeeUILabel alloc] initWithFrame:statusFrame];
 		_statusView.textColor = [UIColor colorWithWhite:0.85f alpha:1.0f];
 		_statusView.textAlignment = UITextAlignmentLeft;
-		_statusView.font = [BeeUIFont height:12.0f bold:YES];
+		_statusView.font = [UIFont boldSystemFontOfSize:12.0f];
 		_statusView.lineBreakMode = UILineBreakModeClip;
 		_statusView.numberOfLines = 1;
 		[self addSubview:_statusView];
@@ -536,7 +536,7 @@
 		_delayPlus.backgroundColor = [UIColor darkGrayColor];
 		_delayPlus.layer.borderColor = [UIColor lightGrayColor].CGColor;
 		_delayPlus.layer.borderWidth = 2.0f;
-		_delayPlus.titleLabel.font = [BeeUIFont height:12.0f bold:YES];
+		_delayPlus.titleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
 		_delayPlus.stateNormal.title = @"+1s";
 		_delayPlus.stateNormal.titleColor = [UIColor whiteColor];
 		[_delayPlus addSignal:@"DELAY+" forControlEvents:UIControlEventTouchUpInside];
@@ -548,7 +548,7 @@
 		_delaySub.backgroundColor = [UIColor darkGrayColor];
 		_delaySub.layer.borderColor = [UIColor lightGrayColor].CGColor;
 		_delaySub.layer.borderWidth = 2.0f;
-		_delaySub.titleLabel.font = [BeeUIFont height:12.0f bold:YES];
+		_delaySub.titleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
 		_delaySub.stateNormal.title = @"-1s";
 		_delaySub.stateNormal.titleColor = [UIColor whiteColor];
 		[_delaySub addSignal:@"DELAY-" forControlEvents:UIControlEventTouchUpInside];
@@ -561,7 +561,7 @@
 		_switchOnline.backgroundColor = [UIColor darkGrayColor];
 		_switchOnline.layer.borderColor = [UIColor lightGrayColor].CGColor;
 		_switchOnline.layer.borderWidth = 2.0f;
-		_switchOnline.titleLabel.font = [BeeUIFont height:12.0f bold:YES];
+		_switchOnline.titleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
 		_switchOnline.stateNormal.title = @"Online";
 		_switchOnline.stateNormal.titleColor = [UIColor greenColor];
 		[_switchOnline addSignal:@"SWITCH" forControlEvents:UIControlEventTouchUpInside];
@@ -577,7 +577,7 @@
 		_bandWidth.backgroundColor = [UIColor darkGrayColor];
 		_bandWidth.layer.borderColor = [UIColor lightGrayColor].CGColor;
 		_bandWidth.layer.borderWidth = 2.0f;
-		_bandWidth.titleLabel.font = [BeeUIFont height:12.0f bold:YES];
+		_bandWidth.titleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
 		_bandWidth.stateNormal.title = @"No limit";
 		_bandWidth.stateNormal.titleColor = [UIColor redColor];
 		[_bandWidth addSignal:@"LIMIT" forControlEvents:UIControlEventTouchUpInside];

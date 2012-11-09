@@ -46,6 +46,7 @@
 
 #import "NSArray+BeeExtension.h"
 #import "NSData+BeeExtension.h"
+#import "NSDate+BeeExtension.h"
 #import "NSDictionary+BeeExtension.h"
 #import "NSNumber+BeeExtension.h"
 #import "NSObject+BeeNotification.h"

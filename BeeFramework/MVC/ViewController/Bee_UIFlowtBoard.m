@@ -37,6 +37,7 @@
 #import "Bee_UIFlowBoard.h"
 #import "Bee_Runtime.h"
 #import "Bee_Log.h"
+#import "UIView+BeeQuery.h"
 
 #pragma mark -
 
@@ -246,9 +247,9 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 {
 	if ( en )
 	{
-		if ( BEE_UIPULLLOADER_STATE_LOADING != _pullLoader.state )
+		if ( BeeUIPullLoader.STATE_LOADING != _pullLoader.state )
 		{
-			if ( BEE_UIPULLLOADER_STATE_NORMAL == _pullLoader.state )
+			if ( BeeUIPullLoader.STATE_NORMAL == _pullLoader.state )
 			{
 				_baseInsets = _scrollView.contentInset;
 			}
@@ -260,19 +261,19 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 			_scrollView.contentInset = insets;
 			[UIView commitAnimations];
 
-			[_pullLoader changeState:BEE_UIPULLLOADER_STATE_LOADING animated:YES];
+			[_pullLoader changeState:BeeUIPullLoader.STATE_LOADING animated:YES];
 		}
 	}
 	else
 	{
-		if ( BEE_UIPULLLOADER_STATE_NORMAL != _pullLoader.state )
+		if ( BeeUIPullLoader.STATE_NORMAL != _pullLoader.state )
 		{
 			[UIView beginAnimations:nil context:NULL];
 			[UIView setAnimationDuration:0.3f];
 			_scrollView.contentInset = _baseInsets;
 			[UIView commitAnimations];
 
-			[_pullLoader changeState:BEE_UIPULLLOADER_STATE_NORMAL animated:YES];
+			[_pullLoader changeState:BeeUIPullLoader.STATE_NORMAL animated:YES];
 		}
 	}
 }
@@ -728,9 +729,9 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 {
 	if ( scrollView.dragging )
 	{
-		if ( NO == _pullLoader.hidden && BEE_UIPULLLOADER_STATE_LOADING != _pullLoader.state )
+		if ( NO == _pullLoader.hidden && BeeUIPullLoader.STATE_LOADING != _pullLoader.state )
 		{
-			if ( BEE_UIPULLLOADER_STATE_NORMAL == _pullLoader.state )
+			if ( BeeUIPullLoader.STATE_NORMAL == _pullLoader.state )
 			{
 				_baseInsets = scrollView.contentInset;
 			}
@@ -740,16 +741,16 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 			
 			if ( offset < boundY )
 			{
-				if ( BEE_UIPULLLOADER_STATE_PULLING != _pullLoader.state )
+				if ( BeeUIPullLoader.STATE_PULLING != _pullLoader.state )
 				{
-					[_pullLoader changeState:BEE_UIPULLLOADER_STATE_PULLING animated:YES];
+					[_pullLoader changeState:BeeUIPullLoader.STATE_PULLING animated:YES];
 				}				
 			}
 			else if ( offset < 0.0f )
 			{
-				if ( BEE_UIPULLLOADER_STATE_NORMAL != _pullLoader.state )
+				if ( BeeUIPullLoader.STATE_NORMAL != _pullLoader.state )
 				{
-					[_pullLoader changeState:BEE_UIPULLLOADER_STATE_NORMAL animated:YES];
+					[_pullLoader changeState:BeeUIPullLoader.STATE_NORMAL animated:YES];
 				}				
 			}
 		}
@@ -767,14 +768,14 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 {
 	if ( decelerate )
 	{
-		if ( NO == _pullLoader.hidden && BEE_UIPULLLOADER_STATE_LOADING != _pullLoader.state )
+		if ( NO == _pullLoader.hidden && BeeUIPullLoader.STATE_LOADING != _pullLoader.state )
 		{
 			CGFloat offset = scrollView.contentOffset.y;
 			CGFloat boundY = -(_baseInsets.top + 80.0f);
 			
 			if ( offset <= boundY )
 			{
-				if ( BEE_UIPULLLOADER_STATE_LOADING != _pullLoader.state )
+				if ( BeeUIPullLoader.STATE_LOADING != _pullLoader.state )
 				{
 					[UIView beginAnimations:nil context:NULL];
 					[UIView setAnimationDuration:0.3f];
@@ -783,21 +784,21 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 					scrollView.contentInset = insets;
 					[UIView commitAnimations];
 
-					[_pullLoader changeState:BEE_UIPULLLOADER_STATE_LOADING animated:YES];
+					[_pullLoader changeState:BeeUIPullLoader.STATE_LOADING animated:YES];
 
 					[self sendUISignal:BeeUIFlowBoard.PULL_REFRESH];
 				}
 			}
 			else
 			{
-				if ( BEE_UIPULLLOADER_STATE_NORMAL != _pullLoader.state )
+				if ( BeeUIPullLoader.STATE_NORMAL != _pullLoader.state )
 				{
 					[UIView beginAnimations:nil context:NULL];
 					[UIView setAnimationDuration:0.3f];
 					scrollView.contentInset = _baseInsets;				
 					[UIView commitAnimations];
 					
-					[_pullLoader changeState:BEE_UIPULLLOADER_STATE_NORMAL animated:YES];
+					[_pullLoader changeState:BeeUIPullLoader.STATE_NORMAL animated:YES];
 				}
 			}
 		}

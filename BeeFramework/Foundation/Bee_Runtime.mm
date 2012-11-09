@@ -61,6 +61,10 @@
 
 @implementation BeeCallFrame
 
+DEF_INT( TYPE_UNKNOWN,	0 )
+DEF_INT( TYPE_OBJC,		1 )
+DEF_INT( TYPE_NATIVEC,	2 )
+
 @synthesize type = _type;
 @synthesize process = _process;
 @synthesize entry = _entry;
@@ -70,11 +74,11 @@
 
 - (NSString *)description
 {
-	if ( BEE_CALLFRAME_TYPE_OBJC == _type )
+	if ( BeeCallFrame.TYPE_OBJC == _type )
 	{
 		return [NSString stringWithFormat:@"[O] %@(0x%08x + %d) -> [%@ %@]", _process, _entry, _offset, _clazz, _method];
 	}
-	else if ( BEE_CALLFRAME_TYPE_NATIVEC == _type )
+	else if ( BeeCallFrame.TYPE_NATIVEC == _type )
 	{
 		return [NSString stringWithFormat:@"[C] %@(0x%08x + %d) -> %@", _process, _entry, _offset, _method];
 	}
@@ -101,7 +105,7 @@
 	if ( result && (regex.numberOfCaptureGroups + 1) == result.numberOfRanges )
 	{
 		BeeCallFrame * frame = [[[BeeCallFrame alloc] init] autorelease];
-		frame.type = BEE_CALLFRAME_TYPE_OBJC;
+		frame.type = BeeCallFrame.TYPE_OBJC;
 		frame.process = [line substringWithRange:[result rangeAtIndex:1]];
 		frame.entry = [BeeCallFrame hex:[line substringWithRange:[result rangeAtIndex:2]]];
 		frame.clazz = [line substringWithRange:[result rangeAtIndex:3]];
@@ -123,7 +127,7 @@
 	if ( result && (regex.numberOfCaptureGroups + 1) == result.numberOfRanges )
 	{
 		BeeCallFrame * frame = [[[BeeCallFrame alloc] init] autorelease];
-		frame.type = BEE_CALLFRAME_TYPE_NATIVEC;
+		frame.type = BeeCallFrame.TYPE_NATIVEC;
 		frame.process = [line substringWithRange:[result rangeAtIndex:1]];
 		frame.entry = [self hex:[line substringWithRange:[result rangeAtIndex:2]]];
 		frame.clazz = nil;
@@ -138,7 +142,7 @@
 + (id)unknown
 {
 	BeeCallFrame * frame = [[[BeeCallFrame alloc] init] autorelease];
-	frame.type = BEE_CALLFRAME_TYPE_UNKNOWN;
+	frame.type = BeeCallFrame.TYPE_UNKNOWN;
 	return frame;
 }
 

@@ -39,7 +39,9 @@
 #import "Bee_UIKeyboard.h"
 #import "Bee_Runtime.h"
 #import "Bee_Log.h"
-#import "Bee_UIRect.h"
+
+#import "CGRect+BeeExtension.h"
+#import "UIView+BeeQuery.h"
 
 #pragma mark -
 
@@ -190,6 +192,9 @@ DEF_SIGNAL( SEARCH_COMMIT )			// 搜索提交
 //DEF_SIGNAL( SCROLL_REACH_TOP )		// 触顶
 //DEF_SIGNAL( SCROLL_REACH_BOTTOM )	// 触底
 
+DEF_INT( SEARCHBAR_STYLE_BOTTOM,	0 );
+DEF_INT( SEARCHBAR_STYLE_TOP,		1 );
+
 - (void)load
 {
 	_baseInsets = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f);
@@ -197,7 +202,7 @@ DEF_SIGNAL( SEARCH_COMMIT )			// 搜索提交
 	_lastScrollPosition = CGPointZero;
 	_currentScrollPosition = CGPointZero;
 
-	_searchBarStyle = BEE_UITABLEBOARD_SEARCHBAR_STYLE_BOTTOM;
+	_searchBarStyle = BeeUITableBoard.SEARCHBAR_STYLE_BOTTOM;
 }
 
 - (void)unload
@@ -329,7 +334,7 @@ DEF_SIGNAL( SEARCH_COMMIT )			// 搜索提交
 		}
 		else if ( [signal is:BeeUIBoard.LAYOUT_VIEWS] )
 		{
-			if ( BEE_UITABLEBOARD_SEARCHBAR_STYLE_BOTTOM == _searchBarStyle )
+			if ( BeeUITableBoard.SEARCHBAR_STYLE_BOTTOM == _searchBarStyle )
 			{
 				CGRect bounds = self.view.bounds;
 				CGRect searchFrame;
@@ -543,9 +548,9 @@ DEF_SIGNAL( SEARCH_COMMIT )			// 搜索提交
 {
 	if ( en )
 	{
-		if ( BEE_UIPULLLOADER_STATE_LOADING != _pullLoader.state )
+		if ( BeeUIPullLoader.STATE_LOADING != _pullLoader.state )
 		{
-			if ( BEE_UIPULLLOADER_STATE_NORMAL == _pullLoader.state )
+			if ( BeeUIPullLoader.STATE_NORMAL == _pullLoader.state )
 			{
 				_baseInsets = _tableView.contentInset;
 			}
@@ -557,19 +562,19 @@ DEF_SIGNAL( SEARCH_COMMIT )			// 搜索提交
 			_tableView.contentInset = insets;
 			[UIView commitAnimations];
 
-			[_pullLoader changeState:BEE_UIPULLLOADER_STATE_LOADING animated:YES];
+			[_pullLoader changeState:BeeUIPullLoader.STATE_LOADING animated:YES];
 		}
 	}
 	else
 	{
-		if ( BEE_UIPULLLOADER_STATE_NORMAL != _pullLoader.state )
+		if ( BeeUIPullLoader.STATE_NORMAL != _pullLoader.state )
 		{
 			[UIView beginAnimations:nil context:NULL];
 			[UIView setAnimationDuration:0.3f];
 			_tableView.contentInset = _baseInsets;
 			[UIView commitAnimations];
 			
-			[_pullLoader changeState:BEE_UIPULLLOADER_STATE_NORMAL animated:YES];
+			[_pullLoader changeState:BeeUIPullLoader.STATE_NORMAL animated:YES];
 		}
 	}
 }
@@ -715,7 +720,7 @@ DEF_SIGNAL( SEARCH_COMMIT )			// 搜索提交
 	
 	CGRect bounds = self.view.bounds;
 	
-	if ( BEE_UITABLEBOARD_SEARCHBAR_STYLE_TOP == _searchBarStyle )
+	if ( BeeUITableBoard.SEARCHBAR_STYLE_TOP == _searchBarStyle )
 	{
 		self.tableView.frame = CGRectMake(0, 0, bounds.size.width, bounds.size.height);			
 	}
@@ -864,9 +869,9 @@ DEF_SIGNAL( SEARCH_COMMIT )			// 搜索提交
 
 	if ( scrollView.dragging )
 	{
-		if ( NO == _pullLoader.hidden && BEE_UIPULLLOADER_STATE_LOADING != _pullLoader.state )
+		if ( NO == _pullLoader.hidden && BeeUIPullLoader.STATE_LOADING != _pullLoader.state )
 		{
-			if ( BEE_UIPULLLOADER_STATE_NORMAL == _pullLoader.state )
+			if ( BeeUIPullLoader.STATE_NORMAL == _pullLoader.state )
 			{
 				_baseInsets = _tableView.contentInset;
 			}
@@ -876,16 +881,16 @@ DEF_SIGNAL( SEARCH_COMMIT )			// 搜索提交
 
 			if ( offset < boundY )
 			{
-				if ( BEE_UIPULLLOADER_STATE_PULLING != _pullLoader.state )
+				if ( BeeUIPullLoader.STATE_PULLING != _pullLoader.state )
 				{
-					[_pullLoader changeState:BEE_UIPULLLOADER_STATE_PULLING animated:YES];
+					[_pullLoader changeState:BeeUIPullLoader.STATE_PULLING animated:YES];
 				}				
 			}
 			else if ( offset < 0.0f )
 			{
-				if ( BEE_UIPULLLOADER_STATE_NORMAL != _pullLoader.state )
+				if ( BeeUIPullLoader.STATE_NORMAL != _pullLoader.state )
 				{
-					[_pullLoader changeState:BEE_UIPULLLOADER_STATE_NORMAL animated:YES];
+					[_pullLoader changeState:BeeUIPullLoader.STATE_NORMAL animated:YES];
 				}				
 			}
 		}
@@ -902,14 +907,14 @@ DEF_SIGNAL( SEARCH_COMMIT )			// 搜索提交
 {
 	if ( decelerate )
 	{
-		if ( NO == _pullLoader.hidden && BEE_UIPULLLOADER_STATE_LOADING != _pullLoader.state )
+		if ( NO == _pullLoader.hidden && BeeUIPullLoader.STATE_LOADING != _pullLoader.state )
 		{
 			CGFloat offset = scrollView.contentOffset.y;
 			CGFloat boundY = -(_baseInsets.top + 80.0f);
 
 			if ( offset <= boundY )
 			{
-				if ( BEE_UIPULLLOADER_STATE_LOADING != _pullLoader.state )
+				if ( BeeUIPullLoader.STATE_LOADING != _pullLoader.state )
 				{
 					[UIView beginAnimations:nil context:NULL];
 					[UIView setAnimationDuration:0.3f];
@@ -918,21 +923,21 @@ DEF_SIGNAL( SEARCH_COMMIT )			// 搜索提交
 					_tableView.contentInset = insets;
 					[UIView commitAnimations];
 					
-					[_pullLoader changeState:BEE_UIPULLLOADER_STATE_LOADING animated:YES];
+					[_pullLoader changeState:BeeUIPullLoader.STATE_LOADING animated:YES];
 
 					[self sendUISignal:BeeUITableBoard.PULL_REFRESH];
 				}
 			}
 			else
 			{
-				if ( BEE_UIPULLLOADER_STATE_NORMAL != _pullLoader.state )
+				if ( BeeUIPullLoader.STATE_NORMAL != _pullLoader.state )
 				{
 					[UIView beginAnimations:nil context:NULL];
 					[UIView setAnimationDuration:0.3f];
 					_tableView.contentInset = _baseInsets;				
 					[UIView commitAnimations];
 					
-					[_pullLoader changeState:BEE_UIPULLLOADER_STATE_NORMAL animated:YES];
+					[_pullLoader changeState:BeeUIPullLoader.STATE_NORMAL animated:YES];
 				}
 			}
 		}

@@ -72,11 +72,11 @@
 
 - (id)init
 {
-	self = [super init]; // will call initWithFrame
+	self = [super initWithFrame:CGRectZero];
 	if ( self )
 	{
-//		[self initSelf];
-//		[self load];
+		[self initSelf];
+		[self load];
 	}
 	return self;	
 }
@@ -88,6 +88,8 @@
 	{
 		[self initSelf];
 		[self load];
+		
+		[self layoutAllSubcells];
 	}
 	return self;
 }
@@ -316,6 +318,7 @@
 	if ( nil == data )
 	{
 		[self clearData];
+		[self layoutAllSubcells];
 		return;
 	}
 	
@@ -359,7 +362,7 @@
 	[_cellData release];
 	[_category release];
 	[_subCells release];
-	[_layout release];
+//	[_layout release];
 
 	[super dealloc];
 }

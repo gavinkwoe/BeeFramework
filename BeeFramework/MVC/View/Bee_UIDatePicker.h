@@ -40,19 +40,20 @@
 {
 	NSDate *				_date;
 	UIDatePicker *			_datePicker;
-	UIViewController *		_parentController;
+	UIView *				_parentView;
 	NSObject *				_userData;
 }
 
 AS_SIGNAL( WILL_PRESENT )	// 将要显示
 AS_SIGNAL( DID_PRESENT )	// 已经显示
-AS_SIGNAL( CHANGED )		// 日期改变
-AS_SIGNAL( CONFIRMED )		// 确认
 AS_SIGNAL( WILL_DISMISS )	// 将要隐藏
 AS_SIGNAL( DID_DISMISS )	// 已经隐藏
+AS_SIGNAL( CHANGED )		// 日期改变
+AS_SIGNAL( CONFIRMED )		// 确认
 
 @property (nonatomic, retain) NSDate *		date;
 @property (nonatomic, retain) NSObject *	userData;
+@property (nonatomic, assign) UIView *		parentView;
 
 + (BeeUIDatePicker *)spawn;
 

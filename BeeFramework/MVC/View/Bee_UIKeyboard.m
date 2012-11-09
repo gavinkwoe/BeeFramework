@@ -57,6 +57,7 @@ DEF_NOTIFICATION( HIDDEN );
 DEF_NOTIFICATION( HEIGHT_CHANGED );
 
 @synthesize shown = _shown;
+@synthesize animating = _animating;
 @synthesize height = _height;
 
 - (id)init
@@ -65,6 +66,7 @@ DEF_NOTIFICATION( HEIGHT_CHANGED );
 	if (self)
 	{
 		_shown = NO;
+		_animating = NO;
 		_height = DEFAULT_KEYBOARD_HEIGHT;
 
 		_accessorFrame = CGRectZero;

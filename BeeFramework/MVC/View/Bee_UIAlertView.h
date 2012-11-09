@@ -38,7 +38,7 @@
 
 @interface BeeUIAlertView : UIAlertView<UIAlertViewDelegate>
 {
-	UIViewController *		_parentController;
+	UIView *				_parentView;
 	NSMutableArray *		_actions;
 	NSObject *				_userData;
 }
@@ -48,18 +48,17 @@ AS_SIGNAL( DID_PRESENT )	// 已经显示
 AS_SIGNAL( WILL_DISMISS )	// 将要隐藏
 AS_SIGNAL( DID_DISMISS )	// 已经隐藏
 
-@property (nonatomic, assign) UIViewController *	parentController;
+@property (nonatomic, assign) UIView *				parentView;
 @property (nonatomic, retain) NSObject *			userData;
 
 + (BeeUIAlertView *)spawn;
-+ (BeeUIAlertView *)showMessage:(NSString *)message
-					cancelTitle:(NSString *)cancel;
++ (BeeUIAlertView *)showMessage:(NSString *)message cancelTitle:(NSString *)title;
 
 - (void)presentForController:(UIViewController *)controller;
+- (void)dismissAnimated:(BOOL)animated;
 
 - (void)addCancelTitle:(NSString *)title;
 - (void)addCancelTitle:(NSString *)title signal:(NSString *)signal object:(NSDictionary *)object;
-
 - (void)addButtonTitle:(NSString *)title signal:(NSString *)signal;
 - (void)addButtonTitle:(NSString *)title signal:(NSString *)signal object:(NSDictionary *)object;
 

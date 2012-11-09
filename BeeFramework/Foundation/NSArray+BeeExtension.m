@@ -61,6 +61,14 @@
 	return self;
 }
 
+- (id)safeObjectAtIndex:(NSUInteger)index
+{
+	if ( index >= self.count )
+		return nil;
+
+	return [self objectAtIndex:index];
+}
+
 @end
 
 #pragma mark -

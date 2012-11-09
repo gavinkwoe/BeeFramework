@@ -32,8 +32,9 @@
 
 #import "Bee_UIZoomView.h"
 #import "Bee_UISignal.h"
-#import "Bee_UIRect.h"
+#import "CGRect+BeeExtension.h"
 #import "NSNumber+BeeExtension.h"
+#import "UIView+BeeQuery.h"
 
 #pragma mark -
 

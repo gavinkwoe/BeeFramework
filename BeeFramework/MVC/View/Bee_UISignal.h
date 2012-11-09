@@ -39,24 +39,6 @@
 
 #pragma mark -
 
-#undef	SAFE_RELEASE_SUBLAYER
-#define SAFE_RELEASE_SUBLAYER( __x ) \
-		{ \
-			[__x removeFromSuperlayer]; \
-			[__x release]; \
-			__x = nil; \
-		}
-
-#undef	SAFE_RELEASE_SUBVIEW
-#define SAFE_RELEASE_SUBVIEW( __x ) \
-		{ \
-			[__x removeFromSuperview]; \
-			[__x release]; \
-			__x = nil; \
-		}
-
-#pragma mark -
-
 @interface NSObject(BeeUISignalResponder)
 
 + (NSString *)SIGNAL;
@@ -109,6 +91,7 @@ AS_STATIC_PROPERTY( NO_VALUE );
 - (void)clear;
 
 // 只有某些特殊的SIGNAL需要加传真假值，如WebView
+- (BOOL)boolValue;
 - (void)returnYES;
 - (void)returnNO;
 
@@ -145,6 +128,8 @@ AS_STATIC_PROPERTY( NO_VALUE );
 AS_SIGNAL( TAPPED );
 
 - (void)makeTappable;
+- (void)makeTappable:(NSString *)signal;
+- (void)makeTappable:(NSString *)signal withObject:(NSObject *)obj;
 - (void)makeUntappable;
 
 @end
