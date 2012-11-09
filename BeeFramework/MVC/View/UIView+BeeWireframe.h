@@ -27,23 +27,19 @@
 //	IN THE SOFTWARE.
 //
 //
-//  Bee_UINavigationBar.h
+//  UIView+BeeTint.h
 //
 
-#import "NSObject+BeeNotification.h"
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "Bee_UISignal.h"
 #import "Bee_UIImageView.h"
 
 #pragma mark -
 
-@interface BeeUINavigationBar : UINavigationBar
-{
-	UIImage * _backgroundImage;
-}
+@interface UIView(BeeTint)
+- (void)
 
-@property (nonatomic, retain) UIImage *	backgroundImage;
-
-+ (BeeUINavigationBar *)spawn;
-+ (void)setDefaultBackgroundImage:(UIImage *)image;
-
+- (void)tintColor:(UIColor *)color andTips:(NSString *)tips;
+- (void)untintColorAndTips;
 @end
