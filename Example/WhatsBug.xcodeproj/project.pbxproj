@@ -34,16 +34,16 @@
 		63AFC7A015DE410300100B4F /* Bee_DebugMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AFC79F15DE410200100B4F /* Bee_DebugMessageModel.m */; };
 		63AFC7A315DE457500100B4F /* Bee_DebugNetworkModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AFC7A215DE457400100B4F /* Bee_DebugNetworkModel.m */; };
 		63AFC7A615DE475E00100B4F /* Bee_DebugDashBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AFC7A515DE475D00100B4F /* Bee_DebugDashBoard.m */; };
-		63C3AC5D15F7942600F411F5 /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C3ABDD15F7942600F411F5 /* ASIAuthenticationDialog.m */; };
-		63C3AC5E15F7942600F411F5 /* ASIDataCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C3ABE015F7942600F411F5 /* ASIDataCompressor.m */; };
-		63C3AC5F15F7942600F411F5 /* ASIDataDecompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C3ABE215F7942600F411F5 /* ASIDataDecompressor.m */; };
-		63C3AC6015F7942600F411F5 /* ASIDownloadCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C3ABE415F7942600F411F5 /* ASIDownloadCache.m */; };
-		63C3AC6115F7942600F411F5 /* ASIFormDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C3ABE615F7942600F411F5 /* ASIFormDataRequest.m */; };
-		63C3AC6215F7942600F411F5 /* ASIHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C3ABE815F7942600F411F5 /* ASIHTTPRequest.m */; };
-		63C3AC6315F7942600F411F5 /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C3ABEC15F7942600F411F5 /* ASIInputStream.m */; };
-		63C3AC6415F7942600F411F5 /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C3ABEE15F7942600F411F5 /* ASINetworkQueue.m */; };
-		63C3AC6515F7942600F411F5 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C3ABF215F7942600F411F5 /* JSONKit.m */; };
-		63C3AC6615F7942600F411F5 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C3ABF515F7942600F411F5 /* Reachability.m */; };
+		63C3AC5D15F7942600F411F5 /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C3ABDD15F7942600F411F5 /* ASIAuthenticationDialog.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		63C3AC5E15F7942600F411F5 /* ASIDataCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C3ABE015F7942600F411F5 /* ASIDataCompressor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		63C3AC5F15F7942600F411F5 /* ASIDataDecompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C3ABE215F7942600F411F5 /* ASIDataDecompressor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		63C3AC6015F7942600F411F5 /* ASIDownloadCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C3ABE415F7942600F411F5 /* ASIDownloadCache.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		63C3AC6115F7942600F411F5 /* ASIFormDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C3ABE615F7942600F411F5 /* ASIFormDataRequest.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		63C3AC6215F7942600F411F5 /* ASIHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C3ABE815F7942600F411F5 /* ASIHTTPRequest.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		63C3AC6315F7942600F411F5 /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C3ABEC15F7942600F411F5 /* ASIInputStream.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		63C3AC6415F7942600F411F5 /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C3ABEE15F7942600F411F5 /* ASINetworkQueue.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		63C3AC6515F7942600F411F5 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C3ABF215F7942600F411F5 /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		63C3AC6615F7942600F411F5 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C3ABF515F7942600F411F5 /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		63C3AC6715F7942600F411F5 /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C3ABF815F7942600F411F5 /* SFHFKeychainUtils.m */; };
 		63C3AC6815F7942600F411F5 /* Bee_Cache.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C3ABFB15F7942600F411F5 /* Bee_Cache.m */; };
 		63C3AC6915F7942600F411F5 /* Bee_Log.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63C3ABFD15F7942600F411F5 /* Bee_Log.mm */; };
@@ -1013,6 +1013,7 @@
 		63A79279157506E900C863F3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WhatsBug/WhatsBug-Prefix.pch";
 				GENERATE_PROFILING_CODE = YES;
@@ -1027,6 +1028,7 @@
 		63A7927A157506E900C863F3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WhatsBug/WhatsBug-Prefix.pch";
 				GENERATE_PROFILING_CODE = YES;

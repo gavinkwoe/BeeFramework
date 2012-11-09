@@ -30,6 +30,17 @@
 //  Bee.h
 //
 
+#if __has_feature(objc_arc)
+#define BEE_AUTORELEASE(exp) exp
+#define BEE_RELEASE(exp) exp
+#define BEE_RETAIN(exp) exp
+#else
+#define BEE_AUTORELEASE(exp) [exp autorelease]
+#define BEE_RELEASE(exp) [exp release]
+#define BEE_RETAIN(exp) [exp retain]
+#endif
+
+
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
