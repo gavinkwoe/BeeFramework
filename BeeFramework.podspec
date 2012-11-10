@@ -39,7 +39,7 @@ Pod::Spec.new do |s|
   # s.platform     = :ios, '5.0'
   s.platform     = :ios
 
-  s.source_files = 'BeeFramework/BeeFramework/{Foundation,MVC}/**/*.{h,m}', 'BeeFramework/BeeFramework/Bee.h'
+  s.source_files = 'BeeFramework/{Foundation,MVC}/**/*.{h,m}', 'BeeFramework/BeeFramework/Bee.h'
 
   s.frameworks = 'CoreMedia', 'CoreVideo', 'AVFoundation', 'Security', 'SystemConfiguration', 'QuartzCore', 'MobileCoreServices', 'CFNetwork'
   s.libraries = 'libz'
