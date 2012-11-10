@@ -9,12 +9,12 @@
 Pod::Spec.new do |s|
   s.name         = "BeeFramework"
   s.version      = "0.1"
-  s.summary      = "A short description of BeeFramework."
+  s.summary      = "Bee Framework 是一款iOS平台的MVC应用快速开发框架."
   s.description  = <<-DESC
-    Bee Framework 是一款iOS平台的MVC应用快速开发框架，使用Objective-C开发。
-    其早期原型曾经被应用在 QQ游戏大厅 for iPhone、QQ空间 for iPhone 等多款精品APP中。 在最近几个月中，我梳理并重构了设计，并取名为Bee，寓意着“清晰，灵活，高效，纯粹”。
+    Bee Framework 是一款iOS平台的MVC应用快速开发框架,使用Objective-C开发.
+    其早期原型曾经被应用在 QQ游戏大厅 for iPhone、QQ空间 for iPhone 等多款精品APP中. 在最近几个月中, 我梳理并重构了设计,并取名为Bee, 寓意着“清晰, 灵活, 高效, 纯粹”.
   
-    Bee 从根本上解决了iOS开发者长期困扰的各种问题，诸如：分层架构如何设计，层与层之间消息传递与处理，网络操作及缓存，异步及多线程，以及适配产品多变的UI布局需求。
+    Bee 从根本上解决了iOS开发者长期困扰的各种问题, 诸如: 分层架构如何设计, 层与层之间消息传递与处理, 网络操作及缓存, 异步及多线程, 以及适配产品多变的UI布局需求.
   DESC
   s.homepage     = "http://bbs.whatsbug.com/BeeFramework"
   s.license      = 'MIT'
@@ -31,7 +31,7 @@ Pod::Spec.new do |s|
 
   # Specify the location from where the source should be retreived.
   #
-  s.source       = { :git => "http://github.com/stcui/BeeFramework.git", :tag => "1.0" }
+  s.source       = { :git => "https://github.com/stcui/BeeFramework.git", :tag => "0.1" }
 
   # If this Pod runs only on iOS or OS X, then specify the platform and
   # the deployment target.

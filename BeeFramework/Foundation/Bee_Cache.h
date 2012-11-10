@@ -63,7 +63,7 @@
 
 AS_SINGLETON( BeeFileCache );
 
-- (NSData *)serialize:(NSObject *)obj;
+- (NSData *)serialize:(id)obj;
 - (NSObject *)unserialize:(NSData *)data;
 
 @end
