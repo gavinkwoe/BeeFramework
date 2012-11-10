@@ -32,6 +32,7 @@
 
 #import "Bee_UIButton.h"
 #import "Bee_UISignal.h"
+#import "UIView+BeeQuery.h"
 
 #pragma mark -
 
@@ -49,26 +50,31 @@
 - (void)setTitle:(NSString *)text
 {
 	[_button setTitle:text forState:_state];
+	[_button setNeedsDisplay];
 }
 
 - (void)setTitleColor:(UIColor *)color
 {
 	[_button setTitleColor:color forState:_state];
+	[_button setNeedsDisplay];
 }
 
 - (void)setTitleShadowColor:(UIColor *)color
 {
 	[_button setTitleShadowColor:color forState:_state];
+	[_button setNeedsDisplay];
 }
 
 - (void)setImage:(UIImage *)img
 {
 	[_button setImage:img forState:_state];
+	[_button setNeedsDisplay];
 }
 
 - (void)setBackgroundImage:(UIImage *)img
 {
 	[_button setBackgroundImage:img forState:_state];
+	[_button setNeedsDisplay];
 }
 
 @end
@@ -98,6 +104,9 @@ DEF_SIGNAL( TOUCH_UP_CANCEL )
 
 @synthesize title;
 @synthesize titleColor;
+@synthesize titleFont;
+@synthesize titleInsets;
+
 @synthesize stateNormal;
 @synthesize stateHighlighted;
 @synthesize stateDisabled;
@@ -135,8 +144,10 @@ DEF_SIGNAL( TOUCH_UP_CANCEL )
 	self.adjustsImageWhenDisabled = YES;
 	self.adjustsImageWhenHighlighted = YES;
 	
-    [_actions release];
-	_actions = [[NSMutableArray alloc] init];
+	if ( nil == _actions )
+	{
+		_actions = [[NSMutableArray alloc] init];
+	}
 	
 	[self addTarget:self action:@selector(didTouchDown) forControlEvents:UIControlEventTouchDown];		
 	[self addTarget:self action:@selector(didTouchDownRepeat) forControlEvents:UIControlEventTouchDownRepeat];		
@@ -165,6 +176,19 @@ DEF_SIGNAL( TOUCH_UP_CANCEL )
 	[super setFrame:frame];
 	
 	_label.frame = CGRectMake( 0.0f, 0.0f, frame.size.width, frame.size.height );
+}
+
+- (void)setTitleInsets:(UIEdgeInsets)insets
+{
+	_insets = insets;
+	
+	CGRect frame = CGRectInset( self.bounds, insets.left, insets.top );
+	frame.size.width -= insets.left;
+	frame.size.height -= insets.top;
+	frame.size.width -= insets.right;
+	frame.size.height -= insets.bottom;
+
+	_label.frame = frame;
 }
 
 - (void)dealloc
@@ -204,6 +228,18 @@ DEF_SIGNAL( TOUCH_UP_CANCEL )
 	[self initLabel];
 	
 	_label.textColor = color;
+}
+
+- (UIFont *)titleFont
+{
+	return _label ? _label.font : nil;
+}
+
+- (void)setTitleFont:(UIFont *)font
+{
+	[self initLabel];
+	
+	_label.font = font;
 }
 
 - (BeeUIButtonState *)stateNormal

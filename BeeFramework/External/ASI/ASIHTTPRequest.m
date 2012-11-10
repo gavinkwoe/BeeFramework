@@ -2158,7 +2158,7 @@ static NSOperationQueue *sharedQueue = nil;
 	[self setResponseStatusCode:(int)CFHTTPMessageGetResponseStatusCode(message)];
 	[self setResponseStatusMessage:[(NSString *)CFHTTPMessageCopyResponseStatusLine(message) autorelease]];
 
-	if ([self downloadCache] && ([[self downloadCache] canUseCachedDataForRequest:self])) {
+	if ([self downloadCache] && ([[self downloadCache] canUseCachedDataForRequest:self] && 304 == [self responseStatusCode])) {
 
 		// Update the expiry date
 		[[self downloadCache] updateExpiryForRequest:self maxAge:[self secondsToCache]];

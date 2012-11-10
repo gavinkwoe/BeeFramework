@@ -31,21 +31,20 @@
 //
 
 #import "Bee_UISignal.h"
-
-#pragma mark -
-
-typedef enum
-{
-	BEE_UISTACK_ANIMATION_DEFAULT = 0,
-	BEE_UISTACK_ANIMATION_CUBE,
-	BEE_UISTACK_ANIMATION_FADE,
-	BEE_UISTACK_ANIMATION_PAGING,
-} BeeUIStackAnimationType;
+#import "Bee_UIImageView.h"
+#import "NSObject+BeeNotification.h"
 
 #pragma mark -
 
 @class BeeUIBoard;
 @class BeeUIStack;
+
+#pragma mark -
+
+@interface UIView(BeeUIStack)
+- (BeeUIStack *)stack;
+- (UINavigationController *)navigationController;
+@end
 
 #pragma mark -
 
@@ -57,6 +56,12 @@ typedef enum
 	NSMutableArray *	_leftButtons;
 	NSMutableArray *	_rightButtons;
 }
+
+AS_INT( ANIMATION_TYPE_DEFAULT )
+AS_INT( ANIMATION_TYPE_CUBE )
+AS_INT( ANIMATION_TYPE_FADE )
+AS_INT( ANIMATION_TYPE_PAGING )
+AS_INT( ANIMATION_TYPE_SLIDE )
 
 @property (nonatomic, retain) NSString *		name;
 @property (nonatomic, assign) BeeUIBoard *		parentBoard;
@@ -74,16 +79,24 @@ typedef enum
 - (BeeUIStack *)initWithName:(NSString *)name andFirstBoard:(BeeUIBoard *)board;
 
 - (void)pushBoard:(BeeUIBoard *)board animated:(BOOL)animated;
-- (void)pushBoard:(BeeUIBoard *)board animated:(BOOL)animated animationType:(BeeUIStackAnimationType)type;
+- (void)pushBoard:(BeeUIBoard *)board animated:(BOOL)animated animationType:(NSInteger)type;
 
 - (void)popBoardAnimated:(BOOL)animated;
+- (void)popBoardAnimated:(BOOL)animated animationType:(NSInteger)type;
+
 - (NSArray *)popToBoard:(BeeUIBoard *)board animated:(BOOL)animated;
+- (NSArray *)popToBoard:(BeeUIBoard *)board animated:(BOOL)animated animationType:(NSInteger)type;
+
 - (NSArray *)popToFirstBoardAnimated:(BOOL)animated;
+- (NSArray *)popToFirstBoardAnimated:(BOOL)animated animationType:(NSInteger)type;
+
 - (void)popAllBoards;
 
 - (BOOL)existsBoard:(BeeUIBoard *)board;
+- (BeeUIBoard *)getBoard:(Class)clazz;
 
 - (void)setBarBackgroundImage:(UIImage *)image;
++ (void)setDefaultBarBackgroundImage:(UIImage *)image;
 
 @end
 

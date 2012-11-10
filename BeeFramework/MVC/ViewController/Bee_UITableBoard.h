@@ -37,14 +37,6 @@
 
 #pragma mark -
 
-typedef enum
-{
-	BEE_UITABLEBOARD_SEARCHBAR_STYLE_BOTTOM,
-	BEE_UITABLEBOARD_SEARCHBAR_STYLE_TOP
-} BeeUITableBoardSearchBarStyle;
-
-#pragma mark -
-
 @interface BeeUITableViewCell : UITableViewCell
 {
 	BeeUIGridCell *	_innerCell;
@@ -68,11 +60,14 @@ typedef enum
 	UISearchBar *					_searchBar;	
 	BeeUIPullLoader *				_pullLoader;
 	UIEdgeInsets					_baseInsets;
-	BeeUITableBoardSearchBarStyle	_searchBarStyle;
+	NSInteger						_searchBarStyle;
 
 	CGPoint							_lastScrollPosition;
 	CGPoint							_currentScrollPosition;
 }
+
+AS_INT( SEARCHBAR_STYLE_BOTTOM );
+AS_INT( SEARCHBAR_STYLE_TOP );
 
 @property (nonatomic, assign) BOOL							reloading;
 @property (nonatomic, assign) BOOL							updating;
@@ -80,7 +75,7 @@ typedef enum
 @property (nonatomic, retain) UITableView *					tableView;
 @property (nonatomic, retain) UISearchBar *					searchBar;
 @property (nonatomic, retain) BeeUIPullLoader *				pullLoader;
-@property (nonatomic, assign) BeeUITableBoardSearchBarStyle	searchBarStyle;
+@property (nonatomic, assign) NSInteger						searchBarStyle;
 
 @property (nonatomic, assign) CGPoint						lastScrollPosition;
 @property (nonatomic, assign) CGPoint						currentScrollPosition;

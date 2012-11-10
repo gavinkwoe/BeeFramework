@@ -127,7 +127,7 @@
 	}
 	else if ( [obj isKindOfClass:[NSString class]] )
 	{
-		return [NSNumber numberWithInt:[(NSString *)obj intValue]];
+		return [NSNumber numberWithDouble:[(NSString *)obj doubleValue]];
 	}
 
 	return nil;
@@ -297,7 +297,7 @@
 	va_list args;
 	va_start( args, first );
 	
-	for ( ;; )
+	for ( ;; first = nil )
 	{
 		NSObject * key = first ? first : va_arg( args, NSObject * );
 		if ( nil == key || NO == [key isKindOfClass:[NSString class]] )

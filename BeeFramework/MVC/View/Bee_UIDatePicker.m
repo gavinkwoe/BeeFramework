@@ -32,6 +32,7 @@
 
 #import "Bee_UIDatePicker.h"
 #import "Bee_UISignal.h"
+#import "UIView+BeeQuery.h"
 
 @interface BeeUIDatePicker(Private)
 - (void)didDateChanged;
@@ -41,13 +42,14 @@
 
 DEF_SIGNAL( WILL_PRESENT )
 DEF_SIGNAL( DID_PRESENT )
-DEF_SIGNAL( CHANGED )
-DEF_SIGNAL( CONFIRMED )
 DEF_SIGNAL( WILL_DISMISS )
 DEF_SIGNAL( DID_DISMISS )
+DEF_SIGNAL( CHANGED )
+DEF_SIGNAL( CONFIRMED )
 
 @synthesize date = _date;
 @synthesize userData = _userData;
+@synthesize parentView = _parentView;
 
 + (BeeUIDatePicker *)spawn
 {
@@ -81,7 +83,7 @@ DEF_SIGNAL( DID_DISMISS )
 
 - (void)presentForController:(UIViewController *)controller
 {
-	_parentController = controller;
+	_parentView = controller.view;
 	
 	[self showInView:controller.view];
 }
@@ -95,7 +97,14 @@ DEF_SIGNAL( DID_DISMISS )
 	if ( buttonIndex == self.cancelButtonIndex )
 	{
 		NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:_datePicker.date, @"date", nil];
-		[_parentController sendUISignal:BeeUIDatePicker.CONFIRMED withObject:dict from:self];
+		if ( _parentView )
+		{
+			[_parentView sendUISignal:BeeUIDatePicker.CONFIRMED withObject:dict from:self];
+		}
+		else
+		{
+			[self sendUISignal:BeeUIDatePicker.CONFIRMED withObject:dict from:self];
+		}
 	}
 }
 
@@ -113,36 +122,72 @@ DEF_SIGNAL( DID_DISMISS )
 		_datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, 0, 320, 200)];
 		_datePicker.date = _date ? _date : [NSDate dateWithTimeIntervalSince1970:0];
 		_datePicker.datePickerMode = UIDatePickerModeDate;
+		_datePicker.calendar = [NSCalendar currentCalendar];
 		_datePicker.maximumDate = [NSDate date];
 		[_datePicker addTarget:self action:@selector(didDateChanged) forControlEvents:UIControlEventValueChanged];
 		[self addSubview:_datePicker];		
 	}
 
-	[_parentController sendUISignal:BeeUIDatePicker.WILL_PRESENT withObject:nil from:self];
+	if ( _parentView )
+	{
+		[_parentView sendUISignal:BeeUIDatePicker.WILL_PRESENT withObject:nil from:self];
+	}
+	else
+	{
+		[self sendUISignal:BeeUIDatePicker.WILL_PRESENT withObject:nil from:self];
+	}
 }
 
 - (void)didDateChanged
 {
 	NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:_datePicker.date, @"date", nil];
-	[_parentController sendUISignal:BeeUIDatePicker.CHANGED withObject:dict from:self];
+	if ( _parentView )
+	{
+		[_parentView sendUISignal:BeeUIDatePicker.CHANGED withObject:dict from:self];
+	}
+	else
+	{
+		[self sendUISignal:BeeUIDatePicker.CHANGED withObject:dict from:self];
+	}
 }
 
 // after animation
 - (void)didPresentActionSheet:(UIActionSheet *)actionSheet
 {
-	[_parentController sendUISignal:BeeUIDatePicker.DID_PRESENT withObject:nil from:self];
+	if ( _parentView )
+	{
+		[_parentView sendUISignal:BeeUIDatePicker.DID_PRESENT withObject:nil from:self];
+	}
+	else
+	{
+		[self sendUISignal:BeeUIDatePicker.DID_PRESENT withObject:nil from:self];
+	}
 }
 
 // before animation and hiding view
 - (void)actionSheet:(UIActionSheet *)actionSheet willDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-	[_parentController sendUISignal:BeeUIDatePicker.WILL_DISMISS withObject:nil from:self];
+	if ( _parentView )
+	{
+		[_parentView sendUISignal:BeeUIDatePicker.WILL_DISMISS withObject:nil from:self];
+	}
+	else
+	{
+		[self sendUISignal:BeeUIDatePicker.WILL_DISMISS withObject:nil from:self];
+	}
 }
 
 // after animation
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-	[_parentController sendUISignal:BeeUIDatePicker.DID_DISMISS withObject:nil from:self];
+	if ( _parentView )
+	{
+		[_parentView sendUISignal:BeeUIDatePicker.DID_DISMISS withObject:nil from:self];		
+	}
+	else
+	{
+		[self sendUISignal:BeeUIDatePicker.DID_DISMISS withObject:nil from:self];		
+	}
 }
 
 @end

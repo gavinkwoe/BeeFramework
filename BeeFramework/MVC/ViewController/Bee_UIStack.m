@@ -37,12 +37,107 @@
 #import "Bee_UIBoard.h"
 #import "Bee_UIStack.h"
 #import "Bee_Runtime.h"
-#import "Bee_UINavigationBar.h"
 
 #pragma mark -
 
 #undef	UNUSED
 #define UNUSED( __x )	(void)(__x)
+
+#pragma mark -
+
+static UIImage * __defaultImage = nil;
+
+#pragma mark -
+
+@interface BeeUINavigationBar : UINavigationBar
+{
+	UIImage * _backgroundImage;
+}
+
+@property (nonatomic, retain) UIImage *	backgroundImage;
+
+@end
+
+#pragma mark -
+
+@implementation BeeUINavigationBar
+
+@dynamic backgroundImage;
+
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if ( self )
+	{
+    }
+    return self;
+}
+
+- (void)dealloc
+{
+    [_backgroundImage release];
+	
+    [super dealloc];
+}
+
+- (void)drawRect:(CGRect)rect
+{
+    if ( _backgroundImage )
+	{
+        [_backgroundImage drawInRect:rect];
+    }
+	else if ( __defaultImage )
+	{
+		[__defaultImage drawInRect:rect];
+	}
+	else
+	{
+        [super drawRect:rect];
+    }
+}
+
+- (void)setBackgroundImage:(UIImage *)image
+{
+	[image retain];
+	[_backgroundImage release];
+	_backgroundImage = image;
+	
+	[self setNeedsDisplay];
+}
+
+@end
+
+#pragma mark -
+
+@implementation UIView(BeeUIStack)
+
+- (BeeUIStack *)stack
+{
+	UINavigationController * controller = [self navigationController];
+	if ( controller && [controller isKindOfClass:[BeeUIStack class]] )
+	{
+		return (BeeUIStack *)controller;
+	}
+	else
+	{
+		return nil;
+	}
+}
+
+- (UINavigationController *)navigationController
+{
+	UIViewController * controller = [self viewController];
+	if ( controller )
+	{
+		return controller.navigationController;
+	}
+	else
+	{
+		return nil;
+	}
+}
+
+@end
 
 #pragma mark -
 
@@ -52,6 +147,12 @@
 @synthesize parentBoard = _parentBoard;
 @synthesize boards = _boards;
 @synthesize topBoard = _topBoard;
+
+DEF_INT( ANIMATION_TYPE_DEFAULT,	0 )
+DEF_INT( ANIMATION_TYPE_CUBE,		1 )
+DEF_INT( ANIMATION_TYPE_FADE,		2 )
+DEF_INT( ANIMATION_TYPE_PAGING,		3 )
+DEF_INT( ANIMATION_TYPE_SLIDE,		4 )
 
 + (BeeUIStack *)stack
 {
@@ -147,10 +248,10 @@
 
 - (void)pushBoard:(BeeUIBoard *)board animated:(BOOL)animated
 {
-	[self pushBoard:board animated:animated animationType:BEE_UISTACK_ANIMATION_DEFAULT];
+	[self pushBoard:board animated:animated animationType:BeeUIStack.ANIMATION_TYPE_DEFAULT];
 }
 
-- (void)pushBoard:(BeeUIBoard *)newBoard animated:(BOOL)animated animationType:(BeeUIStackAnimationType)type
+- (void)pushBoard:(BeeUIBoard *)newBoard animated:(BOOL)animated animationType:(NSInteger)type
 {
 	newBoard.popover = self.topBoard.popover;
 	newBoard.stackAnimationType = type;
@@ -161,11 +262,11 @@
 	}
 	else
 	{
-		if ( BEE_UISTACK_ANIMATION_DEFAULT == type )
+		if ( BeeUIStack.ANIMATION_TYPE_DEFAULT == type )
 		{
 			[super pushViewController:newBoard animated:YES];
 		}
-		else if ( BEE_UISTACK_ANIMATION_CUBE == type )
+		else if ( BeeUIStack.ANIMATION_TYPE_CUBE == type )
 		{
 			CATransition *animation = [CATransition animation];
 			[animation setDuration:0.6f];
@@ -177,7 +278,7 @@
 
 			[super pushViewController:newBoard animated:NO];
 		}
-		else if ( BEE_UISTACK_ANIMATION_FADE == type )
+		else if ( BeeUIStack.ANIMATION_TYPE_FADE == type )
 		{
 			CATransition *animation = [CATransition animation];
 			[animation setDuration:0.6f];
@@ -190,7 +291,7 @@
 			
 			[super pushViewController:newBoard animated:NO];
 		}
-		else if ( BEE_UISTACK_ANIMATION_PAGING == type )
+		else if ( BeeUIStack.ANIMATION_TYPE_PAGING == type )
 		{
 			CATransition * animation = [CATransition animation];
 			[animation setDuration:0.6f];
@@ -217,6 +318,19 @@
 
 			[UIView commitAnimations];
 		}
+		else if ( BeeUIStack.ANIMATION_TYPE_SLIDE == type )
+		{
+			CATransition * animation = [CATransition animation];
+			[animation setDuration:0.6f];
+			[animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
+			[animation setType:kCATransitionPush];
+			[animation setSubtype:kCATransitionFromTop];
+			[animation setRemovedOnCompletion:YES];
+			[self.view.layer removeAnimationForKey:@"slide_in"];
+			[self.view.layer addAnimation:animation forKey:@"slide_in"];
+			
+			[super pushViewController:newBoard animated:NO];
+		}
 	}
 		
 	UNUSED(newBoard.view);	// load view
@@ -224,19 +338,22 @@
 
 - (void)popBoardAnimated:(BOOL)animated
 {
-	BeeUIStackAnimationType animType = self.topBoard.stackAnimationType;
+	[self popBoardAnimated:animated animationType:self.topBoard.stackAnimationType];
+}
 	
+- (void)popBoardAnimated:(BOOL)animated animationType:(NSInteger)animType
+{
 	if ( NO == animated )
 	{
 		[super popViewControllerAnimated:NO];
 	}
 	else
 	{
-		if ( BEE_UISTACK_ANIMATION_DEFAULT == animType )
+		if ( BeeUIStack.ANIMATION_TYPE_DEFAULT == animType )
 		{
 			[super popViewControllerAnimated:YES];
 		}
-		else if ( BEE_UISTACK_ANIMATION_CUBE == animType )
+		else if ( BeeUIStack.ANIMATION_TYPE_CUBE == animType )
 		{
 			[super popViewControllerAnimated:NO];
 			
@@ -249,7 +366,7 @@
 
 			[self.view.layer addAnimation:animation forKey:@"cube"];			
 		}
-		else if ( BEE_UISTACK_ANIMATION_FADE == animType )
+		else if ( BeeUIStack.ANIMATION_TYPE_FADE == animType )
 		{
 			[super popViewControllerAnimated:NO];
 			
@@ -262,7 +379,7 @@
 			
 			[self.view.layer addAnimation:animation forKey:@"fade"];
 		}
-		else if ( BEE_UISTACK_ANIMATION_PAGING == animType )
+		else if ( BeeUIStack.ANIMATION_TYPE_PAGING == animType )
 		{
 			UIView * topView = [self.topBoard.view retain];
 			[super popViewControllerAnimated:NO];
@@ -290,14 +407,30 @@
 								 [topView release];
 							 }];
 		}
+		else if ( BeeUIStack.ANIMATION_TYPE_SLIDE == animType )
+		{
+			[super popViewControllerAnimated:NO];
+			
+			CATransition *animation = [CATransition animation];
+			[animation setDuration:0.6f];
+			[animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
+			[animation setType:kCATransitionPush];
+			[animation setSubtype:kCATransitionFromBottom];
+			[animation setRemovedOnCompletion:YES];
+
+			[self.view.layer addAnimation:animation forKey:@"slide_out"];
+		}
 	}
 }
 
 - (NSArray *)popToBoard:(BeeUIBoard *)board animated:(BOOL)animated
 {
+	return [self popToBoard:board animated:animated animationType:self.topBoard.stackAnimationType];
+}
+
+- (NSArray *)popToBoard:(BeeUIBoard *)board animated:(BOOL)animated animationType:(NSInteger)animType
+{
 	NSArray * result = nil;
-	
-	BeeUIStackAnimationType animType = self.topBoard.stackAnimationType;
 	
 	if ( NO == animated )
 	{
@@ -305,11 +438,11 @@
 	}
 	else
 	{
-		if ( BEE_UISTACK_ANIMATION_DEFAULT == animType )
+		if ( BeeUIStack.ANIMATION_TYPE_DEFAULT == animType )
 		{
 			result = [super popToViewController:board animated:YES];
 		}
-		else if ( BEE_UISTACK_ANIMATION_CUBE == animType )
+		else if ( BeeUIStack.ANIMATION_TYPE_CUBE == animType )
 		{
 			result = [super popToViewController:board animated:NO];
 			
@@ -322,7 +455,7 @@
 
 			[self.view.layer addAnimation:animation forKey:@"cube"];			
 		}
-		else if ( BEE_UISTACK_ANIMATION_FADE == animType )
+		else if ( BeeUIStack.ANIMATION_TYPE_FADE == animType )
 		{
 			result = [super popToViewController:board animated:NO];
 			
@@ -335,7 +468,7 @@
 			
 			[self.view.layer addAnimation:animation forKey:@"fade"];
 		}
-		else if ( BEE_UISTACK_ANIMATION_PAGING == animType )
+		else if ( BeeUIStack.ANIMATION_TYPE_PAGING == animType )
 		{
 			UIView * topView = [self.topBoard.view retain];
 			result = [super popToViewController:board animated:NO];
@@ -370,9 +503,12 @@
 
 - (NSArray *)popToFirstBoardAnimated:(BOOL)animated
 {
+	return [self popToFirstBoardAnimated:animated animationType:self.topBoard.stackAnimationType];
+}
+
+- (NSArray *)popToFirstBoardAnimated:(BOOL)animated animationType:(NSInteger)animType
+{
 	NSArray * result = nil;
-	
-	BeeUIStackAnimationType animType = self.topBoard.stackAnimationType;
 	
 	if ( NO == animated )
 	{
@@ -380,11 +516,11 @@
 	}
 	else
 	{
-		if ( BEE_UISTACK_ANIMATION_DEFAULT == animType )
+		if ( BeeUIStack.ANIMATION_TYPE_DEFAULT == animType )
 		{
 			result = [super popToRootViewControllerAnimated:YES];
 		}
-		else if ( BEE_UISTACK_ANIMATION_CUBE == animType )
+		else if ( BeeUIStack.ANIMATION_TYPE_CUBE == animType )
 		{
 			result = [super popToRootViewControllerAnimated:NO];
 			
@@ -397,7 +533,7 @@
 
 			[self.view.layer addAnimation:animation forKey:@"cube"];			
 		}
-		else if ( BEE_UISTACK_ANIMATION_FADE == animType )
+		else if ( BeeUIStack.ANIMATION_TYPE_FADE == animType )
 		{
 			result = [super popToRootViewControllerAnimated:NO];
 			
@@ -410,7 +546,7 @@
 			
 			[self.view.layer addAnimation:animation forKey:@"fade"];
 		}
-		else if ( BEE_UISTACK_ANIMATION_PAGING == animType )
+		else if ( BeeUIStack.ANIMATION_TYPE_PAGING == animType )
 		{
 			UIView * topView = [self.topBoard.view retain];
 			result = [super popToRootViewControllerAnimated:NO];
@@ -461,6 +597,19 @@
 	return NO;
 }
 
+- (BeeUIBoard *)getBoard:(Class)clazz
+{
+	for ( UIViewController * controller in self.viewControllers )
+	{
+		if ( [controller isKindOfClass:clazz] )
+		{
+			return (BeeUIBoard *)controller;
+		}
+	}
+
+	return nil;
+}
+
 - (void)__enterBackground
 {
 	for ( UIViewController * viewController in self.viewControllers )
@@ -485,11 +634,19 @@
 	}
 }
 
++ (void)setDefaultBarBackgroundImage:(UIImage *)image
+{
+	[image retain];
+	[__defaultImage release];
+	__defaultImage = image;
+}
+
 - (void)loadView
 {
 	[super loadView];
 
-	[self setValue:[BeeUINavigationBar spawn] forKey:@"navigationBar"];
+	BeeUINavigationBar * bar = [[[BeeUINavigationBar alloc] init] autorelease];
+	[self setValue:bar forKey:@"navigationBar"];
 }
 
 - (void)setBarBackgroundImage:(UIImage *)image

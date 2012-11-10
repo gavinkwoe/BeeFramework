@@ -42,7 +42,7 @@ DEF_SIGNAL( DID_PRESENT )
 DEF_SIGNAL( WILL_DISMISS )
 DEF_SIGNAL( DID_DISMISS )
 
-@synthesize parentController = _parentController;
+@synthesize parentView = _parentView;
 @synthesize userData = _userData;
 
 + (BeeUIActionSheet *)spawn
@@ -76,9 +76,19 @@ DEF_SIGNAL( DID_DISMISS )
 
 - (void)presentForController:(UIViewController *)controller
 {
-	_parentController = controller;
+	_parentView = controller.view;
 
 	[self showInView:controller.view];
+}
+
+- (void)dismissAnimated:(BOOL)animated
+{
+	[self dismissWithClickedButtonIndex:self.cancelButtonIndex animated:animated];
+}
+
+- (void)addButtonTitle:(NSString *)title signal:(NSString *)signal
+{
+	[self addButtonTitle:title signal:signal object:nil];
 }
 
 - (void)addButtonTitle:(NSString *)title signal:(NSString *)signal object:(NSObject *)object
@@ -118,6 +128,11 @@ DEF_SIGNAL( DID_DISMISS )
 	[_actions addObject:[NSArray arrayWithObjects:title, [NSNumber numberWithInt:self.cancelButtonIndex], signal, object, nil]];
 }
 
+- (void)addDestructiveTitle:(NSString *)title signal:(NSString *)signal
+{
+	[self addDestructiveTitle:title signal:signal object:nil];
+}
+
 - (void)addDestructiveTitle:(NSString *)title signal:(NSString *)signal object:(NSObject *)object
 {
 	if ( nil == signal )
@@ -155,9 +170,14 @@ DEF_SIGNAL( DID_DISMISS )
 			if ( signal && [signal length] )
 			{
 				NSObject * object = ([array count] >= 4) ? [array objectAtIndex:3] : nil;
-				[_parentController sendUISignal:signal
-									 withObject:object
-										   from:self];
+				if ( _parentView )
+				{
+					[_parentView sendUISignal:signal withObject:object from:self];
+				}
+				else
+				{
+					[self sendUISignal:signal withObject:object from:self];
+				}
 			}
 			else if ( buttonIndex != self.cancelButtonIndex && buttonIndex != self.destructiveButtonIndex )
 			{
@@ -178,25 +198,53 @@ DEF_SIGNAL( DID_DISMISS )
 // before animation and showing view
 - (void)willPresentActionSheet:(UIActionSheet *)actionSheet
 {
-	[_parentController sendUISignal:BeeUIActionSheet.WILL_PRESENT withObject:nil from:self];
+	if ( _parentView )
+	{
+		[_parentView sendUISignal:BeeUIActionSheet.WILL_PRESENT withObject:nil from:self];
+	}
+	else
+	{
+		[self sendUISignal:BeeUIActionSheet.WILL_PRESENT withObject:nil from:self];
+	}
 }
 
 // after animation
 - (void)didPresentActionSheet:(UIActionSheet *)actionSheet
 {
-	[_parentController sendUISignal:BeeUIActionSheet.DID_PRESENT withObject:nil from:self];	
+	if ( _parentView )
+	{
+		[_parentView sendUISignal:BeeUIActionSheet.DID_PRESENT withObject:nil from:self];	
+	}
+	else
+	{
+		[self sendUISignal:BeeUIActionSheet.DID_PRESENT withObject:nil from:self];	
+	}
 }
 
 // before animation and hiding view
 - (void)actionSheet:(UIActionSheet *)actionSheet willDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-	[_parentController sendUISignal:BeeUIActionSheet.WILL_DISMISS withObject:nil from:self];
+	if ( _parentView )
+	{
+		[_parentView sendUISignal:BeeUIActionSheet.WILL_DISMISS withObject:nil from:self];		
+	}
+	else
+	{
+		[self sendUISignal:BeeUIActionSheet.WILL_DISMISS withObject:nil from:self];		
+	}
 }
 
 // after animation
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-	[_parentController sendUISignal:BeeUIActionSheet.DID_DISMISS withObject:nil from:self];
+	if ( _parentView )
+	{
+		[_parentView sendUISignal:BeeUIActionSheet.DID_DISMISS withObject:nil from:self];
+	}
+	else
+	{
+		[self sendUISignal:BeeUIActionSheet.DID_DISMISS withObject:nil from:self];
+	}
 }
 
 @end

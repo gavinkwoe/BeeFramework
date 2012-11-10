@@ -30,6 +30,8 @@
 //  Bee_Runtime.h
 //
 
+#import "NSObject+BeeProperty.h"
+
 #pragma mark -
 
 #undef	PRINT_CALLSTACK
@@ -37,18 +39,11 @@
 
 #pragma mark -
 
-typedef enum
-{
-	BEE_CALLFRAME_TYPE_UNKNOWN = 0,
-	BEE_CALLFRAME_TYPE_OBJC,
-	BEE_CALLFRAME_TYPE_NATIVEC
-} BeeCallFrameType;
-
 #pragma mark -
 
 @interface BeeCallFrame : NSObject
 {
-	BeeCallFrameType	_type;
+	NSUInteger			_type;
 	NSString *			_process;
 	NSUInteger			_entry;
 	NSUInteger			_offset;
@@ -56,12 +51,16 @@ typedef enum
 	NSString *			_method;
 }
 
-@property (nonatomic, assign) BeeCallFrameType	type;
-@property (nonatomic, retain) NSString *			process;
-@property (nonatomic, assign) NSUInteger			entry;
-@property (nonatomic, assign) NSUInteger			offset;
-@property (nonatomic, retain) NSString *			clazz;
-@property (nonatomic, retain) NSString *			method;
+AS_INT( TYPE_UNKNOWN )
+AS_INT( TYPE_OBJC )
+AS_INT( TYPE_NATIVEC )
+
+@property (nonatomic, assign) NSUInteger	type;
+@property (nonatomic, retain) NSString *	process;
+@property (nonatomic, assign) NSUInteger	entry;
+@property (nonatomic, assign) NSUInteger	offset;
+@property (nonatomic, retain) NSString *	clazz;
+@property (nonatomic, retain) NSString *	method;
 
 + (id)parse:(NSString *)line;
 + (id)unknown;
@@ -71,8 +70,6 @@ typedef enum
 #pragma mark -
 
 @interface BeeRuntime : NSObject
-{
-}
 
 + (id)allocByClass:(Class)clazz;
 + (id)allocByClassName:(NSString *)clazzName;

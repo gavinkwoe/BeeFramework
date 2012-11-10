@@ -12,8 +12,8 @@
 
 typedef enum _ASIPostFormat {
     ASIMultipartFormDataPostFormat = 0,
-    ASIURLEncodedPostFormat = 1
-	
+    ASIURLEncodedPostFormat = 1,
+	ASIRawPostFormat = 2
 } ASIPostFormat;
 
 @interface ASIFormDataRequest : ASIHTTPRequest <NSCopying> {

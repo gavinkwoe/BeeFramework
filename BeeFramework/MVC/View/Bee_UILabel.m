@@ -31,7 +31,7 @@
 //
 
 #import "Bee_UILabel.h"
-#import "Bee_UIFont.h"
+#import "UIFont+BeeExtension.h"
 
 #pragma mark -
 
@@ -70,7 +70,7 @@
 {
 	self.backgroundColor = [UIColor clearColor];
 	
-	self.font = [BeeUIFont height:12.0f];
+	self.font = [UIFont systemFontOfSize:12.0f];
 	self.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
 	self.textAlignment = UITextAlignmentCenter;
 	self.textColor = [UIColor whiteColor];

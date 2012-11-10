@@ -27,13 +27,14 @@
 //	IN THE SOFTWARE.
 //
 //
-//  UIView+BeeTint.m
+//  UIView+BeeWireframe.m
 //
 
-#import "UIView+BeeTint.h"
+#import "UIView+BeeWireframe.h"
 #import "Bee_UISignal.h"
 #import "Bee_UIImageView.h"
 #import "Bee_UILabel.h"
+#import "UIView+BeeQuery.h"
 
 #pragma mark -
 
@@ -64,7 +65,7 @@
 		_label = [[BeeUILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, frame.size.width, frame.size.height)];
 		_label.textColor = [UIColor whiteColor];
 		_label.textAlignment = UITextAlignmentCenter;
-		_label.font = [UIFont boldSystemFontOfSize:20.0f];
+		_label.font = [UIFont boldSystemFontOfSize:24.0f];
 		_label.lineBreakMode = UILineBreakModeClip;
 		_label.numberOfLines = 1;
 		[self addSubview:_label];
@@ -113,7 +114,7 @@
 
 #pragma mark -
 
-@implementation UIView(Tint)
+@implementation UIView(BeeWireframe)
 
 - (BeeTintView *)__tintView
 {
@@ -131,34 +132,68 @@
 	return result;
 }
 
-- (void)tintColor:(UIColor *)color andTips:(NSString *)tips
+- (void)showWireframe
 {
-	[self addObserver:self
-		   forKeyPath:@"frame"
-			  options:0
-			  context:nil];
+	[self showWireframe:nil tintColor:nil];
+}
 
+- (void)showWireframe:(NSString *)title
+{
+	[self showWireframe:title tintColor:nil];
+}
+
+- (void)showWireframe:(NSString *)title tintColor:(UIColor *)color
+{
 	BeeTintView * tintView = [self __tintView];
 	if ( nil == tintView )
 	{
 		tintView = [[[BeeTintView alloc] initWithFrame:self.bounds] autorelease];
 		[self addSubview:tintView];
 		[self sendSubviewToBack:tintView];
+		
+		[self addObserver:self
+			   forKeyPath:@"frame"
+				  options:0
+				  context:nil];
 	}
 
-	tintView.label.text = tips;
+	if ( title )
+	{
+		tintView.label.text = title;		
+	}
+	
+	if ( color )
+	{
+		tintView.backgroundColor = color;
+	}
+	
 	tintView.frame = self.bounds;
-	tintView.backgroundColor = color;
 	[tintView setNeedsDisplay];
 }
 
-- (void)untintColorAndTips
+- (void)hideWireframe
 {
 	BeeTintView * tintView = [self __tintView];
 	if ( tintView )
 	{
 		[tintView removeFromSuperview];
 	}	
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+					  ofObject:(id)object
+						change:(NSDictionary *)change
+					   context:(void *)context
+{
+	if ( [keyPath isEqualToString:@"frame"] )
+	{
+		BeeTintView * tintView = [self __tintView];
+		if ( tintView )
+		{
+			tintView.frame = self.bounds;
+			[tintView setNeedsDisplay];
+		}
+	}
 }
 
 @end

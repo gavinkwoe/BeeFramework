@@ -76,8 +76,30 @@
 	[_target sendUISignal:BeeUITextView.DID_DEACTIVED];
 }
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)string
 {
+	if ( 1 == range.length )
+	{
+		[_target sendUISignal:BeeUITextView.TEXT_CHANGED];
+		return YES;
+	}
+	
+	if ( [string isEqualToString:@"\n"] || [string isEqualToString:@"\r"] )
+	{
+		BeeUISignal * signal = [_target sendUISignal:BeeUITextView.RETURN];
+		if ( signal )
+		{
+			return signal.boolValue;
+		}
+	}
+	
+	NSString * text = [_target.text stringByReplacingCharactersInRange:range withString:string];
+	if ( _target.maxLength > 0 && text.length > _target.maxLength )
+	{
+		[_target sendUISignal:BeeUITextView.TEXT_OVERFLOW];
+		return NO;
+	}
+	
 	return YES;
 }
 
@@ -110,11 +132,16 @@ DEF_SIGNAL( DID_ACTIVED )
 DEF_SIGNAL( WILL_DEACTIVE )
 DEF_SIGNAL( DID_DEACTIVED )
 DEF_SIGNAL( TEXT_CHANGED )
+DEF_SIGNAL( TEXT_OVERFLOW )
 DEF_SIGNAL( SELECTION_CHANGED )
+DEF_SIGNAL( RETURN )
 
+@synthesize active;
 @synthesize placeholder = _placeholder;
 @synthesize placeHolderLabel = _placeHolderLabel;
 @synthesize placeHolderColor = _placeHolderColor;
+@synthesize maxLength = _maxLength;
+@synthesize nextChain = _nextChain;
 
 + (BeeUITextView *)spawn
 {
@@ -149,7 +176,13 @@ DEF_SIGNAL( SELECTION_CHANGED )
 	self.placeholder = @"";
 	self.placeHolderColor = [UIColor grayColor];
 	
-    [_agent release];
+
+
+
+	_maxLength = 0;
+	
+
+        [_agent release];
 	_agent = [[BeeUITextViewAgent alloc] init];
 	_agent.target = self;
 	
@@ -234,6 +267,20 @@ DEF_SIGNAL( SELECTION_CHANGED )
 	{
 		[self resignFirstResponder];
 	}
+}
+
+- (void)handleUISignal:(BeeUISignal *)signal
+{
+	if ( [signal is:BeeUITextView.RETURN] )
+	{
+		if ( _nextChain && _nextChain != self )
+		{
+			[_nextChain becomeFirstResponder];
+			return;
+		}
+	}
+	
+	[super handleUISignal:signal];
 }
 
 @end

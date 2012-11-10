@@ -27,7 +27,7 @@
 //	IN THE SOFTWARE.
 //
 //
-//  UIView+BeeTint.h
+//  UIView+BeeWireframe.h
 //
 
 #import <Foundation/Foundation.h>
@@ -37,9 +37,9 @@
 
 #pragma mark -
 
-@interface UIView(BeeTint)
-- (void)
-
-- (void)tintColor:(UIColor *)color andTips:(NSString *)tips;
-- (void)untintColorAndTips;
+@interface UIView(BeeWireframe)
+- (void)showWireframe;
+- (void)showWireframe:(NSString *)title;
+- (void)showWireframe:(NSString *)title tintColor:(UIColor *)color;
+- (void)hideWireframe;
 @end

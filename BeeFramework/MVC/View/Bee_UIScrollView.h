@@ -36,12 +36,6 @@
 
 #pragma mark -
 
-typedef enum
-{
-	BEE_SCROLL_DIRECTION_HORIZONTAL = 0,
-	BEE_SCROLL_DIRECTION_VERTICAL
-} BeeScrollDirection;
-
 #undef	BEE_SCROLL_MAX_LINES
 #define BEE_SCROLL_MAX_LINES	(16)
 
@@ -59,7 +53,7 @@ typedef enum
 @interface BeeUIScrollView : UIScrollView<BeeUIScrollViewDataSource, UIScrollViewDelegate>
 {
 	id							_dataSource;
-	BeeScrollDirection			_direction;
+	NSInteger					_direction;
 
 	NSInteger					_visibleStart;
 	NSInteger					_visibleEnd;
@@ -77,6 +71,9 @@ typedef enum
 	BOOL						_reachEnd;
 	NSMutableArray *			_reuseQueue;
 }
+
+AS_INT( DIRECTION_HORIZONTAL )
+AS_INT( DIRECTION_VERTICAL )
 
 @property (nonatomic, assign) id				dataSource;
 @property (nonatomic, assign) BOOL				horizontal;
@@ -97,6 +94,9 @@ typedef enum
 AS_SIGNAL( RELOADED )		// 数据重新加载
 AS_SIGNAL( REACH_TOP )		// 触顶
 AS_SIGNAL( REACH_BOTTOM )	// 触底
+
+AS_SIGNAL( DID_STOP )
+AS_SIGNAL( DID_SCROLL )
 
 + (BeeUIScrollView *)spawn;
 

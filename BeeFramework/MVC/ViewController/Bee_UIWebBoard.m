@@ -35,6 +35,7 @@
 #import <UIKit/UIKit.h>
 
 #import "Bee_UIWebBoard.h"
+#import "UIView+BeeQuery.h"
 
 #pragma mark -
 

@@ -34,6 +34,8 @@
 #import "Bee_UILabel.h"
 #import "Bee_UIStack.h"
 
+#import "NSObject+BeeProperty.h"
+
 #pragma mark -
 
 @class BeeUIBoard;
@@ -43,35 +45,9 @@
 
 #pragma mark -
 
-typedef enum
-{
-	BEE_UIBOARD_STATE_DEACTIVATED = 0,
-	BEE_UIBOARD_STATE_DEACTIVATING,
-	BEE_UIBOARD_STATE_ACTIVATING,
-	BEE_UIBOARD_STATE_ACTIVATED
-} BeeUIBoardState;
-
-typedef enum
-{
-	BEE_UIBOARD_BARBUTTON_LEFT = 0,
-	BEE_UIBOARD_BARBUTTON_RIGHT
-} BeeUIBoardBarButtonPosition;
-
-typedef enum
-{
-	BEE_UIBOARD_ANIMATION_ALPHA = 0,
-	BEE_UIBOARD_ANIMATION_BOUNCE,
-	BEE_UIBOARD_ANIMATION_DEFAULT = BEE_UIBOARD_ANIMATION_ALPHA
-} BeeUIBoardAnimationType;
-
-#pragma mark -
-
-@interface UIView(BeeView)
+@interface UIView(BeeUIBoard)
 - (BeeUIBoard *)board;
-- (BeeUIStack *)stack;
 - (UIViewController *)viewController;
-- (UINavigationController *)navigationController;
-- (UIView *)subview:(NSString *)name;
 @end
 
 #pragma mark -
@@ -85,29 +61,27 @@ typedef enum
 
 #pragma mark -
 
-typedef void (^BeeUIBoardBlock)( BeeUIBoard * board );
-
 @interface BeeUIBoard : UIViewController<UIGestureRecognizerDelegate, UIPopoverControllerDelegate>
 {
 	UIPopoverController *		_popover;
-	BeeUIStackAnimationType		_stackAnimationType;
+	NSInteger					_stackAnimationType;
 
 	NSTimeInterval				_lastSleep;
 	NSTimeInterval				_lastWeekup;
 	BeeUIBoard *				_parentBoard;
-	
+		
 	BOOL						_firstEnter;
 	BOOL						_presenting;
 	BOOL						_viewBuilt;
 	BOOL						_dataLoaded;
-	BeeUIBoardState				_state;
+	NSInteger					_state;
 
 	NSDate *					_createDate;
 
 	UIButton *					_modalMaskView;
 	UIView *					_modalContentView;
 	BeeUIBoard *				_modalBoard;
-	BeeUIBoardAnimationType		_modalAnimationType;
+	NSInteger					_modalAnimationType;
 
 	BOOL						_panEnabled;
 	UIPanGestureRecognizer *	_panGesture;
@@ -115,6 +89,8 @@ typedef void (^BeeUIBoardBlock)( BeeUIBoard * board );
 
 	BOOL						_swipeEnabled;
 	UISwipeGestureRecognizer *	_swipeGesture;
+
+	UIInterfaceOrientation		_allowedOrientation;
 
 #ifdef __BEE_DEVELOPMENT__
 	NSUInteger					_signalSeq;
@@ -124,7 +100,7 @@ typedef void (^BeeUIBoardBlock)( BeeUIBoard * board );
 }
 
 @property (nonatomic, assign) UIPopoverController *			popover;
-@property (nonatomic, assign) BeeUIStackAnimationType		stackAnimationType;
+@property (nonatomic, assign) NSInteger						stackAnimationType;
 
 @property (nonatomic, assign) NSTimeInterval				lastSleep;
 @property (nonatomic, assign) NSTimeInterval				lastWeekup;
@@ -134,7 +110,7 @@ typedef void (^BeeUIBoardBlock)( BeeUIBoard * board );
 @property (nonatomic, assign) BOOL							presenting;
 @property (nonatomic, assign) BOOL							viewBuilt;
 @property (nonatomic, assign) BOOL							dataLoaded;
-@property (nonatomic, assign) BeeUIBoardState				state;
+@property (nonatomic, assign) NSInteger						state;
 
 @property (nonatomic, retain) NSDate *						createDate;
 
@@ -163,6 +139,8 @@ typedef void (^BeeUIBoardBlock)( BeeUIBoard * board );
 
 @property (nonatomic, assign) NSString *					titleString;
 @property (nonatomic, assign) UIView *						titleView;
+
+@property (nonatomic, assign) UIInterfaceOrientation		allowedOrientation;
 
 #ifdef __BEE_DEVELOPMENT__
 @property (nonatomic, readonly) NSUInteger					signalSeq;
@@ -204,8 +182,21 @@ AS_SIGNAL( SWIPE_DOWN )				// 手势：瞬间向下滑动
 AS_SIGNAL( SWIPE_LEFT )				// 手势：瞬间向左滑动
 AS_SIGNAL( SWIPE_RIGHT )			// 手势：瞬间向右滑动
 
-+ (NSArray *)allBoards;
 
+AS_INT( STATE_DEACTIVATED )		// 隐藏
+AS_INT( STATE_DEACTIVATING )	// 将要隐藏
+AS_INT( STATE_ACTIVATING )		// 将要显示
+AS_INT( STATE_ACTIVATED )		// 显示
+
+AS_INT( BARBUTTON_LEFT )		// 左按钮
+AS_INT( BARBUTTON_RIGHT )		// 右按钮
+
+AS_INT( ANIMATION_TYPE_ALPHA )
+AS_INT( ANIMATION_TYPE_BOUNCE )
+AS_INT( ANIMATION_TYPE_DEFAULT )
+
+
++ (NSArray *)allBoards;
 + (BeeUIBoard *)board;
 
 - (void)load;
@@ -215,7 +206,7 @@ AS_SIGNAL( SWIPE_RIGHT )			// 手势：瞬间向右滑动
 - (void)hideNavigationBarAnimated:(BOOL)animated;
 
 - (void)presentModalView:(UIView *)view animated:(BOOL)animated;
-- (void)presentModalView:(UIView *)view animated:(BOOL)animated animationType:(BeeUIBoardAnimationType)type;
+- (void)presentModalView:(UIView *)view animated:(BOOL)animated animationType:(NSInteger)type;
 - (void)dismissModalViewAnimated:(BOOL)animated;
 
 - (void)presentPopoverForView:(UIView *)view
@@ -227,11 +218,11 @@ AS_SIGNAL( SWIPE_RIGHT )			// 手势：瞬间向右滑动
 - (void)presentModalBoard:(BeeUIBoard *)board animated:(BOOL)animated;
 - (void)dismissModalBoardAnimated:(BOOL)animated;
 
-- (void)showBarButton:(BeeUIBoardBarButtonPosition)position title:(NSString *)name;
-- (void)showBarButton:(BeeUIBoardBarButtonPosition)position image:(UIImage *)image;
-- (void)showBarButton:(BeeUIBoardBarButtonPosition)position system:(UIBarButtonSystemItem)index;
-- (void)showBarButton:(BeeUIBoardBarButtonPosition)position custom:(UIView *)view;
-- (void)hideBarButton:(BeeUIBoardBarButtonPosition)position;
+- (void)showBarButton:(NSInteger)position title:(NSString *)name;
+- (void)showBarButton:(NSInteger)position image:(UIImage *)image;
+- (void)showBarButton:(NSInteger)position system:(UIBarButtonSystemItem)index;
+- (void)showBarButton:(NSInteger)position custom:(UIView *)view;
+- (void)hideBarButton:(NSInteger)position;
 
 @end
 

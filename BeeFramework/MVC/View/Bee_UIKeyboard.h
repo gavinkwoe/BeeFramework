@@ -40,6 +40,7 @@
 @interface BeeUIKeyboard : NSObject
 {
 	BOOL		_shown;
+	BOOL		_animating;
 	CGFloat		_height;
 
 	CGRect		_accessorFrame;
@@ -53,6 +54,7 @@ AS_NOTIFICATION( HIDDEN )			// 键盘收起
 AS_NOTIFICATION( HEIGHT_CHANGED )	// 输入法切换
 
 @property (nonatomic, readonly) BOOL	shown;
+@property (nonatomic, readonly) BOOL	animating;
 @property (nonatomic, readonly) CGFloat	height;
 
 - (void)showAccessor:(UIView *)view animated:(BOOL)animated;

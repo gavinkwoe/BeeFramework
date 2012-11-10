@@ -42,10 +42,12 @@
 {
 	BeeUITextFieldAgent *	_agent;
 	NSUInteger				_maxLength;
+	UIResponder *			_nextChain;
 }
 
 @property (nonatomic, assign) BOOL			active;
 @property (nonatomic, assign) NSUInteger	maxLength;
+@property (nonatomic, assign) NSObject *	nextChain;
 
 AS_SIGNAL( WILL_ACTIVE )		// 将要获取焦点
 AS_SIGNAL( DID_ACTIVED )		// 已经获取焦点

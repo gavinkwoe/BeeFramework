@@ -104,6 +104,23 @@
 
 @implementation BeeMessage
 
+DEF_STRING( ERROR_DOMAIN_UNKNOWN,	@"domain.unknown" )
+DEF_STRING( ERROR_DOMAIN_SERVER,	@"domain.server" )
+DEF_STRING( ERROR_DOMAIN_CLIENT,	@"domain.client" )
+DEF_STRING( ERROR_DOMAIN_NETWORK,	@"domain.network" )
+
+DEF_INT( ERROR_CODE_OK,			0 )		
+DEF_INT( ERROR_CODE_UNKNOWN,	-1 )
+DEF_INT( ERROR_CODE_TIMEOUT,	-2 )
+DEF_INT( ERROR_CODE_PARAMS,		-3 )
+DEF_INT( ERROR_CODE_ROUTES,		-4 )
+
+DEF_INT( STATE_CREATED,		0 )
+DEF_INT( STATE_SENDING,		1 )
+DEF_INT( STATE_SUCCEED,		2 )
+DEF_INT( STATE_FAILED,		3 )
+DEF_INT( STATE_CANCELLED,	4 )
+
 @synthesize unique = _unique;
 @synthesize disabled = _disabled;
 @synthesize async = _async;
@@ -146,6 +163,13 @@
 @synthesize failed;
 @synthesize cancelled;
 
+@synthesize uploadProgress;
+@synthesize downloadProgress;
+
+@synthesize timeElapsed;
+@synthesize timeCostPending;
+@synthesize timeCostOverAir;
+
 - (id)init
 {
 	self = [super init];
@@ -161,8 +185,8 @@
 		_toldProgress = NO;
 		_progressed = NO;
 
-		_nextState = BEE_MESSAGE_STATE_CREATED;
-		_state = BEE_MESSAGE_STATE_CREATED;
+		_nextState = BeeMessage.STATE_CREATED;
+		_state = BeeMessage.STATE_CREATED;
 		_message = [@"nil.nil" retain];
 		_input = [[NSMutableDictionary alloc] init];
 		_output = [[NSMutableDictionary alloc] init];
@@ -171,7 +195,7 @@
 		_request = nil;
 		_response = nil;
 
-		_errorCode = BEE_ERROR_CODE_OK;
+		_errorCode = BeeMessage.ERROR_CODE_OK;
 		_errorDomain = nil;
 		
 		_initTimeStamp = [NSDate timeIntervalSinceReferenceDate];
@@ -259,7 +283,7 @@
 	_timeout = YES;
 	_emitted = NO;
 	
-	[self changeState:BEE_MESSAGE_STATE_CANCELLED];
+	[self changeState:BeeMessage.STATE_CANCELLED];
 }
 
 - (void)internalStartTimer
@@ -490,7 +514,7 @@
 	if ( NO == _emitted || nil == _executer )
 		return self;
 	
-	[self changeState:BEE_MESSAGE_STATE_CANCELLED];
+	[self changeState:BeeMessage.STATE_CANCELLED];
 	return self;
 }
 
@@ -586,9 +610,16 @@
 
 - (void)setLastError
 {
-	self.errorCode = BEE_ERROR_CODE_UNKNOWN;
-	self.errorDomain = BEE_ERROR_DOMAIN_UNKNOWN;
+	self.errorCode = BeeMessage.ERROR_CODE_UNKNOWN;
+	self.errorDomain = BeeMessage.ERROR_DOMAIN_UNKNOWN;
 	self.errorDesc = @"unknown";
+}
+
+- (void)setLastError:(NSInteger)code
+{
+	self.errorCode = code;
+	self.errorDomain = BeeMessage.ERROR_DOMAIN_UNKNOWN;
+	self.errorDesc = @"unknown";	
 }
 
 - (void)setLastError:(NSInteger)code domain:(NSString *)domain
@@ -607,66 +638,70 @@
 
 - (BOOL)created
 {
-	return BEE_MESSAGE_STATE_CREATED == _state ? YES : NO;
+	return BeeMessage.STATE_CREATED == _state ? YES : NO;
 }
 
 - (void)setCreated:(BOOL)flag
 {
 	if ( flag )
 	{
-		_nextState = BEE_MESSAGE_STATE_CREATED;
+		_nextState = BeeMessage.STATE_CREATED;
 	}
 }
 
 - (BOOL)sending
 {
-	return BEE_MESSAGE_STATE_SENDING == _state ? YES : NO;
+	return BeeMessage.STATE_SENDING == _state ? YES : NO;
 }
 
 - (void)setSending:(BOOL)flag
 {
 	if ( flag )
 	{
-		_nextState = BEE_MESSAGE_STATE_SENDING;
+		_nextState = BeeMessage.STATE_SENDING;
 	}
 }
 
 - (BOOL)succeed
 {
-	return BEE_MESSAGE_STATE_SUCCEED == _state ? YES : NO;
+	return BeeMessage.STATE_SUCCEED == _state ? YES : NO;
 }
 
 - (void)setSucceed:(BOOL)flag
 {
 	if ( flag )
 	{
-		_nextState = BEE_MESSAGE_STATE_SUCCEED;
+		_nextState = BeeMessage.STATE_SUCCEED;
+	}
+	else
+	{
+		_nextState = BeeMessage.STATE_FAILED;
 	}
 }
 
 - (BOOL)failed
 {
-	return BEE_MESSAGE_STATE_FAILED == _state ? YES : NO;
+	return BeeMessage.STATE_FAILED == _state ? YES : NO;
 }
 
 - (void)setFailed:(BOOL)flag
 {
 	if ( flag )
 	{
-		_nextState = BEE_MESSAGE_STATE_FAILED;
+		_nextState = BeeMessage.STATE_FAILED;
 	}
 }
 
 - (BOOL)cancelled
 {
-	return BEE_MESSAGE_STATE_CANCELLED == _state ? YES : NO;
+	return BeeMessage.STATE_CANCELLED == _state ? YES : NO;
 }
 
 - (void)setCancelled:(BOOL)flag
 {
 	if ( flag )
 	{
-		_nextState = BEE_MESSAGE_STATE_CANCELLED;
+		_nextState = BeeMessage.STATE_CANCELLED;
 	}
 }
 
@@ -678,8 +713,10 @@
 	}
 }
 
-- (void)changeState:(BeeMessageState)newState
+- (void)changeState:(NSInteger)newState
 {
+	BOOL shouldRemove = NO;
+    
 	if ( _state == newState )
 		return;
 
@@ -698,16 +735,16 @@
 
 	[_executer route:self];
 	
-	if ( BEE_ERROR_CODE_OK != _errorCode )
+	if ( BeeMessage.ERROR_CODE_OK != _errorCode )
 	{
-		_state = BEE_MESSAGE_STATE_FAILED;
+		_state = BeeMessage.STATE_FAILED;
 	}
 
-	if ( BEE_MESSAGE_STATE_CREATED == _state )
+	if ( BeeMessage.STATE_CREATED == _state )
 	{
 		// TODO: nothing to do
 	}
-	else if ( BEE_MESSAGE_STATE_SENDING == _state )
+	else if ( BeeMessage.STATE_SENDING == _state )
 	{
 	#if __BEE_DEVELOPMENT__
 		CC( @"\n[REQUEST]\n'%@'.parameters = %@", _message, [_input description] );
@@ -718,7 +755,7 @@
 			[self internalStopTimer];
 			[self internalNotifySucceed];
 			
-			[[BeeMessageQueue sharedInstance] removeMessage:self];
+			shouldRemove = YES;
 		}
 		else
 		{
@@ -726,7 +763,7 @@
 			[self internalNotifySending];
 		}
 	}
-	else if ( BEE_MESSAGE_STATE_SUCCEED == _state )
+	else if ( BeeMessage.STATE_SUCCEED == _state )
 	{
 	#if __BEE_DEVELOPMENT__
 		CC( @"\n[SUCCEED]\n'%@'.input = \n%@\n'%@'.output = \n%@\n",
@@ -738,9 +775,9 @@
 		[self internalStopTimer];
 		[self internalNotifySucceed];
 		
-		[[BeeMessageQueue sharedInstance] removeMessage:self];
+		shouldRemove = YES;
 	}	
-	else if ( BEE_MESSAGE_STATE_FAILED == _state )
+	else if ( BeeMessage.STATE_FAILED == _state )
 	{
 	#if __BEE_DEVELOPMENT__
 		CC( @"\n[FAILED]\n'%@'.input = \n%@\n", _message, [_input description] );
@@ -749,9 +786,9 @@
 		[self internalStopTimer];
 		[self internalNotifyFailed];	
 
-		[[BeeMessageQueue sharedInstance] removeMessage:self];
+		shouldRemove = YES;
 	}
-	else if ( BEE_MESSAGE_STATE_CANCELLED == _state )
+	else if ( BeeMessage.STATE_CANCELLED == _state )
 	{
 	#if __BEE_DEVELOPMENT__
 		CC( @"\n[CANCELLED]\n'%@'.input = %@", _message, [_input description] );
@@ -762,12 +799,17 @@
 		[self internalStopTimer];	
 		[self internalNotifyCancelled];
 
-		[[BeeMessageQueue sharedInstance] removeMessage:self];
+		shouldRemove = YES;
 	}
 
 	if ( [BeeMessageQueue sharedInstance].whenUpdate )
 	{
 		[BeeMessageQueue sharedInstance].whenUpdate( self );
+	}
+
+	if ( shouldRemove )
+	{
+		[[BeeMessageQueue sharedInstance] removeMessage:self];
 	}
 }
 
@@ -794,7 +836,7 @@
 
 		self.response = [request responseData];
 		
-		[self changeState:BEE_MESSAGE_STATE_SUCCEED];
+		[self changeState:BeeMessage.STATE_SUCCEED];
 	}
 	else if ( request.failed )
 	{
@@ -802,24 +844,24 @@
 		
 		if ( self.timeout )
 		{
-			self.errorDomain = BEE_ERROR_DOMAIN_SERVER;
-			self.errorCode = BEE_ERROR_CODE_TIMEOUT;
+			self.errorDomain = BeeMessage.ERROR_DOMAIN_SERVER;
+			self.errorCode = BeeMessage.ERROR_CODE_TIMEOUT;
 			self.errorDesc = @"timeout";			
 		}
 		else
 		{
-			self.errorDomain = BEE_ERROR_DOMAIN_NETWORK;
+			self.errorDomain = BeeMessage.ERROR_DOMAIN_NETWORK;
 			self.errorCode = request.errorCode;
 			self.errorDesc = nil;
 		}
 		
-		[self changeState:BEE_MESSAGE_STATE_FAILED];
+		[self changeState:BeeMessage.STATE_FAILED];
 	}
 	else if ( request.cancelled )
 	{
 		self.request = nil;
 
-		[self changeState:BEE_MESSAGE_STATE_CANCELLED];
+		[self changeState:BeeMessage.STATE_CANCELLED];
 	}
 }
 
@@ -979,7 +1021,7 @@ DEF_SINGLETON(BeeMessageQueue);
 			if ( msg && NO == [msg isEqualToString:bmsg.message] )
 				continue;
 			
-			[bmsg changeState:BEE_MESSAGE_STATE_CANCELLED];			
+			[bmsg changeState:BeeMessage.STATE_CANCELLED];			
 		}		
 	}
 }
@@ -1086,7 +1128,7 @@ DEF_SINGLETON(BeeMessageQueue);
 		if ( msg && NO == [msg isEqualToString:bmsg.message] )
 			continue;
 		
-		[bmsg changeState:BEE_MESSAGE_STATE_CANCELLED];
+		[bmsg changeState:BeeMessage.STATE_CANCELLED];
 	}
 }
 
@@ -1236,7 +1278,9 @@ DEF_SINGLETON( BeeController );
 {
 	CC( @"unknown message '%@'", msg.message );
 
-	[msg setLastError:BEE_ERROR_CODE_ROUTES domain:BEE_ERROR_DOMAIN_UNKNOWN desc:@"No routes"];
+	[msg setLastError:BeeMessage.ERROR_CODE_ROUTES
+			   domain:BeeMessage.ERROR_DOMAIN_UNKNOWN
+				 desc:@"No routes"];
 }
 
 - (void)route:(BeeMessage *)msg

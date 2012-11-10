@@ -58,7 +58,7 @@
 @property (nonatomic, assign) BOOL						autoLayout;
 @property (nonatomic, retain) NSObject *				cellData;
 @property (nonatomic, retain) NSString *				category;
-@property (nonatomic, retain) NSObject *				layout;
+@property (nonatomic, assign) NSObject *				layout;
 @property (nonatomic, retain) NSMutableArray *			subCells;
 @property (nonatomic, assign) BOOL						zoomsTouchWhenHighlighted;
 @property (nonatomic, readonly) BeeUIGridCell *			supercell;
