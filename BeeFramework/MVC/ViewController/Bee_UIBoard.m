@@ -37,6 +37,7 @@
 #import "Bee_UIBoard.h"
 #import "Bee_UIStack.h"
 #import "Bee_Runtime.h"
+#import "Bee_SystemInfo.h"
 #import "Bee_Log.h"
 
 #import "Bee_Network.h"

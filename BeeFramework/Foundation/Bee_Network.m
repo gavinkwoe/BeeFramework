@@ -305,7 +305,7 @@ DEF_INT( STATE_CANCELLED,	5 );
 @synthesize recving;
 @synthesize failed;
 @synthesize succeed;
-@synthesize cancelled;
+//@synthesize cancelled;
 @synthesize sendProgressed = _sendProgressed;
 @synthesize recvProgressed = _recvProgressed;
 
