@@ -27,30 +27,37 @@
 //	IN THE SOFTWARE.
 //
 //
-//	Bee_Debug.m
+//  Bee_DebugHeatmapModel.h
 //
 
-#import "Bee_Debug.h"
-#import "Bee_DebugWindow.h"
+#if __BEE_DEBUGGER__
 
-#import "Bee_DebugMemoryModel.h"
-#import "Bee_DebugMessageModel.h"
-#import "Bee_DebugNetworkModel.h"
-#import "Bee_DebugHeatmapModel.h"
+#import "Bee.h"
 
-@implementation BeeDebugger
+#pragma mark -
 
-+ (void)show
+@interface BeeDebugHeatmapModel : BeeModel
 {
-#if __BEE_DEBUGGER__	
-	[BeeDebugShortcut sharedInstance].hidden = NO;
-	[BeeDebugWindow sharedInstance].hidden = YES;
-	
-	[BeeDebugMemoryModel sharedInstance];
-	[BeeDebugMessageModel sharedInstance];
-	[BeeDebugNetworkModel sharedInstance];
-	[BeeDebugHeatmapModel sharedInstance];
-#endif
+	NSUInteger				_rowCount;
+	NSUInteger				_colCount;
+	NSUInteger				_peakValueTap;
+	NSUInteger				_peakValueDrag;
+	NSUInteger *			_heatmapTap;
+	NSUInteger *			_heatmapDrag;
 }
 
+@property (nonatomic, readonly) NSUInteger			rowCount;
+@property (nonatomic, readonly) NSUInteger			colCount;
+@property (nonatomic, readonly) NSUInteger			peakValueTap;
+@property (nonatomic, readonly) NSUInteger			peakValueDrag;
+@property (nonatomic, readonly) NSUInteger *		heatmapTap;
+@property (nonatomic, readonly) NSUInteger *		heatmapDrag;
+
+AS_SINGLETON( BeeDebugHeatmapModel )
+
+- (void)recordTapAtLocation:(CGPoint)location;
+- (void)recordDragAtLocation:(CGPoint)location;
+
 @end
+
+#endif	// #if __BEE_DEBUGGER__

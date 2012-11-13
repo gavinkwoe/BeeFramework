@@ -40,6 +40,7 @@
 #import "Bee_DebugSandboxBoard.h"
 #import "Bee_DebugViewBoard.h"
 #import "Bee_DebugDashBoard.h"
+#import "Bee_DebugHeatmapModel.h"
 
 #pragma mark -
 
@@ -47,11 +48,14 @@
 
 DEF_SINGLETON( BeeDebugShortcut )
 
+DEF_SIGNAL( TOGGLE_HEATMAP )
+DEF_SIGNAL( TOGGLE_DEBUGGER )
+
 - (id)init
 {
 	CGRect screenBound = [UIScreen mainScreen].bounds;
 	CGRect shortcutFrame;
-	shortcutFrame.size.width = 40.0f;
+	shortcutFrame.size.width = 80.0f;
 	shortcutFrame.size.height = 40.0f;
 	shortcutFrame.origin.x = CGRectGetMaxX(screenBound) - shortcutFrame.size.width;
 	shortcutFrame.origin.y = CGRectGetMaxY(screenBound) - shortcutFrame.size.height - 44.0f;
@@ -63,14 +67,25 @@ DEF_SINGLETON( BeeDebugShortcut )
 		self.hidden = YES;
 		self.windowLevel = UIWindowLevelStatusBar + 100.0f;
 
-		CGRect buttonFrame = shortcutFrame;
+		CGRect buttonFrame;
 		buttonFrame.origin = CGPointZero;
+		buttonFrame.size.width = 40.0f;
+		buttonFrame.size.height = 40.0f;
 		
-		BeeUIButton * button = [[[BeeUIButton alloc] initWithFrame:buttonFrame] autorelease];
+		BeeUIButton * button;
+		
+		button = [[[BeeUIButton alloc] initWithFrame:buttonFrame] autorelease];
+		button.backgroundColor = [UIColor clearColor];
+		button.adjustsImageWhenHighlighted = YES;
+		[button setImage:__IMAGE( @"heat.png" ) forState:UIControlStateNormal];
+		[button addSignal:BeeDebugShortcut.TOGGLE_HEATMAP forControlEvents:UIControlEventTouchUpInside];
+		[self addSubview:button];
+
+		button = [[[BeeUIButton alloc] initWithFrame:CGRectOffset(buttonFrame, 40.0f, 0.0f)] autorelease];
 		button.backgroundColor = [UIColor clearColor];
 		button.adjustsImageWhenHighlighted = YES;
 		[button setImage:__IMAGE( @"bug.png" ) forState:UIControlStateNormal];
-		[button addSignal:@"TOGGLE_TOUCHED" forControlEvents:UIControlEventTouchUpInside];
+		[button addSignal:BeeDebugShortcut.TOGGLE_DEBUGGER forControlEvents:UIControlEventTouchUpInside];
 		[self addSubview:button];
 	}
 	return self;
@@ -78,9 +93,16 @@ DEF_SINGLETON( BeeDebugShortcut )
 
 - (void)handleUISignal:(BeeUISignal *)signal
 {
-	if ( [signal is:@"TOGGLE_TOUCHED"] )
+	if ( [signal is:BeeDebugShortcut.TOGGLE_DEBUGGER] )
 	{
 		[BeeDebugWindow sharedInstance].hidden = NO;
+		[BeeDebugHeatmap sharedInstance].hidden = YES;
+		[BeeDebugShortcut sharedInstance].hidden = YES;
+	}
+	else if ( [signal is:BeeDebugShortcut.TOGGLE_HEATMAP] )
+	{
+		[BeeDebugWindow sharedInstance].hidden = YES;
+		[BeeDebugHeatmap sharedInstance].hidden = NO;
 		[BeeDebugShortcut sharedInstance].hidden = YES;
 	}
 }
@@ -202,6 +224,7 @@ DEF_SINGLETON( BeeDebugBoard );
 	else if ( [signal is:@"CLOSE_TOUCHED"] )
 	{
 		[BeeDebugWindow sharedInstance].hidden = YES;
+		[BeeDebugHeatmap sharedInstance].hidden = YES;
 		[BeeDebugShortcut sharedInstance].hidden = NO;
 	}
 }
@@ -255,6 +278,185 @@ DEF_SINGLETON( BeeDebugWindow )
 - (void)dealloc
 {
 	[super dealloc];
+}
+
+@end
+
+#pragma mark -
+
+@implementation BeeDebugHeatmap
+
+DEF_SINGLETON( BeeDebugHeatmap )
+
+- (id)init
+{
+	CGRect screenBound = [UIScreen mainScreen].bounds;
+	self = [super initWithFrame:screenBound];
+	if (self)
+	{
+		self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.1f];
+		self.hidden = YES;
+		self.windowLevel = UIWindowLevelStatusBar + 200;
+		
+		CGRect closeFrame;
+		closeFrame.size.width = 44.0f;
+		closeFrame.size.height = 44.0f;
+		closeFrame.origin.x = screenBound.size.width - closeFrame.size.width;
+		closeFrame.origin.y = screenBound.size.height - closeFrame.size.height;
+
+		BeeUIButton * closeView = [[[BeeUIButton alloc] initWithFrame:closeFrame] autorelease];
+		closeView.stateNormal.image = __IMAGE( @"close.png" );
+		[closeView addSignal:@"CLOSE_TOUCHED" forControlEvents:UIControlEventTouchUpInside];
+		[self addSubview:closeView];
+	}
+	return self;
+}
+
+- (void)dealloc
+{
+	[super dealloc];
+}
+
+- (void)setHidden:(BOOL)flag
+{
+	[super setHidden:flag];
+	
+	if ( flag )
+	{
+		[self unobserveTick];
+	}
+	else
+	{
+		[self observeTick];
+		[self setNeedsDisplay];
+	}
+}
+
+- (void)handleUISignal:(BeeUISignal *)signal
+{
+	[super handleUISignal:signal];
+	
+	if ( [signal is:@"CLOSE_TOUCHED"] )
+	{
+		[BeeDebugWindow sharedInstance].hidden = YES;
+		[BeeDebugHeatmap sharedInstance].hidden = YES;
+		[BeeDebugShortcut sharedInstance].hidden = NO;
+	}
+}
+
+- (void)handleTick:(NSTimeInterval)elapsed
+{
+	[self setNeedsDisplay];
+}
+
+- (void)drawRect:(CGRect)rect
+{
+	[super drawRect:rect];
+
+	CGContextRef context = UIGraphicsGetCurrentContext();			
+	CGContextSaveGState( context );
+
+	CGContextClearRect( context, rect );
+	CGContextSetFillColorWithColor( context, [[UIColor blackColor] colorWithAlphaComponent:0.6f].CGColor );
+    CGContextFillRect( context, rect );
+
+	NSUInteger colCount = [BeeDebugHeatmapModel sharedInstance].colCount;
+	NSUInteger rowCount = [BeeDebugHeatmapModel sharedInstance].rowCount;
+
+	NSUInteger * heatmap;
+	NSUInteger peakValue;
+	
+	heatmap = [BeeDebugHeatmapModel sharedInstance].heatmapDrag;
+	peakValue = [BeeDebugHeatmapModel sharedInstance].peakValueDrag;
+	
+	if ( peakValue )
+	{
+		for ( NSUInteger row = 0; row < rowCount; ++row )
+		{
+			for ( NSUInteger col = 0; col < colCount; ++col )
+			{
+				NSUInteger value = heatmap[row * colCount + col];
+				
+				CGRect blockFrame;
+				blockFrame.size.width = 16.0f;
+				blockFrame.size.height = 16.0f;
+				blockFrame.origin.x = blockFrame.size.width * col;
+				blockFrame.origin.y = blockFrame.size.height * row;
+				
+				CGContextBeginPath( context );
+				CGContextAddEllipseInRect( context, blockFrame );
+				CGContextClosePath( context );
+								
+				CGFloat percent =  (CGFloat)value / (CGFloat)peakValue;
+				if ( percent > 0.0f )
+				{
+					UIColor * color = nil;
+					
+					if ( percent < 0.2f )
+					{
+						color = [[UIColor blueColor] colorWithAlphaComponent:(0.05f + 0.05f * percent)];
+					}
+					else if ( percent < 0.4f )
+					{
+						color = [[UIColor blueColor] colorWithAlphaComponent:(0.2f + 0.3f * percent)];
+					}
+					else if ( percent < 0.6f )
+					{
+						color = [[UIColor blueColor] colorWithAlphaComponent:(0.3f + 0.3f * percent)];
+					}
+					else if ( percent < 0.8f )
+					{
+						color = [[UIColor blueColor] colorWithAlphaComponent:(0.4f + 0.3f * percent)];
+					}
+					else
+					{
+						color = [[UIColor blueColor] colorWithAlphaComponent:(0.5f + 0.3f * percent)];
+					}
+					
+					CGContextSetFillColorWithColor( context, color.CGColor );
+					CGContextFillPath( context );			
+				}
+			}		
+		}
+	}
+
+	heatmap = [BeeDebugHeatmapModel sharedInstance].heatmapTap;
+	peakValue = [BeeDebugHeatmapModel sharedInstance].peakValueTap;
+	
+	if ( peakValue )
+	{
+		for ( NSUInteger row = 0; row < rowCount; ++row )
+		{
+			for ( NSUInteger col = 0; col < colCount; ++col )
+			{
+				NSUInteger value = heatmap[row * colCount + col];
+				
+				CGRect blockFrame;
+				blockFrame.size.width = 16.0f;
+				blockFrame.size.height = 16.0f;
+				blockFrame.origin.x = blockFrame.size.width * col;
+				blockFrame.origin.y = blockFrame.size.height * row;
+				
+				CGContextBeginPath( context );
+				CGContextAddEllipseInRect( context, blockFrame );
+				CGContextClosePath( context );
+				
+				CGFloat percent =  (CGFloat)value / (CGFloat)peakValue;
+				if ( percent > 0.0f )
+				{
+					UIColor * color = [[UIColor redColor] colorWithAlphaComponent:(0.2f + 0.8f * percent)];
+					if ( color )
+					{
+						CGContextSetLineWidth( context, 4.0f );
+						CGContextSetStrokeColorWithColor( context, color.CGColor );
+						CGContextStrokePath( context );			
+					}
+				}
+			}		
+		}
+	}
+
+	CGContextRestoreGState( context );
 }
 
 @end
