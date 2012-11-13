@@ -84,7 +84,7 @@ DEF_INT( TYPE_NATIVEC,	2 )
 	}
 	else
 	{
-		return [NSString stringWithFormat:@"[X] <unknown>(0x%08x + %d)", _process, _entry, _offset];
+		return [NSString stringWithFormat:@"[X] <unknown>(0x%08x + %d)", _entry, _offset];
 	}	
 }
 
