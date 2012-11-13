@@ -1,6 +1,6 @@
 #Bee framework
 
-A rapid development framework for iOS applications for geek and nerds. :-)
+A rapid development framework for iOS applications, from geek. :-)
 
 --------------------
 
