@@ -139,6 +139,7 @@
 		63FE1C4815D0191C00432794 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 63FE1C3115D0191C00432794 /* main.m */; };
 		63FE1DDF15D118D500432794 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63FE1DDE15D118D200432794 /* MobileCoreServices.framework */; };
 		63FE1DE115D11A0200432794 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63FE1DE015D119FF00432794 /* CoreGraphics.framework */; };
+		98F4D5481653E658002133AA /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 98F4D5471653E658002133AA /* Default-568h@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -391,6 +392,7 @@
 		63FE1C3315D0191C00432794 /* WhatsBug-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WhatsBug-Prefix.pch"; sourceTree = "<group>"; };
 		63FE1DDE15D118D200432794 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		63FE1DE015D119FF00432794 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		98F4D5471653E658002133AA /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -792,6 +794,7 @@
 				63FE1C2C15D0191C00432794 /* AppDelegate.m */,
 				63FE1C2D15D0191C00432794 /* Default.png */,
 				63FE1C2E15D0191C00432794 /* Default@2x.png */,
+				98F4D5471653E658002133AA /* Default-568h@2x.png */,
 				63FE1C2F15D0191C00432794 /* icon.png */,
 				63FE1C3015D0191C00432794 /* icon@2x.png */,
 				63FE1C3115D0191C00432794 /* main.m */,
@@ -863,6 +866,7 @@
 				63133C8815D4E5F0009A5BFC /* folder@2x.png in Resources */,
 				6392692B164F99320099625C /* tap@2x.png in Resources */,
 				6392692D164F9CEF0099625C /* heat@2x.png in Resources */,
+				98F4D5481653E658002133AA /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1043,9 +1047,10 @@
 				GCC_PREFIX_HEADER = "WhatsBug/WhatsBug-Prefix.pch";
 				GENERATE_PROFILING_CODE = YES;
 				INFOPLIST_FILE = "WhatsBug/WhatsBug-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1057,9 +1062,10 @@
 				GCC_PREFIX_HEADER = "WhatsBug/WhatsBug-Prefix.pch";
 				GENERATE_PROFILING_CODE = YES;
 				INFOPLIST_FILE = "WhatsBug/WhatsBug-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
