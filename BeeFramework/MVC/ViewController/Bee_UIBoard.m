@@ -34,8 +34,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
 
-#import "Bee_SystemInfo.h"
-
 #import "Bee_UIBoard.h"
 #import "Bee_UIStack.h"
 #import "Bee_Runtime.h"
