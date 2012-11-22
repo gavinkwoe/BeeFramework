@@ -42,6 +42,7 @@
 
 #import "Bee_Network.h"
 #import "Bee_Controller.h"
+#import "Bee_SystemInfo.h"
 
 #import "UIView+BeeBackground.h"
 #import "UIView+BeeQuery.h"

@@ -80,6 +80,9 @@
 		6392690E164CFFBE0099625C /* UIImage+BeeExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6392690D164CFFBD0099625C /* UIImage+BeeExtension.m */; };
 		63926911164D1F580099625C /* UIView+BeeBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = 63926910164D1F520099625C /* UIView+BeeBackground.m */; };
 		63926916164D49DC0099625C /* NSDate+BeeExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 63926915164D49D90099625C /* NSDate+BeeExtension.m */; };
+		6392691C164F88D50099625C /* Bee_DebugHeatmapModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6392691B164F88D50099625C /* Bee_DebugHeatmapModel.m */; };
+		6392692B164F99320099625C /* tap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6392692A164F99320099625C /* tap@2x.png */; };
+		6392692D164F9CEF0099625C /* heat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6392692C164F9CEF0099625C /* heat@2x.png */; };
 		63A79250157506E700C863F3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63A7924F157506E700C863F3 /* UIKit.framework */; };
 		63A79252157506E700C863F3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63A79251157506E700C863F3 /* Foundation.framework */; };
 		63AFC78715DB522100100B4F /* Bee_DebugViewBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AFC78615DB522100100B4F /* Bee_DebugViewBoard.m */; };
@@ -276,6 +279,10 @@
 		63926913164D2C250099625C /* Lession10Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lession10Model.h; sourceTree = "<group>"; };
 		63926914164D49D50099625C /* NSDate+BeeExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+BeeExtension.h"; sourceTree = "<group>"; };
 		63926915164D49D90099625C /* NSDate+BeeExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+BeeExtension.m"; sourceTree = "<group>"; };
+		6392691A164F88D50099625C /* Bee_DebugHeatmapModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bee_DebugHeatmapModel.h; sourceTree = "<group>"; };
+		6392691B164F88D50099625C /* Bee_DebugHeatmapModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bee_DebugHeatmapModel.m; sourceTree = "<group>"; };
+		6392692A164F99320099625C /* tap@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tap@2x.png"; sourceTree = "<group>"; };
+		6392692C164F9CEF0099625C /* heat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heat@2x.png"; sourceTree = "<group>"; };
 		63A7924B157506E700C863F3 /* WhatsBug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhatsBug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63A7924F157506E700C863F3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		63A79251157506E700C863F3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -416,6 +423,8 @@
 				63133C5B15D4E5F0009A5BFC /* Bee_Debug.m */,
 				63AFC7A415DE475C00100B4F /* Bee_DebugDashBoard.h */,
 				63AFC7A515DE475D00100B4F /* Bee_DebugDashBoard.m */,
+				6392691A164F88D50099625C /* Bee_DebugHeatmapModel.h */,
+				6392691B164F88D50099625C /* Bee_DebugHeatmapModel.m */,
 				63AFC79B15DE3EA500100B4F /* Bee_DebugMemoryModel.h */,
 				63AFC79C15DE3EA500100B4F /* Bee_DebugMemoryModel.m */,
 				63133C6415D4E5F0009A5BFC /* Bee_DebugMemoryBoard.h */,
@@ -448,6 +457,8 @@
 				63133C7515D4E5F0009A5BFC /* close@2x.png */,
 				63133C7615D4E5F0009A5BFC /* file@2x.png */,
 				63133C7715D4E5F0009A5BFC /* folder@2x.png */,
+				6392692A164F99320099625C /* tap@2x.png */,
+				6392692C164F9CEF0099625C /* heat@2x.png */,
 			);
 			name = BeeDebugger;
 			path = ../BeeDebugger;
@@ -850,6 +861,8 @@
 				63133C8615D4E5F0009A5BFC /* close@2x.png in Resources */,
 				63133C8715D4E5F0009A5BFC /* file@2x.png in Resources */,
 				63133C8815D4E5F0009A5BFC /* folder@2x.png in Resources */,
+				6392692B164F99320099625C /* tap@2x.png in Resources */,
+				6392692D164F9CEF0099625C /* heat@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -969,6 +982,7 @@
 				6392690E164CFFBE0099625C /* UIImage+BeeExtension.m in Sources */,
 				63926911164D1F580099625C /* UIView+BeeBackground.m in Sources */,
 				63926916164D49DC0099625C /* NSDate+BeeExtension.m in Sources */,
+				6392691C164F88D50099625C /* Bee_DebugHeatmapModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
