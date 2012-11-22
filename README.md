@@ -417,25 +417,24 @@ How to run
 Installation
 --------------------
 
-1. Copy BeeFramework/ and BeeDebugger into your project folder
-2. Drag and drop both two source folder into your XCode project
-3. Add Framework：
-   a. libz.dlib
-   b. CFNetwork.framework
-   c. CoreGraphics.framework
-   d. Foundation.framework
-   e. MobileCoreServies.framework (ASI)
-   f. QuartzCore.framework
-   g. Security.framework (MD5)
-   h. SystemConfiguration.framework (Reachibility)
-   i. UIKit.framework
-4. Modify your precompile header file:
-   a. \#import "Bee.h"
-   b. \#define __BEE_DEVELOPMENT__  (1)
-   c. \#define __BEE_LOG__          (1)
-   d. \#define __BEE_DEBUGGER__     (1)
-5. Build and run
-6. Good luck
+1. Copy BeeFramework/ and BeeDebugger into your project folder    
+2. Drag and drop both two source folder into your XCode project    
+3. Add Framework：    
+   a. libz.dlib    
+   b. CFNetwork.framework    
+   c. CoreGraphics.framework    
+   d. Foundation.framework    
+   e. MobileCoreServies.framework (ASI)    
+   f. QuartzCore.framework    
+   g. Security.framework (MD5)    
+   h. SystemConfiguration.framework (Reachibility)    
+   i. UIKit.framework    
+4. Modify your precompile header file:    
+   a. \#define \__BEE_DEVELOPMENT__  (1)      
+   b. \#define \__BEE_LOG__          (1)    
+   c. \#define \__BEE_DEBUGGER__     (1)    
+5. Build and run    
+6. Good luck    
 
 
 [1]: http://www.whatsbug.com
