@@ -90,6 +90,7 @@
 		CGContextSaveGState( context );
 		
 		CGContextSetStrokeColorWithColor( context, [UIColor colorWithWhite:0.3f alpha:1.0f].CGColor );
+        
 		CGContextMoveToPoint( context, 0.0f, 0.0f );
 		CGContextAddLineToPoint( context, self.bounds.size.width, self.bounds.size.height );
 		CGContextStrokePath( context );

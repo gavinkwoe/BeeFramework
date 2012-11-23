@@ -49,19 +49,21 @@
 	{
 		self.backgroundColor = [UIColor clearColor];
 		
-		UITapGestureRecognizer * singleTapGesture = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSingleTap:)] autorelease];
+		UITapGestureRecognizer * singleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSingleTap:)];
 		singleTapGesture.numberOfTapsRequired = 1;
 		singleTapGesture.numberOfTouchesRequired = 1;
 		singleTapGesture.cancelsTouchesInView = YES;
 		singleTapGesture.delaysTouchesBegan = YES;
 		singleTapGesture.delaysTouchesEnded = YES;
 		[self addGestureRecognizer:singleTapGesture];
-		
-		UITapGestureRecognizer * doubleTapGesture = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onDoubleTap:)] autorelease];
+		[singleTapGesture release];
+        
+		UITapGestureRecognizer * doubleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onDoubleTap:)];
 		doubleTapGesture.numberOfTapsRequired = 2;
 		doubleTapGesture.numberOfTouchesRequired = 1;
 		doubleTapGesture.cancelsTouchesInView = YES;
 		[self addGestureRecognizer:doubleTapGesture];
+        [doubleTapGesture release];
 	}
 	return self;
 }

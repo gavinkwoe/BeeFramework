@@ -645,8 +645,9 @@ DEF_INT( ANIMATION_TYPE_SLIDE,		4 )
 {
 	[super loadView];
 
-	BeeUINavigationBar * bar = [[[BeeUINavigationBar alloc] init] autorelease];
+	BeeUINavigationBar * bar = [[BeeUINavigationBar alloc] init];
 	[self setValue:bar forKey:@"navigationBar"];
+    [bar release];
 }
 
 - (void)setBarBackgroundImage:(UIImage *)image
