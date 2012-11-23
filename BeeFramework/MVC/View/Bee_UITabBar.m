@@ -78,6 +78,7 @@ DEF_SIGNAL( HIGHLIGHT_CHANGED )
 	self.items = [NSArray array];
 	self.selectedItem = nil;
 	
+    [_barItems release];
 	_barItems = [[NSMutableArray alloc] init];
 }
 
@@ -128,8 +129,9 @@ DEF_SIGNAL( HIGHLIGHT_CHANGED )
 
 - (void)addTitle:(NSString *)title image:(UIImage *)image tag:(NSInteger)tag
 {
-	UITabBarItem * item = [[[UITabBarItem alloc] initWithTitle:title image:image tag:tag] autorelease];
+	UITabBarItem * item = [[UITabBarItem alloc] initWithTitle:title image:image tag:tag];
 	[_barItems addObject:item];
+    [item release];
 	[self setItems:_barItems animated:NO];
 }
 
