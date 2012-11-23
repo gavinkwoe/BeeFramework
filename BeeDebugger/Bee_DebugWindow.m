@@ -74,19 +74,21 @@ DEF_SIGNAL( TOGGLE_DEBUGGER )
 		
 		BeeUIButton * button;
 		
-		button = [[[BeeUIButton alloc] initWithFrame:buttonFrame] autorelease];
+		button = [[BeeUIButton alloc] initWithFrame:buttonFrame];
 		button.backgroundColor = [UIColor clearColor];
 		button.adjustsImageWhenHighlighted = YES;
 		[button setImage:__IMAGE( @"heat.png" ) forState:UIControlStateNormal];
 		[button addSignal:BeeDebugShortcut.TOGGLE_HEATMAP forControlEvents:UIControlEventTouchUpInside];
 		[self addSubview:button];
-
-		button = [[[BeeUIButton alloc] initWithFrame:CGRectOffset(buttonFrame, 40.0f, 0.0f)] autorelease];
+        [button release];
+        
+		button = [[BeeUIButton alloc] initWithFrame:CGRectOffset(buttonFrame, 40.0f, 0.0f)];
 		button.backgroundColor = [UIColor clearColor];
 		button.adjustsImageWhenHighlighted = YES;
 		[button setImage:__IMAGE( @"bug.png" ) forState:UIControlStateNormal];
 		[button addSignal:BeeDebugShortcut.TOGGLE_DEBUGGER forControlEvents:UIControlEventTouchUpInside];
 		[self addSubview:button];
+        [button release];
 	}
 	return self;
 }
@@ -180,24 +182,26 @@ DEF_SINGLETON( BeeDebugBoard );
 			segFrame.origin.x = 10.0f;
 			segFrame.origin.y = (bottomFrame.size.height - segFrame.size.height) / 2.0f;
 			
-			BeeUISegmentedControl * segmentControl = [[[BeeUISegmentedControl alloc] initWithFrame:segFrame] autorelease];
+			BeeUISegmentedControl * segmentControl = [[BeeUISegmentedControl alloc] initWithFrame:segFrame];
 			for ( BeeUIStack * stack in self.stacks )
 			{
 				[segmentControl addTitle:stack.name];
 			}
 			[segmentControl setSelectedSegmentIndex:0];
 			[_bottomView addSubview:segmentControl];
-			
+			[segmentControl release];
+            
 			CGRect closeFrame;
 			closeFrame.size.width = 44.0f;
 			closeFrame.size.height = 44.0f;
 			closeFrame.origin.x = self.viewSize.width - closeFrame.size.width;
 			closeFrame.origin.y = (bottomFrame.size.height - closeFrame.size.height) / 2.0f;
 			
-			BeeUIButton * closeView = [[[BeeUIButton alloc] initWithFrame:closeFrame] autorelease];
+			BeeUIButton * closeView = [[BeeUIButton alloc] initWithFrame:closeFrame];
 			closeView.stateNormal.image = __IMAGE( @"close.png" );
 			[closeView addSignal:@"CLOSE_TOUCHED" forControlEvents:UIControlEventTouchUpInside];
 			[_bottomView addSubview:closeView];
+            [closeView release];
 		}
 		else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
 		{	
@@ -304,10 +308,11 @@ DEF_SINGLETON( BeeDebugHeatmap )
 		closeFrame.origin.x = screenBound.size.width - closeFrame.size.width;
 		closeFrame.origin.y = screenBound.size.height - closeFrame.size.height;
 
-		BeeUIButton * closeView = [[[BeeUIButton alloc] initWithFrame:closeFrame] autorelease];
+		BeeUIButton * closeView = [[BeeUIButton alloc] initWithFrame:closeFrame];
 		closeView.stateNormal.image = __IMAGE( @"close.png" );
 		[closeView addSignal:@"CLOSE_TOUCHED" forControlEvents:UIControlEventTouchUpInside];
 		[self addSubview:closeView];
+        [closeView release];
 	}
 	return self;
 }
