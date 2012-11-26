@@ -36,7 +36,6 @@
 #import <CommonCrypto/CommonDigest.h>
 
 #import "NSDate+BeeExtension.h"
-#import "NSNumber+BeeExtension.h"
 
 #pragma mark -
 
@@ -44,10 +43,9 @@
 
 - (NSString *)stringWithDateFormat:(NSString *)format
 {
-	NSTimeInterval time = [self timeIntervalSince1970];
-	NSUInteger timeUint = (NSUInteger)time;
-	
-	return [[NSNumber numberWithUnsignedInteger:timeUint] stringWithDateFormat:format];
+    NSDateFormatter * dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+    [dateFormatter setDateFormat:format];
+    return [dateFormatter stringFromDate:self];
 }
 
 @end
