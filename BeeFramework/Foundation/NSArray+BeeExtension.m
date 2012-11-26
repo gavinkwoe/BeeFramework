@@ -58,7 +58,15 @@
 
 - (NSArray *)tail:(NSUInteger)count
 {
-	return self;
+    if ( [self count] < count )
+	{
+		return self;
+	}
+	else
+	{
+        NSRange range = {self.count - count, count};
+        return [self subarrayWithRange:range];
+	}
 }
 
 - (id)safeObjectAtIndex:(NSUInteger)index

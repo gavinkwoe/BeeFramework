@@ -31,16 +31,13 @@
 //
 
 #import "NSNumber+BeeExtension.h"
+#import "NSDate+BeeExtension.h"
 
 @implementation NSNumber(BeeExtension)
 
 - (NSString *)stringWithDateFormat:(NSString *)format
 {
-	NSDateFormatter * dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:format];
-	NSString * result = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[self doubleValue]]];
-	[dateFormatter release];
-
+    NSString * result = [[NSDate dateWithTimeIntervalSince1970:[self doubleValue]] stringWithDateFormat:format];
 	return result;
 }
 

@@ -39,36 +39,44 @@
 
 - (NSObject *)objectAtPath:(NSString *)path
 {
-	NSArray * array = [path componentsSeparatedByString:@"/"]; 
-	if ( 0 == [array count] )
-	{
-		return nil;
-	}
+//	NSArray * array = [path componentsSeparatedByString:@"/"]; 
+//	if ( 0 == [array count] )
+//	{
+//		return nil;
+//	}
+//
+//	NSObject * result = nil;
+//	NSDictionary * dict = self;
+//	
+//	for ( NSString * subPath in array )
+//	{
+//		if ( 0 == [subPath length] )
+//			continue;
+//		
+//		result = [dict objectForKey:subPath];
+//		if ( nil == result )
+//			return nil;
+//
+//		if ( [array lastObject] == subPath )
+//		{
+//			return result;
+//		}
+//		else if ( NO == [result isKindOfClass:[NSDictionary class]] )
+//		{
+//			return nil;
+//		}
+//		
+//		dict = (NSDictionary *)result;
+//	}
 
-	NSObject * result = nil;
-	NSDictionary * dict = self;
-	
-	for ( NSString * subPath in array )
-	{
-		if ( 0 == [subPath length] )
-			continue;
-		
-		result = [dict objectForKey:subPath];
-		if ( nil == result )
-			return nil;
-
-		if ( [array lastObject] == subPath )
-		{
-			return result;
-		}
-		else if ( NO == [result isKindOfClass:[NSDictionary class]] )
-		{
-			return nil;
-		}
-		
-		dict = (NSDictionary *)result;
-	}
-	
+    NSString *keyPath = [path stringByReplacingOccurrencesOfString:@"/" withString:@"."];
+    NSRange range = {0, 1};
+    if ([[keyPath substringWithRange:range] isEqualToString:@"."]) {
+        keyPath = [keyPath substringFromIndex:1];
+    }
+    
+    NSObject *result = [self valueForKeyPath:keyPath];
+    
 	return (result == [NSNull null]) ? nil : result;
 }
 
