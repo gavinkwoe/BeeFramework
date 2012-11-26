@@ -58,7 +58,18 @@
 
 - (NSArray *)tail:(NSUInteger)count
 {
-	return self;
+    if ( [self count] < count )
+	{
+		return self;
+	}
+	else
+	{
+        NSMutableArray *tempFeeds = [NSMutableArray array];
+        for (NSUInteger i = 0; i < count; i++) {
+            [tempFeeds insertObject:[self objectAtIndex:[self count] - i] atIndex:0];
+        }
+		return tempFeeds;
+	}
 }
 
 - (id)safeObjectAtIndex:(NSUInteger)index
