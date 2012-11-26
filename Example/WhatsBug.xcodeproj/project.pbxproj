@@ -139,6 +139,7 @@
 		63FE1C4815D0191C00432794 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 63FE1C3115D0191C00432794 /* main.m */; };
 		63FE1DDF15D118D500432794 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63FE1DDE15D118D200432794 /* MobileCoreServices.framework */; };
 		63FE1DE115D11A0200432794 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63FE1DE015D119FF00432794 /* CoreGraphics.framework */; };
+		A048866F16633E850093E93C /* WebViewBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = A048866E16633E850093E93C /* WebViewBoard.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -391,6 +392,8 @@
 		63FE1C3315D0191C00432794 /* WhatsBug-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WhatsBug-Prefix.pch"; sourceTree = "<group>"; };
 		63FE1DDE15D118D200432794 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		63FE1DE015D119FF00432794 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		A048866D16633E850093E93C /* WebViewBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewBoard.h; sourceTree = "<group>"; };
+		A048866E16633E850093E93C /* WebViewBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewBoard.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -515,6 +518,8 @@
 				63926869164CEF600099625C /* Lession10Board.m */,
 				63926913164D2C250099625C /* Lession10Model.h */,
 				6392686A164CEF600099625C /* Lession10Model.m */,
+				A048866D16633E850093E93C /* WebViewBoard.h */,
+				A048866E16633E850093E93C /* WebViewBoard.m */,
 			);
 			path = Lessions;
 			sourceTree = SOURCE_ROOT;
@@ -983,6 +988,7 @@
 				63926911164D1F580099625C /* UIView+BeeBackground.m in Sources */,
 				63926916164D49DC0099625C /* NSDate+BeeExtension.m in Sources */,
 				6392691C164F88D50099625C /* Bee_DebugHeatmapModel.m in Sources */,
+				A048866F16633E850093E93C /* WebViewBoard.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

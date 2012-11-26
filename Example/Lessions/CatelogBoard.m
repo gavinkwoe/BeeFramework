@@ -83,6 +83,8 @@ DEF_SINGLETON( CatelogBoard );
 	[_lessions addObject:[NSArray arrayWithObjects:@"Lession9Board", @"Lession 9 (New)", @"How to use BeeController", nil]];
 	[_lessions addObject:[NSArray arrayWithObjects:@"Lession10Board", @"Lession 10 (New)", @"How to use BeeModel & BeeCache", nil]];
 	[_lessions addObject:[NSArray arrayWithObjects:@"DribbbleBoard", @"Dribbble.com (New)", @"Demo for dribbble.com", nil]];
+    [_lessions addObject:[NSArray arrayWithObjects:@"WebViewBoard", @"WebView Demo (New)", @"Demo for BeeUIWebView", nil]];
+
 }
 
 - (void)unload
