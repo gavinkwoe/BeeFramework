@@ -93,12 +93,12 @@ DEF_SIGNAL( BUTTON_TOUCHED )
 		else if ( [signal is:BeeUIDatePicker.CHANGED] )
 		{
 			NSDate * date = (NSDate *)[(NSDictionary *)signal.object objectAtPath:@"/date"];
-			_label.text = [date stringWithDateFormat:@"yyyy/mm/dd"];
+			_label.text = [date stringWithDateFormat:@"yyyy/MM/dd"];
 		}
 		else if ( [signal is:BeeUIDatePicker.CONFIRMED] )
 		{
 			NSDate * date = (NSDate *)[(NSDictionary *)signal.object objectAtPath:@"/date"];
-			_label.text = [date stringWithDateFormat:@"yyyy/mm/dd"];
+			_label.text = [date stringWithDateFormat:@"yyyy/MM/dd"];
 		}
 	}
 }
