@@ -64,11 +64,8 @@
 	}
 	else
 	{
-        NSMutableArray *tempFeeds = [NSMutableArray array];
-        for (NSUInteger i = 0; i < count; i++) {
-            [tempFeeds insertObject:[self objectAtIndex:[self count] - i] atIndex:0];
-        }
-		return tempFeeds;
+        NSRange range = {self.count - count, count};
+        return [self subarrayWithRange:range];
 	}
 }
 
