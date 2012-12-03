@@ -25,12 +25,23 @@ See 'Lession11' & 'Bee_ActiveRecordTest.h/.m' & 'BeeDatabaseTest.h/.m'
 Fantastic BeeDatabase:
 
 	self.DB
-	.FROM( @"tableName" )
-	.WHERE( @"key", @"value" )
-	.GET();
+	    .TABLE( @"tableName" )
+	    .FIELD( @"id", @"INTEGER", 12 ).PRIMARY_KEY().AUTO_INREMENT()
+	    .FIELD( @"field1", @"TEXT", 20 )
+	    .FIELD( @"field2", @"TEXT", 64 )
+	    .CREATE_IF_NOT_EXISTS();
+	NSAssert( self.DB.succeed, nil );
+	
+	self.DB
+	    .FROM( @"tableName" )
+	    .WHERE( @"key", @"value" )
+	    .GET();
+	NSAssert( self.DB.resultArray.count > 0, nil );
 
 Fantastic BeeActiveRecord:
 
+	// UserInfo.h
+	
 	@interface UserInfo : BeeActiveRecord
 	{
 		NSNumber *	_uid;
@@ -40,11 +51,27 @@ Fantastic BeeActiveRecord:
 	@property (nonatomic, retain) NSString *	name;
 	@end
 
+	// UserInfo.m
+	
+	@implementation UserInfo
+	@synthesize uid = _uid;
+	@synthesize name = _name;
+	+ (void)mapRelation
 	{
+		[self mapPropertyAsKey:@"uid"];		
+		[self mapProperty:@"name"];
+	}
+	@end
+
+	// Test.m
+
+	{
+		// style1
 		UserInfo.DB
 			.SET( @"name", @"gavin" )
 			.INSERT();
-		
+
+		// style2
 		UserInfo * user = [[UserInfo alloc] init];
 		user.name = @"amanda";
 		user.INSERT();		
