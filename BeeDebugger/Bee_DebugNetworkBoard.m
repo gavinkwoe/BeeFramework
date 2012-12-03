@@ -30,9 +30,11 @@
 //  Bee_DebugNetworkBoard.m
 //
 
-#if __BEE_DEBUGGER__
+#import "Bee_Precompile.h"
+#import "Bee.h"
 
-#import <QuartzCore/QuartzCore.h>
+#if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__
+
 #import "Bee_DebugWindow.h"
 #import "Bee_DebugNetworkBoard.h"
 #import "Bee_DebugNetworkModel.h"
@@ -59,7 +61,7 @@
 
 + (CGSize)cellSize:(NSObject *)data bound:(CGSize)bound
 {
-	return CGSizeMake( bound.width, 40.0f );
+	return CGSizeMake( bound.width, 50.0f );
 }
 
 - (void)cellLayout:(BeeUIGridCell *)cell bound:(CGSize)bound
@@ -197,13 +199,18 @@ DEF_SINGLETON( BeeDebugNetworkBoard )
 		if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
 		{
 			[self setBaseInsets:UIEdgeInsetsMake(0.0f, 0, 44.0f, 0)];
-
-			[self observeTick];
-			[self handleTick:0];
 		}
 		else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
 		{
-			[self unobserveTick];
+		}
+		else if ( [signal is:BeeUIBoard.WILL_APPEAR] )
+		{
+			[self observeTick];
+			[self handleTick:0.0f];
+		}
+		else if ( [signal is:BeeUIBoard.WILL_DISAPPEAR] )
+		{
+			[self unobserveTick];	
 		}
 	}
 }
@@ -276,4 +283,4 @@ DEF_SINGLETON( BeeDebugNetworkBoard )
 
 @end
 
-#endif	// #if __BEE_DEBUGGER__
+#endif	// #if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__

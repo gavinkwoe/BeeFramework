@@ -30,11 +30,14 @@
 //  Bee_Controller.h
 //
 
+#import "Bee_Precompile.h"
 #import "Bee_Singleton.h"
 #import "Bee_Controller.h"
 #import "Bee_Runtime.h"
 #import "Bee_Log.h"
+
 #import "JSONKit.h"
+#import <objc/runtime.h>
 
 #undef	DEFAULT_RUNLOOP_INTERVAL
 #define	DEFAULT_RUNLOOP_INTERVAL	(0.1f)
@@ -98,6 +101,7 @@
 - (void)internalNotifyFailed;
 - (void)internalNotifyCancelled;
 - (void)internalNotifyProgressUpdated;
+- (void)callResponder;
 @end
 
 #pragma mark -
@@ -153,9 +157,9 @@ DEF_INT( STATE_CANCELLED,	4 )
 
 @synthesize whenUpdate = _whenUpdate;
 
-#ifdef __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 @synthesize callstack = _callstack;
-#endif	// #ifdef __BEE_DEVELOPMENT__
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 
 @synthesize created;
 @synthesize sending;
@@ -209,9 +213,9 @@ DEF_INT( STATE_CANCELLED,	4 )
 			[BeeMessageQueue sharedInstance].whenCreate( self );
 		}
 		
-	#ifdef __BEE_DEVELOPMENT__
+	#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 		_callstack = [[NSMutableArray alloc] init];
-	#endif	// #ifdef __BEE_DEVELOPMENT__
+	#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	}
 	
 	return self;
@@ -235,10 +239,10 @@ DEF_INT( STATE_CANCELLED,	4 )
 	[_errorDomain release];
 	[_errorDesc release];
 	
-#ifdef __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	[_callstack removeAllObjects];
 	[_callstack release];
-#endif	// #ifdef __BEE_DEVELOPMENT__
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	
 	self.whenUpdate = nil;
 	
@@ -328,10 +332,7 @@ DEF_INT( STATE_CANCELLED,	4 )
 			self.whenUpdate( self );
 		}
 
-		if ( self.responder && [self.responder respondsToSelector:@selector(handleMessage:)] )
-		{
-			[self.responder handleMessage:self];			
-		}		
+		[self callResponder];		
 	}
 }
 
@@ -345,11 +346,8 @@ DEF_INT( STATE_CANCELLED,	4 )
 		{
 			self.whenUpdate( self );
 		}
-
-		if ( self.responder && [self.responder respondsToSelector:@selector(handleMessage:)] )
-		{
-			[self.responder handleMessage:self];			
-		}
+		
+		[self callResponder];
 	}
 }
 
@@ -364,10 +362,7 @@ DEF_INT( STATE_CANCELLED,	4 )
 			self.whenUpdate( self );
 		}
 
-		if ( self.responder && [self.responder respondsToSelector:@selector(handleMessage:)] )
-		{
-			[self.responder handleMessage:self];			
-		}
+		[self callResponder];
 	}
 }
 
@@ -382,10 +377,7 @@ DEF_INT( STATE_CANCELLED,	4 )
 			self.whenUpdate( self );
 		}
 
-		if ( self.responder && [self.responder respondsToSelector:@selector(handleMessage:)] )
-		{
-			[self.responder handleMessage:self];			
-		}
+		[self callResponder];
 	}
 }
 
@@ -405,13 +397,42 @@ DEF_INT( STATE_CANCELLED,	4 )
 			self.whenUpdate( self );
 		}
 
-		if ( self.responder && [self.responder respondsToSelector:@selector(handleMessage:)] )
-		{
-			[self.responder handleMessage:self];			
-		}	
+		[self callResponder];
 	}
 
 	_progressed = NO;
+}
+
+- (void)callResponder
+{
+	[self forwardResponder:self.responder];
+}
+
+- (void)forwardResponder:(NSObject *)obj
+{
+	if ( nil == obj )
+		return;
+
+	NSArray * array = [_message componentsSeparatedByString:@"."];
+	if ( array && array.count > 1 )
+	{
+//		NSString * prefix = (NSString *)[array objectAtIndex:0];
+		NSString * clazz = (NSString *)[array objectAtIndex:1];
+		
+		NSString *	selectorName = [NSString stringWithFormat:@"handle%@:", clazz];
+		SEL			selector = NSSelectorFromString( selectorName );
+		
+		if ( obj && [obj respondsToSelector:selector] )
+		{
+			[obj performSelector:selector withObject:self];
+			return;
+		}
+	}
+
+	if ( obj && [obj respondsToSelector:@selector(handleMessage:)] )
+	{
+		[obj handleMessage:self];			
+	}	
 }
 
 - (BeeMessage *)send
@@ -419,9 +440,9 @@ DEF_INT( STATE_CANCELLED,	4 )
 	if ( YES == _emitted )
 		return self;
 
-#if __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	[_callstack addObjectsFromArray:[BeeRuntime callstack:16]];
-#endif	// #if __BEE_DEVELOPMENT__
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 
 	[[BeeMessageQueue sharedInstance] sendMessage:self];
 	return self;
@@ -746,9 +767,9 @@ DEF_INT( STATE_CANCELLED,	4 )
 	}
 	else if ( BeeMessage.STATE_SENDING == _state )
 	{
-	#if __BEE_DEVELOPMENT__
+	#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 		CC( @"\n[REQUEST]\n'%@'.parameters = %@", _message, [_input description] );
-	#endif	// #if __BEE_DEVELOPMENT__
+	#endif	//#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 
 		if ( self.oneDirection )
 		{
@@ -765,12 +786,12 @@ DEF_INT( STATE_CANCELLED,	4 )
 	}
 	else if ( BeeMessage.STATE_SUCCEED == _state )
 	{
-	#if __BEE_DEVELOPMENT__
+	#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 		CC( @"\n[SUCCEED]\n'%@'.input = \n%@\n'%@'.output = \n%@\n",
 		   _message, [_input description],
 		   _message, [_output description]
 		   );
-	#endif	// #if __BEE_DEVELOPMENT__
+	#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 		
 		[self internalStopTimer];
 		[self internalNotifySucceed];
@@ -779,9 +800,9 @@ DEF_INT( STATE_CANCELLED,	4 )
 	}	
 	else if ( BeeMessage.STATE_FAILED == _state )
 	{
-	#if __BEE_DEVELOPMENT__
+	#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 		CC( @"\n[FAILED]\n'%@'.input = \n%@\n", _message, [_input description] );
-	#endif	// #if __BEE_DEVELOPMENT__
+	#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 		
 		[self internalStopTimer];
 		[self internalNotifyFailed];	
@@ -790,9 +811,9 @@ DEF_INT( STATE_CANCELLED,	4 )
 	}
 	else if ( BeeMessage.STATE_CANCELLED == _state )
 	{
-	#if __BEE_DEVELOPMENT__
+	#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 		CC( @"\n[CANCELLED]\n'%@'.input = %@", _message, [_input description] );
-	#endif	// #if __BEE_DEVELOPMENT__
+	#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 		
 		[self cancelRequests];
 		
@@ -1206,17 +1227,58 @@ DEF_SINGLETON( BeeController );
 
 + (BeeController *)routes:(NSString *)message
 {
-	BeeController * controller = [BeeController sharedInstance];
+	BeeController * controller = nil;
 
-	for ( BeeController * subController in __subControllers )
+	if ( __subControllers.count )
 	{
-		if ( [message hasPrefix:subController.prefix] )
+		for ( BeeController * subController in __subControllers )
 		{
-			controller = subController;
-			break;
+			if ( [message hasPrefix:subController.prefix] )
+			{
+				controller = subController;
+				break;
+			}
 		}
 	}
 
+	if ( nil == controller )
+	{
+		NSArray * array = [message componentsSeparatedByString:@"."];
+		if ( array && array.count > 1 )
+		{
+//			NSString * prefix = (NSString *)[array objectAtIndex:0];
+			NSString * clazz = (NSString *)[array objectAtIndex:1];
+
+			Class rtti = NSClassFromString( clazz );
+			if ( rtti )
+			{
+				if ( class_respondsToSelector( rtti, @selector(sharedInstance) ) )
+				{
+					controller = [rtti sharedInstance];
+				}
+				else
+				{
+					controller = [[[rtti alloc] init] autorelease];
+				}
+				
+				if ( controller )
+				{
+					NSAssert( [message hasPrefix:controller.prefix], @"wrong prefix" );
+					
+					if ( NO == [__subControllers containsObject:controller] )
+					{
+						[__subControllers addObject:controller];
+					}
+				}
+			}
+		}
+	}
+	
+	if ( nil == controller )
+	{
+		controller = [BeeController sharedInstance];
+	}
+	
 	return controller;
 }
 

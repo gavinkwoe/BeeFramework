@@ -3,6 +3,7 @@
 //
 
 #import "CatelogBoard.h"
+#import "Bee_Debug.h"
 #import "Bee_Runtime.h"
 
 #pragma mark -
@@ -65,12 +66,10 @@
 
 @implementation CatelogBoard
 
-DEF_SINGLETON( CatelogBoard );
-
 - (void)load
 {
 	[super load];
-	
+
 	_lessions = [[NSMutableArray alloc] init];
 	[_lessions addObject:[NSArray arrayWithObjects:@"Lession1Board", @"Lession 1", @"How to use BeeUIBoard", nil]];
 	[_lessions addObject:[NSArray arrayWithObjects:@"Lession2Board", @"Lession 2", @"How to use BeeUISignal", nil]];
@@ -82,9 +81,9 @@ DEF_SINGLETON( CatelogBoard );
 	[_lessions addObject:[NSArray arrayWithObjects:@"Lession8Board", @"Lession 8 (New)", @"How to use BeeNetwork", nil]];
 	[_lessions addObject:[NSArray arrayWithObjects:@"Lession9Board", @"Lession 9 (New)", @"How to use BeeController", nil]];
 	[_lessions addObject:[NSArray arrayWithObjects:@"Lession10Board", @"Lession 10 (New)", @"How to use BeeModel & BeeCache", nil]];
+	[_lessions addObject:[NSArray arrayWithObjects:@"Lession11Board", @"Lession 11 (New)", @"How to use BeeActiveRecord", nil]];
 	[_lessions addObject:[NSArray arrayWithObjects:@"DribbbleBoard", @"Dribbble.com (New)", @"Demo for dribbble.com", nil]];
-    [_lessions addObject:[NSArray arrayWithObjects:@"WebViewBoard", @"WebView Demo (New)", @"Demo for BeeUIWebView", nil]];
-
+	[_lessions addObject:[NSArray arrayWithObjects:@"WebViewBoard", @"WebView Demo (New)", @"Demo for BeeUIWebView", nil]];
 }
 
 - (void)unload

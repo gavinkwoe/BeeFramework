@@ -27,50 +27,14 @@
 //	IN THE SOFTWARE.
 //
 //
-//  Bee_DebugMemoryBoard.h
+//  Bee_DatabaseTest.h
 //
 
-#if __BEE_DEBUGGER__
-
-#import <QuartzCore/QuartzCore.h>
-#import "Bee_DebugWindow.h"
-#import "Bee_DebugMemoryBoard.h"
-#import "Bee_DebugUtility.h"
-
-#include <mach/mach.h>
-#include <malloc/malloc.h>
-
-#undef	MAX_MEMORY_HISTORY
-#define MAX_MEMORY_HISTORY	(50)
+#import "Bee_Precompile.h"
+#import "Bee_Database.h"
 
 #pragma mark -
 
-@implementation BeeDebugMemoryBoard
-
-DEF_SINGLETON( BeeDebugMemoryBoard )
-
-- (void)handleUISignal:(BeeUISignal *)signal
-{
-	[super handleUISignal:signal];
-	
-	if ( [signal isKindOf:BeeUIBoard.SIGNAL] )
-	{
-		if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
-		{
-			[self observeTick];
-			[self handleTick:0.0f];
-		}
-		else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
-		{
-			[self unobserveTick];
-		}
-	}
-}
-
-- (void)handleTick:(NSTimeInterval)elapsed
-{
-}
-
+@interface BeeDatabaseTest : NSObject
++ (void)run;
 @end
-
-#endif	// #if __BEE_DEBUGGER__

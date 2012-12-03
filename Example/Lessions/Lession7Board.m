@@ -85,10 +85,17 @@ DEF_SINGLETON( Lession7Board );
 	[super unload];
 }
 
+#pragma mark -
+
 - (void)handleUISignal:(BeeUISignal *)signal
 {
+	[super handleUISignal:signal];	
+}
+
+- (void)handleBeeUIBoard:(BeeUISignal *)signal
+{
 	[super handleUISignal:signal];
-	
+
 	if ( [signal isKindOf:BeeUIBoard.SIGNAL] )
 	{
 		if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
@@ -101,6 +108,8 @@ DEF_SINGLETON( Lession7Board );
 		}
 	}
 }
+
+#pragma mark -
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {

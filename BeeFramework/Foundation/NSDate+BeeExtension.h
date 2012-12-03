@@ -30,8 +30,11 @@
 //  NSObject+BeeProperty.h
 //
 
+#import "Bee_Precompile.h"
+
 @interface NSDate(BeeExtension)
 
 - (NSString *)stringWithDateFormat:(NSString *)format;
++ (NSUInteger)timeStamp;
 
 @end

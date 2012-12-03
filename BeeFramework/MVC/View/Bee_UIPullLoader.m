@@ -30,7 +30,7 @@
 //  Bee_UIPullLoader.m
 //
 
-#import <QuartzCore/QuartzCore.h>
+#import "Bee_Precompile.h"
 #import "Bee_UIPullLoader.h"
 #import "Bee_UIActivityIndicatorView.h"
 #import "Bee_UISignal.h"
@@ -88,7 +88,6 @@ DEF_INT( STATE_LOADING,	2 )
 	self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	
 	_arrowView = [[UIImageView alloc] initWithFrame:CGRectZero];
-	_arrowView.image = [UIImage imageNamed:@"common-pic-load.png"];
 	_arrowView.contentMode = UIViewContentModeCenter;
 	_arrowView.backgroundColor = [UIColor clearColor];
 	_arrowView.hidden = NO;
@@ -97,6 +96,7 @@ DEF_INT( STATE_LOADING,	2 )
     [_indicator release];
 	_indicator = [[BeeUIActivityIndicatorView alloc] initWithFrame:CGRectZero];
 	_indicator.hidden = YES;
+	_indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
 	[self addSubview:_indicator];
 	
 	_state = BeeUIPullLoader.STATE_NORMAL;

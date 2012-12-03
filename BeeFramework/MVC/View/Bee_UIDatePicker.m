@@ -30,6 +30,7 @@
 //  Bee_UIDatePicker.m
 //
 
+#import "Bee_Precompile.h"
 #import "Bee_UIDatePicker.h"
 #import "Bee_UISignal.h"
 #import "UIView+BeeQuery.h"

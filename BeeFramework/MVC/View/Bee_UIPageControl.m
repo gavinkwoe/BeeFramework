@@ -30,7 +30,7 @@
 //  Bee_UIPageControl.m
 //
 
-#import <QuartzCore/QuartzCore.h>
+#import "Bee_Precompile.h"
 #import "Bee_UIPageControl.h"
 #import "Bee_UISignal.h"
 #import "Bee_SystemInfo.h"

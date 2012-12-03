@@ -30,10 +30,7 @@
 //  Bee_UIStackGroup.m
 //
 
-#import <Foundation/Foundation.h>
-#import <QuartzCore/QuartzCore.h>
-#import <UIKit/UIKit.h>
-
+#import "Bee_Precompile.h"
 #import "Bee_UIBoard.h"
 #import "Bee_UIStack.h"
 #import "Bee_UIStackGroup.h"
@@ -60,9 +57,16 @@ DEF_SINGLETON(BeeUIStackGroup)
 
 DEF_SIGNAL( INDEX_CHANGED );
 
-+ (BeeUIStackGroup *)group
++ (BeeUIStackGroup *)stackGroup
 {
 	return [[[BeeUIStackGroup alloc] init] autorelease];
+}
+
++ (BeeUIStackGroup *)stackGroupWithFirstStack:(BeeUIStack *)stack
+{
+	BeeUIStackGroup * group = [[[BeeUIStackGroup alloc] init] autorelease];
+	[group append:stack];
+	return group;
 }
 
 - (void)load

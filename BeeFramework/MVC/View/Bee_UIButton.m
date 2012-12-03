@@ -30,6 +30,7 @@
 //  Bee_UIButton.m
 //
 
+#import "Bee_Precompile.h"
 #import "Bee_UIButton.h"
 #import "Bee_UISignal.h"
 #import "UIView+BeeQuery.h"
@@ -148,7 +149,7 @@ DEF_SIGNAL( TOUCH_UP_CANCEL )
 	{
 		_actions = [[NSMutableArray alloc] init];
 	}
-	
+
 	[self addTarget:self action:@selector(didTouchDown) forControlEvents:UIControlEventTouchDown];		
 	[self addTarget:self action:@selector(didTouchDownRepeat) forControlEvents:UIControlEventTouchDownRepeat];		
 	[self addTarget:self action:@selector(didTouchUpInside) forControlEvents:UIControlEventTouchUpInside];

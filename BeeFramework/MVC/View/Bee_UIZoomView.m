@@ -30,11 +30,13 @@
 //  Bee_UIZoomView.m
 //
 
+#import "Bee_Precompile.h"
 #import "Bee_UIZoomView.h"
 #import "Bee_UISignal.h"
+#import "UIView+BeeQuery.h"
+
 #import "CGRect+BeeExtension.h"
 #import "NSNumber+BeeExtension.h"
-#import "UIView+BeeQuery.h"
 
 #pragma mark -
 

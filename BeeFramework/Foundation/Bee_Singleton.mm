@@ -30,5 +30,5 @@
 //  Bee_Singleton.h
 //
 
-#import <Foundation/Foundation.h>
+#import "Bee_Precompile.h"
 #import "Bee_Singleton.h"

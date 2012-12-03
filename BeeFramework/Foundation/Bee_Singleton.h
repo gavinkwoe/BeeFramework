@@ -30,6 +30,8 @@
 //  Bee_Singleton.h
 //
 
+#import "Bee_Precompile.h"
+
 #undef	AS_SINGLETON
 #define AS_SINGLETON( __class ) \
 		+ (__class *)sharedInstance;

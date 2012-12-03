@@ -30,6 +30,8 @@
 //  Bee_NSArray+Slice.h
 //
 
+#import "Bee_Precompile.h"
+
 #pragma mark -
 
 @interface NSArray(BeeExtension)
@@ -58,6 +60,7 @@
 - (NSMutableArray *)keepHead:(NSUInteger)n;
 - (NSMutableArray *)keepTail:(NSUInteger)n;
 
+- (void)insertObjectNoRetain:(id)anObject atIndex:(NSUInteger)index;
 - (void)addObjectNoRetain:(NSObject *)obj;
 - (void)removeObjectNoRelease:(NSObject *)obj;
 - (void)removeAllObjectsNoRelease;

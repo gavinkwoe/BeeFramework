@@ -30,9 +30,11 @@
 //  Bee_DebugSandboxBoard.h
 //
 
-#if __BEE_DEBUGGER__
-
+#import "Bee_Precompile.h"
 #import "Bee.h"
+
+#if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__
+
 #import "Bee_DebugPieView.h"
 #import "Bee_DebugPlotsView.h"
 #import "Bee_DebugSampleView.h"
@@ -50,18 +52,37 @@
 
 #pragma mark -
 
+@interface BeeDebugToolCell : BeeUIGridCell
+{
+	BeeUILabel *	_folderName;
+	BeeUIButton *	_refresh;
+	BeeUIButton *	_deleteAll;
+}
+
+AS_SIGNAL( REFRESH )
+AS_SIGNAL( DELETE_ALL )
+
+- (void)setPath:(NSString *)path fileCount:(NSUInteger)count;
+
+@end
+
+#pragma mark -
+
 @interface BeeDebugSandboxBoard : BeeUITableBoard
 {
 	NSUInteger			_folderDepth;
 	NSString *			_filePath;
 	NSMutableArray *	_fileArray;
+	BeeDebugToolCell *	_toolCell;
 }
 
 AS_SINGLETON( BeeDebugSandboxBoard )
+
+AS_SIGNAL( CONFIRM_DELETE_ALL )
 
 @property (nonatomic, assign) NSUInteger	folderDepth;
 @property (nonatomic, retain) NSString *	filePath;
 
 @end
 
-#endif	// #if __BEE_DEBUGGER__
+#endif	// #if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__

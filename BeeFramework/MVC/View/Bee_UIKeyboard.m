@@ -30,18 +30,9 @@
 //  Bee_UIKeyboard.m
 //
 
-#import <UIKit/UIKit.h>
+#import "Bee_Precompile.h"
 #import "Bee_UIKeyboard.h"
 #import "Bee_UISignal.h"
-
-#pragma mark -
-
-#if defined(__IPHONE_5_0)
-UIKIT_EXTERN
-NSString * const UIKeyboardWillChangeFrameNotification;
-#else
-NSString * const UIKeyboardWillChangeFrameNotification = @"UIKeyboardWillChangeFrameNotification";
-#endif
 
 #undef	DEFAULT_KEYBOARD_HEIGHT
 #define	DEFAULT_KEYBOARD_HEIGHT	(216.0f)
@@ -60,6 +51,9 @@ DEF_NOTIFICATION( HEIGHT_CHANGED );
 @synthesize animating = _animating;
 @synthesize height = _height;
 
+@synthesize animationDuration = _animationDuration;
+@synthesize animationCurve = _animationCurve;
+
 - (id)init
 {
 	self = [super init];
@@ -71,10 +65,10 @@ DEF_NOTIFICATION( HEIGHT_CHANGED );
 
 		_accessorFrame = CGRectZero;
 		_accessor = nil;
-		
+
 		[self observeNotification:UIKeyboardDidShowNotification];
 		[self observeNotification:UIKeyboardDidHideNotification];
-		[self observeNotification:UIKeyboardWillChangeFrameNotification];
+		[self observeNotification:@"UIKeyboardWillChangeFrameNotification"];
 	}
 	return self;
 }
@@ -83,32 +77,40 @@ DEF_NOTIFICATION( HEIGHT_CHANGED );
 {
 	BOOL animated = YES;
 	
+	NSDictionary * userInfo = (NSDictionary *)[notification userInfo];
+	if ( userInfo )
+	{
+		[[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&_animationCurve];
+		[[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&_animationDuration];	
+	}
+	
 	if ( [notification is:UIKeyboardDidShowNotification] )
-	{			
+	{
 		if ( NO == _shown )
 		{
 			_shown = YES;
 			[self postNotification:BeeUIKeyboard.SHOWN];
 		}		
 		
-		NSValue * value = [(NSDictionary *)[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey];
+		NSValue * value = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
 		if ( value )
 		{
-			CGRect keyboardEndFrame = [value CGRectValue];
-			CGFloat _keyboardHeight = ([[UIDevice currentDevice] orientation] == UIDeviceOrientationPortrait || [[UIDevice currentDevice] orientation] == UIDeviceOrientationPortraitUpsideDown) ? keyboardEndFrame.size.height : keyboardEndFrame.size.width;
-			if ( _keyboardHeight != _height )
+			CGRect	keyboardEndFrame = [value CGRectValue];
+			CGFloat	keyboardHeight = ([[UIDevice currentDevice] orientation] == UIDeviceOrientationPortrait || [[UIDevice currentDevice] orientation] == UIDeviceOrientationPortraitUpsideDown) ? keyboardEndFrame.size.height : keyboardEndFrame.size.width;
+			
+			if ( keyboardHeight != _height )
 			{
-				_height = _keyboardHeight;
-				[self postNotification:BeeUIKeyboard.HEIGHT_CHANGED];
+				_height = keyboardHeight;
 				
+				[self postNotification:BeeUIKeyboard.HEIGHT_CHANGED];
 				animated = NO;
 			}
 		}
 	}
-	else if ( [notification is:UIKeyboardWillChangeFrameNotification] )
+	else if ( [notification is:@"UIKeyboardWillChangeFrameNotification"] )
 	{
-		NSValue * value1 = [(NSDictionary *)[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey];		
-		NSValue * value2 = [(NSDictionary *)[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey];		
+		NSValue * value1 = [userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey];		
+		NSValue * value2 = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];		
 		if ( value1 && value2 )
 		{
 			CGRect rect1 = [value1 CGRectValue];
@@ -151,14 +153,16 @@ DEF_NOTIFICATION( HEIGHT_CHANGED );
 			_shown = NO;		
 		}
 		
-		NSValue * value = [(NSDictionary *)[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey];
+		NSValue * value = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
 		if ( value )
 		{
-			CGRect keyboardEndFrame = [value CGRectValue];
-			CGFloat _keyboardHeight = ([[UIDevice currentDevice] orientation] == UIDeviceOrientationPortrait || [[UIDevice currentDevice] orientation] == UIDeviceOrientationPortraitUpsideDown) ? keyboardEndFrame.size.height : keyboardEndFrame.size.width;
-			if ( _keyboardHeight != _height )
+			CGRect	keyboardEndFrame = [value CGRectValue];
+			CGFloat	keyboardHeight = ([[UIDevice currentDevice] orientation] == UIDeviceOrientationPortrait || [[UIDevice currentDevice] orientation] == UIDeviceOrientationPortraitUpsideDown) ? keyboardEndFrame.size.height : keyboardEndFrame.size.width;
+			
+			if ( keyboardHeight != _height )
 			{
-				_height = _keyboardHeight;
+				_height = keyboardHeight;
+				
 			//	[self postNotification:BeeUIKeyboard.HEIGHT_CHANGED];
 				animated = NO;
 			}

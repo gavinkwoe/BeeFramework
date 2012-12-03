@@ -30,10 +30,7 @@
 //  NSObject+BeeProperty.m
 //
 
-#import <Foundation/Foundation.h>
-#import <QuartzCore/QuartzCore.h>
-#import <UIKit/UIKit.h>
-#import <CommonCrypto/CommonDigest.h>
+#import "Bee_Precompile.h"
 
 #import "NSDate+BeeExtension.h"
 #import "NSNumber+BeeExtension.h"
@@ -44,10 +41,27 @@
 
 - (NSString *)stringWithDateFormat:(NSString *)format
 {
+#if 0
+	
 	NSTimeInterval time = [self timeIntervalSince1970];
 	NSUInteger timeUint = (NSUInteger)time;
-	
 	return [[NSNumber numberWithUnsignedInteger:timeUint] stringWithDateFormat:format];
+	
+#else
+	
+	// thansk @lancy, changed: "NSDate depend on NSNumber" to "NSNumber depend on NSDate"
+	
+	NSDateFormatter * dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+	[dateFormatter setDateFormat:format];
+	return [dateFormatter stringFromDate:self];
+	
+#endif
+}
+
++ (NSUInteger)timeStamp
+{
+	NSTimeInterval time = [NSDate timeIntervalSinceReferenceDate];
+	return (NSUInteger)(time * 1000.0f);
 }
 
 @end

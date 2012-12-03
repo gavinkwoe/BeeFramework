@@ -30,9 +30,11 @@
 //  Bee_DebugMessageBoard.h
 //
 
-#if __BEE_DEBUGGER__
+#import "Bee_Precompile.h"
+#import "Bee.h"
 
-#import <QuartzCore/QuartzCore.h>
+#if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__
+
 #import "Bee_DebugWindow.h"
 #import "Bee_DebugMessageBoard.h"
 #import "Bee_DebugMessageModel.h"
@@ -53,11 +55,11 @@
 	[text appendFormat:@"整体耗时: %.0fms\n", message.timeElapsed * 1000.0f];
 	[text appendString:@"\n"];
 
-#if __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	[text appendFormat:@"========= 调用栈(CallStack) =========\n"];
 	[text appendFormat:@"%@\n", message.callstack];	
 	[text appendString:@"\n"];
-#endif	// #if __BEE_DEVELOPMENT__
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	
 	[text appendFormat:@"========= 输入参数(Input) =========\n"];
 	[text appendFormat:@"%@\n", [message.input description]];
@@ -108,7 +110,7 @@
 
 + (CGSize)cellSize:(NSObject *)data bound:(CGSize)bound
 {
-	return CGSizeMake( bound.width, 40.0f );
+	return CGSizeMake( bound.width, 50.0f );
 }
 
 - (void)cellLayout:(BeeUIGridCell *)cell bound:(CGSize)bound
@@ -251,13 +253,18 @@ DEF_SINGLETON( BeeDebugMessageBoard )
 		if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
 		{
 			[self setBaseInsets:UIEdgeInsetsMake(0.0f, 0, 44.0f, 0)];
-
-			[self observeTick];
-			[self handleTick:0.0f];
 		}
 		else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
 		{
-			[self unobserveTick];
+		}
+		else if ( [signal is:BeeUIBoard.WILL_APPEAR] )
+		{
+			[self observeTick];
+			[self handleTick:0.0f];
+		}
+		else if ( [signal is:BeeUIBoard.WILL_DISAPPEAR] )
+		{
+			[self unobserveTick];	
 		}
 	}
 }
@@ -307,4 +314,4 @@ DEF_SINGLETON( BeeDebugMessageBoard )
 
 @end
 
-#endif	// #if __BEE_DEBUGGER__
+#endif	// #if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__

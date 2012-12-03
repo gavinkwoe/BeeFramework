@@ -30,6 +30,7 @@
 //  Bee_UIWebView.m
 //
 
+#import "Bee_Precompile.h"
 #import "Bee_UIWebView.h"
 #import "Bee_UISignal.h"
 #import "Bee_Log.h"

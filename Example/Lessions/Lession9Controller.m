@@ -9,8 +9,6 @@
 
 @implementation Lession9Controller
 
-DEF_SINGLETON( Lession9Controller )
-
 DEF_MESSAGE( LOCAL )
 DEF_MESSAGE( REMOTE )
 

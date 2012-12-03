@@ -160,33 +160,35 @@ DEF_SINGLETON( Lession5Board );
 - (void)handleUISignal:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
+}
 
-	if ( [signal isKindOf:BeeUIBoard.SIGNAL] )
+- (void)handleBeeUIBoard:(BeeUISignal *)signal
+{
+	[super handleUISignal:signal];
+
+	if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
 	{
-		if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
-		{
-			[self setTitleString:@"Lession 5"];
-			[self showNavigationBarAnimated:NO];
-		}
-		else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
-		{
-		}
-		else if ( [signal is:BeeUIBoard.LOAD_DATAS] )
-		{
-		}
-		else if ( [signal is:BeeUIBoard.WILL_APPEAR] )
-		{
-		}
-		else if ( [signal is:BeeUIBoard.DID_DISAPPEAR] )
-		{
-		}
-		else if ( [signal is:BeeUIBoard.BACK_BUTTON_TOUCHED] )
-		{
-			
-		}
-		else if ( [signal is:BeeUIBoard.DONE_BUTTON_TOUCHED] )
-		{
-		}
+		[self setTitleString:@"Lession 5"];
+		[self showNavigationBarAnimated:NO];
+	}
+	else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
+	{
+	}
+	else if ( [signal is:BeeUIBoard.LOAD_DATAS] )
+	{
+	}
+	else if ( [signal is:BeeUIBoard.WILL_APPEAR] )
+	{
+	}
+	else if ( [signal is:BeeUIBoard.DID_DISAPPEAR] )
+	{
+	}
+	else if ( [signal is:BeeUIBoard.BACK_BUTTON_TOUCHED] )
+	{
+		
+	}
+	else if ( [signal is:BeeUIBoard.DONE_BUTTON_TOUCHED] )
+	{
 	}
 }
 

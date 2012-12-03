@@ -30,6 +30,8 @@
 //  Bee_UtilitySandbox.h
 //
 
+#import "Bee_Precompile.h"
+
 @interface BeeSandbox : NSObject
 
 + (NSString *)appPath;		// 程序目录，不能存任何东西

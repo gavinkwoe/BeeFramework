@@ -30,4 +30,5 @@
 //  NSObject+BeeProperty.m
 //
 
+#import "Bee_Precompile.h"
 #import "NSObject+BeeProperty.h"

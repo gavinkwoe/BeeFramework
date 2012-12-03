@@ -30,6 +30,7 @@
 //  Bee_UITextField.m
 //
 
+#import "Bee_Precompile.h"
 #import "Bee_UITextField.h"
 #import "Bee_UISignal.h"
 

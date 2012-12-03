@@ -25,6 +25,75 @@ QQ Group(QQ群号): 79054681
 QQ: 5220509    
 Email: gavinkwoe@gmail.com    
 
+##v0.2 changes
+
+1. Add overload graph in BeeDebugger    
+2. Add BeeDatabase(based on FMDB) and BeeActiveRecord    
+3. Fix some bugs
+4. Move precompile options to 'Bee_Precompile.h'     
+
+From now, you can use SQLITE everywhere in fantastic way!    
+See 'Lession11' & 'Bee_ActiveRecordTest.h/.m' & 'BeeDatabaseTest.h/.m'    
+
+Fantastic BeeDatabase:
+
+	self.DB
+	    .TABLE( @"tableName" )
+	    .FIELD( @"id", @"INTEGER", 12 ).PRIMARY_KEY().AUTO_INREMENT()
+	    .FIELD( @"field1", @"TEXT", 20 )
+	    .FIELD( @"field2", @"TEXT", 64 )
+	    .CREATE_IF_NOT_EXISTS();
+	NSAssert( self.DB.succeed, nil );
+	
+	self.DB
+	    .FROM( @"tableName" )
+	    .WHERE( @"key", @"value" )
+	    .GET();
+	NSAssert( self.DB.resultArray.count > 0, nil );
+
+Fantastic BeeActiveRecord:
+
+	// UserInfo.h
+	
+	@interface UserInfo : BeeActiveRecord
+	{
+		NSNumber *	_uid;
+		NSString *	_name;
+	}
+	@property (nonatomic, retain) NSNumber *	uid;
+	@property (nonatomic, retain) NSString *	name;
+	@end
+
+	// UserInfo.m
+	
+	@implementation UserInfo
+	@synthesize uid = _uid;
+	@synthesize name = _name;
+	+ (void)mapRelation
+	{
+		[self mapPropertyAsKey:@"uid"];		
+		[self mapProperty:@"name"];
+	}
+	@end
+
+	// Test.m
+
+	{
+		// style1
+		UserInfo.DB
+			.SET( @"name", @"gavin" )
+			.INSERT();
+
+		// style2
+		UserInfo * user = [[UserInfo alloc] init];
+		user.name = @"amanda";
+		user.INSERT();		
+	}
+	
+New overload graph:
+
+![Debugger](http://blog.whatsbug.com/wp-content/uploads/2012/12/bee_5.png)
+
 ##v0.1 changes
 
 1. Add more DEMOs (useful~~)

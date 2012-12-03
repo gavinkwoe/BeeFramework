@@ -30,8 +30,7 @@
 //  Bee_UIImageView.h
 //
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import "Bee_Precompile.h"
 #import "Bee_Cache.h"
 #import "Bee_Network.h"
 #import "Bee_UISignal.h"

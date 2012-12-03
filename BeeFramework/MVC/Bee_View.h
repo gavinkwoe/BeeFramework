@@ -30,6 +30,8 @@
 //  Bee_View.h
 //
 
+#import "Bee_Precompile.h"
+
 // View
 #import "Bee_UIActionSheet.h"
 #import "Bee_UIAlertView.h"

@@ -30,10 +30,7 @@
 //  NSObject+BeeNotification.m
 //
 
-#import <Foundation/Foundation.h>
-#import <QuartzCore/QuartzCore.h>
-#import <UIKit/UIKit.h>
-
+#import "Bee_Precompile.h"
 #import "Bee_Log.h"
 #import "NSObject+BeeNotification.h"
 

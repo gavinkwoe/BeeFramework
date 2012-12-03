@@ -30,11 +30,12 @@
 //  Bee_DebugDashBoard.h
 //
 
-#if __BEE_DEBUGGER__
-
+#import "Bee_Precompile.h"
 #import "Bee.h"
+
+#if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__
+
 #import "Bee_DebugPlotsView.h"
-#import "Bee_DebugSampleView.h"
 
 #pragma mark -
 
@@ -42,7 +43,8 @@
 {
 	BeeUILabel *			_titleView;
 	BeeUILabel *			_statusView;
-	BeeDebugPlotsView *		_plotView;
+	BeeDebugPlotsView *		_plotView1;
+	BeeDebugPlotsView *		_plotView2;
 	BeeUIButton *			_manualAlloc;
 	BeeUIButton *			_manualFree;
 	BeeUIButton *			_manualAllocAll;
@@ -77,9 +79,8 @@
 {
 	BeeUILabel *			_titleView;
 	BeeUILabel *			_statusView;
-	BeeDebugPlotsView *		_plotView1;	// sending
-	BeeDebugPlotsView *		_plotView2;	// succeed
-	BeeDebugPlotsView *		_plotView3;	// failed
+	BeeDebugPlotsView *		_plotView1;	// send bytes
+	BeeDebugPlotsView *		_plotView2;	// recv bytes
 	BeeUIButton *			_delayPlus;
 	BeeUIButton *			_delaySub;
 	BeeUIButton *			_bandWidth;
@@ -103,4 +104,4 @@ AS_SINGLETON( BeeDebugDashBoard )
 
 @end
 
-#endif	// #if __BEE_DEBUGGER__
+#endif	// #if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__

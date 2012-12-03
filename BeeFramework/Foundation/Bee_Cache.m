@@ -30,9 +30,7 @@
 //  Bee_Cache.m
 //
 
-#import <QuartzCore/QuartzCore.h>
-#import "JSONKit.h"
-
+#import "Bee_Precompile.h"
 #import "Bee_Singleton.h"
 #import "Bee_SystemInfo.h"
 #import "Bee_Sandbox.h"
@@ -40,6 +38,11 @@
 #import "Bee_Log.h"
 
 #import "NSObject+BeeNotification.h"
+#import "JSONKit.h"
+
+#pragma mark -
+
+#define DEFAULT_MAX_COUNT	(16)
 
 #pragma mark -
 
@@ -62,7 +65,8 @@ DEF_SINGLETON( BeeFileCache );
 	if ( self )
 	{
 		self.cacheUser = @"";
-		self.cachePath = [NSString stringWithFormat:@"%@/%@/cache/", [BeeSandbox libCachePath], [BeeSystemInfo appVersion]];
+//		self.cachePath = [NSString stringWithFormat:@"%@/%@/cache/", [BeeSandbox libCachePath], [BeeSystemInfo appVersion]];
+		self.cachePath = [NSString stringWithFormat:@"%@/BeeCache/", [BeeSandbox libCachePath]];
 	}
 	return self;
 }
@@ -136,7 +140,7 @@ DEF_SINGLETON( BeeFileCache );
 	return nil;
 }
 
-- (NSObject *)unserialize:(id)data
+- (id)unserialize:(NSData *)data
 {
 	return [data objectFromJSONData];
 }
@@ -185,8 +189,6 @@ DEF_SINGLETON( BeeFileCache );
 @end
 
 #pragma mark -
-
-#define DEFAULT_MAX_COUNT	(16)
 
 @implementation BeeMemoryCache
 

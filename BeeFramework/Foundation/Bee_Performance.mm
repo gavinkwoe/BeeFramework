@@ -30,9 +30,7 @@
 //  Bee_Performance.h
 //
 
-#import <Foundation/Foundation.h>
-#import <QuartzCore/QuartzCore.h>
-
+#import "Bee_Precompile.h"
 #import "Bee_Performance.h"
 
 #pragma mark -
@@ -74,15 +72,6 @@ DEF_SINGLETON( BeePerformance );
 	[[BeePerformance sharedInstance].tags setObject:time forKey:tag];
 	
 	return curr;
-}
-
-+ (double)elapsed:(NSString *)tag
-{
-	NSNumber * time = [[BeePerformance sharedInstance].tags objectForKey:tag];
-	if ( nil == time )
-		return 0.0;
-	
-	return CACurrentMediaTime() - [time doubleValue];
 }
 
 + (double)between:(NSString *)tag1 and:(NSString *)tag2

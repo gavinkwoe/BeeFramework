@@ -30,4 +30,5 @@
 //  Bee_View.h
 //
 
+#import "Bee_Precompile.h"
 #import "Bee_View.h"

@@ -30,7 +30,7 @@
 //  Bee_Controller.h
 //
 
-#import <Foundation/Foundation.h>
+#import "Bee_Precompile.h"
 #import "Bee_Singleton.h"
 #import "Bee_Network.h"
 
@@ -105,9 +105,9 @@ typedef void (^BeeMessageBlock)( BeeMessage * msg );
 
 	BeeMessageBlock				_whenUpdate;
 
-#ifdef __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	NSMutableArray *			_callstack;
-#endif	// #ifdef __BEE_DEVELOPMENT__
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 }
 
 AS_STRING( ERROR_DOMAIN_UNKNOWN )
@@ -157,9 +157,9 @@ AS_INT( STATE_CANCELLED )		// 消息被取消了
 
 @property (nonatomic, copy) BeeMessageBlock				whenUpdate;
 
-#ifdef __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 @property (nonatomic, readonly) NSMutableArray *		callstack;
-#endif	// #ifdef __BEE_DEVELOPMENT__
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 
 @property (nonatomic, assign) BOOL						created;
 @property (nonatomic, assign) BOOL						sending;
@@ -201,6 +201,9 @@ AS_INT( STATE_CANCELLED )		// 消息被取消了
 
 - (void)runloop;
 - (void)changeState:(NSInteger)newState;
+
+- (void)callResponder;
+- (void)forwardResponder:(NSObject *)obj;
 
 @end
 

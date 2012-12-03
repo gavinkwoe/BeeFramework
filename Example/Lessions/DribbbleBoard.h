@@ -26,7 +26,4 @@
 	DribbbleDebutsModel *		_debutsModel;
 	DribbblePopularModel *		_popularModel;
 }
-
-AS_SINGLETON( DribbbleBoard );
-
 @end

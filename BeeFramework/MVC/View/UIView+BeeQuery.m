@@ -30,10 +30,11 @@
 //  UIView+BeeQuery.m
 //
 
-#import "UIView+BeeQuery.h"
+#import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 #import "Bee_UIImageView.h"
 #import "Bee_UILabel.h"
+#import "UIView+BeeQuery.h"
 
 #pragma mark -
 

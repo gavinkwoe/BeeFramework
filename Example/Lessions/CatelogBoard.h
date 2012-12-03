@@ -19,7 +19,4 @@
 {
 	NSMutableArray * _lessions;
 }
-
-AS_SINGLETON( CatelogBoard );
-
 @end

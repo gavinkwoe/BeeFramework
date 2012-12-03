@@ -30,6 +30,7 @@
 //  Bee_UIAlertView.m
 //
 
+#import "Bee_Precompile.h"
 #import "Bee_UIAlertView.h"
 #import "Bee_UISignal.h"
 

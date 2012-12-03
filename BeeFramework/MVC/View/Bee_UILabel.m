@@ -30,6 +30,7 @@
 //  Bee_UILabel.m
 //
 
+#import "Bee_Precompile.h"
 #import "Bee_UILabel.h"
 #import "UIFont+BeeExtension.h"
 

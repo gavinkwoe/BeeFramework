@@ -30,7 +30,7 @@
 //  UIColor+BeeExtension.m
 //
 
-#import <UIKit/UIKit.h>
+#import "Bee_Precompile.h"
 #import "UIColor+BeeExtension.h"
 
 #pragma mark -

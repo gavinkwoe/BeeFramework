@@ -4,6 +4,7 @@
 
 #import "DribbbleModel.h"
 #import "DribbbleController.h"
+#import "Bee_Database.h"
 
 #pragma mark -
 
@@ -13,10 +14,16 @@
 
 @interface DribbbleModel(Private)
 - (void)asyncSaveCache;
+- (void)addShot:(NSObject *)shot;
+- (void)addShots:(NSArray *)shots;
+- (void)removeShost:(NSObject *)shot;
+- (void)removeShosts:(NSArray *)shots;
+- (void)removeAllShots;
 @end
 
 @implementation DribbbleModel
 
+@synthesize category = _category;
 @synthesize perPage = _perPage;
 @synthesize total = _total;
 @synthesize shots = _shots;
@@ -25,8 +32,7 @@
 {
 	[super load];
 
-	[DribbbleController sharedInstance];
-
+	_category = nil;
 	_perPage = DEFAULT_PER_PAGE;
 	_total = 0;
 	_shots = [[NSMutableArray alloc] init];
@@ -42,13 +48,15 @@
 	[_shots release];
 	_shots = nil;
 	
+	[_category release];
+	
 	[super unload];
 }
 
 - (void)loadCache
 {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-	
+		
 	NSDictionary * dict = (NSDictionary *)[[BeeFileCache sharedInstance] objectForKey:self.name];
 	if ( dict )
 	{
@@ -113,15 +121,10 @@
 	[self saveCache];
 }
 
-@end
-
-#pragma mark -
-
-@implementation DribbbleEveryoneModel
-
 - (void)fetchShots
 {
-	[[self sendMessage:DribbbleController.GET_SHOTS_EVERYONE timeoutSeconds:30.0f] input:
+	[[self sendMessage:DribbbleController.GET_SHOTS timeoutSeconds:30.0f] input:
+	 @"cate", _category,
 	 @"page", __INT(0),
 	 @"size", __INT(_perPage),
 	 nil];	
@@ -129,7 +132,14 @@
 
 - (void)handleMessage:(BeeMessage *)msg
 {
-	if ( [msg is:DribbbleController.GET_SHOTS_EVERYONE] )
+	[super handleMessage:msg];
+}
+
+- (void)handleDribbbleController:(BeeMessage *)msg
+{
+	[super handleMessage:msg];
+	
+	if ( [msg is:DribbbleController.GET_SHOTS] )
 	{
 		if ( msg.succeed )
 		{
@@ -143,8 +153,19 @@
 			[self addShots:[msg.output arrayAtPath:@"/shots"]];
 		}
 	}
-	
-	[super handleMessage:msg];
+}
+
+@end
+
+#pragma mark -
+
+@implementation DribbbleEveryoneModel
+
+- (void)load
+{
+	[super load];
+
+	self.category = @"everyone";
 }
 
 @end
@@ -153,32 +174,11 @@
 
 @implementation DribbbleDebutsModel
 
-- (void)fetchShots
+- (void)load
 {
-	[[self sendMessage:DribbbleController.GET_SHOTS_DEBUTS timeoutSeconds:30.0f] input:
-	 @"page", __INT(0),
-	 @"size", __INT(_perPage),
-	 nil];	
-}
+	[super load];
 
-- (void)handleMessage:(BeeMessage *)msg
-{
-	if ( [msg is:DribbbleController.GET_SHOTS_DEBUTS] )
-	{
-		if ( msg.succeed )
-		{
-			NSNumber * page = [msg.input numberAtPath:@"/page" otherwise:__INT(0)];
-			if ( 0 == [page intValue] )
-			{
-				[self removeAllShots];
-			}
-			
-			[self setTotal:[msg.output numberAtPath:@"/total"].intValue];
-			[self addShots:[msg.output arrayAtPath:@"/shots"]];		
-		}
-	}
-	
-	[super handleMessage:msg];
+	self.category = @"debuts";
 }
 
 @end
@@ -187,32 +187,11 @@
 
 @implementation DribbblePopularModel
 
-- (void)fetchShots
+- (void)load
 {
-	[[self sendMessage:DribbbleController.GET_SHOTS_POPULAR timeoutSeconds:30.0f] input:
-	 @"page", __INT(0),
-	 @"size", __INT(_perPage),
-	 nil];	
-}
+	[super load];
 
-- (void)handleMessage:(BeeMessage *)msg
-{
-	if ( [msg is:DribbbleController.GET_SHOTS_POPULAR] )
-	{
-		if ( msg.succeed )
-		{
-			NSNumber * page = [msg.input numberAtPath:@"/page" otherwise:__INT(0)];
-			if ( 0 == [page intValue] )
-			{
-				[self removeAllShots];
-			}
-			
-			[self setTotal:[msg.output numberAtPath:@"/total"].intValue];
-			[self addShots:[msg.output arrayAtPath:@"/shots"]];		
-		}
-	}
-	
-	[super handleMessage:msg];
+	self.category = @"popular";
 }
 
 @end

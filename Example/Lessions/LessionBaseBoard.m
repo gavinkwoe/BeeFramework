@@ -40,8 +40,9 @@ DEF_SINGLETON( LessionBaseBoard );
 	for ( NSUInteger i = 0; i < self.signals.count; ++i )
 	{
 		BeeUISignal * signal = [self.signals objectAtIndex:i];
-		[text appendFormat:@"[%d] %@\n", self.signalSeq - i, signal.name];
+		[text appendFormat:@"[%d] %@\n", self.signalSeq, signal.name];
 	}
+
 	_textView.text = text;
 	_textView.scrollEnabled = YES;
 	_textView.showsVerticalScrollIndicator = YES;

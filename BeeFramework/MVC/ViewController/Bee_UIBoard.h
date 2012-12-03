@@ -30,6 +30,7 @@
 //  Bee_UIBoard.h
 //
 
+#import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 #import "Bee_UILabel.h"
 #import "Bee_UIStack.h"
@@ -92,11 +93,12 @@
 
 	UIInterfaceOrientation		_allowedOrientation;
 
-#ifdef __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
+	NSUInteger					_createSeq;
 	NSUInteger					_signalSeq;
 	NSMutableArray *			_signals;
 	NSMutableArray *			_callstack;
-#endif	// #ifdef __BEE_DEVELOPMENT__
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 }
 
 @property (nonatomic, assign) UIPopoverController *			popover;
@@ -142,11 +144,12 @@
 
 @property (nonatomic, assign) UIInterfaceOrientation		allowedOrientation;
 
-#ifdef __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
+@property (nonatomic, readonly) NSUInteger					createSeq;
 @property (nonatomic, readonly) NSUInteger					signalSeq;
 @property (nonatomic, readonly) NSMutableArray *			signals;
 @property (nonatomic, readonly) NSMutableArray *			callstack;
-#endif	// #ifdef __BEE_DEVELOPMENT__
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 
 AS_SIGNAL( CREATE_VIEWS )			// 创建视图
 AS_SIGNAL( DELETE_VIEWS )			// 释放视图

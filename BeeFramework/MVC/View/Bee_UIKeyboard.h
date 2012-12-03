@@ -30,7 +30,7 @@
 //  Bee_UIKeyboard.h
 //
 
-#import "NSObject+BeeNotification.h"
+#import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 #import "Bee_Singleton.h"
 #import "NSObject+BeeNotification.h"
@@ -45,6 +45,9 @@
 
 	CGRect		_accessorFrame;
 	UIView *	_accessor;
+	
+	NSTimeInterval			_animationDuration;
+	UIViewAnimationCurve	_animationCurve;
 }
 
 AS_SINGLETON( BeeUIKeyboard )
@@ -56,6 +59,9 @@ AS_NOTIFICATION( HEIGHT_CHANGED )	// 输入法切换
 @property (nonatomic, readonly) BOOL	shown;
 @property (nonatomic, readonly) BOOL	animating;
 @property (nonatomic, readonly) CGFloat	height;
+
+@property (nonatomic, readonly) NSTimeInterval			animationDuration;
+@property (nonatomic, readonly) UIViewAnimationCurve	animationCurve;
 
 - (void)showAccessor:(UIView *)view animated:(BOOL)animated;
 - (void)hideAccessor:(UIView *)view animated:(BOOL)animated;

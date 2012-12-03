@@ -30,7 +30,7 @@
 //  Bee_NSArray+Slice.mm
 //
 
-#import <Foundation/Foundation.h>
+#import "Bee_Precompile.h"
 #import "NSArray+BeeExtension.h"
 
 #pragma mark -
@@ -57,8 +57,27 @@
 }
 
 - (NSArray *)tail:(NSUInteger)count
-{
-	return self;
+{	
+//	if ( [self count] < count )
+//	{
+//		return self;
+//	}
+//	else
+//	{
+//        NSMutableArray * tempFeeds = [NSMutableArray array];
+//		
+//        for ( NSUInteger i = 0; i < count; i++ )
+//		{
+//            [tempFeeds insertObject:[self objectAtIndex:[self count] - i] atIndex:0];
+//        }
+//
+//		return tempFeeds;
+//	}
+
+	// thansk @lancy, changed: NSArray tail: count
+
+	NSRange range = NSMakeRange( self.count - count, count );
+	return [self subarrayWithRange:range];
 }
 
 - (id)safeObjectAtIndex:(NSUInteger)index
@@ -206,6 +225,12 @@
 	}
 	
 	return self;
+}
+
+- (void)insertObjectNoRetain:(id)object atIndex:(NSUInteger)index
+{
+	[self insertObject:object atIndex:index];
+	[object release];	
 }
 
 - (void)addObjectNoRetain:(NSObject *)object

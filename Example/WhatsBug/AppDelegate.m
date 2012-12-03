@@ -6,26 +6,60 @@
 #import "AppDelegate.h"
 #import "CatelogBoard.h"
 #import "DribbbleController.h"
+
 #import "Bee.h"
 #import "Bee_Debug.h"
+#import "Bee_DatabaseTest.h"
+#import "Bee_ActiveRecordTest.h"
 
 @implementation AppDelegate
 
 @synthesize window = _window;
 
+- (void)onCrash_divByZero
+{
+	int zeroDivisor = 0;
+	int result = 10 / zeroDivisor;
+}
+
+- (void) onCrash_deallocatedObject
+{
+	// Note: EXC_BAD_ACCESS errors tend to cause the app to close stdout,
+	// which means you won't see the trace on your console.
+	// It is, however, stored to the error log file.
+	NSObject* object = [[NSObject alloc] init];
+	[object release];
+	NSLog(@"%@", object);
+}
+
+- (void) onCrash_outOfBounds
+{
+	NSArray* array = [NSArray arrayWithObject:[[[NSObject alloc] init] autorelease]];
+	NSLog(@"%@", [array objectAtIndex:100]);
+}
+
+- (void) onCrash_unimplementedSelector
+{
+	id notAViewController = [NSData data];
+	[notAViewController presentModalViewController:nil animated:NO];
+}
+
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {	
 	PRINT_CALLSTACK( 32 );
 
-	BeeUIStackGroup * stackGroup = [[[BeeUIStackGroup alloc] init] autorelease];
-	[stackGroup append:[BeeUIStack stack:@"WhatsBug" firstBoard:[CatelogBoard board]]];
-    
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     self.window.backgroundColor = [UIColor whiteColor];
-	self.window.rootViewController = stackGroup;
+	self.window.rootViewController = [BeeUIStackGroup stackGroupWithFirstStack:[BeeUIStack stackWithFirstBoard:[CatelogBoard board]]];
     [self.window makeKeyAndVisible];
-
+	
 	[BeeDebugger show];
+	[BeeDatabaseTest run];
+	[BeeActiveRecordTest run];
+
+//	[self onCrash_unimplementedSelector];
+
     return YES;
 }
 

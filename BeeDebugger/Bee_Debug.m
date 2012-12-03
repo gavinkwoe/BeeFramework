@@ -30,27 +30,39 @@
 //	Bee_Debug.m
 //
 
+#import "Bee_Precompile.h"
+#import "Bee.h"
+
 #import "Bee_Debug.h"
 #import "Bee_DebugWindow.h"
-
 #import "Bee_DebugMemoryModel.h"
 #import "Bee_DebugMessageModel.h"
 #import "Bee_DebugNetworkModel.h"
 #import "Bee_DebugHeatmapModel.h"
+#import "Bee_DebugViewModel.h"
+
+#import "Bee_DebugCrashReporter.h"
 
 @implementation BeeDebugger
 
 + (void)show
 {
-#if __BEE_DEBUGGER__	
-	[BeeDebugShortcut sharedInstance].hidden = NO;
-	[BeeDebugWindow sharedInstance].hidden = YES;
+#if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__
 	
 	[BeeDebugMemoryModel sharedInstance];
 	[BeeDebugMessageModel sharedInstance];
 	[BeeDebugNetworkModel sharedInstance];
 	[BeeDebugHeatmapModel sharedInstance];
-#endif
+	[BeeDebugViewModel sharedInstance];
+	
+#if defined(__BEE_CRASHLOG__) && __BEE_CRASHLOG__
+	[[BeeDebugCrashReporter sharedInstance] install];
+#endif	// #if defined(__BEE_CRASHLOG__) && __BEE_CRASHLOG__
+
+	[BeeDebugShortcut sharedInstance].hidden = NO;
+	[BeeDebugWindow sharedInstance].hidden = YES;
+
+#endif	// #if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__
 }
 
 @end

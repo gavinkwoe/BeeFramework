@@ -30,6 +30,7 @@
 //  Bee_Thread.h
 //
 
+#import "Bee_Precompile.h"
 #import "Bee_Singleton.h"
 
 #pragma mark -

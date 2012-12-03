@@ -30,8 +30,7 @@
 //  Bee_UtilityRuntime.h
 //
 
-#import <Foundation/Foundation.h>
-#import <objc/runtime.h>
+#import "Bee_Precompile.h"
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -30,6 +30,7 @@
 //  Bee_UISegmentedControl.m
 //
 
+#import "Bee_Precompile.h"
 #import "Bee_UISegmentedControl.h"
 #import "Bee_UISignal.h"
 
@@ -91,8 +92,11 @@ DEF_SIGNAL( HIGHLIGHT_CHANGED )
 	self.segmentedControlStyle = UISegmentedControlStyleBar;
 	self.selectedSegmentIndex = 0;
 //	self.tintColor = [UIColor darkGrayColor];
-    [_tags release];
-    _tags = [[NSMutableArray alloc] init];
+
+	if ( nil == _tags )
+	{
+		_tags = [[NSMutableArray alloc] init];
+	}
 	
 	[self addTarget:self action:@selector(didSelectionChanged:) forControlEvents:UIControlEventValueChanged];	
 }

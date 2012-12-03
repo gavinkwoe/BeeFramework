@@ -14,7 +14,7 @@ DEF_SIGNAL( ACTION_ITEM2_TOUCHED )
 
 - (void)load
 {
-[super load];
+	[super load];
 }
 
 - (void)unload
@@ -25,38 +25,46 @@ DEF_SIGNAL( ACTION_ITEM2_TOUCHED )
 - (void)handleUISignal:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
+}
+
+- (void)handleBeeUIBoard:(BeeUISignal *)signal
+{
+	[super handleUISignal:signal];
 	
-	if ( [signal isKindOf:BeeUIBoard.SIGNAL] )
+	if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
 	{
-		if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
-		{
-			[self setTitleString:@"BeeUIActionSheet"];
-			[self showNavigationBarAnimated:NO];
-			
-			// button2点击时，将发送我们自定义的信号 MY_SIGNAL
-			_button = [[BeeUIButton alloc] initWithFrame:CGRectZero];
-			_button.backgroundColor = [UIColor blackColor];
-			_button.titleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
-			_button.stateNormal.title = @"Show actionSheet";
-			_button.stateNormal.titleColor = [UIColor whiteColor];
-			[_button addSignal:Lession7_1Board.BUTTON_TOUCHED forControlEvents:UIControlEventTouchUpInside];
-			[self.view addSubview:_button];
-		}
-		else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
-		{
-			SAFE_RELEASE_SUBVIEW( _button );
-		}
-		else if ( [signal is:BeeUIBoard.LAYOUT_VIEWS] )
-		{
-			CGRect buttonFrame;
-			buttonFrame.size.width = self.viewSize.width - 30.0f;
-			buttonFrame.size.height = 44.0f;
-			buttonFrame.origin.x = 15.0f;
-			buttonFrame.origin.y = self.viewSize.height - buttonFrame.size.height - 10.0f;
-			_button.frame = buttonFrame;
-		}
+		[self setTitleString:@"BeeUIActionSheet"];
+		[self showNavigationBarAnimated:NO];
+		
+		// button2点击时，将发送我们自定义的信号 MY_SIGNAL
+		_button = [[BeeUIButton alloc] initWithFrame:CGRectZero];
+		_button.backgroundColor = [UIColor blackColor];
+		_button.titleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
+		_button.stateNormal.title = @"Show actionSheet";
+		_button.stateNormal.titleColor = [UIColor whiteColor];
+		[_button addSignal:Lession7_1Board.BUTTON_TOUCHED forControlEvents:UIControlEventTouchUpInside];
+		[self.view addSubview:_button];
 	}
-	else if ( [signal is:Lession7_1Board.BUTTON_TOUCHED] )
+	else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
+	{
+		SAFE_RELEASE_SUBVIEW( _button );
+	}
+	else if ( [signal is:BeeUIBoard.LAYOUT_VIEWS] )
+	{
+		CGRect buttonFrame;
+		buttonFrame.size.width = self.viewSize.width - 30.0f;
+		buttonFrame.size.height = 44.0f;
+		buttonFrame.origin.x = 15.0f;
+		buttonFrame.origin.y = self.viewSize.height - buttonFrame.size.height - 10.0f;
+		_button.frame = buttonFrame;
+	}
+}
+
+- (void)handleLession7_1Board:(BeeUISignal *)signal
+{
+	[super handleUISignal:signal];
+	
+	if ( [signal is:Lession7_1Board.BUTTON_TOUCHED] )
 	{
 		BeeUIActionSheet * actionSheet = [BeeUIActionSheet spawn];
 		actionSheet.title = @"Lession7";
@@ -75,23 +83,26 @@ DEF_SIGNAL( ACTION_ITEM2_TOUCHED )
 		BeeUIActionSheet * actionSheet = (BeeUIActionSheet *)signal.source;
 		[actionSheet dismissAnimated:YES];
 	}
-	else if ( [signal isKindOf:BeeUIActionSheet.SIGNAL] )
+}
+
+- (void)handleBeeUIActionSheet:(BeeUISignal *)signal
+{
+	[super handleUISignal:signal];
+
+	if ( [signal is:BeeUIActionSheet.WILL_PRESENT] )
 	{
-		if ( [signal is:BeeUIActionSheet.WILL_PRESENT] )
-		{
-			_button.hidden = YES;
-		}
-		else if ( [signal is:BeeUIActionSheet.DID_PRESENT] )
-		{
-			
-		}
-		else if ( [signal is:BeeUIActionSheet.WILL_DISMISS] )
-		{
-		}
-		else if ( [signal is:BeeUIActionSheet.DID_DISMISS] )
-		{
-			_button.hidden = NO;			
-		}
+		_button.hidden = YES;
+	}
+	else if ( [signal is:BeeUIActionSheet.DID_PRESENT] )
+	{
+		
+	}
+	else if ( [signal is:BeeUIActionSheet.WILL_DISMISS] )
+	{
+	}
+	else if ( [signal is:BeeUIActionSheet.DID_DISMISS] )
+	{
+		_button.hidden = NO;			
 	}
 }
 

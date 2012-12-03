@@ -30,8 +30,7 @@
 //  Bee_UITextField.h
 //
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 
 #pragma mark -

@@ -30,12 +30,12 @@
 //  Bee_UICameraBoard.h
 //
 
-#import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import <CoreGraphics/CoreGraphics.h>
 #import <CoreVideo/CoreVideo.h>
 #import <CoreMedia/CoreMedia.h>
 
+#import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 #import "Bee_UIGridCell.h"
 #import "Bee_UIBoard.h"

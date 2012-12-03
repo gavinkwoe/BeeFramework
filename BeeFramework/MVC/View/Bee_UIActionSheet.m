@@ -30,6 +30,7 @@
 //  Bee_UIActionSheet.m
 //
 
+#import "Bee_Precompile.h"
 #import "Bee_UIActionSheet.h"
 #import "Bee_UISignal.h"
 

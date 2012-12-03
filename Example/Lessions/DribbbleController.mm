@@ -9,11 +9,7 @@
 
 @implementation DribbbleController
 
-DEF_SINGLETON(DribbbleController)
-
-DEF_MESSAGE( GET_SHOTS_EVERYONE )
-DEF_MESSAGE( GET_SHOTS_DEBUTS )
-DEF_MESSAGE( GET_SHOTS_POPULAR )
+DEF_MESSAGE( GET_SHOTS )
 
 - (void)load
 {
@@ -30,28 +26,7 @@ DEF_MESSAGE( GET_SHOTS_POPULAR )
 	// default action
 }
 
-- (void)GET_SHOTS_EVERYONE:(BeeMessage *)msg
-{
-	[msg.input setObject:@"everyone" atPath:@"/cate"];
-	
-	[self getShots:msg];
-}
-
-- (void)GET_SHOTS_DEBUTS:(BeeMessage *)msg
-{
-	[msg.input setObject:@"debuts" atPath:@"/cate"];
-	
-	[self getShots:msg];
-}
-
-- (void)GET_SHOTS_POPULAR:(BeeMessage *)msg
-{
-	[msg.input setObject:@"popular" atPath:@"/cate"];
-	
-	[self getShots:msg];
-}
-
-- (void)getShots:(BeeMessage *)msg
+- (void)GET_SHOTS:(BeeMessage *)msg
 {
 	if ( msg.sending )
 	{
@@ -62,7 +37,7 @@ DEF_MESSAGE( GET_SHOTS_POPULAR )
 		cate = (nil == cate) ? @"everyone" : cate;
 		page = (nil == page) ? __INT(0) : page;
 		size = (nil == size) ? __INT(30) : size;
-		
+
 		NSString * baseURL = [@"http://api.dribbble.com/shots/" stringByAppendingString:cate];
 		NSString * callURL = [baseURL urlByAppendingArray:[NSArray arrayWithObjects:@"page", page, @"per_page", size, nil]];
 

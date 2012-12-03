@@ -30,8 +30,7 @@
 //  Bee_Orientation.m
 //
 
-#import <UIKit/UIKit.h>
-#import <QuartzCore/QuartzCore.h>
+#import "Bee_Precompile.h"
 #import "Bee_UIOrientation.h"
 #import "Bee_UISignal.h"
 #import "Bee_Log.h"

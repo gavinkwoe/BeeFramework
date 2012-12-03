@@ -30,9 +30,11 @@
 //  Bee_DebugPieView.m
 //
 
-#if __BEE_DEBUGGER__
+#import "Bee_Precompile.h"
+#import "Bee.h"
 
-#import <QuartzCore/QuartzCore.h>
+#if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__
+
 #import "Bee_DebugPieView.h"
 
 #pragma mark -
@@ -116,4 +118,4 @@ static inline float radians(double degrees) { return degrees * M_PI / 180; }
 
 @end
 
-#endif	// #if __BEE_DEBUGGER__
+#endif	// #if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__
