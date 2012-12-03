@@ -9,7 +9,7 @@ QQ: 5220509
 邮箱: gavinkwoe@gmail.com    
 
 
-##v0.2 changes
+##v0.2 变更
 
 1. 增加负载图表在BeeDebugger中    
 2. 增加数据库及活动记录的支持    
