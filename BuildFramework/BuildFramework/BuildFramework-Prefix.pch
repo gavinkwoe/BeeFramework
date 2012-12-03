@@ -1,7 +1,0 @@
-//
-// Prefix header for all source files of the 'BuildFramework' target in the 'BuildFramework' project
-//
-
-#ifdef __OBJC__
-	#import <Foundation/Foundation.h>
-#endif
