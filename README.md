@@ -10,9 +10,14 @@ Email: gavinkwoe@gmail.com
 
 ##v0.2 changes
 
-1. Add overload graph in BeeDebugger（增加负载图表在BeeDebugger中）
-2. Add BeeDatabase(based on FMDB) and BeeActiveRecord（增加数据库及活动记录的支持）
-3. Fix some bugs（修改了一些BUG，感谢同学们的给力支持！）
+1. Add overload graph in BeeDebugger    
+  （增加负载图表在BeeDebugger中）
+2. Add BeeDatabase(based on FMDB) and BeeActiveRecord    
+  （增加数据库及活动记录的支持）
+3. Fix some bugs
+  （修改了一些BUG，感谢同学们的给力支持！）
+4. Move precompile options to 'Bee_Precompile.h' 
+  （把所有编译选项都移到Bee_Precompile.h里了）
 
 From now, you can use SQLITE everywhere in fantastic way!    
 See 'Lession11' & 'Bee_ActiveRecordTest.h/.m' & 'BeeDatabaseTest.h/.m'    
