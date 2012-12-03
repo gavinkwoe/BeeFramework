@@ -8,6 +8,43 @@ QQ Group(QQ群号): 79054681
 QQ: 5220509    
 Email: gavinkwoe@gmail.com    
 
+##v0.2 changes
+
+1. Add overload graph in BeeDebugger（增加负载图表在BeeDebugger中）
+2. Add BeeDatabase(based on FMDB) and BeeActiveRecord（增加数据库及活动记录的支持）
+3. Fix some bugs（修改了一些BUG，感谢同学们的给力支持！）
+
+From now, you can use SQLITE everywhere in fantastic way!
+See 'Lession11' & 'Bee_ActiveRecordTest.h/.m' & 'BeeDatabaseTest.h/.m'
+
+Fantastic BeeDatabase:
+
+	self.DB
+	.FROM( @"tableName" )
+	.WHERE( @"key", @"value" )
+	.GET();
+
+Fantastic BeeActiveRecord:
+
+	@interface UserInfo : BeeActiveRecord
+	{
+		NSNumber *	_uid;
+		NSString *	_name;
+	}
+	@property (nonatomic, retain) NSNumber *	uid;
+	@property (nonatomic, retain) NSString *	name;
+	@end
+
+	{
+		UserInfo.DB
+			.SET( @"name", @"gavin" )
+			.INSERT();
+		
+		UserInfo * user = [[UserInfo alloc] init];
+		user.name = @"amanda";
+		user.INSERT();		
+	}
+
 ##v0.1 changes
 
 1. Add more DEMOs (useful~~)
