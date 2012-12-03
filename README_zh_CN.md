@@ -8,6 +8,49 @@ QQ群号: 79054681
 QQ: 5220509    
 邮箱: gavinkwoe@gmail.com    
 
+
+##v0.2 changes
+
+1. 增加负载图表在BeeDebugger中    
+2. 增加数据库及活动记录的支持    
+3. 修改了一些BUG，感谢同学们的给力支持！    
+4. 把所有编译选项都移到Bee_Precompile.h里了    
+
+从现在开始，你可以用一种更神奇的方式在做任何代码中使用SQLITEF。    
+详情请见 'Lession11'、'Bee_ActiveRecordTest.h/.m'、'BeeDatabaseTest.h/.m'    
+
+神奇的BeeDatabase:
+
+	self.DB
+	.FROM( @"tableName" )
+	.WHERE( @"key", @"value" )
+	.GET();
+
+神奇的BeeActiveRecord:
+
+	@interface UserInfo : BeeActiveRecord
+	{
+		NSNumber *	_uid;
+		NSString *	_name;
+	}
+	@property (nonatomic, retain) NSNumber *	uid;
+	@property (nonatomic, retain) NSString *	name;
+	@end
+
+	{
+		UserInfo.DB
+			.SET( @"name", @"gavin" )
+			.INSERT();
+		
+		UserInfo * user = [[UserInfo alloc] init];
+		user.name = @"amanda";
+		user.INSERT();		
+	}
+	
+新增加负载图:
+
+![Debugger](http://blog.whatsbug.com/wp-content/uploads/2012/12/bee_5.png)
+
 ##v0.1 变更
 
 1. 增加更多DEMO
