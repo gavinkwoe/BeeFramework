@@ -30,13 +30,15 @@
 //  Bee_UISignal.m
 //
 
-#import <Foundation/Foundation.h>
-#import <QuartzCore/QuartzCore.h>
-#import <UIKit/UIKit.h>
-
+#import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 #import "Bee_Singleton.h"
 #import "Bee_Log.h"
+#import "Bee_Performance.h"
+
+#import <objc/runtime.h>
+
+#pragma mark -
 
 #undef	MAX_POOL_SIZE
 #define MAX_POOL_SIZE	(8)
@@ -66,6 +68,12 @@
 
 #pragma mark -
 
+@interface BeeUISignal(Private)
+- (void)routes;
+@end
+
+#pragma mark -
+
 @implementation BeeUISignal
 
 @synthesize dead = _dead;
@@ -77,9 +85,17 @@
 @synthesize object = _object;
 @synthesize returnValue = _returnValue;
 
-#if __BEE_DEVELOPMENT__
+@synthesize initTimeStamp = _initTimeStamp;
+@synthesize sendTimeStamp = _sendTimeStamp;
+@synthesize reachTimeStamp = _reachTimeStamp;
+
+@synthesize timeElapsed;
+@synthesize timeCostPending;
+@synthesize timeCostExecution;
+
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 @synthesize callPath = _callPath;
-#endif	// #if __BEE_DEVELOPMENT__
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 
 DEF_STATIC_PROPERTY( YES_VALUE );
 DEF_STATIC_PROPERTY( NO_VALUE );
@@ -88,7 +104,7 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 {
 	self = [super init];
 	if ( self )
-	{		
+	{
 		[self clear];
 	}
 	return self;
@@ -96,11 +112,11 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 
 - (NSString *)description
 {
-#if __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	return [NSString stringWithFormat:@"%@ > %@", _name, _callPath];
-#else
+#else	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	return [NSString stringWithFormat:@"%@", _name];
-#endif
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 }
 
 - (BOOL)is:(NSString *)name
@@ -123,7 +139,9 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 	if ( _dead )
 		return NO;
 	
-#if __BEE_DEVELOPMENT__
+	_sendTimeStamp = [NSDate timeIntervalSinceReferenceDate];
+	
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	if ( _source == _target )
 	{
 		[_callPath appendFormat:@"%@", [[_source class] description]];
@@ -137,17 +155,18 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 	{
 		[_callPath appendFormat:@" > [DONE]"];
 	}
-#endif	// #if __BEE_DEVELOPMENT__
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 
 	if ( [_target isUISignalResponder] )
 	{
 		_jump = 1;
 		
-		[_target handleUISignal:self];		
+		[self routes];
 	}
 	else
 	{
-		_reach = YES;
+		_reachTimeStamp = [NSDate timeIntervalSinceReferenceDate];
+		_reach = YES;		
 	}
 
 	return _reach;
@@ -158,28 +177,87 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 	if ( _dead )
 		return NO;
 
-#if __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	[_callPath appendFormat:@" > %@", [[target class] description]];
 	
 	if ( _reach )
 	{
 		[_callPath appendFormat:@" > [DONE]"];
 	}
-#endif	// #if __BEE_DEVELOPMENT__
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 
 	if ( [target isUISignalResponder] )
 	{
 		_jump += 1;
 
 		_target = target;	
-		[_target handleUISignal:self];
+		
+		[self routes];
 	}
 	else
 	{
-		_reach = YES;
+		_reachTimeStamp = [NSDate timeIntervalSinceReferenceDate];
+		_reach = YES;		
 	}
 
 	return _reach;
+}
+
+- (void)routes
+{
+	NSArray * array = [_name componentsSeparatedByString:@"."];
+	if ( array && array.count > 1 )
+	{
+//		NSString * prefix = (NSString *)[array objectAtIndex:0];
+		NSString * clazz = (NSString *)[array objectAtIndex:1];
+
+		NSString *	selectorName = [NSString stringWithFormat:@"handle%@:", clazz];
+		SEL			selector = NSSelectorFromString(selectorName);
+		
+		if ( [_target respondsToSelector:selector] )
+		{
+			[_target performSelector:selector withObject:self];
+			return;
+		}
+	}
+
+	Class rtti = [_source class];
+	for ( ;; )
+	{
+		if ( nil == rtti )
+			break;
+		
+		NSString *	selectorName = [NSString stringWithFormat:@"handle%@:", [rtti description]];
+		SEL			selector = NSSelectorFromString(selectorName);
+
+		if ( [_target respondsToSelector:selector] )
+		{
+			[_target performSelector:selector withObject:self];
+			break;
+		}
+	
+		rtti = class_getSuperclass( rtti );
+	}
+
+	if ( nil == rtti )
+	{
+		[_target handleUISignal:self];	
+	}
+}
+
+- (NSTimeInterval)timeElapsed
+{
+	return _reachTimeStamp - _initTimeStamp;
+}
+
+- (NSTimeInterval)timeCostPending
+{
+	return _sendTimeStamp - _initTimeStamp;
+}
+
+- (NSTimeInterval)timeCostExecution
+{
+	return _reachTimeStamp - _sendTimeStamp;
 }
 
 - (void)clear
@@ -193,9 +271,13 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 	self.object = nil;
 	self.returnValue = nil;
 	
-#if __BEE_DEVELOPMENT__
+	_initTimeStamp = [NSDate timeIntervalSinceReferenceDate];
+	_sendTimeStamp = _initTimeStamp;
+	_reachTimeStamp = _initTimeStamp;
+
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	self.callPath = [NSMutableString string];
-#endif	// #if __BEE_DEVELOPMENT__
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 }
 
 - (BOOL)boolValue
@@ -224,9 +306,9 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 
 - (void)dealloc
 {
-#if __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	[_callPath release];
-#endif	// #if __BEE_DEVELOPMENT__
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	
 	[_name release];
 
@@ -252,9 +334,9 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 	{
 		signal.reach = YES;
 
-	#if __BEE_DEVELOPMENT__
+	#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 		CC( @"[%@] > %@", signal.name, signal.callPath );
-	#endif	// #if __BEE_DEVELOPMENT__
+	#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	}
 }
 
@@ -286,15 +368,15 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 
 #pragma mark -
 
-@implementation UIViewController(Bee_UISignal)
+@implementation UIViewController(BeeUISignal)
 
 - (void)handleUISignal:(BeeUISignal *)signal
 {
 	signal.reach = YES;
 	
-#if __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	CC( @"[%@] > %@", signal.name, signal.callPath );
-#endif	// #if __BEE_DEVELOPMENT__
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 }
 
 - (BeeUISignal *)sendUISignal:(NSString *)name

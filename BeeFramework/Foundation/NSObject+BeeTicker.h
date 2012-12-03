@@ -30,6 +30,8 @@
 //  NSObject+BeeTicker.h
 //
 
+#import "Bee_Precompile.h"
+
 #pragma mark -
 
 @interface NSObject(BeeTicker)

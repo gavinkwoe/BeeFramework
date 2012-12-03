@@ -30,13 +30,13 @@
 //  Bee_Model.h
 //
 
+#import "Bee_Precompile.h"
 #import "Bee_Model.h"
 #import "Bee_Controller.h"
 #import "Bee_Network.h"
 #import "NSArray+BeeExtension.h"
 
 #import "JSONKit.h"
-#import "SFHFKeychainUtils.h"
 
 #pragma mark -
 
@@ -158,10 +158,7 @@ static NSMutableArray *	__models = nil;
 {
 	for ( NSObject * obj in _observers )
 	{
-		if ( [obj respondsToSelector:@selector(handleMessage:)] )
-		{
-			[obj handleMessage:msg];
-		}
+		[msg forwardResponder:obj];
 	}
 }
 
@@ -169,10 +166,7 @@ static NSMutableArray *	__models = nil;
 {
 	for ( NSObject * obj in _observers )
 	{
-		if ( [obj respondsToSelector:@selector(handleRequest:)] )
-		{
-			[obj handleRequest:request];
-		}
+		[request forwardResponder:obj];
 	}
 }
 

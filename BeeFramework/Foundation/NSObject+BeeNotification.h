@@ -30,6 +30,7 @@
 //  NSObject+BeeNotification.h
 //
 
+#import "Bee_Precompile.h"
 #import "NSObject+BeeProperty.h"
 
 #pragma mark -

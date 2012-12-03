@@ -30,10 +30,7 @@
 //  Bee_UIScrollView.m
 //
 
-#import <Foundation/Foundation.h>
-#import <QuartzCore/QuartzCore.h>
-#import <UIKit/UIKit.h>
-
+#import "Bee_Precompile.h"
 #import "Bee_UIScrollView.h"
 #import "Bee_Runtime.h"
 #import "Bee_Log.h"

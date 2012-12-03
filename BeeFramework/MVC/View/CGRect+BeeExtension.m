@@ -30,8 +30,7 @@
 //  UIView+BeeExtension.m
 //
 
-#import <UIKit/UIKit.h>
-#import <QuartzCore/QuartzCore.h>
+#import "Bee_Precompile.h"
 #import "CGRect+BeeExtension.h"
 
 #pragma mark -

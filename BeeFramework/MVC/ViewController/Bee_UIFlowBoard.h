@@ -30,6 +30,7 @@
 //  Bee_UIFlowBoard.h
 //
 
+#import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 #import "Bee_UIGridCell.h"
 #import "Bee_UIPullLoader.h"

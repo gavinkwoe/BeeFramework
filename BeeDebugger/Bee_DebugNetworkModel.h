@@ -30,9 +30,10 @@
 //  Bee_DebugNetworkModel.h
 //
 
-#if __BEE_DEBUGGER__
-
+#import "Bee_Precompile.h"
 #import "Bee.h"
+
+#if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__
 
 #pragma mark -
 
@@ -49,34 +50,38 @@
 @interface BeeDebugNetworkModel : BeeModel
 {
 	NSUInteger			_totalCount;
-	NSUInteger			_sendingCount;
-	NSUInteger			_succeedCount;
-	NSUInteger			_failedCount;
-	NSUInteger			_upperBound;
+	
+	NSUInteger			_sendLowerBound;
+	NSUInteger			_sendUpperBound;
+
+	NSUInteger			_recvLowerBound;
+	NSUInteger			_recvUpperBound;
+
+	NSUInteger			_lastUploadBytes;
+	NSUInteger			_lastDownloadBytes;
 
 	NSUInteger			_uploadBytes;
 	NSUInteger			_downloadBytes;
 
-	NSMutableArray *	_sendingPlots;
-	NSMutableArray *	_succeedPlots;
-	NSMutableArray *	_failedPlots;
+	NSMutableArray *	_sendPlots;
+	NSMutableArray *	_recvPlots;
 	
 	NSMutableArray *	_history;
 	NSUInteger			_bandWidth;
 }
 
 @property (nonatomic, readonly) NSUInteger			totalCount;
-@property (nonatomic, readonly) NSUInteger			sendingCount;
-@property (nonatomic, readonly) NSUInteger			succeedCount;
-@property (nonatomic, readonly) NSUInteger			failedCount;
-@property (nonatomic, readonly) NSUInteger			upperBound;
+
+@property (nonatomic, readonly) NSUInteger			sendLowerBound;
+@property (nonatomic, readonly) NSUInteger			sendUpperBound;
+@property (nonatomic, readonly) NSUInteger			recvLowerBound;
+@property (nonatomic, readonly) NSUInteger			recvUpperBound;
 
 @property (nonatomic, readonly) NSUInteger			uploadBytes;
 @property (nonatomic, readonly) NSUInteger			downloadBytes;
 
-@property (nonatomic, readonly) NSMutableArray *	sendingPlots;
-@property (nonatomic, readonly) NSMutableArray *	succeedPlots;
-@property (nonatomic, readonly) NSMutableArray *	failedPlots;
+@property (nonatomic, readonly) NSMutableArray *	sendPlots;
+@property (nonatomic, readonly) NSMutableArray *	recvPlots;
 
 @property (nonatomic, readonly) NSMutableArray *	history;
 @property (nonatomic, readonly) NSUInteger			bandWidth;
@@ -87,4 +92,4 @@ AS_SINGLETON( BeeDebugNetworkModel )
 
 @end
 
-#endif	// #if __BEE_DEBUGGER__
+#endif	// #if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__

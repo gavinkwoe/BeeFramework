@@ -30,10 +30,10 @@
 //  UIFont+BeeExtension.m
 //
 
-#import <UIKit/UIKit.h>
-#import <QuartzCore/QuartzCore.h>
-#import <objc/runtime.h>
+#import "Bee_Precompile.h"
 #import "UIFont+BeeExtension.h"
+
+#import <objc/runtime.h>
 
 #pragma mark -
 

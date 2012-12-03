@@ -30,6 +30,8 @@
 //  Bee_UIColor.h
 //
 
+#import "Bee_Precompile.h"
+
 #pragma mark -
 
 #undef	RGB

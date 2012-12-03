@@ -30,7 +30,7 @@
 //  Bee_Log.h
 //
 
-#import <Foundation/Foundation.h>
+#import "Bee_Precompile.h"
 
 #pragma mark -
 

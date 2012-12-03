@@ -30,6 +30,7 @@
 //  Bee_UITabBar.m
 //
 
+#import "Bee_Precompile.h"
 #import "Bee_UITabBar.h"
 #import "Bee_UISignal.h"
 

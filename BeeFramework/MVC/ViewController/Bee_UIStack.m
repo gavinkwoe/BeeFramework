@@ -30,10 +30,7 @@
 //  Bee_UIStack.m
 //
 
-#import <Foundation/Foundation.h>
-#import <QuartzCore/QuartzCore.h>
-#import <UIKit/UIKit.h>
-
+#import "Bee_Precompile.h"
 #import "Bee_UIBoard.h"
 #import "Bee_UIStack.h"
 #import "Bee_Runtime.h"
@@ -153,6 +150,7 @@ DEF_INT( ANIMATION_TYPE_CUBE,		1 )
 DEF_INT( ANIMATION_TYPE_FADE,		2 )
 DEF_INT( ANIMATION_TYPE_PAGING,		3 )
 DEF_INT( ANIMATION_TYPE_SLIDE,		4 )
+DEF_INT( ANIMATION_TYPE_FLIP,		5 )
 
 + (BeeUIStack *)stack
 {
@@ -331,6 +329,9 @@ DEF_INT( ANIMATION_TYPE_SLIDE,		4 )
 			
 			[super pushViewController:newBoard animated:NO];
 		}
+		else if ( BeeUIStack.ANIMATION_TYPE_FLIP == type )
+		{
+		}
 	}
 		
 	UNUSED(newBoard.view);	// load view
@@ -420,6 +421,10 @@ DEF_INT( ANIMATION_TYPE_SLIDE,		4 )
 
 			[self.view.layer addAnimation:animation forKey:@"slide_out"];
 		}
+		else if ( BeeUIStack.ANIMATION_TYPE_FLIP == animType )
+		{
+			
+		}
 	}
 }
 
@@ -495,6 +500,10 @@ DEF_INT( ANIMATION_TYPE_SLIDE,		4 )
 								 [topView removeFromSuperview];
 								 [topView release];
 							 }];			
+		}
+		else if ( BeeUIStack.ANIMATION_TYPE_FLIP == animType )
+		{
+			
 		}
 	}
 	
@@ -573,6 +582,10 @@ DEF_INT( ANIMATION_TYPE_SLIDE,		4 )
 								 [topView removeFromSuperview];
 								 [topView release];
 							 }];
+		}
+		else if ( BeeUIStack.ANIMATION_TYPE_FLIP == animType )
+		{
+			
 		}
 	}
 	

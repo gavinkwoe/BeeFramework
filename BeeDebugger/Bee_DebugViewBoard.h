@@ -30,9 +30,11 @@
 //  Bee_DebugViewBoard.h
 //
 
-#if __BEE_DEBUGGER__
-
+#import "Bee_Precompile.h"
 #import "Bee.h"
+
+#if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__
+
 #import "Bee_DebugPlotsView.h"
 #import "Bee_DebugSampleView.h"
 #import "Bee_DebugDetailView.h"
@@ -47,9 +49,11 @@
 
 @interface BeeDebugViewCell : BeeUIGridCell
 {
-	BeeUILabel *	_timeLabel;
-	BeeUILabel *	_nameLabel;
-	BeeUILabel *	_statusLabel;
+	BeeUILabel *		_timeLabel;
+	BeeUILabel *		_nameLabel;
+	BeeUILabel *		_countLabel;
+	BeeUILabel *		_statusLabel;
+	BeeDebugPlotsView *	_plotView;
 }
 @end
 
@@ -59,4 +63,4 @@
 AS_SINGLETON( BeeDebugViewBoard )
 @end
 
-#endif	// #if __BEE_DEBUGGER__
+#endif	// #if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__

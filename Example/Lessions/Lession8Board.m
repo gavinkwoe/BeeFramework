@@ -23,51 +23,59 @@ DEF_SIGNAL( BUTTON_TOUCHED )
 - (void)handleUISignal:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
+}
+
+- (void)handleBeeUIBoard:(BeeUISignal *)signal
+{
+	[super handleUISignal:signal];
 	
-	if ( [signal isKindOf:BeeUIBoard.SIGNAL] )
+	if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
 	{
-		if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
-		{
-			[self setTitleString:@"Lession 8"];
-			
-			_button = [[BeeUIButton alloc] initWithFrame:CGRectZero];
-			_button.backgroundColor = [UIColor blackColor];
-			_button.font = [UIFont systemFontOfSize:14.0f];
-			_button.stateNormal.title = @"Send request";
-			[_button addSignal:Lession8Board.BUTTON_TOUCHED forControlEvents:UIControlEventTouchUpInside];
-			[self.view addSubview:_button];
-		}
-		else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
-		{
-			SAFE_RELEASE_SUBVIEW( _button );
-		}
-		else if ( [signal is:BeeUIBoard.LAYOUT_VIEWS] )
-		{
-			CGRect buttonFrame;
-			buttonFrame.size.width = self.viewSize.width - 30.0f;
-			buttonFrame.size.height = 44.0f;
-			buttonFrame.origin.x = 10.0f;
-			buttonFrame.origin.y = self.viewSize.height - buttonFrame.size.height - 10.0f;
-			_button.frame = buttonFrame;
-		}
-		else if ( [signal is:BeeUIBoard.LOAD_DATAS] )
-		{
-		}
-		else if ( [signal is:BeeUIBoard.WILL_APPEAR] )
-		{
-		}
-		else if ( [signal is:BeeUIBoard.DID_DISAPPEAR] )
-		{
-		}
-		else if ( [signal is:BeeUIBoard.BACK_BUTTON_TOUCHED] )
-		{
-			
-		}
-		else if ( [signal is:BeeUIBoard.DONE_BUTTON_TOUCHED] )
-		{
-		}
+		[self setTitleString:@"Lession 8"];
+		
+		_button = [[BeeUIButton alloc] initWithFrame:CGRectZero];
+		_button.backgroundColor = [UIColor blackColor];
+		_button.font = [UIFont systemFontOfSize:14.0f];
+		_button.stateNormal.title = @"Send request";
+		[_button addSignal:Lession8Board.BUTTON_TOUCHED forControlEvents:UIControlEventTouchUpInside];
+		[self.view addSubview:_button];
 	}
-	else if ( [signal is:Lession8Board.BUTTON_TOUCHED] )
+	else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
+	{
+		SAFE_RELEASE_SUBVIEW( _button );
+	}
+	else if ( [signal is:BeeUIBoard.LAYOUT_VIEWS] )
+	{
+		CGRect buttonFrame;
+		buttonFrame.size.width = self.viewSize.width - 30.0f;
+		buttonFrame.size.height = 44.0f;
+		buttonFrame.origin.x = 10.0f;
+		buttonFrame.origin.y = self.viewSize.height - buttonFrame.size.height - 10.0f;
+		_button.frame = buttonFrame;
+	}
+	else if ( [signal is:BeeUIBoard.LOAD_DATAS] )
+	{
+	}
+	else if ( [signal is:BeeUIBoard.WILL_APPEAR] )
+	{
+	}
+	else if ( [signal is:BeeUIBoard.DID_DISAPPEAR] )
+	{
+	}
+	else if ( [signal is:BeeUIBoard.BACK_BUTTON_TOUCHED] )
+	{
+		
+	}
+	else if ( [signal is:BeeUIBoard.DONE_BUTTON_TOUCHED] )
+	{
+	}
+}
+
+- (void)handleLession8Board:(BeeUISignal *)signal
+{
+	[super handleUISignal:signal];
+	
+	if ( [signal is:Lession8Board.BUTTON_TOUCHED] )
 	{
 		if ( [self requestingURL:@"http://blog.whatsbug.com"] )
 		{

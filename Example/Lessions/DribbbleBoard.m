@@ -128,19 +128,17 @@
 
 @implementation DribbbleBoard
 
-DEF_SINGLETON( DribbbleBoard );
-
 - (void)load
 {
 	[super load];
 
-	_debutsModel = [[DribbbleDebutsModel alloc] init];
+	_debutsModel = [DribbbleDebutsModel new];
 	[_debutsModel bind:self];
-	
-	_popularModel = [[DribbblePopularModel alloc] init];
+
+	_popularModel = [DribbblePopularModel new];
 	[_debutsModel bind:self];
-	
-	_everyoneModel = [[DribbbleEveryoneModel alloc] init];
+
+	_everyoneModel = [DribbbleEveryoneModel new];
 	[_everyoneModel bind:self];
 }
 
@@ -156,66 +154,76 @@ DEF_SINGLETON( DribbbleBoard );
 - (void)handleUISignal:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
+}
 
-	if ( [signal isKindOf:BeeUIBoard.SIGNAL] )
-	{
-		if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
-		{
-			[self showNavigationBarAnimated:NO];
-//			[self showPullLoader:YES animated:NO];
-			
-			BeeUISegmentedControl * seg = [BeeUISegmentedControl spawn];
-			[seg addTitle:@"everyone" tag:TAG_EVERYONE];
-			[seg addTitle:@"debuts" tag:TAG_DEBUTS];
-			[seg addTitle:@"popular" tag:TAG_POPULAR];
-			[self setTitleView:seg];
-			 
-			[self showPullLoader:YES animated:NO];
-//			[self showBarButton:BeeUIBoard.BARBUTTON_LEFT title:@"Clear"];
-			[self showBarButton:BeeUIBoard.BARBUTTON_RIGHT system:UIBarButtonSystemItemRefresh];
-		}
-		else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
-		{
-		}
-		else if ( [signal is:BeeUIBoard.LOAD_DATAS] )
-		{
-			[_debutsModel loadCache];
-			[_popularModel loadCache];
-			[_everyoneModel loadCache];
-		}
-		else if ( [signal is:BeeUIBoard.WILL_APPEAR] )
-		{
-			if ( self.firstEnter )
-			{
-				BeeUISegmentedControl * titleView = (BeeUISegmentedControl *)self.titleView;
-				titleView.selectedTag = TAG_EVERYONE;
-			}
+- (void)handleBeeUIBoard:(BeeUISignal *)signal
+{
+	[super handleUISignal:signal];
 
-			[self refresh:self.firstEnter];
-		}
-		else if ( [signal is:BeeUIBoard.DID_DISAPPEAR] )
-		{
-		}
-		else if ( [signal is:BeeUIBoard.BACK_BUTTON_TOUCHED] )
-		{
-			
-		}
-		else if ( [signal is:BeeUIBoard.DONE_BUTTON_TOUCHED] )
-		{
-			[self refresh:YES];
-		}
-	}
-	else if ( [signal isKindOf:BeeUISegmentedControl.SIGNAL] )
+	if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
 	{
-		if ( [signal is:BeeUISegmentedControl.HIGHLIGHT_CHANGED] )
-		{
-			[self reloadData];
-			[self scrollToTop:YES];
-			
-			[self refresh:NO];
-		}
+		[self showNavigationBarAnimated:NO];
+		[self showPullLoader:YES animated:NO];
+
+		BeeUISegmentedControl * seg = [BeeUISegmentedControl spawn];
+		[seg addTitle:@"everyone" tag:TAG_EVERYONE];
+		[seg addTitle:@"debuts" tag:TAG_DEBUTS];
+		[seg addTitle:@"popular" tag:TAG_POPULAR];
+		[self setTitleView:seg];
+		
+//		[self showBarButton:BeeUIBoard.BARBUTTON_LEFT title:@"Clear"];
+		[self showBarButton:BeeUIBoard.BARBUTTON_RIGHT system:UIBarButtonSystemItemRefresh];
 	}
-	else if ( [signal is:BeeUITableBoard.PULL_REFRESH] )
+	else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
+	{
+	}
+	else if ( [signal is:BeeUIBoard.LOAD_DATAS] )
+	{
+		[_debutsModel loadCache];
+		[_popularModel loadCache];
+		[_everyoneModel loadCache];
+	}
+	else if ( [signal is:BeeUIBoard.WILL_APPEAR] )
+	{
+		if ( self.firstEnter )
+		{
+			BeeUISegmentedControl * titleView = (BeeUISegmentedControl *)self.titleView;
+			titleView.selectedTag = TAG_EVERYONE;
+		}
+		
+		[self refresh:self.firstEnter];
+	}
+	else if ( [signal is:BeeUIBoard.DID_DISAPPEAR] )
+	{
+	}
+	else if ( [signal is:BeeUIBoard.BACK_BUTTON_TOUCHED] )
+	{
+		
+	}
+	else if ( [signal is:BeeUIBoard.DONE_BUTTON_TOUCHED] )
+	{
+		[self refresh:YES];
+	}
+}
+
+- (void)handleBeeUISegmentedControl:(BeeUISignal *)signal
+{
+	[super handleUISignal:signal];
+	
+	if ( [signal is:BeeUISegmentedControl.HIGHLIGHT_CHANGED] )
+	{
+		[self reloadData];
+		[self scrollToTop:YES];
+		
+		[self refresh:NO];
+	}
+}
+
+- (void)handleBeeUITableBoard:(BeeUISignal *)signal
+{
+	[super handleUISignal:signal];
+	
+	if ( [signal is:BeeUITableBoard.PULL_REFRESH] )
 	{
 		[self refresh:YES];
 	}
@@ -223,16 +231,21 @@ DEF_SINGLETON( DribbbleBoard );
 
 - (void)handleMessage:(BeeMessage *)msg
 {
-	if ( [msg is:DribbbleController.GET_SHOTS_EVERYONE] ||
-		[msg is:DribbbleController.GET_SHOTS_DEBUTS] ||
-		[msg is:DribbbleController.GET_SHOTS_POPULAR] )
+	[super handleMessage:msg];
+}
+
+- (void)handleDribbbleController:(BeeMessage *)msg
+{
+	[super handleMessage:msg];
+	
+	if ( [msg is:DribbbleController.GET_SHOTS] )
 	{
 		if ( msg.sending )
 		{
 			BeeUIActivityIndicatorView * indicator = [BeeUIActivityIndicatorView spawn];
 			[self showBarButton:BeeUIBoard.BARBUTTON_RIGHT custom:indicator];
 			[indicator startAnimating];						
-
+			
 			[self showPullLoader:YES animated:YES];
 		}
 		else
@@ -240,12 +253,12 @@ DEF_SINGLETON( DribbbleBoard );
 			[self showBarButton:BeeUIBoard.BARBUTTON_RIGHT system:UIBarButtonSystemItemRefresh];
 			[self showPullLoader:NO animated:YES];
 		}
-
+		
 		if ( msg.succeed || msg.failed )
 		{
 			[self.tableView flashScrollIndicators];
 		}
-
+		
 		[self asyncReloadData];
 	}
 }
@@ -255,6 +268,7 @@ DEF_SINGLETON( DribbbleBoard );
 	[self cancelMessages];
 
 	BeeUISegmentedControl * titleView = (BeeUISegmentedControl *)self.titleView;
+
 	if ( TAG_EVERYONE == titleView.selectedTag )
 	{
 		if ( 0 == _everyoneModel.shots.count || force )

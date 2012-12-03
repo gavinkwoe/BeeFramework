@@ -30,7 +30,7 @@
 //  Bee_UIActivityIndicatorView.m
 //
 
-#import <QuartzCore/QuartzCore.h>
+#import "Bee_Precompile.h"
 #import "Bee_UIActivityIndicatorView.h"
 #import "Bee_UISignal.h"
 #import "Bee_SystemInfo.h"

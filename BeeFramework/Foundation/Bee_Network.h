@@ -30,14 +30,13 @@
 //  Bee_Network.h
 //
 
-#import <Foundation/Foundation.h>
+#import "Bee_Precompile.h"
 #import "Bee_Singleton.h"
+#import "NSObject+BeeProperty.h"
 
 #import "ASIHTTPRequest.h"
 #import "ASIDataDecompressor.h"
 #import "ASIFormDataRequest.h"
-
-#import "NSObject+BeeProperty.h"
 
 #pragma mark -
 
@@ -82,7 +81,8 @@ typedef void (^BeeRequestBlock)( BeeRequest * req );
 @interface BeeRequest : ASIFormDataRequest
 {
 	NSUInteger				_state;
-	id						_responder;
+	NSMutableArray *		_responders;
+//	id						_responder;
 
 	NSInteger				_errorCode;
 	NSMutableDictionary *	_userInfo;
@@ -96,9 +96,9 @@ typedef void (^BeeRequestBlock)( BeeRequest * req );
 	NSTimeInterval			_recvTimeStamp;
 	NSTimeInterval			_doneTimeStamp;
 
-#ifdef __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	NSMutableArray *		_callstack;
-#endif	// #ifdef __BEE_DEVELOPMENT__
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 }
 
 AS_INT( STATE_CREATED );
@@ -109,7 +109,8 @@ AS_INT( STATE_SUCCEED );
 AS_INT( STATE_CANCELLED );
 
 @property (nonatomic, assign) NSUInteger				state;
-@property (nonatomic, assign) id						responder;
+@property (nonatomic, retain) NSMutableArray *			responders;
+//@property (nonatomic, assign) id						responder;
 
 @property (nonatomic, assign) NSInteger					errorCode;
 @property (nonatomic, retain) NSMutableDictionary *		userInfo;
@@ -126,9 +127,9 @@ AS_INT( STATE_CANCELLED );
 @property (nonatomic, readonly) NSTimeInterval			timeCostRecving;	// 网络收包耗时
 @property (nonatomic, readonly) NSTimeInterval			timeCostOverAir;	// 网络整体耗时
 
-#ifdef __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 @property (nonatomic, readonly) NSMutableArray *		callstack;
-#endif	// #ifdef __BEE_DEVELOPMENT__
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 
 @property (nonatomic, readonly) BOOL					created;
 @property (nonatomic, readonly) BOOL					sending;
@@ -150,12 +151,20 @@ AS_INT( STATE_CANCELLED );
 - (BOOL)is:(NSString *)url;
 - (void)changeState:(NSUInteger)state;
 
+- (BOOL)hasResponder:(id)responder;
+- (void)addResponder:(id)responder;
+- (void)removeResponder:(id)responder;
+
+- (void)callResponders;
+- (void)forwardResponder:(NSObject *)obj;
+
 @end
 
 #pragma mark -
 
 @interface BeeRequestQueue : NSObject<ASIHTTPRequestDelegate>
 {
+	BOOL					_merge;
 	BOOL					_online;
 
 	BOOL					_blackListEnable;
@@ -172,6 +181,7 @@ AS_INT( STATE_CANCELLED );
 	BeeRequestBlock			_whenUpdate;
 }
 
+@property (nonatomic, assign) BOOL						merge;
 @property (nonatomic, assign) BOOL						online;				// 开网/断网
 
 @property (nonatomic, assign) BOOL						blackListEnable;	// 是否使用黑名单

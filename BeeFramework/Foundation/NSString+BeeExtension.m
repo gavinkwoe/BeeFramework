@@ -30,7 +30,7 @@
 //  NSString+BeeExtension.m
 //
 
-#import <Foundation/Foundation.h>
+#import "Bee_Precompile.h"
 #import "NSString+BeeExtension.h"
 #import "NSData+BeeExtension.h"
 
@@ -309,6 +309,11 @@
 	{
 		return nil;
 	}
+}
+
+- (NSString *)trim
+{
+	return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
 @end

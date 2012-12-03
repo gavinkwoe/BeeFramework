@@ -30,7 +30,10 @@
 //  Bee_DebugHeatmapModel.h
 //
 
-#if __BEE_DEBUGGER__
+#import "Bee_Precompile.h"
+#import "Bee.h"
+
+#if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__
 
 #import <objc/runtime.h>
 #import "Bee_DebugHeatmapModel.h"
@@ -192,7 +195,7 @@ static void (* _origSendEvent)( id, SEL, UIEvent * );
 			{ 
 				CGPoint location = [touch locationInView:keyWindow];
 
-				CC( @"touch.phase = %d", touch.phase );
+//				CC( @"touch.phase = %d", touch.phase );
 				
 				if ( UITouchPhaseBegan == touch.phase )
 				{
@@ -275,12 +278,14 @@ DEF_SINGLETON( BeeDebugHeatmapModel )
 	NSUInteger col = (NSUInteger)(location.x / 16.0f);
 	NSUInteger row = (NSUInteger)(location.y / 16.0f);
 	NSUInteger index = _colCount * row + col;
-	
-	_heatmapTap[index] += 1;
-	
-	if ( _heatmapTap[index] > _peakValueTap )
+	if ( index < _colCount * _rowCount )
 	{
-		_peakValueTap = _heatmapTap[index];
+		_heatmapTap[index] += 1;
+		
+		if ( _heatmapTap[index] > _peakValueTap )
+		{
+			_peakValueTap = _heatmapTap[index];
+		}
 	}
 }
 
@@ -289,15 +294,17 @@ DEF_SINGLETON( BeeDebugHeatmapModel )
 	NSUInteger col = (NSUInteger)(location.x / 16.0f);
 	NSUInteger row = (NSUInteger)(location.y / 16.0f);
 	NSUInteger index = _colCount * row + col;
-	
-	_heatmapDrag[index] += 1;
-	
-	if ( _heatmapDrag[index] > _peakValueDrag )
-	{
-		_peakValueDrag = _heatmapDrag[index];
+	if ( index < _colCount * _rowCount )
+	{	
+		_heatmapDrag[index] += 1;
+		
+		if ( _heatmapDrag[index] > _peakValueDrag )
+		{
+			_peakValueDrag = _heatmapDrag[index];
+		}
 	}
 }
 
 @end
 
-#endif	// #if __BEE_DEBUGGER__
+#endif	// #if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__

@@ -30,11 +30,12 @@
 //  Bee_DebugWindow.m
 //
 
-#if __BEE_DEBUGGER__
+#import "Bee_Precompile.h"
+#import "Bee.h"
 
-#import <QuartzCore/QuartzCore.h>
+#if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__
+
 #import "Bee_DebugWindow.h"
-#import "Bee_DebugMemoryBoard.h"
 #import "Bee_DebugMessageBoard.h"
 #import "Bee_DebugNetworkBoard.h"
 #import "Bee_DebugSandboxBoard.h"
@@ -134,8 +135,7 @@ DEF_SINGLETON( BeeDebugBoard );
 - (void)load
 {
 	[super load];
-	
-	[BeeDebugMemoryBoard sharedInstance];
+
 	[BeeDebugMessageBoard sharedInstance];
 	[BeeDebugNetworkBoard sharedInstance];
 	[BeeDebugSandboxBoard sharedInstance];
@@ -155,11 +155,12 @@ DEF_SINGLETON( BeeDebugBoard );
 	{
 		if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
 		{
-			[self append:[BeeUIStack stack:@"监视" firstBoard:[BeeDebugDashBoard sharedInstance]]];
-			[self append:[BeeUIStack stack:@"视图" firstBoard:[BeeDebugViewBoard sharedInstance]]];
-			[self append:[BeeUIStack stack:@"消息" firstBoard:[BeeDebugMessageBoard sharedInstance]]];
-			[self append:[BeeUIStack stack:@"网络" firstBoard:[BeeDebugNetworkBoard sharedInstance]]];
-			[self append:[BeeUIStack stack:@"沙箱" firstBoard:[BeeDebugSandboxBoard sharedInstance]]];
+			[self append:[BeeUIStack stack:@"Dash" firstBoard:[BeeDebugDashBoard sharedInstance]]];
+			[self append:[BeeUIStack stack:@"View" firstBoard:[BeeDebugViewBoard sharedInstance]]];
+			[self append:[BeeUIStack stack:@"Msg" firstBoard:[BeeDebugMessageBoard sharedInstance]]];
+			[self append:[BeeUIStack stack:@"Net" firstBoard:[BeeDebugNetworkBoard sharedInstance]]];
+			[self append:[BeeUIStack stack:@"File" firstBoard:[BeeDebugSandboxBoard sharedInstance]]];
+//			[self append:[BeeUIStack stack:@"Crash" firstBoard:nil]];
 			[self present:[self.stacks objectAtIndex:0]];
 
 			CGRect bottomFrame;
@@ -169,7 +170,8 @@ DEF_SINGLETON( BeeDebugBoard );
 			bottomFrame.origin.y = self.viewSize.height - bottomFrame.size.height;
 			
 			_bottomView = [[UIView alloc] initWithFrame:bottomFrame];
-			_bottomView.backgroundColor = [UIColor grayColor];
+			_bottomView.backgroundColor = [UIColor clearColor];
+			_bottomView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4f];
 			_bottomView.layer.borderWidth = 1.0f;
 			_bottomView.layer.borderColor = [UIColor grayColor].CGColor;
 			[self.view addSubview:_bottomView];
@@ -185,6 +187,8 @@ DEF_SINGLETON( BeeDebugBoard );
 			{
 				[segmentControl addTitle:stack.name];
 			}
+			segmentControl.segmentedControlStyle = UISegmentedControlStyleBezeled;
+			segmentControl.tintColor = [UIColor grayColor];
 			[segmentControl setSelectedSegmentIndex:0];
 			[_bottomView addSubview:segmentControl];
 			
@@ -308,6 +312,37 @@ DEF_SINGLETON( BeeDebugHeatmap )
 		closeView.stateNormal.image = __IMAGE( @"close.png" );
 		[closeView addSignal:@"CLOSE_TOUCHED" forControlEvents:UIControlEventTouchUpInside];
 		[self addSubview:closeView];
+		
+		
+		CGRect labelFrame;
+		labelFrame.size.width = 64.0f;
+		labelFrame.size.height = 24.0f;
+		labelFrame.origin.x = 10.0f;
+		labelFrame.origin.y = screenBound.size.height - labelFrame.size.height - 10.0f;;
+		
+		BeeUILabel * label1 = [[[BeeUILabel alloc] initWithFrame:labelFrame] autorelease];
+		label1.alpha = 0.8f;
+		label1.backgroundColor = [UIColor blueColor];
+		label1.textColor = [UIColor whiteColor];
+		label1.textAlignment = UITextAlignmentCenter;
+		label1.font = [UIFont boldSystemFontOfSize:12.0f];
+		label1.lineBreakMode = UILineBreakModeClip;
+		label1.numberOfLines = 1;
+		label1.text = @"Drag";
+		label1.tag = 100;
+		[self addSubview:label1];
+
+		BeeUILabel * label2 = [[[BeeUILabel alloc] initWithFrame:CGRectOffset(labelFrame, labelFrame.size.width + 10.0f, 0.0f)] autorelease];
+		label2.alpha = 0.8f;
+		label2.backgroundColor = [UIColor redColor];
+		label2.textColor = [UIColor whiteColor];
+		label2.textAlignment = UITextAlignmentCenter;
+		label2.font = [UIFont boldSystemFontOfSize:12.0f];
+		label2.lineBreakMode = UILineBreakModeClip;
+		label2.numberOfLines = 1;
+		label2.text = @"Click";
+		label2.tag = 200;
+		[self addSubview:label2];
 	}
 	return self;
 }
@@ -327,6 +362,21 @@ DEF_SINGLETON( BeeDebugHeatmap )
 	}
 	else
 	{
+		UIView * label1 = [self viewWithTag:100];
+		UIView * label2 = [self viewWithTag:200];
+		
+		label1.alpha = 0.8f;
+		label2.alpha = 0.8f;
+		
+		[UIView beginAnimations:nil context:NULL];
+		[UIView setAnimationDelay:2.0f];
+		[UIView setAnimationDuration:1.0f];
+		
+		label1.alpha = 0.0f;
+		label2.alpha = 0.0f;
+		
+		[UIView commitAnimations];
+		
 		[self observeTick];
 		[self setNeedsDisplay];
 	}
@@ -461,4 +511,4 @@ DEF_SINGLETON( BeeDebugHeatmap )
 
 @end
 
-#endif
+#endif	// #if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__

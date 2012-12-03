@@ -30,8 +30,7 @@
 //  Bee_UILabel.h
 //
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import "Bee_Precompile.h"
 
 #pragma mark -
 

@@ -30,11 +30,7 @@
 //  Bee_UITableBoard.m
 //
 
-#import <Foundation/Foundation.h>
-#import <QuartzCore/QuartzCore.h>
-#import <UIKit/UIKit.h>
-#import <objc/runtime.h>
-
+#import "Bee_Precompile.h"
 #import "Bee_UITableBoard.h"
 #import "Bee_UIKeyboard.h"
 #import "Bee_Runtime.h"
@@ -42,6 +38,8 @@
 
 #import "CGRect+BeeExtension.h"
 #import "UIView+BeeQuery.h"
+
+#import <objc/runtime.h>
 
 #pragma mark -
 
@@ -160,6 +158,7 @@
 - (void)disableScrollsToTopPropertyOnAllSubviewsOf:(UIView *)view;
 - (void)enableScrollsToTopPropertyOnAllSubviewsOf:(UIView *)view;
 - (void)operateReloadData;
+- (void)layoutSearchBar:(BOOL)animated;
 - (void)layoutViews:(BOOL)animated;
 - (void)didSearchMaskHidden;
 - (void)syncScrollPosition;
@@ -285,22 +284,22 @@ DEF_INT( SEARCHBAR_STYLE_TOP,		1 );
 			
 			_searchBar = [[UISearchBar alloc] initWithFrame:searchFrame];
 			_searchBar.delegate = self;
-			_searchBar.barStyle = UIBarStyleDefault; // UIBarStyleBlackTranslucent;
+			_searchBar.barStyle = UIBarStyleBlackOpaque;
 //			_searchBar.tintColor = [UIColor colorWithRed:242.0f/255.0f green:81.0f/255.0f blue:134.0f/255.0f alpha:1.0f];
 			_searchBar.hidden = YES;
 			_searchBar.backgroundColor = [UIColor clearColor];
 			_searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 			[self.view addSubview:_searchBar];
 			
-			[[_searchBar.subviews objectAtIndex:0] removeFromSuperview];
-			for ( UIView * subview in _searchBar.subviews ) 
-			{  
-				if ( [subview isKindOfClass:NSClassFromString(@"UISearchBarBackground")] )
-				{  
-					[subview removeFromSuperview];  
-					break;  
-				}	
-			}		
+//			[[_searchBar.subviews objectAtIndex:0] removeFromSuperview];
+//			for ( UIView * subview in _searchBar.subviews ) 
+//			{  
+//				if ( [subview isKindOfClass:NSClassFromString(@"UISearchBarBackground")] )
+//				{  
+//					[subview removeFromSuperview];  
+//					break;  
+//				}	
+//			}		
 			
 			CGRect pullFrame;
 			pullFrame.origin.x = 0.0f;
@@ -315,7 +314,10 @@ DEF_INT( SEARCHBAR_STYLE_TOP,		1 );
 			[_tableView addSubview:_pullLoader];
 			
 			[self layoutViews:NO];
+			
+			[self observeNotification:BeeUIKeyboard.SHOWN];
 			[self observeNotification:BeeUIKeyboard.HEIGHT_CHANGED];
+			[self observeNotification:BeeUIKeyboard.HIDDEN];
 		}
 		else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
 		{
@@ -323,7 +325,7 @@ DEF_INT( SEARCHBAR_STYLE_TOP,		1 );
 			SAFE_RELEASE_SUBVIEW( _searchBar );
 			SAFE_RELEASE_SUBVIEW( _pullLoader );
 			
-			[self unobserveAllNotifications];
+			[self unobserveNotification:BeeUIKeyboard.HEIGHT_CHANGED];
 		}
 		else if ( [signal is:BeeUIBoard.LOAD_DATAS] )
 		{
@@ -334,33 +336,17 @@ DEF_INT( SEARCHBAR_STYLE_TOP,		1 );
 		}
 		else if ( [signal is:BeeUIBoard.LAYOUT_VIEWS] )
 		{
-			if ( BeeUITableBoard.SEARCHBAR_STYLE_BOTTOM == _searchBarStyle )
+			if ( NO == _searchBar.hidden )
 			{
-				CGRect bounds = self.view.bounds;
-				CGRect searchFrame;
-				searchFrame.origin.x = 0.0f;
-				searchFrame.origin.y = bounds.size.height - SEARCH_BAR_HEIGHT;
-				searchFrame.size.width = bounds.size.width;
-				searchFrame.size.height = SEARCH_BAR_HEIGHT;
-				
-				if ( [BeeUIKeyboard sharedInstance].shown )
-				{
-					searchFrame.origin.y -= [BeeUIKeyboard sharedInstance].height;
-				}
-				
-				_searchBar.frame = searchFrame;			
+				[self layoutSearchBar:NO];
 			}
-			else
-			{
-				CGRect bounds = self.view.bounds;
-				CGRect searchFrame;
-				searchFrame.origin.x = 0.0f;
-				searchFrame.origin.y = 0.0f; // bounds.size.height - SEARCH_BAR_HEIGHT;
-				searchFrame.size.width = bounds.size.width;
-				searchFrame.size.height = SEARCH_BAR_HEIGHT;
-				
-				_searchBar.frame = searchFrame;			
-			}
+
+			CGRect pullFrame;
+			pullFrame.origin.x = 0.0f;
+			pullFrame.origin.y = -60.0f;
+			pullFrame.size.width = self.viewBound.size.width;
+			pullFrame.size.height = 60.0f;
+			_pullLoader.frame = pullFrame;
 		}
 		else if ( [signal is:BeeUIBoard.WILL_APPEAR] )
 		{		
@@ -387,27 +373,63 @@ DEF_INT( SEARCHBAR_STYLE_TOP,		1 );
 
 - (void)handleNotification:(NSNotification *)notification
 {
-	if ( [notification is:BeeUIKeyboard.HEIGHT_CHANGED] )
+	if ( [notification is:BeeUIKeyboard.HEIGHT_CHANGED] ||
+		[notification is:BeeUIKeyboard.SHOWN] ||
+		[notification is:BeeUIKeyboard.HIDDEN] )
 	{
-		
-		NSTimeInterval animationDuration;
-		UIViewAnimationCurve animationCurve;
-		
-		NSDictionary * userInfo =  (NSDictionary *)[notification userInfo];
-		[[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&animationCurve];
-		[[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
-				
-		// Animate up or down
-		[UIView beginAnimations:nil context:nil];
-		[UIView setAnimationDuration:animationDuration];
-		[UIView setAnimationCurve:animationCurve];
-		//[self sendUISignal:BeeUIBoard.LAYOUT_VIEWS];
-		
-		[UIView commitAnimations];
+		if ( NO == _searchBar.hidden )
+		{
+			[self layoutSearchBar:YES];
+		}
 	}
 }
 
 #pragma mark -
+
+- (void)layoutSearchBar:(BOOL)animated
+{
+	if ( animated )
+	{
+		// Animate up or down
+		[UIView beginAnimations:nil context:nil];
+		[UIView setAnimationDuration:[BeeUIKeyboard sharedInstance].animationDuration];
+		[UIView setAnimationCurve:[BeeUIKeyboard sharedInstance].animationCurve];		
+		[UIView setAnimationBeginsFromCurrentState:YES];
+	}
+
+	if ( BeeUITableBoard.SEARCHBAR_STYLE_BOTTOM == _searchBarStyle )
+	{
+		CGRect bounds = self.view.bounds;
+		CGRect searchFrame;
+		searchFrame.origin.x = 0.0f;
+		searchFrame.origin.y = bounds.size.height - SEARCH_BAR_HEIGHT;
+		searchFrame.size.width = bounds.size.width;
+		searchFrame.size.height = SEARCH_BAR_HEIGHT;
+		
+		if ( [BeeUIKeyboard sharedInstance].shown )
+		{
+			searchFrame.origin.y -= [BeeUIKeyboard sharedInstance].height;
+		}
+		
+		_searchBar.frame = searchFrame;			
+	}
+	else
+	{
+		CGRect bounds = self.view.bounds;
+		CGRect searchFrame;
+		searchFrame.origin.x = 0.0f;
+		searchFrame.origin.y = 0.0f; // bounds.size.height - SEARCH_BAR_HEIGHT;
+		searchFrame.size.width = bounds.size.width;
+		searchFrame.size.height = SEARCH_BAR_HEIGHT;
+		
+		_searchBar.frame = searchFrame;			
+	}
+	
+	if ( animated )
+	{
+		[UIView commitAnimations];
+	}
+}
 
 - (float)getScrollPercent
 {

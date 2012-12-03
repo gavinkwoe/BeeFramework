@@ -30,6 +30,8 @@
 //  NSString+BeeExtension.h
 //
 
+#import "Bee_Precompile.h"
+
 #pragma mark -
 
 @interface NSString(BeeExtension)
@@ -48,6 +50,7 @@
 - (NSString *)URLDecoding;
 
 - (NSString *)MD5;
+- (NSString *)trim;
 
 - (BOOL)empty;
 - (BOOL)notEmpty;

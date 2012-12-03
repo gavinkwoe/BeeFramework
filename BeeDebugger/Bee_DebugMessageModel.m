@@ -30,7 +30,10 @@
 //  Bee_DebugMessageModel.h
 //
 
-#if __BEE_DEBUGGER__
+#import "Bee_Precompile.h"
+#import "Bee.h"
+
+#if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__
 
 #import "Bee_DebugMessageModel.h"
 
@@ -58,12 +61,17 @@ DEF_SINGLETON( BeeDebugMessageModel )
 	_failedCount = 0;
 
 	_sendingPlots = [[NSMutableArray alloc] init];
+	[_sendingPlots pushTail:[NSNumber numberWithInt:0]];
+
 	_succeedPlots = [[NSMutableArray alloc] init];
+	[_succeedPlots pushTail:[NSNumber numberWithInt:0]];
+
 	_failedPlots = [[NSMutableArray alloc] init];
+	[_failedPlots pushTail:[NSNumber numberWithInt:0]];
 
 	_history = [[NSMutableArray alloc] init];
 	
-	_upperBound = 0;
+	_upperBound = 1;
 
 	[BeeMessageQueue sharedInstance].whenCreate = ^( BeeMessage * msg )
 	{
@@ -127,4 +135,4 @@ DEF_SINGLETON( BeeDebugMessageModel )
 
 @end
 
-#endif	// #if __BEE_DEBUGGER__
+#endif	// #if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__

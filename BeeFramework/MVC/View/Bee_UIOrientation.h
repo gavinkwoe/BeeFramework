@@ -30,9 +30,10 @@
 //  Bee_Orientation.h
 //
 
-#import "NSObject+BeeNotification.h"
+#import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 #import "Bee_Singleton.h"
+#import "NSObject+BeeNotification.h"
 
 #pragma mark -
 

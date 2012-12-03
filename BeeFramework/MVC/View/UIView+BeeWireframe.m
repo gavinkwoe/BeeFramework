@@ -30,10 +30,11 @@
 //  UIView+BeeWireframe.m
 //
 
-#import "UIView+BeeWireframe.h"
+#import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 #import "Bee_UIImageView.h"
 #import "Bee_UILabel.h"
+#import "UIView+BeeWireframe.h"
 #import "UIView+BeeQuery.h"
 
 #pragma mark -
@@ -116,6 +117,9 @@
 
 @implementation UIView(BeeWireframe)
 
+@dynamic wireFrameTitle;
+@dynamic wireFrameColor;
+
 - (BeeTintView *)__tintView
 {
 	BeeTintView * result = nil;
@@ -130,6 +134,30 @@
 	}
 
 	return result;
+}
+
+- (UIColor *)wireFrameColor
+{
+	return [self __tintView].backgroundColor;	
+}
+
+- (void)setWireFrameColor:(UIColor *)color
+{
+	[self showWireframe];
+
+	[self __tintView].backgroundColor = color;	
+}
+
+- (NSString *)wireFrameTitle
+{
+	return [self __tintView].label.text;	
+}
+
+- (void)setWireFrameTitle:(NSString *)title
+{
+	[self showWireframe];
+	
+	[self __tintView].label.text = title;		
 }
 
 - (void)showWireframe

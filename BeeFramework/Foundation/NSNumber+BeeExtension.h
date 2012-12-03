@@ -30,6 +30,8 @@
 //  NSNumber+BeeExtension.h
 //
 
+#import "Bee_Precompile.h"
+
 #undef	__INT
 #define __INT( __x )			[NSNumber numberWithInt:(NSInteger)__x]
 

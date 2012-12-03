@@ -30,7 +30,7 @@
 //  Bee_Log.h
 //
 
-#import <Foundation/Foundation.h>
+#import "Bee_Precompile.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -54,7 +54,7 @@ extern "C" NSString * NSStringFormatted( NSString * format, va_list argList )
 
 extern "C" void BeeLog( NSObject * format, ... )
 {
-#if __BEE_LOG__
+#if defined(__BEE_LOG__) && __BEE_LOG__
 	
 	va_list args;
 	va_start( args, format );
@@ -70,5 +70,5 @@ extern "C" void BeeLog( NSObject * format, ... )
 	
 	va_end( args );
 	
-#endif	// __BEE_LOG__
+#endif	// #if defined(__BEE_LOG__) && __BEE_LOG__
 }

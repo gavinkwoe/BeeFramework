@@ -30,9 +30,11 @@
 //  Bee_DebugMessageBoard.h
 //
 
-#if __BEE_DEBUGGER__
-
+#import "Bee_Precompile.h"
 #import "Bee.h"
+
+#if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__
+
 #import "Bee_DebugDetailView.h"
 
 #pragma mark -
@@ -57,4 +59,4 @@
 AS_SINGLETON( BeeDebugMessageBoard )
 @end
 
-#endif	// #if __BEE_DEBUGGER__
+#endif	// #if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__

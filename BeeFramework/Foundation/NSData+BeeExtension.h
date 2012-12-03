@@ -30,6 +30,8 @@
 //  NSObject+BeeProperty.h
 //
 
+#import "Bee_Precompile.h"
+
 @interface NSData(BeeExtension)
 
 - (NSData *)MD5;

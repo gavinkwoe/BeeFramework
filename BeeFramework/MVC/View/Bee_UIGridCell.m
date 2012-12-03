@@ -30,7 +30,7 @@
 //  Bee_UIGridCell.m
 //
 
-#import <QuartzCore/QuartzCore.h>
+#import "Bee_Precompile.h"
 #import "Bee_UIGridCell.h"
 #import "Bee_UISignal.h"
 

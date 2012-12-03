@@ -30,6 +30,8 @@
 //  Bee_SystemInfo.h
 //
 
+#import "Bee_Precompile.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -45,7 +47,6 @@
 #include <errno.h>
 #include <net/if_dl.h>
 
-#import <Foundation/Foundation.h>
 #import "Bee_SystemInfo.h"
 
 @implementation BeeSystemInfo

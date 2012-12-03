@@ -48,10 +48,12 @@
 
 - (void)bindData:(NSObject *)data
 {
-	NSString * url = (NSString *)[(NSArray *)data objectAtIndex:1];
-	_photo.url = url;
-	
+PERF_ENTER_(1)
+	_photo.url = (NSString *)[(NSArray *)data objectAtIndex:1];
+PERF_LEAVE_(1)
+PERF_ENTER_(2)
 	[super bindData:data];
+PERF_LEAVE_(2)
 }
 
 - (void)clearData
@@ -80,7 +82,7 @@ DEF_SINGLETON( Lession6Board );
 		[_datas addObject:[NSArray arrayWithObjects:__INT(120), @"http://dribbble.s3.amazonaws.com/users/161397/screenshots/802804/screen_shot_2012-11-06_at_9.20.44_am.png", nil]];
 		[_datas addObject:[NSArray arrayWithObjects:__INT(100), @"http://dribbble.s3.amazonaws.com/users/4678/screenshots/803216/giantsize_1x.png", nil]];
 		
-		if ( _datas.count >= 100 )
+		if ( _datas.count >= 500 )
 			break;
 	}
 }
@@ -96,34 +98,36 @@ DEF_SINGLETON( Lession6Board );
 - (void)handleUISignal:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
+}
+
+- (void)handleBeeUIBoard:(BeeUISignal *)signal
+{
+	[super handleUISignal:signal];
 	
-	if ( [signal isKindOf:BeeUIBoard.SIGNAL] )
+	if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
 	{
-		if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
-		{
-			[self setTitleString:@"Lession 6"];
-			[self showNavigationBarAnimated:NO];
-		}
-		else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
-		{
-		}
-		else if ( [signal is:BeeUIBoard.LOAD_DATAS] )
-		{
-		}
-		else if ( [signal is:BeeUIBoard.WILL_APPEAR] )
-		{
-			[self.scrollView flashScrollIndicators];
-		}
-		else if ( [signal is:BeeUIBoard.DID_DISAPPEAR] )
-		{
-		}
-		else if ( [signal is:BeeUIBoard.BACK_BUTTON_TOUCHED] )
-		{
-			
-		}
-		else if ( [signal is:BeeUIBoard.DONE_BUTTON_TOUCHED] )
-		{
-		}
+		[self setTitleString:@"Lession 6"];
+		[self showNavigationBarAnimated:NO];
+	}
+	else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
+	{
+	}
+	else if ( [signal is:BeeUIBoard.LOAD_DATAS] )
+	{
+	}
+	else if ( [signal is:BeeUIBoard.WILL_APPEAR] )
+	{
+		[self.scrollView flashScrollIndicators];
+	}
+	else if ( [signal is:BeeUIBoard.DID_DISAPPEAR] )
+	{
+	}
+	else if ( [signal is:BeeUIBoard.BACK_BUTTON_TOUCHED] )
+	{
+		
+	}
+	else if ( [signal is:BeeUIBoard.DONE_BUTTON_TOUCHED] )
+	{
 	}
 }
 
@@ -131,7 +135,7 @@ DEF_SINGLETON( Lession6Board );
 
 - (NSInteger)numberOfColumns
 {
-	return 3.0f;
+	return 3;
 }
 
 - (NSInteger)numberOfViews
@@ -156,7 +160,7 @@ DEF_SINGLETON( Lession6Board );
 	NSNumber * height = (NSNumber *)[item objectAtIndex:0];
 	
 	CGSize cellSize;
-	cellSize.width = self.viewSize.width / 3.0f;
+	cellSize.width = self.viewSize.width / self.numberOfColumns;
 	cellSize.height = height.floatValue;
 	return cellSize;
 }

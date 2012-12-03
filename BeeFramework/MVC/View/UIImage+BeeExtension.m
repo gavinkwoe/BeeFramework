@@ -30,9 +30,7 @@
 //  UIImage+BeeExtension.m
 //
 
-#import <TargetConditionals.h>
-#import <QuartzCore/QuartzCore.h>
-
+#import "Bee_Precompile.h"
 #import "UIImage+BeeExtension.h"
 
 #pragma mark -

@@ -30,6 +30,7 @@
 //  Bee_Debug.h
 //
 
+#import "Bee_Precompile.h"
 #import "Bee.h"
 
 @interface BeeDebugger

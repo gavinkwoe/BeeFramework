@@ -30,9 +30,11 @@
 //  Bee_DebugMessageBoard.h
 //
 
-#if __BEE_DEBUGGER__
+#import "Bee_Precompile.h"
+#import "Bee.h"
 
-#import <QuartzCore/QuartzCore.h>
+#if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__
+
 #import "Bee_DebugUtility.h"
 
 @implementation BeeDebugUtility
@@ -41,22 +43,22 @@
 {
 	if ( n < K )
 	{
-		return [NSString stringWithFormat:@"%dB", n];
+		return [NSString stringWithFormat:@"%lluB", n];
 	}
 	else if ( n < M )
 	{
-		return [NSString stringWithFormat:@"%.2fK", (float)n / (float)K];
+		return [NSString stringWithFormat:@"%.1fK", (float)n / (float)K];
 	}
 	else if ( n < G )
 	{
-		return [NSString stringWithFormat:@"%.2fM", (float)n / (float)M];
+		return [NSString stringWithFormat:@"%.1fM", (float)n / (float)M];
 	}
 	else
 	{
-		return [NSString stringWithFormat:@"%.2fG", (float)n / (float)G];
+		return [NSString stringWithFormat:@"%.1fG", (float)n / (float)G];
 	}
 }
 
 @end
 
-#endif	// #if __BEE_DEBUGGER__
+#endif	// #if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__

@@ -30,7 +30,7 @@
 //  Bee_Thread.m
 //
 
-#import <Foundation/Foundation.h>
+#import "Bee_Precompile.h"
 #import "Bee_Thread.h"
  
 #pragma mark -

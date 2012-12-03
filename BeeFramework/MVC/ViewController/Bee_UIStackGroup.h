@@ -30,6 +30,7 @@
 //  Bee_UIStackGroup.h
 //
 
+#import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 #import "Bee_Singleton.h"
 
@@ -54,7 +55,8 @@ AS_SIGNAL( INDEX_CHANGED );	// 显示顺序变了
 @property (nonatomic, readonly) NSInteger		topIndex;
 @property (nonatomic, readonly) BeeUIStack *	topStack;
 
-+ (BeeUIStackGroup *)group;
++ (BeeUIStackGroup *)stackGroup;
++ (BeeUIStackGroup *)stackGroupWithFirstStack:(BeeUIStack *)stack;
 
 - (BeeUIStack *)reflect:(NSString *)name;
 - (void)present:(BeeUIStack *)nav;

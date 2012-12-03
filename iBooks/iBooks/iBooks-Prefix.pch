@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'iBooks' target in the 'iBooks' project
+//
+
+#ifdef __OBJC__
+	#import <UIKit/UIKit.h>
+#endif

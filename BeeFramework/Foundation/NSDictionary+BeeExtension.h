@@ -30,6 +30,8 @@
 //  NSDictionary+BeeExtension.h
 //
 
+#import "Bee_Precompile.h"
+
 #pragma mark -
 
 @interface NSDictionary(BeeExtension)

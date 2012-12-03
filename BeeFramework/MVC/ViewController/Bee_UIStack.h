@@ -30,6 +30,7 @@
 //  Bee_UIStack.h
 //
 
+#import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 #import "Bee_UIImageView.h"
 #import "NSObject+BeeNotification.h"
@@ -57,11 +58,12 @@
 	NSMutableArray *	_rightButtons;
 }
 
-AS_INT( ANIMATION_TYPE_DEFAULT )
-AS_INT( ANIMATION_TYPE_CUBE )
-AS_INT( ANIMATION_TYPE_FADE )
-AS_INT( ANIMATION_TYPE_PAGING )
-AS_INT( ANIMATION_TYPE_SLIDE )
+AS_INT( ANIMATION_TYPE_DEFAULT )	// 默认
+AS_INT( ANIMATION_TYPE_CUBE )		// 3D
+AS_INT( ANIMATION_TYPE_FADE )		// 渐隐
+AS_INT( ANIMATION_TYPE_PAGING )		// 竖直翻页
+AS_INT( ANIMATION_TYPE_SLIDE )		// 滑动
+AS_INT( ANIMATION_TYPE_FLIP )		// 翻页
 
 @property (nonatomic, retain) NSString *		name;
 @property (nonatomic, assign) BeeUIBoard *		parentBoard;

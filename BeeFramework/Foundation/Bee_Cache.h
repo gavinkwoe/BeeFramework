@@ -30,7 +30,7 @@
 //  Bee_Cache.h
 //
 
-#import <Foundation/Foundation.h>
+#import "Bee_Precompile.h"
 #import "Bee_Singleton.h"
 
 #pragma mark -
@@ -40,9 +40,9 @@
 - (BOOL)hasCached:(NSString *)key;
 
 - (NSData *)dataForKey:(NSString *)key;
-- (void)saveData:(NSData *)data forKey:(NSString *)key;
-
 - (NSObject *)objectForKey:(NSString *)key;
+
+- (void)saveData:(NSData *)data forKey:(NSString *)key;
 - (void)saveObject:(NSObject *)object forKey:(NSString *)key;
 
 - (void)deleteKey:(NSString *)key;
@@ -63,8 +63,9 @@
 
 AS_SINGLETON( BeeFileCache );
 
-- (NSData *)serialize:(NSObject *)obj;
-- (NSObject *)unserialize:(NSData *)data;
+- (NSString *)cacheFileName:(NSString *)key;
+- (NSData *)serialize:(id)obj;
+- (id)unserialize:(NSData *)data;
 
 @end
 

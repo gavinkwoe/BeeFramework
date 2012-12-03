@@ -27,20 +27,39 @@
 //	IN THE SOFTWARE.
 //
 //
-//  Bee_DebugMemoryBoard.h
+//  Bee_Keychain.h
 //
 
-#if __BEE_DEBUGGER__
-
-#import "Bee.h"
-#import "Bee_DebugPieView.h"
-#import "Bee_DebugPlotsView.h"
-#import "Bee_DebugSampleView.h"
+#import "Bee_Precompile.h"
 
 #pragma mark -
 
-@interface BeeDebugMemoryBoard : BeeUIBoard
-AS_SINGLETON( BeeDebugMemoryBoard )
+#define AS_KEYCHAIN( __name )	AS_STATIC_PROPERTY( __name )
+#define DEF_KEYCHAIN( __name )	DEF_STATIC_PROPERTY3( __name, @"keychain", [self description] )
+
+#pragma mark -
+
+@interface NSObject(BeeKeychain)
+
+- (NSString *)readValueForKey:(NSString *)key;
+- (void)writeValue:(NSString *)value forKey:(NSString *)key;
+- (void)deleteValueForKey:(NSString *)key;
+
 @end
 
-#endif	// #if __BEE_DEBUGGER__
+#pragma mark -
+
+@interface BeeKeychain : NSObject
+
++ (void)setDefaultDomain:(NSString *)domain;
+
++ (NSString *)readValueForKey:(NSString *)key;
++ (NSString *)readValueForKey:(NSString *)key andDomain:(NSString *)domain;
+
++ (void)writeValue:(NSString *)value forKey:(NSString *)key;
++ (void)writeValue:(NSString *)value forKey:(NSString *)key andDomain:(NSString *)domain;
+
++ (void)deleteValueForKey:(NSString *)key;
++ (void)deleteValueForKey:(NSString *)key andDomain:(NSString *)domain;
+
+@end

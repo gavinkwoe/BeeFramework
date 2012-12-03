@@ -30,7 +30,10 @@
 //  Bee_DebugNetworkModel.m
 //
 
-#if __BEE_DEBUGGER__
+#import "Bee_Precompile.h"
+#import "Bee.h"
+
+#if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__
 
 #import "Bee_DebugNetworkModel.h"
 
@@ -39,13 +42,14 @@
 @implementation BeeDebugNetworkModel
 
 @synthesize totalCount = _totalCount;
-@synthesize sendingCount = _sendingCount;
-@synthesize succeedCount = _succeedCount;
-@synthesize failedCount = _failedCount;
-@synthesize upperBound = _upperBound;
-@synthesize sendingPlots = _sendingPlots;
-@synthesize succeedPlots = _succeedPlots;
-@synthesize failedPlots = _failedPlots;
+
+@synthesize sendLowerBound = _sendLowerBound;
+@synthesize sendUpperBound = _sendUpperBound;
+@synthesize recvLowerBound = _recvLowerBound;
+@synthesize recvUpperBound = _recvUpperBound;
+
+@synthesize sendPlots = _sendPlots;
+@synthesize recvPlots = _recvPlots;
 
 @synthesize uploadBytes = _uploadBytes;
 @synthesize downloadBytes = _downloadBytes;
@@ -61,61 +65,39 @@ DEF_SINGLETON( BeeDebugNetworkModel )
 
 	_history = [[NSMutableArray alloc] init];
 
-	_sendingCount = 0;
-	_succeedCount = 0;
-	_failedCount = 0;
-
 	_uploadBytes = 0;
 	_downloadBytes = 0;
 
-	_sendingPlots = [[NSMutableArray alloc] init];
-	_succeedPlots = [[NSMutableArray alloc] init];
-	_failedPlots = [[NSMutableArray alloc] init];
+	_sendPlots = [[NSMutableArray alloc] init];
+	[_sendPlots pushTail:[NSNumber numberWithInt:0]];
 
-	_upperBound = 0;
+	_recvPlots = [[NSMutableArray alloc] init];
+	[_recvPlots pushTail:[NSNumber numberWithInt:0]];
+
+	_sendLowerBound = 0;
+	_sendUpperBound = 1;
+
+	_recvLowerBound = 0;
+	_recvUpperBound = 1;
 
 	[BeeRequestQueue sharedInstance].whenCreate = ^( BeeRequest * req )
 	{
 		[_history insertObject:req atIndex:0];
 		[_history keepHead:MAX_REQUEST_HISTORY];
 
-		_totalCount += 1;
-		_sendingCount = [BeeRequestQueue sharedInstance].requests.count;
-		
-		_upperBound = MAX( MAX( MAX( _sendingCount, _succeedCount ), _failedCount ), _upperBound );
-		_upperBound = _upperBound;
+		_totalCount = [BeeRequestQueue sharedInstance].requests.count;
 	};
-	
+
 	[BeeRequestQueue sharedInstance].whenUpdate = ^( BeeRequest * req )
 	{
-		_sendingCount = [BeeRequestQueue sharedInstance].requests.count;
-		
 		if ( req.sending )
 		{
 			_uploadBytes += [req uploadBytes];
 		}
-		else if ( req.succeed )
+		else if ( req.succeed || req.failed || req.cancelled )
 		{
-			if ( 200 == req.responseStatusCode )
-			{
-				_succeedCount += 1;
-			}
-			else
-			{
-				_failedCount += 1;
-			}
-
 			_downloadBytes += [req downloadBytes];
 		}
-		else if ( req.failed )
-		{
-			_failedCount += 1;
-
-			_downloadBytes += [req downloadBytes];
-		}
-		
-		_upperBound = MAX( MAX( MAX( _sendingCount, _succeedCount ), _failedCount ), _upperBound );
-		_upperBound = _upperBound;
 	};
 
 	[self observeTick];
@@ -125,14 +107,11 @@ DEF_SINGLETON( BeeDebugNetworkModel )
 {
 	[self unobserveTick];
 
-	[_sendingPlots removeAllObjects];
-	[_sendingPlots release];
+	[_sendPlots removeAllObjects];
+	[_sendPlots release];
 	
-	[_succeedPlots removeAllObjects];
-	[_succeedPlots release];
-	
-	[_failedPlots removeAllObjects];
-	[_failedPlots release];
+	[_recvPlots removeAllObjects];
+	[_recvPlots release];
 	
 	[_history removeAllObjects];
 	[_history release];
@@ -142,17 +121,46 @@ DEF_SINGLETON( BeeDebugNetworkModel )
 
 - (void)handleTick:(NSTimeInterval)elapsed
 {
-	[_sendingPlots pushTail:[NSNumber numberWithInt:_sendingCount]];
-	[_sendingPlots keepTail:MAX_REQUEST_HISTORY];
+	[_sendPlots pushTail:__INT(_uploadBytes - _lastUploadBytes)];
+	[_sendPlots keepTail:MAX_REQUEST_HISTORY];
 	
-	[_succeedPlots pushTail:[NSNumber numberWithInt:_succeedCount]];
-	[_succeedPlots keepTail:MAX_REQUEST_HISTORY];
-	
-	[_failedPlots pushTail:[NSNumber numberWithInt:_failedCount]];
-	[_failedPlots keepTail:MAX_REQUEST_HISTORY];
+	for ( NSNumber * n in _sendPlots )
+	{
+		if ( n.intValue > _sendUpperBound )
+		{
+			_sendUpperBound = n.intValue;
+			if ( _sendUpperBound < _sendLowerBound )
+			{
+				_sendLowerBound = _sendUpperBound;
+			}
+		}
+		else if ( n.intValue < _sendLowerBound )
+		{
+			_sendLowerBound = n.intValue;
+		}
+	}
 
-	_succeedCount = 0;
-	_failedCount = 0;
+	[_recvPlots pushTail:__INT(_downloadBytes - _lastDownloadBytes)];
+	[_recvPlots keepTail:MAX_REQUEST_HISTORY];
+
+	for ( NSNumber * n in _recvPlots )
+	{
+		if ( n.intValue > _recvUpperBound )
+		{
+			_recvUpperBound = n.intValue;
+			if ( _recvUpperBound < _recvLowerBound )
+			{
+				_recvLowerBound = _recvUpperBound;
+			}
+		}
+		else if ( n.intValue < _recvLowerBound )
+		{
+			_recvLowerBound = n.intValue;
+		}
+	}
+	
+	_lastUploadBytes = _uploadBytes;
+	_lastDownloadBytes = _downloadBytes;
 }
 
 - (void)changeBandWidth:(NSUInteger)bw
@@ -186,4 +194,4 @@ DEF_SINGLETON( BeeDebugNetworkModel )
 
 @end
 
-#endif	// #if __BEE_DEBUGGER__
+#endif	// #if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__

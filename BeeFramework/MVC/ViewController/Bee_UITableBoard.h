@@ -30,6 +30,7 @@
 //  Bee_UITableBoard.h
 //
 
+#import "Bee_Precompile.h"
 #import "Bee_UIGridCell.h"
 #import "Bee_UIPullLoader.h"
 #import "Bee_UIBoard.h"

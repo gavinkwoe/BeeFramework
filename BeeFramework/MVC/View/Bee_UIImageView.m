@@ -30,14 +30,14 @@
 //  Bee_UIImageView.m
 //
 
-#import <TargetConditionals.h>
-#import <QuartzCore/QuartzCore.h>
-
+#import "Bee_Precompile.h"
 #import "Bee_UIImageView.h"
 #import "Bee_UIActivityIndicatorView.h"
 #import "Bee_UISignal.h"
 #import "Bee_Sandbox.h"
 #import "Bee_SystemInfo.h"
+#import "Bee_Thread.h"
+#import "Bee_Performance.h"
 
 #import "NSString+BeeExtension.h"
 #import "UIImage+BeeExtension.h"
@@ -58,7 +58,7 @@ DEF_SINGLETON( BeeImageCache );
 		_memoryCache.clearWhenMemoryLow = YES;
 		
 		_fileCache = [[BeeFileCache alloc] init];
-		_fileCache.cachePath = [NSString stringWithFormat:@"%@/images/", [BeeSandbox libCachePath]];
+		_fileCache.cachePath = [NSString stringWithFormat:@"%@/BeeImages/", [BeeSandbox libCachePath]];
 		_fileCache.cacheUser = @"";
 	}
 	
@@ -88,28 +88,42 @@ DEF_SINGLETON( BeeImageCache );
 
 - (UIImage *)imageForURL:(NSString *)string
 {
-	NSString * cacheKey = [string MD5];
+	NSString *	cacheKey = [string MD5];
+	UIImage *	image = nil;
 
-	NSObject * image = [_memoryCache objectForKey:cacheKey];
-	if ( image && [image isKindOfClass:[UIImage class]] )
+	NSObject * object = [_memoryCache objectForKey:cacheKey];
+	if ( object && [object isKindOfClass:[UIImage class]] )
 	{
-		return (UIImage *)image;
+		image = (UIImage *)object;
 	}
 
-	NSData * data = [_fileCache dataForKey:cacheKey];
-	if ( data )
+	if ( nil == image )
 	{
-		return [UIImage imageWithData:data];
+		NSString * fullPath = [_fileCache cacheFileName:cacheKey];
+		if ( fullPath )
+		{
+			image = [UIImage imageWithContentsOfFile:fullPath];
+
+			UIImage * cachedImage = (UIImage *)[_memoryCache objectForKey:cacheKey];
+			if ( nil == cachedImage && image != cachedImage )
+			{
+				[_memoryCache saveObject:image forKey:cacheKey];
+			}
+		}
 	}
 
-	return nil;
+	return image;
 }
 
 - (void)saveImage:(UIImage *)image forURL:(NSString *)string
 {
 	NSString * cacheKey = [string MD5];
-	[_memoryCache saveObject:image forKey:cacheKey];
-	[_fileCache saveData:UIImagePNGRepresentation(image) forKey:cacheKey];
+	UIImage * cachedImage = (UIImage *)[_memoryCache objectForKey:cacheKey];
+	if ( nil == cachedImage && image != cachedImage )
+	{
+		[_memoryCache saveObject:image forKey:cacheKey];
+		[_fileCache saveData:UIImagePNGRepresentation(image) forKey:cacheKey];	
+	}	
 }
 
 - (void)saveData:(NSData *)data forURL:(NSString *)string
@@ -235,20 +249,40 @@ DEF_SIGNAL( LOAD_CANCELLED )
 	self.loadedURL = string;
 	self.loaded		= NO;
 
+PERF_ENTER
+	
 	if ( useCache && [[BeeImageCache sharedInstance] hasCachedForURL:string] )
 	{
+	PERF_ENTER_(1)
 		UIImage * image = [[BeeImageCache sharedInstance] imageForURL:string];
+	PERF_LEAVE_(1)
+		
 		if ( image )
 		{
+		PERF_ENTER_(2)
 			[self changeImage:image];
+		PERF_LEAVE_(2)
+			
+		PERF_ENTER_(3)
 			self.loaded = YES;
+		PERF_LEAVE_(3)
+
+		PERF_LEAVE
 			return;
 		}
 	}
 
+PERF_ENTER_(4)
 	[self changeImage:defaultImage];
+PERF_ENTER_(4)
+	
+PERF_ENTER_(5)
 	[self cancelRequests];
+PERF_ENTER_(5)
+
 	[self GET:string];
+	
+PERF_LEAVE
 }
 
 - (void)setUrl:(NSString *)string

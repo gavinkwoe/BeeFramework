@@ -30,11 +30,7 @@
 //  Bee_UICameraBoard.m
 //
 
-#import <TargetConditionals.h>
-#import <Foundation/Foundation.h>
-#import <QuartzCore/QuartzCore.h>
-#import <UIKit/UIKit.h>
-
+#import "Bee_Precompile.h"
 #import "Bee_UICameraBoard.h"
 #import "Bee_UIOrientation.h"
 #import "Bee_Runtime.h"

@@ -30,10 +30,11 @@
 //  UIView+BeeBackground.m
 //
 
-#import "UIView+BeeBackground.h"
+#import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 #import "Bee_UIImageView.h"
 #import "Bee_UILabel.h"
+#import "UIView+BeeBackground.h"
 
 #pragma mark -
 

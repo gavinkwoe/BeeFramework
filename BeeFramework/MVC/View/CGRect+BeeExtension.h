@@ -30,6 +30,8 @@
 //  CGRect+BeeExtension.h
 //
 
+#import "Bee_Precompile.h"
+
 #pragma mark -
 
 CGSize	AspectFitSizeByWidth( CGSize size, CGFloat width );

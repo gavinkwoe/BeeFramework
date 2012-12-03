@@ -30,14 +30,17 @@
 //  UIView+BeeWireframe.h
 //
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 #import "Bee_UIImageView.h"
 
 #pragma mark -
 
 @interface UIView(BeeWireframe)
+
+@property (nonatomic, assign) NSString *	wireFrameTitle;
+@property (nonatomic, assign) UIColor *		wireFrameColor;
+
 - (void)showWireframe;
 - (void)showWireframe:(NSString *)title;
 - (void)showWireframe:(NSString *)title tintColor:(UIColor *)color;

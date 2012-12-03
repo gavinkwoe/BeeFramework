@@ -30,6 +30,8 @@
 //  UIFont+BeeExtension.h
 //
 
+#import "Bee_Precompile.h"
+
 #pragma mark -
 
 @interface UIFont(BeeExtension)

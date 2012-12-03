@@ -30,11 +30,9 @@
 //  Bee_UIFlowBoard.m
 //
 
-#import <Foundation/Foundation.h>
-#import <QuartzCore/QuartzCore.h>
-#import <UIKit/UIKit.h>
-
+#import "Bee_Precompile.h"
 #import "Bee_UIFlowBoard.h"
+#import "Bee_Performance.h"
 #import "Bee_Runtime.h"
 #import "Bee_Log.h"
 #import "UIView+BeeQuery.h"
@@ -168,7 +166,7 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 	float offset = _scrollView.contentOffset.y;
 	float percent = (offset / height);
 
-	CC( @"height = %0.2f, offset = %0.2f, percent = %0.2f", height, offset, percent );
+//	CC( @"height = %0.2f, offset = %0.2f, percent = %0.2f", height, offset, percent );
 	return percent;
 }
 
@@ -378,7 +376,7 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 	{
 		if ( [reuseView isKindOfClass:clazz] )
 		{
-			CC( @"FlowBoard, dequeue <= (%p)", reuseView );
+//			CC( @"FlowBoard, dequeue <= (%p)", reuseView );
 
 			[reuseView retain];
 			[_reuseQueue removeObject:reuseView];
@@ -393,14 +391,20 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 
 - (void)syncPositions
 {
-	CC( @"FlowBoard, subviews = %d", [self.scrollView.subviews count] );
+//	CC( @"FlowBoard, subviews = %d", [self.scrollView.subviews count] );
+
+	if ( _scrollView.contentOffset.y < 0.0f && _scrollView.subviews.count )
+		return;
 	
+PERF_ENTER
+PERF_ENTER_( step1 )
+
 	NSInteger columnFits = 0;
 	CGFloat columnHeights[FLOW_MAX_COLUMNS] = { 0.0f };
 
 	_visibleStart = 0;
 	_visibleEnd = 0;
-
+	
 	for ( NSInteger i = 0; i < _total; ++i )
 	{
 		BeeUIFlowItem * item = [_items objectAtIndex:i];
@@ -415,7 +419,7 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 
 		if ( item.view )
 		{
-			CC( @"FlowBoard, enqueue => (%p)", item.view );
+//			CC( @"FlowBoard, enqueue => (%p)", item.view );
 			[_reuseQueue addObject:item.view];
 
 			[item.view removeFromSuperview];
@@ -423,6 +427,9 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 		}
 	}
 
+PERF_LEAVE_( step1 )
+PERF_ENTER_( step2 )
+	
 	for ( NSInteger j = _visibleStart; j < _total; ++j )
 	{
 		BeeUIFlowItem * item = [_items objectAtIndex:j];
@@ -455,7 +462,7 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 			
 			if ( item.view )
 			{
-				CC( @"FlowBoard, enqueue => (%p)", item.view );
+//				CC( @"FlowBoard, enqueue => (%p)", item.view );
 				[_reuseQueue addObject:item.view];
 
 				[item.view removeFromSuperview];
@@ -471,6 +478,9 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 			break;
 		}
 	}
+
+PERF_LEAVE_( step2 )
+PERF_ENTER_( step3 )
 	
 	if ( 0 == _visibleEnd )
 	{
@@ -484,30 +494,44 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 
 		if ( item.view )
 		{
-			CC( @"FlowBoard, enqueue => (%p)", item.view );
+//			CC( @"FlowBoard, enqueue => (%p)", item.view );
 			[_reuseQueue addObject:item.view];
 
 			[item.view removeFromSuperview];
 			item.view = nil;
 		}
 	}
+	
+PERF_LEAVE_( step3 )
+PERF_ENTER_( step4 )
 
-	CC( @"start = %d, end = %d", _visibleStart, _visibleEnd );
+//	CC( @"start = %d, end = %d", _visibleStart, _visibleEnd );
 		
 	if ( _total > 0 )
 	{
+	PERF_ENTER_( step4_a )
+		
 		for ( NSInteger l = _visibleStart; l <= _visibleEnd; ++l )
-		{
+		{			
 			BeeUIFlowItem * item = [_items objectAtIndex:l];		
 			if ( NO == item.visible )
 				continue;
-			
+
 			if ( nil == item.view )
 			{
+			PERF_ENTER_( step4_a1 )
+
 				item.view = [self viewForIndex:l scale:item.scale];
+				
+			PERF_LEAVE_( step4_a1 )
+			PERF_ENTER_( step4_a2 )
+				
 				item.view.frame = item.rect;
 			}
 
+			PERF_LEAVE_( step4_a2 )
+			PERF_ENTER_( step4_a3 )
+			
 			if ( item.view && item.view.superview != _scrollView )
 			{
 //				[item.view retain];
@@ -515,12 +539,19 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 				[_scrollView addSubview:item.view];	
 //				[item.view release];
 			}
+			
+			PERF_LEAVE_( step4_a3 )
 
 //			CC( @"%p, (%f, %f), (%f, %f)",
 //				  item.view,
 //				  item.rect.origin.x, item.rect.origin.y,
 //				  item.rect.size.width, item.rect.size.height );
-		}		
+			
+			
+		}	
+		
+	PERF_LEAVE_( step4_a )
+	PERF_ENTER_( step4_b )
 		
 		BOOL reachTop = (0 == _visibleStart) ? YES : NO;
 		if ( reachTop )
@@ -535,6 +566,9 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 		{
 			_reachTop = NO;
 		}
+		
+	PERF_LEAVE_( step4_b )
+	PERF_ENTER_( step4_c )
 
 		BOOL reachEnd = (_visibleEnd + 1 >= _total) ? YES : NO;
 		if ( reachEnd )
@@ -549,14 +583,21 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 		{
 			_reachEnd = NO;
 		}
+		
+	PERF_LEAVE_( step4_c )
 	}
+	
+PERF_LEAVE_( step4 )
+PERF_LEAVE
 }
 
 - (void)calcPositions
 {
 	if ( 0 == _total )
 		return;
-	
+		
+	PERF_ENTER
+
 	CGRect bounds = _scrollView.bounds;
 	CGFloat itemWidth = bounds.size.width / _colCount;
 	BeeUIFlowItem * item = nil;
@@ -604,11 +645,13 @@ DEF_SIGNAL( REACH_BOTTOM )	// 触底
 
 	for ( BeeUIFlowItem * item in _items )
 	{
-		CC( @"index = %d, visible = %d, column = %d, rect = (%.1f,%.1f, %.1f,%.1f)",
-			  item.index, item.visible, item.column,
-			  item.rect.origin.x, item.rect.origin.y,
-			  item.rect.size.width, item.rect.size.height );
+//		CC( @"index = %d, visible = %d, column = %d, rect = (%.1f,%.1f, %.1f,%.1f)",
+//			  item.index, item.visible, item.column,
+//			  item.rect.origin.x, item.rect.origin.y,
+//			  item.rect.size.width, item.rect.size.height );
 	}
+	
+	PERF_LEAVE
 }
 
 - (float)getHeight

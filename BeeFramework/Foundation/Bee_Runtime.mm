@@ -30,8 +30,7 @@
 //  Bee_UtilityRuntime.h
 //
 
-#import <Foundation/Foundation.h>
-#import <objc/runtime.h>
+#import "Bee_Precompile.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -84,7 +83,7 @@ DEF_INT( TYPE_NATIVEC,	2 )
 	}
 	else
 	{
-		return [NSString stringWithFormat:@"[X] <unknown>(0x%08x + %d)", _process, _entry, _offset];
+		return [NSString stringWithFormat:@"[X] <unknown>(0x%08x + %d)", _entry, _offset];
 	}	
 }
 

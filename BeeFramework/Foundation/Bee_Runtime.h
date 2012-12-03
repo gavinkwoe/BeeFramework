@@ -30,6 +30,7 @@
 //  Bee_Runtime.h
 //
 
+#import "Bee_Precompile.h"
 #import "NSObject+BeeProperty.h"
 
 #pragma mark -
@@ -38,6 +39,16 @@
 #define PRINT_CALLSTACK( __n )	 [BeeRuntime printCallstack:__n]
 
 #pragma mark -
+
+#if __has_feature(objc_arc)
+#define BEE_AUTORELEASE(exp)	exp
+#define BEE_RELEASE(exp)		exp
+#define BEE_RETAIN(exp)			exp
+#else
+#define BEE_AUTORELEASE(exp)	[exp autorelease]
+#define BEE_RELEASE(exp)		[exp release]
+#define BEE_RETAIN(exp)			[exp retain]
+#endif
 
 #pragma mark -
 

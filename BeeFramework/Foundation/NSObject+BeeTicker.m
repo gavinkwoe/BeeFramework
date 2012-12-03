@@ -30,10 +30,10 @@
 //  NSObject+BeeTicker.m
 //
 
-#import <Foundation/Foundation.h>
+#import "Bee_Precompile.h"
+#import "Bee_Singleton.h"
 #import "NSObject+BeeTicker.h"
 #import "NSArray+BeeExtension.h"
-#import "Bee_Singleton.h"
 
 #pragma mark -
 
@@ -84,7 +84,7 @@ DEF_SINGLETON( BeeTicker )
 		
 		if ( nil == _timer )
 		{
-			_timer = [NSTimer scheduledTimerWithTimeInterval:0.5f
+			_timer = [NSTimer scheduledTimerWithTimeInterval:(1.0f / 3.0f)
 													  target:self 
 													selector:@selector(performTick) 
 													userInfo:nil

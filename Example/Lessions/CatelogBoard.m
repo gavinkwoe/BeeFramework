@@ -3,6 +3,7 @@
 //
 
 #import "CatelogBoard.h"
+#import "Bee_Debug.h"
 #import "Bee_Runtime.h"
 
 #pragma mark -
@@ -65,12 +66,10 @@
 
 @implementation CatelogBoard
 
-DEF_SINGLETON( CatelogBoard );
-
 - (void)load
 {
 	[super load];
-	
+
 	_lessions = [[NSMutableArray alloc] init];
 	[_lessions addObject:[NSArray arrayWithObjects:@"Lession1Board", @"Lession 1", @"How to use BeeUIBoard", nil]];
 	[_lessions addObject:[NSArray arrayWithObjects:@"Lession2Board", @"Lession 2", @"How to use BeeUISignal", nil]];
@@ -78,11 +77,12 @@ DEF_SINGLETON( CatelogBoard );
 	[_lessions addObject:[NSArray arrayWithObjects:@"Lession4Board", @"Lession 4", @"How to use BeeUIStackGroup", nil]];
 	[_lessions addObject:[NSArray arrayWithObjects:@"Lession5Board", @"Lession 5", @"How to use BeeUITableBoard", nil]];
 	[_lessions addObject:[NSArray arrayWithObjects:@"Lession6Board", @"Lession 6", @"How to use BeeUIFlowBoard", nil]];
-	[_lessions addObject:[NSArray arrayWithObjects:@"Lession7Board", @"Lession 7 (New)", @"How to use Bee controls", nil]];
-	[_lessions addObject:[NSArray arrayWithObjects:@"Lession8Board", @"Lession 8 (New)", @"How to use BeeNetwork", nil]];
-	[_lessions addObject:[NSArray arrayWithObjects:@"Lession9Board", @"Lession 9 (New)", @"How to use BeeController", nil]];
-	[_lessions addObject:[NSArray arrayWithObjects:@"Lession10Board", @"Lession 10 (New)", @"How to use BeeModel & BeeCache", nil]];
-	[_lessions addObject:[NSArray arrayWithObjects:@"DribbbleBoard", @"Dribbble.com (New)", @"Demo for dribbble.com", nil]];
+	[_lessions addObject:[NSArray arrayWithObjects:@"Lession7Board", @"Lession 7", @"How to use Bee controls", nil]];
+	[_lessions addObject:[NSArray arrayWithObjects:@"Lession8Board", @"Lession 8", @"How to use BeeNetwork", nil]];
+	[_lessions addObject:[NSArray arrayWithObjects:@"Lession9Board", @"Lession 9", @"How to use BeeController", nil]];
+	[_lessions addObject:[NSArray arrayWithObjects:@"Lession10Board", @"Lession 10", @"How to use BeeCache", nil]];
+	[_lessions addObject:[NSArray arrayWithObjects:@"Lession11Board", @"Lession 11 (New)", @"How to use BeeActiveRecord", nil]];
+	[_lessions addObject:[NSArray arrayWithObjects:@"DribbbleBoard", @"Dribbble.com", @"Demo for dribbble.com", nil]];
 }
 
 - (void)unload

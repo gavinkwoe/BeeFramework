@@ -30,11 +30,19 @@
 //  Bee_Network.m
 //
 
+#include <execinfo.h>
+
+#import "Bee_Precompile.h"
 #import "Bee_Network.h"
 #import "Bee_Runtime.h"
 #import "Bee_Log.h"
 
-#include <execinfo.h>
+#import "NSArray+BeeExtension.h"
+#import "NSDictionary+BeeExtension.h"
+
+#import "ASIHTTPRequest.h"
+#import "ASIDataDecompressor.h"
+#import "ASIFormDataRequest.h"
 
 #pragma mark -
 
@@ -69,7 +77,8 @@
 	if ( [self isRequestResponder] )
 	{
 		BeeRequest * request = [BeeRequestQueue GET:url];
-		request.responder = self;
+		[request addResponder:self];
+//		request.responder = self;
 		return request;
 	}
 	else
@@ -84,7 +93,8 @@
 	{
 		NSData * data = [text dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
 		BeeRequest * request = [BeeRequestQueue POST:url data:data];
-		request.responder = self;
+		[request addResponder:self];
+//		request.responder = self;
 		return request;	
 	}
 	else
@@ -98,7 +108,8 @@
 	if ( [self isRequestResponder] )
 	{
 		BeeRequest * request = [BeeRequestQueue POST:url data:data];
-		request.responder = self;
+		[request addResponder:self];
+//		request.responder = self;
 		return request;	
 	}
 	else
@@ -112,7 +123,8 @@
 	if ( [self isRequestResponder] )
 	{
 		BeeRequest * request = [BeeRequestQueue POST:url params:kvs];
-		request.responder = self;
+		[request addResponder:self];
+//		request.responder = self;
 		return request;
 	}
 	else
@@ -146,7 +158,8 @@
 	if ( [self isRequestResponder] )
 	{
 		BeeRequest * request = [BeeRequestQueue POST:url params:dict];
-		request.responder = self;
+		[request addResponder:self];
+//		request.responder = self;
 		return request;
 	}
 	else
@@ -160,7 +173,8 @@
 	if ( [self isRequestResponder] )
 	{
 		BeeRequest * request = [BeeRequestQueue POST:url files:files];
-		request.responder = self;
+		[request addResponder:self];
+//		request.responder = self;
 		return request;
 	}
 	else
@@ -174,7 +188,8 @@
 	if ( [self isRequestResponder] )
 	{
 		BeeRequest * request = [BeeRequestQueue POST:url files:files params:kvs];
-		request.responder = self;
+		[request addResponder:self];
+//		request.responder = self;
 		return request;
 	}
 	else
@@ -206,7 +221,8 @@
 	if ( [self isRequestResponder] )
 	{
 		BeeRequest * request = [BeeRequestQueue POST:url files:files params:dict];
-		request.responder = self;
+		[request addResponder:self];
+//		request.responder = self;
 		return request;
 	}
 	else
@@ -281,7 +297,8 @@ DEF_INT( STATE_CANCELLED,	5 );
 
 @synthesize state = _state;
 @synthesize errorCode = _errorCode;
-@synthesize responder = _responder;
+//@synthesize responder = _responder;
+@synthesize responders = _responders;
 @synthesize userInfo = _userInfo;
 
 @synthesize whenUpdate = _whenUpdate;
@@ -296,16 +313,16 @@ DEF_INT( STATE_CANCELLED,	5 );
 @synthesize timeCostRecving;	// 网络收包耗时
 @synthesize timeCostOverAir;	// 网络整体耗时
 
-#ifdef __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 @synthesize callstack = _callstack;
-#endif	// #ifdef __BEE_DEVELOPMENT__
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 
 @synthesize created;
 @synthesize sending;
 @synthesize recving;
 @synthesize failed;
 @synthesize succeed;
-@synthesize cancelled;
+//@synthesize cancelled;
 @synthesize sendProgressed = _sendProgressed;
 @synthesize recvProgressed = _recvProgressed;
 
@@ -323,6 +340,8 @@ DEF_INT( STATE_CANCELLED,	5 );
 	{
 		_state = BeeRequest.STATE_CREATED;
 		_errorCode = 0;
+		
+		_responders = [[NSMutableArray alloc] init];
 		_userInfo = [[NSMutableDictionary alloc] init];
 		
 		_whenUpdate = nil;
@@ -335,10 +354,10 @@ DEF_INT( STATE_CANCELLED,	5 );
 		_recvTimeStamp = _initTimeStamp;	
 		_doneTimeStamp = _initTimeStamp;
 
-	#if __BEE_DEVELOPMENT__
+	#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 		_callstack = [[NSMutableArray alloc] init];
 		[_callstack addObjectsFromArray:[BeeRuntime callstack:16]];
-	#endif	// #if __BEE_DEVELOPMENT__
+	#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	}
 
 	return self;
@@ -356,13 +375,16 @@ DEF_INT( STATE_CANCELLED,	5 );
 {
 	self.whenUpdate = nil;
 	
+	[_responders removeAllObjectsNoRelease];
+	[_responders release];
+	
 	[_userInfo removeAllObjects];
 	[_userInfo release];
 	
-#ifdef __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	[_callstack removeAllObjects];
 	[_callstack release];	
-#endif	// #ifdef __BEE_DEVELOPMENT__
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	
 	[super dealloc];
 }
@@ -426,12 +448,31 @@ DEF_INT( STATE_CANCELLED,	5 );
 	return [[self.url absoluteString] isEqualToString:text];
 }
 
+- (void)callResponders
+{
+	for ( NSObject * responder in _responders )
+	{
+		if ( [responder isRequestResponder] )
+		{
+			[responder handleRequest:self];
+		}			
+	}	
+}
+
+- (void)forwardResponder:(NSObject *)obj
+{
+	if ( [obj isRequestResponder] )
+	{
+		[obj handleRequest:self];
+	}			
+}
+
 - (void)changeState:(NSUInteger)state
 {
 	if ( state != _state )
 	{
 		_state = state;
-		
+
 		if ( BeeRequest.STATE_SENDING == _state )
 		{
 			_sendTimeStamp = [NSDate timeIntervalSinceReferenceDate];
@@ -445,10 +486,12 @@ DEF_INT( STATE_CANCELLED,	5 );
 			_doneTimeStamp = [NSDate timeIntervalSinceReferenceDate];
 		}
 
-		if ( [_responder isRequestResponder] )
-		{
-			[_responder handleRequest:self];
-		}
+		[self callResponders];
+
+//		if ( [_responder isRequestResponder] )
+//		{
+//			[_responder handleRequest:self];
+//		}
 		
 		if ( self.whenUpdate )
 		{
@@ -461,10 +504,12 @@ DEF_INT( STATE_CANCELLED,	5 );
 {
 	_sendProgressed = YES;
 	
-	if ( [_responder isRequestResponder] )
-	{
-		[_responder handleRequest:self];
-	}
+	[self callResponders];
+
+//	if ( [_responder isRequestResponder] )
+//	{
+//		[_responder handleRequest:self];
+//	}
 	
 	if ( self.whenUpdate )
 	{
@@ -484,10 +529,12 @@ DEF_INT( STATE_CANCELLED,	5 );
     
 	_recvProgressed = YES;
 	
-	if ( [_responder isRequestResponder] )
-	{
-		[_responder handleRequest:self];
-	}
+	[self callResponders];
+
+//	if ( [_responder isRequestResponder] )
+//	{
+//		[_responder handleRequest:self];
+//	}
 	
 	if ( self.whenUpdate )
 	{
@@ -547,6 +594,21 @@ DEF_INT( STATE_CANCELLED,	5 );
 	return BeeRequest.STATE_CANCELLED == _state ? YES : NO;
 }
 
+- (BOOL)hasResponder:(id)responder
+{
+	return [_responders containsObject:responder];
+}
+
+- (void)addResponder:(id)responder
+{
+	[_responders addObjectNoRetain:responder];
+}
+
+- (void)removeResponder:(id)responder
+{
+	[_responders removeObjectNoRelease:responder];
+}
+
 @end
 
 #pragma mark -
@@ -578,6 +640,7 @@ DEF_INT( STATE_CANCELLED,	5 );
 
 @implementation BeeRequestQueue
 
+@synthesize merge = _merge;
 @synthesize online = _online;
 
 @synthesize	blackListEnable = _blackListEnable;
@@ -622,7 +685,7 @@ DEF_INT( STATE_CANCELLED,	5 );
 		if ( nil == __sharedInstance )
 		{
 			__sharedInstance = [[BeeRequestQueue alloc] init];
-						
+
 //			[ASIHTTPRequest setShouldThrottleBandwidthForWWAN:YES];
 //			[ASIHTTPRequest throttleBandwidthForWWANUsingLimit:32 * 1024];	// 32K
 			[ASIHTTPRequest setDefaultUserAgentString:@"Bee"];			
@@ -639,6 +702,7 @@ DEF_INT( STATE_CANCELLED,	5 );
 	if ( self )
 	{
 		_delay = 0.1f;
+		_merge = YES;
 		_online = YES;
 		_requests = [[NSMutableArray alloc] init];
 
@@ -686,9 +750,9 @@ DEF_INT( STATE_CANCELLED,	5 );
 		date = [_blackList objectForKey:url];
 		if ( date && ([date timeIntervalSince1970] - [now timeIntervalSince1970]) < _blackListTimeout )
 		{
-		#if __BEE_DEVELOPMENT__
+		#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 			CC( @"resource broken: %@", url );
-		#endif
+		#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 			
 			return YES;
 		}
@@ -714,9 +778,20 @@ DEF_INT( STATE_CANCELLED,	5 );
 
 	BeeRequest * request = nil;
 
-#if __BEE_DEVELOPMENT__
+	if ( NO == sync && _merge )
+	{
+		for ( BeeRequest * req in _requests )
+		{
+			if ( [req.url.absoluteString isEqualToString:url] )
+			{
+				return req;
+			}
+		}
+	}
+
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	CC( @"GET %@\n", url );
-#endif
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 
 	request = [[BeeRequest alloc] initWithURL:[NSURL URLWithString:url]];
 	request.timeOutSeconds = DEFAULT_GET_TIMEOUT;
@@ -774,9 +849,9 @@ DEF_INT( STATE_CANCELLED,	5 );
 	
 	BeeRequest * request = nil;
 	
-#if __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	CC( @"POST %@\n", url );
-#endif
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	
 	request = [[BeeRequest alloc] initWithURL:[NSURL URLWithString:url]];
 	request.timeOutSeconds = DEFAULT_POST_TIMEOUT;
@@ -834,9 +909,9 @@ DEF_INT( STATE_CANCELLED,	5 );
 
 	BeeRequest * request = nil;
 
-#if __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	CC( @"POST %@\n", url );
-#endif
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 
 	request = [[BeeRequest alloc] initWithURL:[NSURL URLWithString:url]];
 	request.timeOutSeconds = DEFAULT_POST_TIMEOUT;
@@ -905,9 +980,9 @@ DEF_INT( STATE_CANCELLED,	5 );
 
 	BeeRequest * request = nil;
 	
-#if __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	CC( @"POST %@\n", url );
-#endif
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 
 	request = [[BeeRequest alloc] initWithURL:[NSURL URLWithString:url]];
 	request.timeOutSeconds = DEFAULT_UPLOAD_TIMEOUT;
@@ -1028,7 +1103,7 @@ DEF_INT( STATE_CANCELLED,	5 );
 {
 	for ( BeeRequest * request in _requests )
 	{
-		if ( responder && request.responder != responder )
+		if ( responder && NO == [request hasResponder:responder] /*request.responder != responder*/ )
 			continue;
 
 		if ( nil == url || [[request.url absoluteString] isEqualToString:url] )
@@ -1071,7 +1146,7 @@ DEF_INT( STATE_CANCELLED,	5 );
 
 	for ( BeeRequest * request in _requests )
 	{
-		if ( responder && request.responder != responder )
+		if ( responder && NO == [request hasResponder:responder] /* request.responder != responder */ )
 			continue;
 		
 		if ( nil == url || [[request.url absoluteString] isEqualToString:url] )
@@ -1121,7 +1196,7 @@ DEF_INT( STATE_CANCELLED,	5 );
 		
 		for ( BeeRequest * request in _requests )
 		{
-			if ( request.responder == responder )
+			if ( [request hasResponder:responder] /* request.responder == responder */ )
 			{
 				[tempArray addObject:request];				
 			}			
@@ -1181,10 +1256,6 @@ DEF_INT( STATE_CANCELLED,	5 );
 
 - (void)requestStarted:(ASIHTTPRequest *)request
 {
-//#if __BEE_DEVELOPMENT__
-//	CC( @"%s, %p", __FUNCTION__, request );
-//#endif
-
 	if ( NO == [request isKindOfClass:[BeeRequest class]] )
 		return;
 
@@ -1201,18 +1272,6 @@ DEF_INT( STATE_CANCELLED,	5 );
 
 - (void)request:(ASIHTTPRequest *)request didReceiveResponseHeaders:(NSDictionary *)responseHeaders
 {
-//#if __BEE_DEVELOPMENT__
-//	CC( @"%s, %p", __FUNCTION__, request );
-//#endif
-
-//#if __BEE_DEVELOPMENT__
-//	NSArray * arr = [responseHeaders allKeys];
-//	for ( NSString * key in arr )
-//	{
-//		CC( @"%@: %@", key, [responseHeaders objectForKey:key] );
-//	}
-//#endif
-	
 	if ( NO == [request isKindOfClass:[BeeRequest class]] )
 		return;
 
@@ -1227,13 +1286,7 @@ DEF_INT( STATE_CANCELLED,	5 );
 
 - (void)requestFinished:(ASIHTTPRequest *)request
 {
-//	NSString * requestURL = [request.url absoluteString];
-	
 	_bytesDownload += [[request rawResponseData] length];
-
-//#if __BEE_DEVELOPMENT__
-//	CC( @"%s, %p", __FUNCTION__, request );
-//#endif
 	
 	if ( NO == [request isKindOfClass:[BeeRequest class]] )
 		return;
@@ -1261,9 +1314,6 @@ DEF_INT( STATE_CANCELLED,	5 );
 	}
 	else
 	{
-//#if __BEE_DEVELOPMENT__
-//		CC( @"%@\n", [request responseString] );	
-//#endif
 		[networkRequest changeState:BeeRequest.STATE_FAILED];
 	}
 
@@ -1278,10 +1328,6 @@ DEF_INT( STATE_CANCELLED,	5 );
 
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
-//#if __BEE_DEVELOPMENT__
-//	CC( @"%s, %p", __FUNCTION__, request );
-//#endif
-	
 	if ( NO == [request isKindOfClass:[BeeRequest class]] )
 		return;
 
@@ -1302,37 +1348,21 @@ DEF_INT( STATE_CANCELLED,	5 );
 
 - (void)request:(ASIHTTPRequest *)request willRedirectToURL:(NSURL *)newURL
 {
-//#if __BEE_DEVELOPMENT__
-//	CC( @"%s, %p", __FUNCTION__, request );
-//#endif
-
 	[self requestFailed:request];
 }
 
 - (void)requestRedirected:(ASIHTTPRequest *)request
 {
-//#if __BEE_DEVELOPMENT__
-//	CC( @"%s, %p", __FUNCTION__, request );
-//#endif
-	
 	[self requestFailed:request];
 }
 
 - (void)authenticationNeededForRequest:(ASIHTTPRequest *)request
 {
-//#if __BEE_DEVELOPMENT__
-//	CC( @"%s, %p", __FUNCTION__, request );
-//#endif
-	
 	[self requestFailed:request];
 }
 
 - (void)proxyAuthenticationNeededForRequest:(ASIHTTPRequest *)request
 {
-//#if __BEE_DEVELOPMENT__
-//	CC( @"%s, %p", __FUNCTION__, request );
-//#endif
-	
 	[self requestFailed:request];
 }
 

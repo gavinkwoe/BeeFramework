@@ -30,9 +30,10 @@
 //  Bee_DebugMemoryModel.h
 //
 
-#if __BEE_DEBUGGER__
-
+#import "Bee_Precompile.h"
 #import "Bee.h"
+
+#if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__
 
 #pragma mark -
 
@@ -48,6 +49,7 @@
 	int64_t				_manualBytes;
 	NSMutableArray *	_manualBlocks;
 	NSMutableArray *	_chartDatas;
+	NSUInteger			_lowerBound;
 	NSUInteger			_upperBound;
 	BOOL				_warningMode;
 }
@@ -57,6 +59,7 @@
 @property (nonatomic, readonly) int64_t				manualBytes;
 @property (nonatomic, readonly) NSMutableArray *	manualBlocks;
 @property (nonatomic, readonly) NSMutableArray *	chartDatas;
+@property (nonatomic, readonly) NSUInteger			lowerBound;
 @property (nonatomic, readonly) NSUInteger			upperBound;
 @property (nonatomic, readonly) BOOL				warningMode;
 
@@ -72,4 +75,4 @@ AS_SINGLETON( BeeDebugMemoryModel )
 
 @end
 
-#endif	// #if __BEE_DEBUGGER__
+#endif	// #if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__

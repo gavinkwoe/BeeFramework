@@ -63,38 +63,55 @@ DEF_SIGNAL( TEST )
 
 @implementation Lession2Board
 
+// Other signal goes here
 - (void)handleUISignal:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
+}
+
+// BeeUIBoard signal goes here
+- (void)handleBeeUIBoard:(BeeUISignal *)signal
+{
+	[super handleUISignal:signal];
 	
-	if ( [signal isKindOf:BeeUIBoard.SIGNAL] )
+	if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
 	{
-		if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
-		{
-			[self setTitleString:@"Lession 2"];
-			[self showNavigationBarAnimated:NO];
-			
-			_textView.contentInset = UIEdgeInsetsMake( 0, 0, 44.0f + 20.0f, 0.0f );
-
-			CGRect innerFrame;
-			innerFrame.size.width = self.viewSize.width - 20.0f;
-			innerFrame.size.height = 44.0f;
-			innerFrame.origin.x = 10.0f;
-			innerFrame.origin.y = self.viewSize.height - innerFrame.size.height - 10.0f;
-
-			_innerView = [[Lession2View1 alloc] initWithFrame:innerFrame];
-			_innerView.backgroundColor = [UIColor clearColor];
-			[self.view addSubview:_innerView];
-		}
-		else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
-		{
-			SAFE_RELEASE_SUBVIEW( _innerView );
-		}
-		else if ( [signal is:BeeUIBoard.LAYOUT_VIEWS] )
-		{
-		}
+		[self setTitleString:@"Lession 2"];
+		[self showNavigationBarAnimated:NO];
+		
+		_textView.contentInset = UIEdgeInsetsMake( 0, 0, 44.0f + 20.0f, 0.0f );
+		
+		CGRect innerFrame;
+		innerFrame.size.width = self.viewSize.width - 20.0f;
+		innerFrame.size.height = 44.0f;
+		innerFrame.origin.x = 10.0f;
+		innerFrame.origin.y = self.viewSize.height - innerFrame.size.height - 10.0f;
+		
+		_innerView = [[Lession2View1 alloc] initWithFrame:innerFrame];
+		_innerView.backgroundColor = [UIColor clearColor];
+		[self.view addSubview:_innerView];
 	}
-	else if ( [signal is:Lession2View2.TEST] )
+	else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
+	{
+		SAFE_RELEASE_SUBVIEW( _innerView );
+	}
+	else if ( [signal is:BeeUIBoard.LAYOUT_VIEWS] )
+	{
+	}	
+}
+
+// Lession2View1 signal goes here
+- (void)handleLession2View1:(BeeUISignal *)signal
+{
+	[super handleUISignal:signal];
+}
+
+// Lession2View2 signal goes here
+- (void)handleLession2View2:(BeeUISignal *)signal
+{
+	[super handleUISignal:signal];
+	
+	if ( [signal is:Lession2View2.TEST] )
 	{
 		[BeeUIAlertView showMessage:@"Signal received" cancelTitle:@"OK"];
 	}

@@ -30,15 +30,22 @@
 //  NSDictionary+BeeExtension.m
 //
 
-#import <Foundation/Foundation.h>
+#import "Bee_Precompile.h"
 #import "NSDictionary+BeeExtension.h"
 
 #pragma mark -
 
 @implementation NSDictionary(BeeExtension)
 
+- (NSObject *)db
+{
+	return nil;
+}
+
 - (NSObject *)objectAtPath:(NSString *)path
 {
+#if 0
+	
 	NSArray * array = [path componentsSeparatedByString:@"/"]; 
 	if ( 0 == [array count] )
 	{
@@ -70,6 +77,23 @@
 	}
 	
 	return (result == [NSNull null]) ? nil : result;
+	
+#else
+	
+	// thanks @lancy, changed: use native keyPath
+	
+	NSString *	keyPath = [path stringByReplacingOccurrencesOfString:@"/" withString:@"."];
+	NSRange		range = NSMakeRange( 0, 1 );
+
+	if ( [[keyPath substringWithRange:range] isEqualToString:@"."] )
+	{
+		keyPath = [keyPath substringFromIndex:1];
+	}
+
+	NSObject * result = [self valueForKeyPath:keyPath];
+	return (result == [NSNull null]) ? nil : result;
+	
+#endif
 }
 
 - (NSObject *)objectAtPath:(NSString *)path otherwise:(NSObject *)other

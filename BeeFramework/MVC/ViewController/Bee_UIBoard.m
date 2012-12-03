@@ -30,10 +30,7 @@
 //  Bee_UIBoard.m
 //
 
-#import <Foundation/Foundation.h>
-#import <QuartzCore/QuartzCore.h>
-#import <UIKit/UIKit.h>
-
+#import "Bee_Precompile.h"
 #import "Bee_UIBoard.h"
 #import "Bee_UIStack.h"
 #import "Bee_Runtime.h"
@@ -57,6 +54,9 @@
 
 #undef	UNUSED
 #define UNUSED( __x )	(void)(__x)
+
+#undef	MAX_SIGNALS
+#define MAX_SIGNALS		(50)
 
 #pragma mark -
 
@@ -165,60 +165,6 @@
 
 #pragma mark -
 
-@implementation BeeUIBoardView
-
-@synthesize owner = _owner;
-
-- (void)setFrame:(CGRect)rect
-{	
-	CGRect prevFrame = self.frame;
-	
-	[super setFrame:rect];
-	
-	[self fitBackgroundFrame];
-	
-	if ( _owner && NO == CGRectEqualToRect(prevFrame, rect) )
-	{
-		[_owner sendUISignal:BeeUIBoard.LAYOUT_VIEWS];
-	}
-}
-
-- (void)layoutSubviews
-{
-	[super layoutSubviews];
-	
-//	if ( _owner )
-//	{
-//		[_owner sendUISignal:BeeUIBoard.LAYOUT_VIEWS];
-//	}
-}
-
-- (void)dealloc
-{	
-	[super dealloc];
-}
-
-- (UIViewController *)viewController
-{
-	return _owner ? _owner : [super viewController];
-}
-
-- (void)handleUISignal:(BeeUISignal *)signal
-{	
-	if ( _owner )
-	{
-		[signal forward:_owner];
-	}
-	else
-	{
-		[super handleUISignal:signal];
-	}
-}	
-
-@end
-
-#pragma mark -
-
 @interface BeeUIBoard(Private)
 - (void)createViews;
 - (void)deleteViews;
@@ -253,6 +199,60 @@
 - (void)didSwipe:(UISwipeGestureRecognizer *)swipeGesture;
 - (void)enableSwipeGesture;
 - (void)disableSwipeGesture;
+
+@end
+
+#pragma mark -
+
+@implementation BeeUIBoardView
+
+@synthesize owner = _owner;
+
+- (void)setFrame:(CGRect)rect
+{	
+	CGRect prevFrame = self.frame;
+	
+	[super setFrame:rect];
+	
+	[self fitBackgroundFrame];
+	
+	if ( _owner && NO == CGRectEqualToRect(prevFrame, rect) )
+	{
+		[_owner sendUISignal:BeeUIBoard.LAYOUT_VIEWS];
+	}
+}
+
+- (void)layoutSubviews
+{
+	[super layoutSubviews];
+
+//	if ( _owner )
+//	{
+//		[_owner sendUISignal:BeeUIBoard.LAYOUT_VIEWS];
+//	}
+}
+
+- (void)dealloc
+{	
+	[super dealloc];
+}
+
+- (UIViewController *)viewController
+{
+	return _owner ? _owner : [super viewController];
+}
+
+- (void)handleUISignal:(BeeUISignal *)signal
+{	
+	if ( _owner )
+	{
+		[signal forward:_owner];
+	}
+	else
+	{
+		[super handleUISignal:signal];
+	}
+}	
 
 @end
 
@@ -303,11 +303,12 @@
 
 @synthesize allowedOrientation = _allowedOrientation;
 
-#ifdef __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
+@synthesize createSeq = _createSeq;
 @synthesize signalSeq = _signalSeq;
 @synthesize signals = _signals;
 @synthesize callstack = _callstack;
-#endif	// #ifdef __BEE_DEVELOPMENT__
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 
 DEF_SIGNAL( CREATE_VIEWS )			// 创建视图
 DEF_SIGNAL( DELETE_VIEWS )			// 释放视图
@@ -355,6 +356,7 @@ DEF_INT( ANIMATION_TYPE_DEFAULT,	0 )
 DEF_INT( ANIMATION_TYPE_ALPHA,		0 )
 DEF_INT( ANIMATION_TYPE_BOUNCE,		1 )
 
+static NSUInteger				__createSeed = 0;
 static NSMutableArray *			__allBoards;
 
 + (NSArray *)allBoards
@@ -377,7 +379,7 @@ static NSMutableArray *			__allBoards;
 			__allBoards = [[NSMutableArray alloc] init];
 		}
 		
-		[__allBoards addObjectNoRetain:self];
+		[__allBoards insertObjectNoRetain:self atIndex:0];
 		
 		_lastSleep = [NSDate timeIntervalSinceReferenceDate];
 		_lastWeekup = [NSDate timeIntervalSinceReferenceDate];
@@ -393,13 +395,14 @@ static NSMutableArray *			__allBoards;
 		_modalAnimationType = BeeUIBoard.ANIMATION_TYPE_ALPHA;
 		_allowedOrientation = UIInterfaceOrientationPortrait;
 		
-	#ifdef __BEE_DEVELOPMENT__
+	#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
+		_createSeq = __createSeed++;
 		_signalSeq = 0;
 		_signals = [[NSMutableArray alloc] init];
 
 		_callstack = [[NSMutableArray alloc] init];
 		[_callstack addObjectsFromArray:[BeeRuntime callstack:16]];
-	#endif
+	#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 		
 		[self load];
 	}
@@ -428,13 +431,13 @@ static NSMutableArray *			__allBoards;
 	[self freeDatas];
 	[self deleteViews];
 	
-#ifdef __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	[_signals removeAllObjects];
 	[_signals release];
 	
 	[_callstack removeAllObjects];
 	[_callstack release];
-#endif
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	
 	[_createDate release];
 	[_panGesture release];
@@ -557,9 +560,9 @@ static NSMutableArray *			__allBoards;
 
 - (void)presentModalViewController:(UIViewController *)modalViewController animated:(BOOL)animated
 {
-#if __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	CC( @"[%@] presentModalViewController", [[self class] description] );
-#endif
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	
 	[super presentModalViewController:modalViewController animated:animated];	
 	
@@ -569,9 +572,9 @@ static NSMutableArray *			__allBoards;
 
 - (void)dismissModalViewControllerAnimated:(BOOL)animated
 {
-#if __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	CC( @"[%@] dismissModalViewControllerAnimated", [[self class] description] );
-#endif
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	
 	[super dismissModalViewControllerAnimated:animated];
 	
@@ -582,9 +585,9 @@ static NSMutableArray *			__allBoards;
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
 - (void)loadView
 {
-#if __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	CC( @"[%@] loadView", [[self class] description] );
-#endif
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 
 	CGRect boardViewBound = [UIScreen mainScreen].bounds;
 	BeeUIBoardView * boardView = [[[BeeUIBoardView alloc] initWithFrame:boardViewBound] autorelease];
@@ -599,9 +602,9 @@ static NSMutableArray *			__allBoards;
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
 {
-#if __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	CC( @"[%@] viewDidLoad", [[self class] description] );
-#endif
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	
     [super viewDidLoad];
 	
@@ -647,9 +650,9 @@ static NSMutableArray *			__allBoards;
 
 - (void)didReceiveMemoryWarning
 {
-#if __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	CC( @"%p(%@) didReceiveMemoryWarning", self, [[self class] description] );
-#endif
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	
     // Releases the view if it doesn't have a superview.
 	if ( YES == _viewBuilt )
@@ -672,9 +675,9 @@ static NSMutableArray *			__allBoards;
 
 - (void)viewDidUnload
 {
-#if __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	CC( @"[%@] viewDidUnload", [[self class] description] );
-#endif
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -831,13 +834,13 @@ static NSMutableArray *			__allBoards;
 
 - (void)handleUISignal:(BeeUISignal *)signal
 {
-#ifdef __BEE_DEVELOPMENT__
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	_signalSeq += 1;
 	
-	[_signals insertObject:signal atIndex:0];
-	[_signals keepHead:20];
-#endif
-
+	[_signals addObject:signal];
+	[_signals keepTail:MAX_SIGNALS];	
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
+	
 	[super handleUISignal:signal];
 		
 	if ( [signal isKindOf:BeeUIBoard.SIGNAL] )

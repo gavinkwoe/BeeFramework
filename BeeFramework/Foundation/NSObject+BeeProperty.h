@@ -30,6 +30,8 @@
 //  NSObject+BeeProperty.h
 //
 
+#import "Bee_Precompile.h"
+
 #pragma mark -
 
 #undef	AS_STATIC_PROPERTY

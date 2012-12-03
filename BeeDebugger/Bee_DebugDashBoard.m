@@ -30,12 +30,13 @@
 //  BeeDebugDashBoard.m
 //
 
-#if __BEE_DEBUGGER__
+#import "Bee_Precompile.h"
+#import "Bee.h"
 
-#import <QuartzCore/QuartzCore.h>
+#if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__
+
 #import "Bee_DebugDashBoard.h"
 #import "Bee_DebugUtility.h"
-
 #import "Bee_DebugMemoryModel.h"
 #import "Bee_DebugMessageModel.h"
 #import "Bee_DebugNetworkModel.h"
@@ -55,19 +56,28 @@
 
 		CGRect plotFrame;
 		plotFrame.size.width = frame.size.width;
-		plotFrame.size.height = 80.0f;
+		plotFrame.size.height = 90.0f;
 		plotFrame.origin.x = 0.0f;
 		plotFrame.origin.y = 20.0f;
-		
-		_plotView = [[BeeDebugPlotsView alloc] initWithFrame:plotFrame];
-		_plotView.alpha = 0.75f;
-		_plotView.lowerBound = 0.0f;
-		_plotView.upperBound = 0.0f;
-		_plotView.lineColor = [UIColor yellowColor];
-		_plotView.lineWidth = 2.0f;
-		_plotView.capacity = MAX_MEMORY_HISTORY;
-		[self addSubview:_plotView];
 
+		_plotView1 = [[BeeDebugPlotsView alloc] initWithFrame:plotFrame];
+		_plotView1.alpha = 0.6f;
+		_plotView1.lowerBound = 0.0f;
+		_plotView1.upperBound = 0.0f;
+		_plotView1.lineColor = [UIColor greenColor];
+		_plotView1.lineWidth = 1.0f;
+		_plotView1.capacity = MAX_MEMORY_HISTORY;
+		[self addSubview:_plotView1];
+
+		_plotView2 = [[BeeDebugPlotsView alloc] initWithFrame:plotFrame];
+		_plotView2.alpha = 0.6f;
+		_plotView2.lowerBound = 0.0f;
+		_plotView2.upperBound = 0.0f;
+		_plotView2.lineColor = [UIColor grayColor];
+		_plotView2.lineWidth = 1.0f;
+		_plotView2.capacity = MAX_MEMORY_HISTORY;
+		[self addSubview:_plotView2];
+		
 		CGRect titleFrame;
 		titleFrame.size.width = 60.0f;
 		titleFrame.size.height = 20.0f;
@@ -90,7 +100,7 @@
 		statusFrame.origin.y = 0.0f;
 
 		_statusView = [[BeeUILabel alloc] initWithFrame:statusFrame];
-		_statusView.textColor = [UIColor colorWithWhite:0.85f alpha:1.0f];
+		_statusView.textColor = [UIColor lightGrayColor];
 		_statusView.textAlignment = UITextAlignmentLeft;
 		_statusView.font = [UIFont boldSystemFontOfSize:12.0f];
 		_statusView.lineBreakMode = UILineBreakModeClip;
@@ -161,7 +171,7 @@
 		_autoWarning.layer.borderWidth = 2.0f;
 		_autoWarning.titleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
 		_autoWarning.stateNormal.title = @"Warning(Off)";
-		_autoWarning.stateNormal.titleColor = [UIColor redColor];
+		_autoWarning.stateNormal.titleColor = [UIColor whiteColor];
 		[_autoWarning addSignal:@"WARNING" forControlEvents:UIControlEventTouchUpInside];
 		[self addSubview:_autoWarning];
 	}
@@ -172,7 +182,8 @@
 {
 	SAFE_RELEASE_SUBVIEW( _titleView );
 	SAFE_RELEASE_SUBVIEW( _statusView );
-	SAFE_RELEASE_SUBVIEW( _plotView );
+	SAFE_RELEASE_SUBVIEW( _plotView1 );
+	SAFE_RELEASE_SUBVIEW( _plotView2 );
 	SAFE_RELEASE_SUBVIEW( _manualAllocAll );
 	SAFE_RELEASE_SUBVIEW( _manualFreeAll );
 	SAFE_RELEASE_SUBVIEW( _manualAlloc );
@@ -222,7 +233,7 @@
 		else
 		{
 			_autoWarning.stateNormal.title = @"Warning(Off)";
-			_autoWarning.stateNormal.titleColor = [UIColor redColor];
+			_autoWarning.stateNormal.titleColor = [UIColor whiteColor];
 		}
 		
 		[self update];
@@ -260,13 +271,19 @@
 		[UIView commitAnimations];
 	}
 
-	[_plotView setPlots:[BeeDebugMemoryModel sharedInstance].chartDatas];
-	[_plotView setUpperBound:[BeeDebugMemoryModel sharedInstance].upperBound * 1.1f];
-	[_plotView setNeedsDisplay];
+	[_plotView1 setPlots:[BeeDebugMemoryModel sharedInstance].chartDatas];
+	[_plotView1 setLowerBound:[BeeDebugMemoryModel sharedInstance].lowerBound];
+	[_plotView1 setUpperBound:[BeeDebugMemoryModel sharedInstance].upperBound];
+	[_plotView1 setNeedsDisplay];
+
+	[_plotView2 setPlots:[BeeDebugMemoryModel sharedInstance].chartDatas];
+	[_plotView2 setLowerBound:0];
+	[_plotView2 setUpperBound:[BeeDebugMemoryModel sharedInstance].totalBytes];
+	[_plotView2 setNeedsDisplay];
 	
 	NSMutableString * text = [NSMutableString string];
-	[text appendFormat:@"Used:%@  ", [BeeDebugUtility number2String:used]];
-	[text appendFormat:@"Free:%@ (%.0f%%)  ", [BeeDebugUtility number2String:total - used], percent];
+	[text appendFormat:@"Used:%@ (%.0f%%)   ", [BeeDebugUtility number2String:used], percent];
+	[text appendFormat:@"Free:%@  ", [BeeDebugUtility number2String:total - used]];
 	_statusView.text = text;
 }
 
@@ -307,7 +324,7 @@
 		statusFrame.origin.y = 0.0f;
 		
 		_statusView = [[BeeUILabel alloc] initWithFrame:statusFrame];
-		_statusView.textColor = [UIColor colorWithWhite:0.85f alpha:1.0f];
+		_statusView.textColor = [UIColor lightGrayColor];
 		_statusView.textAlignment = UITextAlignmentLeft;
 		_statusView.font = [UIFont boldSystemFontOfSize:12.0f];
 		_statusView.lineBreakMode = UILineBreakModeClip;
@@ -316,37 +333,37 @@
 
 		CGRect plotFrame;
 		plotFrame.size.width = frame.size.width;
-		plotFrame.size.height = 70.0f;
+		plotFrame.size.height = 90.0f;
 		plotFrame.origin.x = 0.0f;
-		plotFrame.origin.y = 30.0f;
-		
-		_plotView3 = [[BeeDebugPlotsView alloc] initWithFrame:plotFrame];
-		_plotView3.alpha = 0.75f;
-		_plotView3.lowerBound = 0.0f;
-		_plotView3.upperBound = MAX_MESSAGE_HISTORY;
-		_plotView3.lineColor = [UIColor redColor];
-		_plotView3.lineWidth = 2.0f;
-		_plotView3.capacity = MAX_MESSAGE_HISTORY;
-		[self addSubview:_plotView3];
-		
-		_plotView2 = [[BeeDebugPlotsView alloc] initWithFrame:plotFrame];
-		_plotView2.alpha = 0.75f;
-		_plotView2.lowerBound = 0.0f;
-		_plotView2.upperBound = MAX_MESSAGE_HISTORY;
-		_plotView2.lineColor = [UIColor greenColor];
-		_plotView2.lineWidth = 2.0f;
-		_plotView2.capacity = MAX_MESSAGE_HISTORY;
-		[self addSubview:_plotView2];
+		plotFrame.origin.y = 20.0f;
 		
 		_plotView1 = [[BeeDebugPlotsView alloc] initWithFrame:plotFrame];
-		_plotView1.alpha = 0.75f;
+		_plotView1.alpha = 0.6f;
 		_plotView1.lowerBound = 0.0f;
 		_plotView1.upperBound = MAX_MESSAGE_HISTORY;
-		_plotView1.lineColor = [UIColor yellowColor];
-		_plotView1.lineWidth = 2.0f;
+		_plotView1.lineColor = [UIColor greenColor];
+		_plotView1.lineWidth = 1.0f;
 		_plotView1.capacity = MAX_MESSAGE_HISTORY;
 		[self addSubview:_plotView1];
 		
+		_plotView2 = [[BeeDebugPlotsView alloc] initWithFrame:plotFrame];
+		_plotView2.alpha = 0.6f;
+		_plotView2.lowerBound = 0.0f;
+		_plotView2.upperBound = MAX_MESSAGE_HISTORY;
+		_plotView2.lineColor = [UIColor cyanColor];
+		_plotView2.lineWidth = 1.0f;
+		_plotView2.capacity = MAX_MESSAGE_HISTORY;
+		[self addSubview:_plotView2];
+
+		_plotView3 = [[BeeDebugPlotsView alloc] initWithFrame:plotFrame];
+		_plotView3.alpha = 0.6f;
+		_plotView3.lowerBound = 0.0f;
+		_plotView3.upperBound = MAX_MESSAGE_HISTORY;
+		_plotView3.lineColor = [UIColor redColor];
+		_plotView3.lineWidth = 1.0f;
+		_plotView3.capacity = MAX_MESSAGE_HISTORY;
+		[self addSubview:_plotView3];
+
 		CGRect allocFrame;
 		allocFrame.size.width = 100.0f;
 		allocFrame.size.height = 26.0f;
@@ -375,7 +392,7 @@
 		_freezeAll.layer.borderWidth = 2.0f;
 		_freezeAll.titleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
 		_freezeAll.stateNormal.title = @"Freeze(Off)";
-		_freezeAll.stateNormal.titleColor = [UIColor redColor];
+		_freezeAll.stateNormal.titleColor = [UIColor whiteColor];
 		[_freezeAll addSignal:@"FREEZE_ALL" forControlEvents:UIControlEventTouchUpInside];
 		[self addSubview:_freezeAll];
 	}
@@ -414,7 +431,17 @@
 			[BeeMessageQueue sharedInstance].pause = NO;
 
 			_freezeAll.stateNormal.title = @"Freeze(Off)";
-			_freezeAll.stateNormal.titleColor = [UIColor redColor];
+			_freezeAll.stateNormal.titleColor = [UIColor whiteColor];
+			
+			[UIView beginAnimations:nil context:nil];
+			[UIView setAnimationDuration:0.6f];
+			[UIView setAnimationBeginsFromCurrentState:YES];
+			[UIView setAnimationRepeatAutoreverses:NO];
+			[UIView setAnimationRepeatCount:1];
+			
+			self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.6f];
+			
+			[UIView commitAnimations];
 		}
 		else
 		{
@@ -422,6 +449,16 @@
 			
 			_freezeAll.stateNormal.title = @"Freeze(On)";
 			_freezeAll.stateNormal.titleColor = [UIColor greenColor];
+			
+			[UIView beginAnimations:nil context:nil];
+			[UIView setAnimationDuration:0.6f];
+			[UIView setAnimationBeginsFromCurrentState:YES];
+			[UIView setAnimationRepeatAutoreverses:YES];
+			[UIView setAnimationRepeatCount:999999];
+			
+			self.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0.6f];
+			
+			[UIView commitAnimations];
 		}
 		
 		[self update];
@@ -486,7 +523,7 @@
 		statusFrame.origin.y = 0.0f;
 		
 		_statusView = [[BeeUILabel alloc] initWithFrame:statusFrame];
-		_statusView.textColor = [UIColor colorWithWhite:0.85f alpha:1.0f];
+		_statusView.textColor = [UIColor lightGrayColor];
 		_statusView.textAlignment = UITextAlignmentLeft;
 		_statusView.font = [UIFont boldSystemFontOfSize:12.0f];
 		_statusView.lineBreakMode = UILineBreakModeClip;
@@ -495,37 +532,28 @@
 
 		CGRect plotFrame;
 		plotFrame.size.width = frame.size.width;
-		plotFrame.size.height = 70.0f;
+		plotFrame.size.height = 90.0f;
 		plotFrame.origin.x = 0.0f;
-		plotFrame.origin.y = 30.0f;
-		
-		_plotView3 = [[BeeDebugPlotsView alloc] initWithFrame:plotFrame];
-		_plotView3.alpha = 0.75f;
-		_plotView3.lowerBound = 0.0f;
-		_plotView3.upperBound = MAX_REQUEST_HISTORY;
-		_plotView3.lineColor = [UIColor redColor];
-		_plotView3.lineWidth = 2.0f;
-		_plotView3.capacity = MAX_REQUEST_HISTORY;
-		[self addSubview:_plotView3];
-		
-		_plotView2 = [[BeeDebugPlotsView alloc] initWithFrame:plotFrame];
-		_plotView2.alpha = 0.75f;
-		_plotView2.lowerBound = 0.0f;
-		_plotView2.upperBound = MAX_REQUEST_HISTORY;
-		_plotView2.lineColor = [UIColor greenColor];
-		_plotView2.lineWidth = 2.0f;
-		_plotView2.capacity = MAX_REQUEST_HISTORY;
-		[self addSubview:_plotView2];
+		plotFrame.origin.y = 20.0f;
 		
 		_plotView1 = [[BeeDebugPlotsView alloc] initWithFrame:plotFrame];
 		_plotView1.alpha = 0.75f;
 		_plotView1.lowerBound = 0.0f;
 		_plotView1.upperBound = MAX_REQUEST_HISTORY;
-		_plotView1.lineColor = [UIColor yellowColor];
-		_plotView1.lineWidth = 2.0f;
+		_plotView1.lineColor = [UIColor greenColor];
+		_plotView1.lineWidth = 1.0f;
 		_plotView1.capacity = MAX_REQUEST_HISTORY;
 		[self addSubview:_plotView1];
-		
+
+		_plotView2 = [[BeeDebugPlotsView alloc] initWithFrame:plotFrame];
+		_plotView2.alpha = 0.6f;
+		_plotView2.lowerBound = 0.0f;
+		_plotView2.upperBound = MAX_REQUEST_HISTORY;
+		_plotView2.lineColor = [UIColor grayColor];
+		_plotView2.lineWidth = 1.0f;
+		_plotView2.capacity = MAX_REQUEST_HISTORY;
+		[self addSubview:_plotView2];
+				
 		CGRect allocFrame;
 		allocFrame.size.width = 50.0f;
 		allocFrame.size.height = 26.0f;
@@ -556,32 +584,32 @@
 
 		allocFrame.origin.x += allocFrame.size.width + 3.0f;
 		allocFrame.size.width = 103.0f;
-		
-		_switchOnline = [[BeeUIButton alloc] initWithFrame:allocFrame];
-		_switchOnline.backgroundColor = [UIColor darkGrayColor];
-		_switchOnline.layer.borderColor = [UIColor lightGrayColor].CGColor;
-		_switchOnline.layer.borderWidth = 2.0f;
-		_switchOnline.titleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
-		_switchOnline.stateNormal.title = @"Online";
-		_switchOnline.stateNormal.titleColor = [UIColor greenColor];
-		[_switchOnline addSignal:@"SWITCH" forControlEvents:UIControlEventTouchUpInside];
-		[self addSubview:_switchOnline];
+
+		_bandWidth = [[BeeUIButton alloc] initWithFrame:allocFrame];
+		_bandWidth.backgroundColor = [UIColor darkGrayColor];
+		_bandWidth.layer.borderColor = [UIColor lightGrayColor].CGColor;
+		_bandWidth.layer.borderWidth = 2.0f;
+		_bandWidth.titleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
+		_bandWidth.stateNormal.title = @"No limit";
+		_bandWidth.stateNormal.titleColor = [UIColor whiteColor];
+		[_bandWidth addSignal:@"LIMIT" forControlEvents:UIControlEventTouchUpInside];
+		[self addSubview:_bandWidth];
 
 		CGRect switchFrame;
 		switchFrame.size.width = 100.0f;
 		switchFrame.size.height = 26.0f;
 		switchFrame.origin.x = frame.size.width - switchFrame.size.width - 4.0f;
 		switchFrame.origin.y = frame.size.height - 30.0f;
-		
-		_bandWidth = [[BeeUIButton alloc] initWithFrame:switchFrame];
-		_bandWidth.backgroundColor = [UIColor darkGrayColor];
-		_bandWidth.layer.borderColor = [UIColor lightGrayColor].CGColor;
-		_bandWidth.layer.borderWidth = 2.0f;
-		_bandWidth.titleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
-		_bandWidth.stateNormal.title = @"No limit";
-		_bandWidth.stateNormal.titleColor = [UIColor redColor];
-		[_bandWidth addSignal:@"LIMIT" forControlEvents:UIControlEventTouchUpInside];
-		[self addSubview:_bandWidth];
+
+		_switchOnline = [[BeeUIButton alloc] initWithFrame:switchFrame];
+		_switchOnline.backgroundColor = [UIColor darkGrayColor];
+		_switchOnline.layer.borderColor = [UIColor lightGrayColor].CGColor;
+		_switchOnline.layer.borderWidth = 2.0f;
+		_switchOnline.titleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
+		_switchOnline.stateNormal.title = @"FlightMode(Off)";
+		_switchOnline.stateNormal.titleColor = [UIColor whiteColor];
+		[_switchOnline addSignal:@"SWITCH" forControlEvents:UIControlEventTouchUpInside];
+		[self addSubview:_switchOnline];
 	}
 	return self;
 }
@@ -590,7 +618,6 @@
 {
 	SAFE_RELEASE_SUBVIEW( _plotView1 );
 	SAFE_RELEASE_SUBVIEW( _plotView2 );
-	SAFE_RELEASE_SUBVIEW( _plotView3 );
 	
 	SAFE_RELEASE_SUBVIEW( _statusView );
 	SAFE_RELEASE_SUBVIEW( _titleView );
@@ -637,15 +664,35 @@
 		{
 			[BeeRequestQueue sharedInstance].online = NO;
 
-			_switchOnline.stateNormal.title = @"Offline";
-			_switchOnline.stateNormal.titleColor = [UIColor redColor];
+			_switchOnline.stateNormal.title = @"FlightMode(On)";
+			_switchOnline.stateNormal.titleColor = [UIColor greenColor];
+			
+			[UIView beginAnimations:nil context:nil];
+			[UIView setAnimationDuration:0.6f];
+			[UIView setAnimationBeginsFromCurrentState:YES];
+			[UIView setAnimationRepeatAutoreverses:YES];
+			[UIView setAnimationRepeatCount:999999];
+			
+			self.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0.6f];
+			
+			[UIView commitAnimations];
 		}
 		else
 		{
 			[BeeRequestQueue sharedInstance].online = YES;
 			
-			_switchOnline.stateNormal.title = @"Online";
-			_switchOnline.stateNormal.titleColor = [UIColor greenColor];
+			_switchOnline.stateNormal.title = @"FlightMode(Off)";
+			_switchOnline.stateNormal.titleColor = [UIColor whiteColor];
+			
+			[UIView beginAnimations:nil context:nil];
+			[UIView setAnimationDuration:0.6f];
+			[UIView setAnimationBeginsFromCurrentState:YES];
+			[UIView setAnimationRepeatAutoreverses:NO];
+			[UIView setAnimationRepeatCount:1];
+			
+			self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.6f];
+			
+			[UIView commitAnimations];
 		}
 
 		[self update];
@@ -663,7 +710,7 @@
 		if ( BANDWIDTH_CURRENT == bandWidth )
 		{
 			_bandWidth.stateNormal.title = @"No limit";
-			_bandWidth.stateNormal.titleColor = [UIColor redColor];
+			_bandWidth.stateNormal.titleColor = [UIColor whiteColor];
 		}
 		else if ( BANDWIDTH_GPRS == bandWidth )
 		{
@@ -688,23 +735,21 @@
 - (void)update
 {
 	NSMutableString * text = [NSMutableString string];
-	[text appendFormat:@"Conn:%d  ", [BeeDebugNetworkModel sharedInstance].totalCount];
-	[text appendFormat:@"Up:%@  ", [BeeDebugUtility number2String:[BeeDebugNetworkModel sharedInstance].uploadBytes]];
-	[text appendFormat:@"Down:%@  ", [BeeDebugUtility number2String:[BeeDebugNetworkModel sharedInstance].downloadBytes]];
+	[text appendFormat:@"Concurrent:%d  ", [BeeDebugNetworkModel sharedInstance].totalCount];
 	[text appendFormat:@"Delay:%.1fs  ", [BeeRequestQueue sharedInstance].delay];
+	[text appendFormat:@"U:%@  ", [BeeDebugUtility number2String:[BeeDebugNetworkModel sharedInstance].uploadBytes]];
+	[text appendFormat:@"D:%@  ", [BeeDebugUtility number2String:[BeeDebugNetworkModel sharedInstance].downloadBytes]];
 	_statusView.text = text;
-	
-	[_plotView1 setUpperBound:[BeeDebugNetworkModel sharedInstance].upperBound];
-	[_plotView1 setPlots:[BeeDebugNetworkModel sharedInstance].sendingPlots];
+		
+	[_plotView1 setUpperBound:[BeeDebugNetworkModel sharedInstance].recvLowerBound];
+	[_plotView1 setUpperBound:[BeeDebugNetworkModel sharedInstance].recvUpperBound];
+	[_plotView1 setPlots:[BeeDebugNetworkModel sharedInstance].recvPlots];
 	[_plotView1 setNeedsDisplay];
 	
-	[_plotView2 setUpperBound:[BeeDebugNetworkModel sharedInstance].upperBound];
-	[_plotView2 setPlots:[BeeDebugNetworkModel sharedInstance].succeedPlots];
+	[_plotView2 setUpperBound:[BeeDebugNetworkModel sharedInstance].sendLowerBound];
+	[_plotView2 setUpperBound:[BeeDebugNetworkModel sharedInstance].sendUpperBound];
+	[_plotView2 setPlots:[BeeDebugNetworkModel sharedInstance].sendPlots];
 	[_plotView2 setNeedsDisplay];
-
-	[_plotView3 setUpperBound:[BeeDebugNetworkModel sharedInstance].upperBound];
-	[_plotView3 setPlots:[BeeDebugNetworkModel sharedInstance].failedPlots];
-	[_plotView3 setNeedsDisplay];
 }
 
 @end
@@ -772,4 +817,4 @@ DEF_SINGLETON( BeeDebugDashBoard )
 
 @end
 
-#endif	// #if __BEE_DEBUGGER__
+#endif	// #if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__

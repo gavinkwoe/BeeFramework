@@ -30,14 +30,18 @@
 //  Bee_DebugPlotsView.h
 //
 
-#if __BEE_DEBUGGER__
-
+#import "Bee_Precompile.h"
 #import "Bee.h"
+
+#if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__
 
 #pragma mark -
 
 @interface BeeDebugPlotsView : UIView
 {
+	BOOL		_fill;
+	BOOL		_border;
+	CGFloat		_lineScale;
 	UIColor *	_lineColor;
 	CGFloat		_lineWidth;
 	CGFloat		_lowerBound;
@@ -46,6 +50,9 @@
 	NSArray *	_plots;
 }
 
+@property (nonatomic, assign) BOOL			fill;
+@property (nonatomic, assign) BOOL			border;
+@property (nonatomic, assign) CGFloat		lineScale;
 @property (nonatomic, retain) UIColor *		lineColor;
 @property (nonatomic, assign) CGFloat		lineWidth;
 @property (nonatomic, assign) CGFloat		lowerBound;
@@ -55,4 +62,4 @@
 
 @end
 
-#endif	// #if __BEE_DEBUGGER__
+#endif	// #if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__

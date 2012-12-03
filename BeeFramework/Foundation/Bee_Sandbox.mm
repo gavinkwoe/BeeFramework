@@ -30,7 +30,7 @@
 //  Bee_CoreSandbox.h
 //
 
-#import <Foundation/Foundation.h>
+#import "Bee_Precompile.h"
 #import "Bee_Sandbox.h"
 
 @implementation BeeSandbox
