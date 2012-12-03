@@ -49,6 +49,10 @@ Fantastic BeeActiveRecord:
 		user.name = @"amanda";
 		user.INSERT();		
 	}
+	
+New overload graph:
+
+![Debugger](http://blog.whatsbug.com/wp-content/uploads/2012/12/bee_5.png)
 
 ##v0.1 changes
 
