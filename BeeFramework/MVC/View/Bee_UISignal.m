@@ -352,7 +352,7 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 
 - (BeeUISignal *)sendUISignal:(NSString *)name withObject:(NSObject *)object from:(id)source
 {
-	BeeUISignal * signal = [[[BeeUISignal alloc] init] autorelease];
+	BeeUISignal * signal = [[BeeUISignal alloc] init];
 	if ( signal )
 	{
 		signal.source = source ? source : self;
@@ -361,7 +361,7 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 		signal.object = object;
 		[signal send];
 	}
-	return signal;
+	return [signal autorelease];
 }
 
 @end
@@ -391,7 +391,7 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 
 - (BeeUISignal *)sendUISignal:(NSString *)name withObject:(NSObject *)object from:(id)source
 {
-	BeeUISignal * signal = [[[BeeUISignal alloc] init] autorelease];
+	BeeUISignal * signal = [[BeeUISignal alloc] init];
 	if ( signal )
 	{
 		signal.source = source ? source : self;
@@ -400,7 +400,7 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 		signal.object = object;
 		[signal send];
 	}
-	return signal;
+	return [signal autorelease];
 }
 
 @end
@@ -490,18 +490,20 @@ DEF_SIGNAL( TAPPED );
 	{
 		if ( [gesture isKindOfClass:[UISingleTapGestureRecognizer class]] )
 		{
-			singleTapGesture = (UISingleTapGestureRecognizer *)gesture;
+			singleTapGesture = (UISingleTapGestureRecognizer *)[gesture retain];
 		}
 	}
 	
 	if ( nil == singleTapGesture )
 	{
-		singleTapGesture = [[[UISingleTapGestureRecognizer alloc] initWithTarget:self action:@selector(didSingleTapped:)] autorelease];
+		singleTapGesture = [[UISingleTapGestureRecognizer alloc] initWithTarget:self action:@selector(didSingleTapped:)];
 		[self addGestureRecognizer:singleTapGesture];
+
 	}
 	
 	singleTapGesture.signalName = signal;
 	singleTapGesture.signalObject = obj;
+    [singleTapGesture release];
 }
 
 - (void)makeUntappable

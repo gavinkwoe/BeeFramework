@@ -61,7 +61,7 @@ DEF_SIGNAL( HIGHLIGHT_CHANGED )
 	{
 		[self initSelf];
 	}
-	return self;	
+	return self;
 }
 
 - (id)initWithFrame:(CGRect)frame

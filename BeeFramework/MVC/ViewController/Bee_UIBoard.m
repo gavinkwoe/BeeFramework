@@ -34,6 +34,7 @@
 #import "Bee_UIBoard.h"
 #import "Bee_UIStack.h"
 #import "Bee_Runtime.h"
+#import "Bee_SystemInfo.h"
 #import "Bee_Log.h"
 
 #import "Bee_Network.h"
@@ -590,13 +591,14 @@ static NSMutableArray *			__allBoards;
 #endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 
 	CGRect boardViewBound = [UIScreen mainScreen].bounds;
-	BeeUIBoardView * boardView = [[[BeeUIBoardView alloc] initWithFrame:boardViewBound] autorelease];
+	BeeUIBoardView * boardView = [[BeeUIBoardView alloc] initWithFrame:boardViewBound];
 	boardView.owner = self;
 
 	self.view = boardView;
 	self.view.userInteractionEnabled = NO;
 	self.view.backgroundColor = [UIColor clearColor];
 	self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [boardView release];
 }
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
@@ -1188,7 +1190,7 @@ static NSMutableArray *			__allBoards;
 
 - (void)showBarButton:(NSInteger)position image:(UIImage *)image
 {
-	UIButton * button = [[[UIButton alloc] initWithFrame:CGRectMake(0, 0, image.size.width, image.size.height)] autorelease];
+	UIButton * button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, image.size.width, image.size.height)];
 	button.contentMode = UIViewContentModeScaleAspectFit;
 	button.backgroundColor = [UIColor clearColor];
 	[button setImage:image forState:UIControlStateNormal];
@@ -1203,7 +1205,8 @@ static NSMutableArray *			__allBoards;
 		[button addTarget:self action:@selector(didRightBarButtonTouched) forControlEvents:UIControlEventTouchUpInside];
 		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:button] autorelease];
 	}
-
+    [button release];
+    
 //	if ( BEE_UIBOARD_BARBUTTON_LEFT == position )
 //	{		
 //		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:image
@@ -1459,7 +1462,9 @@ static NSMutableArray *			__allBoards;
 {
 	self.view.frame = CGRectMake( 0.0f, 0.0f, size.width, size.height );
 
-	self.popover = [[[UIPopoverController alloc] initWithContentViewController:[BeeUIStack stackWithFirstBoard:self]] autorelease];
+    UIPopoverController *popover = [[UIPopoverController alloc] initWithContentViewController:[BeeUIStack stackWithFirstBoard:self]];
+	self.popover = popover;
+    [popover release];
 	self.popover.delegate = self;
     self.contentSizeForViewInPopover = size;
 	[self.popover setPopoverContentSize:size];

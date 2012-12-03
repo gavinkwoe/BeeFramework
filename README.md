@@ -1,3 +1,20 @@
+This fork is for porting to cocoapods
+
+use cocoapods to enjoy your development
+
+http://cocoapods.org
+
+just add 
+
+```
+platform :ios
+pod 'BeeFramefork'
+```
+
+to `Podfile` and run `pod install`
+
+--------------------
+
 #Bee framework
 
 A rapid development framework for iOS applications, from geek. :-)

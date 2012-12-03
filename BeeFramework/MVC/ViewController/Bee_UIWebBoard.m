@@ -89,7 +89,7 @@
 	{
 		if ( [signal is:BeeUIWebView.DID_LOAD_FINISH] )
 		{
-			// TODO: change title
+            self.title = [self.webView stringByEvaluatingJavaScriptFromString:@"document.title"];
 		}
 	}
 }

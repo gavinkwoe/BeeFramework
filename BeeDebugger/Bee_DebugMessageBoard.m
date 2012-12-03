@@ -170,7 +170,11 @@
 	BeeMessage * msg = (BeeMessage *)data;
 	
 	NSDateFormatter * formatter = [[NSDateFormatter alloc] init];
-	[formatter setLocale:[[[NSLocale alloc] initWithLocaleIdentifier:@"US"] autorelease]];
+    
+    NSLocale *local = [[NSLocale alloc] initWithLocaleIdentifier:@"US"];
+	[formatter setLocale:local];
+    [local release];
+    
 	[formatter setDateFormat:@"hh:mm:ss"];
 	NSDate * date2 = [NSDate dateWithTimeIntervalSince1970:msg.initTimeStamp];
 	_timeLabel.text = [formatter stringFromDate:date2];
