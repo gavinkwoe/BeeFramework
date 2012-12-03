@@ -16,8 +16,8 @@ Email: gavinkwoe@gmail.com
   （增加数据库及活动记录的支持）
 3. Fix some bugs
   （修改了一些BUG，感谢同学们的给力支持！）
-4. Move precompile options to 'Bee_Precompile.h' 
-  （把所有编译选项都移到Bee_Precompile.h里了）
+4. Move precompile options to 'Bee_Precompile.h'     
+  （把所有编译选项都移到Bee_Precompile.h里了）   
 
 From now, you can use SQLITE everywhere in fantastic way!    
 See 'Lession11' & 'Bee_ActiveRecordTest.h/.m' & 'BeeDatabaseTest.h/.m'    
