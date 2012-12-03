@@ -16,11 +16,3 @@ profile
 +.DS_Store
 
 Example/.DS_Store
-
-iBooks/iBooks/AppBoard.m
-
-BeeFramework/Storage/Bee_ActiveRecordTest.h
-
-BeeDebugger/Bee_DebugMemoryBoard.h
-
-BeeFramework/Storage/Bee_DatabaseTest.h
