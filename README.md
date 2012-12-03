@@ -14,8 +14,8 @@ Email: gavinkwoe@gmail.com
 2. Add BeeDatabase(based on FMDB) and BeeActiveRecord（增加数据库及活动记录的支持）
 3. Fix some bugs（修改了一些BUG，感谢同学们的给力支持！）
 
-From now, you can use SQLITE everywhere in fantastic way!
-See 'Lession11' & 'Bee_ActiveRecordTest.h/.m' & 'BeeDatabaseTest.h/.m'
+From now, you can use SQLITE everywhere in fantastic way!    
+See 'Lession11' & 'Bee_ActiveRecordTest.h/.m' & 'BeeDatabaseTest.h/.m'    
 
 Fantastic BeeDatabase:
 
