@@ -96,7 +96,8 @@ DEF_NOTIFICATION( HEIGHT_CHANGED );
 		if ( value )
 		{
 			CGRect	keyboardEndFrame = [value CGRectValue];
-			CGFloat	keyboardHeight = ([[UIDevice currentDevice] orientation] == UIDeviceOrientationPortrait || [[UIDevice currentDevice] orientation] == UIDeviceOrientationPortraitUpsideDown) ? keyboardEndFrame.size.height : keyboardEndFrame.size.width;
+//			CGFloat	keyboardHeight = ([[UIDevice currentDevice] orientation] == UIDeviceOrientationPortrait || [[UIDevice currentDevice] orientation] == UIDeviceOrientationPortraitUpsideDown) ? keyboardEndFrame.size.height : keyboardEndFrame.size.width;
+			CGFloat	keyboardHeight = keyboardEndFrame.size.height;
 			
 			if ( keyboardHeight != _height )
 			{
@@ -157,7 +158,8 @@ DEF_NOTIFICATION( HEIGHT_CHANGED );
 		if ( value )
 		{
 			CGRect	keyboardEndFrame = [value CGRectValue];
-			CGFloat	keyboardHeight = ([[UIDevice currentDevice] orientation] == UIDeviceOrientationPortrait || [[UIDevice currentDevice] orientation] == UIDeviceOrientationPortraitUpsideDown) ? keyboardEndFrame.size.height : keyboardEndFrame.size.width;
+//			CGFloat	keyboardHeight = ([[UIDevice currentDevice] orientation] == UIDeviceOrientationPortrait || [[UIDevice currentDevice] orientation] == UIDeviceOrientationPortraitUpsideDown) ? keyboardEndFrame.size.height : keyboardEndFrame.size.width;
+			CGFloat	keyboardHeight = keyboardEndFrame.size.height;
 			
 			if ( keyboardHeight != _height )
 			{

@@ -609,6 +609,11 @@ DEF_INT( STATE_CANCELLED,	5 );
 	[_responders removeObjectNoRelease:responder];
 }
 
+- (void)removeAllResponders
+{
+	[_responders removeAllObjectsNoRelease];
+}
+
 @end
 
 #pragma mark -
@@ -1170,9 +1175,11 @@ DEF_INT( STATE_CANCELLED,	5 );
 	if ( [_requests containsObject:request] )
 	{
 		if ( request.created || request.sending || request.recving )
-		{
-			[request clearDelegatesAndCancel];
+		{						
 			[request changeState:BeeRequest.STATE_CANCELLED];
+			
+			[request clearDelegatesAndCancel];	
+			[request removeAllResponders];	
 		}
 		
 		[_requests removeObject:request];
@@ -1317,9 +1324,11 @@ DEF_INT( STATE_CANCELLED,	5 );
 		[networkRequest changeState:BeeRequest.STATE_FAILED];
 	}
 
+	[networkRequest clearDelegatesAndCancel];	
+	[networkRequest removeAllResponders];	
+
 	[_requests removeObject:networkRequest];
-	[networkRequest cancel];	
-	
+		
 	if ( self.whenUpdate )
 	{
 		self.whenUpdate( networkRequest );
@@ -1332,9 +1341,12 @@ DEF_INT( STATE_CANCELLED,	5 );
 		return;
 
 	BeeRequest * networkRequest = (BeeRequest *)request;	
+
 	networkRequest.errorCode = -1;
 	[networkRequest changeState:BeeRequest.STATE_FAILED];
-	[networkRequest cancel];
+	
+	[networkRequest clearDelegatesAndCancel];	
+	[networkRequest removeAllResponders];	
 	
 	[_requests removeObject:networkRequest];
 	

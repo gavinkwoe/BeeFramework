@@ -159,6 +159,7 @@
 - (void)enableScrollsToTopPropertyOnAllSubviewsOf:(UIView *)view;
 - (void)operateReloadData;
 - (void)layoutSearchBar:(BOOL)animated;
+- (void)layoutTableView:(BOOL)animated;
 - (void)layoutViews:(BOOL)animated;
 - (void)didSearchMaskHidden;
 - (void)syncScrollPosition;
@@ -340,6 +341,8 @@ DEF_INT( SEARCHBAR_STYLE_TOP,		1 );
 			{
 				[self layoutSearchBar:NO];
 			}
+			
+			[self layoutTableView:NO];
 
 			CGRect pullFrame;
 			pullFrame.origin.x = 0.0f;
@@ -380,6 +383,7 @@ DEF_INT( SEARCHBAR_STYLE_TOP,		1 );
 		if ( NO == _searchBar.hidden )
 		{
 			[self layoutSearchBar:YES];
+			[self layoutTableView:YES];
 		}
 	}
 }
@@ -410,7 +414,7 @@ DEF_INT( SEARCHBAR_STYLE_TOP,		1 );
 		{
 			searchFrame.origin.y -= [BeeUIKeyboard sharedInstance].height;
 		}
-		
+
 		_searchBar.frame = searchFrame;			
 	}
 	else
@@ -424,6 +428,46 @@ DEF_INT( SEARCHBAR_STYLE_TOP,		1 );
 		
 		_searchBar.frame = searchFrame;			
 	}
+	
+	if ( animated )
+	{
+		[UIView commitAnimations];
+	}
+}
+
+
+- (void)layoutTableView:(BOOL)animated
+{
+	if ( animated )
+	{
+		// Animate up or down
+		[UIView beginAnimations:nil context:nil];
+		[UIView setAnimationDuration:[BeeUIKeyboard sharedInstance].animationDuration];
+		[UIView setAnimationCurve:[BeeUIKeyboard sharedInstance].animationCurve];
+		[UIView setAnimationBeginsFromCurrentState:YES];
+		
+//		[UIView beginAnimations:nil context:NULL];
+//		[UIView setAnimationDuration:0.3f];
+//		[UIView setAnimationBeginsFromCurrentState:YES];
+	}
+	
+	CGRect bounds = self.view.bounds;
+	CGRect tableFrame;
+	tableFrame.origin = CGPointZero;
+	tableFrame.size.width = bounds.size.width;
+	tableFrame.size.height = bounds.size.height;
+	
+	if ( [BeeUIKeyboard sharedInstance].shown )
+	{
+		tableFrame.size.height -= [BeeUIKeyboard sharedInstance].height;
+	}
+	
+	if ( NO == _searchBar.hidden )
+	{
+		tableFrame.size.height -= SEARCH_BAR_HEIGHT;
+	}
+
+	_tableView.frame = tableFrame;
 	
 	if ( animated )
 	{
@@ -1003,22 +1047,15 @@ DEF_INT( SEARCHBAR_STYLE_TOP,		1 );
 }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
-{	
+{
 	[self.view bringSubviewToFront:_searchBar];
-	
-	[UIView beginAnimations:nil context:NULL];		
-	[UIView setAnimationDuration:0.3f];
-	
-	CGRect bounds = self.view.bounds;
-	
-	_tableView.frame = CGRectMake(0, 0, bounds.size.width, 225);
-	_searchBar.frame = CGRectMake(0, 225, bounds.size.width, 40);
-	
-	[UIView commitAnimations];
-	
+
 	_searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
 	[_searchBar setShowsCancelButton:YES animated:YES];
-	
+
+	[self layoutSearchBar:YES];
+	[self layoutTableView:YES];
+
 //	_searchBar.text = @"";
 	_searching = YES;
 
@@ -1028,16 +1065,10 @@ DEF_INT( SEARCHBAR_STYLE_TOP,		1 );
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
 {
-	[UIView beginAnimations:nil context:NULL];		
-	[UIView setAnimationDuration:0.3f];
+	[self layoutSearchBar:YES];
+	[self layoutTableView:YES];
 
-	CGRect bounds = self.view.bounds;
-
-	_tableView.frame = CGRectMake(0, 0, bounds.size.width, bounds.size.height - 40);
-	_searchBar.frame = CGRectMake(0, bounds.size.height - 40.0f, bounds.size.width, 40);
-	
 	[self sendUISignal:BeeUITableBoard.SEARCH_DEACTIVE];
-	[UIView commitAnimations];
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
