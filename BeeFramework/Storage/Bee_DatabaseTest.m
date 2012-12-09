@@ -96,7 +96,7 @@
 			self.DB
 				.FROM( @"blogs" )
 				.SET( @"date", [[NSDate date] description] )
-				.SET( @"content", [NSString stringWithFormat:@"Some content %lu", i] );
+				.SET( @"content", [NSString stringWithFormat:@"Some content %u", i] );
 			
 			if ( 0 == (i % 3) )
 			{
@@ -124,7 +124,7 @@
 			self.DB
 				.FROM( @"blogs" )
 				.WHERE( @"id", __INT(self.DB.insertID) )
-				.SET( @"content", [NSString stringWithFormat:@"Some content %lu", self.DB.insertID] )
+				.SET( @"content", [NSString stringWithFormat:@"Some content %u", self.DB.insertID] )
 				.UPDATE();
 				NSAssert( self.DB.succeed, nil );
 		}

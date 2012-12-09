@@ -220,7 +220,7 @@ DEF_SIGNAL( DELETE_ALL )
 
 - (void)setPath:(NSString *)path fileCount:(NSUInteger)count
 {
-	_folderName.text = [NSString stringWithFormat:@"Total %lu file(s)", count];
+	_folderName.text = [NSString stringWithFormat:@"Total %u file(s)", count];
 }
 
 - (void)unload

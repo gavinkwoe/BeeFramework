@@ -96,7 +96,6 @@ AS_SIGNAL( REACH_BOTTOM )	// 触底
 - (void)cancelReloadData;
 
 - (void)showPullLoader:(BOOL)en animated:(BOOL)animated;
-- (void)setBaseInsets:(UIEdgeInsets)insets;
 
 - (void)setPullLoading:(BOOL)en;
 - (void)scrollToTop:(BOOL)animated;

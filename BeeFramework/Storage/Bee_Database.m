@@ -1414,11 +1414,11 @@ static BeeDatabase * __mockedDB = nil;
 	{
 		if ( _offset )
 		{
-			[sql appendFormat:@" LIMIT %lu, %lu", _offset, _limit];
+			[sql appendFormat:@" LIMIT %u, %u", _offset, _limit];
 		}
 		else
 		{
-			[sql appendFormat:@" LIMIT %lu", _limit];
+			[sql appendFormat:@" LIMIT %u", _limit];
 		}
 	}
 
@@ -1637,7 +1637,7 @@ static BeeDatabase * __mockedDB = nil;
 
 	if ( _limit )
 	{
-		[sql appendFormat:@" LIMIT %lu", _limit];
+		[sql appendFormat:@" LIMIT %u", _limit];
 	}	
 	
 	[self __internalResetWrite];
@@ -1775,7 +1775,7 @@ static BeeDatabase * __mockedDB = nil;
 	
 	if ( _limit )
 	{
-		[sql appendFormat:@" LIMIT %lu", _limit];
+		[sql appendFormat:@" LIMIT %u", _limit];
 	}
 	
 	[self __internalResetWrite];
