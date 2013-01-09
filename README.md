@@ -17,13 +17,15 @@ to `Podfile` and run `pod install`
 
 #Bee framework
 
-A rapid development framework for iOS applications, from geek. :-)
+A rapid development framework for iOS applications.
+By geek, for geek.
 
 --------------------
 
 QQ Group(QQ群号): 79054681    
 QQ: 5220509    
 Email: gavinkwoe@gmail.com    
+google groups： https://groups.google.com/d/forum/beeframework?hl=zh-CN
 
 ##v0.2 changes
 

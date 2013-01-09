@@ -140,6 +140,7 @@
 		63C3AC9715F7942600F411F5 /* Bee_UIWebBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C3AC5C15F7942600F411F5 /* Bee_UIWebBoard.m */; };
 		63D5116316593A39005948E3 /* Bee_DebugViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 63D5116216593A38005948E3 /* Bee_DebugViewModel.m */; };
 		63D5116916596495005948E3 /* Bee_DebugCrashReporter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63D5116816596494005948E3 /* Bee_DebugCrashReporter.mm */; };
+		63EAE482166E2C5500C6F40E /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63EAE481166E2C5500C6F40E /* Default-568h@2x.png */; };
 		63F5FB6F166CE38B00139103 /* Lession11Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 63F5FB6C166CE38B00139103 /* Lession11Board.m */; };
 		63F5FB73166CE53900139103 /* Lession11Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 63F5FB72166CE53900139103 /* Lession11Model.m */; };
 		63F8E90F160C595300A5FECC /* Bee_UICameraBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 63F8E90E160C595300A5FECC /* Bee_UICameraBoard.m */; };
@@ -522,6 +523,7 @@
 		63D5116216593A38005948E3 /* Bee_DebugViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bee_DebugViewModel.m; sourceTree = "<group>"; };
 		63D5116716596493005948E3 /* Bee_DebugCrashReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bee_DebugCrashReporter.h; sourceTree = "<group>"; };
 		63D5116816596494005948E3 /* Bee_DebugCrashReporter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Bee_DebugCrashReporter.mm; sourceTree = "<group>"; };
+		63EAE481166E2C5500C6F40E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		63F5FB6B166CE38A00139103 /* Lession11Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lession11Board.h; sourceTree = "<group>"; };
 		63F5FB6C166CE38B00139103 /* Lession11Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lession11Board.m; sourceTree = "<group>"; };
 		63F5FB71166CE53800139103 /* Lession11Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lession11Model.h; sourceTree = "<group>"; };
@@ -993,6 +995,7 @@
 			children = (
 				63FE1C2B15D0191C00432794 /* AppDelegate.h */,
 				63FE1C2C15D0191C00432794 /* AppDelegate.m */,
+				63EAE481166E2C5500C6F40E /* Default-568h@2x.png */,
 				63FE1C2D15D0191C00432794 /* Default.png */,
 				63FE1C2E15D0191C00432794 /* Default@2x.png */,
 				63FE1C2F15D0191C00432794 /* icon.png */,
@@ -1086,6 +1089,7 @@
 				6392692D164F9CEF0099625C /* heat@2x.png in Resources */,
 				63A6314E16665170006FC6A0 /* Contributors.txt in Resources */,
 				63A6314F16665170006FC6A0 /* License.txt in Resources */,
+				63EAE482166E2C5500C6F40E /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

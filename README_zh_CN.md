@@ -7,6 +7,7 @@
 QQ群号: 79054681    
 QQ: 5220509    
 邮箱: gavinkwoe@gmail.com    
+邮件列表（google groups）： https://groups.google.com/d/forum/beeframework?hl=zh-CN
 
 
 ##v0.2 变更

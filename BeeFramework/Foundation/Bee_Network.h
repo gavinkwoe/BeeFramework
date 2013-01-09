@@ -154,6 +154,7 @@ AS_INT( STATE_CANCELLED );
 - (BOOL)hasResponder:(id)responder;
 - (void)addResponder:(id)responder;
 - (void)removeResponder:(id)responder;
+- (void)removeAllResponders;
 
 - (void)callResponders;
 - (void)forwardResponder:(NSObject *)obj;
