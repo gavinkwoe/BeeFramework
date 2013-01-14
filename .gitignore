@@ -13,6 +13,6 @@ build/*
 xcuserdata
 profile
 *.moved-aside
-+.DS_Store
-
-Example/.DS_Store
+*.DS_Store
+*.svn/
+*.idea/
