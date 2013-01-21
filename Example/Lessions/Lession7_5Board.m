@@ -85,7 +85,7 @@ DEF_SIGNAL( BUTTON_TOUCHED )
 {
 	if ( [signal isKindOf:BeeUIDatePicker.SIGNAL] )
 	{
-		BeeUIDatePicker * picker = (BeeUIDatePicker *)signal.source;
+//		BeeUIDatePicker * picker = (BeeUIDatePicker *)signal.source;
 
 		if ( [signal is:BeeUIDatePicker.WILL_PRESENT] )
 		{

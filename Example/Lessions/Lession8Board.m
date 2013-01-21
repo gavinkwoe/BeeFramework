@@ -35,7 +35,7 @@ DEF_SIGNAL( BUTTON_TOUCHED )
 		
 		_button = [[BeeUIButton alloc] initWithFrame:CGRectZero];
 		_button.backgroundColor = [UIColor blackColor];
-		_button.font = [UIFont systemFontOfSize:14.0f];
+		_button.titleLabel.font = [UIFont systemFontOfSize:14.0f];
 		_button.stateNormal.title = @"Send request";
 		[_button addSignal:Lession8Board.BUTTON_TOUCHED forControlEvents:UIControlEventTouchUpInside];
 		[self.view addSubview:_button];
@@ -144,13 +144,13 @@ DEF_SIGNAL( BUTTON_TOUCHED )
 		{
 			// TODO: 正在发送数据，更新百分比
 			
-			self.title = [NSString stringWithFormat:@"Sending(%d%%)", request.uploadPercent];
+			self.title = [NSString stringWithFormat:@"Sending(%f%%)", request.uploadPercent];
 		}
 		else if ( request.recvProgressed )
 		{
 			// TODO: 正在接收数据，更新百分比
 			
-			self.title = [NSString stringWithFormat:@"Receiving(%d%%)", request.downloadPercent];
+			self.title = [NSString stringWithFormat:@"Receiving(%f%%)", request.downloadPercent];
 		}
 	}
 }

@@ -92,7 +92,7 @@ DEF_SIGNAL( ALERT_ITEM2_TOUCHED )
 {
 	if ( [signal isKindOf:BeeUIAlertView.SIGNAL] )
 	{
-		BeeUIAlertView * alert = (BeeUIAlertView *)signal.source;
+//		BeeUIAlertView * alert = (BeeUIAlertView *)signal.source;
 
 		if ( [signal is:BeeUIAlertView.WILL_PRESENT] )
 		{

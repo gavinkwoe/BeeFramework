@@ -20,6 +20,7 @@
 {
 	int zeroDivisor = 0;
 	int result = 10 / zeroDivisor;
+#pragma unused(result)
 }
 
 - (void) onCrash_deallocatedObject
