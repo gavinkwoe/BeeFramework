@@ -52,7 +52,7 @@ google groups： https://groups.google.com/d/forum/beeframework?hl=zh-CN
 	.FILE( @"photo2.png", [NSData data] )    
 	.FILE( @"photo3.png", [NSData data] );    
 
-        self    
+	self
 	.MSG( ArticleController.GET_ARTICLES )    
 	.TIMEOUT( 10.0f )    
 	.INPUT( @"magzine", _magzine );    
