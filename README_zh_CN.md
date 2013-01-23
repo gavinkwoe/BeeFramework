@@ -9,6 +9,41 @@ QQ: 5220509
 邮箱: gavinkwoe@gmail.com    
 邮件列表（google groups）： https://groups.google.com/d/forum/beeframework?hl=zh-CN
 
+##v0.2.3 变更
+
+1. 重构目录结构，Core与MVC完全分离，源文件与Extension分离
+2. 重构BeeDatabase及BeeActiveRecord代码结构，更清晰
+3. 支持ActiveRecord继承及嵌套，支持HAS、BELONG_TO等高级操作（后续会添加更多类RUBY高级特性），如：
+
+	@interface Location : BeeActiveRecord    
+	...    
+	@end    
+
+	@interface User : BeeActiveRecord    
+	...    
+	@end    
+	
+	@interface User2 : User    
+	@property (nonatomic, retain) Location * location;    
+	...    
+	@end    
+
+4. HTTP及MESSAGE支持点操作，如：
+
+	self    
+	.HTTP_GET( @"http://www.qq.com" )    
+	.HEADER( @"header1", @"xxx" )    
+	.HEADER( @"header2", @"xxx" )    
+	.HEADER( @"header3", @"xxx" )    
+	.PARAM( @"key1", @"xxx" )    
+	.PARAM( @"key2", @"xxx" )    
+	.PARAM( @"key3", @"xxx" )    
+	.FILE( @"photo1.png", [NSData data] )    
+	.FILE( @"photo2.png", [NSData data] )    
+	.FILE( @"photo3.png", [NSData data] );    
+
+
+5. 修复部分BUG（感谢群友们的支持！爱你们）
 
 ##v0.2 变更
 
