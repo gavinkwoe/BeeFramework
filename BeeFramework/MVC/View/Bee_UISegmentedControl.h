@@ -45,6 +45,7 @@ AS_SIGNAL( HIGHLIGHT_CHANGED )	// 高亮改变
 @property (nonatomic, assign) NSInteger	selectedTag;
 
 + (BeeUISegmentedControl *)spawn;
++ (BeeUISegmentedControl *)spawn:(NSString *)tagString;
 
 - (void)addTitle:(NSString *)title;
 - (void)addTitle:(NSString *)title tag:(NSInteger)tag;

@@ -26,7 +26,7 @@ DEF_SIGNAL( HIDE )
 	[super handleUISignal:signal];
 }
 
-- (void)handleBeeUIBoard:(BeeUISignal *)signal
+- (void)handleUISignal_BeeUIBoard:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 	
@@ -82,8 +82,10 @@ DEF_SIGNAL( HIDE )
 	}
 }
 
-- (void)handleLession7_2Board:(BeeUISignal *)signal
+- (void)handleUISignal_Lession7_2Board:(BeeUISignal *)signal
 {
+	[super handleUISignal:signal];
+	
 	if ( [signal is:Lession7_2Board.SHOW] )
 	{
 		[_indicator startAnimating];

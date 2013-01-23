@@ -33,6 +33,8 @@
 #import "Bee_Precompile.h"
 #import "Bee_UISegmentedControl.h"
 #import "Bee_UISignal.h"
+#import "UIView+BeeExtension.h"
+#import "UIView+BeeUISignal.h"
 
 #pragma mark -
 
@@ -52,6 +54,13 @@ DEF_SIGNAL( HIGHLIGHT_CHANGED )
 + (BeeUISegmentedControl *)spawn
 {
 	return [[[BeeUISegmentedControl alloc] initWithItems:[NSArray array]] autorelease];
+}
+
++ (BeeUISegmentedControl *)spawn:(NSString *)tagString
+{
+	BeeUISegmentedControl * view = [[[BeeUISegmentedControl alloc] init] autorelease];
+	view.tagString = tagString;
+	return view;
 }
 
 - (id)init

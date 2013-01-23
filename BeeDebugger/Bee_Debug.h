@@ -33,6 +33,6 @@
 #import "Bee_Precompile.h"
 #import "Bee.h"
 
-@interface BeeDebugger
+@interface BeeDebugger : NSObject
 + (void)show;
 @end

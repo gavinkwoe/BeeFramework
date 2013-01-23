@@ -138,7 +138,7 @@
 - (void)handleDribbbleController:(BeeMessage *)msg
 {
 	[super handleMessage:msg];
-	
+
 	if ( [msg is:DribbbleController.GET_SHOTS] )
 	{
 		if ( msg.succeed )

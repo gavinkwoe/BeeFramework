@@ -25,7 +25,7 @@ DEF_SIGNAL( BUTTON_TOUCHED )
 	[super handleUISignal:signal];
 }
 
-- (void)handleBeeUIBoard:(BeeUISignal *)signal
+- (void)handleUISignal_BeeUIBoard:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 	
@@ -60,7 +60,7 @@ DEF_SIGNAL( BUTTON_TOUCHED )
 	}
 }
 
-- (void)handleLession7_4Board:(BeeUISignal *)signal
+- (void)handleUISignal_Lession7_4Board:(BeeUISignal *)signal
 {
 	if ( [signal is:Lession7_4Board.BUTTON_TOUCHED] )
 	{

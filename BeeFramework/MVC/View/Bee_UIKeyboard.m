@@ -210,7 +210,7 @@ DEF_NOTIFICATION( HEIGHT_CHANGED );
 {
 	if ( nil == _accessor )
 		return;
-	
+
 	if ( animated )
 	{
 		[UIView beginAnimations:nil context:NULL];

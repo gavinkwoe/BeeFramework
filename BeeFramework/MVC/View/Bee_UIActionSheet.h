@@ -51,7 +51,9 @@ AS_SIGNAL( DID_DISMISS )	// 已经隐藏
 @property (nonatomic, retain) NSObject *			userData;
 
 + (BeeUIActionSheet *)spawn;
++ (BeeUIActionSheet *)spawn:(NSString * )tagString;
 
+- (void)showInViewController:(UIViewController *)controller;	// samw as presentForController:
 - (void)presentForController:(UIViewController *)controller;
 - (void)dismissAnimated:(BOOL)animated;
 

@@ -41,19 +41,11 @@
 
 #pragma mark -
 
-@interface BeeUIStackGroup(Private)
-- (void)arrange;
-@end
-
-#pragma mark -
-
 @implementation BeeUIStackGroup
 
 @synthesize stacks = _stacks;
 @synthesize topIndex;
 @synthesize topStack;
-
-DEF_SINGLETON(BeeUIStackGroup)
 
 DEF_SIGNAL( INDEX_CHANGED );
 

@@ -63,6 +63,7 @@
 	NSInteger					_total;
 	NSMutableArray *			_items;
 
+	BOOL						_reloaded;
 	BOOL						_reloading;
 	UIEdgeInsets				_baseInsets;
 
@@ -84,6 +85,7 @@ AS_INT( DIRECTION_VERTICAL )
 @property (nonatomic, readonly) NSRange			visibleRange;
 @property (nonatomic, readonly) NSUInteger		visiblePageIndex;
 
+@property (nonatomic, assign) BOOL				reloaded;
 @property (nonatomic, readonly) BOOL			reloading;
 @property (nonatomic, retain) NSMutableArray *	reuseQueue;
 
@@ -98,6 +100,7 @@ AS_SIGNAL( DID_STOP )
 AS_SIGNAL( DID_SCROLL )
 
 + (BeeUIScrollView *)spawn;
++ (BeeUIScrollView *)spawn:(NSString *)tagString;
 
 - (UIView *)dequeueWithContentClass:(Class)clazz;
 

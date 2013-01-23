@@ -11,12 +11,12 @@
 
 DEF_SINGLETON(Lession5CellLayout1)
 
-+ (CGSize)cellSize:(NSObject *)data bound:(CGSize)bound
++ (CGSize)sizeInBound:(CGSize)bound forData:(NSObject *)data
 {
 	return CGSizeMake( bound.width, 100.0f );
 }
 
-- (void)cellLayout:(BeeUIGridCell *)cell bound:(CGSize)bound
+- (void)layoutInBound:(CGSize)bound forCell:(BeeUIGridCell *)cell
 {
 	CGRect photoFrame;
 	photoFrame.origin = CGPointZero;
@@ -36,12 +36,12 @@ DEF_SINGLETON(Lession5CellLayout1)
 
 DEF_SINGLETON(Lession5CellLayout2)
 
-+ (CGSize)cellSize:(NSObject *)data bound:(CGSize)bound
++ (CGSize)sizeInBound:(CGSize)bound forData:(NSObject *)data
 {
 	return CGSizeMake( bound.width, 200.0f );
 }
 
-- (void)cellLayout:(BeeUIGridCell *)cell bound:(CGSize)bound
+- (void)layoutInBound:(CGSize)bound forCell:(BeeUIGridCell *)cell
 {
 	CGRect photoFrame;
 	photoFrame.origin = CGPointZero;
@@ -106,20 +106,25 @@ DEF_SINGLETON(Lession5CellLayout2)
 	[super unload];
 }
 
-- (void)bindData:(NSObject *)data
+- (void)dataWillChange
 {
-	_photo1.url = @"http://dribbble.s3.amazonaws.com/users/2862/screenshots/802586/asiabear.jpg";
-	_photo2.url = @"http://dribbble.s3.amazonaws.com/users/91300/screenshots/802850/d109_dark_side_buddy.jpg";
-	_photo3.url = @"http://dribbble.s3.amazonaws.com/users/161397/screenshots/802804/screen_shot_2012-11-06_at_9.20.44_am.png";
-	
-	[super bindData:data];
+	[super dataWillChange];
 }
 
-- (void)clearData
+- (void)dataDidChanged
 {
-	_photo1.image = nil;
-	_photo2.image = nil;
-	_photo3.image = nil;
+	if ( self.cellData )
+	{
+		_photo1.url = @"http://dribbble.s3.amazonaws.com/users/2862/screenshots/802586/asiabear.jpg";
+		_photo2.url = @"http://dribbble.s3.amazonaws.com/users/91300/screenshots/802850/d109_dark_side_buddy.jpg";
+		_photo3.url = @"http://dribbble.s3.amazonaws.com/users/161397/screenshots/802804/screen_shot_2012-11-06_at_9.20.44_am.png";
+	}
+	else
+	{
+		_photo1.image = nil;
+		_photo2.image = nil;
+		_photo3.image = nil;
+	}
 }
 
 @end
@@ -162,7 +167,7 @@ DEF_SINGLETON( Lession5Board );
 	[super handleUISignal:signal];
 }
 
-- (void)handleBeeUIBoard:(BeeUISignal *)signal
+- (void)handleUISignal_BeeUIBoard:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 
@@ -183,13 +188,6 @@ DEF_SINGLETON( Lession5Board );
 	else if ( [signal is:BeeUIBoard.DID_DISAPPEAR] )
 	{
 	}
-	else if ( [signal is:BeeUIBoard.BACK_BUTTON_TOUCHED] )
-	{
-		
-	}
-	else if ( [signal is:BeeUIBoard.DONE_BUTTON_TOUCHED] )
-	{
-	}
 }
 
 #pragma mark -
@@ -200,12 +198,12 @@ DEF_SINGLETON( Lession5Board );
 	if ( 0 == [data intValue] )
 	{
 		CGSize bound = CGSizeMake( self.view.bounds.size.width, 0.0f );
-		return [Lession5CellLayout1 cellSize:data bound:bound].height;
+		return [Lession5CellLayout1 sizeInBound:bound forData:data].height;
 	}
 	else
 	{
 		CGSize bound = CGSizeMake( self.view.bounds.size.width, 0.0f );
-		return [Lession5CellLayout2 cellSize:data bound:bound].height;
+		return [Lession5CellLayout2 sizeInBound:bound forData:data].height;
 	}
 }
 
@@ -222,13 +220,14 @@ DEF_SINGLETON( Lession5Board );
 		NSNumber * data = [_datas objectAtIndex:indexPath.row];
 		if ( 0 == [data intValue] )
 		{
-			[cell.innerCell setLayout:[Lession5CellLayout1 sharedInstance]];
+			cell.cellLayout = [Lession5CellLayout1 sharedInstance];
 		}
 		else
 		{
-			[cell.innerCell setLayout:[Lession5CellLayout2 sharedInstance]];
+			cell.cellLayout = [Lession5CellLayout2 sharedInstance];
 		}
-		[cell bindData:data];
+		
+		cell.cellData = data;
 		return cell;
 	}
 

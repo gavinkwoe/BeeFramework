@@ -33,6 +33,8 @@
 #import "Bee_Precompile.h"
 #import "Bee_UIActionSheet.h"
 #import "Bee_UISignal.h"
+#import "UIView+BeeExtension.h"
+#import "UIView+BeeUISignal.h"
 
 #pragma mark -
 
@@ -49,6 +51,13 @@ DEF_SIGNAL( DID_DISMISS )
 + (BeeUIActionSheet *)spawn
 {
 	return [[[BeeUIActionSheet alloc] init] autorelease];
+}
+
++ (BeeUIActionSheet *)spawn:(NSString * )tagString
+{
+	BeeUIActionSheet * view = [[[BeeUIActionSheet alloc] init] autorelease];
+	view.tagString = tagString;
+	return view;
 }
 
 - (id)init
@@ -68,11 +77,54 @@ DEF_SIGNAL( DID_DISMISS )
 - (void)dealloc
 {
 	[_userData release];
-	
+
 	[_actions removeAllObjects];
 	[_actions release];
 	
 	[super dealloc];
+}
+
+- (void)showFromToolbar:(UIToolbar *)view
+{
+	_parentView = view;
+	
+	[super showFromToolbar:view];
+}
+
+- (void)showFromTabBar:(UITabBar *)view
+{
+	_parentView = view;
+	
+	[super showFromTabBar:view];
+}
+
+- (void)showFromBarButtonItem:(UIBarButtonItem *)item animated:(BOOL)animated
+{
+	if ( item.target && [item.target isKindOfClass:[UIView class]] )
+	{
+		_parentView = item.target;
+	}
+	
+	[super showFromBarButtonItem:item animated:animated];
+}
+
+- (void)showFromRect:(CGRect)rect inView:(UIView *)view animated:(BOOL)animated
+{
+	_parentView = view;
+	
+	[super showFromRect:rect inView:view animated:animated];
+}
+
+- (void)showInView:(UIView *)view
+{
+	_parentView = view;
+	
+	[super showInView:view];
+}
+			 
+- (void)showInViewController:(UIViewController *)controller
+{
+	[self presentForController:controller];
 }
 
 - (void)presentForController:(UIViewController *)controller

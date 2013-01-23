@@ -37,6 +37,11 @@
 
 #pragma mark -
 
+@class BeeUIImageView;
+@class BeeUIActivityIndicatorView;
+
+#pragma mark -
+
 @interface BeeImageCache : NSObject
 {
 	BeeMemoryCache *	_memoryCache;
@@ -56,8 +61,6 @@ AS_SINGLETON( BeeImageCache )
 @end
 
 #pragma mark -
-
-@class BeeUIActivityIndicatorView;
 
 @interface BeeUIImageView : UIImageView
 {
@@ -86,6 +89,7 @@ AS_SIGNAL( LOAD_CANCELLED )		// 加载取消
 @property (nonatomic, assign) NSString *					resource;
 
 + (BeeUIImageView *)spawn;
++ (BeeUIImageView *)spawn:(NSString *)tagString;
 
 - (void)GET:(NSString *)url useCache:(BOOL)useCache;
 - (void)GET:(NSString *)url useCache:(BOOL)useCache placeHolder:(UIImage *)defaultImage;

@@ -34,6 +34,8 @@
 #import "Bee_UIScrollView.h"
 #import "Bee_Runtime.h"
 #import "Bee_Log.h"
+#import "UIView+BeeExtension.h"
+#import "UIView+BeeUISignal.h"
 
 #pragma mark -
 
@@ -140,6 +142,7 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 @dynamic visibleRange;
 @dynamic visiblePageIndex;
 
+@synthesize reloaded = _reloaded;
 @synthesize reloading = _reloading;
 @synthesize reuseQueue = _reuseQueue;
 
@@ -149,6 +152,13 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 + (BeeUIScrollView *)spawn
 {
 	return [[[BeeUIScrollView alloc] initWithFrame:CGRectZero] autorelease];
+}
+
++ (BeeUIScrollView *)spawn:(NSString *)tagString
+{
+	BeeUIScrollView * view = [[[BeeUIScrollView alloc] init] autorelease];
+	view.tagString = tagString;
+	return view;
 }
 
 - (id)init
@@ -176,6 +186,7 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 	_direction = BeeUIScrollView.DIRECTION_VERTICAL;
 	_dataSource = self;
 	
+	_reloaded = NO;
 	_lineCount = 0;
 	
 	_total = 0;
@@ -275,13 +286,15 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 
 - (NSUInteger)visiblePageIndex
 {
+	// special thanks to @Royall
+	
 	if ( BeeUIScrollView.DIRECTION_HORIZONTAL == _direction )
 	{
-		return (NSUInteger)floorf(self.contentOffset.x / self.contentSize.width);
+		return (NSUInteger)floorf(_total - ((self.contentSize.width - self.contentOffset.x) / self.bounds.size.width) + 0.5);
 	}
 	else
 	{
-		return (NSUInteger)floorf(self.contentOffset.y / self.contentSize.width);
+		return (NSUInteger)floorf(_total - ((self.contentSize.height - self.contentOffset.y) / self.bounds.size.height) + 0.5);
 	}
 }
 
@@ -352,7 +365,8 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 {
 	if ( YES == _reloading )
 	{
-		_reloading = NO;		
+		_reloading = NO;
+		
 		[self internalReloadData];
 		[self sendUISignal:BeeUIScrollView.RELOADED];
 	}
@@ -372,14 +386,22 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 	[self releaseAllViews];
 	[self calcPositions];
 	[self syncPositions];
+	
+	_reloaded = YES;
 }
 
 - (void)setFrame:(CGRect)frame
 {
 	[super setFrame:frame];
 
-	[self syncReloadData];
-	[self syncPositions];
+	if ( NO == _reloaded )
+	{
+		[self syncReloadData];
+	}
+	else
+	{
+		[self asyncReloadData];	
+	}
 }
 
 - (void)scrollToFirstPage:(BOOL)animated

@@ -41,7 +41,7 @@ DEF_MESSAGE( GET_SHOTS )
 		NSString * baseURL = [@"http://api.dribbble.com/shots/" stringByAppendingString:cate];
 		NSString * callURL = [baseURL urlByAppendingArray:[NSArray arrayWithObjects:@"page", page, @"per_page", size, nil]];
 
-		[msg GET:callURL];
+		msg.HTTP_GET( callURL );
 	}
 	else if ( msg.progressed )
 	{
@@ -66,9 +66,9 @@ DEF_MESSAGE( GET_SHOTS )
 		if ( nil == shots )
 		{
 			[msg setLastError];
-			return;			
+			return;	
 		}
-		
+
 		[msg output:@"total", total, @"shots", shots, nil];		
 	}
 	else if ( msg.failed )

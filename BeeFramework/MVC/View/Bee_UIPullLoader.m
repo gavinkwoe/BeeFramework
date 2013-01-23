@@ -34,7 +34,8 @@
 #import "Bee_UIPullLoader.h"
 #import "Bee_UIActivityIndicatorView.h"
 #import "Bee_UISignal.h"
-#import "UIView+BeeQuery.h"
+#import "UIView+BeeExtension.h"
+#import "UIView+BeeUISignal.h"
 
 #pragma mark -
 
@@ -51,13 +52,23 @@ DEF_INT( STATE_PULLING,	1 )
 DEF_INT( STATE_LOADING,	2 )
 
 @synthesize state = _state;
-@synthesize normal = _normal;
-@synthesize pulling = _pulling;
-@synthesize loading = _loading;
+@synthesize arrow = _arrow;
+@synthesize indicator = _indicator;
+
+@dynamic normal;
+@dynamic pulling;
+@dynamic loading;
 
 + (BeeUIPullLoader *)spawn
 {
 	return [[[BeeUIPullLoader alloc] init] autorelease];
+}
+
++ (BeeUIPullLoader *)spawn:(NSString *)tagString
+{
+	BeeUIPullLoader * view = [[[BeeUIPullLoader alloc] init] autorelease];
+	view.tagString = tagString;
+	return view;
 }
 
 - (id)init
@@ -77,6 +88,7 @@ DEF_INT( STATE_LOADING,	2 )
 	if ( self )
 	{
 		[self initSelf];
+		[self changeFrame:frame];
     }
 	
     return self;
@@ -87,11 +99,11 @@ DEF_INT( STATE_LOADING,	2 )
 	self.backgroundColor = [UIColor clearColor];
 	self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	
-	_arrowView = [[UIImageView alloc] initWithFrame:CGRectZero];
-	_arrowView.contentMode = UIViewContentModeCenter;
-	_arrowView.backgroundColor = [UIColor clearColor];
-	_arrowView.hidden = NO;
-	[self addSubview:_arrowView];
+	_arrow = [[UIImageView alloc] initWithFrame:CGRectZero];
+	_arrow.contentMode = UIViewContentModeCenter;
+	_arrow.backgroundColor = [UIColor clearColor];
+	_arrow.hidden = NO;
+	[self addSubview:_arrow];
 	
 	_indicator = [[BeeUIActivityIndicatorView alloc] initWithFrame:CGRectZero];
 	_indicator.hidden = YES;
@@ -101,16 +113,14 @@ DEF_INT( STATE_LOADING,	2 )
 	_state = BeeUIPullLoader.STATE_NORMAL;
 }
 
-- (void)setFrame:(CGRect)frame
+- (void)changeFrame:(CGRect)frame
 {
-	[super setFrame:frame];
-
 	CGRect imageFrame;
 	imageFrame.size.width = frame.size.height;
 	imageFrame.size.height = frame.size.height;
 	imageFrame.origin.x = (frame.size.width - imageFrame.size.width) / 2.0f;
 	imageFrame.origin.y = (frame.size.height - imageFrame.size.height) / 2.0f;
-	_arrowView.frame = imageFrame;
+	_arrow.frame = imageFrame;
 	
 	CGRect indicatorFrame;
 	indicatorFrame.size.width = 20.0f;
@@ -120,9 +130,16 @@ DEF_INT( STATE_LOADING,	2 )
 	_indicator.frame = indicatorFrame;	
 }
 
+- (void)setFrame:(CGRect)frame
+{
+	[super setFrame:frame];
+	
+    [self changeFrame:frame];
+}
+
 - (void)dealloc
 {	
-	SAFE_RELEASE_SUBVIEW( _arrowView );
+	SAFE_RELEASE_SUBVIEW( _arrow );
 	SAFE_RELEASE_SUBVIEW( _indicator );
 	
     [super dealloc];
@@ -183,8 +200,8 @@ DEF_INT( STATE_LOADING,	2 )
 	{
 		[UIView beginAnimations:nil context:nil];
 		[UIView setAnimationDuration:0.3f];
-		_arrowView.hidden = NO;
-		_arrowView.transform = CGAffineTransformIdentity;
+		_arrow.hidden = NO;
+		_arrow.transform = CGAffineTransformIdentity;
 		[UIView commitAnimations];
 
 		[_indicator stopAnimating];		
@@ -193,8 +210,8 @@ DEF_INT( STATE_LOADING,	2 )
 	{
 		[UIView beginAnimations:nil context:nil];
 		[UIView setAnimationDuration:0.3f];
-		_arrowView.hidden = NO;
-		_arrowView.transform = CGAffineTransformRotate( CGAffineTransformIdentity, (M_PI / 360.0f) * -359.0f );
+		_arrow.hidden = NO;
+		_arrow.transform = CGAffineTransformRotate( CGAffineTransformIdentity, (M_PI / 360.0f) * -359.0f );
 		[UIView commitAnimations];		
 	}
 	else if ( BeeUIPullLoader.STATE_LOADING == state )
@@ -203,7 +220,7 @@ DEF_INT( STATE_LOADING,	2 )
 
 		[UIView beginAnimations:nil context:nil];
 		[UIView setAnimationDuration:0.3f];
-		_arrowView.hidden = YES;
+		_arrow.hidden = YES;
 		[UIView commitAnimations];		
 	}
 

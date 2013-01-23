@@ -31,21 +31,21 @@
 //
 
 #import "Bee_Precompile.h"
-#import "Bee_UIGridCell.h"
 #import "Bee_UISignal.h"
+#import "Bee_UIGridCell.h"
+#import "UIView+BeeExtension.h"
 
 #pragma mark -
 
-@implementation NSObject(BeeUIGridCell)
+@implementation NSObject(BeeUILayout)
 
-+ (CGSize)cellSize:(NSObject *)data bound:(CGSize)bound
++ (CGSize)sizeInBound:(CGSize)bound forData:(NSObject *)data
 {
 	return bound;
 }
 
-- (void)cellLayout:(BeeUIGridCell *)cell bound:(CGSize)bound
+- (void)layoutInBound:(CGSize)bound forCell:(BeeUIGridCell *)cell
 {
-	
 }
 
 @end
@@ -58,16 +58,21 @@
 
 @implementation BeeUIGridCell
 
-@synthesize autoLayout = _autoLayout;
-@synthesize cellData = _cellData;
-@synthesize category = _category;
-@synthesize layout = _layout;
-@synthesize subCells = _subCells;
-@synthesize zoomsTouchWhenHighlighted = _zoomsTouchWhenHighlighted;
+@dynamic cellData;
+@dynamic cellLayout;
 
-+ (BeeUIGridCell *)spawn
+@dynamic childCells;
+@dynamic superCell;
+
+- (void)initSelf
 {
-	return [[[BeeUIGridCell alloc] init] autorelease];
+	self.backgroundColor = [UIColor clearColor];
+	self.alpha = 1.0f;
+	self.layer.masksToBounds = YES;
+	self.layer.opaque = YES;
+
+	_cellData = nil;
+	_cellLayout = self;
 }
 
 - (id)init
@@ -88,23 +93,19 @@
 	{
 		[self initSelf];
 		[self load];
-		
-		[self layoutAllSubcells];
+
+		[self setNeedsLayout];
 	}
 	return self;
 }
 
-- (void)initSelf
+- (void)dealloc
 {
-	self.backgroundColor = [UIColor clearColor];
-	self.alpha = 1.0f;
-	self.layer.masksToBounds = YES;
-	self.layer.opaque = YES;
-	
-	_layout = self;
-	_autoLayout = YES;
-	_subCells = [[NSMutableArray alloc] init];
-	_zoomsTouchWhenHighlighted = NO;
+	[self unload];
+
+	[_cellData release];
+
+	[super dealloc];
 }
 
 - (void)load
@@ -115,7 +116,22 @@
 {	
 }
 
-- (BeeUIGridCell *)supercell
+- (NSArray *)childCells
+{
+	NSMutableArray * array = [NSMutableArray array];
+	
+	for ( UIView * subview in self.subviews )
+	{
+		if ( [subview isKindOfClass:[BeeUIGridCell class]] )
+		{
+			[array addObject:subview];
+		}
+	}
+
+	return array;
+}
+
+- (BeeUIGridCell *)superCell
 {
 	if ( [self.superview isKindOfClass:[BeeUIGridCell class]] )
 	{
@@ -127,90 +143,13 @@
 	}
 }
 
-- (NSString *)description
-{
-	return _category ? _category : @"unknown";
-}
-
-- (NSMutableArray *)subCellsIncludeCategory:(NSString *)cate
-{
-	if ( 0 == [_subCells count] )
-	{
-		return nil;
-	}
-	else
-	{
-		NSMutableArray * array = [[NSMutableArray alloc] init];
-		for ( BeeUIGridCell * cell in _subCells )
-		{
-			if ( YES == [cell.category isEqualToString:cate] )
-			{
-				[array addObject:cell];
-			}
-		}
-		return [array autorelease];
-	}
-}
-
-- (NSMutableArray *)subCellsExcludeCategory:(NSString *)cate
-{
-	if ( 0 == [_subCells count] )
-	{
-		return nil;
-	}
-	else
-	{
-		NSMutableArray * array = [[NSMutableArray alloc] init];
-		for ( BeeUIGridCell * cell in _subCells )
-		{
-			if ( NO == [cell.category isEqualToString:cate] )
-			{
-				[array addObject:cell];
-			}
-		}
-		return [array autorelease];
-	}
-}
-
-- (void)addSubcell:(BeeUIGridCell *)cell
-{
-	if ( NO == [_subCells containsObject:cell] )
-	{
-		[_subCells addObject:cell];
-		[self addSubview:cell];
-	}
-}
-
-- (void)removeSubcell:(BeeUIGridCell *)cell
-{
-	if ( YES == [_subCells containsObject:cell] )
-	{
-		[_subCells removeObject:cell];
-		[cell removeFromSuperview];
-		[cell release];
-	}
-}
-
-- (void)removeAllSubcells
-{
-	for ( BeeUIGridCell * cell in _subCells )
-	{
-		[cell removeFromSuperview];
-	}
-
-	[_subCells removeAllObjects];
-}
-
 - (void)setFrame:(CGRect)rc
 {
 	if ( NO == CGSizeEqualToSize(rc.size, self.frame.size) )
 	{
 		[super setFrame:rc];
 
-		if ( _autoLayout )
-		{
-			[self layoutAllSubcells];			
-		}
+		[self layoutSubcells];
 	}
 	else
 	{
@@ -224,10 +163,7 @@
 	{
 		[super setCenter:pt];
 		
-		if ( _autoLayout )
-		{
-			[self layoutAllSubcells];
-		}
+		[self layoutSubcells];
 	}
 	else
 	{
@@ -235,136 +171,85 @@
 	}
 }
 
-- (void)layoutAllSubcells
+- (void)layoutSubcells
 {
 	if ( CGSizeEqualToSize(self.bounds.size, CGSizeZero) )
 		return;
-	
-	if ( _layout && [_layout respondsToSelector:@selector(cellLayout:bound:)] )
+
+	[self layoutWillBegin];
+
+	if ( _cellLayout && [_cellLayout respondsToSelector:@selector(layoutInBound:forCell:)] )
 	{
-		[_layout cellLayout:self bound:self.bounds.size];
+		[_cellLayout layoutInBound:self.bounds.size forCell:self];
+//		[_cellLayout cellLayout:self bound:self.bounds.size];
 	}
 
-	for ( BeeUIGridCell * cell in _subCells )
+	for ( UIView * subview in self.subviews )
 	{
-		if ( cell && [cell respondsToSelector:@selector(layoutAllSubcells)] )
+		if ( [subview isKindOfClass:[BeeUIGridCell class]] )
 		{
-			[cell layoutAllSubcells];
+			[(BeeUIGridCell *)subview layoutSubcells];
+		}
+	}
+
+	[self layoutDidFinish];
+}
+
+- (NSObject *)cellData
+{
+	return _cellData;
+}
+
+- (void)setCellData:(NSObject *)data
+{
+	[self dataWillChange];
+
+	if ( _cellData != data )
+	{
+		[_cellData release];
+		_cellData = [data retain];
+	}
+
+	[self dataDidChanged];
+
+	if ( _cellLayout )
+	{
+		[self layoutSubcells];
+	}
+}
+
+- (NSObject *)cellLayout
+{
+	return _cellLayout;
+}
+
+- (void)setCellLayout:(NSObject *)layout
+{
+	if ( _cellLayout != layout )
+	{
+		_cellLayout = layout;
+
+		if ( _cellLayout )
+		{
+			[self layoutSubcells];
 		}
 	}
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)dataWillChange
 {
-	[super touchesBegan:touches withEvent:event];
-	
-	if ( _zoomsTouchWhenHighlighted )
-	{
-		[UIView beginAnimations:nil context:nil];
-		[UIView setAnimationDuration:0.1f];
-		[UIView setAnimationCurve:UIViewAnimationCurveLinear];
-		[UIView setAnimationBeginsFromCurrentState:YES];
-		
-		CATransform3D transform = CATransform3DIdentity;
-		transform.m34 = -(1.0f / 2500.0f);
-		transform = CATransform3DTranslate( transform, 0.0f, 0.0f, -250.0f );
-		self.layer.transform = transform;
-		
-		[UIView commitAnimations];		
-	}
 }
 
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)dataDidChanged
 {
-	[super touchesEnded:touches withEvent:event];
-	
-	if ( _zoomsTouchWhenHighlighted )
-	{
-		[UIView beginAnimations:nil context:nil];
-		[UIView setAnimationDuration:0.1f];
-		[UIView setAnimationCurve:UIViewAnimationCurveLinear];
-		[UIView setAnimationBeginsFromCurrentState:YES];
-		
-		self.layer.transform = CATransform3DIdentity;
-		
-		[UIView commitAnimations];
-	}
 }
 
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)layoutWillBegin
 {
-	[super touchesCancelled:touches withEvent:event];
-	
-	if ( _zoomsTouchWhenHighlighted )
-	{
-		[UIView beginAnimations:nil context:nil];
-		[UIView setAnimationDuration:0.1f];
-		[UIView setAnimationCurve:UIViewAnimationCurveLinear];
-		[UIView setAnimationBeginsFromCurrentState:YES];
-		
-		self.layer.transform = CATransform3DIdentity;
-		
-		[UIView commitAnimations];
-	}
 }
 
-- (void)clearData
+- (void)layoutDidFinish
 {
-	self.cellData = nil;
-}
-
-- (void)bindData:(NSObject *)data
-{
-	if ( nil == data )
-	{
-		[self clearData];
-		[self layoutAllSubcells];
-		return;
-	}
-	
-//	if ( data != self.cellData )
-//	{
-		self.cellData = data;
-		[self layoutAllSubcells];		
-//	}
-}
-
-- (BeeUIGridCell *)hitTestSubCells:(CGPoint)point
-{
-	for ( BeeUIGridCell * cell in _subCells )
-	{
-		if ( CGRectContainsPoint(cell.frame, point) )
-		{
-			return cell;
-		}
-	}
-	
-	return nil;
-}
-
-- (void)beginLayout
-{
-	_autoLayout = NO;
-}
-
-- (void)commitLayout
-{
-	_autoLayout = YES;
-	
-	[self layoutAllSubcells];
-}
-
-- (void)dealloc
-{
-	[self unload];
-	[self removeAllSubcells];
-	
-	[_cellData release];
-	[_category release];
-	[_subCells release];
-//	[_layout release];
-
-	[super dealloc];
 }
 
 @end

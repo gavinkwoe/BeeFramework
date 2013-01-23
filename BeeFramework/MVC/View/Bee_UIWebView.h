@@ -56,5 +56,6 @@ AS_SIGNAL( DID_LOAD_CANCELLED )		// 加载取消
 @property (nonatomic, assign) NSString * url;
 
 + (BeeUIWebView *)spawn;
++ (BeeUIWebView *)spawn:(NSString *)tagString;
 
 @end

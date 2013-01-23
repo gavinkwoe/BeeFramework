@@ -77,6 +77,7 @@ AS_SIGNAL( DOUBLE_TAPPED );
 @property (nonatomic, retain) UIView *				content;
 
 + (BeeUIZoomView *)spawn;
++ (BeeUIZoomView *)spawn:(NSString *)tagString;
 
 - (void)resetZoom;
 - (void)layoutContent;

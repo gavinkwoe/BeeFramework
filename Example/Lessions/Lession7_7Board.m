@@ -23,7 +23,7 @@
 	[super handleUISignal:signal];
 }
 
-- (void)handleBeeUIBoard:(BeeUISignal *)signal
+- (void)handleUISignal_BeeUIBoard:(BeeUISignal *)signal
 {
 	if ( [signal isKindOf:BeeUIBoard.SIGNAL] )
 	{

@@ -43,6 +43,7 @@
 @interface NSObject(BeeUISignalResponder)
 
 + (NSString *)SIGNAL;
++ (NSString *)SIGNAL_TYPE;
 
 - (BOOL)isUISignalResponder;
 
@@ -107,42 +108,5 @@ AS_STATIC_PROPERTY( NO_VALUE );
 - (BOOL)boolValue;
 - (void)returnYES;
 - (void)returnNO;
-
-@end
-
-#pragma mark -
-
-@interface UIView(BeeUISignal)
-
-- (void)handleUISignal:(BeeUISignal *)signal;
-
-- (BeeUISignal *)sendUISignal:(NSString *)name;
-- (BeeUISignal *)sendUISignal:(NSString *)name withObject:(NSObject *)object;
-- (BeeUISignal *)sendUISignal:(NSString *)name withObject:(NSObject *)object from:(id)source;
-
-@end
-
-#pragma mark -
-
-@interface UIViewController(BeeUISignal)
-
-- (void)handleUISignal:(BeeUISignal *)signal;
-
-- (BeeUISignal *)sendUISignal:(NSString *)name;
-- (BeeUISignal *)sendUISignal:(NSString *)name withObject:(NSObject *)object;
-- (BeeUISignal *)sendUISignal:(NSString *)name withObject:(NSObject *)object from:(id)source;
-
-@end
-
-#pragma mark -
-
-@interface UIView(BeeTappable)
-
-AS_SIGNAL( TAPPED );
-
-- (void)makeTappable;
-- (void)makeTappable:(NSString *)signal;
-- (void)makeTappable:(NSString *)signal withObject:(NSObject *)obj;
-- (void)makeUntappable;
 
 @end

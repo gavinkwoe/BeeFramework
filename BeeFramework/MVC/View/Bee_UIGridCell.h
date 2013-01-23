@@ -37,49 +37,36 @@
 
 @class BeeUIGridCell;
 
-#pragma mark -
+@interface NSObject(BeeUILayout)
 
-@interface NSObject(BeeUIGridCell)
-+ (CGSize)cellSize:(NSObject *)data bound:(CGSize)bound;
-- (void)cellLayout:(BeeUIGridCell *)cell bound:(CGSize)bound;
++ (CGSize)sizeInBound:(CGSize)bound forData:(NSObject *)data;
+- (void)layoutInBound:(CGSize)bound forCell:(BeeUIGridCell *)cell;
+
 @end
+
+#pragma mark -
 
 @interface BeeUIGridCell : UIView
 {
-	BOOL					_autoLayout;
-	NSObject *				_cellData;
-	NSString *				_category;
-	NSObject *				_layout;
-	NSMutableArray *		_subCells;
-	BOOL					_zoomsTouchWhenHighlighted;
+	NSObject *	_cellData;
+	NSObject *	_cellLayout;
 }
 
-@property (nonatomic, assign) BOOL						autoLayout;
-@property (nonatomic, retain) NSObject *				cellData;
-@property (nonatomic, retain) NSString *				category;
-@property (nonatomic, assign) NSObject *				layout;
-@property (nonatomic, retain) NSMutableArray *			subCells;
-@property (nonatomic, assign) BOOL						zoomsTouchWhenHighlighted;
-@property (nonatomic, readonly) BeeUIGridCell *			supercell;
+@property (nonatomic, retain) NSObject *		cellData;
+@property (nonatomic, assign) NSObject *		cellLayout;
 
-+ (BeeUIGridCell *)spawn;
-
-- (void)bindData:(NSObject *)data;
-- (void)clearData;
-
-- (NSMutableArray *)subCellsIncludeCategory:(NSString *)cate;
-- (NSMutableArray *)subCellsExcludeCategory:(NSString *)cate;
-
-- (void)addSubcell:(BeeUIGridCell *)cell;
-- (void)removeSubcell:(BeeUIGridCell *)cell;
-- (void)removeAllSubcells;
-- (void)layoutAllSubcells;
-- (BeeUIGridCell *)hitTestSubCells:(CGPoint)point;
-
-- (void)beginLayout;
-- (void)commitLayout;
+@property (nonatomic, readonly) NSArray *		childCells;
+@property (nonatomic, readonly) BeeUIGridCell *	superCell;
 
 - (void)load;
 - (void)unload;
+
+- (void)layoutSubcells;
+
+- (void)dataWillChange;
+- (void)dataDidChanged;
+
+- (void)layoutWillBegin;
+- (void)layoutDidFinish;
 
 @end

@@ -9,7 +9,7 @@
 
 @implementation DribbbleCell
 
-+ (CGSize)cellSize:(NSObject *)data bound:(CGSize)bound
++ (CGSize)sizeInBound:(CGSize)bound forData:(NSObject *)data
 {
 	if ( data )
 	{
@@ -23,32 +23,33 @@
 		cellSize.height = photoSize.height;
 		return cellSize;
 	}
-	else
-	{
-		return [super cellSize:data bound:bound];
-	}
+	
+	return bound;
 }
 
-- (void)cellLayout:(BeeUIGridCell *)cell bound:(CGSize)bound
+- (void)layoutInBound:(CGSize)bound forCell:(BeeUIGridCell *)cell
 {
-	CGSize photoSize;
-	photoSize.width = [[(NSDictionary *)cell.cellData numberAtPath:@"/width"] floatValue];
-	photoSize.height = [[(NSDictionary *)cell.cellData numberAtPath:@"/height"] floatValue];
-	photoSize = AspectFitSizeByWidth( photoSize, bound.width );
-	
-	_photo.frame = CGRectMake( 0.0f, 0.0f, bound.width, photoSize.height );
-	_mask.frame = CGRectMake( 0.0f, bound.height - 40.0f, bound.width, 40.0f );
+	if ( cell.cellData )
+	{
+		CGSize photoSize;
+		photoSize.width = [[(NSDictionary *)cell.cellData numberAtPath:@"/width"] floatValue];
+		photoSize.height = [[(NSDictionary *)cell.cellData numberAtPath:@"/height"] floatValue];
+		photoSize = AspectFitSizeByWidth( photoSize, bound.width );
+		
+		_photo.frame = CGRectMake( 0.0f, 0.0f, bound.width, photoSize.height );
+		_mask.frame = CGRectMake( 0.0f, bound.height - 40.0f, bound.width, 40.0f );
 
-	_avatar.frame = CGRectMake( 5.0f, CGRectGetMinY(_mask.frame) + 5.0f, 30.0f, 30.0f );
-	_title.frame = CGRectMake( 40.0f, CGRectGetMinY(_mask.frame) + 6.0f, bound.width - 40.0f - 80.0f, 14.0f );
-	_time.frame = CGRectMake( bound.width - 80.0f, CGRectGetMinY(_title.frame), 80.0f, 14.0f );	
-	_name.frame = CGRectMake( 40.0f, CGRectGetMinY(_mask.frame) + 20.0f, bound.width - 40.0f, 14.0f );
+		_avatar.frame = CGRectMake( 5.0f, CGRectGetMinY(_mask.frame) + 5.0f, 30.0f, 30.0f );
+		_title.frame = CGRectMake( 40.0f, CGRectGetMinY(_mask.frame) + 6.0f, bound.width - 40.0f - 80.0f, 14.0f );
+		_time.frame = CGRectMake( bound.width - 80.0f, CGRectGetMinY(_title.frame), 80.0f, 14.0f );	
+		_name.frame = CGRectMake( 40.0f, CGRectGetMinY(_mask.frame) + 20.0f, bound.width - 40.0f, 14.0f );
+	}
 }
 
 - (void)load
 {
 	[super load];
-	
+
 	_photo = [[BeeUIImageView alloc] init];
 	_photo.contentMode = UIViewContentModeScaleAspectFit;
 	_photo.indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
@@ -94,23 +95,25 @@
 	[super unload];
 }
 
-- (void)bindData:(NSObject *)data
+- (void)dataDidChanged
 {
-	[_photo GET:[(NSDictionary *)data stringAtPath:@"/image_teaser_url"] useCache:YES];
-	[_avatar GET:[(NSDictionary *)data stringAtPath:@"/player/avatar_url"] useCache:YES];
-	[_title setText:[(NSDictionary *)data stringAtPath:@"/title"]];
-	[_time setText:[[(NSDictionary *)data stringAtPath:@"/created_at"] substringToIndex:10]];
-	[_name setText:[NSString stringWithFormat:@"by %@", [(NSDictionary *)data stringAtPath:@"/player/name"]]];
-
-	[super bindData:data];
-}
-
-- (void)clearData
-{
-	[_photo setImage:nil];
-	[_avatar setImage:nil];
-	[_title setText:nil];
-	[_name setText:nil];
+	[super dataDidChanged];
+	
+	if ( self.cellData )
+	{
+		[_photo GET:[(NSDictionary *)self.cellData stringAtPath:@"/image_teaser_url"] useCache:YES];
+		[_avatar GET:[(NSDictionary *)self.cellData stringAtPath:@"/player/avatar_url"] useCache:YES];
+		[_title setText:[(NSDictionary *)self.cellData stringAtPath:@"/title"]];
+		[_time setText:[[(NSDictionary *)self.cellData stringAtPath:@"/created_at"] substringToIndex:10]];
+		[_name setText:[NSString stringWithFormat:@"by %@", [(NSDictionary *)self.cellData stringAtPath:@"/player/name"]]];
+	}
+	else
+	{
+		[_photo setImage:nil];
+		[_avatar setImage:nil];
+		[_title setText:nil];
+		[_name setText:nil];
+	}
 }
 
 @end
@@ -133,13 +136,13 @@
 	[super load];
 
 	_debutsModel = [DribbbleDebutsModel new];
-	[_debutsModel bind:self];
+	[_debutsModel addObserver:self];
 
 	_popularModel = [DribbblePopularModel new];
-	[_debutsModel bind:self];
+	[_popularModel addObserver:self];
 
 	_everyoneModel = [DribbbleEveryoneModel new];
-	[_everyoneModel bind:self];
+	[_everyoneModel addObserver:self];
 }
 
 - (void)unload
@@ -156,7 +159,7 @@
 	[super handleUISignal:signal];
 }
 
-- (void)handleBeeUIBoard:(BeeUISignal *)signal
+- (void)handleUISignal_BeeUIBoard:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 
@@ -164,15 +167,17 @@
 	{
 		[self showNavigationBarAnimated:NO];
 		[self showPullLoader:YES animated:NO];
+		
+		self.pullLoader.arrow.image = [UIImage imageNamed:@"bug.png"];
 
 		BeeUISegmentedControl * seg = [BeeUISegmentedControl spawn];
 		[seg addTitle:@"everyone" tag:TAG_EVERYONE];
 		[seg addTitle:@"debuts" tag:TAG_DEBUTS];
 		[seg addTitle:@"popular" tag:TAG_POPULAR];
-		[self setTitleView:seg];
+		self.titleView = seg;
 		
-//		[self showBarButton:BeeUIBoard.BARBUTTON_LEFT title:@"Clear"];
-		[self showBarButton:BeeUIBoard.BARBUTTON_RIGHT system:UIBarButtonSystemItemRefresh];
+//		[self showBarButton:UINavigationBar.BARBUTTON_LEFT title:@"Clear"];
+		[self showBarButton:UINavigationBar.BARBUTTON_RIGHT system:UIBarButtonSystemItemRefresh];
 	}
 	else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
 	{
@@ -196,17 +201,20 @@
 	else if ( [signal is:BeeUIBoard.DID_DISAPPEAR] )
 	{
 	}
-	else if ( [signal is:BeeUIBoard.BACK_BUTTON_TOUCHED] )
-	{
-		
-	}
-	else if ( [signal is:BeeUIBoard.DONE_BUTTON_TOUCHED] )
-	{
-		[self refresh:YES];
-	}
 }
 
-- (void)handleBeeUISegmentedControl:(BeeUISignal *)signal
+- (void)handleUISignal_UINavigationBar:(BeeUISignal *)signal
+{
+	if ( [signal is:UINavigationBar.BACK_BUTTON_TOUCHED] )
+	{	
+	}
+	else if ( [signal is:UINavigationBar.DONE_BUTTON_TOUCHED] )
+	{
+		[self refresh:YES];
+	}	
+}
+
+- (void)handleUISignal_BeeUISegmentedControl:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 	
@@ -219,7 +227,7 @@
 	}
 }
 
-- (void)handleBeeUITableBoard:(BeeUISignal *)signal
+- (void)handleUISignal_BeeUITableBoard:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 	
@@ -234,7 +242,7 @@
 	[super handleMessage:msg];
 }
 
-- (void)handleDribbbleController:(BeeMessage *)msg
+- (void)handleMessage_DribbbleController:(BeeMessage *)msg
 {
 	[super handleMessage:msg];
 	
@@ -243,17 +251,18 @@
 		if ( msg.sending )
 		{
 			BeeUIActivityIndicatorView * indicator = [BeeUIActivityIndicatorView spawn];
-			[self showBarButton:BeeUIBoard.BARBUTTON_RIGHT custom:indicator];
+			[self showBarButton:UINavigationBar.BARBUTTON_RIGHT custom:indicator];
 			[indicator startAnimating];						
 			
-			[self showPullLoader:YES animated:YES];
+			[self setPullLoading:YES];
 		}
 		else
 		{
-			[self showBarButton:BeeUIBoard.BARBUTTON_RIGHT system:UIBarButtonSystemItemRefresh];
-			[self showPullLoader:NO animated:YES];
+			[self showBarButton:UINavigationBar.BARBUTTON_RIGHT system:UIBarButtonSystemItemRefresh];
+			
+			[self setPullLoading:NO];
 		}
-		
+
 		if ( msg.succeed || msg.failed )
 		{
 			[self.tableView flashScrollIndicators];
@@ -318,7 +327,7 @@
 {
 	NSData * data = [[self shots] safeObjectAtIndex:indexPath.row];
 	CGSize bound = CGSizeMake( self.view.bounds.size.width, 0.0f );
-	return [DribbbleCell cellSize:data bound:bound].height;
+	return [DribbbleCell sizeInBound:bound forData:data].height;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -330,8 +339,8 @@
 {
 	BeeUITableViewCell * cell = (BeeUITableViewCell *)[self dequeueWithContentClass:[DribbbleCell class]];
 	if ( cell )
-	{		
-		[cell bindData:[[self shots] safeObjectAtIndex:indexPath.row]];
+	{
+		cell.cellData = [[self shots] safeObjectAtIndex:indexPath.row];
 		return cell;
 	}
 
@@ -341,7 +350,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	[super tableView:tableView didSelectRowAtIndexPath:indexPath];
-	
+
 	DribbblePhotoBoard * board = [[[DribbblePhotoBoard alloc] init] autorelease];
 	board.feed = [[self shots] safeObjectAtIndex:indexPath.row];
 	[self.stack pushBoard:board animated:YES];

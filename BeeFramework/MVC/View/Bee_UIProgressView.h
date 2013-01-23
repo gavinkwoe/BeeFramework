@@ -38,5 +38,6 @@
 @interface BeeUIProgressView : UIProgressView
 
 + (BeeUIProgressView *)spawn;
++ (BeeUIProgressView *)spawn:(NSString *)tagString;
 
 @end

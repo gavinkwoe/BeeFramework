@@ -34,7 +34,6 @@ DEF_SIGNAL( TEST )
 
 @end
 
-
 #pragma mark -
 
 @implementation Lession2View1
@@ -63,14 +62,12 @@ DEF_SIGNAL( TEST )
 
 @implementation Lession2Board
 
-// Other signal goes here
 - (void)handleUISignal:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 }
 
-// BeeUIBoard signal goes here
-- (void)handleBeeUIBoard:(BeeUISignal *)signal
+- (void)handleUISignal_BeeUIBoard:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 	
@@ -78,7 +75,7 @@ DEF_SIGNAL( TEST )
 	{
 		[self setTitleString:@"Lession 2"];
 		[self showNavigationBarAnimated:NO];
-		
+
 		_textView.contentInset = UIEdgeInsetsMake( 0, 0, 44.0f + 20.0f, 0.0f );
 		
 		CGRect innerFrame;
@@ -101,13 +98,13 @@ DEF_SIGNAL( TEST )
 }
 
 // Lession2View1 signal goes here
-- (void)handleLession2View1:(BeeUISignal *)signal
+- (void)handleUISignal_Lession2View1:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 }
 
 // Lession2View2 signal goes here
-- (void)handleLession2View2:(BeeUISignal *)signal
+- (void)handleUISignal_Lession2View2:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 	

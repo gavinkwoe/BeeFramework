@@ -3,6 +3,7 @@
 //
 
 #import "Bee.h"
+#import "Bee_UITableBoard.h"
 
 #pragma mark -
 

@@ -33,7 +33,9 @@
 #import "Bee_Precompile.h"
 #import "Bee_UIButton.h"
 #import "Bee_UISignal.h"
-#import "UIView+BeeQuery.h"
+#import "UIView+BeeExtension.h"
+#import "UIView+BeeUISignal.h"
+#import "UIView+BeeUISignal.h"
 
 #pragma mark -
 
@@ -116,6 +118,13 @@ DEF_SIGNAL( TOUCH_UP_CANCEL )
 + (BeeUIButton *)spawn
 {
 	return [[[BeeUIButton alloc] init] autorelease];
+}
+
++ (BeeUIButton *)spawn:(NSString *)tagString
+{
+	BeeUIButton * view = [[[BeeUIButton alloc] init] autorelease];
+	view.tagString = tagString;
+	return view;
 }
 
 - (id)init
@@ -285,7 +294,7 @@ DEF_SIGNAL( TOUCH_UP_CANCEL )
 	{
 		_stateSelected = [[BeeUIButtonState alloc] init];
 		_stateSelected.button = self;
-		_stateSelected.state = UIControlStateDisabled;
+		_stateSelected.state = UIControlStateSelected;
 	}
 	
 	return _stateSelected;

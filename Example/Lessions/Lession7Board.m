@@ -8,12 +8,12 @@
 
 @implementation Lession7Cell
 
-+ (CGSize)cellSize:(NSObject *)data bound:(CGSize)bound
++ (CGSize)sizeInBound:(CGSize)bound forData:(NSObject *)data
 {
 	return CGSizeMake( bound.width, 60.0f );
 }
 
-- (void)cellLayout:(BeeUIGridCell *)cell bound:(CGSize)bound
+- (void)layoutInBound:(CGSize)bound forCell:(BeeUIGridCell *)cell
 {
 	_title.frame = CGRectMake( 10.0f, 5.0f, cell.bounds.size.width - 20.0f, bound.height - 10.0f );
 }
@@ -36,16 +36,23 @@
 	[super unload];
 }
 
-- (void)bindData:(NSObject *)data
+- (void)dataWillChange
 {
-	[_title setText:[(NSArray *)data objectAtIndex:1]];
-	
-	[super bindData:data];
+	[super dataWillChange];
 }
 
-- (void)clearData
+- (void)dataDidChanged
 {
-	[_title setText:nil];
+	[super dataDidChanged];
+	
+	if ( self.cellData )
+	{
+		[_title setText:[(NSArray *)self.cellData objectAtIndex:1]];
+	}
+	else
+	{
+		[_title setText:nil];
+	}
 }
 
 @end
@@ -92,7 +99,7 @@ DEF_SINGLETON( Lession7Board );
 	[super handleUISignal:signal];	
 }
 
-- (void)handleBeeUIBoard:(BeeUISignal *)signal
+- (void)handleUISignal_BeeUIBoard:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 
@@ -114,7 +121,7 @@ DEF_SINGLETON( Lession7Board );
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	CGSize bound = CGSizeMake( self.view.bounds.size.width, 0.0f );
-	return [Lession7Cell cellSize:nil bound:bound].height;
+	return [Lession7Cell sizeInBound:bound forData:nil].height;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -129,16 +136,17 @@ DEF_SINGLETON( Lession7Board );
 	{
 		if ( indexPath.row % 2 )
 		{
-			[cell.innerCell setBackgroundColor:[UIColor whiteColor]];
+			cell.backgroundColor = [UIColor whiteColor];
 		}
 		else
 		{
-			[cell.innerCell setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
+			cell.backgroundColor = [UIColor colorWithWhite:0.95f alpha:1.0f];
 		}
 		
 		[cell setSelectionStyle:UITableViewCellSelectionStyleGray];
 		[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-		[cell bindData:[_items objectAtIndex:indexPath.row]];
+		
+		cell.cellData = [_items objectAtIndex:indexPath.row];
 		return cell;
 	}
 	return [super tableView:tableView cellForRowAtIndexPath:indexPath];

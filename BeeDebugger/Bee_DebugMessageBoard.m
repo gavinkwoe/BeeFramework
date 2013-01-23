@@ -108,12 +108,12 @@
 
 @implementation BeeDebugMessageCell
 
-+ (CGSize)cellSize:(NSObject *)data bound:(CGSize)bound
++ (CGSize)sizeInBound:(CGSize)bound forData:(NSObject *)data
 {
 	return CGSizeMake( bound.width, 50.0f );
 }
 
-- (void)cellLayout:(BeeUIGridCell *)cell bound:(CGSize)bound
+- (void)layoutInBound:(CGSize)bound forCell:(BeeUIGridCell *)cell
 {
 	CGRect timeFrame;
 	timeFrame.size.width = 70.0f;
@@ -165,71 +165,75 @@
 	[self addSubview:_statusLabel];
 }
 
-- (void)bindData:(NSObject *)data
+- (void)dataWillChange
 {
-	BeeMessage * msg = (BeeMessage *)data;
-	
-	NSDateFormatter * formatter = [[NSDateFormatter alloc] init];
-	[formatter setLocale:[[[NSLocale alloc] initWithLocaleIdentifier:@"US"] autorelease]];
-	[formatter setDateFormat:@"hh:mm:ss"];
-	NSDate * date2 = [NSDate dateWithTimeIntervalSince1970:msg.initTimeStamp];
-	_timeLabel.text = [formatter stringFromDate:date2];
-	[formatter release];
+	[super dataWillChange];
+}
 
-	_nameLabel.text = msg.message;
-	
-	if ( msg.created )
+- (void)dataDidChanged
+{
+	BeeMessage * msg = (BeeMessage *)self.cellData;
+	if ( msg )
 	{
-		_statusLabel.text = @"Created";
-		_statusLabel.textColor = [UIColor whiteColor];
-	}
-	else if ( msg.sending )
-	{
-		_statusLabel.text = [NSString stringWithFormat:@"Sending\n%dK / %dK",
-							 [msg.request uploadBytes] / 1024,
-							 [msg.request downloadBytes] / 1024];
-		_statusLabel.textColor = [UIColor yellowColor];		
-	}
-	else if ( msg.succeed )
-	{
-//		_statusLabel.text = [NSString stringWithFormat:@"Succeed\n%dK / %dK",
-//							 [msg.request uploadBytes] / 1024,
-//							 [msg.request downloadBytes] / 1024];
-		_statusLabel.text = @"Succeed";
-		_statusLabel.textColor = [UIColor greenColor];
-	}
-	else if ( msg.failed )
-	{
-		if ( msg.timeout )
+		NSDateFormatter * formatter = [[NSDateFormatter alloc] init];
+		[formatter setLocale:[[[NSLocale alloc] initWithLocaleIdentifier:@"US"] autorelease]];
+		[formatter setDateFormat:@"hh:mm:ss"];
+		NSDate * date2 = [NSDate dateWithTimeIntervalSince1970:msg.initTimeStamp];
+		_timeLabel.text = [formatter stringFromDate:date2];
+		[formatter release];
+
+		_nameLabel.text = msg.message;
+		
+		if ( msg.created )
 		{
-			_statusLabel.text = @"Timeout";
-			_statusLabel.textColor = [UIColor redColor];			
+			_statusLabel.text = @"Created";
+			_statusLabel.textColor = [UIColor whiteColor];
+		}
+		else if ( msg.sending )
+		{
+			_statusLabel.text = [NSString stringWithFormat:@"Sending\n%dK / %dK",
+								 [msg.request uploadBytes] / 1024,
+								 [msg.request downloadBytes] / 1024];
+			_statusLabel.textColor = [UIColor yellowColor];		
+		}
+		else if ( msg.succeed )
+		{
+	//		_statusLabel.text = [NSString stringWithFormat:@"Succeed\n%dK / %dK",
+	//							 [msg.request uploadBytes] / 1024,
+	//							 [msg.request downloadBytes] / 1024];
+			_statusLabel.text = @"Succeed";
+			_statusLabel.textColor = [UIColor greenColor];
+		}
+		else if ( msg.failed )
+		{
+			if ( msg.timeout )
+			{
+				_statusLabel.text = @"Timeout";
+				_statusLabel.textColor = [UIColor redColor];			
+			}
+			else
+			{
+				_statusLabel.text = @"Failed";
+				_statusLabel.textColor = [UIColor redColor];
+			}
+		}
+		else if ( msg.cancelled )
+		{
+			_statusLabel.text = @"Cancelled";
+			_statusLabel.textColor = [UIColor grayColor];
 		}
 		else
 		{
-			_statusLabel.text = @"Failed";
-			_statusLabel.textColor = [UIColor redColor];
+			_statusLabel.text = @"";
+			_statusLabel.textColor = [UIColor whiteColor];
 		}
-	}
-	else if ( msg.cancelled )
-	{
-		_statusLabel.text = @"Cancelled";
-		_statusLabel.textColor = [UIColor grayColor];
 	}
 	else
 	{
-		_statusLabel.text = @"";
-		_statusLabel.textColor = [UIColor whiteColor];
+		SAFE_RELEASE_SUBVIEW( _nameLabel );
+		SAFE_RELEASE_SUBVIEW( _timeLabel );
+		SAFE_RELEASE_SUBVIEW( _statusLabel );
 	}
-}
-
-- (void)unload
-{
-	SAFE_RELEASE_SUBVIEW( _nameLabel );
-	SAFE_RELEASE_SUBVIEW( _timeLabel );
-	SAFE_RELEASE_SUBVIEW( _statusLabel );
-	
-	[super unload];
 }
 
 @end
@@ -267,7 +271,7 @@ DEF_SINGLETON( BeeDebugMessageBoard )
 
 - (void)handleTick:(NSTimeInterval)elapsed
 {
-	[self syncReloadData];
+	[self reloadData];
 }
 
 #pragma mark -
@@ -277,7 +281,7 @@ DEF_SINGLETON( BeeDebugMessageBoard )
 {
 	NSObject * data = [[BeeDebugMessageModel sharedInstance].history objectAtIndex:indexPath.row];
 	CGSize bound = CGSizeMake( self.viewSize.width, 0.0f );
-	return [BeeDebugMessageCell cellSize:data bound:bound].height;
+	return [BeeDebugMessageCell sizeInBound:bound forData:data].height;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -290,7 +294,7 @@ DEF_SINGLETON( BeeDebugMessageBoard )
 	BeeUITableViewCell * cell = (BeeUITableViewCell *)[self dequeueWithContentClass:[BeeDebugMessageCell class]];
 	if ( cell )
 	{
-		[cell bindData:[[BeeDebugMessageModel sharedInstance].history objectAtIndex:indexPath.row]];
+		cell.cellData = [[BeeDebugMessageModel sharedInstance].history objectAtIndex:indexPath.row];
 		return cell;
 	}
 

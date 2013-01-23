@@ -42,3 +42,8 @@
 #define __BEE_DEBUGGER__	(1)	// 是否显示“小虫子”
 #define __BEE_CRASHLOG__	(0)	// （未完成）
 #define __BEE_PERFORMANCE__	(0)	// 是否开启性能测试
+#define __BEE_UNITTEST__	(1)	// 是否UnitTest
+#define __BEE_WIREFRAME__	(1)	// 是否显示WireFrame
+
+#define __BEE_SELECTOR_STYLE1__	(1)	// handle + ClassName
+#define __BEE_SELECTOR_STYLE2__	(1)	// handleXXX + ClassName + MethodName

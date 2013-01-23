@@ -35,6 +35,7 @@
 #import "Bee_Singleton.h"
 #import "Bee_Log.h"
 #import "Bee_Performance.h"
+#import "UIView+BeeExtension.h"
 
 #import <objc/runtime.h>
 
@@ -48,6 +49,11 @@
 @implementation NSObject(BeeUISignalResponder)
 
 + (NSString *)SIGNAL
+{
+	return [self SIGNAL_TYPE];
+}
+
++ (NSString *)SIGNAL_TYPE
 {
 	return [NSString stringWithFormat:@"signal.%@.", [self description]];
 }
@@ -157,7 +163,7 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 	}
 #endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 
-	if ( [_target isUISignalResponder] )
+	if ( [_target isKindOfClass:[UIView class]] || [_target isKindOfClass:[UIViewController class]] )
 	{
 		_jump = 1;
 		
@@ -186,7 +192,7 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 	}
 #endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 
-	if ( [target isUISignalResponder] )
+	if ( [_target isKindOfClass:[UIView class]] || [_target isKindOfClass:[UIViewController class]] )
 	{
 		_jump += 1;
 
@@ -210,15 +216,59 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 	{
 //		NSString * prefix = (NSString *)[array objectAtIndex:0];
 		NSString * clazz = (NSString *)[array objectAtIndex:1];
+		NSString * method = (NSString *)[array objectAtIndex:2];
 
-		NSString *	selectorName = [NSString stringWithFormat:@"handle%@:", clazz];
-		SEL			selector = NSSelectorFromString(selectorName);
+		NSObject * targetObject = _target;
 		
-		if ( [_target respondsToSelector:selector] )
+		if ( [_target isKindOfClass:[UIView class]] )
 		{
-			[_target performSelector:selector withObject:self];
-			return;
+			UIViewController * viewController = [(UIView *)_target viewController];
+			if ( viewController )
+			{
+				targetObject = viewController;
+			}
 		}
+
+	#if defined(__BEE_SELECTOR_STYLE2__) && __BEE_SELECTOR_STYLE2__
+		{
+			NSString * selectorName;
+			SEL selector;
+			
+			selectorName = [NSString stringWithFormat:@"handleUISignal_%@_%@:", clazz, method];
+			selector = NSSelectorFromString(selectorName);
+			
+			if ( [targetObject respondsToSelector:selector] )
+			{
+				[targetObject performSelector:selector withObject:self];
+				return;
+			}
+			
+			selectorName = [NSString stringWithFormat:@"handleUISignal_%@:", clazz];
+			selector = NSSelectorFromString(selectorName);
+			
+			if ( [targetObject respondsToSelector:selector] )
+			{
+				[targetObject performSelector:selector withObject:self];
+				return;
+			}
+		}
+	#endif	// #if defined(__BEE_SELECTOR_STYLE2__) && __BEE_SELECTOR_STYLE2__
+
+	#if defined(__BEE_SELECTOR_STYLE1__) && __BEE_SELECTOR_STYLE1__
+		{
+			NSString * selectorName;
+			SEL selector;
+		
+			selectorName = [NSString stringWithFormat:@"handle%@:", clazz];
+			selector = NSSelectorFromString(selectorName);
+			
+			if ( [targetObject respondsToSelector:selector] )
+			{
+				[targetObject performSelector:selector withObject:self];
+				return;
+			}
+		}
+	#endif	// #if defined(__BEE_SELECTOR_STYLE1__) && __BEE_SELECTOR_STYLE1__		
 	}
 
 	Class rtti = [_source class];
@@ -241,7 +291,10 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 
 	if ( nil == rtti )
 	{
-		[_target handleUISignal:self];	
+		if ( [_target respondsToSelector:@selector(handleUISignal:)] )
+		{
+			[_target performSelector:@selector(handleUISignal:) withObject:self];
+		}
 	}
 }
 
@@ -316,202 +369,6 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 	[_returnValue release];
 	
 	[super dealloc];
-}
-
-@end
-
-#pragma mark -
-
-@implementation UIView(BeeUISignal)
-
-- (void)handleUISignal:(BeeUISignal *)signal
-{
-	if ( self.superview )
-	{
-		[signal forward:self.superview];
-	}
-	else
-	{
-		signal.reach = YES;
-
-	#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
-		CC( @"[%@] > %@", signal.name, signal.callPath );
-	#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
-	}
-}
-
-- (BeeUISignal *)sendUISignal:(NSString *)name
-{
-	return [self sendUISignal:name withObject:nil from:self];
-}
-
-- (BeeUISignal *)sendUISignal:(NSString *)name withObject:(NSObject *)object
-{
-	return [self sendUISignal:name withObject:object from:self];
-}
-
-- (BeeUISignal *)sendUISignal:(NSString *)name withObject:(NSObject *)object from:(id)source
-{
-	BeeUISignal * signal = [[[BeeUISignal alloc] init] autorelease];
-	if ( signal )
-	{
-		signal.source = source ? source : self;
-		signal.target = self;
-		signal.name = name;		
-		signal.object = object;
-		[signal send];
-	}
-	return signal;
-}
-
-@end
-
-#pragma mark -
-
-@implementation UIViewController(BeeUISignal)
-
-- (void)handleUISignal:(BeeUISignal *)signal
-{
-	signal.reach = YES;
-	
-#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
-	CC( @"[%@] > %@", signal.name, signal.callPath );
-#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
-}
-
-- (BeeUISignal *)sendUISignal:(NSString *)name
-{
-	return [self sendUISignal:name withObject:nil from:self];
-}
-
-- (BeeUISignal *)sendUISignal:(NSString *)name withObject:(NSObject *)object
-{
-	return [self sendUISignal:name withObject:object from:self];
-}
-
-- (BeeUISignal *)sendUISignal:(NSString *)name withObject:(NSObject *)object from:(id)source
-{
-	BeeUISignal * signal = [[[BeeUISignal alloc] init] autorelease];
-	if ( signal )
-	{
-		signal.source = source ? source : self;
-		signal.target = self;
-		signal.name = name;
-		signal.object = object;
-		[signal send];
-	}
-	return signal;
-}
-
-@end
-
-#pragma mark -
-
-@interface UISingleTapGestureRecognizer : UITapGestureRecognizer
-{
-	NSString *	_signalName;
-	NSObject *	_signalObject;
-}
-
-@property (nonatomic, retain) NSString *	signalName;
-@property (nonatomic, assign) NSObject *	signalObject;
-
-@end
-
-#pragma mark -
-
-@implementation UISingleTapGestureRecognizer
-
-@synthesize signalName = _signalName;
-@synthesize signalObject = _signalObject;
-
-- (id)initWithTarget:(id)target action:(SEL)action
-{
-	self = [super initWithTarget:target action:action];
-	if ( self )
-	{
-		self.numberOfTapsRequired = 1;
-		self.numberOfTouchesRequired = 1;
-		self.cancelsTouchesInView = YES;
-		self.delaysTouchesBegan = YES;
-		self.delaysTouchesEnded = YES;		
-	}
-	return self;
-}
-
-- (void)dealloc
-{
-	[super dealloc];
-}
-
-@end
-
-#pragma mark -
-
-@implementation UIView(BeeTappable)
-
-DEF_SIGNAL( TAPPED );
-
-- (void)didSingleTapped:(UITapGestureRecognizer *)tapGesture
-{
-	if ( [tapGesture isKindOfClass:[UISingleTapGestureRecognizer class]] )
-	{
-		UISingleTapGestureRecognizer * gesture = (UISingleTapGestureRecognizer *)tapGesture;
-		if ( UIGestureRecognizerStateEnded == gesture.state )
-		{
-			if ( gesture.signalName )
-			{
-				[self sendUISignal:gesture.signalName withObject:gesture.signalObject];
-			}
-			else
-			{
-				[self sendUISignal:UIView.TAPPED];
-			}
-		}
-	}		
-}
-
-- (void)makeTappable
-{
-	[self makeTappable:nil];
-}
-
-- (void)makeTappable:(NSString *)signal
-{
-	[self makeTappable:signal withObject:nil];
-}
-
-- (void)makeTappable:(NSString *)signal withObject:(NSObject *)obj
-{
-	self.userInteractionEnabled = YES;
-	
-	UISingleTapGestureRecognizer * singleTapGesture = nil;
-	for ( UITapGestureRecognizer * gesture in self.gestureRecognizers )
-	{
-		if ( [gesture isKindOfClass:[UISingleTapGestureRecognizer class]] )
-		{
-			singleTapGesture = (UISingleTapGestureRecognizer *)gesture;
-		}
-	}
-	
-	if ( nil == singleTapGesture )
-	{
-		singleTapGesture = [[[UISingleTapGestureRecognizer alloc] initWithTarget:self action:@selector(didSingleTapped:)] autorelease];
-		[self addGestureRecognizer:singleTapGesture];
-	}
-	
-	singleTapGesture.signalName = signal;
-	singleTapGesture.signalObject = obj;
-}
-
-- (void)makeUntappable
-{
-	self.userInteractionEnabled = NO;
-	
-	for ( UITapGestureRecognizer * gesture in self.gestureRecognizers )
-	{
-		[self removeGestureRecognizer:gesture];
-	}
 }
 
 @end

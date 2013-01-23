@@ -37,5 +37,6 @@
 @interface BeeUILabel : UILabel
 
 + (BeeUILabel *)spawn;
++ (BeeUILabel *)spawn:(NSString *)tagString;
 
 @end

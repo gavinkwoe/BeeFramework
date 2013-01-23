@@ -34,6 +34,8 @@
 #import "Bee_UIWebView.h"
 #import "Bee_UISignal.h"
 #import "Bee_Log.h"
+#import "UIView+BeeExtension.h"
+#import "UIView+BeeUISignal.h"
 
 #pragma mark -
 
@@ -66,6 +68,13 @@ DEF_SIGNAL( DID_LOAD_CANCELLED )	// 加载取消
 + (BeeUIWebView *)spawn
 {
 	return [[[BeeUIWebView alloc] initWithFrame:CGRectZero] autorelease];
+}
+
++ (BeeUIWebView *)spawn:(NSString *)tagString
+{
+	BeeUIWebView * view = [[[BeeUIWebView alloc] init] autorelease];
+	view.tagString = tagString;
+	return view;
 }
 
 - (id)init

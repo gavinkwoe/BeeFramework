@@ -43,5 +43,6 @@ AS_SIGNAL( WILL_STOP )	// 动画将要停止
 AS_SIGNAL( DID_STOP )	// 动画已经停止
 
 + (BeeUIActivityIndicatorView *)spawn;
++ (BeeUIActivityIndicatorView *)spawn:(NSString *)tagString;
 
 @end

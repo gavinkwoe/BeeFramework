@@ -53,9 +53,6 @@
 {
 	BeeUIBoard *		_parentBoard;
 	NSString *			_name;
-	
-	NSMutableArray *	_leftButtons;
-	NSMutableArray *	_rightButtons;
 }
 
 AS_INT( ANIMATION_TYPE_DEFAULT )	// 默认
@@ -67,6 +64,7 @@ AS_INT( ANIMATION_TYPE_FLIP )		// 翻页
 
 @property (nonatomic, retain) NSString *		name;
 @property (nonatomic, assign) BeeUIBoard *		parentBoard;
+
 @property (nonatomic, readonly) NSArray *		boards;
 @property (nonatomic, readonly) BeeUIBoard *	topBoard;
 

@@ -47,5 +47,8 @@
 @property (nonatomic, assign) CGSize	dotSize;
 
 + (BeeUIPageControl *)spawn;
++ (BeeUIPageControl *)spawn:(NSString *)tagString;
+
+- (void)updateDotImages;
 
 @end

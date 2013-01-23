@@ -40,12 +40,17 @@
 #import "Bee_Controller.h"
 #import "Bee_SystemInfo.h"
 
-#import "UIView+BeeBackground.h"
-#import "UIView+BeeQuery.h"
+#import "NSObject+BeeMessage.h"
+#import "NSObject+BeeRequest.h"
+
+#import "UIView+BeeExtension.h"
 #import "UIFont+BeeExtension.h"
 #import "NSObject+BeeNotification.h"
 #import "NSObject+BeeTicker.h"
 #import "NSArray+BeeExtension.h"
+#import "UIViewController+BeeExtension.h"
+#import "UIView+BeeUISignal.h"
+#import "UIViewController+BeeUISignal.h"
 
 #pragma mark -
 
@@ -64,7 +69,9 @@
 {
 	BeeUIBoard * _owner;
 }
+
 @property (nonatomic, assign) BeeUIBoard * owner;
+
 @end
 
 #pragma mark -
@@ -74,9 +81,11 @@
 - (BeeUIBoard *)board
 {
 	UIView * topView = self;
+	
 	while ( topView.superview )
 	{
 		topView = topView.superview;
+	
 		if ( [topView isKindOfClass:[UIWindow class]] )
 		{
 			break;
@@ -88,6 +97,7 @@
 	}
 
 	UIViewController * controller = [topView viewController];
+
 	if ( controller && [controller isKindOfClass:[BeeUIBoard class]] )
 	{
 		return (BeeUIBoard *)controller;
@@ -98,74 +108,12 @@
 	}
 }
 
-- (UIViewController *)viewController
-{   
-	id nextResponder = [self nextResponder];   
-	if ( [nextResponder isKindOfClass:[UIViewController class]] )
-	{
-		return (UIViewController *)nextResponder;
-	}
-	else
-	{   
-		return nil;   
-	}   
-} 
-
-@end
-
-#pragma mark -
-
-@implementation UIViewController(BeeExtension)
-
-- (CGRect)viewFrame
-{
-	CGRect bounds = [UIScreen mainScreen].bounds;
-
-//	UIInterfaceOrientation orient = [UIApplication sharedApplication].statusBarOrientation;
-//	CGRect applicationframe = [UIScreen mainScreen].applicationFrame;
-	
-	if ( UIInterfaceOrientationIsLandscape(self.interfaceOrientation) )
-	{
-		bounds.origin = CGPointMake( bounds.origin.y, bounds.origin.x );
-		bounds.size = CGSizeMake( bounds.size.height, bounds.size.width );
-	}
-
-	if ( NO == [UIApplication sharedApplication].statusBarHidden )
-	{
-		bounds.origin.y += 20;
-		bounds.size.height -= 20;
-	}
-	
-	if ( NO == self.navigationController.navigationBarHidden )
-	{
-		bounds.size.height -= self.navigationController.navigationBar.bounds.size.height;
-	}
-	
-	return bounds;
-}
-
-- (CGRect)viewBound
-{
-	CGRect bound = self.viewFrame;
-	bound.origin = CGPointZero;
-	return bound;
-}
-
-- (CGSize)viewSize
-{
-	return self.viewFrame.size;
-}
-
-- (CGRect)screenBound
-{
-	return [UIScreen mainScreen].bounds;
-}
-
 @end
 
 #pragma mark -
 
 @interface BeeUIBoard(Private)
+
 - (void)createViews;
 - (void)deleteViews;
 - (void)loadDatas;
@@ -189,17 +137,6 @@
 - (void)resignFirstResponderWalkThrough:(UIView *)rootView;
 - (void)becomeFirstResponderWalkThrough:(UIView *)rootView;
 
-- (void)didLeftBarButtonTouched;
-- (void)didRightBarButtonTouched;
-
-- (void)didPan:(UIPanGestureRecognizer *)panGesture;
-- (void)enablePanGesture;
-- (void)disablePanGesture;
-
-- (void)didSwipe:(UISwipeGestureRecognizer *)swipeGesture;
-- (void)enableSwipeGesture;
-- (void)disableSwipeGesture;
-
 @end
 
 #pragma mark -
@@ -209,27 +146,26 @@
 @synthesize owner = _owner;
 
 - (void)setFrame:(CGRect)rect
-{	
-	CGRect prevFrame = self.frame;
-	
-	[super setFrame:rect];
-	
-	[self fitBackgroundFrame];
-	
-	if ( _owner && NO == CGRectEqualToRect(prevFrame, rect) )
-	{
-		[_owner sendUISignal:BeeUIBoard.LAYOUT_VIEWS];
-	}
+{
+//	if ( CGRectEqualToRect(rect, super.frame) )
+//	{
+		[super setFrame:rect];
+
+		if ( _owner )
+		{
+			[_owner sendUISignal:BeeUIBoard.LAYOUT_VIEWS];
+		}
+//	}
 }
 
 - (void)layoutSubviews
 {
 	[super layoutSubviews];
 
-//	if ( _owner )
-//	{
-//		[_owner sendUISignal:BeeUIBoard.LAYOUT_VIEWS];
-//	}
+	if ( _owner )
+	{
+		[_owner sendUISignal:BeeUIBoard.LAYOUT_VIEWS];
+	}
 }
 
 - (void)dealloc
@@ -260,7 +196,7 @@
 
 @implementation BeeUIBoard
 
-@synthesize popover = _popover;
+@synthesize containedPopover = _containedPopover;
 @synthesize stackAnimationType = _stackAnimationType;
 
 @synthesize lastSleep = _lastSleep;
@@ -275,17 +211,10 @@
 
 @synthesize createDate = _createDate;
 
+@synthesize modalBoard = _modalBoard;
 @synthesize modalMaskView = _modalMaskView;
 @synthesize modalContentView = _modalContentView;
-@synthesize modalBoard = _modalBoard;
-
-@synthesize panEnabled;
-@synthesize panGesture = _panGesture;
-@synthesize panOffset = _panOffset;
-
-@synthesize swipeEnabled;
-@synthesize swipeDirection;
-@synthesize swipeGesture = _swipeGesture;
+@synthesize modalAnimationType = _modalAnimationType;
 
 @synthesize deactivated;
 @synthesize deactivating;
@@ -297,9 +226,6 @@
 @dynamic stack;
 @dynamic previousBoard;
 @dynamic nextBoard;
-
-@synthesize titleString;
-@synthesize titleView;
 
 @synthesize allowedOrientation = _allowedOrientation;
 
@@ -331,26 +257,10 @@ DEF_SIGNAL( POPOVER_DID_PRESENT )	// Popover已经显示
 DEF_SIGNAL( POPOVER_WILL_DISMISS )	// Popover将要隐藏
 DEF_SIGNAL( POPOVER_DID_DISMISSED )	// Popover已经隐藏
 
-DEF_SIGNAL( BACK_BUTTON_TOUCHED )	// NavigationBar左按钮被点击
-DEF_SIGNAL( DONE_BUTTON_TOUCHED )	// NavigationBar右按钮被点击
-
-DEF_SIGNAL( PAN_START )				// 左右滑动手势开始
-DEF_SIGNAL( PAN_STOP )				// 左右滑动手势结束
-DEF_SIGNAL( PAN_CHANGED )			// 左右滑动手势位置变化
-DEF_SIGNAL( PAN_CANCELLED )			// 左右滑动手势取消
-
-DEF_SIGNAL( SWIPE_UP )				// 手势：瞬间向上滑动
-DEF_SIGNAL( SWIPE_DOWN )			// 手势：瞬间向下滑动
-DEF_SIGNAL( SWIPE_LEFT )			// 手势：瞬间向左滑动
-DEF_SIGNAL( SWIPE_RIGHT )			// 手势：瞬间向右滑动
-
 DEF_INT( STATE_DEACTIVATED,			0 )
 DEF_INT( STATE_DEACTIVATING,		1 )
 DEF_INT( STATE_ACTIVATING,			2 )
 DEF_INT( STATE_ACTIVATED,			3 )
-
-DEF_INT( BARBUTTON_LEFT,			0 )
-DEF_INT( BARBUTTON_RIGHT,			1 )
 
 DEF_INT( ANIMATION_TYPE_DEFAULT,	0 )
 DEF_INT( ANIMATION_TYPE_ALPHA,		0 )
@@ -376,10 +286,10 @@ static NSMutableArray *			__allBoards;
 	{
 		if ( nil == __allBoards )
 		{
-			__allBoards = [[NSMutableArray alloc] init];
+			__allBoards = [NSMutableArray nonRetainingArray];
 		}
-		
-		[__allBoards insertObjectNoRetain:self atIndex:0];
+
+		[__allBoards insertObject:self atIndex:0];
 		
 		_lastSleep = [NSDate timeIntervalSinceReferenceDate];
 		_lastWeekup = [NSDate timeIntervalSinceReferenceDate];
@@ -393,7 +303,7 @@ static NSMutableArray *			__allBoards;
 		_createDate = [[NSDate date] retain];
 		
 		_modalAnimationType = BeeUIBoard.ANIMATION_TYPE_ALPHA;
-		_allowedOrientation = UIInterfaceOrientationPortrait;
+		_allowedOrientation = UIInterfaceOrientationPortrait|UIInterfaceOrientationPortraitUpsideDown|UIInterfaceOrientationLandscapeLeft|UIInterfaceOrientationLandscapeRight;
 		
 	#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 		_createSeq = __createSeed++;
@@ -440,8 +350,6 @@ static NSMutableArray *			__allBoards;
 #endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	
 	[_createDate release];
-	[_panGesture release];
-	[_swipeGesture release];
 	
 	if ( _modalBoard.viewBuilt )
 	{
@@ -452,7 +360,7 @@ static NSMutableArray *			__allBoards;
 	
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 
-	[__allBoards removeObjectNoRelease:self];
+	[__allBoards removeObject:self];
 
 	[super dealloc];
 }
@@ -624,28 +532,56 @@ static NSMutableArray *			__allBoards;
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 							   duration:(NSTimeInterval)duration
 {
-	if ( NO == _viewBuilt )
+	if ( _viewBuilt )
 	{
-//		[self sendUISignal:BeeUIBoard.CREATE_VIEWS];
 		[self sendUISignal:BeeUIBoard.LAYOUT_VIEWS];
 		[self sendUISignal:BeeUIBoard.ORIENTATION_CHANGED];
-		
-		_viewBuilt = YES;
+	}
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+	if ( _viewBuilt )
+	{
+		[self sendUISignal:BeeUIBoard.LAYOUT_VIEWS];
+		[self sendUISignal:BeeUIBoard.ORIENTATION_CHANGED];
 	}
 }
 
 #if defined(__IPHONE_6_0)
+
 -(NSUInteger)supportedInterfaceOrientations
 {
-	if ( IOS6_OR_LATER )
+	NSUInteger orientation = 0;
+
+	if ( (_allowedOrientation & UIInterfaceOrientationPortrait) != 0 )
 	{
-		return UIInterfaceOrientationMaskPortrait;
+		orientation |= UIInterfaceOrientationMaskPortrait;
 	}
-	else
+
+	if ( (_allowedOrientation & UIInterfaceOrientationPortraitUpsideDown) != 0 )
 	{
-		return 0;
+		orientation |= UIInterfaceOrientationMaskPortraitUpsideDown;
 	}
+
+	if ( (_allowedOrientation & UIInterfaceOrientationLandscapeLeft) != 0 )
+	{
+		orientation |= UIInterfaceOrientationMaskLandscapeLeft;
+	}
+
+	if ( (_allowedOrientation & UIInterfaceOrientationLandscapeRight) != 0 )
+	{
+		orientation |= UIInterfaceOrientationMaskLandscapeRight;
+	}
+
+	return orientation;
 }
+
+- (BOOL)shouldAutorotate
+{
+	return YES;
+}
+
 #endif	// #if defined(__IPHONE_6_0)
 
 - (void)didReceiveMemoryWarning
@@ -850,48 +786,25 @@ static NSMutableArray *			__allBoards;
 			self.view.backgroundColor = [UIColor clearColor];
 //			self.navigationController.navigationBarHidden = YES;
 			
-			_modalMaskView = [[UIButton alloc] initWithFrame:self.view.bounds];
+			_modalMaskView = [[UIButton alloc] initWithFrame:self.viewBound];
 			_modalMaskView.hidden = YES;
 			_modalMaskView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.1f];
 			[_modalMaskView addTarget:self action:@selector(didModalMaskTouched) forControlEvents:UIControlEventTouchUpInside];
 			[self.view addSubview:_modalMaskView];
-			
-			if ( _panEnabled )
-			{
-				[self enablePanGesture];
-			}
-
-			if ( _swipeEnabled )
-			{
-				[self enableSwipeGesture];
-			}
 		}
 		else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
 		{		
-			[self disablePanGesture];
-			[self disableSwipeGesture];
-			
 			SAFE_RELEASE_SUBVIEW( _modalMaskView );
 			SAFE_RELEASE_SUBVIEW( _modalContentView );
 		}
 		else if ( [signal is:BeeUIBoard.LAYOUT_VIEWS] )
 		{
-			self.modalMaskView.frame = self.view.bounds;
+			self.modalMaskView.frame = self.viewBound;
 		}
 		else if ( [signal is:BeeUIBoard.WILL_APPEAR] )
 		{
 			[self.view bringSubviewToFront:_modalMaskView];
 			[self.view bringSubviewToFront:_modalContentView];
-			
-			if ( _panEnabled )
-			{
-				[self enablePanGesture];
-			}
-			
-			if ( _swipeEnabled )
-			{
-				[self enableSwipeGesture];
-			}
 		}
 		else if ( [signal is:BeeUIBoard.DID_APPEAR] )
 		{
@@ -908,16 +821,6 @@ static NSMutableArray *			__allBoards;
 	{
 		[signal forward:self.parentBoard.view];
 	}
-}
-
-- (void)showNavigationBarAnimated:(BOOL)animated
-{
-	[self.navigationController setNavigationBarHidden:NO animated:animated];
-}
-
-- (void)hideNavigationBarAnimated:(BOOL)animated
-{
-	[self.navigationController setNavigationBarHidden:YES animated:animated];
 }
 
 - (void)didModalMaskTouched
@@ -1115,15 +1018,9 @@ static NSMutableArray *			__allBoards;
 {
 	for ( UIView * subview in rootView.subviews )
 	{
-		if ( [subview isKindOfClass:[UITextField class]] )
+		if ( [subview respondsToSelector:@selector(resignFirstResponder)] )
 		{
-			UITextField * textField = (UITextField *)subview;
-			[textField resignFirstResponder];
-		}
-		else if ( [subview isKindOfClass:[UITextView class]] )
-		{
-			UITextView * textView = (UITextView *)subview;
-			[textView resignFirstResponder];
+			[subview performSelector:@selector(resignFirstResponder)];
 		}
 		else
 		{
@@ -1136,128 +1033,6 @@ static NSMutableArray *			__allBoards;
 {
 	[self resignFirstResponderWalkThrough:self.view];
 	return YES;
-}
-
-- (NSString *)titleString
-{
-	return self.navigationItem.title ? self.navigationItem.title : self.title;
-}
-
-- (void)setTitleString:(NSString *)text
-{
-	self.navigationItem.title = text;
-}
-
-- (UIView *)titleView
-{
-	return self.navigationItem.titleView;
-}
-
-- (void)setTitleView:(UIView *)view
-{
-	self.navigationItem.titleView = view;
-}
-
-- (void)didLeftBarButtonTouched
-{
-	[self sendUISignal:BeeUIBoard.BACK_BUTTON_TOUCHED];
-}
-
-- (void)didRightBarButtonTouched
-{
-	[self sendUISignal:BeeUIBoard.DONE_BUTTON_TOUCHED];
-}
-
-- (void)showBarButton:(NSInteger)position title:(NSString *)name
-{
-	if ( BeeUIBoard.BARBUTTON_LEFT == position )
-	{
-		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:name
-																				  style:UIBarButtonItemStylePlain
-																				 target:self
-																				 action:@selector(didLeftBarButtonTouched)] autorelease];
-	}
-	else
-	{
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:name
-																				   style:UIBarButtonItemStylePlain
-																				  target:self
-																				  action:@selector(didRightBarButtonTouched)] autorelease];
-	}
-}
-
-- (void)showBarButton:(NSInteger)position image:(UIImage *)image
-{
-	UIButton * button = [[[UIButton alloc] initWithFrame:CGRectMake(0, 0, image.size.width, image.size.height)] autorelease];
-	button.contentMode = UIViewContentModeScaleAspectFit;
-	button.backgroundColor = [UIColor clearColor];
-	[button setImage:image forState:UIControlStateNormal];
-
-	if ( BeeUIBoard.BARBUTTON_LEFT == position )
-	{
-		[button addTarget:self action:@selector(didLeftBarButtonTouched) forControlEvents:UIControlEventTouchUpInside];
-		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:button] autorelease];
-	}
-	else
-	{
-		[button addTarget:self action:@selector(didRightBarButtonTouched) forControlEvents:UIControlEventTouchUpInside];
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:button] autorelease];
-	}
-
-//	if ( BEE_UIBOARD_BARBUTTON_LEFT == position )
-//	{		
-//		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:image
-//																				  style:UIBarButtonItemStylePlain
-//																				 target:self
-//																				 action:@selector(didLeftBarButtonTouched)] autorelease];
-//	}
-//	else
-//	{
-//		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:image
-//																				   style:UIBarButtonItemStylePlain
-//																				  target:self
-//																				  action:@selector(didRightBarButtonTouched)] autorelease];
-//	}	
-}
-
-- (void)showBarButton:(NSInteger)position system:(UIBarButtonSystemItem)index
-{
-	if ( BeeUIBoard.BARBUTTON_LEFT == position )
-	{
-		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:index
-																							   target:self
-																							   action:@selector(didLeftBarButtonTouched)] autorelease];
-	}
-	else
-	{
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:index
-																								target:self
-																								action:@selector(didRightBarButtonTouched)] autorelease];
-	}		
-}
-
-- (void)showBarButton:(NSInteger)position custom:(UIView *)view
-{
-	if ( BeeUIBoard.BARBUTTON_LEFT == position )
-	{
-		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:view] autorelease];
-	}
-	else
-	{
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:view] autorelease];
-	}
-}
-
-- (void)hideBarButton:(NSInteger)position
-{
-	if ( BeeUIBoard.BARBUTTON_LEFT == position )
-	{
-		self.navigationItem.leftBarButtonItem = nil;
-	}
-	else
-	{
-		self.navigationItem.rightBarButtonItem = nil;
-	}
 }
 
 - (BOOL)deactivated
@@ -1280,178 +1055,6 @@ static NSMutableArray *			__allBoards;
 	return BeeUIBoard.STATE_ACTIVATED == _state ? YES : NO;
 }
 
-- (BOOL)panEnabled
-{
-	return _panEnabled;
-}
-
-- (void)setPanEnabled:(BOOL)flag
-{
-	if ( flag == _panEnabled )
-		return;
-
-	if ( flag )
-	{
-		[self enablePanGesture];
-	}
-	else
-	{
-		[self disablePanGesture];
-	}
-	
-	_panEnabled = flag;
-}
-
-- (void)enablePanGesture
-{
-	if ( nil == _panGesture )
-	{
-		_panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
-		_panGesture.delegate = self;
-	}
-
-	if ( _viewBuilt )
-	{
-		[self.view removeGestureRecognizer:_panGesture];
-		[self.view addGestureRecognizer:_panGesture];			
-	}
-}
-
-- (void)disablePanGesture
-{
-	if ( _panGesture )
-	{
-		if ( _viewBuilt )
-		{
-			[self.view removeGestureRecognizer:_panGesture];		
-		}
-	}
-}
-
-- (void)didPan:(UIPanGestureRecognizer *)panGesture
-{
-	if ( NO == _panEnabled )
-		return;
-
-	_panOffset = [panGesture translationInView:self.view];
-
-	CC( @"panOffset = (%.0f, %.0f)", _panOffset.x, _panOffset.y );
-
-	if ( UIGestureRecognizerStateBegan == panGesture.state )
-	{
-		[self sendUISignal:BeeUIBoard.PAN_START];
-	}
-	else if ( UIGestureRecognizerStateChanged == panGesture.state )
-	{
-		[self sendUISignal:BeeUIBoard.PAN_CHANGED];
-	}
-	else if ( UIGestureRecognizerStateEnded == panGesture.state )
-	{		
-		[self sendUISignal:BeeUIBoard.PAN_STOP];
-		
-		_panOffset = CGPointZero;
-	}
-	else if ( UIGestureRecognizerStateCancelled == panGesture.state )
-	{
-		[self sendUISignal:BeeUIBoard.PAN_CANCELLED];
-		
-		_panOffset = CGPointZero;
-	}
-}
-
-- (BOOL)swipeEnabled
-{
-	return _swipeEnabled;
-}
-
-- (void)setSwipeEnabled:(BOOL)flag
-{
-	if ( flag == _swipeEnabled )
-		return;
-	
-	if ( flag )
-	{
-		[self enableSwipeGesture];
-	}
-	else
-	{
-		[self disableSwipeGesture];
-	}
-	
-	_swipeEnabled = flag;
-}
-
-- (UISwipeGestureRecognizerDirection)direction
-{
-	return _swipeGesture ? _swipeGesture.direction : 0;
-}
-
-- (void)setSwipeDirection:(UISwipeGestureRecognizerDirection)direction
-{
-	_swipeGesture.direction = direction;
-}
-
-- (void)enableSwipeGesture
-{
-	if ( nil == _swipeGesture )
-	{
-		_swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipe:)];
-		_swipeGesture.numberOfTouchesRequired = 1;
-		_swipeGesture.delegate = self;		
-	}
-
-	if ( _viewBuilt )
-	{
-		[self.view removeGestureRecognizer:_swipeGesture];
-		[self.view addGestureRecognizer:_swipeGesture];			
-	}
-}
-
-- (void)disableSwipeGesture
-{
-	if ( _swipeGesture )
-	{
-		if ( _viewBuilt )
-		{
-			[self.view removeGestureRecognizer:_swipeGesture];		
-		}
-	}
-}
-
-- (void)didSwipe:(UISwipeGestureRecognizer *)swipeGesture
-{
-	if ( NO == _swipeEnabled )
-		return;
-	
-	if ( UIGestureRecognizerStateEnded == swipeGesture.state )
-	{		
-		if ( UISwipeGestureRecognizerDirectionUp == swipeGesture.direction )
-		{
-			CC( @"swipe up" );
-			
-			[self sendUISignal:BeeUIBoard.SWIPE_UP];
-		}
-		else if ( UISwipeGestureRecognizerDirectionDown == swipeGesture.direction )
-		{
-			CC( @"swipe down" );
-			
-			[self sendUISignal:BeeUIBoard.SWIPE_DOWN];
-		}
-		else if ( UISwipeGestureRecognizerDirectionLeft == swipeGesture.direction )
-		{
-			CC( @"swipe left" );
-			
-			[self sendUISignal:BeeUIBoard.SWIPE_LEFT];
-		}
-		else if ( UISwipeGestureRecognizerDirectionRight == swipeGesture.direction )
-		{
-			CC( @"swipe right" );
-			
-			[self sendUISignal:BeeUIBoard.SWIPE_RIGHT];
-		}
-	}
-}
-
 - (void)presentPopoverForView:(UIView *)view
 				  contentSize:(CGSize)size
 					direction:(UIPopoverArrowDirection)direction
@@ -1459,25 +1062,25 @@ static NSMutableArray *			__allBoards;
 {
 	self.view.frame = CGRectMake( 0.0f, 0.0f, size.width, size.height );
 
-	self.popover = [[[UIPopoverController alloc] initWithContentViewController:[BeeUIStack stackWithFirstBoard:self]] autorelease];
-	self.popover.delegate = self;
+	self.containedPopover = [[[UIPopoverController alloc] initWithContentViewController:[BeeUIStack stackWithFirstBoard:self]] autorelease];
+	self.containedPopover.delegate = self;
     self.contentSizeForViewInPopover = size;
-	[self.popover setPopoverContentSize:size];
-	
+	[self.containedPopover setPopoverContentSize:size];
+
 	[self sendUISignal:BeeUIBoard.POPOVER_WILL_PRESENT];
-	
-	[self.popover presentPopoverFromRect:view.frame
-								  inView:view.superview
-				permittedArrowDirections:direction
-								animated:animated];
+
+	[self.containedPopover presentPopoverFromRect:view.frame
+										   inView:view.superview
+						 permittedArrowDirections:direction
+										 animated:animated];
 	
 	[self sendUISignal:BeeUIBoard.POPOVER_DID_PRESENT];
 }
 
 - (void)dismissPopoverAnimated:(BOOL)animated
 {
-	[self.popover dismissPopoverAnimated:animated];
-	self.popover = nil;
+	[self.containedPopover dismissPopoverAnimated:animated];
+	self.containedPopover = nil;
 }
 
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController
@@ -1489,7 +1092,7 @@ static NSMutableArray *			__allBoards;
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
 {
 	[self sendUISignal:BeeUIBoard.POPOVER_DID_DISMISSED];
-	self.popover = nil;
+	self.containedPopover = nil;
 }
 
 @end

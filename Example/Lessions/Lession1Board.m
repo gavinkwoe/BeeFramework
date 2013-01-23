@@ -15,8 +15,10 @@
 }
 
 // BeeUIBoard signal goes here
-- (void)handleBeeUIBoard:(BeeUISignal *)signal
+- (void)handleUISignal_BeeUIBoard:(BeeUISignal *)signal
 {
+	[super handleUISignal:signal];
+	
 	if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
 	{
 		// 界面创建

@@ -33,6 +33,7 @@
 #import "Bee_Precompile.h"
 #import "Bee_UITextField.h"
 #import "Bee_UISignal.h"
+#import "UIView+BeeExtension.h"
 
 #pragma mark -
 
@@ -141,6 +142,13 @@ DEF_SIGNAL( RETURN )
 + (BeeUITextField *)spawn
 {
 	return [[[BeeUITextField alloc] initWithFrame:CGRectZero] autorelease];
+}
+
++ (BeeUITextField *)spawn:(NSString *)tagString
+{
+	BeeUITextField * view = [[[BeeUITextField alloc] init] autorelease];
+	view.tagString = tagString;
+	return view;
 }
 
 - (id)init

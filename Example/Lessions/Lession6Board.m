@@ -8,13 +8,13 @@
 
 @implementation Lession6Cell
 
-+ (CGSize)cellSize:(NSObject *)data bound:(CGSize)bound
++ (CGSize)sizeInBound:(CGSize)bound forData:(NSObject *)data
 {
 	NSNumber * height = (NSNumber *)[(NSArray *)data objectAtIndex:0];
 	return CGSizeMake( bound.width, height.floatValue );
 }
 
-- (void)cellLayout:(BeeUIGridCell *)cell bound:(CGSize)bound
+- (void)layoutInBound:(CGSize)bound forCell:(BeeUIGridCell *)cell
 {
 	CGRect photoFrame;
 	photoFrame.origin = CGPointZero;
@@ -46,19 +46,21 @@
 	[super unload];
 }
 
-- (void)bindData:(NSObject *)data
+- (void)dataWillChange
 {
-PERF_ENTER_(1)
-	_photo.url = (NSString *)[(NSArray *)data objectAtIndex:1];
-PERF_LEAVE_(1)
-PERF_ENTER_(2)
-	[super bindData:data];
-PERF_LEAVE_(2)
+	[super dataWillChange];
 }
 
-- (void)clearData
+- (void)dataDidChanged
 {
-	_photo.image = nil;
+	if ( self.cellData )
+	{
+		_photo.url = (NSString *)[(NSArray *)self.cellData objectAtIndex:1];
+	}
+	else
+	{
+		_photo.image = nil;
+	}
 }
 
 @end
@@ -100,7 +102,7 @@ DEF_SINGLETON( Lession6Board );
 	[super handleUISignal:signal];
 }
 
-- (void)handleBeeUIBoard:(BeeUISignal *)signal
+- (void)handleUISignal_BeeUIBoard:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 	
@@ -120,13 +122,6 @@ DEF_SINGLETON( Lession6Board );
 		[self.scrollView flashScrollIndicators];
 	}
 	else if ( [signal is:BeeUIBoard.DID_DISAPPEAR] )
-	{
-	}
-	else if ( [signal is:BeeUIBoard.BACK_BUTTON_TOUCHED] )
-	{
-		
-	}
-	else if ( [signal is:BeeUIBoard.DONE_BUTTON_TOUCHED] )
 	{
 	}
 }
@@ -149,7 +144,7 @@ DEF_SINGLETON( Lession6Board );
 	Lession6Cell * cell = (Lession6Cell *)[self dequeueWithContentClass:[Lession6Cell class]];
 	if ( cell )
 	{
-		[cell bindData:data];
+		cell.cellData = data;
 	}
 	return cell;
 }

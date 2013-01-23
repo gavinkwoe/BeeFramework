@@ -46,12 +46,12 @@
 
 @implementation BeeDebugSandboxCell
 
-+ (CGSize)cellSize:(NSObject *)data bound:(CGSize)bound
++ (CGSize)sizeInBound:(CGSize)bound forData:(NSObject *)data
 {
 	return CGSizeMake( bound.width, 50.0f );
 }
 
-- (void)cellLayout:(BeeUIGridCell *)cell bound:(CGSize)bound
+- (void)layoutInBound:(CGSize)bound forCell:(BeeUIGridCell *)cell
 {
 	CGRect iconFrame;
 	iconFrame.size.width = bound.height;
@@ -99,12 +99,17 @@
 	_sizeLabel.font = [UIFont boldSystemFontOfSize:13.0f];
 	_sizeLabel.lineBreakMode = UILineBreakModeClip;
 	_sizeLabel.numberOfLines = 1;
-	[self addSubview:_sizeLabel];	
+	[self addSubview:_sizeLabel];
 }
 
-- (void)bindData:(NSObject *)data
+- (void)dataWillChange
 {
-	NSString * filePath = (NSString *)data;
+	[super dataWillChange];
+}
+
+- (void)dataDidChanged
+{
+	NSString * filePath = (NSString *)self.cellData;
 	if ( [filePath isEqualToString:@".."] )
 	{
 		_nameLabel.text = @"..";
@@ -123,7 +128,7 @@
 			}
 		}
 		
-		_nameLabel.text = [(NSString *)data lastPathComponent];
+		_nameLabel.text = [(NSString *)filePath lastPathComponent];
 		_iconView.image = __IMAGE( isDirectory ? @"folder.png" : @"file.png" );
 		_sizeLabel.text = @"";
 		
@@ -156,12 +161,12 @@
 DEF_SIGNAL( REFRESH )
 DEF_SIGNAL( DELETE_ALL )
 
-+ (CGSize)cellSize:(NSObject *)data bound:(CGSize)bound
++ (CGSize)sizeInBound:(CGSize)bound forData:(NSObject *)data
 {
 	return CGSizeMake( bound.width, 40.0f );
 }
 
-- (void)cellLayout:(BeeUIGridCell *)cell bound:(CGSize)bound
+- (void)layoutInBound:(CGSize)bound forCell:(BeeUIGridCell *)cell
 {
 	CGRect buttonFrame;
 	buttonFrame.size.width = 72.0f;
@@ -220,7 +225,7 @@ DEF_SIGNAL( DELETE_ALL )
 
 - (void)setPath:(NSString *)path fileCount:(NSUInteger)count
 {
-	_folderName.text = [NSString stringWithFormat:@"Total %lu file(s)", count];
+	_folderName.text = [NSString stringWithFormat:@"Total %u file(s)", count];
 }
 
 - (void)unload
@@ -392,7 +397,7 @@ DEF_SIGNAL( CONFIRM_DELETE_ALL )
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	CGSize bound = CGSizeMake( self.viewSize.width, 0.0f );
-	return [BeeDebugSandboxCell cellSize:nil bound:bound].height;
+	return [BeeDebugSandboxCell sizeInBound:bound forData:nil].height;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -408,12 +413,11 @@ DEF_SIGNAL( CONFIRM_DELETE_ALL )
 		NSString * file = [_fileArray objectAtIndex:indexPath.row];
 		if ( [file isEqualToString:@".."] )
 		{
-			[cell bindData:file];
+			cell.cellData = file;
 		}
 		else
 		{
-			NSString * path = [NSString stringWithFormat:@"%@/%@", self.filePath, file];
-			[cell bindData:path];
+			cell.cellData = [NSString stringWithFormat:@"%@/%@", self.filePath, file];
 		}
 		return cell;
 	}

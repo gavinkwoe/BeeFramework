@@ -27,7 +27,7 @@
 	[super handleUISignal:signal];
 }
 
-- (void)handleBeeUIBoard:(BeeUISignal *)signal
+- (void)handleUISignal_BeeUIBoard:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 	
@@ -66,13 +66,6 @@
 	{
 	}
 	else if ( [signal is:BeeUIBoard.DID_DISAPPEAR] )
-	{
-	}
-	else if ( [signal is:BeeUIBoard.BACK_BUTTON_TOUCHED] )
-	{
-		
-	}
-	else if ( [signal is:BeeUIBoard.DONE_BUTTON_TOUCHED] )
 	{
 	}
 }

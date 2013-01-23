@@ -34,6 +34,8 @@
 #import "Bee_UIActivityIndicatorView.h"
 #import "Bee_UISignal.h"
 #import "Bee_SystemInfo.h"
+#import "UIView+BeeExtension.h"
+#import "UIView+BeeUISignal.h"
 
 #pragma mark -
 
@@ -51,6 +53,13 @@ DEF_SIGNAL( DID_STOP )
 + (BeeUIActivityIndicatorView *)spawn
 {
 	return [[[BeeUIActivityIndicatorView alloc] init] autorelease];
+}
+
++ (BeeUIActivityIndicatorView *)spawn:(NSString *)tagString
+{
+	BeeUIActivityIndicatorView * view = [[[BeeUIActivityIndicatorView alloc] init] autorelease];
+	view.tagString = tagString;
+	return view;
 }
 
 - (id)init

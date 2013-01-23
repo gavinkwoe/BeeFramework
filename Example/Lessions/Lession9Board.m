@@ -28,7 +28,7 @@ DEF_SIGNAL( BUTTON2_TOUCHED )
 	[super handleUISignal:signal];
 }
 
-- (void)handleBeeUIBoard:(BeeUISignal *)signal
+- (void)handleUISignal_BeeUIBoard:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 	
@@ -75,16 +75,9 @@ DEF_SIGNAL( BUTTON2_TOUCHED )
 	else if ( [signal is:BeeUIBoard.DID_DISAPPEAR] )
 	{
 	}
-	else if ( [signal is:BeeUIBoard.BACK_BUTTON_TOUCHED] )
-	{
-		
-	}
-	else if ( [signal is:BeeUIBoard.DONE_BUTTON_TOUCHED] )
-	{
-	}
 }
 
-- (void)handleLession9Board:(BeeUISignal *)signal
+- (void)handleUISignal_Lession9Board:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 	
@@ -118,7 +111,7 @@ DEF_SIGNAL( BUTTON2_TOUCHED )
 	[super handleMessage:msg];
 }
 
-- (void)handleLession9Controller:(BeeMessage *)msg
+- (void)handleMessage_Lession9Controller:(BeeMessage *)msg
 {
 	[super handleMessage:msg];
 

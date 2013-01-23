@@ -37,7 +37,6 @@
 
 @interface BeeUIDatePicker : UIActionSheet<UIActionSheetDelegate>
 {
-	NSDate *				_date;
 	UIDatePicker *			_datePicker;
 	UIView *				_parentView;
 	NSObject *				_userData;
@@ -50,12 +49,26 @@ AS_SIGNAL( DID_DISMISS )	// 已经隐藏
 AS_SIGNAL( CHANGED )		// 日期改变
 AS_SIGNAL( CONFIRMED )		// 确认
 
-@property (nonatomic, retain) NSDate *		date;
-@property (nonatomic, retain) NSObject *	userData;
-@property (nonatomic, assign) UIView *		parentView;
+@property (nonatomic, retain) NSObject *		userData;
+@property (nonatomic, assign) UIView *			parentView;
+
+@property (nonatomic, retain) NSDate *			date;
+@property (nonatomic, assign) UIDatePickerMode	datePickerMode;
+@property (nonatomic, assign) NSLocale *		locale;
+@property (nonatomic, assign) NSCalendar *		calendar;
+@property (nonatomic, assign) NSTimeZone *		timeZone;
+@property (nonatomic, assign) NSDate *			minimumDate;
+@property (nonatomic, assign) NSDate *			maximumDate;
+@property (nonatomic, assign) NSTimeInterval	countDownDuration;
+@property (nonatomic, assign) NSInteger			minuteInterval;
 
 + (BeeUIDatePicker *)spawn;
++ (BeeUIDatePicker *)spawn:(NSString *)tagString;
 
+- (void)showInViewController:(UIViewController *)controller;	// samw as presentForController:
 - (void)presentForController:(UIViewController *)controller;
+- (void)dismissAnimated:(BOOL)animated;
+
+- (void)setDate:(NSDate *)date animated:(BOOL)animated;
 
 @end

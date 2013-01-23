@@ -151,85 +151,100 @@ DEF_SINGLETON( BeeDebugBoard );
 {
 	[super handleUISignal:signal];
 	
-	if ( [signal isKindOf:BeeUIBoard.SIGNAL] )
-	{
-		if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
-		{
-			[self append:[BeeUIStack stack:@"Dash" firstBoard:[BeeDebugDashBoard sharedInstance]]];
-			[self append:[BeeUIStack stack:@"View" firstBoard:[BeeDebugViewBoard sharedInstance]]];
-			[self append:[BeeUIStack stack:@"Msg" firstBoard:[BeeDebugMessageBoard sharedInstance]]];
-			[self append:[BeeUIStack stack:@"Net" firstBoard:[BeeDebugNetworkBoard sharedInstance]]];
-			[self append:[BeeUIStack stack:@"File" firstBoard:[BeeDebugSandboxBoard sharedInstance]]];
-//			[self append:[BeeUIStack stack:@"Crash" firstBoard:nil]];
-			[self present:[self.stacks objectAtIndex:0]];
-
-			CGRect bottomFrame;
-			bottomFrame.size.width = self.viewSize.width;
-			bottomFrame.size.height = 44.0f;
-			bottomFrame.origin.x = 0.0f;
-			bottomFrame.origin.y = self.viewSize.height - bottomFrame.size.height;
-			
-			_bottomView = [[UIView alloc] initWithFrame:bottomFrame];
-			_bottomView.backgroundColor = [UIColor clearColor];
-			_bottomView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4f];
-			_bottomView.layer.borderWidth = 1.0f;
-			_bottomView.layer.borderColor = [UIColor grayColor].CGColor;
-			[self.view addSubview:_bottomView];
-			
-			CGRect segFrame;
-			segFrame.size.width = self.viewSize.width - 44.0f - 10.0f;
-			segFrame.size.height = 30.0f;
-			segFrame.origin.x = 10.0f;
-			segFrame.origin.y = (bottomFrame.size.height - segFrame.size.height) / 2.0f;
-			
-			BeeUISegmentedControl * segmentControl = [[[BeeUISegmentedControl alloc] initWithFrame:segFrame] autorelease];
-			for ( BeeUIStack * stack in self.stacks )
-			{
-				[segmentControl addTitle:stack.name];
-			}
-			segmentControl.segmentedControlStyle = UISegmentedControlStyleBezeled;
-			segmentControl.tintColor = [UIColor grayColor];
-			[segmentControl setSelectedSegmentIndex:0];
-			[_bottomView addSubview:segmentControl];
-			
-			CGRect closeFrame;
-			closeFrame.size.width = 44.0f;
-			closeFrame.size.height = 44.0f;
-			closeFrame.origin.x = self.viewSize.width - closeFrame.size.width;
-			closeFrame.origin.y = (bottomFrame.size.height - closeFrame.size.height) / 2.0f;
-			
-			BeeUIButton * closeView = [[[BeeUIButton alloc] initWithFrame:closeFrame] autorelease];
-			closeView.stateNormal.image = __IMAGE( @"close.png" );
-			[closeView addSignal:@"CLOSE_TOUCHED" forControlEvents:UIControlEventTouchUpInside];
-			[_bottomView addSubview:closeView];
-		}
-		else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
-		{	
-			SAFE_RELEASE_SUBVIEW( _bottomView );
-		}
-		else if ( [signal is:BeeUIBoard.WILL_APPEAR] )
-		{
-			
-		}
-		else if ( [signal is:BeeUIBoard.DID_DISAPPEAR] )
-		{
-
-		}
-	}
-	else if ( [signal is:BeeUIStackGroup.INDEX_CHANGED] )
-	{
-		[self.view bringSubviewToFront:_bottomView];
-	}
-	else if ( [signal is:BeeUISegmentedControl.HIGHLIGHT_CHANGED] )
-	{
-		BeeUISegmentedControl * segmentControl = (BeeUISegmentedControl *)signal.source;
-		[self present:[self.stacks objectAtIndex:segmentControl.selectedSegmentIndex]];
-	}
-	else if ( [signal is:@"CLOSE_TOUCHED"] )
+	if ( [signal is:@"CLOSE_TOUCHED"] )
 	{
 		[BeeDebugWindow sharedInstance].hidden = YES;
 		[BeeDebugHeatmap sharedInstance].hidden = YES;
 		[BeeDebugShortcut sharedInstance].hidden = NO;
+	}
+}
+
+- (void)handleUISignal_BeeUIBoard:(BeeUISignal *)signal
+{
+	[super handleUISignal:signal];
+	
+	if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
+	{
+		[self append:[BeeUIStack stack:@"Dash" firstBoard:[BeeDebugDashBoard sharedInstance]]];
+		[self append:[BeeUIStack stack:@"View" firstBoard:[BeeDebugViewBoard sharedInstance]]];
+		[self append:[BeeUIStack stack:@"Msg" firstBoard:[BeeDebugMessageBoard sharedInstance]]];
+		[self append:[BeeUIStack stack:@"Net" firstBoard:[BeeDebugNetworkBoard sharedInstance]]];
+		[self append:[BeeUIStack stack:@"File" firstBoard:[BeeDebugSandboxBoard sharedInstance]]];
+//			[self append:[BeeUIStack stack:@"Crash" firstBoard:nil]];
+		[self present:[self.stacks objectAtIndex:0]];
+
+		CGRect bottomFrame;
+		bottomFrame.size.width = self.viewSize.width;
+		bottomFrame.size.height = 44.0f;
+		bottomFrame.origin.x = 0.0f;
+		bottomFrame.origin.y = self.viewSize.height - bottomFrame.size.height;
+		
+		_bottomView = [[UIView alloc] initWithFrame:bottomFrame];
+		_bottomView.backgroundColor = [UIColor clearColor];
+		_bottomView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4f];
+		_bottomView.layer.borderWidth = 1.0f;
+		_bottomView.layer.borderColor = [UIColor grayColor].CGColor;
+		[self.view addSubview:_bottomView];
+		
+		CGRect segFrame;
+		segFrame.size.width = self.viewSize.width - 44.0f - 10.0f;
+		segFrame.size.height = 30.0f;
+		segFrame.origin.x = 10.0f;
+		segFrame.origin.y = (bottomFrame.size.height - segFrame.size.height) / 2.0f;
+		
+		BeeUISegmentedControl * segmentControl = [[[BeeUISegmentedControl alloc] initWithFrame:segFrame] autorelease];
+		for ( BeeUIStack * stack in self.stacks )
+		{
+			[segmentControl addTitle:stack.name];
+		}
+		segmentControl.segmentedControlStyle = UISegmentedControlStyleBezeled;
+		segmentControl.tintColor = [UIColor grayColor];
+		[segmentControl setSelectedSegmentIndex:0];
+		[_bottomView addSubview:segmentControl];
+		
+		CGRect closeFrame;
+		closeFrame.size.width = 44.0f;
+		closeFrame.size.height = 44.0f;
+		closeFrame.origin.x = self.viewSize.width - closeFrame.size.width;
+		closeFrame.origin.y = (bottomFrame.size.height - closeFrame.size.height) / 2.0f;
+		
+		BeeUIButton * closeView = [[[BeeUIButton alloc] initWithFrame:closeFrame] autorelease];
+		closeView.stateNormal.image = __IMAGE( @"close.png" );
+		[closeView addSignal:@"CLOSE_TOUCHED" forControlEvents:UIControlEventTouchUpInside];
+		[_bottomView addSubview:closeView];
+	}
+	else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
+	{	
+		SAFE_RELEASE_SUBVIEW( _bottomView );
+	}
+	else if ( [signal is:BeeUIBoard.WILL_APPEAR] )
+	{
+		
+	}
+	else if ( [signal is:BeeUIBoard.DID_DISAPPEAR] )
+	{
+
+	}
+}
+
+- (void)handleUISignal_BeeUIStackGroup:(BeeUISignal *)signal
+{
+	[super handleUISignal:signal];
+	
+	if ( [signal is:BeeUIStackGroup.INDEX_CHANGED] )
+	{
+		[self.view bringSubviewToFront:_bottomView];
+	}
+}
+
+- (void)handleUISignal_BeeUISegmentedControl:(BeeUISignal *)signal
+{
+	[super handleUISignal:signal];
+
+	if ( [signal is:BeeUISegmentedControl.HIGHLIGHT_CHANGED] )
+	{
+		BeeUISegmentedControl * segmentControl = (BeeUISegmentedControl *)signal.source;
+		[self present:[self.stacks objectAtIndex:segmentControl.selectedSegmentIndex]];
 	}
 }
 

@@ -34,6 +34,7 @@
 #import "Bee_UIPageControl.h"
 #import "Bee_UISignal.h"
 #import "Bee_SystemInfo.h"
+#import "UIView+BeeExtension.h"
 
 #pragma mark -
 
@@ -51,6 +52,13 @@
 + (BeeUIPageControl *)spawn
 {
 	return [[[BeeUIPageControl alloc] init] autorelease];
+}
+
++ (BeeUIPageControl *)spawn:(NSString *)tagString
+{
+	BeeUIPageControl * view = [[[BeeUIPageControl alloc] init] autorelease];
+	view.tagString = tagString;
+	return view;
 }
 
 - (id)init
