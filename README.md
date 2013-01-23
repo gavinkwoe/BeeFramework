@@ -10,6 +10,55 @@ QQ: 5220509
 Email: gavinkwoe@gmail.com    
 google groups： https://groups.google.com/d/forum/beeframework?hl=zh-CN
 
+##v0.2.3 changes
+
+1. Refactoring the directory structure, Core and MVC completely separated, and the source files and the extensions completely separated
+2. Refactoring the code structure of BeeDatabase and BeeActiveRecord, more clearly
+3. Support the ActiveRecord inherition and nesting, support HAS/BELONG_TO operations, such as:
+
+	@interface Location : BeeActiveRecord    
+	...    
+	@end    
+
+	@interface User : BeeActiveRecord    
+	...    
+	@end    
+	
+	@interface User2 : User    
+	@property (nonatomic, retain) Location * location;    
+	...    
+	@end    
+
+	Magzine * magzine = ...;    
+	Article.DB.BELONG_TO( magzine ).GET_RECORDS();    
+	Article.DB.BELONG_TO( magzine ).SAVE_ARRAY( result );    
+
+	Article * article = ...;    
+	Magzine.DB.HAS( article ).GET_RECORDS();    
+
+	(follow-up version will add more RUBY-like advanced features)    
+
+4. Support dot(.) opertions for BeeRequest & BeeMessage, such as：
+
+	self    
+	.HTTP_GET( @"http://www.qq.com" )    
+	.HEADER( @"header1", @"xxx" )    
+	.HEADER( @"header2", @"xxx" )    
+	.HEADER( @"header3", @"xxx" )    
+	.PARAM( @"key1", @"xxx" )    
+	.PARAM( @"key2", @"xxx" )    
+	.PARAM( @"key3", @"xxx" )    
+	.FILE( @"photo1.png", [NSData data] )    
+	.FILE( @"photo2.png", [NSData data] )    
+	.FILE( @"photo3.png", [NSData data] );    
+
+        self    
+	.MSG( ArticleController.GET_ARTICLES )    
+	.TIMEOUT( 10.0f )    
+	.INPUT( @"magzine", _magzine );    
+
+5. Fix some bugs (Thanks, I love U all!)
+
 ##v0.2 changes
 
 1. Add overload graph in BeeDebugger    
