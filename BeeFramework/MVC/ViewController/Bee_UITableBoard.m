@@ -144,8 +144,7 @@
 
 - (void)dealloc
 {
-	[_innerCell removeFromSuperview];
-	_innerCell = nil;
+	SAFE_RELEASE_SUBVIEW(_innerCell);
 
 	[super dealloc];
 }
