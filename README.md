@@ -18,17 +18,19 @@ google groups： https://groups.google.com/d/forum/beeframework?hl=zh-CN
 
 A. China Mobile, http://www.chinamobileltd.com/en/global/home.php    
 B. China Unicom, http://www.chinaunicom.com.cn/    
-C. Tencent, http://www.qq.com/    
-D. Sina, http://www.sina.com.cn/  
-E. iFeng, http://www.ifeng.com/    
-F. Novagin, http://www.novagin.com/cn/index.htm    
-G. IGRS Lab, http://www.tivic.com/    
-H. Front network, http://www.frontnetwork.com/      
-I. Middling industries, http://www.middlingindustries.com/    
-J. iLouShi, http://www.iloushi.cn/    
-K. Duopeng, http://www.duopeng.com/    
-L. VoiceFrom, http://voicefrom.me/    
-M. Distance Education Group, http://www.sdeg.cn/sdegPortal/    
+C. China Telecom, http://www.chinatelecom.com.cn/    
+D. Tencent, http://www.qq.com/    
+E. Sina, http://www.sina.com.cn/  
+F. iFeng, http://www.ifeng.com/    
+G. Novagin, http://www.novagin.com/cn/index.htm    
+H. IGRS Lab, http://www.tivic.com/    
+I. Front network, http://www.frontnetwork.com/      
+J. Middling industries, http://www.middlingindustries.com/    
+K. iLouShi, http://www.iloushi.cn/    
+L. Duopeng, http://www.duopeng.com/    
+M. VoiceFrom, http://voicefrom.me/    
+N. Distance Education Group, http://www.sdeg.cn/sdegPortal/    
+O. MesonTech, http://www.mesontech.com.cn/home/mesontech.jsp
 
 ####Projects
 
