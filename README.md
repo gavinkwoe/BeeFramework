@@ -18,16 +18,16 @@ google groups： https://groups.google.com/d/forum/beeframework?hl=zh-CN
 
 A. China Mobile, http://www.chinamobileltd.com/en/global/home.php    
 B. China Unicome, http://www.chinaunicom.com.cn/    
-C. Sina, http://www.sina.com.cn/    
-D. iFeng, http://www.ifeng.com/    
-E. Digby, http://www.digby.com/    
+C. Tencent, http://www.qq.com/
+D. Sina, http://www.sina.com.cn/  
+E. iFeng, http://www.ifeng.com/    
 F. Novagin, http://www.novagin.com/cn/index.htm    
 G. IGRS Lab, http://www.tivic.com/    
 H. Front network, http://www.frontnetwork.com/      
 I. Middling industries, http://www.middlingindustries.com/    
 J. iLouShi, http://www.iloushi.cn/    
 K. Duopeng, http://www.duopeng.com/    
-F. VoiceFrom, http://voicefrom.me/    
+L. VoiceFrom, http://voicefrom.me/    
 M. Distance Education Group, http://www.sdeg.cn/sdegPortal/    
 
 ####Projects
