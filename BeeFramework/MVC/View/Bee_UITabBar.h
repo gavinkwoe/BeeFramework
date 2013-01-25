@@ -37,24 +37,30 @@
 
 @interface BeeUITabBar : UITabBar<UITabBarDelegate>
 {
-	NSMutableArray *	_barItems;
+	NSMutableDictionary *	_barSignals;
+	NSMutableArray *		_barItems;
 }
 
 AS_SIGNAL( HIGHLIGHT_CHANGED )	// 高亮改变
 
-@property (nonatomic, readonly) NSInteger	selectedIndex;
+@property (nonatomic, assign) NSInteger	selectedIndex;
+@property (nonatomic, assign) NSInteger	selectedTag;
 
 + (BeeUITabBar *)spawn;
++ (BeeUITabBar *)spawn:(NSString *)tagString;
 
-- (void)hilite:(NSInteger)tag;
+- (void)hilite:(NSInteger)tag;	// use selectedIndex instead
 
 - (void)addTitle:(NSString *)title;
 - (void)addTitle:(NSString *)title tag:(NSInteger)tag;
+- (void)addTitle:(NSString *)title tag:(NSInteger)tag signal:(NSString *)signal;
 
 - (void)addImage:(UIImage *)image;
 - (void)addImage:(UIImage *)image tag:(NSInteger)tag;
+- (void)addImage:(UIImage *)image tag:(NSInteger)tag signal:(NSString *)signal;
 
 - (void)addTitle:(NSString *)title image:(UIImage *)image;
 - (void)addTitle:(NSString *)title image:(UIImage *)image tag:(NSInteger)tag;
+- (void)addTitle:(NSString *)title image:(UIImage *)image tag:(NSInteger)tag signal:(NSString *)signal;
 
 @end

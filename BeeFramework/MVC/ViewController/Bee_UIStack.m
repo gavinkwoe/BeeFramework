@@ -34,6 +34,7 @@
 #import "Bee_UIBoard.h"
 #import "Bee_UIStack.h"
 #import "Bee_Runtime.h"
+#import "UIView+BeeExtension.h"
 
 #pragma mark -
 
@@ -251,7 +252,7 @@ DEF_INT( ANIMATION_TYPE_FLIP,		5 )
 
 - (void)pushBoard:(BeeUIBoard *)newBoard animated:(BOOL)animated animationType:(NSInteger)type
 {
-	newBoard.popover = self.topBoard.popover;
+	newBoard.containedPopover = self.topBoard.containedPopover;
 	newBoard.stackAnimationType = type;
 
 	if ( NO == animated )
@@ -326,7 +327,7 @@ DEF_INT( ANIMATION_TYPE_FLIP,		5 )
 			[animation setRemovedOnCompletion:YES];
 			[self.view.layer removeAnimationForKey:@"slide_in"];
 			[self.view.layer addAnimation:animation forKey:@"slide_in"];
-			
+
 			[super pushViewController:newBoard animated:NO];
 		}
 		else if ( BeeUIStack.ANIMATION_TYPE_FLIP == type )
@@ -344,6 +345,9 @@ DEF_INT( ANIMATION_TYPE_FLIP,		5 )
 	
 - (void)popBoardAnimated:(BOOL)animated animationType:(NSInteger)animType
 {
+	if ( self.boards.count <= 1 )
+		return;
+	
 	if ( NO == animated )
 	{
 		[super popViewControllerAnimated:NO];
@@ -411,8 +415,8 @@ DEF_INT( ANIMATION_TYPE_FLIP,		5 )
 		else if ( BeeUIStack.ANIMATION_TYPE_SLIDE == animType )
 		{
 			[super popViewControllerAnimated:NO];
-			
-			CATransition *animation = [CATransition animation];
+
+			CATransition * animation = [CATransition animation];
 			[animation setDuration:0.6f];
 			[animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
 			[animation setType:kCATransitionPush];

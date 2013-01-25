@@ -9,12 +9,12 @@
 
 @implementation Lession11Cell
 
-+ (CGSize)cellSize:(NSObject *)data bound:(CGSize)bound
++ (CGSize)sizeInBound:(CGSize)bound forData:(NSObject *)data
 {
 	return CGSizeMake( bound.width, 60.0f );
 }
 
-- (void)cellLayout:(BeeUIGridCell *)cell bound:(CGSize)bound
+- (void)layoutInBound:(CGSize)bound forCell:(BeeUIGridCell *)cell
 {
 	_label1.frame = CGRectMake( 10.0f, 5.0f, cell.bounds.size.width - 20.0f, 30.0f );
 	_label2.frame = CGRectMake( 10.0f, 32.0f, cell.bounds.size.width - 20.0f, 20.0f );
@@ -45,20 +45,26 @@
 	[super unload];
 }
 
-- (void)bindData:(NSObject *)data
+- (void)dataWillChange
 {
-	Lession11Record * record = (Lession11Record *)data;
-	
-	_label1.text = [NSString stringWithFormat:@"%@. %@", record.rid, record.name];
-	_label2.text = record.url;
-	
-//	[super bindData:data];
+	[super dataWillChange];
 }
 
-- (void)clearData
+- (void)dataDidChanged
 {
-	_label1.text = nil;
-	_label2.text = nil;
+	[super dataDidChanged];
+	
+	Lession11Record * record = (Lession11Record *)self.cellData;
+	if ( record )
+	{
+		_label1.text = [NSString stringWithFormat:@"%@. %@", record.rid, record.name];
+		_label2.text = record.url;
+	}
+	else
+	{
+		_label1.text = nil;
+		_label2.text = nil;
+	}
 }
 
 @end
@@ -124,7 +130,7 @@ DEF_SINGLETON( Lession11Board );
 	[super handleUISignal:signal];
 }
 
-- (void)handleBeeUIBoard:(BeeUISignal *)signal
+- (void)handleUISignal_BeeUIBoard:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 	
@@ -158,16 +164,9 @@ DEF_SINGLETON( Lession11Board );
 	else if ( [signal is:BeeUIBoard.DID_DISAPPEAR] )
 	{
 	}
-	else if ( [signal is:BeeUIBoard.BACK_BUTTON_TOUCHED] )
-	{
-		
-	}
-	else if ( [signal is:BeeUIBoard.DONE_BUTTON_TOUCHED] )
-	{
-	}
 }
 
-- (void)handleBeeUITableBoard:(BeeUISignal *)signal
+- (void)handleUISignal_BeeUITableBoard:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 	
@@ -204,7 +203,8 @@ DEF_SINGLETON( Lession11Board );
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	Lession11Record * record = (Lession11Record *)[_records objectAtIndex:indexPath.row];
-	return [Lession11Cell cellSize:record bound:CGSizeMake( self.view.bounds.size.width, 0.0f )].height;
+	CGSize bound = CGSizeMake( self.view.bounds.size.width, 0.0f );
+	return [Lession11Cell sizeInBound:bound forData:record].height;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -217,8 +217,7 @@ DEF_SINGLETON( Lession11Board );
 	BeeUITableViewCell * cell = (BeeUITableViewCell *)[self dequeueWithContentClass:[Lession11Cell class]];
 	if ( cell )
 	{		
-		Lession11Record * record = (Lession11Record *)[_records objectAtIndex:indexPath.row];
-		[cell bindData:record];
+		cell.cellData = [_records objectAtIndex:indexPath.row];
 		return cell;
 	}
 	

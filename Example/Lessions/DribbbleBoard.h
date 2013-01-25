@@ -4,6 +4,7 @@
 
 #import "Bee.h"
 #import "DribbbleModel.h"
+#import "Bee_UITableBoard.h"
 
 #pragma mark -
 

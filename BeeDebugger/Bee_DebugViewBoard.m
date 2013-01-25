@@ -115,12 +115,12 @@
 
 @implementation BeeDebugViewCell
 
-+ (CGSize)cellSize:(NSObject *)data bound:(CGSize)bound
++ (CGSize)sizeInBound:(CGSize)bound forData:(NSObject *)data
 {
 	return CGSizeMake( bound.width, 50.0f );
 }
 
-- (void)cellLayout:(BeeUIGridCell *)cell bound:(CGSize)bound
+- (void)layoutInBound:(CGSize)bound forCell:(BeeUIGridCell *)cell
 {
 	_plotView.frame = CGSizeMakeBound( bound );
 	
@@ -235,73 +235,83 @@
 	return subCount;
 }
 
-- (void)bindData:(NSObject *)data
+- (void)dataWillChange
 {
-	BeeUIBoard * board = (BeeUIBoard *)data;
-	
-	NSArray * plots = [[BeeDebugViewModel sharedInstance] plotsForBoard:board];
+	[super dataWillChange];
+}
 
-	[_plotView setPlots:plots];
-	[_plotView setLowerBound:[BeeDebugViewModel sharedInstance].lowerBound];
-	[_plotView setUpperBound:[BeeDebugViewModel sharedInstance].upperBound];
-	[_plotView setNeedsDisplay];
-
-	NSDateFormatter * formatter = [[NSDateFormatter alloc] init];
-	[formatter setLocale:[[[NSLocale alloc] initWithLocaleIdentifier:@"US"] autorelease]];
-	[formatter setDateFormat:@"hh:mm:ss"];
-	_timeLabel.text = [NSString stringWithFormat:@"%@", [formatter stringFromDate:board.createDate]];
-	[formatter release];
-
-//	_timeLabel.text = [NSString stringWithFormat:@"#%d", board.createSeq];
-	
-	if ( [[[board class] description] hasPrefix:@"BeeDebug"] )
+- (void)dataDidChanged
+{
+	BeeUIBoard * board = (BeeUIBoard *)self.cellData;
+	if ( board )
 	{
-		_nameLabel.textColor = [UIColor lightGrayColor];
-		_nameLabel.text = [[board class] description];
+		NSArray * plots = [[BeeDebugViewModel sharedInstance] plotsForBoard:board];
+		
+		[_plotView setPlots:plots];
+		[_plotView setLowerBound:[BeeDebugViewModel sharedInstance].lowerBound];
+		[_plotView setUpperBound:[BeeDebugViewModel sharedInstance].upperBound];
+		[_plotView setNeedsDisplay];
+		
+		NSDateFormatter * formatter = [[NSDateFormatter alloc] init];
+		[formatter setLocale:[[[NSLocale alloc] initWithLocaleIdentifier:@"US"] autorelease]];
+		[formatter setDateFormat:@"hh:mm:ss"];
+		_timeLabel.text = [NSString stringWithFormat:@"%@", [formatter stringFromDate:board.createDate]];
+		[formatter release];
+		
+		//	_timeLabel.text = [NSString stringWithFormat:@"#%d", board.createSeq];
+		
+		if ( [[[board class] description] hasPrefix:@"BeeDebug"] )
+		{
+			_nameLabel.textColor = [UIColor lightGrayColor];
+			_nameLabel.text = [[board class] description];
+		}
+		else
+		{
+			_nameLabel.textColor = [UIColor whiteColor];
+			_nameLabel.text = [[board class] description];
+		}
+		
+		NSUInteger subviewCount = [self countSubviewsIn:board.view];
+		NSUInteger imageviewCount = [self countUIImageViewsIn:board.view];
+		
+		//	if ( subviewCount >= 100 )
+		//	{
+		//		_countLabel.textColor = [UIColor redColor];
+		//	}
+		//	else if ( subviewCount >= 50 )
+		//	{
+		//		_countLabel.textColor = [UIColor yellowColor];
+		//	}
+		//	else
+		//	{
+		_countLabel.textColor = [UIColor lightGrayColor];
+		//	}
+		
+		_countLabel.text = [NSString stringWithFormat:@"%d subviews, %d images", subviewCount, imageviewCount];
+		
+		if ( board.deactivated )
+		{
+			_statusLabel.textColor = [UIColor grayColor];
+			_statusLabel.text = @"Deactivated";
+		}
+		else if ( board.deactivating )
+		{
+			_statusLabel.textColor = [UIColor yellowColor];
+			_statusLabel.text = @"Deactivating";
+		}
+		else if ( board.activating )
+		{
+			_statusLabel.textColor = [UIColor yellowColor];
+			_statusLabel.text = @"Activating";
+		}
+		else if ( board.activated )
+		{
+			_statusLabel.textColor = [UIColor greenColor];
+			_statusLabel.text = @"Activated";
+		}
 	}
 	else
 	{
-		_nameLabel.textColor = [UIColor whiteColor];
-		_nameLabel.text = [[board class] description];		
-	}
-
-	NSUInteger subviewCount = [self countSubviewsIn:board.view];
-	NSUInteger imageviewCount = [self countUIImageViewsIn:board.view];
-	
-//	if ( subviewCount >= 100 )
-//	{
-//		_countLabel.textColor = [UIColor redColor];
-//	}
-//	else if ( subviewCount >= 50 )
-//	{
-//		_countLabel.textColor = [UIColor yellowColor];
-//	}
-//	else
-//	{
-		_countLabel.textColor = [UIColor lightGrayColor];
-//	}
-
-	_countLabel.text = [NSString stringWithFormat:@"%d subviews, %d images", subviewCount, imageviewCount];
-
-	if ( board.deactivated )
-	{
-		_statusLabel.textColor = [UIColor grayColor];
-		_statusLabel.text = @"Deactivated";
-	}
-	else if ( board.deactivating )
-	{
-		_statusLabel.textColor = [UIColor yellowColor];
-		_statusLabel.text = @"Deactivating";
-	}
-	else if ( board.activating )
-	{
-		_statusLabel.textColor = [UIColor yellowColor];
-		_statusLabel.text = @"Activating";
-	}
-	else if ( board.activated )
-	{
-		_statusLabel.textColor = [UIColor greenColor];
-		_statusLabel.text = @"Activated";
 	}
 }
 
@@ -366,7 +376,7 @@ DEF_SINGLETON( BeeDebugViewBoard )
 	BeeUITableViewCell * cell = [self dequeueWithContentClass:[BeeDebugViewCell class]];
 	if ( cell )
 	{
-		[cell bindData:[[BeeUIBoard allBoards] objectAtIndex:indexPath.row]];
+		cell.cellData = [[BeeUIBoard allBoards] objectAtIndex:indexPath.row];
 	}
 	return cell;
 }
@@ -374,7 +384,7 @@ DEF_SINGLETON( BeeDebugViewBoard )
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	CGSize bound = CGSizeMake( self.viewSize.width, 0.0f );
-	return [BeeDebugViewCell cellSize:nil bound:bound].height;
+	return [BeeDebugViewCell sizeInBound:bound forData:nil].height;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

@@ -50,8 +50,13 @@ AS_SIGNAL( DID_DISMISS )	// 已经隐藏
 @property (nonatomic, assign) UIView *				parentView;
 @property (nonatomic, retain) NSObject *			userData;
 
-+ (BeeUIAlertView *)spawn;
 + (BeeUIAlertView *)showMessage:(NSString *)message cancelTitle:(NSString *)title;
+
++ (BeeUIAlertView *)spawn;
++ (BeeUIAlertView *)spawn:(NSString *)tagString;
+
+- (void)showInView:(UIView *)view;
+- (void)showInViewController:(UIViewController *)controller; // same as presentForController:
 
 - (void)presentForController:(UIViewController *)controller;
 - (void)dismissAnimated:(BOOL)animated;

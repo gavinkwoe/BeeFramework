@@ -58,5 +58,6 @@ AS_SIGNAL( CLEAR )				// 清空
 AS_SIGNAL( RETURN )				// 换行
 
 + (BeeUITextField *)spawn;
++ (BeeUITextField *)spawn:(NSString *)tagString;
 
 @end

@@ -33,6 +33,8 @@
 #import "Bee_Precompile.h"
 #import "Bee_UITabBar.h"
 #import "Bee_UISignal.h"
+#import "UIView+BeeExtension.h"
+#import "UIView+BeeUISignal.h"
 
 #pragma mark -
 
@@ -46,11 +48,19 @@
 
 DEF_SIGNAL( HIGHLIGHT_CHANGED )
 
-@synthesize selectedIndex;
+@dynamic selectedIndex;
+@dynamic selectedTag;
 
 + (BeeUITabBar *)spawn
 {
 	return [[[BeeUITabBar alloc] initWithFrame:CGRectZero] autorelease];
+}
+
++ (BeeUITabBar *)spawn:(NSString *)tagString
+{
+	BeeUITabBar * view = [[[BeeUITabBar alloc] init] autorelease];
+	view.tagString = tagString;
+	return view;
 }
 
 - (id)init
@@ -81,10 +91,14 @@ DEF_SIGNAL( HIGHLIGHT_CHANGED )
 	
     [_barItems release];
 	_barItems = [[NSMutableArray alloc] init];
+	_barSignals = [[NSMutableDictionary alloc] init];
 }
 
 - (void)dealloc
 {
+	[_barSignals removeAllObjects];
+	[_barSignals release];
+	
 	[_barItems removeAllObjects];
 	[_barItems release];
 	
@@ -93,14 +107,7 @@ DEF_SIGNAL( HIGHLIGHT_CHANGED )
 
 - (void)hilite:(NSInteger)tag
 {
-	for ( UITabBarItem * item in _barItems )
-	{
-		if ( item.tag == tag )
-		{
-			self.selectedItem = item;
-			break;
-		}
-	}
+	[self setSelectedTag:tag];
 }
 
 - (void)addTitle:(NSString *)title
@@ -113,6 +120,11 @@ DEF_SIGNAL( HIGHLIGHT_CHANGED )
 	[self addTitle:title image:nil tag:tag];
 }
 
+- (void)addTitle:(NSString *)title tag:(NSInteger)tag signal:(NSString *)signal
+{
+	[self addTitle:title image:nil tag:tag signal:signal];
+}
+
 - (void)addImage:(UIImage *)image
 {
 	[self addTitle:nil image:image tag:_barItems.count];
@@ -123,6 +135,11 @@ DEF_SIGNAL( HIGHLIGHT_CHANGED )
 	[self addTitle:nil image:image tag:tag];
 }
 
+- (void)addImage:(UIImage *)image tag:(NSInteger)tag signal:(NSString *)signal
+{
+	[self addTitle:nil image:image tag:tag signal:signal];
+}
+
 - (void)addTitle:(NSString *)title image:(UIImage *)image
 {
 	[self addTitle:title image:image tag:_barItems.count];
@@ -130,10 +147,22 @@ DEF_SIGNAL( HIGHLIGHT_CHANGED )
 
 - (void)addTitle:(NSString *)title image:(UIImage *)image tag:(NSInteger)tag
 {
-	UITabBarItem * item = [[UITabBarItem alloc] initWithTitle:title image:image tag:tag];
-	[_barItems addObject:item];
-    [item release];
-	[self setItems:_barItems animated:NO];
+	[self addTitle:title image:image tag:tag signal:nil];
+}
+
+- (void)addTitle:(NSString *)title image:(UIImage *)image tag:(NSInteger)tag signal:(NSString *)signal
+{
+	UITabBarItem * item = [[[UITabBarItem alloc] initWithTitle:title image:image tag:tag] autorelease];
+	if ( item )
+	{
+		[_barItems addObject:item];
+		[self setItems:_barItems animated:NO];
+		
+		if ( signal )
+		{
+			[_barSignals setObject:signal forKey:[NSString stringWithFormat:@"%p", item]];
+		}
+	}
 }
 
 - (NSInteger)selectedIndex
@@ -149,13 +178,57 @@ DEF_SIGNAL( HIGHLIGHT_CHANGED )
 	return -1;
 }
 
+- (void)setSelectedIndex:(NSInteger)index
+{
+	if ( index < _barItems.count )
+	{
+		UITabBarItem * item = [_barItems objectAtIndex:index];
+
+		[self setSelectedItem:item];
+		[self tabBar:self didSelectItem:item];
+	}
+	else
+	{
+		[self setSelectedItem:nil];
+//		[self tabBar:self didSelectItem:item];
+	}
+}
+
+- (NSInteger)selectedTag
+{
+	return self.selectedItem.tag;
+}
+
+- (void)setSelectedTag:(NSInteger)tag
+{
+	for ( UITabBarItem * item in _barItems )
+	{
+		if ( item.tag == tag )
+		{
+			[self setSelectedItem:item];
+			[self tabBar:self didSelectItem:item];
+			break;
+		}
+	}
+}
+
 #pragma mark -
 
 // called when a new view is selected by the user (but not programatically)
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
 {
-	[self sendUISignal:BeeUITabBar.HIGHLIGHT_CHANGED
-			withObject:[NSNumber numberWithInt:item.tag]];
+	NSString * key = [NSString stringWithFormat:@"%p", item];
+	NSString * signal = [_barSignals objectForKey:key];
+	if ( signal )
+	{
+		[self sendUISignal:signal
+				withObject:[NSNumber numberWithInt:item.tag]];		
+	}
+	else
+	{
+		[self sendUISignal:BeeUITabBar.HIGHLIGHT_CHANGED
+				withObject:[NSNumber numberWithInt:item.tag]];	
+	}
 }
 
 @end

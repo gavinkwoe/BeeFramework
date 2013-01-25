@@ -31,11 +31,10 @@ DEF_MESSAGE( REMOTE )
 {
 	if ( msg.sending )
 	{
-		[msg output:
-		 @"key1", @"value1",
-		 @"key2", @"value2",
-		 @"key3", @"value3",
-		 nil];
+		msg
+		.OUTPUT( @"key1", @"value1" )
+		.OUTPUT( @"key2", @"value2" )
+		.OUTPUT( @"key3", @"value3" );
 		
 		msg.succeed = YES;	
 	}	
@@ -71,13 +70,12 @@ DEF_MESSAGE( REMOTE )
 		}
 		else
 		{
-			[msg GET:url];
+			msg.HTTP_GET( url );
 		}
 	}
 	else if ( msg.succeed )
 	{
-		NSString * httpResponse = [NSString stringWithUTF8String:[msg.response bytes]];
-		[msg output:@"response", httpResponse, nil];
+		msg.OUTPUT( @"response", msg.responseString );
 	}
 	else if ( msg.failed )
 	{		

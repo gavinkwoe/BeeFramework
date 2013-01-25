@@ -39,6 +39,7 @@
 #import "Bee_DebugPlotsView.h"
 #import "Bee_DebugSampleView.h"
 #import "Bee_DebugDetailView.h"
+#import "Bee_UITableBoard.h"
 
 #pragma mark -
 

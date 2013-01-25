@@ -11,14 +11,12 @@
 DEF_SIGNAL( BACK );
 DEF_SIGNAL( ENTER );
 
-// Other signal goes here
 - (void)handleUISignal:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 }
 
-// BeeUIBoard signal goes here
-- (void)handleBeeUIBoard:(BeeUISignal *)signal
+- (void)handleUISignal_BeeUIBoard:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 	
@@ -63,8 +61,7 @@ DEF_SIGNAL( ENTER );
 	}
 }
 
-// Lession3Board signal goes here
-- (void)handleLession3Board:(BeeUISignal *)signal
+- (void)handleUISignal_Lession3Board:(BeeUISignal *)signal
 {
 	if ( [signal is:Lession3Board.ENTER] )
 	{

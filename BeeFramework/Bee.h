@@ -31,36 +31,5 @@
 //
 
 #import "Bee_Precompile.h"
-
-// Foundation
-#import "Bee_Log.h"
-#import "Bee_Keychain.h"
-#import "Bee_Performance.h"
-#import "Bee_Runtime.h"
-#import "Bee_Sandbox.h"
-#import "Bee_SystemInfo.h"
-#import "Bee_Thread.h"
-#import "Bee_Cache.h"
-#import "Bee_Network.h"
-
-#import "NSArray+BeeExtension.h"
-#import "NSData+BeeExtension.h"
-#import "NSDate+BeeExtension.h"
-#import "NSDictionary+BeeExtension.h"
-#import "NSNumber+BeeExtension.h"
-#import "NSObject+BeeNotification.h"
-#import "NSObject+BeeProperty.h"
-#import "NSObject+BeeTicker.h"
-#import "NSString+BeeExtension.h"
-
-// Storage
-
-#import "Bee_ActiveRecord.h"
-#import "Bee_Database.h"
-
-// MVC
-#import "Bee_Model.h"
-#import "Bee_View.h"
-#import "Bee_Controller.h"
-
-
+#import "Bee_Core.h"
+#import "Bee_MVC.h"

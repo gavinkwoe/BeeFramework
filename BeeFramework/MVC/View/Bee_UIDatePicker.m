@@ -33,9 +33,13 @@
 #import "Bee_Precompile.h"
 #import "Bee_UIDatePicker.h"
 #import "Bee_UISignal.h"
-#import "UIView+BeeQuery.h"
+#import "UIView+BeeExtension.h"
+#import "UIView+BeeUISignal.h"
+
+#pragma mark -
 
 @interface BeeUIDatePicker(Private)
+- (void)initSelf;
 - (void)didDateChanged;
 @end
 
@@ -48,13 +52,47 @@ DEF_SIGNAL( DID_DISMISS )
 DEF_SIGNAL( CHANGED )
 DEF_SIGNAL( CONFIRMED )
 
-@synthesize date = _date;
 @synthesize userData = _userData;
 @synthesize parentView = _parentView;
+
+@dynamic date;
+@dynamic datePickerMode;
+@dynamic locale;
+@dynamic calendar;
+@dynamic timeZone;
+@dynamic minimumDate;
+@dynamic maximumDate;
+@dynamic countDownDuration;
+@dynamic minuteInterval;
 
 + (BeeUIDatePicker *)spawn
 {
 	return [[[BeeUIDatePicker alloc] init] autorelease];
+}
+
++ (BeeUIDatePicker *)spawn:(NSString *)tagString
+{
+	BeeUIDatePicker * view = [[[BeeUIDatePicker alloc] init] autorelease];
+	view.tagString = tagString;
+	return view;
+}
+
+- (void)initSelf
+{
+	self.delegate = self;
+	self.date = [NSDate date];
+	self.title = @"\n\n\n\\n\n\n\\n\n\n\n\n\n\n\n";
+	self.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+//	self.actionSheetStyle = UIActionSheetStyleDefault;
+	self.cancelButtonIndex = [self addButtonWithTitle:@"确定"];
+
+	_datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, 0, 320, 200)];
+	_datePicker.date = [NSDate date];
+	_datePicker.datePickerMode = UIDatePickerModeDate;
+	_datePicker.calendar = [NSCalendar currentCalendar];
+	_datePicker.maximumDate = [NSDate date];
+	[_datePicker addTarget:self action:@selector(didDateChanged) forControlEvents:UIControlEventValueChanged];
+	[self addSubview:_datePicker];
 }
 
 - (id)init
@@ -62,12 +100,7 @@ DEF_SIGNAL( CONFIRMED )
 	self = [super init];
 	if ( self )
 	{
-		self.delegate = self;
-		self.date = [NSDate date];
-		self.title = @"\n\n\n\\n\n\n\\n\n\n\n\n\n\n\n";
-		self.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
-//		self.actionSheetStyle = UIActionSheetStyleDefault;
-		self.cancelButtonIndex = [self addButtonWithTitle:@"确定"];
+		[self initSelf];
 	}
 	return self;
 }
@@ -76,10 +109,147 @@ DEF_SIGNAL( CONFIRMED )
 {
 	SAFE_RELEASE_SUBVIEW( _datePicker );
 
-	[_date release];
 	[_userData release];
 	
 	[super dealloc];
+}
+
+- (void)setDate:(NSDate *)date
+{
+	_datePicker.date = date;
+}
+
+- (void)setDate:(NSDate *)date animated:(BOOL)animated
+{
+	[_datePicker setDate:date animated:animated];
+}
+
+- (NSDate *)date
+{
+	return _datePicker.date;
+}
+
+- (void)setDatePickerMode:(UIDatePickerMode)datePickerMode
+{
+	_datePicker.datePickerMode = datePickerMode;
+}
+
+- (UIDatePickerMode)datePickerMode
+{
+	return _datePicker.datePickerMode;
+}
+
+- (void)setLocale:(NSLocale *)locale
+{
+	_datePicker.locale = locale;
+}
+
+- (NSLocale *)locale
+{
+	return _datePicker.locale;
+}
+
+- (void)setCalendar:(NSCalendar *)calendar
+{
+	_datePicker.calendar = calendar;
+}
+
+- (NSCalendar *)calendar
+{
+	return _datePicker.calendar;
+}
+
+- (void)setTimeZone:(NSTimeZone *)timeZone
+{
+	_datePicker.timeZone = timeZone;
+}
+
+- (NSTimeZone *)timeZone
+{
+	return _datePicker.timeZone;
+}
+
+- (void)setMinimumDate:(NSDate *)minimumDate
+{
+	_datePicker.minimumDate = minimumDate;
+}
+
+- (NSDate *)minimumDate
+{
+	return _datePicker.minimumDate;
+}
+
+- (void)setMaximumDate:(NSDate *)maximumDate
+{
+	_datePicker.maximumDate = maximumDate;
+}
+
+- (NSDate *)maximumDate
+{
+	return _datePicker.maximumDate;
+}
+
+- (void)setCountDownDuration:(NSTimeInterval)countDownDuration
+{
+	_datePicker.countDownDuration = countDownDuration;
+}
+
+- (NSTimeInterval)countDownDuration
+{
+	return _datePicker.countDownDuration;
+}
+
+- (void)setMinuteInterval:(NSInteger)minuteInterval
+{
+	_datePicker.minuteInterval = minuteInterval;
+}
+
+- (NSInteger)minuteInterval
+{
+	return _datePicker.minuteInterval;
+}
+
+- (void)showFromToolbar:(UIToolbar *)view
+{
+	_parentView = view;
+	
+	[self showInView:view];
+}
+
+- (void)showFromTabBar:(UITabBar *)view
+{
+	_parentView = view;
+	
+	[self showInView:view];
+}
+
+- (void)showFromBarButtonItem:(UIBarButtonItem *)item animated:(BOOL)animated
+{
+	if ( item.target && [item.target isKindOfClass:[UIView class]] )
+	{
+		_parentView = item.target;
+	}
+	
+	[super showFromBarButtonItem:item animated:animated];
+}
+
+- (void)showFromRect:(CGRect)rect inView:(UIView *)view animated:(BOOL)animated
+{
+	_parentView = view;
+	
+	[super showFromRect:rect inView:view animated:animated];
+}
+
+- (void)showInView:(UIView *)view
+{
+	_parentView = view;
+	
+	[super showInView:view];
+}
+
+- (void)showInViewController:(UIViewController *)controller
+{
+	[self presentForController:controller];
 }
 
 - (void)presentForController:(UIViewController *)controller
@@ -87,6 +257,11 @@ DEF_SIGNAL( CONFIRMED )
 	_parentView = controller.view;
 	
 	[self showInView:controller.view];
+}
+
+- (void)dismissAnimated:(BOOL)animated
+{
+	[self dismissWithClickedButtonIndex:self.cancelButtonIndex animated:animated];
 }
 
 #pragma mark -
@@ -118,17 +293,6 @@ DEF_SIGNAL( CONFIRMED )
 // before animation and showing view
 - (void)willPresentActionSheet:(UIActionSheet *)actionSheet
 {
-	if ( nil == _datePicker )
-	{
-		_datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, 0, 320, 200)];
-		_datePicker.date = _date ? _date : [NSDate dateWithTimeIntervalSince1970:0];
-		_datePicker.datePickerMode = UIDatePickerModeDate;
-		_datePicker.calendar = [NSCalendar currentCalendar];
-		_datePicker.maximumDate = [NSDate date];
-		[_datePicker addTarget:self action:@selector(didDateChanged) forControlEvents:UIControlEventValueChanged];
-		[self addSubview:_datePicker];		
-	}
-
 	if ( _parentView )
 	{
 		[_parentView sendUISignal:BeeUIDatePicker.WILL_PRESENT withObject:nil from:self];

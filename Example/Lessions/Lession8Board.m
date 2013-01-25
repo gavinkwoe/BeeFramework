@@ -25,7 +25,7 @@ DEF_SIGNAL( BUTTON_TOUCHED )
 	[super handleUISignal:signal];
 }
 
-- (void)handleBeeUIBoard:(BeeUISignal *)signal
+- (void)handleUISignal_BeeUIBoard:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 	
@@ -62,16 +62,20 @@ DEF_SIGNAL( BUTTON_TOUCHED )
 	else if ( [signal is:BeeUIBoard.DID_DISAPPEAR] )
 	{
 	}
-	else if ( [signal is:BeeUIBoard.BACK_BUTTON_TOUCHED] )
+}
+
+- (void)handleUISignal_UINavigationBar:(BeeUISignal *)signal
+{
+	if ( [signal is:UINavigationBar.BACK_BUTTON_TOUCHED] )
 	{
 		
 	}
-	else if ( [signal is:BeeUIBoard.DONE_BUTTON_TOUCHED] )
+	else if ( [signal is:UINavigationBar.DONE_BUTTON_TOUCHED] )
 	{
-	}
+	}	
 }
 
-- (void)handleLession8Board:(BeeUISignal *)signal
+- (void)handleUISignal_Lession8Board:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 	
@@ -83,8 +87,7 @@ DEF_SIGNAL( BUTTON_TOUCHED )
 		}
 		else
 		{
-			[self GET:@"http://blog.whatsbug.com"];
-//			[self POST: data:];
+			[self HTTP_GET:@"http://blog.whatsbug.com"];
 		}
 	}
 }

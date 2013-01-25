@@ -41,7 +41,8 @@
 
 #import "NSString+BeeExtension.h"
 #import "UIImage+BeeExtension.h"
-#import "UIView+BeeQuery.h"
+#import "UIView+BeeExtension.h"
+#import "UIView+BeeUISignal.h"
 
 #pragma mark -
 
@@ -178,6 +179,13 @@ DEF_SIGNAL( LOAD_CANCELLED )
 	return [[[BeeUIImageView alloc] initWithImage:nil] autorelease];
 }
 
++ (BeeUIImageView *)spawn:(NSString *)tagString
+{
+	BeeUIImageView * view = [[[BeeUIImageView alloc] init] autorelease];
+	view.tagString = tagString;
+	return view;
+}
+
 - (id)init
 {
 	self = [super init];
@@ -280,7 +288,7 @@ PERF_ENTER_(5)
 	[self cancelRequests];
 PERF_ENTER_(5)
 
-	[self GET:string];
+	self.HTTP_GET( string );
 	
 PERF_LEAVE
 }

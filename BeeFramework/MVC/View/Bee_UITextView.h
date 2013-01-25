@@ -64,6 +64,7 @@ AS_SIGNAL( RETURN )				// 换行
 @property (nonatomic, assign) NSObject *	nextChain;
 
 + (BeeUITextView *)spawn;
++ (BeeUITextView *)spawn:(NSString *)tagString;
 
 - (void)updatePlaceHolder;
 

@@ -9,8 +9,9 @@
 
 #import "Bee.h"
 #import "Bee_Debug.h"
-#import "Bee_DatabaseTest.h"
-#import "Bee_ActiveRecordTest.h"
+
+#pragma mark -
+#pragma mark UnitTest
 
 @implementation AppDelegate
 
@@ -48,7 +49,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {	
-	PRINT_CALLSTACK( 32 );
+	[BeeUnitTest runTests];
 
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     self.window.backgroundColor = [UIColor whiteColor];
@@ -56,9 +57,7 @@
     [self.window makeKeyAndVisible];
 	
 	[BeeDebugger show];
-	[BeeDatabaseTest run];
-	[BeeActiveRecordTest run];
-
+	
 //	[self onCrash_unimplementedSelector];
 
     return YES;

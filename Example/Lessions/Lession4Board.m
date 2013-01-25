@@ -16,7 +16,7 @@ DEF_SIGNAL( ENTER );
 	[super handleUISignal:signal];
 }
 
-- (void)handleBeeUIBoard:(BeeUISignal *)signal
+- (void)handleUISignal_BeeUIBoard:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 	
@@ -60,7 +60,7 @@ DEF_SIGNAL( ENTER );
 	}
 }
 
-- (void)handleLession4InnerBoard:(BeeUISignal *)signal
+- (void)handleUISignal_Lession4InnerBoard:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 	
@@ -86,7 +86,7 @@ DEF_SIGNAL( ENTER );
 	[super handleUISignal:signal];
 }
 
-- (void)handleBeeUIBoard:(BeeUISignal *)signal
+- (void)handleUISignal_BeeUIBoard:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 
@@ -109,7 +109,7 @@ DEF_SIGNAL( ENTER );
 	}
 }
 
-- (void)handleBeeUISegmentedControl:(BeeUISignal *)signal
+- (void)handleUISignal_BeeUISegmentedControl:(BeeUISignal *)signal
 {
 	if ( [signal is:BeeUISegmentedControl.HIGHLIGHT_CHANGED] )
 	{

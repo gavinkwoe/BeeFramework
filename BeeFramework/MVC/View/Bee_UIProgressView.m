@@ -34,6 +34,7 @@
 #import "Bee_UIProgressView.h"
 #import "Bee_UISignal.h"
 #import "Bee_SystemInfo.h"
+#import "UIView+BeeExtension.h"
 
 #pragma mark -
 
@@ -46,6 +47,13 @@
 + (BeeUIProgressView *)spawn
 {
 	return [[[BeeUIProgressView alloc] init] autorelease];
+}
+
++ (BeeUIProgressView *)spawn:(NSString *)tagString
+{
+	BeeUIProgressView * view = [[[BeeUIProgressView alloc] init] autorelease];
+	view.tagString = tagString;
+	return view;
 }
 
 - (id)init

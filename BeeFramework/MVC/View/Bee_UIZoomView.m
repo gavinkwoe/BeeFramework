@@ -33,10 +33,11 @@
 #import "Bee_Precompile.h"
 #import "Bee_UIZoomView.h"
 #import "Bee_UISignal.h"
-#import "UIView+BeeQuery.h"
+#import "UIView+BeeExtension.h"
 
 #import "CGRect+BeeExtension.h"
 #import "NSNumber+BeeExtension.h"
+#import "UIView+BeeUISignal.h"
 
 #pragma mark -
 
@@ -178,6 +179,13 @@ DEF_SIGNAL( DOUBLE_TAPPED );
 + (BeeUIZoomView *)spawn
 {
 	return [[[BeeUIZoomView alloc] init] autorelease];
+}
+
++ (BeeUIZoomView *)spawn:(NSString *)tagString
+{
+	BeeUIZoomView * view = [[[BeeUIZoomView alloc] init] autorelease];
+	view.tagString = tagString;
+	return view;
 }
 
 - (id)init

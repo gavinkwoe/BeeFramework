@@ -38,6 +38,9 @@
 
 @class BeeUIBoard;
 @class BeeUIStack;
+@class BeeUIStackGroup;
+
+typedef BeeUIStackGroup BeeUINavigationControllerGroup;
 
 #pragma mark -
 
@@ -46,8 +49,6 @@
 	NSInteger			_index;
 	NSMutableArray *	_stacks;
 }
-
-AS_SINGLETON( BeeUIStackGroup );
 
 AS_SIGNAL( INDEX_CHANGED );	// 显示顺序变了
 

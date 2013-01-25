@@ -32,6 +32,7 @@
 
 #import "Bee_Precompile.h"
 #import "Bee_UILabel.h"
+#import "UIView+BeeExtension.h"
 #import "UIFont+BeeExtension.h"
 
 #pragma mark -
@@ -45,6 +46,13 @@
 + (BeeUILabel *)spawn
 {
 	return [[[BeeUILabel alloc] initWithFrame:CGRectZero] autorelease];
+}
+
++ (BeeUILabel *)spawn:(NSString *)tagString
+{
+	BeeUILabel * view = [[[BeeUILabel alloc] init] autorelease];
+	view.tagString = tagString;
+	return view;
 }
 
 - (id)init

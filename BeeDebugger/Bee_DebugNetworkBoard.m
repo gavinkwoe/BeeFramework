@@ -59,12 +59,12 @@
 
 @implementation BeeDebugNetworkCell
 
-+ (CGSize)cellSize:(NSObject *)data bound:(CGSize)bound
++ (CGSize)sizeInBound:(CGSize)bound forData:(NSObject *)data
 {
 	return CGSizeMake( bound.width, 50.0f );
 }
 
-- (void)cellLayout:(BeeUIGridCell *)cell bound:(CGSize)bound
+- (void)layoutInBound:(CGSize)bound forCell:(BeeUIGridCell *)cell
 {
 	CGRect timeFrame;
 	timeFrame.size.width = 70.0f;
@@ -126,59 +126,68 @@
 	[super unload];
 }
 
-- (void)bindData:(NSObject *)data
+- (void)dataWillChange
 {
-	BeeRequest * req = (BeeRequest *)data;
+	[super dataWillChange];
+}
 
-	NSDateFormatter * formatter = [[NSDateFormatter alloc] init];
-	[formatter setLocale:[[[NSLocale alloc] initWithLocaleIdentifier:@"US"] autorelease]];
-	[formatter setDateFormat:@"hh:mm:ss"];
-	NSDate * date2 = [NSDate dateWithTimeIntervalSince1970:req.initTimeStamp];
-	_timeLabel.text = [formatter stringFromDate:date2];
-	[formatter release];
+- (void)dataDidChanged
+{
+	[super dataDidChanged];
 	
-	_urlLabel.text = [req.url absoluteString];
+	BeeRequest * req = (BeeRequest *)self.cellData;
+	if ( req )
+	{
+		NSDateFormatter * formatter = [[NSDateFormatter alloc] init];
+		[formatter setLocale:[[[NSLocale alloc] initWithLocaleIdentifier:@"US"] autorelease]];
+		[formatter setDateFormat:@"hh:mm:ss"];
+		NSDate * date2 = [NSDate dateWithTimeIntervalSince1970:req.initTimeStamp];
+		_timeLabel.text = [formatter stringFromDate:date2];
+		[formatter release];
+		
+		_urlLabel.text = [req.url absoluteString];
 
-	NSUInteger upSize = req.postLength;
-	NSUInteger downSize = [[req rawResponseData] length];
-	
-	if ( req.created )
-	{
-		_statusLabel.textColor = [UIColor whiteColor];
-		_statusLabel.text = @"Pending";
-	}
-	else if ( req.sending )
-	{
-		_statusLabel.textColor = [UIColor yellowColor];
-		_statusLabel.text = [NSString stringWithFormat:@"Sending\n%@/%@",
-							 [BeeDebugUtility number2String:upSize],
-							 [BeeDebugUtility number2String:downSize]];
-	}
-	else if ( req.recving )
-	{
-		_statusLabel.textColor = [UIColor yellowColor];
-		_statusLabel.text = [NSString stringWithFormat:@"Recving\n%@/%@",
-							 [BeeDebugUtility number2String:upSize],
-							 [BeeDebugUtility number2String:downSize]];
-	}
-	else if ( req.failed )
-	{
-		_statusLabel.textColor = [UIColor redColor];
-		_statusLabel.text = [NSString stringWithFormat:@"Failed\nerr%d", req.responseStatusCode];
-	}
-	else if ( req.succeed )
-	{
-		_statusLabel.textColor = [UIColor greenColor];
-		_statusLabel.text = [NSString stringWithFormat:@"Succeed\n%@/%@",
-							 [BeeDebugUtility number2String:upSize],
-							 [BeeDebugUtility number2String:downSize]];
+		NSUInteger upSize = req.postLength;
+		NSUInteger downSize = [[req rawResponseData] length];
+		
+		if ( req.created )
+		{
+			_statusLabel.textColor = [UIColor whiteColor];
+			_statusLabel.text = @"Pending";
+		}
+		else if ( req.sending )
+		{
+			_statusLabel.textColor = [UIColor yellowColor];
+			_statusLabel.text = [NSString stringWithFormat:@"Sending\n%@/%@",
+								 [BeeDebugUtility number2String:upSize],
+								 [BeeDebugUtility number2String:downSize]];
+		}
+		else if ( req.recving )
+		{
+			_statusLabel.textColor = [UIColor yellowColor];
+			_statusLabel.text = [NSString stringWithFormat:@"Recving\n%@/%@",
+								 [BeeDebugUtility number2String:upSize],
+								 [BeeDebugUtility number2String:downSize]];
+		}
+		else if ( req.failed )
+		{
+			_statusLabel.textColor = [UIColor redColor];
+			_statusLabel.text = [NSString stringWithFormat:@"Failed\nerr%d", req.responseStatusCode];
+		}
+		else if ( req.succeed )
+		{
+			_statusLabel.textColor = [UIColor greenColor];
+			_statusLabel.text = [NSString stringWithFormat:@"Succeed\n%@/%@",
+								 [BeeDebugUtility number2String:upSize],
+								 [BeeDebugUtility number2String:downSize]];
 
-//		_statusLabel.text = @"Succeed";
-	}
-	else if ( req.cancelled )
-	{
-		_statusLabel.textColor = [UIColor grayColor];
-		_statusLabel.text = @"Cancelled";
+	//		_statusLabel.text = @"Succeed";
+		}
+		else if ( req.cancelled )
+		{
+			_statusLabel.textColor = [UIColor grayColor];
+			_statusLabel.text = @"Cancelled";
+		}
 	}
 }
 
@@ -233,7 +242,7 @@ DEF_SINGLETON( BeeDebugNetworkBoard )
 	BeeUITableViewCell * cell = [self dequeueWithContentClass:[BeeDebugNetworkCell class]];
 	if ( cell )
 	{
-		[cell bindData:[[BeeDebugNetworkModel sharedInstance].history objectAtIndex:indexPath.row]];
+		cell.cellData = [[BeeDebugNetworkModel sharedInstance].history objectAtIndex:indexPath.row];
 	}
 	return cell;		
 }
@@ -241,7 +250,7 @@ DEF_SINGLETON( BeeDebugNetworkBoard )
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	CGSize bound = CGSizeMake( self.viewSize.width, 0.0f );
-	return [BeeDebugNetworkCell cellSize:nil bound:bound].height;
+	return [BeeDebugNetworkCell sizeInBound:bound forData:nil].height;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

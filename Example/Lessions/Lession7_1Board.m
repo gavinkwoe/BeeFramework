@@ -27,7 +27,7 @@ DEF_SIGNAL( ACTION_ITEM2_TOUCHED )
 	[super handleUISignal:signal];
 }
 
-- (void)handleBeeUIBoard:(BeeUISignal *)signal
+- (void)handleUISignal_BeeUIBoard:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 	
@@ -60,7 +60,7 @@ DEF_SIGNAL( ACTION_ITEM2_TOUCHED )
 	}
 }
 
-- (void)handleLession7_1Board:(BeeUISignal *)signal
+- (void)handleUISignal_Lession7_1Board:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 	
@@ -85,7 +85,7 @@ DEF_SIGNAL( ACTION_ITEM2_TOUCHED )
 	}
 }
 
-- (void)handleBeeUIActionSheet:(BeeUISignal *)signal
+- (void)handleUISignal_BeeUIActionSheet:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 

@@ -10,12 +10,12 @@
 
 @implementation CatelogCell
 
-+ (CGSize)cellSize:(NSObject *)data bound:(CGSize)bound
++ (CGSize)sizeInBound:(CGSize)bound forData:(NSObject *)data
 {
 	return CGSizeMake( bound.width, 60.0f );
 }
 
-- (void)cellLayout:(BeeUIGridCell *)cell bound:(CGSize)bound
+- (void)layoutInBound:(CGSize)bound forCell:(BeeUIGridCell *)cell
 {
 	_title.frame = CGRectMake( 10.0f, 5.0f, cell.bounds.size.width - 20.0f, 30.0f );
 	_intro.frame = CGRectMake( 10.0f, 32.0f, cell.bounds.size.width - 20.0f, 20.0f );
@@ -46,18 +46,25 @@
 	[super unload];
 }
 
-- (void)bindData:(NSObject *)data
+- (void)dataWillChange
 {
-	[_title setText:[(NSArray *)data objectAtIndex:1]];
-	[_intro setText:[(NSArray *)data objectAtIndex:2]];
-	
-	[super bindData:data];
+	[super dataWillChange];
 }
 
-- (void)clearData
+- (void)dataDidChanged
 {
-	[_title setText:nil];
-	[_intro setText:nil];
+	[super dataDidChanged];
+	
+	if ( self.cellData )
+	{
+		[_title setText:[(NSArray *)self.cellData objectAtIndex:1]];
+		[_intro setText:[(NSArray *)self.cellData objectAtIndex:2]];
+	}
+	else
+	{
+		[_title setText:nil];
+		[_intro setText:nil];
+	}
 }
 
 @end
@@ -114,7 +121,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	CGSize bound = CGSizeMake( self.view.bounds.size.width, 0.0f );
-	return [CatelogCell cellSize:nil bound:bound].height;
+	return [CatelogCell sizeInBound:bound forData:nil].height;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -129,16 +136,17 @@
 	{
 		if ( indexPath.row % 2 )
 		{
-			[cell.innerCell setBackgroundColor:[UIColor whiteColor]];
+			[cell.gridCell setBackgroundColor:[UIColor whiteColor]];
 		}
 		else
 		{
-			[cell.innerCell setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
+			[cell.gridCell setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
 		}
 		
 		[cell setSelectionStyle:UITableViewCellSelectionStyleGray];
 		[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-		[cell bindData:[_lessions objectAtIndex:indexPath.row]];
+
+		cell.cellData = [_lessions objectAtIndex:indexPath.row];
 		return cell;
 	}
 	return [super tableView:tableView cellForRowAtIndexPath:indexPath];

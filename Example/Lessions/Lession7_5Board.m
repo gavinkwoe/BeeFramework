@@ -25,7 +25,7 @@ DEF_SIGNAL( BUTTON_TOUCHED )
 	[super handleUISignal:signal];
 }
 
-- (void)handleBeeUIBoard:(BeeUISignal *)signal
+- (void)handleUISignal_BeeUIBoard:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 
@@ -69,7 +69,7 @@ DEF_SIGNAL( BUTTON_TOUCHED )
 }
 
 
-- (void)handleLession7_5Board:(BeeUISignal *)signal
+- (void)handleUISignal_Lession7_5Board:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 
@@ -81,7 +81,7 @@ DEF_SIGNAL( BUTTON_TOUCHED )
 	}	
 }
 
-- (void)handleBeeUIDatePicker:(BeeUISignal *)signal
+- (void)handleUISignal_BeeUIDatePicker:(BeeUISignal *)signal
 {
 	if ( [signal isKindOf:BeeUIDatePicker.SIGNAL] )
 	{

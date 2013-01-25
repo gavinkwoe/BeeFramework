@@ -35,8 +35,6 @@
 
 #pragma mark -
 
-//typedef void (^BeeButtonBlock)( UIView * view );
-
 @class BeeUIButton;
 
 @interface BeeUIButtonState : NSObject
@@ -62,12 +60,6 @@
 	NSMutableArray *	_actions;
 	UILabel *			_label;
 	UIEdgeInsets		_insets;
-	
-//	BeeButtonBlock		_touchDown;
-//	BeeButtonBlock		_touchDownRepeat;
-//	BeeButtonBlock		_touchUpInside;
-//	BeeButtonBlock		_touchUpOutside;
-//	BeeButtonBlock		_touchUpCancel;
 
 	BeeUIButtonState *	_stateNormal;
 	BeeUIButtonState *	_stateHighlighted;
@@ -92,6 +84,7 @@ AS_SIGNAL( TOUCH_UP_CANCEL )	// 撤销
 @property (nonatomic, readonly) BeeUIButtonState *	stateSelected;
 
 + (BeeUIButton *)spawn;
++ (BeeUIButton *)spawn:(NSString *)tagString;
 
 - (void)addSignal:(NSString *)signal forControlEvents:(UIControlEvents)controlEvents;
 - (void)addSignal:(NSString *)signal forControlEvents:(UIControlEvents)controlEvents object:(NSObject *)object;

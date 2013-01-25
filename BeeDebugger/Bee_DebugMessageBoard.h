@@ -36,6 +36,7 @@
 #if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__
 
 #import "Bee_DebugDetailView.h"
+#import "Bee_UITableBoard.h"
 
 #pragma mark -
 

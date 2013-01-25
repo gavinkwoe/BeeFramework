@@ -40,7 +40,7 @@
 @interface BeeUIPullLoader : UIView
 {
 	NSInteger						_state;
-	UIImageView *					_arrowView;
+	UIImageView *					_arrow;
 	BeeUIActivityIndicatorView *	_indicator;
 }
 
@@ -48,14 +48,18 @@ AS_INT( STATE_NORMAL )
 AS_INT( STATE_PULLING )
 AS_INT( STATE_LOADING )
 
+AS_SIGNAL( STATE_CHANGED )	// 状态改变
+
 @property (nonatomic, readonly) NSInteger	state;
 @property (nonatomic, assign) BOOL			normal;
 @property (nonatomic, assign) BOOL			pulling;
 @property (nonatomic, assign) BOOL			loading;
-	   
-AS_SIGNAL( STATE_CHANGED )	// 状态改变
+
+@property (nonatomic, readonly) UIImageView *					arrow;
+@property (nonatomic, readonly) BeeUIActivityIndicatorView *	indicator;
 
 + (BeeUIPullLoader *)spawn;
++ (BeeUIPullLoader *)spawn:(NSString *)tagString;
 
 - (void)changeState:(NSInteger)state;
 - (void)changeState:(NSInteger)state animated:(BOOL)animated;

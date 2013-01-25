@@ -33,6 +33,9 @@
 #import "Bee_Precompile.h"
 #import "Bee_UIAlertView.h"
 #import "Bee_UISignal.h"
+#import "UIView+BeeExtension.h"
+#import "UIView+BeeUISignal.h"
+#import "UIView+BeeUISignal.h"
 
 #pragma mark -
 
@@ -46,20 +49,25 @@ DEF_SIGNAL( DID_DISMISS )
 @synthesize parentView = _parentView;
 @synthesize userData = _userData;
 
++ (BeeUIAlertView *)showMessage:(NSString *)message cancelTitle:(NSString *)title
+{
+	BeeUIAlertView * alert = [BeeUIAlertView spawn];
+	[alert setMessage:message];
+	[alert addCancelTitle:title];
+	[alert show];
+	return alert;
+}
+
 + (BeeUIAlertView *)spawn
 {
 	return [[[BeeUIAlertView alloc] init] autorelease];
 }
 
-+ (BeeUIAlertView *)showMessage:(NSString *)message cancelTitle:(NSString *)cancel
++ (BeeUIAlertView *)spawn:(NSString *)tagString
 {
-	BeeUIAlertView * alert = [[[BeeUIAlertView alloc] initWithTitle:nil
-															message:message
-														   delegate:self
-												  cancelButtonTitle:cancel
-												  otherButtonTitles:nil] autorelease];
-	[alert show];
-	return alert;
+	BeeUIAlertView * view = [[[BeeUIAlertView alloc] init] autorelease];
+	view.tagString = tagString;
+	return view;
 }
 
 - (id)init
@@ -83,6 +91,20 @@ DEF_SIGNAL( DID_DISMISS )
 	[_actions release];
 	
 	[super dealloc];
+}
+
+- (void)showInView:(UIView *)view
+{
+	_parentView = view;
+
+	[self show];
+}
+
+- (void)showInViewController:(UIViewController *)controller
+{
+	_parentView = controller.view;
+
+	[self show];
 }
 
 - (void)presentForController:(UIViewController *)controller

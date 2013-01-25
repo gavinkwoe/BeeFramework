@@ -27,6 +27,100 @@ QQ: 5220509
 Email: gavinkwoe@gmail.com    
 google groups： https://groups.google.com/d/forum/beeframework?hl=zh-CN
 
+--------------------
+
+##Who using Bee
+
+####Companies
+
+A. China Mobile, http://www.chinamobileltd.com/en/global/home.php    
+B. China Unicom, http://www.chinaunicom.com.cn/    
+C. China Telecom, http://www.chinatelecom.com.cn/    
+D. Tencent, http://www.qq.com/    
+E. Baidu, http://www.baidu.com/    
+F. Sina, http://www.sina.com.cn/    
+G. iFeng, http://www.ifeng.com/    
+H. Novagin, http://www.novagin.com/cn/index.htm    
+I. IGRS Lab, http://www.tivic.com/    
+J. Front network, http://www.frontnetwork.com/      
+K. Middling industries, http://www.middlingindustries.com/    
+L. iLouShi, http://www.iloushi.cn/    
+M. Duopeng, http://www.duopeng.com/    
+N. VoiceFrom, http://voicefrom.me/    
+O. Distance Education Group, http://www.sdeg.cn/sdegPortal/    
+P. MesonTech, http://www.mesontech.com.cn/home/mesontech.jsp
+
+####Projects
+
+1. Sina Finance(新浪财经)    
+   https://itunes.apple.com/us/app/xin-lang-cai-jing/id430165157?mt=8
+2. Mengtu(萌图)    
+   https://itunes.apple.com/us/app/meng-tu/id531292307?mt=8    
+3. iLoushi(i楼市)    
+   http://itunes.apple.com/cn/app/id464232572?mt=8(iPhone)    
+   https://itunes.apple.com/cn/app/id428916075?mt=8(iPad)    
+4. Duopeng(多朋)    
+   http://www.duopeng.com/    
+5. Yiban(易班)    
+   https://itunes.apple.com/app/yi-ban/id549775029?mt=8    
+6. Golden carp(金鲤鱼理财)    
+   https://itunes.apple.com/cn/app/id584687764    
+7. Tivic(TV客)    
+   http://mobile.91.com/Soft/Detail.aspx?Platform=iPhone&f_id=1373668    
+8. Middling(Middling图书)    
+   https://itunes.apple.com/us/app/middling/id531625104?mt=8    
+
+--------------------
+
+##v0.2.3 changes
+
+1. Refactoring the directory structure, Core and MVC completely separated, and the source files and the extensions completely separated
+2. Refactoring the code structure of BeeDatabase and BeeActiveRecord, more clearly
+3. Support the ActiveRecord inherition and nesting, support HAS/BELONG_TO operations, such as:
+
+	@interface Location : BeeActiveRecord    
+	...    
+	@end    
+
+	@interface User : BeeActiveRecord    
+	...    
+	@end    
+	
+	@interface User2 : User    
+	@property (nonatomic, retain) Location * location;    
+	...    
+	@end    
+
+	Magzine * magzine = ...;    
+	Article.DB.BELONG_TO( magzine ).GET_RECORDS();    
+	Article.DB.BELONG_TO( magzine ).SAVE_ARRAY( result );    
+
+	Article * article = ...;    
+	Magzine.DB.HAS( article ).GET_RECORDS();    
+
+	(follow-up version will add more RUBY-like advanced features)    
+
+4. Support dot(.) opertions for BeeRequest & BeeMessage, such as：
+
+	self    
+	.HTTP_GET( @"http://www.qq.com" )    
+	.HEADER( @"header1", @"xxx" )    
+	.HEADER( @"header2", @"xxx" )    
+	.HEADER( @"header3", @"xxx" )    
+	.PARAM( @"key1", @"xxx" )    
+	.PARAM( @"key2", @"xxx" )    
+	.PARAM( @"key3", @"xxx" )    
+	.FILE( @"photo1.png", [NSData data] )    
+	.FILE( @"photo2.png", [NSData data] )    
+	.FILE( @"photo3.png", [NSData data] );    
+
+	self
+	.MSG( ArticleController.GET_ARTICLES )    
+	.TIMEOUT( 10.0f )    
+	.INPUT( @"magzine", _magzine );    
+
+5. Fix some bugs (Thanks, I love U all!)
+
 ##v0.2 changes
 
 1. Add overload graph in BeeDebugger    

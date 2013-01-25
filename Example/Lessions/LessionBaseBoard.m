@@ -40,7 +40,7 @@ DEF_SINGLETON( LessionBaseBoard );
 	for ( NSUInteger i = 0; i < self.signals.count; ++i )
 	{
 		BeeUISignal * signal = [self.signals objectAtIndex:i];
-		[text appendFormat:@"[%d] %@\n", self.signalSeq, signal.name];
+		[text appendFormat:@"[%d] %@\n", self.signalSeq - i, signal.name];
 	}
 
 	_textView.text = text;
