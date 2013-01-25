@@ -35,7 +35,7 @@
 #import "Bee_Message.h"
 #import "Bee_MessageQueue.h"
 #import "Bee_Controller.h"
-
+#import "NSObject+BeeMessage.h"
 #import <objc/runtime.h>
 
 #pragma mark -
@@ -352,7 +352,7 @@ DEF_INT( STATE_CANCELLED,	4 )
 	[self forwardResponder:self.responder];
 }
 
-- (void)forwardResponder:(NSObject *)obj
+- (void)forwardResponder:(id)obj
 {
 	if ( nil == obj )
 		return;

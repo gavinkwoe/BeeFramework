@@ -184,6 +184,7 @@
 		63FE1DDF15D118D500432794 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63FE1DDE15D118D200432794 /* MobileCoreServices.framework */; };
 		63FE1DE115D11A0200432794 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63FE1DE015D119FF00432794 /* CoreGraphics.framework */; };
 		A0FCD7EF16B2C4CB002FB7F0 /* WebViewBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = A048866E16633E850093E93C /* WebViewBoard.m */; };
+		A0FCD80316B2D71B002FB7F0 /* ASIHTTPRequest+Bee.m in Sources */ = {isa = PBXBuildFile; fileRef = A0FCD80216B2D4C1002FB7F0 /* ASIHTTPRequest+Bee.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1383,6 +1384,7 @@
 				63560A5F16AFCA3700F959AA /* Bee_UITableBoard.m in Sources */,
 				63560A6016AFCA3700F959AA /* Bee_UIWebBoard.m in Sources */,
 				A0FCD7EF16B2C4CB002FB7F0 /* WebViewBoard.m in Sources */,
+				A0FCD80316B2D71B002FB7F0 /* ASIHTTPRequest+Bee.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

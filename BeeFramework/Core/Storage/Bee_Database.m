@@ -43,6 +43,8 @@
 #import "NSDictionary+BeeExtension.h"
 #import "NSObject+BeeDatabase.h"
 
+#import "FMDatabase.h"
+
 #pragma mark -
 
 @interface BeeDatabase(Private)

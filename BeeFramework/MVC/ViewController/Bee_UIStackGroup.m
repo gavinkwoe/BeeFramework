@@ -35,6 +35,7 @@
 #import "Bee_UIStack.h"
 #import "Bee_UIStackGroup.h"
 #import "Bee_UISignal.h"
+#import "UIViewController+BeeUISignal.h"
 
 #import "NSObject+BeeNotification.h"
 #import "NSArray+BeeExtension.h"

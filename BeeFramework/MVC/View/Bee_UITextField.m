@@ -34,6 +34,7 @@
 #import "Bee_UITextField.h"
 #import "Bee_UISignal.h"
 #import "UIView+BeeExtension.h"
+#import "UIView+BeeUISignal.h"
 
 #pragma mark -
 
