@@ -19,8 +19,8 @@ google groups： https://groups.google.com/d/forum/beeframework?hl=zh-CN
 A. China Mobile, http://www.chinamobileltd.com/en/global/home.php    
 B. China Unicom, http://www.chinaunicom.com.cn/    
 C. China Telecom, http://www.chinatelecom.com.cn/    
-D. Tencent, http://www.qq.com/
-E. Baidu, http://www.baidu.com/
+D. Tencent, http://www.qq.com/    
+E. Baidu, http://www.baidu.com/    
 F. Sina, http://www.sina.com.cn/    
 G. iFeng, http://www.ifeng.com/    
 H. Novagin, http://www.novagin.com/cn/index.htm    
