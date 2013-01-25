@@ -1,9 +1,9 @@
 //
-//	 ______    ______    ______    
-//	/\  __ \  /\  ___\  /\  ___\   
-//	\ \  __<  \ \  __\_ \ \  __\_ 
-//	 \ \_____\ \ \_____\ \ \_____\ 
-//	  \/_____/  \/_____/  \/_____/ 
+//	 ______    ______    ______
+//	/\  __ \  /\  ___\  /\  ___\
+//	\ \  __<  \ \  __\_ \ \  __\_
+//	 \ \_____\ \ \_____\ \ \_____\
+//	  \/_____/  \/_____/  \/_____/
 //
 //	Copyright (c) 2012 BEE creators
 //	http://www.whatsbug.com
@@ -252,9 +252,9 @@ static NSUInteger		__identSeed = 1;
 	[self __internalResetSelect];
 	[self __internalResetWrite];
 	[self __internalResetCreate];
-
-//	[self __internalResetResult];
-
+    
+    //	[self __internalResetResult];
+    
 	return [[[NSMutableArray alloc] initWithArray:_resultArray] autorelease];
 }
 
@@ -289,7 +289,7 @@ static NSUInteger		__identSeed = 1;
 	_set = [[NSMutableDictionary alloc] init];
 	_classType = [[NSMutableArray alloc] init];
 	_associate = [[NSMutableArray alloc] init];
-
+    
 	_table = [[NSMutableArray alloc] init];
 	_field = [[NSMutableArray alloc] init];
 	_index = [[NSMutableArray alloc] init];
@@ -349,7 +349,7 @@ static NSUInteger		__identSeed = 1;
 		[__sharedDB release];
 		__sharedDB = db;
 	}
-
+    
 	[self resetPrepareFlags];
 }
 
@@ -365,7 +365,7 @@ static NSUInteger		__identSeed = 1;
 	{
 		[self initSelf];
 	}
-	return self;	
+	return self;
 }
 
 - (id)initWithPath:(NSString *)path
@@ -405,7 +405,7 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( _filePath && [_filePath isEqualToString:path] )
 		return YES;
-
+    
 	[self close];
 	
 	CC( @"[DB] open '%@'", path );
@@ -424,7 +424,7 @@ static NSUInteger		__identSeed = 1;
 		if ( NO == ret )
 			return NO;
 	}
-
+    
 	_database = [[FMDatabase alloc] initWithPath:fullName];
 	if ( nil == _database )
 		return NO;
@@ -441,7 +441,7 @@ static NSUInteger		__identSeed = 1;
 	_database.traceExecution = YES;
 	_database.logsErrors = YES;
 #endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
-
+    
 	self.filePath = path;
 	return YES;
 }
@@ -471,10 +471,10 @@ static NSUInteger		__identSeed = 1;
 	_database = nil;
 	
 	[_filePath release];
-
+    
 	[_select removeAllObjects];
 	[_select release];
-
+    
 	[_from removeAllObjects];
 	[_from release];
 	
@@ -492,7 +492,7 @@ static NSUInteger		__identSeed = 1;
 	
 	[_keys removeAllObjects];
 	[_keys release];
-
+    
 	[_orderby removeAllObjects];
 	[_orderby release];
 	
@@ -516,7 +516,7 @@ static NSUInteger		__identSeed = 1;
 	
 	[_associate removeAllObjects];
 	[_associate release];
-
+    
 	[super dealloc];
 }
 
@@ -537,13 +537,13 @@ static NSUInteger		__identSeed = 1;
 	
 	if ( nil == name )
 		return self;
-
+    
 	for ( NSString * table in _table )
 	{
 		if ( NSOrderedSame == [table compare:name options:NSCaseInsensitiveSearch] )
 			return self;
 	}
-
+    
 	[_table addObject:name];
 	return self;
 }
@@ -552,7 +552,7 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == _database )
 		return self;
-
+    
 	name = [[self class] fieldNameForIdentifier:name];
 	
 	for ( NSMutableDictionary * dict in _field )
@@ -562,11 +562,11 @@ static NSUInteger		__identSeed = 1;
 		{
 			if ( type )
 			{
-				[dict setObject:type forKey:@"type"];				
+				[dict setObject:type forKey:@"type"];
 			}
 			if ( size )
 			{
-				[dict setObject:__INT(size) forKey:@"size"];				
+				[dict setObject:__INT(size) forKey:@"size"];
 			}
 			return self;
 		}
@@ -577,7 +577,7 @@ static NSUInteger		__identSeed = 1;
 					   type ? type : @"int",	@"type",
 					   __INT(size),				@"size",
 					   nil]];
-
+    
 	return self;
 }
 
@@ -585,39 +585,39 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == _database )
 		return self;
-
+    
 	NSMutableDictionary * dict = (NSMutableDictionary *)_field.lastObject;
 	if ( nil == dict )
 		return self;
 	
 	[dict setObject:__INT(1) forKey:@"unsigned"];
-	return self;	
+	return self;
 }
 
 - (BeeDatabase *)notNull
 {
 	if ( nil == _database )
 		return self;
-
+    
 	NSMutableDictionary * dict = (NSMutableDictionary *)_field.lastObject;
 	if ( nil == dict )
 		return self;
 	
 	[dict setObject:__INT(1) forKey:@"notNull"];
-	return self;	
+	return self;
 }
 
 - (BeeDatabase *)primaryKey
 {
 	if ( nil == _database )
 		return self;
-
+    
 	NSMutableDictionary * dict = (NSMutableDictionary *)_field.lastObject;
 	if ( nil == dict )
 		return self;
 	
 	[dict setObject:__INT(1) forKey:@"primaryKey"];
-	return self;		
+	return self;
 }
 
 - (BeeDatabase *)autoIncrement
@@ -630,7 +630,7 @@ static NSUInteger		__identSeed = 1;
 		return self;
 	
 	[dict setObject:__INT(1) forKey:@"autoIncrement"];
-	return self;		
+	return self;
 }
 
 - (BeeDatabase *)defaultZero
@@ -647,13 +647,13 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == _database )
 		return self;
-
+    
 	NSMutableDictionary * dict = (NSMutableDictionary *)_field.lastObject;
 	if ( nil == dict )
-	return self;
-
+        return self;
+    
 	[dict setObject:value forKey:@"default"];
-	return self;			
+	return self;
 }
 
 - (BeeDatabase *)unique
@@ -680,12 +680,12 @@ static NSUInteger		__identSeed = 1;
 	
 	if ( nil == _database )
 		return NO;
-
+    
 	if ( 0 == _table.count )
 		return NO;
-
+    
 	if ( nil == table )
-	{	
+	{
 		table = (NSString *)_table.lastObject;
 	}
 	
@@ -694,8 +694,8 @@ static NSUInteger		__identSeed = 1;
 	
 	if ( 0 == _field.count )
 		return NO;
-
-	NSString * sql = [self internalCompileCreate:table];	
+    
+	NSString * sql = [self internalCompileCreate:table];
 	[self __internalResetCreate];
 	
 	BOOL ret = [_database executeUpdate:sql];
@@ -710,9 +710,9 @@ static NSUInteger		__identSeed = 1;
 - (NSString *)internalCompileCreate:(NSString *)table
 {
 	NSMutableString * sql = [NSMutableString string];
-
+    
 	[sql appendFormat:@"CREATE TABLE IF NOT EXISTS %@ ( ", table];
-
+    
 	for ( NSInteger i = 0; i < _field.count; ++i )
 	{
 		NSDictionary * dict = [_field objectAtIndex:i];
@@ -724,9 +724,9 @@ static NSUInteger		__identSeed = 1;
 		NSNumber * AI = (NSNumber *)[dict objectForKey:@"autoIncrement"];
 		NSNumber * UN = (NSNumber *)[dict objectForKey:@"unique"];
 		NSNumber * NN = (NSNumber *)[dict objectForKey:@"notNull"];
-
+        
 		NSObject * defaultValue = [dict objectForKey:@"default"];
-
+        
 		if ( 0 == i )
 		{
 			[sql appendFormat:@"%@", name];
@@ -735,7 +735,7 @@ static NSUInteger		__identSeed = 1;
 		{
 			[sql appendFormat:@", %@", name];
 		}
-				
+        
 		if ( type )
 		{
 			[sql appendFormat:@" %@", type];
@@ -755,12 +755,12 @@ static NSUInteger		__identSeed = 1;
 		{
 			[sql appendString:@" AUTOINCREMENT"];
 		}
-
+        
 		if ( UN && UN.intValue )
 		{
 			[sql appendString:@" UNIQUE"];
 		}
-
+        
 		if ( NN && NN.intValue )
 		{
 			[sql appendString:@" NOT NULL"];
@@ -780,20 +780,20 @@ static NSUInteger		__identSeed = 1;
 	}
 	
 	[sql appendString:@" )"];
-
+    
 	return sql;
 }
 
 - (BOOL)indexTableOn:(NSArray *)fields
 {
 	[self __internalResetResult];
-
+    
 	if ( nil == _database )
 		return NO;
-
+    
 	if ( nil == fields || 0 == fields.count )
 		return NO;
-
+    
 	if ( 0 == _table.count )
 		return NO;
 	
@@ -806,11 +806,11 @@ static NSUInteger		__identSeed = 1;
 		field = [[self class] fieldNameForIdentifier:field];
 		[_index addObject:field];
 	}
-
+    
 	if ( 0 == _index.count )
 		return NO;
 	
-	NSString * sql = [self internalCompileIndex:table];	
+	NSString * sql = [self internalCompileIndex:table];
 	[self __internalResetCreate];
 	
 	BOOL ret = [_database executeUpdate:sql];
@@ -828,15 +828,15 @@ static NSUInteger		__identSeed = 1;
 	
 	if ( nil == _database )
 		return NO;
-
+    
 	if ( nil == fields || 0 == fields.count )
 		return NO;
-
+    
 	if ( 0 == _table.count )
 		return NO;
-
+    
 	if ( nil == table )
-	{	
+	{
 		table = (NSString *)_table.lastObject;
 	}
 	if ( nil == table || 0 == table.length )
@@ -847,11 +847,11 @@ static NSUInteger		__identSeed = 1;
 		field = [[self class] fieldNameForIdentifier:field];
 		[_index addObject:field];
 	}
-
+    
 	if ( 0 == _index.count )
 		return NO;
 	
-	NSString * sql = [self internalCompileIndex:table];	
+	NSString * sql = [self internalCompileIndex:table];
 	[self __internalResetCreate];
 	
 	BOOL ret = [_database executeUpdate:sql];
@@ -864,9 +864,9 @@ static NSUInteger		__identSeed = 1;
 }
 
 - (NSString *)internalCompileIndex:(NSString *)table
-{	
+{
 	NSMutableString * sql = [NSMutableString string];
-
+    
 	[sql appendFormat:@"CREATE INDEX IF NOT EXISTS index_%@ ON %@ ( ", table, table];
 	
 	for ( NSInteger i = 0; i < _index.count; ++i )
@@ -952,7 +952,7 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == _database )
 		return self;
-
+    
 	if ( nil == select )
 		return self;
 	
@@ -978,7 +978,7 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == _database )
 		return self;
-
+    
 	[self internalSelect:select alias:alias type:@"MAX"];
 	return self;
 }
@@ -992,7 +992,7 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == _database )
 		return self;
-
+    
 	[self internalSelect:select alias:alias type:@"MIN"];
 	return self;
 }
@@ -1006,7 +1006,7 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == _database )
 		return self;
-
+    
 	[self internalSelect:select alias:alias type:@"AVG"];
 	return self;
 }
@@ -1020,7 +1020,7 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == _database )
 		return self;
-
+    
 	[self internalSelect:select alias:alias type:@"SUM"];
 	return self;
 }
@@ -1034,9 +1034,9 @@ static NSUInteger		__identSeed = 1;
 	{
 		alias = [self internalCreateAliasFromTable:alias];
 	}
-
+    
 	NSString * sql = [NSString stringWithFormat:@"%@(%@) AS %@", type, [select trim], alias];
-
+    
 	[_select addObject:sql];
 }
 
@@ -1051,7 +1051,7 @@ static NSUInteger		__identSeed = 1;
 			return array.lastObject;
 		}
 	}
-
+    
 	return name;
 }
 
@@ -1059,7 +1059,7 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == _database )
 		return self;
-
+    
 	_distinct = flag;
 	return self;
 }
@@ -1068,17 +1068,17 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == _database )
 		return self;
-
+    
 	if ( nil == from )
 		return self;
-
+    
 	for ( NSString * table in _from )
 	{
 		if ( NSOrderedSame == [table compare:from options:NSCaseInsensitiveSearch] )
 			return self;
 	}
-
-	[_from addObject:from.trim];	
+    
+	[_from addObject:from.trim];
 	return self;
 }
 
@@ -1088,7 +1088,7 @@ static NSUInteger		__identSeed = 1;
 	NSString * sql = nil;
 	
 	key = [[self class] fieldNameForIdentifier:key];
-		
+    
 	if ( nil == value )
 	{
 		sql = [NSString stringWithFormat:@"%@ %@ IS NULL", prefix, key];
@@ -1104,7 +1104,7 @@ static NSUInteger		__identSeed = 1;
 			sql = [NSString stringWithFormat:@"%@ %@ = '%@'", prefix, key, value];
 		}
 	}
-
+    
 	[_where addObject:sql];
 }
 
@@ -1112,7 +1112,7 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == _database )
 		return self;
-
+    
 	[self internalWhere:key value:value type:@"AND"];
 	return self;
 }
@@ -1121,7 +1121,7 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == _database )
 		return self;
-
+    
 	[self internalWhere:key value:value type:@"OR"];
 	return self;
 }
@@ -1130,7 +1130,7 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == _database )
 		return self;
-
+    
 	[self internalWhereIn:key values:values not:NO type:@"AND"];
 	return self;
 }
@@ -1139,16 +1139,16 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == _database )
 		return self;
-
+    
 	[self internalWhereIn:key values:values not:NO type:@"OR"];
-	return self;	
+	return self;
 }
 
 - (BeeDatabase *)whereNotIn:(NSString *)key values:(NSArray *)values
 {
 	if ( nil == _database )
 		return self;
-
+    
 	[self internalWhereIn:key values:values not:YES type:@"AND"];
 	return self;
 }
@@ -1157,7 +1157,7 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == _database )
 		return self;
-
+    
 	[self internalWhereIn:key values:values not:YES type:@"OR"];
 	return self;
 }
@@ -1166,7 +1166,7 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == key || nil == values || 0 == values.count )
 		return;
-
+    
 	key = [[self class] fieldNameForIdentifier:key];
 	
 	NSMutableString * sql = [NSMutableString string];
@@ -1175,14 +1175,14 @@ static NSUInteger		__identSeed = 1;
 	{
 		[sql appendFormat:@"%@ ", type];
 	}
-		
+    
 	[sql appendString:key];
 	
 	if ( not )
 	{
 		[sql appendString:@" NOT"];
 	}
-
+    
 	[sql appendString:@" IN ("];
 	
 	for ( NSInteger i = 0; i < values.count; ++i )
@@ -1193,7 +1193,7 @@ static NSUInteger		__identSeed = 1;
 		{
 			[sql appendFormat:@", "];
 		}
-
+        
 		if ( [value isKindOfClass:[NSNumber class]] )
 		{
 			[sql appendFormat:@"%@", value];
@@ -1205,7 +1205,7 @@ static NSUInteger		__identSeed = 1;
 	}
 	
 	[sql appendString:@")"];
-
+    
 	[_where addObject:sql];
 }
 
@@ -1213,7 +1213,7 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == _database )
 		return self;
-
+    
 	[self internalLike:field match:value type:@"AND" side:@"both" not:NO];
 	return self;
 }
@@ -1222,7 +1222,7 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == _database )
 		return self;
-
+    
 	[self internalLike:field match:value type:@"AND" side:@"both" not:YES];
 	return self;
 }
@@ -1231,7 +1231,7 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == _database )
 		return self;
-
+    
 	[self internalLike:field match:value type:@"OR" side:@"both" not:NO];
 	return self;
 }
@@ -1240,7 +1240,7 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == _database )
 		return self;
-
+    
 	[self internalLike:field match:value type:@"OR" side:@"both" not:YES];
 	return self;
 }
@@ -1249,7 +1249,7 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == field || nil == match )
 		return;
-
+    
 	field = [[self class] fieldNameForIdentifier:field];
 	
 	NSString * value = nil;
@@ -1266,14 +1266,14 @@ static NSUInteger		__identSeed = 1;
 	{
 		value = [NSString stringWithFormat:@"%%%@%%", match];
 	}
-
+    
 	NSMutableString * sql = [NSMutableString string];
 	
 	if ( _like.count )
 	{
 		[sql appendString:type];
 	}
-
+    
 	[sql appendFormat:@" %@", field];
 	
 	if ( not )
@@ -1282,7 +1282,7 @@ static NSUInteger		__identSeed = 1;
 	}
 	
 	[sql appendFormat:@" LIKE '%@'", value];
-
+    
 	[_like addObject:sql];
 }
 
@@ -1290,11 +1290,11 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == _database )
 		return self;
-
+    
 	by = [[self class] fieldNameForIdentifier:by];
 	
 	[_groupby addObject:by];
-
+    
 	return self;
 }
 
@@ -1302,7 +1302,7 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == _database )
 		return self;
-
+    
 	[self internalHaving:key value:value type:@"AND"];
 	return self;
 }
@@ -1311,9 +1311,9 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == _database )
 		return self;
-
+    
 	[self internalHaving:key value:value type:@"OR"];
-	return self;	
+	return self;
 }
 
 - (void)internalHaving:(NSString *)key value:(NSObject *)value type:(NSString *)type
@@ -1333,7 +1333,7 @@ static NSUInteger		__identSeed = 1;
 	{
 		sql = [NSString stringWithFormat:@"%@ = '%@'", key, value];
 	}
-
+    
 	[_having addObject:sql];
 }
 
@@ -1356,13 +1356,13 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == _database )
 		return self;
-
+    
 	if ( nil == by )
 		return self;
-
+    
 	by = [[self class] fieldNameForIdentifier:by];
 	
-	NSString * sql = [NSString stringWithFormat:@"%@ %@", by, direction];	
+	NSString * sql = [NSString stringWithFormat:@"%@ %@", by, direction];
 	[_orderby addObject:sql];
 	
 	return self;
@@ -1372,7 +1372,7 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == _database )
 		return self;
-
+    
 	_limit = limit;
 	return self;
 }
@@ -1381,7 +1381,7 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == _database )
 		return self;
-
+    
 	_offset = offset;
 	return self;
 }
@@ -1404,7 +1404,7 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == _database )
 		return self;
-
+    
 	if ( nil == key )
 		return self;
 	
@@ -1442,15 +1442,15 @@ static NSUInteger		__identSeed = 1;
 - (NSArray *)get:(NSString *)table limit:(NSUInteger)limit offset:(NSUInteger)offset
 {
 	[self __internalResetResult];
-
+    
 	if ( nil == _database )
 		return nil;
-
+    
 	if ( table )
 	{
 		[self from:table];
 	}
-
+    
 	if ( limit )
 	{
 		[self limit:limit];
@@ -1463,7 +1463,7 @@ static NSUInteger		__identSeed = 1;
 	
 	NSString * sql = [self internalCompileSelect:nil];
 	[self __internalResetSelect];
-
+    
 	FMResultSet * result = [_database executeQuery:sql];
 	if ( result )
 	{
@@ -1475,7 +1475,7 @@ static NSUInteger		__identSeed = 1;
 		_resultCount = _resultArray.count;
 		_lastSucceed = YES;
 	}
-
+    
 	return _resultArray;
 }
 
@@ -1497,7 +1497,7 @@ static NSUInteger		__identSeed = 1;
 		{
 			[sql appendString:@"SELECT "];
 		}
-
+        
 		if ( _select.count )
 		{
 			for ( NSInteger i = 0; i < _select.count; ++i )
@@ -1519,7 +1519,7 @@ static NSUInteger		__identSeed = 1;
 			[sql appendString:@"*"];
 		}
 	}
-
+    
 	if ( _from.count )
 	{
 		[sql appendString:@" FROM "];
@@ -1527,7 +1527,7 @@ static NSUInteger		__identSeed = 1;
 		for ( NSInteger i = 0; i < _from.count; ++i )
 		{
 			NSString * from = [_from objectAtIndex:i];
-
+            
 			if ( 0 == i )
 			{
 				[sql appendString:from];
@@ -1538,12 +1538,12 @@ static NSUInteger		__identSeed = 1;
 			}
 		}
 	}
-
+    
 	if ( _where.count || _like.count )
 	{
 		[sql appendString:@" WHERE"];
 	}
-
+    
 	if ( _where.count )
 	{
 		for ( NSString * where in _where )
@@ -1558,13 +1558,13 @@ static NSUInteger		__identSeed = 1;
 		{
 			[sql appendString:@" AND "];
 		}
-
+        
 		for ( NSString * like in _like )
 		{
 			[sql appendFormat:@" %@ ", like];
 		}
 	}
-
+    
 	if ( _groupby.count )
 	{
 		[sql appendString:@" GROUP BY "];
@@ -1583,7 +1583,7 @@ static NSUInteger		__identSeed = 1;
 			}
 		}
 	}
-
+    
 	if ( _having.count )
 	{
 		[sql appendString:@" HAVING "];
@@ -1593,11 +1593,11 @@ static NSUInteger		__identSeed = 1;
 			[sql appendFormat:@" %@ ", have];
 		}
 	}
-
+    
 	if ( _orderby.count )
 	{
 		[sql appendString:@" ORDER BY "];
-
+        
 		for ( NSInteger i = 0; i < _orderby.count; ++i )
 		{
 			NSString * by = [_orderby objectAtIndex:i];
@@ -1612,7 +1612,7 @@ static NSUInteger		__identSeed = 1;
 			}
 		}
 	}
-
+    
 	if ( _limit )
 	{
 		if ( _offset )
@@ -1624,7 +1624,7 @@ static NSUInteger		__identSeed = 1;
 			[sql appendFormat:@" LIMIT %u", _limit];
 		}
 	}
-
+    
 	return sql;
 }
 
@@ -1636,10 +1636,10 @@ static NSUInteger		__identSeed = 1;
 - (NSUInteger)count:(NSString *)table
 {
 	[self __internalResetResult];
-
+    
 	if ( nil == _database )
 		return 0;
-
+    
 	if ( table )
 	{
 		[self from:table];
@@ -1658,7 +1658,7 @@ static NSUInteger		__identSeed = 1;
 		_resultCount = (NSUInteger)[result unsignedLongLongIntForColumn:@"numrows"];
 		_lastSucceed = YES;
 	}
-
+    
 	return _resultCount;
 }
 
@@ -1670,13 +1670,13 @@ static NSUInteger		__identSeed = 1;
 - (NSInteger)insert:(NSString *)table
 {
 	[self __internalResetResult];
-
+    
 	if ( nil == _database )
 		return -1;
-
+    
 	if ( 0 == _set.count )
-		return -1;		
-
+		return -1;
+    
 	if ( nil == table )
 	{
 		if ( 0 == _from.count )
@@ -1684,23 +1684,23 @@ static NSUInteger		__identSeed = 1;
 		
 		table = [_from objectAtIndex:0];
 	}
-
+    
 	NSMutableString *	sql = [NSMutableString string];
 	NSArray *			allKeys = _set.allKeys;
 	NSMutableArray *	allValues = [NSMutableArray array];
-
+    
 	NSString *			field = nil;
 	NSObject *			value = nil;
-
+    
 	[sql appendFormat:@"INSERT INTO %@ (", table];
-
+    
 	for ( NSInteger i = 0; i < allKeys.count; ++i )
 	{
 		NSString * key = [allKeys objectAtIndex:i];
-
+        
 		field = [[self class] fieldNameForIdentifier:key];
 		value = [_set objectForKey:key];
-
+        
 		if ( 0 == i )
 		{
 			[sql appendString:field];
@@ -1709,12 +1709,12 @@ static NSUInteger		__identSeed = 1;
 		{
 			[sql appendFormat:@", %@", field];
 		}
-
+        
 		[allValues addObject:value];
 	}
 	
 	[sql appendString:@") VALUES ("];
-
+    
 	for ( NSInteger i = 0; i < allValues.count; ++i )
 	{
 		if ( 0 == i )
@@ -1726,18 +1726,18 @@ static NSUInteger		__identSeed = 1;
 			[sql appendString:@", ?"];
 		}
 	}
-
+    
 	[sql appendString:@")"];
-
+    
 	[self __internalResetWrite];
-
+    
 	BOOL ret = [_database executeUpdate:sql withArgumentsInArray:allValues];
 	if ( ret )
 	{
 		_lastInsertID = (NSInteger)_database.lastInsertRowId;
 		_lastSucceed = YES;
 	}
-
+    
 	return _lastInsertID;
 }
 
@@ -1749,7 +1749,7 @@ static NSUInteger		__identSeed = 1;
 - (BOOL)update:(NSString *)table
 {
 	[self __internalResetResult];
-
+    
 	if ( nil == _database )
 		return NO;
 	
@@ -1763,23 +1763,23 @@ static NSUInteger		__identSeed = 1;
 		
 		table = [_from objectAtIndex:0];
 	}
-
+    
 	NSMutableString *	sql = [NSMutableString string];
 	NSArray *			allKeys = _set.allKeys;
 	NSMutableArray *	allValues = [NSMutableArray array];
-
+    
 	NSString *			field = nil;
 	NSObject *			value = nil;
-
+    
 	[sql appendFormat:@"UPDATE %@ SET ", table];
-
+    
 	for ( NSInteger i = 0; i < allKeys.count; ++i )
 	{
 		NSString * key = [allKeys objectAtIndex:i];
-
+        
 		field = [[self class] fieldNameForIdentifier:key];
 		value = [_set objectForKey:key];
-
+        
 		if ( value )
 		{
 			[allValues addObject:value];
@@ -1794,7 +1794,7 @@ static NSUInteger		__identSeed = 1;
 			}
 		}
 	}
-		
+    
 	if ( _where.count )
 	{
 		[sql appendString:@" WHERE"];
@@ -1823,14 +1823,14 @@ static NSUInteger		__identSeed = 1;
 			}
 		}
 	}
-
+    
 	if ( _limit )
 	{
 		[sql appendFormat:@" LIMIT %u", _limit];
-	}	
+	}
 	
 	[self __internalResetWrite];
-
+    
 	BOOL ret = [_database executeUpdate:sql withArgumentsInArray:allValues];
 	if ( ret )
 	{
@@ -1852,7 +1852,7 @@ static NSUInteger		__identSeed = 1;
 	
 	if ( nil == _database )
 		return NO;
-
+    
 	if ( nil == table )
 	{
 		if ( 0 == _from.count )
@@ -1862,7 +1862,7 @@ static NSUInteger		__identSeed = 1;
 	}
 	
 	NSString * sql = [NSString stringWithFormat:@"DELETE FROM %@", table];
-
+    
 	[self __internalResetWrite];
 	
 	BOOL ret = [_database executeUpdate:sql];
@@ -1886,7 +1886,7 @@ static NSUInteger		__identSeed = 1;
 	
 	if ( nil == _database )
 		return NO;
-
+    
 	if ( nil == table )
 	{
 		if ( 0 == _from.count )
@@ -1896,7 +1896,7 @@ static NSUInteger		__identSeed = 1;
 	}
 	
 	NSString * sql = [NSString stringWithFormat:@"TRUNCATE %@", table];
-
+    
 	[self __internalResetWrite];
 	
 	BOOL ret = [_database executeUpdate:sql];
@@ -1920,7 +1920,7 @@ static NSUInteger		__identSeed = 1;
 	
 	if ( nil == _database )
 		return NO;
-
+    
 	if ( nil == table )
 	{
 		if ( 0 == _from.count )
@@ -1935,7 +1935,7 @@ static NSUInteger		__identSeed = 1;
 	NSMutableString * sql = [NSMutableString string];
 	
 	[sql appendFormat:@"DELETE FROM %@", table];
-
+    
 	if ( _where.count || _like.count )
 	{
 		[sql appendString:@" WHERE "];
@@ -1947,7 +1947,7 @@ static NSUInteger		__identSeed = 1;
 				[sql appendFormat:@" %@ ", where];
 			}
 		}
-
+        
 		if ( _like.count )
 		{
 			if ( _where.count )
@@ -2001,7 +2001,7 @@ static NSUInteger		__identSeed = 1;
 	Class classType = NSClassFromString( className );
 	if ( nil == classType || NO == [classType conformsToProtocol:@protocol(BeeActiveProtocol)] )
 		return NULL;
-
+    
 	return classType;
 }
 
@@ -2021,7 +2021,7 @@ static NSUInteger		__identSeed = 1;
 			[array addObject:obj];
 		}
 	}
-
+    
 	return array;
 }
 
@@ -2033,7 +2033,7 @@ static NSUInteger		__identSeed = 1;
 - (NSArray *)hasObjectsFor:(Class)clazz
 {
 	NSMutableArray * array = [NSMutableArray array];
-
+    
 	for ( NSObject * obj in _has )
 	{
 		if ( [obj isKindOfClass:clazz] )
@@ -2041,8 +2041,8 @@ static NSUInteger		__identSeed = 1;
 			[array addObject:obj];
 		}
 	}
-
-	return array;	
+    
+	return array;
 }
 
 - (void)classType:(Class)clazz
@@ -2051,7 +2051,7 @@ static NSUInteger		__identSeed = 1;
 		return;
 	
 	[_classType addObject:[clazz description]];
-
+    
 	[self from:[BeeDatabase tableNameForClass:clazz]];
 }
 
@@ -2059,7 +2059,7 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( nil == obj )
 		return;
-
+    
 	[_associate addObject:obj];
 }
 
@@ -2079,10 +2079,10 @@ static NSUInteger		__identSeed = 1;
 	{
 		va_list args;
 		va_start( args, first );
-
+        
 		NSString *	field = (NSString *)first;
 		NSString *	type = va_arg( args, NSString * );
-
+        va_end( args );
 		return [self field:field type:type size:0];
 	};
 	
@@ -2100,6 +2100,8 @@ static NSUInteger		__identSeed = 1;
 		NSString *	type = va_arg( args, NSString * );
 		NSUInteger	size = va_arg( args, NSUInteger );
 		
+        va_end( args );
+        
 		return [self field:field type:type size:size];
 	};
 	
@@ -2172,7 +2174,7 @@ static NSUInteger		__identSeed = 1;
 	{
 		return [self defaultValue:first];
 	};
-
+    
 	return [[block copy] autorelease];
 }
 
@@ -2182,7 +2184,7 @@ static NSUInteger		__identSeed = 1;
 	{
 		return [self unique];
 	};
-
+    
 	return [[block copy] autorelease];
 }
 
@@ -2213,7 +2215,7 @@ static NSUInteger		__identSeed = 1;
 			
 			[array addObject:(NSString *)name];
 		}
-		
+		va_end(args);
 		return [self indexTableOn:array] ? self : nil;
 	};
 	
@@ -2249,7 +2251,7 @@ static NSUInteger		__identSeed = 1;
 		
 		NSString * field = (NSString *)first;
 		NSString * alias = (NSString *)va_arg( args, NSString * );
-		
+		va_end( args );
 		return [self selectMax:field alias:alias];
 	};
 	
@@ -2275,10 +2277,10 @@ static NSUInteger		__identSeed = 1;
 		
 		NSString * field = (NSString *)first;
 		NSString * alias = (NSString *)va_arg( args, NSString * );
-		
+		va_end(args);
 		return [self selectMin:field alias:alias];
 	};
-
+    
 	return [[block copy] autorelease];
 }
 
@@ -2301,7 +2303,7 @@ static NSUInteger		__identSeed = 1;
 		
 		NSString * field = (NSString *)first;
 		NSString * alias = (NSString *)va_arg( args, NSString * );
-		
+		va_end( args );
 		return [self selectAvg:field alias:alias];
 	};
 	
@@ -2327,7 +2329,7 @@ static NSUInteger		__identSeed = 1;
 		
 		NSString * field = (NSString *)first;
 		NSString * alias = (NSString *)va_arg( args, NSString * );
-		
+		va_end( args );
 		return [self selectSum:field alias:alias];
 	};
 	
@@ -2363,7 +2365,7 @@ static NSUInteger		__identSeed = 1;
 		
 		NSString * key = (NSString *)first;
 		NSObject * value = (NSObject *)va_arg( args, NSObject * );
-		
+		va_end( args );
 		return [self where:key value:value];
 	};
 	
@@ -2379,7 +2381,7 @@ static NSUInteger		__identSeed = 1;
 		
 		NSString * key = (NSString *)first;
 		NSObject * value = (NSObject *)va_arg( args, NSObject * );
-		
+		va_end( args );
 		return [self orWhere:key value:value];
 	};
 	
@@ -2404,7 +2406,7 @@ static NSUInteger		__identSeed = 1;
 			
 			[array addObject:(NSString *)value];
 		}
-
+        va_end( args );
 		return [self whereIn:key values:array];
 	};
 	
@@ -2429,7 +2431,7 @@ static NSUInteger		__identSeed = 1;
 			
 			[array addObject:(NSString *)value];
 		}
-
+        va_end( args );
 		return [self orWhereIn:key values:array];
 	};
 	
@@ -2454,7 +2456,7 @@ static NSUInteger		__identSeed = 1;
 			
 			[array addObject:(NSString *)value];
 		}
-		
+		va_end( args );
 		return [self whereNotIn:key values:array];
 	};
 	
@@ -2479,7 +2481,7 @@ static NSUInteger		__identSeed = 1;
 			
 			[array addObject:(NSString *)value];
 		}
-
+        va_end( args );
 		return [self orWhereNotIn:key values:array];
 	};
 	
@@ -2495,7 +2497,7 @@ static NSUInteger		__identSeed = 1;
 		
 		NSString * key = (NSString *)first;
 		NSObject * value = (NSObject *)va_arg( args, NSObject * );
-		
+		va_end( args );
 		return [self like:key match:value];
 	};
 	
@@ -2527,7 +2529,7 @@ static NSUInteger		__identSeed = 1;
 		
 		NSString * key = (NSString *)first;
 		NSObject * value = (NSObject *)va_arg( args, NSObject * );
-		
+		va_end( args );
 		return [self orLike:key match:value];
 	};
 	
@@ -2543,7 +2545,7 @@ static NSUInteger		__identSeed = 1;
 		
 		NSString * key = (NSString *)first;
 		NSObject * value = (NSObject *)va_arg( args, NSObject * );
-		
+		va_end( args );
 		return [self orNotLike:key match:value];
 	};
 	
@@ -2569,7 +2571,7 @@ static NSUInteger		__identSeed = 1;
 		
 		NSString * key = (NSString *)first;
 		NSObject * value = (NSObject *)va_arg( args, NSObject * );
-		
+		va_end( args );
 		return [self having:key value:value];
 	};
 	
@@ -2585,7 +2587,7 @@ static NSUInteger		__identSeed = 1;
 		
 		NSString * key = (NSString *)first;
 		NSObject * value = (NSObject *)va_arg( args, NSObject * );
-		
+		va_end( args );
 		return [self orHaving:key value:value];
 	};
 	
@@ -2631,7 +2633,7 @@ static NSUInteger		__identSeed = 1;
 		
 		NSString * by = (NSString *)first;
 		NSString * direction = (NSString *)va_arg( args, NSString * );
-		
+		va_end( args );
 		return [self orderBy:by direction:direction];
 	};
 	
@@ -2677,7 +2679,7 @@ static NSUInteger		__identSeed = 1;
 		
 		NSString * key = (NSString *)first;
 		NSObject * value = (NSObject *)va_arg( args, NSObject * );
-		
+		va_end( args );
 		return [self set:key value:value];
 	};
 	

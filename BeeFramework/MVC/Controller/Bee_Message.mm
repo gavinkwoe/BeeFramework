@@ -444,7 +444,7 @@ DEF_INT( STATE_CANCELLED,	4 )
 		
 		[self.input setObject:value forKey:key];
 	}
-	
+	va_end( args );
 	return self;
 }
 
@@ -467,7 +467,7 @@ DEF_INT( STATE_CANCELLED,	4 )
 		
 		[self.output setObject:value forKey:key];
 	}
-	
+	va_end( args );
 	return self;
 }
 
@@ -763,7 +763,7 @@ DEF_INT( STATE_CANCELLED,	4 )
 		{
 			[self.input setObject:value atPath:key];
 		}
-		
+		va_end( args );
 		return self;
 	};
 	
@@ -784,7 +784,7 @@ DEF_INT( STATE_CANCELLED,	4 )
 		{
 			[self.output setObject:value atPath:key];
 		}
-		
+		va_end( args );
 		return self;
 	};
 	

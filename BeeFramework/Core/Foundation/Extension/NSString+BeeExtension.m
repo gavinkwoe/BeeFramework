@@ -84,7 +84,7 @@
 			NSString * append = [[NSString alloc] initWithFormat:first arguments:args];
 			[(NSMutableString *)self appendString:append];
 			[append release];
-			
+			va_end( args );
 			return self;
 		}
 		else
@@ -94,7 +94,7 @@
 			NSString * append = [[NSString alloc] initWithFormat:first arguments:args];
 			[copy appendString:append];
 			[append release];
-			
+			va_end( args );
 			return [copy autorelease];
 		}
 	};
@@ -239,7 +239,7 @@
 		
 		[dict setObject:value forKey:key];
 	}
-	
+	va_end( args );
 	return [NSString queryStringFromDictionary:dict];
 }
 
@@ -278,7 +278,7 @@
 
 		[dict setObject:value forKey:key];
 	}
-
+    va_end( args );
 	return [self urlByAppendingDict:dict];
 }
 
