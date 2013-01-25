@@ -19,23 +19,24 @@ google groups： https://groups.google.com/d/forum/beeframework?hl=zh-CN
 A. China Mobile, http://www.chinamobileltd.com/en/global/home.php    
 B. China Unicom, http://www.chinaunicom.com.cn/    
 C. China Telecom, http://www.chinatelecom.com.cn/    
-D. Tencent, http://www.qq.com/    
-E. Sina, http://www.sina.com.cn/  
-F. iFeng, http://www.ifeng.com/    
-G. Novagin, http://www.novagin.com/cn/index.htm    
-H. IGRS Lab, http://www.tivic.com/    
-I. Front network, http://www.frontnetwork.com/      
-J. Middling industries, http://www.middlingindustries.com/    
-K. iLouShi, http://www.iloushi.cn/    
-L. Duopeng, http://www.duopeng.com/    
-M. VoiceFrom, http://voicefrom.me/    
-N. Distance Education Group, http://www.sdeg.cn/sdegPortal/    
-O. MesonTech, http://www.mesontech.com.cn/home/mesontech.jsp
+D. Tencent, http://www.qq.com/
+E. Baidu, http://www.baidu.com/
+F. Sina, http://www.sina.com.cn/    
+G. iFeng, http://www.ifeng.com/    
+H. Novagin, http://www.novagin.com/cn/index.htm    
+I. IGRS Lab, http://www.tivic.com/    
+J. Front network, http://www.frontnetwork.com/      
+K. Middling industries, http://www.middlingindustries.com/    
+L. iLouShi, http://www.iloushi.cn/    
+M. Duopeng, http://www.duopeng.com/    
+N. VoiceFrom, http://voicefrom.me/    
+O. Distance Education Group, http://www.sdeg.cn/sdegPortal/    
+P. MesonTech, http://www.mesontech.com.cn/home/mesontech.jsp
 
 ####Projects
 
 1. Sina Finance(新浪财经)    
-   https://itunes.apple.com/us/app/xin-lang-cai-jing/id430165157?mt=8    
+   https://itunes.apple.com/us/app/xin-lang-cai-jing/id430165157?mt=8
 2. Mengtu(萌图)    
    https://itunes.apple.com/us/app/meng-tu/id531292307?mt=8    
 3. iLoushi(i楼市)    
@@ -51,11 +52,6 @@ O. MesonTech, http://www.mesontech.com.cn/home/mesontech.jsp
    http://mobile.91.com/Soft/Detail.aspx?Platform=iPhone&f_id=1373668    
 8. Middling(Middling图书)    
    https://itunes.apple.com/us/app/middling/id531625104?mt=8    
-
-####Developing
-
-1. QQBaobao, http://my.qqbaobao.com/login.php
-2. ...
 
 --------------------
 
