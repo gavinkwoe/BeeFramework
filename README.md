@@ -39,7 +39,8 @@ O. MesonTech, http://www.mesontech.com.cn/home/mesontech.jsp
 2. Mengtu(萌图)    
    https://itunes.apple.com/us/app/meng-tu/id531292307?mt=8    
 3. iLoushi(i楼市)    
-   http://itunes.apple.com/cn/app/id464232572?mt=8    
+   http://itunes.apple.com/cn/app/id464232572?mt=8(iPhone)    
+   https://itunes.apple.com/cn/app/id428916075?mt=8(iPad)    
 4. Duopeng(多朋)    
    http://www.duopeng.com/    
 5. Yiban(易班)    
@@ -50,6 +51,11 @@ O. MesonTech, http://www.mesontech.com.cn/home/mesontech.jsp
    http://mobile.91.com/Soft/Detail.aspx?Platform=iPhone&f_id=1373668    
 8. Middling(Middling图书)    
    https://itunes.apple.com/us/app/middling/id531625104?mt=8    
+
+####Developing
+
+1. QQBaobao, http://my.qqbaobao.com/login.php
+2. ...
 
 --------------------
 
