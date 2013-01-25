@@ -520,6 +520,8 @@
 		63FE1DE015D119FF00432794 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		A048866D16633E850093E93C /* WebViewBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewBoard.h; sourceTree = "<group>"; };
 		A048866E16633E850093E93C /* WebViewBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewBoard.m; sourceTree = "<group>"; };
+		A0FCD80116B2D4C1002FB7F0 /* ASIHTTPRequest+Bee.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ASIHTTPRequest+Bee.h"; sourceTree = "<group>"; };
+		A0FCD80216B2D4C1002FB7F0 /* ASIHTTPRequest+Bee.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "ASIHTTPRequest+Bee.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1123,6 +1125,8 @@
 				63B46E8416A6BC180087C88C /* Bee_DebugViewModel.m */,
 				63B46E8516A6BC180087C88C /* Bee_DebugWindow.h */,
 				63B46E8616A6BC180087C88C /* Bee_DebugWindow.m */,
+				A0FCD80116B2D4C1002FB7F0 /* ASIHTTPRequest+Bee.h */,
+				A0FCD80216B2D4C1002FB7F0 /* ASIHTTPRequest+Bee.m */,
 				63B46E8716A6BC180087C88C /* bug@2x.png */,
 				63B46E8816A6BC180087C88C /* close@2x.png */,
 				63B46E8916A6BC180087C88C /* file@2x.png */,
