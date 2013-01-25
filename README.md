@@ -10,6 +10,47 @@ QQ: 5220509
 Email: gavinkwoe@gmail.com    
 google groups： https://groups.google.com/d/forum/beeframework?hl=zh-CN
 
+--------------------
+
+##Who using Bee
+
+####Companies
+
+A. China Mobile, http://www.chinamobileltd.com/en/global/home.php    
+B. China Unicome, http://www.chinaunicom.com.cn/    
+C. Sina, http://www.sina.com.cn/    
+D. iFeng, http://www.ifeng.com/    
+E. Digby, http://www.digby.com/    
+F. Novagin, http://www.novagin.com/cn/index.htm    
+G. IGRS Lab, http://www.tivic.com/    
+H. Front network, http://www.frontnetwork.com/      
+I. Middling industries, http://www.middlingindustries.com/    
+J. iLouShi, http://www.iloushi.cn/    
+K. Duopeng, http://www.duopeng.com/    
+F. VoiceFrom, http://voicefrom.me/    
+M. Distance Education Group, http://www.sdeg.cn/sdegPortal/    
+
+####Projects
+
+1. Sina Finance(新浪财经)    
+   https://itunes.apple.com/us/app/xin-lang-cai-jing/id430165157?mt=8    
+2. Mengtu(萌图)    
+   https://itunes.apple.com/us/app/meng-tu/id531292307?mt=8    
+3. iLoushi(i楼市)    
+   http://itunes.apple.com/cn/app/id464232572?mt=8    
+4. Duopeng(多朋)    
+   http://www.duopeng.com/    
+5. Yiban(易班)    
+   https://itunes.apple.com/app/yi-ban/id549775029?mt=8    
+6. Golden carp(金鲤鱼理财)    
+   https://itunes.apple.com/cn/app/id584687764    
+7. Tivic(TV客)    
+   http://mobile.91.com/Soft/Detail.aspx?Platform=iPhone&f_id=1373668    
+8. Middling(Middling图书)    
+   https://itunes.apple.com/us/app/middling/id531625104?mt=8    
+
+--------------------
+
 ##v0.2.3 changes
 
 1. Refactoring the directory structure, Core and MVC completely separated, and the source files and the extensions completely separated
