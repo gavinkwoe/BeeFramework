@@ -17,8 +17,8 @@ google groups： https://groups.google.com/d/forum/beeframework?hl=zh-CN
 ####Companies
 
 A. China Mobile, http://www.chinamobileltd.com/en/global/home.php    
-B. China Unicome, http://www.chinaunicom.com.cn/    
-C. Tencent, http://www.qq.com/
+B. China Unicom, http://www.chinaunicom.com.cn/    
+C. Tencent, http://www.qq.com/    
 D. Sina, http://www.sina.com.cn/  
 E. iFeng, http://www.ifeng.com/    
 F. Novagin, http://www.novagin.com/cn/index.htm    
