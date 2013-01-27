@@ -33,6 +33,8 @@ N. VoiceFrom, http://voicefrom.me/
 O. Distance Education Group, http://www.sdeg.cn/sdegPortal/    
 P. MesonTech, http://www.mesontech.com.cn/home/mesontech.jsp
 
+![Vendors](http://blog.whatsbug.com/wp-content/uploads/2013/01/bee_2013.jpg)
+
 ####Projects
 
 1. Sina Finance(新浪财经)    
