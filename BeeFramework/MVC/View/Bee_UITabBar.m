@@ -89,6 +89,7 @@ DEF_SIGNAL( HIGHLIGHT_CHANGED )
 	self.items = [NSArray array];
 	self.selectedItem = nil;
 	
+    [_barItems release];
 	_barItems = [[NSMutableArray alloc] init];
 	_barSignals = [[NSMutableDictionary alloc] init];
 }

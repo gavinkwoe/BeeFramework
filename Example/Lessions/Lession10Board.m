@@ -53,14 +53,14 @@ DEF_SIGNAL( BUTTON2_TOUCHED )
 		
 		_button1 = [[BeeUIButton alloc] initWithFrame:CGRectZero];
 		_button1.backgroundColor = [UIColor blackColor];
-		_button1.font = [UIFont boldSystemFontOfSize:14.0f];
+		_button1.titleLabel.font = [UIFont boldSystemFontOfSize:14.0f];
 		_button1.stateNormal.title = @"Load cache";
 		[_button1 addSignal:Lession10Board.BUTTON1_TOUCHED forControlEvents:UIControlEventTouchUpInside];
 		[self.view addSubview:_button1];
 		
 		_button2 = [[BeeUIButton alloc] initWithFrame:CGRectZero];
 		_button2.backgroundColor = [UIColor blackColor];
-		_button2.font = [UIFont boldSystemFontOfSize:14.0f];
+		_button2.titleLabel.font = [UIFont boldSystemFontOfSize:14.0f];
 		_button2.stateNormal.title = @"Save cache";
 		[_button2 addSignal:Lession10Board.BUTTON2_TOUCHED forControlEvents:UIControlEventTouchUpInside];
 		[self.view addSubview:_button2];

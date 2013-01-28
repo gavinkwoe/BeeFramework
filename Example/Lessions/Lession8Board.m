@@ -35,7 +35,7 @@ DEF_SIGNAL( BUTTON_TOUCHED )
 		
 		_button = [[BeeUIButton alloc] initWithFrame:CGRectZero];
 		_button.backgroundColor = [UIColor blackColor];
-		_button.font = [UIFont systemFontOfSize:14.0f];
+		_button.titleLabel.font = [UIFont systemFontOfSize:14.0f];
 		_button.stateNormal.title = @"Send request";
 		[_button addSignal:Lession8Board.BUTTON_TOUCHED forControlEvents:UIControlEventTouchUpInside];
 		[self.view addSubview:_button];

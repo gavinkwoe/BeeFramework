@@ -132,10 +132,10 @@ DEF_SINGLETON( BeeFileCache );
 - (NSData *)serialize:(id)obj
 {
 	if ( [obj isKindOfClass:[NSData class]] )
-		return (NSData *)obj;
+		return obj;
 	
 	if ( [obj respondsToSelector:@selector(JSONData)] )
-		return (NSData *)[obj JSONData];
+		return [obj JSONData];
 
 	return nil;
 }

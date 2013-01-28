@@ -43,7 +43,7 @@
 {
 	if ( n < K )
 	{
-		return [NSString stringWithFormat:@"%lluB", n];
+		return [NSString stringWithFormat:@"%lldB", n];
 	}
 	else if ( n < M )
 	{

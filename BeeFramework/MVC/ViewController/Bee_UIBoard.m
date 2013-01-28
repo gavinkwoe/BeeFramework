@@ -34,6 +34,7 @@
 #import "Bee_UIBoard.h"
 #import "Bee_UIStack.h"
 #import "Bee_Runtime.h"
+#import "Bee_SystemInfo.h"
 #import "Bee_Log.h"
 
 #import "Bee_Network.h"
@@ -498,13 +499,14 @@ static NSMutableArray *			__allBoards;
 #endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 
 	CGRect boardViewBound = [UIScreen mainScreen].bounds;
-	BeeUIBoardView * boardView = [[[BeeUIBoardView alloc] initWithFrame:boardViewBound] autorelease];
+	BeeUIBoardView * boardView = [[BeeUIBoardView alloc] initWithFrame:boardViewBound];
 	boardView.owner = self;
 
 	self.view = boardView;
 	self.view.userInteractionEnabled = NO;
 	self.view.backgroundColor = [UIColor clearColor];
 	self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [boardView release];
 }
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.

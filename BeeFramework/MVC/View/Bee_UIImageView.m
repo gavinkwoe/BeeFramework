@@ -437,8 +437,8 @@ PERF_LEAVE
 	return _indicator;
 }
 
-#pragma -
-#pragma NetworkRequestDelegate
+#pragma mark -
+#pragma mark NetworkRequestDelegate
 
 - (void)handleRequest:(BeeRequest *)request
 {

@@ -103,14 +103,14 @@ DEF_INT( TYPE_NATIVEC,	2 )
 	NSTextCheckingResult * result = [regex firstMatchInString:line options:0 range:NSMakeRange(0, [line length])];
 	if ( result && (regex.numberOfCaptureGroups + 1) == result.numberOfRanges )
 	{
-		BeeCallFrame * frame = [[[BeeCallFrame alloc] init] autorelease];
+		BeeCallFrame * frame = [[BeeCallFrame alloc] init];
 		frame.type = BeeCallFrame.TYPE_OBJC;
 		frame.process = [line substringWithRange:[result rangeAtIndex:1]];
 		frame.entry = [BeeCallFrame hex:[line substringWithRange:[result rangeAtIndex:2]]];
 		frame.clazz = [line substringWithRange:[result rangeAtIndex:3]];
 		frame.method = [line substringWithRange:[result rangeAtIndex:4]];
 		frame.offset = [[line substringWithRange:[result rangeAtIndex:5]] intValue];
-		return frame;
+		return [frame autorelease];
 	}
 	
 	return nil;
@@ -125,14 +125,14 @@ DEF_INT( TYPE_NATIVEC,	2 )
 	NSTextCheckingResult * result = [regex firstMatchInString:line options:0 range:NSMakeRange(0, [line length])];
 	if ( result && (regex.numberOfCaptureGroups + 1) == result.numberOfRanges )
 	{
-		BeeCallFrame * frame = [[[BeeCallFrame alloc] init] autorelease];
+		BeeCallFrame * frame = [[BeeCallFrame alloc] init];
 		frame.type = BeeCallFrame.TYPE_NATIVEC;
 		frame.process = [line substringWithRange:[result rangeAtIndex:1]];
 		frame.entry = [self hex:[line substringWithRange:[result rangeAtIndex:2]]];
 		frame.clazz = nil;
 		frame.method = [line substringWithRange:[result rangeAtIndex:3]];
 		frame.offset = [[line substringWithRange:[result rangeAtIndex:4]] intValue];
-		return frame;
+		return [frame autorelease];
 	}
 	
 	return nil;
@@ -140,9 +140,9 @@ DEF_INT( TYPE_NATIVEC,	2 )
 
 + (id)unknown
 {
-	BeeCallFrame * frame = [[[BeeCallFrame alloc] init] autorelease];
+	BeeCallFrame * frame = [[BeeCallFrame alloc] init];
 	frame.type = BeeCallFrame.TYPE_UNKNOWN;
-	return frame;
+	return [frame autorelease];
 }
 
 + (id)parse:(NSString *)line
@@ -354,7 +354,7 @@ DEF_INT( NSDATE,		6 )
 
 + (NSArray *)callstack:(NSUInteger)depth
 {
-	NSMutableArray * array = [[[NSMutableArray alloc] init] autorelease];
+	NSMutableArray * array = [[NSMutableArray alloc] init];
 	
 	void * stacks[MAX_CALLSTACK_DEPTH] = { 0 };
 
@@ -390,12 +390,12 @@ DEF_INT( NSDATE,		6 )
 		}
 	}
 	
-	return array;
+	return [array autorelease];
 }
 
 + (NSArray *)callframes:(NSUInteger)depth
 {
-	NSMutableArray * array = [[[NSMutableArray alloc] init] autorelease];
+	NSMutableArray * array = [[NSMutableArray alloc] init];
 	
 	void * stacks[MAX_CALLSTACK_DEPTH] = { 0 };
 	
@@ -422,7 +422,7 @@ DEF_INT( NSDATE,		6 )
 		}
 	}
 	
-	return array;
+	return [array autorelease];
 }
 
 + (void)printCallstack:(NSUInteger)depth
