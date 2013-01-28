@@ -1,19 +1,3 @@
-This fork is for porting to cocoapods
-
-use cocoapods to enjoy your development
-
-http://cocoapods.org
-
-just add 
-
-```
-platform :ios
-pod 'BeeFramefork'
-```
-
-to `Podfile` and run `pod install`
-
---------------------
 
 #Bee framework
 
@@ -619,6 +603,24 @@ Installation
    c. \#define \__BEE_DEBUGGER__     (1)    
 5. Build and run    
 6. Good luck    
+
+Import by cocoapods （Thanks @stcui）
+--------------------
+
+This fork is for porting to cocoapods
+
+use cocoapods to enjoy your development
+
+http://cocoapods.org
+
+just add 
+
+```
+platform :ios
+pod 'BeeFramefork'
+```
+
+to `Podfile` and run `pod install`
 
 
 [1]: http://www.whatsbug.com

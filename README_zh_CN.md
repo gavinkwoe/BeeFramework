@@ -9,6 +9,52 @@ QQ: 5220509
 邮箱: gavinkwoe@gmail.com    
 邮件列表（google groups）： https://groups.google.com/d/forum/beeframework?hl=zh-CN
 
+-----------------
+##谁在使用 BeeFramework
+
+####公司
+
+A. 中国移动, http://www.chinamobileltd.com/sc/global/home.php    
+B. 中国联通, http://www.chinaunicom.com.cn/    
+C. 中国电信, http://www.chinatelecom.com.cn/    
+D. 腾讯, http://www.qq.com/    
+E. 百度, http://www.baidu.com/    
+F. 新浪, http://www.sina.com.cn/    
+G. 凤凰网, http://www.ifeng.com/    
+H. Novagin, http://www.novagin.com/cn/index.htm    
+I. IGRS Lab, http://www.tivic.com/    
+J. Front network, http://www.frontnetwork.com/      
+K. Middling industries, http://www.middlingindustries.com/    
+L. iLouShi, http://www.iloushi.cn/    
+M. Duopeng, http://www.duopeng.com/    
+N. VoiceFrom, http://voicefrom.me/    
+O. Distance Education Group, http://www.sdeg.cn/sdegPortal/    
+P. MesonTech, http://www.mesontech.com.cn/home/mesontech.jsp
+
+![Vendors](http://blog.whatsbug.com/wp-content/uploads/2013/01/bee_2013.jpg)
+
+#### 项目
+
+1. Sina Finance(新浪财经)    
+   https://itunes.apple.com/us/app/xin-lang-cai-jing/id430165157?mt=8
+2. Mengtu(萌图)    
+   https://itunes.apple.com/us/app/meng-tu/id531292307?mt=8    
+3. iLoushi(i楼市)    
+   http://itunes.apple.com/cn/app/id464232572?mt=8(iPhone)    
+   https://itunes.apple.com/cn/app/id428916075?mt=8(iPad)    
+4. Duopeng(多朋)    
+   http://www.duopeng.com/    
+5. Yiban(易班)    
+   https://itunes.apple.com/app/yi-ban/id549775029?mt=8    
+6. Golden carp(金鲤鱼理财)    
+   https://itunes.apple.com/cn/app/id584687764    
+7. Tivic(TV客)    
+   http://mobile.91.com/Soft/Detail.aspx?Platform=iPhone&f_id=1373668    
+8. Middling(Middling图书)    
+   https://itunes.apple.com/us/app/middling/id531625104?mt=8    
+   
+------------------------------
+
 ##v0.2.3 变更
 
 1. 重构目录结构，Core与MVC完全分离，源文件与Extension分离
@@ -545,6 +591,20 @@ Geek们都在用！行业内N家顶级互联网公司在采用。
 5. 编译并运行
 6. Good luck
 
+
+使用cocoapods管理
+--------------------
+
+BeeFramefork 已经支持 [cocoapods](http://cocoapods.org) 管理依赖
+
+在 `Podfile` 中添加 
+
+```
+platform :ios
+pod 'BeeFramefork'
+```
+
+并执行 `pod install`
 
 [1]: http://www.whatsbug.com
 [2]: http://itunes.apple.com/cn/app/qq-you-xi-da-ting/id443908613?mt=8
