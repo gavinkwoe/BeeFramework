@@ -201,9 +201,10 @@ static void (* _origSendEvent)( id, SEL, UIEvent * );
 				{
 					__timeStamp = touch.timestamp;
 					
-					BeeDebugBorder * border = [[[BeeDebugBorder alloc] initWithFrame:touch.view.bounds] autorelease];
+					BeeDebugBorder * border = [[BeeDebugBorder alloc] initWithFrame:touch.view.bounds];
 					[touch.view addSubview:border];
 					[border startAnimation];
+                    [border release];
 				}
 				else if ( UITouchPhaseMoved == touch.phase )
 				{
@@ -211,11 +212,11 @@ static void (* _origSendEvent)( id, SEL, UIEvent * );
 				}
 				else if ( UITouchPhaseEnded == touch.phase || UITouchPhaseCancelled == touch.phase )
 				{
-					BeeDebugTapIndicator * indicator = [[[BeeDebugTapIndicator alloc] initWithFrame:CGRectMake(0, 0, 50.0f, 50.0f)] autorelease];
+					BeeDebugTapIndicator * indicator = [[BeeDebugTapIndicator alloc] initWithFrame:CGRectMake(0, 0, 50.0f, 50.0f)] ;
 					indicator.center = location;
 					[keyWindow addSubview:indicator];
 					[indicator startAnimation];					
-
+                    [indicator release];
 					NSTimeInterval diff = touch.timestamp - __timeStamp;
 					if ( diff <= 0.3f )
 					{

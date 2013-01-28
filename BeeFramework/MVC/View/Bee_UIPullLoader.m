@@ -105,6 +105,7 @@ DEF_INT( STATE_LOADING,	2 )
 	_arrow.hidden = NO;
 	[self addSubview:_arrow];
 	
+    [_indicator release];
 	_indicator = [[BeeUIActivityIndicatorView alloc] initWithFrame:CGRectZero];
 	_indicator.hidden = YES;
 	_indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;

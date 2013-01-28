@@ -52,19 +52,21 @@
 	{
 		self.backgroundColor = [UIColor clearColor];
 		
-		UITapGestureRecognizer * singleTapGesture = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSingleTap:)] autorelease];
+		UITapGestureRecognizer * singleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSingleTap:)];
 		singleTapGesture.numberOfTapsRequired = 1;
 		singleTapGesture.numberOfTouchesRequired = 1;
 		singleTapGesture.cancelsTouchesInView = YES;
 		singleTapGesture.delaysTouchesBegan = YES;
 		singleTapGesture.delaysTouchesEnded = YES;
 		[self addGestureRecognizer:singleTapGesture];
-		
-		UITapGestureRecognizer * doubleTapGesture = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onDoubleTap:)] autorelease];
+		[singleTapGesture release];
+        
+		UITapGestureRecognizer * doubleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onDoubleTap:)];
 		doubleTapGesture.numberOfTapsRequired = 2;
 		doubleTapGesture.numberOfTouchesRequired = 1;
 		doubleTapGesture.cancelsTouchesInView = YES;
 		[self addGestureRecognizer:doubleTapGesture];
+        [doubleTapGesture release];
 	}
 	return self;
 }
@@ -211,6 +213,7 @@ DEF_SIGNAL( DOUBLE_TAPPED );
 	self.alpha = 1.0f;
 	self.backgroundColor = [UIColor clearColor];
 	
+    [_innerView release];
 	_innerView = [[BeeUIZoomInnerView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
 	_innerView.backgroundColor = [UIColor clearColor];
 	_innerView.zoomScale = 1.0f;
@@ -232,7 +235,8 @@ DEF_SIGNAL( DOUBLE_TAPPED );
 	_innerView.multipleTouchEnabled = YES;
 	_innerView.delegate = self;
 	_innerView.zoomDelegate = self;
-	[self addSubview:_innerView];	}
+	[self addSubview:_innerView];
+}
 
 - (void)resetZoom
 {

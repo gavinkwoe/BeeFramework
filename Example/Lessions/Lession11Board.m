@@ -170,7 +170,7 @@ DEF_SINGLETON( Lession11Board );
 {
 	[super handleUISignal:signal];
 	
-	if ( [signal is:BeeUITableBoard.SEARCH_COMMIT] )
+	if ( [signal is:BeeUITableBoard.SEARCH_UPDATE] )
 	{
 		[_records removeAllObjects];
 		

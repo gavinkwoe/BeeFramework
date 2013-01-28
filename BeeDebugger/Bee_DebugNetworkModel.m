@@ -32,6 +32,7 @@
 
 #import "Bee_Precompile.h"
 #import "Bee.h"
+#import "ASIHTTPRequest+Bee.h"
 
 #if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__
 

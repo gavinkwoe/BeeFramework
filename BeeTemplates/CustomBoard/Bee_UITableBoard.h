@@ -107,7 +107,6 @@ AS_SIGNAL( SEARCH_COMMIT )			// 搜索提交
 - (void)showSearchBar:(BOOL)en animated:(BOOL)animated;
 - (void)showPullLoader:(BOOL)en animated:(BOOL)animated;
 
-- (void)setBaseInsets:(UIEdgeInsets)insets;
 - (void)setPullLoading:(BOOL)en;
 
 - (void)scrollToTop:(BOOL)animated;

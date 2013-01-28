@@ -186,8 +186,13 @@ DEF_SIGNAL( RETURN )
 	self.placeholder = @"";
 	self.placeHolderColor = [UIColor grayColor];
 	
+
+
+
 	_maxLength = 0;
 	
+
+        [_agent release];
 	_agent = [[BeeUITextViewAgent alloc] init];
 	_agent.target = self;
 	

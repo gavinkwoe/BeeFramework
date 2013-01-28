@@ -183,6 +183,8 @@
 		63FE1C4815D0191C00432794 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 63FE1C3115D0191C00432794 /* main.m */; };
 		63FE1DDF15D118D500432794 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63FE1DDE15D118D200432794 /* MobileCoreServices.framework */; };
 		63FE1DE115D11A0200432794 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63FE1DE015D119FF00432794 /* CoreGraphics.framework */; };
+		A0FCD7EF16B2C4CB002FB7F0 /* WebViewBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = A048866E16633E850093E93C /* WebViewBoard.m */; };
+		A0FCD80316B2D71B002FB7F0 /* ASIHTTPRequest+Bee.m in Sources */ = {isa = PBXBuildFile; fileRef = A0FCD80216B2D4C1002FB7F0 /* ASIHTTPRequest+Bee.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -405,7 +407,7 @@
 		63560A5A16AFCA3700F959AA /* Bee_UIWebBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bee_UIWebBoard.h; sourceTree = "<group>"; };
 		63560A5B16AFCA3700F959AA /* Bee_UIWebBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bee_UIWebBoard.m; sourceTree = "<group>"; };
 		6392685F164CEF600099625C /* CatelogBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CatelogBoard.h; sourceTree = "<group>"; };
-		63926860164CEF600099625C /* CatelogBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CatelogBoard.m; sourceTree = "<group>"; };
+		63926860164CEF600099625C /* CatelogBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CatelogBoard.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		63926861164CEF600099625C /* DribbbleBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DribbbleBoard.h; sourceTree = "<group>"; };
 		63926862164CEF600099625C /* DribbbleBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DribbbleBoard.m; sourceTree = "<group>"; };
 		63926863164CEF600099625C /* DribbbleController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DribbbleController.h; sourceTree = "<group>"; };
@@ -517,6 +519,10 @@
 		63FE1C3315D0191C00432794 /* WhatsBug-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WhatsBug-Prefix.pch"; sourceTree = "<group>"; };
 		63FE1DDE15D118D200432794 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		63FE1DE015D119FF00432794 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		A048866D16633E850093E93C /* WebViewBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewBoard.h; sourceTree = "<group>"; };
+		A048866E16633E850093E93C /* WebViewBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewBoard.m; sourceTree = "<group>"; };
+		A0FCD80116B2D4C1002FB7F0 /* ASIHTTPRequest+Bee.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ASIHTTPRequest+Bee.h"; sourceTree = "<group>"; };
+		A0FCD80216B2D4C1002FB7F0 /* ASIHTTPRequest+Bee.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "ASIHTTPRequest+Bee.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1021,6 +1027,8 @@
 				63926869164CEF600099625C /* Lession10Board.m */,
 				63926913164D2C250099625C /* Lession10Model.h */,
 				6392686A164CEF600099625C /* Lession10Model.m */,
+				A048866D16633E850093E93C /* WebViewBoard.h */,
+				A048866E16633E850093E93C /* WebViewBoard.m */,
 				63F5FB6B166CE38A00139103 /* Lession11Board.h */,
 				63F5FB6C166CE38B00139103 /* Lession11Board.m */,
 				63F5FB71166CE53800139103 /* Lession11Model.h */,
@@ -1118,6 +1126,8 @@
 				63B46E8416A6BC180087C88C /* Bee_DebugViewModel.m */,
 				63B46E8516A6BC180087C88C /* Bee_DebugWindow.h */,
 				63B46E8616A6BC180087C88C /* Bee_DebugWindow.m */,
+				A0FCD80116B2D4C1002FB7F0 /* ASIHTTPRequest+Bee.h */,
+				A0FCD80216B2D4C1002FB7F0 /* ASIHTTPRequest+Bee.m */,
 				63B46E8716A6BC180087C88C /* bug@2x.png */,
 				63B46E8816A6BC180087C88C /* close@2x.png */,
 				63B46E8916A6BC180087C88C /* file@2x.png */,
@@ -1373,6 +1383,8 @@
 				63560A5E16AFCA3700F959AA /* Bee_UIFlowBoard.m in Sources */,
 				63560A5F16AFCA3700F959AA /* Bee_UITableBoard.m in Sources */,
 				63560A6016AFCA3700F959AA /* Bee_UIWebBoard.m in Sources */,
+				A0FCD7EF16B2C4CB002FB7F0 /* WebViewBoard.m in Sources */,
+				A0FCD80316B2D71B002FB7F0 /* ASIHTTPRequest+Bee.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1402,6 +1414,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				WARNING_CFLAGS = "";
 			};
 			name = Debug;
 		};
@@ -1423,12 +1436,14 @@
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+				WARNING_CFLAGS = "";
 			};
 			name = Release;
 		};
 		63A79279157506E900C863F3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WhatsBug/WhatsBug-Prefix.pch";
 				GENERATE_PROFILING_CODE = YES;
@@ -1443,6 +1458,7 @@
 		63A7927A157506E900C863F3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WhatsBug/WhatsBug-Prefix.pch";
 				GENERATE_PROFILING_CODE = YES;

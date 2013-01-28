@@ -514,7 +514,7 @@ DEF_INT( STATE_CANCELLED,	5 );
 		va_start( args, first );
 		
 		NSString * name = [(NSString *)first asNSString];
-		NSObject * data = va_arg( args, NSObject * );
+		id data = va_arg( args, NSObject * );
 
 		if ( data )
 		{
@@ -534,7 +534,6 @@ DEF_INT( STATE_CANCELLED,	5 );
 			}
 			else if ( [data isKindOfClass:[NSData class]] )
 			{
-				NSData * data = (NSData *)data;
 				[data writeToFile:path
 						  options:NSDataWritingAtomic
 							error:NULL];

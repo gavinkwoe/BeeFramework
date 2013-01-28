@@ -190,7 +190,10 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 	_lineCount = 0;
 	
 	_total = 0;
+    [_items release];
 	_items = [[NSMutableArray alloc] init];
+    
+    [_reuseQueue release];
 	_reuseQueue = [[NSMutableArray alloc] init];
 	
 	_visibleStart = 0;

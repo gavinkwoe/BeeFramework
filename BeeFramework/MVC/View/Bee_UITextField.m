@@ -34,6 +34,7 @@
 #import "Bee_UITextField.h"
 #import "Bee_UISignal.h"
 #import "UIView+BeeExtension.h"
+#import "UIView+BeeUISignal.h"
 
 #pragma mark -
 
@@ -171,6 +172,7 @@ DEF_SIGNAL( RETURN )
 
 - (void)initSelf
 {
+    [_agent release];
 	_agent = [[BeeUITextFieldAgent alloc] init];
 	_agent.target = self;
 	

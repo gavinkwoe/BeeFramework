@@ -359,10 +359,12 @@
 			break;
 
 		BOOL ret = [self setObject:value atPath:(NSString *)key];
-		if ( NO == ret )
+		if ( NO == ret ) {
+            va_end( args );
 			return NO;
+        }
 	}
-	
+	va_end( args );
 	return YES;
 }
 
@@ -385,7 +387,7 @@
 
 		[dict setObject:value atPath:(NSString *)key];
 	}
-
+    va_end( args );
 	return dict;
 }
 

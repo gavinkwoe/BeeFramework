@@ -34,6 +34,7 @@
 #import "Bee_Log.h"
 #import "Bee_UISignal.h"
 #import "UIViewController+UINavigationBar.h"
+#import "UIViewController+BeeUISignal.h"
 
 #pragma mark -
 

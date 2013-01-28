@@ -45,7 +45,7 @@
 #import "Bee_Log.h"
 #import "Bee_Sandbox.h"
 
-#pragma -
+#pragma mark -
 
 extern "C" NSString * NSStringFormatted( NSString * format, va_list argList )
 {
