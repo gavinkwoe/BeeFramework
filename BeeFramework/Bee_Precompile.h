@@ -47,3 +47,58 @@
 
 #define __BEE_SELECTOR_STYLE1__	(1)	// handle + ClassName
 #define __BEE_SELECTOR_STYLE2__	(1)	// handleXXX + ClassName + MethodName
+
+
+#if !defined(__clang__) || __clang_major__ < 3
+    #ifndef __bridge
+        #define __bridge
+    #endif
+
+    #ifndef __bridge_retain
+        #define __bridge_retain
+    #endif
+
+    #ifndef __bridge_retained
+        #define __bridge_retained
+    #endif
+
+    #ifndef __autoreleasing
+        #define __autoreleasing
+    #endif
+
+    #ifndef __strong
+        #define __strong
+    #endif
+
+    #ifndef __unsafe_unretained
+        #define __unsafe_unretained
+    #endif
+
+    #ifndef __weak
+        #define __weak
+    #endif
+#endif
+
+#if __has_feature(objc_arc)
+    #define BEE_PROP_RETAIN strong
+    #define BEE_RETAIN(x) (x)
+    #define BEE_RELEASE(x)
+    #define BEE_AUTORELEASE(x) (x)
+    #define BEE_BLOCK_COPY(x) (x)
+    #define BEE_BLOCK_RELEASE(x)
+    #define BEE_SUPER_DEALLOC()
+    #define BEE_AUTORELEASE_POOL_START() @autoreleasepool {
+    #define BEE_AUTORELEASE_POOL_END() }
+#else
+    #define BEE_PROP_RETAIN retain
+    #define BEE_RETAIN(x) ([(x) retain])
+    #define BEE_RELEASE(x) ([(x) release])
+    #define BEE_AUTORELEASE(x) ([(x) autorelease])
+    #define BEE_BLOCK_COPY(x) (Block_copy(x))
+    #define BEE_BLOCK_RELEASE(x) (Block_release(x))
+    #define BEE_SUPER_DEALLOC() ([super dealloc])
+    #define BEE_AUTORELEASE_POOL_START() NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    #define BEE_AUTORELEASE_POOL_END() [pool release];
+#endif
+
+
