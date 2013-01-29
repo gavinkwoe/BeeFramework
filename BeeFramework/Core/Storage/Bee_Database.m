@@ -387,12 +387,26 @@ static NSUInteger		__identSeed = 1;
 	return _database.open;
 }
 
++(BOOL) isFullPath:(NSString *)path{
+    if ([[path componentsSeparatedByString:@"/"]count]>1) {
+        return YES;
+    }
+    return NO;
+}
+
++(NSString *)storePath:(NSString *)path{
+    if ([BeeDatabase isFullPath:path]) {
+        return path;
+    }
+    NSString * fullPath = [NSString stringWithFormat:@"%@/BeeDatabase/", [BeeSandbox docPath]];
+	NSString * fullName = [fullPath stringByAppendingString:path];
+    return fullName;
+}
+
 + (BOOL)exists:(NSString *)path;
 {
 	NSFileManager * manager = [NSFileManager defaultManager];
-	
-	NSString * fullPath = [NSString stringWithFormat:@"%@/BeeDatabase/", [BeeSandbox docPath]];
-	NSString * fullName = [fullPath stringByAppendingString:path];
+	NSString * fullName = [BeeDatabase storePath:path];
 	BOOL isDirectory = NO;
 	BOOL returnValue = [manager fileExistsAtPath:fullName isDirectory:&isDirectory];
 	if ( NO == returnValue || YES == isDirectory )
@@ -412,21 +426,25 @@ static NSUInteger		__identSeed = 1;
 	
 	NSFileManager * manager = [NSFileManager defaultManager];
 	
-	NSString * fullPath = [NSString stringWithFormat:@"%@/BeeDatabase/", [BeeSandbox docPath]];
-	NSString * fullName = [fullPath stringByAppendingString:path];
+	if (![BeeDatabase isFullPath:path]) {
+        NSString * fullPath = [NSString stringWithFormat:@"%@/BeeDatabase/", [BeeSandbox docPath]];
+        
+        if ( NO == [manager fileExistsAtPath:fullPath isDirectory:NULL] )
+        {
+            BOOL ret = [manager createDirectoryAtPath:fullPath
+                          withIntermediateDirectories:YES
+                                           attributes:nil
+                                                error:nil];
+            if ( NO == ret )
+                return NO;
+        }
+    }
 	
-	if ( NO == [manager fileExistsAtPath:fullPath isDirectory:NULL] )
-	{
-		BOOL ret = [manager createDirectoryAtPath:fullPath
-					  withIntermediateDirectories:YES
-									   attributes:nil
-											error:nil];
-		if ( NO == ret )
-			return NO;
-	}
+    NSString * fullName = [BeeDatabase storePath:path];
     
 	_database = [[FMDatabase alloc] initWithPath:fullName];
-	if ( nil == _database )
+	
+    if ( nil == _database )
 		return NO;
 	
 	BOOL ret = [_database open];
