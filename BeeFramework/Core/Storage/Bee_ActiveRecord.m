@@ -1834,7 +1834,10 @@
 	
 	[classType setAssociateConditions];
 	[classType setHasConditions];
-	
+	if (table) {
+        [_from removeAllObjects];
+        self.FROM(table);
+    }
 	self.OFFSET( offset ).LIMIT( limit ).GET();
 	if ( NO == self.succeed )
 		return [NSArray array];
