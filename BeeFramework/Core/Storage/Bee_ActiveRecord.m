@@ -92,12 +92,9 @@
 
 + (BeeDatabase *)DB
 {
-	BeeDatabase * db = super.DB.CLASS_TYPE( self );
-	if ( db )
-	{
-		[self prepareOnceWithRootClass:[BeeActiveRecord class]];
-	}
-	return db;
+	[self prepareOnceWithRootClass:[BeeActiveRecord class]];
+	
+	return super.DB.CLASS_TYPE( self );
 }
 
 + (NSString *)activePrimaryKeyFor:(Class)clazz
