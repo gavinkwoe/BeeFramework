@@ -71,8 +71,13 @@
     
     int columnIdx = 0;
     for (columnIdx = 0; columnIdx < columnCount; columnIdx++) {
+        //OLDDO
+//        [_columnNameToIndexMap setObject:[NSNumber numberWithInt:columnIdx]
+//                                 forKey:[[NSString stringWithUTF8String:sqlite3_column_name([_statement statement], columnIdx)] lowercaseString]];
+        
+        //MYDO
         [_columnNameToIndexMap setObject:[NSNumber numberWithInt:columnIdx]
-                                 forKey:[[NSString stringWithUTF8String:sqlite3_column_name([_statement statement], columnIdx)] lowercaseString]];
+                                  forKey:[NSString stringWithUTF8String:sqlite3_column_name([_statement statement], columnIdx)]];
     }
     _columnNamesSetup = YES;
 }
@@ -223,9 +228,11 @@
     if (!_columnNamesSetup) {
         [self setupColumnNames];
     }
+    //OLDDO
+    //columnName = [columnName lowercaseString];
     
-    columnName = [columnName lowercaseString];
-    
+    //MYDO
+    columnName = columnName ;
     NSNumber *n = [_columnNameToIndexMap objectForKey:columnName];
     
     if (n) {
