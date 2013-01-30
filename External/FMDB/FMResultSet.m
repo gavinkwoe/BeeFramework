@@ -72,10 +72,10 @@
     int columnIdx = 0;
     for (columnIdx = 0; columnIdx < columnCount; columnIdx++) {
         //OLDDO
-        //        [_columnNameToIndexMap setObject:[NSNumber numberWithInt:columnIdx]
-        //                                 forKey:[[NSString stringWithUTF8String:sqlite3_column_name([_statement statement], columnIdx)] lowercaseString]];
+//        [_columnNameToIndexMap setObject:[NSNumber numberWithInt:columnIdx]
+//                                 forKey:[[NSString stringWithUTF8String:sqlite3_column_name([_statement statement], columnIdx)] lowercaseString]];
         
-        //MYDO 参见Bee_Database.m MYDO
+        //MYDO
         [_columnNameToIndexMap setObject:[NSNumber numberWithInt:columnIdx]
                                   forKey:[NSString stringWithUTF8String:sqlite3_column_name([_statement statement], columnIdx)]];
     }
@@ -231,9 +231,8 @@
     //OLDDO
     //columnName = [columnName lowercaseString];
     
-    //MYDO 参见Bee_Database.m MYDO
+    //MYDO
     columnName = columnName ;
-    
     NSNumber *n = [_columnNameToIndexMap objectForKey:columnName];
     
     if (n) {
