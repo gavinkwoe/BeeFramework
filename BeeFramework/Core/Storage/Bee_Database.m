@@ -1998,11 +1998,8 @@ static NSUInteger		__identSeed = 1;
 }
 
 + (NSString *)fieldNameForIdentifier:(NSString *)identifier
-{
-    //OLDDO
-	//NSString * name = identifier.lowercaseString;
-    
-    //MYDO 取消强制小写规范
+{   
+    // 取消强制小写规范 by @hesonghang (ilikeido@hotmail.com)
     NSString * name = identifier;
 	name = [name stringByReplacingOccurrencesOfString:@"." withString:@"_"];
 	name = [name stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
