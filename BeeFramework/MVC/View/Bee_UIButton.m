@@ -202,9 +202,9 @@ DEF_SIGNAL( TOUCH_UP_CANCEL )
 	_label.frame = frame;
 }
 
--(void) setTitleTextAlignment:(UITextAlignment)textAlignment{
-    titleTextAlignment = textAlignment;
-    [_label setTextAlignment:textAlignment];
+-(void) setTitleTextAlignment:(UITextAlignment)alignment{
+    titleTextAlignment = alignment;
+    [_label setTextAlignment:alignment];
 }
 
 - (void)dealloc
