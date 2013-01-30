@@ -181,6 +181,10 @@
 	if ( _cellLayout && [_cellLayout respondsToSelector:@selector(layoutInBound:forCell:)] )
 	{
 		[_cellLayout layoutInBound:self.bounds.size forCell:self];
+        if ([[_cellLayout class] respondsToSelector:@selector(sizeInBound:forData:)]) {
+            CGSize size = [[_cellLayout class] sizeInBound:self.bounds.size forData:self.cellData];
+            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, size.width,size.height);
+        }
 //		[_cellLayout cellLayout:self bound:self.bounds.size];
 	}
 

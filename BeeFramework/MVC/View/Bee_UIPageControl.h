@@ -39,16 +39,19 @@
 {
 	UIImage *	_dotImageNormal;
 	UIImage *	_dotImageHilite;
+    NSArray *   _dotImageNormals;
+    NSArray *   _dotImageHilites;
+    NSArray *   _dotImageSizes;
 	CGSize		_dotSize;
 }
-
+@property (nonatomic,retain) NSArray *dotImageNormals;
+@property (nonatomic,retain) NSArray *dotImageHilites;
 @property (nonatomic, retain) UIImage *	dotImageNormal;
 @property (nonatomic, retain) UIImage *	dotImageHilite;
 @property (nonatomic, assign) CGSize	dotSize;
+@property (nonatomic, retain) NSArray	*dotImageSizes;
 
 + (BeeUIPageControl *)spawn;
 + (BeeUIPageControl *)spawn:(NSString *)tagString;
-
-- (void)updateDotImages;
 
 @end
