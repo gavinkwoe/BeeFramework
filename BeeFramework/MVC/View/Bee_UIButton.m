@@ -109,6 +109,7 @@ DEF_SIGNAL( TOUCH_UP_CANCEL )
 @synthesize titleColor;
 @synthesize titleFont;
 @synthesize titleInsets;
+@synthesize titleTextAlignment;
 
 @synthesize stateNormal;
 @synthesize stateHighlighted;
@@ -199,6 +200,11 @@ DEF_SIGNAL( TOUCH_UP_CANCEL )
 	frame.size.height -= insets.bottom;
 
 	_label.frame = frame;
+}
+
+-(void) setTitleTextAlignment:(UITextAlignment)alignment{
+    titleTextAlignment = alignment;
+    [_label setTextAlignment:alignment];
 }
 
 - (void)dealloc

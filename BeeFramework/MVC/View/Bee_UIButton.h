@@ -77,6 +77,7 @@ AS_SIGNAL( TOUCH_UP_CANCEL )	// 撤销
 @property (nonatomic, retain) UIColor *				titleColor;
 @property (nonatomic, retain) UIFont *				titleFont;
 @property (nonatomic, assign) UIEdgeInsets			titleInsets;
+@property (nonatomic, assign) UITextAlignment       titleTextAlignment;
 
 @property (nonatomic, readonly) BeeUIButtonState *	stateNormal;
 @property (nonatomic, readonly) BeeUIButtonState *	stateHighlighted;
