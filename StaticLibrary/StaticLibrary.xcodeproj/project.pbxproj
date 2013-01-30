@@ -284,6 +284,8 @@
 		985B33E216B29881005E6F76 /* Bee_UITableBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 985B33D916B29881005E6F76 /* Bee_UITableBoard.m */; };
 		985B33E316B29881005E6F76 /* Bee_UIWebBoard.h in Headers */ = {isa = PBXBuildFile; fileRef = 985B33DA16B29881005E6F76 /* Bee_UIWebBoard.h */; };
 		985B33E416B29881005E6F76 /* Bee_UIWebBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 985B33DB16B29881005E6F76 /* Bee_UIWebBoard.m */; };
+		DDE01F6216B8BC8F00C2370C /* ASIHTTPRequest+Bee.h in Headers */ = {isa = PBXBuildFile; fileRef = DDE01F6016B8BC8F00C2370C /* ASIHTTPRequest+Bee.h */; };
+		DDE01F6316B8BC8F00C2370C /* ASIHTTPRequest+Bee.m in Sources */ = {isa = PBXBuildFile; fileRef = DDE01F6116B8BC8F00C2370C /* ASIHTTPRequest+Bee.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -578,6 +580,8 @@
 		985B33D916B29881005E6F76 /* Bee_UITableBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bee_UITableBoard.m; sourceTree = "<group>"; };
 		985B33DA16B29881005E6F76 /* Bee_UIWebBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bee_UIWebBoard.h; sourceTree = "<group>"; };
 		985B33DB16B29881005E6F76 /* Bee_UIWebBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bee_UIWebBoard.m; sourceTree = "<group>"; };
+		DDE01F6016B8BC8F00C2370C /* ASIHTTPRequest+Bee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ASIHTTPRequest+Bee.h"; sourceTree = "<group>"; };
+		DDE01F6116B8BC8F00C2370C /* ASIHTTPRequest+Bee.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ASIHTTPRequest+Bee.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -664,6 +668,8 @@
 		985B31D516B2986C005E6F76 /* BeeDebugger */ = {
 			isa = PBXGroup;
 			children = (
+				DDE01F6016B8BC8F00C2370C /* ASIHTTPRequest+Bee.h */,
+				DDE01F6116B8BC8F00C2370C /* ASIHTTPRequest+Bee.m */,
 				985B31D616B2986C005E6F76 /* Bee_Debug.h */,
 				985B31D716B2986C005E6F76 /* Bee_Debug.m */,
 				985B31D816B2986C005E6F76 /* Bee_DebugCrashReporter.h */,
@@ -1270,6 +1276,7 @@
 				985B33DF16B29881005E6F76 /* Bee_UIFlowBoard.h in Headers */,
 				985B33E116B29881005E6F76 /* Bee_UITableBoard.h in Headers */,
 				985B33E316B29881005E6F76 /* Bee_UIWebBoard.h in Headers */,
+				DDE01F6216B8BC8F00C2370C /* ASIHTTPRequest+Bee.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1477,6 +1484,7 @@
 				985B33E016B29881005E6F76 /* Bee_UIFlowBoard.m in Sources */,
 				985B33E216B29881005E6F76 /* Bee_UITableBoard.m in Sources */,
 				985B33E416B29881005E6F76 /* Bee_UIWebBoard.m in Sources */,
+				DDE01F6316B8BC8F00C2370C /* ASIHTTPRequest+Bee.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
