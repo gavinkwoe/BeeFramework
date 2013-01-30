@@ -39,8 +39,22 @@
 		@property (nonatomic, readonly) NSString * __name; \
 		+ (NSString *)__name;
 
-#undef	DEF_STATIC_PROPERTY
-#define DEF_STATIC_PROPERTY( __name ) \
+#if __has_feature(objc_arc)
+    #undef	DEF_STATIC_PROPERTY
+    #define DEF_STATIC_PROPERTY( __name ) \
+        @dynamic __name; \
+        + (NSString *)__name \
+        { \
+            static NSString * __local = nil; \
+            if ( nil == __local ) \
+            { \
+                __local = [NSString stringWithFormat:@"%s", #__name]; \
+            } \
+            return __local; \
+        }
+#else
+    #undef	DEF_STATIC_PROPERTY
+    #define DEF_STATIC_PROPERTY( __name ) \
 		@dynamic __name; \
 		+ (NSString *)__name \
 		{ \
@@ -51,9 +65,24 @@
 			} \
 			return __local; \
 		}
+#endif
 
-#undef	DEF_STATIC_PROPERTY2
-#define DEF_STATIC_PROPERTY2( __name, __prefix ) \
+#if __has_feature(objc_arc)
+    #undef	DEF_STATIC_PROPERTY2
+    #define DEF_STATIC_PROPERTY2( __name, __prefix ) \
+        @dynamic __name; \
+        + (NSString *)__name \
+        { \
+            static NSString * __local = nil; \
+            if ( nil == __local ) \
+            { \
+                __local = [NSString stringWithFormat:@"%@.%s", __prefix, #__name]; \
+            } \
+            return __local; \
+        }
+#else
+    #undef	DEF_STATIC_PROPERTY2
+    #define DEF_STATIC_PROPERTY2( __name, __prefix ) \
 		@dynamic __name; \
 		+ (NSString *)__name \
 		{ \
@@ -64,9 +93,24 @@
 			} \
 			return __local; \
 		}
+#endif
 
-#undef	DEF_STATIC_PROPERTY3
-#define DEF_STATIC_PROPERTY3( __name, __prefix, __prefix2 ) \
+#if __has_feature(objc_arc)
+    #undef	DEF_STATIC_PROPERTY3
+    #define DEF_STATIC_PROPERTY3( __name, __prefix, __prefix2 ) \
+        @dynamic __name; \
+        + (NSString *)__name \
+        { \
+            static NSString * __local = nil; \
+            if ( nil == __local ) \
+            { \
+                __local = [NSString stringWithFormat:@"%@.%@.%s", __prefix, __prefix2, #__name]; \
+            } \
+            return __local; \
+        }
+#else
+    #undef	DEF_STATIC_PROPERTY3
+    #define DEF_STATIC_PROPERTY3( __name, __prefix, __prefix2 ) \
 		@dynamic __name; \
 		+ (NSString *)__name \
 		{ \
@@ -77,6 +121,7 @@
 			} \
 			return __local; \
 		}
+#endif
 
 #undef	AS_STATIC_PROPERTY_INT
 #define AS_STATIC_PROPERTY_INT( __name ) \
