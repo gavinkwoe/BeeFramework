@@ -2007,6 +2007,9 @@ static NSUInteger		__identSeed = 1;
 
 + (NSString *)tableNameForClass:(Class)clazz
 {
+    if ([clazz respondsToSelector:@selector(mapRelationTable)]) {
+        return [clazz performSelector:@selector(mapRelationTable)];
+    }
 	return [NSString stringWithFormat:@"table_%@",[clazz description].lowercaseString];
 }
 
