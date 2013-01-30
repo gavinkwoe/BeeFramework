@@ -105,18 +105,10 @@ return ret;
     
     //check if column is present in table schema
     while ([rs next]) {
-        //OLDDO
-        //        if ([[[rs stringForColumn:@"name"] lowercaseString] isEqualToString:columnName]) {
-        //            returnBool = YES;
-        //            break;
-        //        }
-        
-        //MYDO 参见Bee_Database.m MYDO
-        if ([[rs stringForColumn:@"name"] isEqualToString:columnName]) {
+        if ([[[rs stringForColumn:@"name"] lowercaseString] isEqualToString:columnName]) {
             returnBool = YES;
             break;
         }
-
     }
     
     //If this is not done FMDatabase instance stays out of pool
