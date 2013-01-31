@@ -53,6 +53,9 @@
 + (id)recordWithJSONData:(NSData *)data;
 + (id)recordWithJSONString:(NSString *)string;
 
++(NSArray *)recordsWithDictionaryArray:(NSArray *)dictArray;
++(NSArray *)recordsAsynSaveWithArray:(NSArray *)array;
+
 @end
 
 #pragma mark -
