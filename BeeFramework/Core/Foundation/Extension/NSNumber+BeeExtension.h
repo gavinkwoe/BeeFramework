@@ -38,7 +38,7 @@
 #define __UINT( __x )			[NSNumber numberWithUnsignedInt:(NSUInteger)__x]
 #define	__FLOAT( __x )			[NSNumber numberWithFloat:(float)__x]
 #define	__DOUBLE( __x )			[NSNumber numberWithDouble:(double)__x]
-
+#define __BOOL( __x )           [NSNumber numberWithBool:(BOOL)__x]
 #pragma mark -
 
 @interface NSNumber(BeeExtension)
