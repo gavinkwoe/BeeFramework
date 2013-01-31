@@ -123,25 +123,25 @@
 		63926891164CEF600099625C /* DribbbleController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63926864164CEF600099625C /* DribbbleController.mm */; };
 		63926892164CEF600099625C /* DribbbleModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 63926866164CEF600099625C /* DribbbleModel.m */; };
 		63926893164CEF600099625C /* DribbblePhotoBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 63926868164CEF600099625C /* DribbblePhotoBoard.m */; };
-		63926894164CEF600099625C /* Lession10Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 63926869164CEF600099625C /* Lession10Board.m */; };
-		63926895164CEF600099625C /* Lession10Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 6392686A164CEF600099625C /* Lession10Model.m */; };
-		63926896164CEF600099625C /* Lession1Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 6392686C164CEF600099625C /* Lession1Board.m */; };
-		63926897164CEF600099625C /* Lession2Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 6392686E164CEF600099625C /* Lession2Board.m */; };
-		63926898164CEF600099625C /* Lession3Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 63926870164CEF600099625C /* Lession3Board.m */; };
-		63926899164CEF600099625C /* Lession4Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 63926872164CEF600099625C /* Lession4Board.m */; };
-		6392689B164CEF600099625C /* Lession5Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 63926876164CEF600099625C /* Lession5Board.m */; };
-		6392689C164CEF600099625C /* Lession6Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 63926878164CEF600099625C /* Lession6Board.m */; };
-		6392689D164CEF600099625C /* Lession7_1Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 6392687A164CEF600099625C /* Lession7_1Board.m */; };
-		6392689E164CEF600099625C /* Lession7_2Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 6392687C164CEF600099625C /* Lession7_2Board.m */; };
-		6392689F164CEF600099625C /* Lession7_3Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 6392687E164CEF600099625C /* Lession7_3Board.m */; };
-		639268A0164CEF600099625C /* Lession7_4Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 63926880164CEF600099625C /* Lession7_4Board.m */; };
-		639268A1164CEF600099625C /* Lession7_5Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 63926882164CEF600099625C /* Lession7_5Board.m */; };
-		639268A2164CEF600099625C /* Lession7_7Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 63926884164CEF600099625C /* Lession7_7Board.m */; };
-		639268A3164CEF600099625C /* Lession7Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 63926886164CEF600099625C /* Lession7Board.m */; };
-		639268A4164CEF600099625C /* Lession8Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 63926888164CEF600099625C /* Lession8Board.m */; };
-		639268A5164CEF600099625C /* Lession9Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 6392688A164CEF600099625C /* Lession9Board.m */; };
-		639268A6164CEF600099625C /* Lession9Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = 6392688C164CEF600099625C /* Lession9Controller.m */; };
-		639268A7164CEF600099625C /* LessionBaseBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 6392688E164CEF600099625C /* LessionBaseBoard.m */; };
+		63926894164CEF600099625C /* Lesson10Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 63926869164CEF600099625C /* Lesson10Board.m */; };
+		63926895164CEF600099625C /* Lesson10Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 6392686A164CEF600099625C /* Lesson10Model.m */; };
+		63926896164CEF600099625C /* Lesson1Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 6392686C164CEF600099625C /* Lesson1Board.m */; };
+		63926897164CEF600099625C /* Lesson2Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 6392686E164CEF600099625C /* Lesson2Board.m */; };
+		63926898164CEF600099625C /* Lesson3Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 63926870164CEF600099625C /* Lesson3Board.m */; };
+		63926899164CEF600099625C /* Lesson4Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 63926872164CEF600099625C /* Lesson4Board.m */; };
+		6392689B164CEF600099625C /* Lesson5Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 63926876164CEF600099625C /* Lesson5Board.m */; };
+		6392689C164CEF600099625C /* Lesson6Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 63926878164CEF600099625C /* Lesson6Board.m */; };
+		6392689D164CEF600099625C /* Lesson7_1Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 6392687A164CEF600099625C /* Lesson7_1Board.m */; };
+		6392689E164CEF600099625C /* Lesson7_2Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 6392687C164CEF600099625C /* Lesson7_2Board.m */; };
+		6392689F164CEF600099625C /* Lesson7_3Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 6392687E164CEF600099625C /* Lesson7_3Board.m */; };
+		639268A0164CEF600099625C /* Lesson7_4Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 63926880164CEF600099625C /* Lesson7_4Board.m */; };
+		639268A1164CEF600099625C /* Lesson7_5Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 63926882164CEF600099625C /* Lesson7_5Board.m */; };
+		639268A2164CEF600099625C /* Lesson7_7Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 63926884164CEF600099625C /* Lesson7_7Board.m */; };
+		639268A3164CEF600099625C /* Lesson7Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 63926886164CEF600099625C /* Lesson7Board.m */; };
+		639268A4164CEF600099625C /* Lesson8Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 63926888164CEF600099625C /* Lesson8Board.m */; };
+		639268A5164CEF600099625C /* Lesson9Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 6392688A164CEF600099625C /* Lesson9Board.m */; };
+		639268A6164CEF600099625C /* Lesson9Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = 6392688C164CEF600099625C /* Lesson9Controller.m */; };
+		639268A7164CEF600099625C /* LessonBaseBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 6392688E164CEF600099625C /* LessonBaseBoard.m */; };
 		63A6316A166659BB006FC6A0 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 63A63169166659B2006FC6A0 /* libsqlite3.dylib */; };
 		63A79250157506E700C863F3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63A7924F157506E700C863F3 /* UIKit.framework */; };
 		63A79252157506E700C863F3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63A79251157506E700C863F3 /* Foundation.framework */; };
@@ -170,8 +170,8 @@
 		63B46EA316A6BC180087C88C /* heat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63B46E8B16A6BC180087C88C /* heat@2x.png */; };
 		63B46EA416A6BC180087C88C /* tap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63B46E8C16A6BC180087C88C /* tap@2x.png */; };
 		63EAE482166E2C5500C6F40E /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63EAE481166E2C5500C6F40E /* Default-568h@2x.png */; };
-		63F5FB6F166CE38B00139103 /* Lession11Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 63F5FB6C166CE38B00139103 /* Lession11Board.m */; };
-		63F5FB73166CE53900139103 /* Lession11Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 63F5FB72166CE53900139103 /* Lession11Model.m */; };
+		63F5FB6F166CE38B00139103 /* Lesson11Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 63F5FB6C166CE38B00139103 /* Lesson11Board.m */; };
+		63F5FB73166CE53900139103 /* Lesson11Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 63F5FB72166CE53900139103 /* Lesson11Model.m */; };
 		63F8E911160C599B00A5FECC /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63F8E910160C599B00A5FECC /* AVFoundation.framework */; };
 		63F8E916160C5B6A00A5FECC /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63F8E915160C5B6A00A5FECC /* CoreVideo.framework */; };
 		63F8E918160C5B8900A5FECC /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63F8E917160C5B8900A5FECC /* CoreMedia.framework */; };
@@ -416,44 +416,44 @@
 		63926866164CEF600099625C /* DribbbleModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DribbbleModel.m; sourceTree = "<group>"; };
 		63926867164CEF600099625C /* DribbblePhotoBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DribbblePhotoBoard.h; sourceTree = "<group>"; };
 		63926868164CEF600099625C /* DribbblePhotoBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DribbblePhotoBoard.m; sourceTree = "<group>"; };
-		63926869164CEF600099625C /* Lession10Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lession10Board.m; sourceTree = "<group>"; };
-		6392686A164CEF600099625C /* Lession10Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lession10Model.m; sourceTree = "<group>"; };
-		6392686B164CEF600099625C /* Lession1Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lession1Board.h; sourceTree = "<group>"; };
-		6392686C164CEF600099625C /* Lession1Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lession1Board.m; sourceTree = "<group>"; };
-		6392686D164CEF600099625C /* Lession2Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lession2Board.h; sourceTree = "<group>"; };
-		6392686E164CEF600099625C /* Lession2Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lession2Board.m; sourceTree = "<group>"; };
-		6392686F164CEF600099625C /* Lession3Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lession3Board.h; sourceTree = "<group>"; };
-		63926870164CEF600099625C /* Lession3Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lession3Board.m; sourceTree = "<group>"; };
-		63926871164CEF600099625C /* Lession4Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lession4Board.h; sourceTree = "<group>"; };
-		63926872164CEF600099625C /* Lession4Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lession4Board.m; sourceTree = "<group>"; };
-		63926875164CEF600099625C /* Lession5Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lession5Board.h; sourceTree = "<group>"; };
-		63926876164CEF600099625C /* Lession5Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lession5Board.m; sourceTree = "<group>"; };
-		63926877164CEF600099625C /* Lession6Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lession6Board.h; sourceTree = "<group>"; };
-		63926878164CEF600099625C /* Lession6Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lession6Board.m; sourceTree = "<group>"; };
-		63926879164CEF600099625C /* Lession7_1Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lession7_1Board.h; sourceTree = "<group>"; };
-		6392687A164CEF600099625C /* Lession7_1Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lession7_1Board.m; sourceTree = "<group>"; };
-		6392687B164CEF600099625C /* Lession7_2Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lession7_2Board.h; sourceTree = "<group>"; };
-		6392687C164CEF600099625C /* Lession7_2Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lession7_2Board.m; sourceTree = "<group>"; };
-		6392687D164CEF600099625C /* Lession7_3Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lession7_3Board.h; sourceTree = "<group>"; };
-		6392687E164CEF600099625C /* Lession7_3Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lession7_3Board.m; sourceTree = "<group>"; };
-		6392687F164CEF600099625C /* Lession7_4Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lession7_4Board.h; sourceTree = "<group>"; };
-		63926880164CEF600099625C /* Lession7_4Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lession7_4Board.m; sourceTree = "<group>"; };
-		63926881164CEF600099625C /* Lession7_5Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lession7_5Board.h; sourceTree = "<group>"; };
-		63926882164CEF600099625C /* Lession7_5Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lession7_5Board.m; sourceTree = "<group>"; };
-		63926883164CEF600099625C /* Lession7_7Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lession7_7Board.h; sourceTree = "<group>"; };
-		63926884164CEF600099625C /* Lession7_7Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lession7_7Board.m; sourceTree = "<group>"; };
-		63926885164CEF600099625C /* Lession7Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lession7Board.h; sourceTree = "<group>"; };
-		63926886164CEF600099625C /* Lession7Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lession7Board.m; sourceTree = "<group>"; };
-		63926887164CEF600099625C /* Lession8Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lession8Board.h; sourceTree = "<group>"; };
-		63926888164CEF600099625C /* Lession8Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lession8Board.m; sourceTree = "<group>"; };
-		63926889164CEF600099625C /* Lession9Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lession9Board.h; sourceTree = "<group>"; };
-		6392688A164CEF600099625C /* Lession9Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lession9Board.m; sourceTree = "<group>"; };
-		6392688B164CEF600099625C /* Lession9Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lession9Controller.h; sourceTree = "<group>"; };
-		6392688C164CEF600099625C /* Lession9Controller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lession9Controller.m; sourceTree = "<group>"; };
-		6392688D164CEF600099625C /* LessionBaseBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LessionBaseBoard.h; sourceTree = "<group>"; };
-		6392688E164CEF600099625C /* LessionBaseBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LessionBaseBoard.m; sourceTree = "<group>"; };
-		63926912164D2C220099625C /* Lession10Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lession10Board.h; sourceTree = "<group>"; };
-		63926913164D2C250099625C /* Lession10Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lession10Model.h; sourceTree = "<group>"; };
+		63926869164CEF600099625C /* Lesson10Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lesson10Board.m; sourceTree = "<group>"; };
+		6392686A164CEF600099625C /* Lesson10Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lesson10Model.m; sourceTree = "<group>"; };
+		6392686B164CEF600099625C /* Lesson1Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lesson1Board.h; sourceTree = "<group>"; };
+		6392686C164CEF600099625C /* Lesson1Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lesson1Board.m; sourceTree = "<group>"; };
+		6392686D164CEF600099625C /* Lesson2Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lesson2Board.h; sourceTree = "<group>"; };
+		6392686E164CEF600099625C /* Lesson2Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lesson2Board.m; sourceTree = "<group>"; };
+		6392686F164CEF600099625C /* Lesson3Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lesson3Board.h; sourceTree = "<group>"; };
+		63926870164CEF600099625C /* Lesson3Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lesson3Board.m; sourceTree = "<group>"; };
+		63926871164CEF600099625C /* Lesson4Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lesson4Board.h; sourceTree = "<group>"; };
+		63926872164CEF600099625C /* Lesson4Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lesson4Board.m; sourceTree = "<group>"; };
+		63926875164CEF600099625C /* Lesson5Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lesson5Board.h; sourceTree = "<group>"; };
+		63926876164CEF600099625C /* Lesson5Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lesson5Board.m; sourceTree = "<group>"; };
+		63926877164CEF600099625C /* Lesson6Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lesson6Board.h; sourceTree = "<group>"; };
+		63926878164CEF600099625C /* Lesson6Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lesson6Board.m; sourceTree = "<group>"; };
+		63926879164CEF600099625C /* Lesson7_1Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lesson7_1Board.h; sourceTree = "<group>"; };
+		6392687A164CEF600099625C /* Lesson7_1Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lesson7_1Board.m; sourceTree = "<group>"; };
+		6392687B164CEF600099625C /* Lesson7_2Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lesson7_2Board.h; sourceTree = "<group>"; };
+		6392687C164CEF600099625C /* Lesson7_2Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lesson7_2Board.m; sourceTree = "<group>"; };
+		6392687D164CEF600099625C /* Lesson7_3Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lesson7_3Board.h; sourceTree = "<group>"; };
+		6392687E164CEF600099625C /* Lesson7_3Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lesson7_3Board.m; sourceTree = "<group>"; };
+		6392687F164CEF600099625C /* Lesson7_4Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lesson7_4Board.h; sourceTree = "<group>"; };
+		63926880164CEF600099625C /* Lesson7_4Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lesson7_4Board.m; sourceTree = "<group>"; };
+		63926881164CEF600099625C /* Lesson7_5Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lesson7_5Board.h; sourceTree = "<group>"; };
+		63926882164CEF600099625C /* Lesson7_5Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lesson7_5Board.m; sourceTree = "<group>"; };
+		63926883164CEF600099625C /* Lesson7_7Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lesson7_7Board.h; sourceTree = "<group>"; };
+		63926884164CEF600099625C /* Lesson7_7Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lesson7_7Board.m; sourceTree = "<group>"; };
+		63926885164CEF600099625C /* Lesson7Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lesson7Board.h; sourceTree = "<group>"; };
+		63926886164CEF600099625C /* Lesson7Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lesson7Board.m; sourceTree = "<group>"; };
+		63926887164CEF600099625C /* Lesson8Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lesson8Board.h; sourceTree = "<group>"; };
+		63926888164CEF600099625C /* Lesson8Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lesson8Board.m; sourceTree = "<group>"; };
+		63926889164CEF600099625C /* Lesson9Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lesson9Board.h; sourceTree = "<group>"; };
+		6392688A164CEF600099625C /* Lesson9Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lesson9Board.m; sourceTree = "<group>"; };
+		6392688B164CEF600099625C /* Lesson9Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lesson9Controller.h; sourceTree = "<group>"; };
+		6392688C164CEF600099625C /* Lesson9Controller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lesson9Controller.m; sourceTree = "<group>"; };
+		6392688D164CEF600099625C /* LessonBaseBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LessonBaseBoard.h; sourceTree = "<group>"; };
+		6392688E164CEF600099625C /* LessonBaseBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LessonBaseBoard.m; sourceTree = "<group>"; };
+		63926912164D2C220099625C /* Lesson10Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lesson10Board.h; sourceTree = "<group>"; };
+		63926913164D2C250099625C /* Lesson10Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lesson10Model.h; sourceTree = "<group>"; };
 		63A63169166659B2006FC6A0 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		63A7924B157506E700C863F3 /* WhatsBug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhatsBug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63A7924F157506E700C863F3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -501,10 +501,10 @@
 		63B46E8B16A6BC180087C88C /* heat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heat@2x.png"; sourceTree = "<group>"; };
 		63B46E8C16A6BC180087C88C /* tap@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tap@2x.png"; sourceTree = "<group>"; };
 		63EAE481166E2C5500C6F40E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		63F5FB6B166CE38A00139103 /* Lession11Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lession11Board.h; sourceTree = "<group>"; };
-		63F5FB6C166CE38B00139103 /* Lession11Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lession11Board.m; sourceTree = "<group>"; };
-		63F5FB71166CE53800139103 /* Lession11Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lession11Model.h; sourceTree = "<group>"; };
-		63F5FB72166CE53900139103 /* Lession11Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lession11Model.m; sourceTree = "<group>"; };
+		63F5FB6B166CE38A00139103 /* Lesson11Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lesson11Board.h; sourceTree = "<group>"; };
+		63F5FB6C166CE38B00139103 /* Lesson11Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lesson11Board.m; sourceTree = "<group>"; };
+		63F5FB71166CE53800139103 /* Lesson11Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lesson11Model.h; sourceTree = "<group>"; };
+		63F5FB72166CE53900139103 /* Lesson11Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lesson11Model.m; sourceTree = "<group>"; };
 		63F8E910160C599B00A5FECC /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		63F8E915160C5B6A00A5FECC /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		63F8E917160C5B8900A5FECC /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -976,7 +976,7 @@
 			path = CustomView;
 			sourceTree = "<group>";
 		};
-		6392685E164CEF600099625C /* Lessions */ = {
+		6392685E164CEF600099625C /* Lessons */ = {
 			isa = PBXGroup;
 			children = (
 				6392685F164CEF600099625C /* CatelogBoard.h */,
@@ -989,52 +989,53 @@
 				63926866164CEF600099625C /* DribbbleModel.m */,
 				63926867164CEF600099625C /* DribbblePhotoBoard.h */,
 				63926868164CEF600099625C /* DribbblePhotoBoard.m */,
-				6392688D164CEF600099625C /* LessionBaseBoard.h */,
-				6392688E164CEF600099625C /* LessionBaseBoard.m */,
-				6392686B164CEF600099625C /* Lession1Board.h */,
-				6392686C164CEF600099625C /* Lession1Board.m */,
-				6392686D164CEF600099625C /* Lession2Board.h */,
-				6392686E164CEF600099625C /* Lession2Board.m */,
-				6392686F164CEF600099625C /* Lession3Board.h */,
-				63926870164CEF600099625C /* Lession3Board.m */,
-				63926871164CEF600099625C /* Lession4Board.h */,
-				63926872164CEF600099625C /* Lession4Board.m */,
-				63926875164CEF600099625C /* Lession5Board.h */,
-				63926876164CEF600099625C /* Lession5Board.m */,
-				63926877164CEF600099625C /* Lession6Board.h */,
-				63926878164CEF600099625C /* Lession6Board.m */,
-				63926879164CEF600099625C /* Lession7_1Board.h */,
-				6392687A164CEF600099625C /* Lession7_1Board.m */,
-				6392687B164CEF600099625C /* Lession7_2Board.h */,
-				6392687C164CEF600099625C /* Lession7_2Board.m */,
-				6392687D164CEF600099625C /* Lession7_3Board.h */,
-				6392687E164CEF600099625C /* Lession7_3Board.m */,
-				6392687F164CEF600099625C /* Lession7_4Board.h */,
-				63926880164CEF600099625C /* Lession7_4Board.m */,
-				63926881164CEF600099625C /* Lession7_5Board.h */,
-				63926882164CEF600099625C /* Lession7_5Board.m */,
-				63926883164CEF600099625C /* Lession7_7Board.h */,
-				63926884164CEF600099625C /* Lession7_7Board.m */,
-				63926885164CEF600099625C /* Lession7Board.h */,
-				63926886164CEF600099625C /* Lession7Board.m */,
-				63926887164CEF600099625C /* Lession8Board.h */,
-				63926888164CEF600099625C /* Lession8Board.m */,
-				63926889164CEF600099625C /* Lession9Board.h */,
-				6392688A164CEF600099625C /* Lession9Board.m */,
-				6392688B164CEF600099625C /* Lession9Controller.h */,
-				6392688C164CEF600099625C /* Lession9Controller.m */,
-				63926912164D2C220099625C /* Lession10Board.h */,
-				63926869164CEF600099625C /* Lession10Board.m */,
-				63926913164D2C250099625C /* Lession10Model.h */,
-				6392686A164CEF600099625C /* Lession10Model.m */,
+				6392688D164CEF600099625C /* LessonBaseBoard.h */,
+				6392688E164CEF600099625C /* LessonBaseBoard.m */,
+				6392686B164CEF600099625C /* Lesson1Board.h */,
+				6392686C164CEF600099625C /* Lesson1Board.m */,
+				6392686D164CEF600099625C /* Lesson2Board.h */,
+				6392686E164CEF600099625C /* Lesson2Board.m */,
+				6392686F164CEF600099625C /* Lesson3Board.h */,
+				63926870164CEF600099625C /* Lesson3Board.m */,
+				63926871164CEF600099625C /* Lesson4Board.h */,
+				63926872164CEF600099625C /* Lesson4Board.m */,
+				63926875164CEF600099625C /* Lesson5Board.h */,
+				63926876164CEF600099625C /* Lesson5Board.m */,
+				63926877164CEF600099625C /* Lesson6Board.h */,
+				63926878164CEF600099625C /* Lesson6Board.m */,
+				63926879164CEF600099625C /* Lesson7_1Board.h */,
+				6392687A164CEF600099625C /* Lesson7_1Board.m */,
+				6392687B164CEF600099625C /* Lesson7_2Board.h */,
+				6392687C164CEF600099625C /* Lesson7_2Board.m */,
+				6392687D164CEF600099625C /* Lesson7_3Board.h */,
+				6392687E164CEF600099625C /* Lesson7_3Board.m */,
+				6392687F164CEF600099625C /* Lesson7_4Board.h */,
+				63926880164CEF600099625C /* Lesson7_4Board.m */,
+				63926881164CEF600099625C /* Lesson7_5Board.h */,
+				63926882164CEF600099625C /* Lesson7_5Board.m */,
+				63926883164CEF600099625C /* Lesson7_7Board.h */,
+				63926884164CEF600099625C /* Lesson7_7Board.m */,
+				63926885164CEF600099625C /* Lesson7Board.h */,
+				63926886164CEF600099625C /* Lesson7Board.m */,
+				63926887164CEF600099625C /* Lesson8Board.h */,
+				63926888164CEF600099625C /* Lesson8Board.m */,
+				63926889164CEF600099625C /* Lesson9Board.h */,
+				6392688A164CEF600099625C /* Lesson9Board.m */,
+				6392688B164CEF600099625C /* Lesson9Controller.h */,
+				6392688C164CEF600099625C /* Lesson9Controller.m */,
+				63926912164D2C220099625C /* Lesson10Board.h */,
+				63926869164CEF600099625C /* Lesson10Board.m */,
+				63926913164D2C250099625C /* Lesson10Model.h */,
+				6392686A164CEF600099625C /* Lesson10Model.m */,
 				A048866D16633E850093E93C /* WebViewBoard.h */,
 				A048866E16633E850093E93C /* WebViewBoard.m */,
-				63F5FB6B166CE38A00139103 /* Lession11Board.h */,
-				63F5FB6C166CE38B00139103 /* Lession11Board.m */,
-				63F5FB71166CE53800139103 /* Lession11Model.h */,
-				63F5FB72166CE53900139103 /* Lession11Model.m */,
+				63F5FB6B166CE38A00139103 /* Lesson11Board.h */,
+				63F5FB6C166CE38B00139103 /* Lesson11Board.m */,
+				63F5FB71166CE53800139103 /* Lesson11Model.h */,
+				63F5FB72166CE53900139103 /* Lesson11Model.m */,
 			);
-			path = Lessions;
+			name = Lessons;
+			path = Lessons;
 			sourceTree = SOURCE_ROOT;
 		};
 		63A79240157506E600C863F3 = {
@@ -1081,7 +1082,7 @@
 		63A79255157506E700C863F3 /* WhatsBug */ = {
 			isa = PBXGroup;
 			children = (
-				6392685E164CEF600099625C /* Lessions */,
+				6392685E164CEF600099625C /* Lessons */,
 				63FE1C2A15D0191C00432794 /* WhatsBug */,
 			);
 			path = WhatsBug;
@@ -1240,27 +1241,27 @@
 				63926891164CEF600099625C /* DribbbleController.mm in Sources */,
 				63926892164CEF600099625C /* DribbbleModel.m in Sources */,
 				63926893164CEF600099625C /* DribbblePhotoBoard.m in Sources */,
-				63926894164CEF600099625C /* Lession10Board.m in Sources */,
-				63926895164CEF600099625C /* Lession10Model.m in Sources */,
-				63926896164CEF600099625C /* Lession1Board.m in Sources */,
-				63926897164CEF600099625C /* Lession2Board.m in Sources */,
-				63926898164CEF600099625C /* Lession3Board.m in Sources */,
-				63926899164CEF600099625C /* Lession4Board.m in Sources */,
-				6392689B164CEF600099625C /* Lession5Board.m in Sources */,
-				6392689C164CEF600099625C /* Lession6Board.m in Sources */,
-				6392689D164CEF600099625C /* Lession7_1Board.m in Sources */,
-				6392689E164CEF600099625C /* Lession7_2Board.m in Sources */,
-				6392689F164CEF600099625C /* Lession7_3Board.m in Sources */,
-				639268A0164CEF600099625C /* Lession7_4Board.m in Sources */,
-				639268A1164CEF600099625C /* Lession7_5Board.m in Sources */,
-				639268A2164CEF600099625C /* Lession7_7Board.m in Sources */,
-				639268A3164CEF600099625C /* Lession7Board.m in Sources */,
-				639268A4164CEF600099625C /* Lession8Board.m in Sources */,
-				639268A5164CEF600099625C /* Lession9Board.m in Sources */,
-				639268A6164CEF600099625C /* Lession9Controller.m in Sources */,
-				639268A7164CEF600099625C /* LessionBaseBoard.m in Sources */,
-				63F5FB6F166CE38B00139103 /* Lession11Board.m in Sources */,
-				63F5FB73166CE53900139103 /* Lession11Model.m in Sources */,
+				63926894164CEF600099625C /* Lesson10Board.m in Sources */,
+				63926895164CEF600099625C /* Lesson10Model.m in Sources */,
+				63926896164CEF600099625C /* Lesson1Board.m in Sources */,
+				63926897164CEF600099625C /* Lesson2Board.m in Sources */,
+				63926898164CEF600099625C /* Lesson3Board.m in Sources */,
+				63926899164CEF600099625C /* Lesson4Board.m in Sources */,
+				6392689B164CEF600099625C /* Lesson5Board.m in Sources */,
+				6392689C164CEF600099625C /* Lesson6Board.m in Sources */,
+				6392689D164CEF600099625C /* Lesson7_1Board.m in Sources */,
+				6392689E164CEF600099625C /* Lesson7_2Board.m in Sources */,
+				6392689F164CEF600099625C /* Lesson7_3Board.m in Sources */,
+				639268A0164CEF600099625C /* Lesson7_4Board.m in Sources */,
+				639268A1164CEF600099625C /* Lesson7_5Board.m in Sources */,
+				639268A2164CEF600099625C /* Lesson7_7Board.m in Sources */,
+				639268A3164CEF600099625C /* Lesson7Board.m in Sources */,
+				639268A4164CEF600099625C /* Lesson8Board.m in Sources */,
+				639268A5164CEF600099625C /* Lesson9Board.m in Sources */,
+				639268A6164CEF600099625C /* Lesson9Controller.m in Sources */,
+				639268A7164CEF600099625C /* LessonBaseBoard.m in Sources */,
+				63F5FB6F166CE38B00139103 /* Lesson11Board.m in Sources */,
+				63F5FB73166CE53900139103 /* Lesson11Model.m in Sources */,
 				63513E5016A54436003422CA /* Bee_Foundation.mm in Sources */,
 				63513E5116A54436003422CA /* Bee_Log.mm in Sources */,
 				63513E5216A54436003422CA /* Bee_Performance.mm in Sources */,
