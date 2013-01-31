@@ -40,7 +40,7 @@
 #define SAFE_RELEASE_SUBLAYER( __x ) \
 		{ \
 			[__x removeFromSuperlayer]; \
-			[__x release]; \
+			BEE_RELEASE(__x); \
 			__x = nil; \
 		}
 
@@ -48,7 +48,7 @@
 #define SAFE_RELEASE_SUBVIEW( __x ) \
 		{ \
 			[__x removeFromSuperview]; \
-			[__x release]; \
+			BEE_RELEASE(__x); \
 			__x = nil; \
 		}
 
