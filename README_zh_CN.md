@@ -601,7 +601,7 @@ BeeFramefork 已经支持 [cocoapods](http://cocoapods.org) 管理依赖
 
 ```
 platform :ios
-pod 'BeeFramefork'
+pod 'BeeFramework',:head
 ```
 
 并执行 `pod install`

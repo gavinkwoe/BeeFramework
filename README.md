@@ -617,7 +617,7 @@ just add
 
 ```
 platform :ios
-pod 'BeeFramefork'
+pod 'BeeFramework', :head
 ```
 
 to `Podfile` and run `pod install`
