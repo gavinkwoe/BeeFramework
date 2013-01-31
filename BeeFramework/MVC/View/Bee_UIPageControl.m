@@ -105,17 +105,18 @@
 - (void)updateDotImages
 {
     NSUInteger index = 0;
+    int _currentpage = self.currentPage;
 	for ( UIView * subView in self.subviews )
 	{
 		if ( [subView isKindOfClass:[UIImageView class]] )
 		{
 			UIImageView * imageView = (UIImageView *)subView;
-			if ( self.currentPage == index )
+			if ( _currentpage == index )
 			{
-                if (self.dotImageHilites && [self.dotImageHilites count]> self.currentPage && [self.dotImageHilites objectAtIndex:self.currentPage] != [NSNull null]) {
-                    imageView.image = [self.dotImageHilites objectAtIndex:self.currentPage];
-                    if (self.dotImageSizes && [self.dotImageSizes count]>self.currentPage) {
-                        NSNumber *number = [self.dotImageSizes objectAtIndex:self.currentPage];
+                if (self.dotImageHilites && [self.dotImageHilites count]>_currentpage && [self.dotImageHilites objectAtIndex:_currentpage] != [NSNull null] ) {
+                    imageView.image = [self.dotImageHilites objectAtIndex:_currentpage];
+                    if (self.dotImageSizes && [self.dotImageSizes count]>_currentpage) {
+                        NSNumber *number = [self.dotImageSizes objectAtIndex:_currentpage];
                         CGSize size = [number CGSizeValue];
                         imageView.frame = CGRectMake(imageView.frame.origin.x, imageView.frame.origin.y, size.width, size.height);
                     }
@@ -127,7 +128,7 @@
 			else
 			{
                 
-				if (self.dotImageNormals && [self.dotImageNormals count]> index && [self.dotImageNormals objectAtIndex:self.currentPage] != [NSNull null]) {
+				if (self.dotImageNormals && [self.dotImageNormals count]>index && [self.dotImageNormals objectAtIndex:index] != [NSNull null]) {
                   
                     imageView.image = [self.dotImageNormals objectAtIndex:index];
                     if (self.dotImageSizes && [self.dotImageSizes count]>index) {
@@ -135,14 +136,12 @@
                         CGSize size = [number CGSizeValue];
                         imageView.frame = CGRectMake(imageView.frame.origin.x, imageView.frame.origin.y, size.width, size.height);
                     }
-                    
-                    
                 }else if ( self.dotImageNormal )
 				{
 					imageView.image = self.dotImageNormal;					
 				}
+                
 			}
-            
             index += 1;
 		}
 	}
@@ -165,6 +164,7 @@
     _dotImageSizes = [dotImageSizes retain];
     [self updateDotImages];
 }
+
 
 
 -(void) setCurrentPage:(NSInteger)page{
