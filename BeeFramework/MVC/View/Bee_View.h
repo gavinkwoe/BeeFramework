@@ -35,6 +35,7 @@
 #import "Bee_UIActivityIndicatorView.h"
 #import "Bee_UIButton.h"
 #import "Bee_UIDatePicker.h"
+#import "Bee_UIPickerView.h"
 #import "Bee_UIGridCell.h"
 #import "Bee_UIKeyboard.h"
 #import "Bee_UIImageView.h"
