@@ -66,6 +66,13 @@
 	return req;
 }
 
+- (BeeRequest *)HTTP_POST:(NSString *)url postdata:(NSDictionary *)postdata
+{
+	BeeRequest * req = [BeeRequestQueue POST:url postdata:postdata];
+	[req addResponder:self];
+	return req;
+}
+
 - (BOOL)isRequestResponder
 {
 	if ( [self respondsToSelector:@selector(handleRequest:)] )

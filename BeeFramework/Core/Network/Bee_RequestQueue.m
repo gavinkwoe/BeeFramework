@@ -58,6 +58,7 @@
 
 - (BeeRequest *)GET:(NSString *)url sync:(BOOL)sync;
 - (BeeRequest *)POST:(NSString *)url sync:(BOOL)sync;
+- (BeeRequest *)POST:(NSString *)url sync:(BOOL)sync postdata:(NSDictionary *)postdata;
 
 - (void)cancelRequest:(BeeRequest *)request;
 - (void)cancelRequestByResponder:(id)responder;
@@ -280,7 +281,16 @@
 	return [[BeeRequestQueue sharedInstance] POST:url sync:NO];
 }
 
-- (BeeRequest *)POST:(NSString *)url sync:(BOOL)sync
++ (BeeRequest *)POST:(NSString *)url postdata:(NSDictionary *)postdata
+{
+	return [[BeeRequestQueue sharedInstance] POST:url sync:NO postdata:postdata];
+}
+
+- (BeeRequest *)POST:(NSString *)url sync:(BOOL)sync{
+    return [self POST:url sync:sync postdata:nil];
+}
+
+- (BeeRequest *)POST:(NSString *)url sync:(BOOL)sync postdata:(NSDictionary *)postdata
 {
 	if ( NO == _online )
 		return nil;
@@ -305,6 +315,12 @@
 
 	[request setThreadPriority:1.0];
 	[request setQueuePriority:NSOperationQueuePriorityHigh];
+    
+    if (postdata && [postdata count]>0) {
+        for (NSString * key in postdata.allKeys) {
+            [request addPostValue:[postdata objectForKey:key] forKey:key];
+        }
+    }
 
 	[_requests addObject:request];	
 	
