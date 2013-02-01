@@ -181,14 +181,6 @@
 	if ( _cellLayout && [_cellLayout respondsToSelector:@selector(layoutInBound:forCell:)] )
 	{
 		[_cellLayout layoutInBound:self.bounds.size forCell:self];
-		
-//		Class layoutClass = [_cellLayout class];
-//		if ( [layoutClass respondsToSelector:@selector(sizeInBound:forData:)] )
-//		{
-//			CGSize size = [layoutClass sizeInBound:self.bounds.size forData:self.cellData];
-//			[super setFrame:CGRectMake( self.frame.origin.x, self.frame.origin.y, size.width, size.height )];
-//		}
-
 //		[_cellLayout cellLayout:self bound:self.bounds.size];
 	}
 
