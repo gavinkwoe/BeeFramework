@@ -31,9 +31,6 @@
 //
 
 #import "Bee_Precompile.h"
-#import "Bee_Database.h"
-#import "Bee_Log.h"
-#include <objc/runtime.h>
 
 #undef	TEST_CASE
 #define	TEST_CASE( __name ) \
@@ -41,6 +38,8 @@
 		@end \
 		@implementation TestCase##__name \
 		+ (NSString *)name { return [NSString stringWithUTF8String:#__name]; } \
+		+ (const char *)file { return __FILE__; } \
+		+ (unsigned int)line { return __LINE__; } \
 		+ (BOOL)runTests { \
 			NSAutoreleasePool * __testReleasePool = [[NSAutoreleasePool alloc] init]; \
 			BOOL __testCasePassed = YES; \
