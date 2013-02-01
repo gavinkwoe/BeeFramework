@@ -30,17 +30,7 @@
 //  Bee_ActiveBase.h
 //
 
-#import "Bee_Precompile.h"
-#import "Bee_Log.h"
-#import "Bee_Runtime.h"
-#import "Bee_Database.h"
-#import "Bee_UnitTest.h"
-
-#import "NSObject+BeeTypeConversion.h"
-#import "NSDictionary+BeeExtension.h"
-#import "NSNumber+BeeExtension.h"
-
-#include <objc/runtime.h>
+#import "Bee.h"
 
 #pragma mark -
 
@@ -123,7 +113,7 @@ static NSUInteger __succeedCount = 0;
 			{
 				CC( @"											" );
 				CC( @" Testing '%@' ...", [clazz name] );
-				CC( @" ----------------------------------		" );
+				CC( @" %s(#%d) ", [clazz file], [clazz line] );
 				CC( @"											" );
 
 				BeeLogIndent( 1 );

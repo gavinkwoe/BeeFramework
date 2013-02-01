@@ -43,11 +43,11 @@ TEST_CASE( db )
 		[BeeDatabase closeSharedDatabase];
 		EXPECTED( nil == [BeeDatabase sharedDatabase] );
 		
-		[BeeDatabase openSharedDatabase:@"my"];
+		[BeeDatabase openSharedDatabase:@"test"];
 		EXPECTED( [BeeDatabase sharedDatabase] );
 	}
 
-	TIMES( 3 )
+	TIMES( 0 )
 	{
 	// create table
 		
