@@ -5,7 +5,6 @@ By geek, for geek.
 
 --------------------
 
-QQ:            5220509    
 QQ Group:      79054681    
 website:       http://www.bee-framework.com    
 email:         gavinkwoe@gmail.com    
