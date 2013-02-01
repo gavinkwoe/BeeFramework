@@ -1,4 +1,3 @@
-
 #Bee framework
 
 A rapid development framework for iOS applications.
@@ -6,10 +5,11 @@ By geek, for geek.
 
 --------------------
 
-QQ Group(QQ群号): 79054681    
-QQ: 5220509    
-Email: gavinkwoe@gmail.com    
-google groups： https://groups.google.com/d/forum/beeframework?hl=zh-CN
+QQ:            5220509    
+QQ Group:      79054681    
+website:       http://www.bee-framework.com    
+email:         gavinkwoe@gmail.com    
+google groups: https://groups.google.com/d/forum/beeframework?hl=zh-CN
 
 --------------------
 
