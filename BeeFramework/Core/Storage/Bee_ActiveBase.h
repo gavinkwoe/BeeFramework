@@ -88,9 +88,9 @@
 
 @protocol BeeActiveProtocol<NSObject>
 
-@property (nonatomic, readonly) BeeDatabaseBoolBlock	EXISTS;	// COUNT WHERE '<your primary key>' = id
-@property (nonatomic, readonly) BeeDatabaseBoolBlock	LOAD;	// GET
-@property (nonatomic, readonly) BeeDatabaseBoolBlock	SAVE;	// INSERT if failed to UPDATE
+@property (nonatomic, readonly) BeeDatabaseBoolBlock	EXISTS;		// COUNT WHERE '<your primary key>' = id
+@property (nonatomic, readonly) BeeDatabaseBoolBlock	LOAD;		// GET
+@property (nonatomic, readonly) BeeDatabaseBoolBlock	SAVE;		// INSERT if failed to UPDATE
 @property (nonatomic, readonly) BeeDatabaseBoolBlock	INSERT;
 @property (nonatomic, readonly) BeeDatabaseBoolBlock	UPDATE;
 @property (nonatomic, readonly) BeeDatabaseBoolBlock	DELETE;
@@ -98,6 +98,7 @@
 @property (nonatomic, readonly) NSString *				primaryKey;
 @property (nonatomic, retain) NSNumber *				primaryID;
 
+@property (nonatomic, readonly) BOOL					inserted;
 @property (nonatomic, readonly) BOOL					changed;
 @property (nonatomic, readonly) BOOL					deleted;
 

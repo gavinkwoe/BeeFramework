@@ -27,7 +27,7 @@
 //	IN THE SOFTWARE.
 //
 //
-//  Bee_ActiveBaseTest.h
+//  Bee_RuntimeTest.h
 //
 
 #import "Bee.h"
@@ -36,8 +36,46 @@
 
 #pragma mark -
 
-TEST_CASE( ar_base )
+TEST_CASE( runtime )
 {
+	TIMES( 3 )
+	{
+		NSString * str = (NSString *)[BeeRuntime allocByClass:[NSString class]];
+		EXPECTED( str );
+		[str release];
+
+		NSString * str2 = (NSString *)[BeeRuntime allocByClassName:@"NSString"];
+		EXPECTED( str2 );
+		[str2 release];
+
+		NSArray * emptyStack = [BeeRuntime callstack:0];
+		EXPECTED( emptyStack );
+		EXPECTED( emptyStack.count == 0 );
+		
+		NSArray * maxStack = [BeeRuntime callstack:100000];
+		EXPECTED( maxStack );
+		EXPECTED( maxStack.count );
+
+		NSArray * stack = [BeeRuntime callstack:1];
+		EXPECTED( stack && stack.count );
+		EXPECTED( [[stack objectAtIndex:0] isKindOfClass:[NSString class]] );
+		
+		NSArray * emptyFrames = [BeeRuntime callframes:0];
+		EXPECTED( emptyFrames );
+		EXPECTED( emptyFrames.count == 0 );
+
+		NSArray * maxFrames = [BeeRuntime callframes:100000];
+		EXPECTED( maxFrames );
+		EXPECTED( maxFrames.count );
+
+		NSArray * frames = [BeeRuntime callframes:1];
+		EXPECTED( frames && frames.count );
+		EXPECTED( [[frames objectAtIndex:0] isKindOfClass:[BeeCallFrame class]] );
+
+		[BeeRuntime printCallstack:0];
+		[BeeRuntime printCallstack:1];
+		[BeeRuntime printCallstack:100000];
+	}
 }
 TEST_CASE_END
 

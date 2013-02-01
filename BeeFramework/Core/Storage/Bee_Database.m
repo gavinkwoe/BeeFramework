@@ -50,6 +50,7 @@
 @interface BeeDatabase(Private)
 
 + (NSString *)fieldNameForIdentifier:(NSString *)identifier;
++ (BOOL)isFullPath:(NSString *)path;
 
 - (void)initSelf;
 - (NSString *)internalCreateAliasFromTable:(NSString *)name;
@@ -164,7 +165,7 @@
 
 @dynamic autoOptimize;
 @dynamic ready;
-
+@dynamic total;
 @synthesize filePath = _filePath;
 @synthesize identifier = _identifier;
 
@@ -271,6 +272,11 @@ static NSUInteger		__identSeed = 1;
 - (BOOL)succeed
 {
 	return _lastSucceed;
+}
+
+- (NSUInteger)total
+{
+	return [self count];
 }
 
 - (void)initSelf
@@ -387,17 +393,23 @@ static NSUInteger		__identSeed = 1;
 	return _database.open;
 }
 
-+(BOOL) isFullPath:(NSString *)path{
-    if ([[path componentsSeparatedByString:@"/"]count]>1) {
++ (BOOL)isFullPath:(NSString *)path
+{
+    if ( [[path componentsSeparatedByString:@"/"] count] > 1 )
+	{
         return YES;
     }
+
     return NO;
 }
 
-+(NSString *)storePath:(NSString *)path{
-    if ([BeeDatabase isFullPath:path]) {
++ (NSString *)storePath:(NSString *)path
+{
+    if ( [BeeDatabase isFullPath:path] )
+	{
         return path;
     }
+
     NSString * fullPath = [NSString stringWithFormat:@"%@/BeeDatabase/", [BeeSandbox docPath]];
 	NSString * fullName = [fullPath stringByAppendingString:path];
     return fullName;
@@ -426,9 +438,9 @@ static NSUInteger		__identSeed = 1;
 	
 	NSFileManager * manager = [NSFileManager defaultManager];
 	
-	if (![BeeDatabase isFullPath:path]) {
+	if ( NO == [BeeDatabase isFullPath:path] )
+	{
         NSString * fullPath = [NSString stringWithFormat:@"%@/BeeDatabase/", [BeeSandbox docPath]];
-        
         if ( NO == [manager fileExistsAtPath:fullPath isDirectory:NULL] )
         {
             BOOL ret = [manager createDirectoryAtPath:fullPath
@@ -439,11 +451,8 @@ static NSUInteger		__identSeed = 1;
                 return NO;
         }
     }
-	
-    NSString * fullName = [BeeDatabase storePath:path];
-    
-	_database = [[FMDatabase alloc] initWithPath:fullName];
-	
+
+	_database = [[FMDatabase alloc] initWithPath:[BeeDatabase storePath:path]];
     if ( nil == _database )
 		return NO;
 	
@@ -1998,9 +2007,8 @@ static NSUInteger		__identSeed = 1;
 }
 
 + (NSString *)fieldNameForIdentifier:(NSString *)identifier
-{   
-    // 取消强制小写规范 by @hesonghang (ilikeido@hotmail.com)
-    NSString * name = identifier;
+{
+	NSString * name = identifier.lowercaseString;
 	name = [name stringByReplacingOccurrencesOfString:@"." withString:@"_"];
 	name = [name stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
 	return name;
@@ -2008,10 +2016,6 @@ static NSUInteger		__identSeed = 1;
 
 + (NSString *)tableNameForClass:(Class)clazz
 {
-    //可通过mapRelationTable重定义表名
-    if ([clazz respondsToSelector:@selector(mapRelationTable)]) {
-        return [clazz performSelector:@selector(mapRelationTable)];
-    }
 	return [NSString stringWithFormat:@"table_%@",[clazz description].lowercaseString];
 }
 

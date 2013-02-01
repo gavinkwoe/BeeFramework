@@ -102,10 +102,13 @@ static NSUInteger __succeedCount = 0;
 			[availableCases addObject:className];
 		}		
 	}
-	
-	CC( @"=====================================" );
-	CC( @"Total %d cases", availableCases.count );
-	CC( @"=====================================" );
+
+	CC( @"==========================================" );
+	CC( @"											" );
+	CC( @" Total %d case(s)", availableCases.count );
+	CC( @"											" );
+	CC( @"==========================================" );
+	CC( @"											" );
 	
 	if ( availableCases.count )
 	{
@@ -115,11 +118,16 @@ static NSUInteger __succeedCount = 0;
 		
 		for ( NSString * className in availableCases )
 		{
-			CC( @"Testing '%@' ...", className );
-
 			Class clazz = NSClassFromString( className );
 			if ( clazz )
 			{
+				CC( @"											" );
+				CC( @" Testing '%@' ...", [clazz name] );
+				CC( @" ----------------------------------		" );
+				CC( @"											" );
+
+				BeeLogIndent( 1 );
+				
 				BOOL ret = [clazz runTests];
 				if ( ret )
 				{
@@ -128,14 +136,22 @@ static NSUInteger __succeedCount = 0;
 				else
 				{
 					__failedCount += 1;
-				}	
+				}
+				
+				BeeLogIndent( 0 );
 			}
 		}
 	}
-	
-	CC( @"=====================================" );
-	CC( @"succeed(%d), failed(%d)", __succeedCount, __failedCount );
-	CC( @"=====================================" );
+
+	CC( @"											" );
+	CC( @"==========================================" );
+	CC( @"											" );
+	CC( @" succeed:   %d", __succeedCount );
+	CC( @" failed:    %d", __failedCount );
+	CC( @" pass rate: %.0f%%", (__succeedCount * 1.0f) / ((__succeedCount + __failedCount) * 1.0f) * 100 );
+	CC( @"											" );
+	CC( @"==========================================" );
+	CC( @"											" );
 	
 	return __failedCount ? NO : YES;
 	

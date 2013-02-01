@@ -27,17 +27,21 @@
 //	IN THE SOFTWARE.
 //
 //
-//  Bee_ActiveBaseTest.h
+//  Bee_LogTest.h
 //
 
 #import "Bee.h"
 
 #if defined(__BEE_UNITTEST__) && __BEE_UNITTEST__
 
-#pragma mark -
-
-TEST_CASE( ar_base )
+TEST_CASE( log )
 {
+	TIMES( 3 )
+	{
+		CC( nil );
+		CC( @"" );
+		CC( @"format %@", @"" );
+	}
 }
 TEST_CASE_END
 

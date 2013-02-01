@@ -70,7 +70,7 @@ DEF_SINGLETON( BeePerformance );
 	return CACurrentMediaTime();
 }
 
-+ (double)mark:(NSString *)tag
++ (double)markTag:(NSString *)tag
 {
 	double curr = CACurrentMediaTime();
 	
@@ -80,23 +80,12 @@ DEF_SINGLETON( BeePerformance );
 	return curr;
 }
 
-+ (double)between:(NSString *)tag1 and:(NSString *)tag2
++ (double)betweenTag:(NSString *)tag1 andTag:(NSString *)tag2
 {
-	NSNumber * time1 = [[BeePerformance sharedInstance].tags objectForKey:tag1];
-	NSNumber * time2 = [[BeePerformance sharedInstance].tags objectForKey:tag2];
-	
-	if ( nil == time1 || nil == time2 )
-		return 0.0;
-
-	double time = fabs( [time2 doubleValue] - [time1 doubleValue] );
-	
-	[[BeePerformance sharedInstance].tags removeObjectForKey:tag1];
-	[[BeePerformance sharedInstance].tags removeObjectForKey:tag2];
-
-	return time;
+	return [self betweenTag:tag1 andTag:tag2 shouldRemove:YES];
 }
 
-+ (double)between:(NSString *)tag1 and:(NSString *)tag2 remove:(BOOL)remove
++ (double)betweenTag:(NSString *)tag1 andTag:(NSString *)tag2 shouldRemove:(BOOL)remove
 {
 	NSNumber * time1 = [[BeePerformance sharedInstance].tags objectForKey:tag1];
 	NSNumber * time2 = [[BeePerformance sharedInstance].tags objectForKey:tag2];
@@ -115,14 +104,19 @@ DEF_SINGLETON( BeePerformance );
 	return time;
 }
 
-+ (void)watch:(Class)clazz
++ (void)watchClass:(Class)clazz
 {
-	[self watch:clazz selector:nil];
+	[self watchClass:clazz andSelector:nil];
 }
 
-+ (void)watch:(Class)clazz selector:(SEL)selector
++ (void)watchClass:(Class)clazz andSelector:(SEL)selector
 {
 	// TODO:
+}
+
++ (void)recordName:(NSString *)name andTime:(NSTimeInterval)time
+{
+	BeeLog( [NSString stringWithFormat:@"[PERF] '%@' = %.4f(s)", name, time] );
 }
 
 @end

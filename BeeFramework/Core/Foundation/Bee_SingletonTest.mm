@@ -27,17 +27,34 @@
 //	IN THE SOFTWARE.
 //
 //
-//  Bee_ActiveBaseTest.h
+//  Bee_SingletonTest.h
 //
 
 #import "Bee.h"
 
 #if defined(__BEE_UNITTEST__) && __BEE_UNITTEST__
 
+@interface SingletonTest : NSObject
+AS_SINGLETON( SingletonTest )
+@end
+
+@implementation SingletonTest
+DEF_SINGLETON( SingletonTest )
+@end
+
 #pragma mark -
 
-TEST_CASE( ar_base )
+TEST_CASE( singleton )
 {
+	TIMES( 3 )
+	{
+		SingletonTest * a = [SingletonTest sharedInstance];
+		SingletonTest * b = [SingletonTest sharedInstance];
+		
+		EXPECTED( nil != a );
+		EXPECTED( nil != b );
+		EXPECTED( a == b );
+	}
 }
 TEST_CASE_END
 

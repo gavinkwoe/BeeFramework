@@ -27,16 +27,14 @@
 //	IN THE SOFTWARE.
 //
 //
-//  Bee_ActiveBaseTest.h
+//  NSObject+BeeNotificationTest.h
 //
 
 #import "Bee.h"
 
 #if defined(__BEE_UNITTEST__) && __BEE_UNITTEST__
 
-#pragma mark -
-
-TEST_CASE( ar_base )
+TEST_CASE( notification )
 {
 }
 TEST_CASE_END

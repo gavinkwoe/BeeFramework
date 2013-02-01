@@ -359,14 +359,14 @@ DEF_INT( NSDATE,		6 )
 	void * stacks[MAX_CALLSTACK_DEPTH] = { 0 };
 
 	depth = backtrace( stacks, (depth > MAX_CALLSTACK_DEPTH) ? MAX_CALLSTACK_DEPTH : depth );
-	if ( depth > 1 )
+	if ( depth )
 	{
 		char ** symbols = backtrace_symbols( stacks, depth );
 		if ( symbols )
 		{
-			for ( int i = 0; i < (depth - 1); ++i )
+			for ( int i = 0; i < depth; ++i )
 			{
-				NSString * symbol = [NSString stringWithUTF8String:(const char *)symbols[1 + i]];
+				NSString * symbol = [NSString stringWithUTF8String:(const char *)symbols[i]];
 				if ( 0 == [symbol length] )
 					continue;
 
@@ -400,14 +400,14 @@ DEF_INT( NSDATE,		6 )
 	void * stacks[MAX_CALLSTACK_DEPTH] = { 0 };
 	
 	depth = backtrace( stacks, (depth > MAX_CALLSTACK_DEPTH) ? MAX_CALLSTACK_DEPTH : depth );
-	if ( depth > 1 )
+	if ( depth )
 	{
 		char ** symbols = backtrace_symbols( stacks, depth );
 		if ( symbols )
 		{
-			for ( int i = 0; i < (depth - 1); ++i )
+			for ( int i = 0; i < depth; ++i )
 			{
-				NSString * line = [NSString stringWithUTF8String:(const char *)symbols[1 + i]];
+				NSString * line = [NSString stringWithUTF8String:(const char *)symbols[i]];
 				if ( 0 == [line length] )
 					continue;
 

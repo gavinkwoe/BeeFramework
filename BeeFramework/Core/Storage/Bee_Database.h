@@ -91,6 +91,7 @@ typedef BOOL			(^BeeDatabaseBoolBlock)( void );
 
 @property (nonatomic, assign) BOOL					autoOptimize;	// TO BE DONE
 @property (nonatomic, retain) NSString *			filePath;
+@property (nonatomic, readonly) NSUInteger			total;
 @property (nonatomic, readonly) BOOL				ready;
 @property (nonatomic, readonly) NSUInteger			identifier;
 

@@ -36,14 +36,14 @@
 
 #pragma mark -
 
-TEST_CASE(BeeFileCache)
+TEST_CASE( file_cache )
 {
 }
 TEST_CASE_END
 
 #pragma mark -
 
-TEST_CASE(BeeMemoryCache)
+TEST_CASE( memory_cache )
 {
 }
 TEST_CASE_END

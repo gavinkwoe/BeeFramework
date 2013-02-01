@@ -27,16 +27,14 @@
 //	IN THE SOFTWARE.
 //
 //
-//  Bee_ActiveBaseTest.h
+//  Bee_RequestQueueTest.h
 //
 
 #import "Bee.h"
 
 #if defined(__BEE_UNITTEST__) && __BEE_UNITTEST__
 
-#pragma mark -
-
-TEST_CASE( ar_base )
+TEST_CASE( request_queue )
 {
 }
 TEST_CASE_END

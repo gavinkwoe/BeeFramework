@@ -37,11 +37,14 @@
 #import <TargetConditionals.h>
 #endif
 
+#undef	BEE_VERSION
+#define BEE_VERSION		"0.2.3"
+
 #define __BEE_DEVELOPMENT__	(1)	// 是否开发模式
 #define __BEE_LOG__			(1)	// 是否打开LOG
 #define __BEE_DEBUGGER__	(1)	// 是否显示“小虫子”
 #define __BEE_CRASHLOG__	(0)	// （未完成）
-#define __BEE_PERFORMANCE__	(0)	// 是否开启性能测试
+#define __BEE_PERFORMANCE__	(1)	// 是否开启性能测试
 #define __BEE_UNITTEST__	(1)	// 是否UnitTest
 #define __BEE_WIREFRAME__	(1)	// 是否显示WireFrame
 
@@ -50,6 +53,7 @@
 
 
 #if !defined(__clang__) || __clang_major__ < 3
+
     #ifndef __bridge
         #define __bridge
     #endif
@@ -77,6 +81,7 @@
     #ifndef __weak
         #define __weak
     #endif
+
 #endif
 
 #if __has_feature(objc_arc)

@@ -32,6 +32,7 @@
 
 #import "Bee_Precompile.h"
 #import "Bee_Database.h"
+#import "Bee_Log.h"
 #include <objc/runtime.h>
 
 #undef	TEST_CASE
@@ -39,22 +40,35 @@
 		@interface TestCase##__name : BeeTestCase \
 		@end \
 		@implementation TestCase##__name \
+		+ (NSString *)name { return [NSString stringWithUTF8String:#__name]; } \
 		+ (BOOL)runTests { \
-			BOOL __testCasePassed = NO; \
+			NSAutoreleasePool * __testReleasePool = [[NSAutoreleasePool alloc] init]; \
+			BOOL __testCasePassed = YES; \
 			@try {
 
 #undef	TEST_CASE_END
 #define	TEST_CASE_END \
 			} \
 			@catch ( NSException * e ) { \
+				CC( @"Failed, %@", e.reason ); \
 				__testCasePassed = NO; \
 			} \
 			@finally { \
-				__testCasePassed = YES; \
 			} \
+			[__testReleasePool release]; \
 			return __testCasePassed; \
 		} \
 		@end
+
+#undef	EXPECTED
+#define EXPECTED( __condition ) \
+		if ( NO == (__condition) ) { \
+			@throw [NSException exceptionWithName:@"" reason:[NSString stringWithFormat:@"<%s> @ <%s(#%u)>", #__condition, __FILE__, __LINE__] userInfo:nil]; \
+		}
+
+#undef	TIMES
+#define TIMES( __n ) \
+		for ( int __i_##__LINE__ = 0; __i_##__LINE__ < __n; ++__i_##__LINE__ )
 
 #pragma mark -
 

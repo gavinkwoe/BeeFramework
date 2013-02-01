@@ -38,35 +38,34 @@
 
 #if defined(__BEE_PERFORMANCE__) && __BEE_PERFORMANCE__
 
-#define	PERF_MARK( __TAG )			[BeePerformance mark:__TAG];
-#define	PERF_TIME( __TAG1, __TAG2 )	[BeePerformance between:__TAG1 and:__TAG2 remove:YES];
+#define PERF_TAG( __X )		[NSString stringWithFormat:@"%s %s", __PRETTY_FUNCTION__, __X]
+#define PERF_TAG1( __X )	[NSString stringWithFormat:@"enter %s %s", __PRETTY_FUNCTION__, __X]
+#define PERF_TAG2( __X )	[NSString stringWithFormat:@"leave %s %s", __PRETTY_FUNCTION__, __X]
+
+#define	PERF_MARK( __X ) \
+		[BeePerformance markTag:PERF_TAG(#__X)];
+
+#define	PERF_TIME( __X1, __X2 ) \
+		[BeePerformance betweenTag:PERF_TAG(#__X1) andTag:PERF_TAG(#__X2)]
 
 #define PERF_ENTER \
-		[BeePerformance mark:[NSString stringWithFormat:@"enter %s", __PRETTY_FUNCTION__]];
+		[BeePerformance markTag:PERF_TAG1("")];
 
 #define PERF_ENTER_( __X ) \
-		[BeePerformance mark:[NSString stringWithFormat:@"enter %s (%s)", __PRETTY_FUNCTION__, #__X]];
+		[BeePerformance markTag:PERF_TAG1(#__X)];
 
 #define PERF_LEAVE \
-		[BeePerformance mark:[NSString stringWithFormat:@"leave %s", __PRETTY_FUNCTION__]]; \
-		CC( @"[PERF] \t%s, elapsed = %f", \
-			__PRETTY_FUNCTION__, \
-			[BeePerformance between:[NSString stringWithFormat:@"enter %s", __PRETTY_FUNCTION__] \
-								and:[NSString stringWithFormat:@"leave %s", __PRETTY_FUNCTION__] \
-							 remove:YES] );
+		[BeePerformance markTag:PERF_TAG2("")]; \
+		[BeePerformance recordName:PERF_TAG("") andTime:[BeePerformance betweenTag:PERF_TAG1("") andTag:PERF_TAG2("")]];
 
 #define PERF_LEAVE_( __X ) \
-		[BeePerformance mark:[NSString stringWithFormat:@"leave %s (%s)", __PRETTY_FUNCTION__, #__X]]; \
-		CC( @"[PERF] \t%s (%s), elapsed = %f", \
-			__PRETTY_FUNCTION__, #__X, \
-			[BeePerformance between:[NSString stringWithFormat:@"enter %s (%s)", __PRETTY_FUNCTION__, #__X] \
-								and:[NSString stringWithFormat:@"leave %s (%s)", __PRETTY_FUNCTION__, #__X] \
-							 remove:YES] );
+		[BeePerformance markTag:PERF_TAG2(#__X)]; \
+		[BeePerformance recordName:PERF_TAG(#__X) andTime:[BeePerformance betweenTag:PERF_TAG1(#__X) andTag:PERF_TAG2(#__X)]];
 
 #else	// #if defined(__BEE_PERFORMANCE__) && __BEE_PERFORMANCE__
 
-#define	PERF_MARK( __TAG )
-#define	PERF_TIME( __TAG1, __TAG2 )
+#define	PERF_MARK( __TAG )			(0.0f)
+#define	PERF_TIME( __TAG1, __TAG2 )	(0.0f)
 
 #define PERF_ENTER
 #define PERF_LEAVE
@@ -100,11 +99,13 @@ AS_SINGLETON( BeePerformance );
 
 + (double)timestamp;
 
-+ (double)mark:(NSString *)tag;
-+ (double)between:(NSString *)tag1 and:(NSString *)tag2;
-+ (double)between:(NSString *)tag1 and:(NSString *)tag2 remove:(BOOL)remove;
++ (double)markTag:(NSString *)tag;
++ (double)betweenTag:(NSString *)tag1 andTag:(NSString *)tag2;
++ (double)betweenTag:(NSString *)tag1 andTag:(NSString *)tag2 shouldRemove:(BOOL)remove;
 
-+ (void)watch:(Class)clazz;
-+ (void)watch:(Class)clazz selector:(SEL)selector;
++ (void)watchClass:(Class)clazz;
++ (void)watchClass:(Class)clazz andSelector:(SEL)selector;
+
++ (void)recordName:(NSString *)name andTime:(NSTimeInterval)time;
 
 @end

@@ -5,7 +5,7 @@
 //	 \ \_____\ \ \_____\ \ \_____\ 
 //	  \/_____/  \/_____/  \/_____/ 
 //
-//	Copyright (c) 2012 BEE creators
+//	Copyright (c) 2013 BEE creators
 //	http://www.whatsbug.com
 //
 //	Permission is hereby granted, free of charge, to any person obtaining a

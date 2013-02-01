@@ -1,9 +1,9 @@
 //
-//	 ______    ______    ______
-//	/\  __ \  /\  ___\  /\  ___\
-//	\ \  __<  \ \  __\_ \ \  __\_
-//	 \ \_____\ \ \_____\ \ \_____\
-//	  \/_____/  \/_____/  \/_____/
+//	 ______    ______    ______    
+//	/\  __ \  /\  ___\  /\  ___\   
+//	\ \  __<  \ \  __\_ \ \  __\_ 
+//	 \ \_____\ \ \_____\ \ \_____\ 
+//	  \/_____/  \/_____/  \/_____/ 
 //
 //	Copyright (c) 2012 BEE creators
 //	http://www.whatsbug.com
@@ -27,7 +27,7 @@
 //	IN THE SOFTWARE.
 //
 //
-//  Bee_ActiveBaseTest.h
+//  Bee_ControllerTest.h
 //
 
 #import "Bee.h"
@@ -36,7 +36,7 @@
 
 #pragma mark -
 
-TEST_CASE( ar_base )
+TEST_CASE( controller )
 {
 }
 TEST_CASE_END

@@ -27,7 +27,7 @@
 //	IN THE SOFTWARE.
 //
 //
-//  Bee_ActiveBaseTest.h
+//  Bee_ThreadTest.h
 //
 
 #import "Bee.h"
@@ -36,8 +36,55 @@
 
 #pragma mark -
 
-TEST_CASE( ar_base )
+TEST_CASE( thread )
 {
+	static int __flag = 0;
+
+// run in background
+
+	BACKGROUND_BEGIN
+	{
+		EXPECTED( NO == [NSThread isMainThread] );
+		EXPECTED( 0 == __flag );
+		
+		__flag = 1;
+
+	// run in foreground
+		
+		FOREGROUND_BEGIN
+		{
+			EXPECTED( YES == [NSThread isMainThread] );
+			EXPECTED( 1 == __flag );
+
+			__flag = 0;
+
+		// run in background
+			
+			BACKGROUND_BEGIN
+			{
+				EXPECTED( NO == [NSThread isMainThread] );
+				EXPECTED( 0 == __flag );
+				
+				__flag = 1;
+				
+			// run in foreground
+				
+				FOREGROUND_BEGIN
+				{
+					EXPECTED( YES == [NSThread isMainThread] );
+					EXPECTED( 1 == __flag );
+					
+					__flag = 2;
+					
+					// done
+				}
+				FOREGROUND_COMMIT
+			}
+			BACKGROUND_COMMIT
+		}
+		FOREGROUND_COMMIT
+	}
+	BACKGROUND_COMMIT
 }
 TEST_CASE_END
 

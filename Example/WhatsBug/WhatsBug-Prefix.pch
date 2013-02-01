@@ -14,3 +14,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import <TargetConditionals.h>
 #endif
+
+#undef	NSLog
+#define	NSLog	BeeLog

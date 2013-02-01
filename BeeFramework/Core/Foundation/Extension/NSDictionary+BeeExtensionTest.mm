@@ -27,16 +27,14 @@
 //	IN THE SOFTWARE.
 //
 //
-//  Bee_ActiveBaseTest.h
+//  NSDictionary+BeeExtensionTest.h
 //
 
 #import "Bee.h"
 
 #if defined(__BEE_UNITTEST__) && __BEE_UNITTEST__
 
-#pragma mark -
-
-TEST_CASE( ar_base )
+TEST_CASE( dictionary )
 {
 }
 TEST_CASE_END

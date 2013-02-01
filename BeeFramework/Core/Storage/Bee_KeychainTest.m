@@ -36,7 +36,7 @@
 
 #pragma mark -
 
-TEST_CASE(BeeKeychain)
+TEST_CASE( keychain )
 {
 }
 TEST_CASE_END

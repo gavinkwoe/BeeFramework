@@ -142,6 +142,37 @@
 		639268A5164CEF600099625C /* Lesson9Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 6392688A164CEF600099625C /* Lesson9Board.m */; };
 		639268A6164CEF600099625C /* Lesson9Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = 6392688C164CEF600099625C /* Lesson9Controller.m */; };
 		639268A7164CEF600099625C /* LessonBaseBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 6392688E164CEF600099625C /* LessonBaseBoard.m */; };
+		63931B3816BBACDE00126C38 /* Bee_LogTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63931B3116BBACDE00126C38 /* Bee_LogTest.mm */; };
+		63931B3916BBACDE00126C38 /* Bee_PerformanceTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63931B3216BBACDE00126C38 /* Bee_PerformanceTest.mm */; };
+		63931B3A16BBACDE00126C38 /* Bee_RuntimeTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63931B3316BBACDE00126C38 /* Bee_RuntimeTest.mm */; };
+		63931B3B16BBACDE00126C38 /* Bee_SandboxTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63931B3416BBACDE00126C38 /* Bee_SandboxTest.mm */; };
+		63931B3C16BBACDE00126C38 /* Bee_SingletonTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63931B3516BBACDE00126C38 /* Bee_SingletonTest.mm */; };
+		63931B3D16BBACDE00126C38 /* Bee_SystemInfoTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63931B3616BBACDE00126C38 /* Bee_SystemInfoTest.mm */; };
+		63931B3E16BBACDE00126C38 /* Bee_ThreadTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63931B3716BBACDE00126C38 /* Bee_ThreadTest.mm */; };
+		63931B4A16BBAD0600126C38 /* NSArray+BeeExtensionTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63931B4016BBAD0600126C38 /* NSArray+BeeExtensionTest.mm */; };
+		63931B4B16BBAD0600126C38 /* NSData+BeeExtensionTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63931B4116BBAD0600126C38 /* NSData+BeeExtensionTest.mm */; };
+		63931B4C16BBAD0600126C38 /* NSDate+BeeExtensionTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63931B4216BBAD0600126C38 /* NSDate+BeeExtensionTest.mm */; };
+		63931B4D16BBAD0600126C38 /* NSDictionary+BeeExtensionTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63931B4316BBAD0600126C38 /* NSDictionary+BeeExtensionTest.mm */; };
+		63931B4E16BBAD0600126C38 /* NSNumber+BeeExtensionTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63931B4416BBAD0600126C38 /* NSNumber+BeeExtensionTest.mm */; };
+		63931B4F16BBAD0600126C38 /* NSObject+BeeNotificationTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63931B4516BBAD0600126C38 /* NSObject+BeeNotificationTest.mm */; };
+		63931B5016BBAD0600126C38 /* NSObject+BeePropertyTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63931B4616BBAD0600126C38 /* NSObject+BeePropertyTest.mm */; };
+		63931B5116BBAD0600126C38 /* NSObject+BeeTickerTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63931B4716BBAD0600126C38 /* NSObject+BeeTickerTest.mm */; };
+		63931B5216BBAD0600126C38 /* NSObject+BeeTypeConversionTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63931B4816BBAD0600126C38 /* NSObject+BeeTypeConversionTest.mm */; };
+		63931B5316BBAD0600126C38 /* NSString+BeeExtensionTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63931B4916BBAD0600126C38 /* NSString+BeeExtensionTest.mm */; };
+		63931B5616BBAD2E00126C38 /* Bee_RequestQueueTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63931B5416BBAD2E00126C38 /* Bee_RequestQueueTest.mm */; };
+		63931B5716BBAD2E00126C38 /* Bee_RequestTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63931B5516BBAD2E00126C38 /* Bee_RequestTest.mm */; };
+		63931B5916BBAD3A00126C38 /* NSObject+BeeRequestTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63931B5816BBAD3A00126C38 /* NSObject+BeeRequestTest.m */; };
+		63931B5C16BBAD4C00126C38 /* NSObject+BeeDatabaseTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63931B5A16BBAD4C00126C38 /* NSObject+BeeDatabaseTest.m */; };
+		63931B5D16BBAD4C00126C38 /* NSObject+BeeKeychainTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63931B5B16BBAD4C00126C38 /* NSObject+BeeKeychainTest.m */; };
+		63931B6116BBAD5D00126C38 /* Bee_ControllerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63931B5E16BBAD5D00126C38 /* Bee_ControllerTest.m */; };
+		63931B6216BBAD5D00126C38 /* Bee_MessageQueueTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63931B5F16BBAD5D00126C38 /* Bee_MessageQueueTest.m */; };
+		63931B6316BBAD5D00126C38 /* Bee_MessageTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63931B6016BBAD5D00126C38 /* Bee_MessageTest.m */; };
+		63931B6916BBAD6E00126C38 /* BeeMessage+ActiveRecordTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63931B6416BBAD6E00126C38 /* BeeMessage+ActiveRecordTest.m */; };
+		63931B6A16BBAD6E00126C38 /* BeeMessage+HTTPTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63931B6516BBAD6E00126C38 /* BeeMessage+HTTPTest.mm */; };
+		63931B6B16BBAD6E00126C38 /* BeeMessage+JSONTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63931B6616BBAD6E00126C38 /* BeeMessage+JSONTest.mm */; };
+		63931B6C16BBAD6E00126C38 /* BeeMessage+XMLTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63931B6716BBAD6E00126C38 /* BeeMessage+XMLTest.mm */; };
+		63931B6D16BBAD6E00126C38 /* NSObject+BeeMessageTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 63931B6816BBAD6E00126C38 /* NSObject+BeeMessageTest.mm */; };
+		63931B6F16BBAD8000126C38 /* Bee_ModelTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63931B6E16BBAD8000126C38 /* Bee_ModelTest.m */; };
 		63A6316A166659BB006FC6A0 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 63A63169166659B2006FC6A0 /* libsqlite3.dylib */; };
 		63A79250157506E700C863F3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63A7924F157506E700C863F3 /* UIKit.framework */; };
 		63A79252157506E700C863F3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63A79251157506E700C863F3 /* Foundation.framework */; };
@@ -454,6 +485,37 @@
 		6392688E164CEF600099625C /* LessonBaseBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LessonBaseBoard.m; sourceTree = "<group>"; };
 		63926912164D2C220099625C /* Lesson10Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lesson10Board.h; sourceTree = "<group>"; };
 		63926913164D2C250099625C /* Lesson10Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lesson10Model.h; sourceTree = "<group>"; };
+		63931B3116BBACDE00126C38 /* Bee_LogTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Bee_LogTest.mm; sourceTree = "<group>"; };
+		63931B3216BBACDE00126C38 /* Bee_PerformanceTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Bee_PerformanceTest.mm; sourceTree = "<group>"; };
+		63931B3316BBACDE00126C38 /* Bee_RuntimeTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Bee_RuntimeTest.mm; sourceTree = "<group>"; };
+		63931B3416BBACDE00126C38 /* Bee_SandboxTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Bee_SandboxTest.mm; sourceTree = "<group>"; };
+		63931B3516BBACDE00126C38 /* Bee_SingletonTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Bee_SingletonTest.mm; sourceTree = "<group>"; };
+		63931B3616BBACDE00126C38 /* Bee_SystemInfoTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Bee_SystemInfoTest.mm; sourceTree = "<group>"; };
+		63931B3716BBACDE00126C38 /* Bee_ThreadTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Bee_ThreadTest.mm; sourceTree = "<group>"; };
+		63931B4016BBAD0600126C38 /* NSArray+BeeExtensionTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSArray+BeeExtensionTest.mm"; sourceTree = "<group>"; };
+		63931B4116BBAD0600126C38 /* NSData+BeeExtensionTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSData+BeeExtensionTest.mm"; sourceTree = "<group>"; };
+		63931B4216BBAD0600126C38 /* NSDate+BeeExtensionTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSDate+BeeExtensionTest.mm"; sourceTree = "<group>"; };
+		63931B4316BBAD0600126C38 /* NSDictionary+BeeExtensionTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSDictionary+BeeExtensionTest.mm"; sourceTree = "<group>"; };
+		63931B4416BBAD0600126C38 /* NSNumber+BeeExtensionTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSNumber+BeeExtensionTest.mm"; sourceTree = "<group>"; };
+		63931B4516BBAD0600126C38 /* NSObject+BeeNotificationTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSObject+BeeNotificationTest.mm"; sourceTree = "<group>"; };
+		63931B4616BBAD0600126C38 /* NSObject+BeePropertyTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSObject+BeePropertyTest.mm"; sourceTree = "<group>"; };
+		63931B4716BBAD0600126C38 /* NSObject+BeeTickerTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSObject+BeeTickerTest.mm"; sourceTree = "<group>"; };
+		63931B4816BBAD0600126C38 /* NSObject+BeeTypeConversionTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSObject+BeeTypeConversionTest.mm"; sourceTree = "<group>"; };
+		63931B4916BBAD0600126C38 /* NSString+BeeExtensionTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSString+BeeExtensionTest.mm"; sourceTree = "<group>"; };
+		63931B5416BBAD2E00126C38 /* Bee_RequestQueueTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Bee_RequestQueueTest.mm; sourceTree = "<group>"; };
+		63931B5516BBAD2E00126C38 /* Bee_RequestTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Bee_RequestTest.mm; sourceTree = "<group>"; };
+		63931B5816BBAD3A00126C38 /* NSObject+BeeRequestTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+BeeRequestTest.m"; sourceTree = "<group>"; };
+		63931B5A16BBAD4C00126C38 /* NSObject+BeeDatabaseTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+BeeDatabaseTest.m"; sourceTree = "<group>"; };
+		63931B5B16BBAD4C00126C38 /* NSObject+BeeKeychainTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+BeeKeychainTest.m"; sourceTree = "<group>"; };
+		63931B5E16BBAD5D00126C38 /* Bee_ControllerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bee_ControllerTest.m; sourceTree = "<group>"; };
+		63931B5F16BBAD5D00126C38 /* Bee_MessageQueueTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bee_MessageQueueTest.m; sourceTree = "<group>"; };
+		63931B6016BBAD5D00126C38 /* Bee_MessageTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bee_MessageTest.m; sourceTree = "<group>"; };
+		63931B6416BBAD6E00126C38 /* BeeMessage+ActiveRecordTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "BeeMessage+ActiveRecordTest.m"; sourceTree = "<group>"; };
+		63931B6516BBAD6E00126C38 /* BeeMessage+HTTPTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "BeeMessage+HTTPTest.mm"; sourceTree = "<group>"; };
+		63931B6616BBAD6E00126C38 /* BeeMessage+JSONTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "BeeMessage+JSONTest.mm"; sourceTree = "<group>"; };
+		63931B6716BBAD6E00126C38 /* BeeMessage+XMLTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "BeeMessage+XMLTest.mm"; sourceTree = "<group>"; };
+		63931B6816BBAD6E00126C38 /* NSObject+BeeMessageTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSObject+BeeMessageTest.mm"; sourceTree = "<group>"; };
+		63931B6E16BBAD8000126C38 /* Bee_ModelTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bee_ModelTest.m; sourceTree = "<group>"; };
 		63A63169166659B2006FC6A0 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		63A7924B157506E700C863F3 /* WhatsBug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhatsBug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63A7924F157506E700C863F3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -580,18 +642,25 @@
 				63513D3516A54436003422CA /* Bee_Foundation.mm */,
 				63513D3616A54436003422CA /* Bee_Log.h */,
 				63513D3716A54436003422CA /* Bee_Log.mm */,
+				63931B3116BBACDE00126C38 /* Bee_LogTest.mm */,
 				63513D3816A54436003422CA /* Bee_Performance.h */,
 				63513D3916A54436003422CA /* Bee_Performance.mm */,
+				63931B3216BBACDE00126C38 /* Bee_PerformanceTest.mm */,
 				63513D3A16A54436003422CA /* Bee_Runtime.h */,
 				63513D3B16A54436003422CA /* Bee_Runtime.mm */,
+				63931B3316BBACDE00126C38 /* Bee_RuntimeTest.mm */,
 				63513D3C16A54436003422CA /* Bee_Sandbox.h */,
 				63513D3D16A54436003422CA /* Bee_Sandbox.mm */,
+				63931B3416BBACDE00126C38 /* Bee_SandboxTest.mm */,
 				63513D3E16A54436003422CA /* Bee_Singleton.h */,
 				63513D3F16A54436003422CA /* Bee_Singleton.mm */,
+				63931B3516BBACDE00126C38 /* Bee_SingletonTest.mm */,
 				63513D4016A54436003422CA /* Bee_SystemInfo.h */,
 				63513D4116A54436003422CA /* Bee_SystemInfo.m */,
+				63931B3616BBACDE00126C38 /* Bee_SystemInfoTest.mm */,
 				63513D4216A54436003422CA /* Bee_Thread.h */,
 				63513D4316A54436003422CA /* Bee_Thread.mm */,
+				63931B3716BBACDE00126C38 /* Bee_ThreadTest.mm */,
 				63513D4416A54436003422CA /* Extension */,
 			);
 			path = Foundation;
@@ -602,24 +671,34 @@
 			children = (
 				63513D4516A54436003422CA /* NSArray+BeeExtension.h */,
 				63513D4616A54436003422CA /* NSArray+BeeExtension.m */,
+				63931B4016BBAD0600126C38 /* NSArray+BeeExtensionTest.mm */,
 				63513D4716A54436003422CA /* NSData+BeeExtension.h */,
 				63513D4816A54436003422CA /* NSData+BeeExtension.m */,
+				63931B4116BBAD0600126C38 /* NSData+BeeExtensionTest.mm */,
 				63513D4916A54436003422CA /* NSDate+BeeExtension.h */,
 				63513D4A16A54436003422CA /* NSDate+BeeExtension.m */,
+				63931B4216BBAD0600126C38 /* NSDate+BeeExtensionTest.mm */,
 				63513D4B16A54436003422CA /* NSDictionary+BeeExtension.h */,
 				63513D4C16A54436003422CA /* NSDictionary+BeeExtension.m */,
+				63931B4316BBAD0600126C38 /* NSDictionary+BeeExtensionTest.mm */,
 				63513D4D16A54436003422CA /* NSNumber+BeeExtension.h */,
 				63513D4E16A54436003422CA /* NSNumber+BeeExtension.m */,
+				63931B4416BBAD0600126C38 /* NSNumber+BeeExtensionTest.mm */,
 				63513D4F16A54436003422CA /* NSObject+BeeNotification.h */,
 				63513D5016A54436003422CA /* NSObject+BeeNotification.m */,
+				63931B4516BBAD0600126C38 /* NSObject+BeeNotificationTest.mm */,
 				63513D5116A54436003422CA /* NSObject+BeeProperty.h */,
 				63513D5216A54436003422CA /* NSObject+BeeProperty.m */,
+				63931B4616BBAD0600126C38 /* NSObject+BeePropertyTest.mm */,
 				63513D5316A54436003422CA /* NSObject+BeeTicker.h */,
 				63513D5416A54436003422CA /* NSObject+BeeTicker.m */,
+				63931B4716BBAD0600126C38 /* NSObject+BeeTickerTest.mm */,
 				63513D5516A54436003422CA /* NSObject+BeeTypeConversion.h */,
 				63513D5616A54436003422CA /* NSObject+BeeTypeConversion.m */,
+				63931B4816BBAD0600126C38 /* NSObject+BeeTypeConversionTest.mm */,
 				63513D5716A54436003422CA /* NSString+BeeExtension.h */,
 				63513D5816A54436003422CA /* NSString+BeeExtension.m */,
+				63931B4916BBAD0600126C38 /* NSString+BeeExtensionTest.mm */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -631,8 +710,10 @@
 				63513D5B16A54436003422CA /* Bee_Network.m */,
 				63513D5C16A54436003422CA /* Bee_Request.h */,
 				63513D5D16A54436003422CA /* Bee_Request.m */,
+				63931B5516BBAD2E00126C38 /* Bee_RequestTest.mm */,
 				63513D5E16A54436003422CA /* Bee_RequestQueue.h */,
 				63513D5F16A54436003422CA /* Bee_RequestQueue.m */,
+				63931B5416BBAD2E00126C38 /* Bee_RequestQueueTest.mm */,
 				63513D6016A54436003422CA /* Extension */,
 			);
 			path = Network;
@@ -643,6 +724,7 @@
 			children = (
 				63513D6116A54436003422CA /* NSObject+BeeRequest.h */,
 				63513D6216A54436003422CA /* NSObject+BeeRequest.m */,
+				63931B5816BBAD3A00126C38 /* NSObject+BeeRequestTest.m */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -677,8 +759,10 @@
 			children = (
 				63513D7616A54436003422CA /* NSObject+BeeDatabase.h */,
 				63513D7716A54436003422CA /* NSObject+BeeDatabase.m */,
+				63931B5A16BBAD4C00126C38 /* NSObject+BeeDatabaseTest.m */,
 				63513D7816A54436003422CA /* NSObject+BeeKeychain.h */,
 				63513D7916A54436003422CA /* NSObject+BeeKeychain.m */,
+				63931B5B16BBAD4C00126C38 /* NSObject+BeeKeychainTest.m */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -709,10 +793,13 @@
 			children = (
 				63513D8216A54436003422CA /* Bee_Controller.h */,
 				63513D8316A54436003422CA /* Bee_Controller.mm */,
+				63931B5E16BBAD5D00126C38 /* Bee_ControllerTest.m */,
 				63513D8416A54436003422CA /* Bee_Message.h */,
 				63513D8516A54436003422CA /* Bee_Message.mm */,
+				63931B6016BBAD5D00126C38 /* Bee_MessageTest.m */,
 				63513D8616A54436003422CA /* Bee_MessageQueue.h */,
 				63513D8716A54436003422CA /* Bee_MessageQueue.mm */,
+				63931B5F16BBAD5D00126C38 /* Bee_MessageQueueTest.m */,
 				63513D8816A54436003422CA /* Extension */,
 			);
 			path = Controller;
@@ -723,14 +810,19 @@
 			children = (
 				63513D8916A54436003422CA /* BeeMessage+ActiveRecord.h */,
 				63513D8A16A54436003422CA /* BeeMessage+ActiveRecord.m */,
+				63931B6416BBAD6E00126C38 /* BeeMessage+ActiveRecordTest.m */,
 				63513D8B16A54436003422CA /* BeeMessage+HTTP.h */,
 				63513D8C16A54436003422CA /* BeeMessage+HTTP.mm */,
+				63931B6516BBAD6E00126C38 /* BeeMessage+HTTPTest.mm */,
 				63513D8D16A54436003422CA /* BeeMessage+JSON.h */,
 				63513D8E16A54436003422CA /* BeeMessage+JSON.mm */,
+				63931B6616BBAD6E00126C38 /* BeeMessage+JSONTest.mm */,
 				63513D8F16A54436003422CA /* BeeMessage+XML.h */,
 				63513D9016A54436003422CA /* BeeMessage+XML.mm */,
+				63931B6716BBAD6E00126C38 /* BeeMessage+XMLTest.mm */,
 				63513D9116A54436003422CA /* NSObject+BeeMessage.h */,
 				63513D9216A54436003422CA /* NSObject+BeeMessage.mm */,
+				63931B6816BBAD6E00126C38 /* NSObject+BeeMessageTest.mm */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -740,6 +832,7 @@
 			children = (
 				63513D9416A54436003422CA /* Bee_Model.h */,
 				63513D9516A54436003422CA /* Bee_Model.m */,
+				63931B6E16BBAD8000126C38 /* Bee_ModelTest.m */,
 				63513D9616A54436003422CA /* Extension */,
 			);
 			path = Model;
@@ -1034,7 +1127,6 @@
 				63F5FB71166CE53800139103 /* Lesson11Model.h */,
 				63F5FB72166CE53900139103 /* Lesson11Model.m */,
 			);
-			name = Lessons;
 			path = Lessons;
 			sourceTree = SOURCE_ROOT;
 		};
@@ -1386,6 +1478,37 @@
 				63560A6016AFCA3700F959AA /* Bee_UIWebBoard.m in Sources */,
 				A0FCD7EF16B2C4CB002FB7F0 /* WebViewBoard.m in Sources */,
 				A0FCD80316B2D71B002FB7F0 /* ASIHTTPRequest+Bee.m in Sources */,
+				63931B3816BBACDE00126C38 /* Bee_LogTest.mm in Sources */,
+				63931B3916BBACDE00126C38 /* Bee_PerformanceTest.mm in Sources */,
+				63931B3A16BBACDE00126C38 /* Bee_RuntimeTest.mm in Sources */,
+				63931B3B16BBACDE00126C38 /* Bee_SandboxTest.mm in Sources */,
+				63931B3C16BBACDE00126C38 /* Bee_SingletonTest.mm in Sources */,
+				63931B3D16BBACDE00126C38 /* Bee_SystemInfoTest.mm in Sources */,
+				63931B3E16BBACDE00126C38 /* Bee_ThreadTest.mm in Sources */,
+				63931B4A16BBAD0600126C38 /* NSArray+BeeExtensionTest.mm in Sources */,
+				63931B4B16BBAD0600126C38 /* NSData+BeeExtensionTest.mm in Sources */,
+				63931B4C16BBAD0600126C38 /* NSDate+BeeExtensionTest.mm in Sources */,
+				63931B4D16BBAD0600126C38 /* NSDictionary+BeeExtensionTest.mm in Sources */,
+				63931B4E16BBAD0600126C38 /* NSNumber+BeeExtensionTest.mm in Sources */,
+				63931B4F16BBAD0600126C38 /* NSObject+BeeNotificationTest.mm in Sources */,
+				63931B5016BBAD0600126C38 /* NSObject+BeePropertyTest.mm in Sources */,
+				63931B5116BBAD0600126C38 /* NSObject+BeeTickerTest.mm in Sources */,
+				63931B5216BBAD0600126C38 /* NSObject+BeeTypeConversionTest.mm in Sources */,
+				63931B5316BBAD0600126C38 /* NSString+BeeExtensionTest.mm in Sources */,
+				63931B5616BBAD2E00126C38 /* Bee_RequestQueueTest.mm in Sources */,
+				63931B5716BBAD2E00126C38 /* Bee_RequestTest.mm in Sources */,
+				63931B5916BBAD3A00126C38 /* NSObject+BeeRequestTest.m in Sources */,
+				63931B5C16BBAD4C00126C38 /* NSObject+BeeDatabaseTest.m in Sources */,
+				63931B5D16BBAD4C00126C38 /* NSObject+BeeKeychainTest.m in Sources */,
+				63931B6116BBAD5D00126C38 /* Bee_ControllerTest.m in Sources */,
+				63931B6216BBAD5D00126C38 /* Bee_MessageQueueTest.m in Sources */,
+				63931B6316BBAD5D00126C38 /* Bee_MessageTest.m in Sources */,
+				63931B6916BBAD6E00126C38 /* BeeMessage+ActiveRecordTest.m in Sources */,
+				63931B6A16BBAD6E00126C38 /* BeeMessage+HTTPTest.mm in Sources */,
+				63931B6B16BBAD6E00126C38 /* BeeMessage+JSONTest.mm in Sources */,
+				63931B6C16BBAD6E00126C38 /* BeeMessage+XMLTest.mm in Sources */,
+				63931B6D16BBAD6E00126C38 /* NSObject+BeeMessageTest.mm in Sources */,
+				63931B6F16BBAD8000126C38 /* Bee_ModelTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -27,7 +27,7 @@
 //	IN THE SOFTWARE.
 //
 //
-//  Bee_ActiveBaseTest.h
+//  Bee_SandboxTest.h
 //
 
 #import "Bee.h"
@@ -36,8 +36,16 @@
 
 #pragma mark -
 
-TEST_CASE( ar_base )
+TEST_CASE( sandbox )
 {
+	TIMES( 3 )
+	{
+		EXPECTED( [BeeSandbox appPath] );
+		EXPECTED( [BeeSandbox docPath] );
+		EXPECTED( [BeeSandbox libPrefPath] );
+		EXPECTED( [BeeSandbox libCachePath] );
+		EXPECTED( [BeeSandbox tmpPath] );
+	}
 }
 TEST_CASE_END
 

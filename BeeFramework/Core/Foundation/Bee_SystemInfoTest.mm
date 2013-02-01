@@ -27,7 +27,7 @@
 //	IN THE SOFTWARE.
 //
 //
-//  Bee_ActiveBaseTest.h
+//  Bee_SystemInfoTest.h
 //
 
 #import "Bee.h"
@@ -36,8 +36,20 @@
 
 #pragma mark -
 
-TEST_CASE( ar_base )
+TEST_CASE( systemInfo )
 {
+	TIMES( 3 )
+	{
+		EXPECTED( [BeeSystemInfo osVersion] );
+		EXPECTED( [BeeSystemInfo appVersion] );
+		EXPECTED( [BeeSystemInfo deviceModel] );
+		EXPECTED( [BeeSystemInfo deviceUUID] );
+		
+		if ( [BeeSystemInfo isJailBroken] )
+		{
+			EXPECTED( [BeeSystemInfo jailBreaker] );
+		}
+	}
 }
 TEST_CASE_END
 

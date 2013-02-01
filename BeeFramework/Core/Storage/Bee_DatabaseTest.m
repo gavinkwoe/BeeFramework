@@ -34,124 +34,151 @@
 
 #if defined(__BEE_UNITTEST__) && __BEE_UNITTEST__
 
-TEST_CASE(BeeDatabase)
+TEST_CASE( db )
 {
-	// 尝试在默认路径中打开数据库my.db
-	if ( [BeeDatabase openSharedDatabase:@"my.db"] )
+	TIMES( 3 )
 	{
-		// Create and table named 'blogs', consists of 4 fields, 'id'、'type'、'date'、'content'
-		self.DB
+		// open close DB
+		
+		[BeeDatabase closeSharedDatabase];
+		EXPECTED( nil == [BeeDatabase sharedDatabase] );
+		
+		[BeeDatabase openSharedDatabase:@"my"];
+		EXPECTED( [BeeDatabase sharedDatabase] );
+	}
+
+	TIMES( 3 )
+	{
+	// create table
+		
+		self
+		.DB
 		.TABLE( @"blogs" )
 		.FIELD( @"id", @"INTEGER" ).PRIMARY_KEY().AUTO_INREMENT()
 		.FIELD( @"type", @"TEXT" )
 		.FIELD( @"date", @"TEXT" )
 		.FIELD( @"content", @"TEXT" )
 		.CREATE_IF_NOT_EXISTS();
-		NSAssert( self.DB.succeed, nil );
 		
-		// Create an index on 'blogs.id'
-		self.DB
+		EXPECTED( self.DB.succeed );
+		
+	// index table
+		
+		self
+		.DB
 		.TABLE( @"blogs" )
 		.INDEX_ON( @"id", nil );
-		NSAssert( self.DB.succeed, nil );
 		
-		// Clear 'blogs'
-		self.DB
+		EXPECTED( self.DB.succeed );
+
+	// empty
+		
+		self
+		.DB
 		.FROM( @"blogs" )
 		.EMPTY();
-		NSAssert( self.DB.succeed, nil );
 		
-		// Try to insert 1 row
-		self.DB
+		EXPECTED( self.DB.succeed );
+
+	// insert
+		
+		self
+		.DB
 		.FROM( @"blogs" )
 		.SET( @"type", @"Test" )
 		.SET( @"date", [[NSDate date] description] )
 		.SET( @"content", @"Hello, world!" )
 		.INSERT();	// write once
-		NSAssert( self.DB.succeed, nil );
+
+		EXPECTED( self.DB.succeed );
 		
-		// Try to delete 1 row
-		self.DB
+	// delete
+		
+		self
+		.DB
 		.FROM( @"blogs" )
 		.WHERE( @"id", __INT(self.DB.insertID) )
 		.DELETE();
-		NSAssert( self.DB.succeed, nil );
 		
-		// Count all
-		self.DB
+		EXPECTED( self.DB.succeed );
+		
+	// count
+		
+		self
+		.DB
 		.FROM( @"blogs" )
 		.COUNT();
-		NSAssert( self.DB.succeed, nil );
-		NSAssert( self.DB.resultCount == 0, nil );
 		
-		// Try to insert 30 rows with different 'type's
+		EXPECTED( self.DB.succeed );
+		EXPECTED( self.DB.resultCount == 0 );
+		
+	// insert 30 rows
+		
 		for ( NSUInteger i = 0; i < 30; ++i )
 		{
-			self.DB
+			self
+			.DB
 			.FROM( @"blogs" )
 			.SET( @"date", [[NSDate date] description] )
 			.SET( @"content", [NSString stringWithFormat:@"Some content %u", i] );
-			
+
 			if ( 0 == (i % 3) )
 			{
-				self.DB
-				.SET( @"type", @"ObjC" );
+				self.DB.SET( @"type", @"A" );
 			}
 			else if ( 1 == (i % 3) )
 			{
-				self.DB
-				.SET( @"type", @"MacOS" );
+				self.DB.SET( @"type", @"B" );
 			}
 			else if ( 2 == (i % 3) )
 			{
-				self.DB
-				.SET( @"type", @"iOS" );
+				self.DB.SET( @"type", @"C" );
 			}
-			
-			// Insert
-			self.DB
-			.INSERT();	// write once
-			NSAssert( self.DB.succeed, nil );
-			NSAssert( self.DB.insertID > 0, nil );
-			
-			// Update 'content' with new 'id'
-			self.DB
-			.FROM( @"blogs" )
-			.WHERE( @"id", __INT(self.DB.insertID) )
-			.SET( @"content", [NSString stringWithFormat:@"Some content %u", self.DB.insertID] )
-			.UPDATE();
-			NSAssert( self.DB.succeed, nil );
+
+			self.DB.INSERT();
+
+			EXPECTED( self.DB.succeed );
+			EXPECTED( self.DB.insertID > 0 );
 		}
 		
-		// Count all
-		self.DB
+	// count all
+		
+		self
+		.DB
 		.FROM( @"blogs" )
 		.COUNT();
-		NSAssert( self.DB.succeed, nil );
-		NSAssert( self.DB.resultCount == 30, nil );
 		
-		// Count how many rows' 'type' is 'ObjC' there
-		self.DB
+		EXPECTED( self.DB.succeed );
+		EXPECTED( self.DB.resultCount == 30 );
+		
+	// count 'A'
+		
+		self
+		.DB
 		.FROM( @"blogs" )
-		.WHERE( @"type", @"ObjC" )
+		.WHERE( @"type", @"A" )
 		.COUNT();
-		NSAssert( self.DB.succeed, nil );
-		NSAssert( self.DB.resultCount == 10, nil );
 		
-		// Query all rows by 3 pages
+		EXPECTED( self.DB.succeed );
+		EXPECTED( self.DB.resultCount == 10 );
+		
+	// query
+		
 		for ( NSUInteger i = 0; i < 3; ++i )
 		{
-			self.DB
+			self
+			.DB
 			.FROM( @"blogs" )
 			.OFFSET( 10 * i )
 			.LIMIT( 10 )
 			.GET();
-			NSAssert( self.DB.succeed, nil );
-			NSAssert( self.DB.resultCount > 0, nil );
-			NSAssert( self.DB.resultCount == self.DB.resultArray.count, nil );
 			
-			VAR_DUMP( self.DB.resultArray );
+			EXPECTED( self.DB.succeed );
+			EXPECTED( self.DB.resultCount > 0 );
+			EXPECTED( self.DB.resultCount == self.DB.resultArray.count );
 		}
+		
+	// close
 		
 		[BeeDatabase closeSharedDatabase];
 	}

@@ -36,6 +36,118 @@
 
 #pragma mark -
 
+@interface User : BeeActiveRecord
+
+@property (nonatomic, retain) NSNumber *	uid;
+@property (nonatomic, retain) NSString *	name;
+@property (nonatomic, retain) NSString *	gender;
+@property (nonatomic, retain) NSDate *		birth;
+
+@end
+
+#pragma mark -
+
+@implementation User
+
+@synthesize uid;
+@synthesize name;
+@synthesize gender;
+@synthesize birth;
+
++ (void)mapRelation
+{
+	[super mapRelation];
+	[super useJSON];
+	[super useAutoIncrement];
+}
+
+@end
+
+#pragma mark -
+
+TEST_CASE( ar )
+{
+	TIMES( 3 )
+	{
+	// open close DB
+		
+		[BeeDatabase closeSharedDatabase];
+		EXPECTED( nil == [BeeDatabase sharedDatabase] );
+
+		[BeeDatabase openSharedDatabase:@"ar"];
+		EXPECTED( [BeeDatabase sharedDatabase] );
+	}
+
+	TIMES( 3 )
+	{
+	// empty
+		
+		User.DB.EMPTY();
+		EXPECTED( User.DB.succeed );
+		EXPECTED( User.DB.total == 0 );
+
+	// insert & get
+		
+		User.DB.SET( @"name", @"gavin" ).SET( @"gender", @"male" ).SET( @"birth", [NSDate date] ).INSERT();
+		EXPECTED( User.DB.succeed );
+		EXPECTED( User.DB.total == 1 );
+
+		User.DB.WHERE( @"name", @"gavin" ).GET();
+		EXPECTED( User.DB.succeed );
+		EXPECTED( User.DB.resultCount == 1 );
+		
+		NSDictionary * user = [User.DB.resultArray objectAtIndex:0];
+		EXPECTED( user );
+		EXPECTED( [[user objectForKey:@"name"] isEqualToString:@"gavin"] );
+		EXPECTED( [[user objectForKey:@"gender"] isEqualToString:@"male"] );
+		EXPECTED( [user objectForKey:@"birth"] );
+
+	// insert & get again
+		
+		User.DB.SET( @"name", @"amanda" ).SET( @"gender", @"female" ).SET( @"birth", [NSDate date] ).INSERT();
+		EXPECTED( User.DB.succeed );
+		EXPECTED( User.DB.total == 2 );
+
+		User.DB.WHERE( @"name", @"amanda" ).GET();
+		EXPECTED( User.DB.succeed );
+		EXPECTED( User.DB.resultCount == 1 );
+
+		NSDictionary * user2 = [User.DB.resultArray objectAtIndex:0];
+		EXPECTED( user2 );
+		EXPECTED( [[user2 objectForKey:@"name"] isEqualToString:@"amanda"] );
+		EXPECTED( [[user2 objectForKey:@"gender"] isEqualToString:@"female"] );
+		EXPECTED( [user2 objectForKey:@"birth"] );
+
+	// update
+
+		User.DB.SET( @"birth", [NSDate date] ).WHERE( @"name", @"gavin" ).UPDATE();
+		EXPECTED( User.DB.succeed );
+		EXPECTED( User.DB.total == 2 );
+
+	// delete
+		
+		User.DB.WHERE( @"name", @"gavin" ).DELETE();
+		EXPECTED( User.DB.succeed );
+		EXPECTED( User.DB.total == 1 );
+
+		User.DB.WHERE( @"name", @"amanda" ).DELETE();
+		EXPECTED( User.DB.succeed );
+		EXPECTED( User.DB.total == 0 );
+		
+	// count
+
+		User.DB.COUNT();
+		EXPECTED( User.DB.succeed );
+		EXPECTED( User.DB.resultCount == 0 );
+	}
+	
+	[BeeDatabase closeSharedDatabase];
+	EXPECTED( nil == [BeeDatabase sharedDatabase] );
+}
+TEST_CASE_END
+
+#pragma mark -
+
 @interface Location : BeeActiveRecord
 
 @property (nonatomic, retain) NSNumber *	lid;
@@ -56,39 +168,9 @@
 
 #pragma mark -
 
-@interface User : BeeActiveRecord
-
-@property (nonatomic, retain) NSNumber *	uid;
-@property (nonatomic, retain) NSString *	name;
-@property (nonatomic, retain) NSString *	gender;
-@property (nonatomic, retain) NSString *	city;
-@property (nonatomic, retain) NSDate *		birth;
-
-@end
-
-#pragma mark -
-
-@implementation User
-
-@synthesize uid;
-@synthesize name;
-@synthesize gender;
-@synthesize city;
-@synthesize birth;
-
-+ (void)mapRelation
-{
-	[super mapRelation];
-	[super useJSON];
-	[super useAutoIncrement];
-}
-
-@end
-
-#pragma mark -
-
 @interface User2 : User
 
+@property (nonatomic, retain) NSString *	city;
 @property (nonatomic, retain) Location *	location;
 
 @end
@@ -97,268 +179,327 @@
 
 @implementation User2
 
+@synthesize city;
 @synthesize location;
 
 @end
 
 #pragma mark -
 
-TEST_CASE(BeeActiveRecord_BeeDatabase)
+TEST_CASE( ar2 )
 {
-	// Clear table
-	
-	User2.DB.EMPTY();
-	
-	// Insert 2 records into table 'table_User2'
-	
-	User2.DB
-	.SET( @"name", @"gavin" )
-	.SET( @"gender", @"male" )
-	.INSERT();
-	
-	User2.DB
-	.SET( @"name", @"amanda" )
-	.SET( @"gender", @"female" )
-	.SET( @"city", @"Columbus" )
-	.SET( @"birth", [NSDate date] )
-	.INSERT();
-	
-	// Update records
-	
-	User2.DB
-	.WHERE( @"name", @"gavin" )
-	.SET( @"city", @"Columbus" )
-	.UPDATE();
-	
-	// Query records
-	
-	User2.DB.WHERE( @"city", @"Columbus" ).GET();	// Results are NSDictionary
-	NSAssert( User2.DB.succeed, @"" );
-	NSAssert( User2.DB.resultCount == 2, @"" );
-	
-	for ( NSDictionary * dict in User2.DB.resultArray )
+	TIMES( 3 )
 	{
-		VAR_DUMP( dict );
+	// open close DB
+
+		[BeeDatabase closeSharedDatabase];
+		EXPECTED( nil == [BeeDatabase sharedDatabase] );
+		
+		[BeeDatabase openSharedDatabase:@"ar2"];
+		EXPECTED( [BeeDatabase sharedDatabase] );
 	}
+
+	TIMES( 3 )
+	{
+	// clear
+
+		User2.DB.EMPTY();
+		EXPECTED( User2.DB.succeed );
+		EXPECTED( User2.DB.total == 0 );
+
+	// create record
+
+		User2 * me;
+
+		me = [User2 record];
+
+		EXPECTED( me );
+		EXPECTED( me.deleted == NO );
+		EXPECTED( me.changed == NO );
+		EXPECTED( me.inserted == NO );
+		EXPECTED( me.primaryKey && [me.primaryKey isEqualToString:@"uid"] );
+		EXPECTED( me.primaryID );
+		EXPECTED( me.JSON );
+		EXPECTED( me.JSONData );
+		EXPECTED( me.JSONString );
+		
+	// set values by property
+		
+		me.name = @"gavin";
+		me.gender = @"male";
+		me.birth = [NSDate date];
+
+		me.city = @"beijing";
+		me.location.lat = __INT(888);
+		me.location.lon = __INT(999);
+
+	// get values by JSON
+		
+		EXPECTED( [[me.JSON objectForKey:@"name"] isEqualToString:@"gavin"] );
+		EXPECTED( [[me.JSON objectForKey:@"city"] isEqualToString:@"beijing"] );
+		EXPECTED( [[me.JSON objectForKey:@"gender"] isEqualToString:@"male"] );
+		EXPECTED( [[me.location.JSON objectForKey:@"lat"] isEqualToNumber:__INT(888)] );
+		EXPECTED( [[me.location.JSON objectForKey:@"lon"] isEqualToNumber:__INT(999)] );
+
+		EXPECTED( me.JSONData );
+		EXPECTED( me.JSONString );
+
+	// insert
+
+		me.SAVE();
+
+		EXPECTED( me.inserted );
+		EXPECTED( User2.DB.succeed );
+		EXPECTED( User2.DB.total == 1 );
+
+	// update
+
+		me.city = @"shenyang";
+
+		EXPECTED( [[me.JSON objectForKey:@"city"] isEqualToString:@"shenyang"] );
+
+		me.UPDATE();
+
+		EXPECTED( User2.DB.succeed );
+		EXPECTED( User2.DB.total == 1 );
+
+	// delete
+
+		me.DELETE();
+		me = nil;
+
+		EXPECTED( User2.DB.succeed );
+		EXPECTED( User2.DB.total == 0 );
+	}
+	
+	TIMES( 3 )
+	{
+	// clear
+		
+		User2.DB.EMPTY();
+
+		EXPECTED( User.DB.succeed );
+		EXPECTED( User.DB.total == 0 );
+
+	// set values by JSON
+
+		User2 * me = [User2 record];
+
+		EXPECTED( me );
+		EXPECTED( me.deleted == NO );
+		EXPECTED( me.changed == NO );
+		EXPECTED( me.inserted == NO );
+		EXPECTED( me.primaryKey && [me.primaryKey isEqualToString:@"uid"] );
+		EXPECTED( me.primaryID );
+		EXPECTED( me.JSON );
+		EXPECTED( me.JSONData );
+		EXPECTED( me.JSONString );
+
+		[me.JSON setObject:@"gavin" atPath:@"name"];
+		[me.JSON setObject:@"beijing" atPath:@"city"];
+		[me.JSON setObject:@"male" atPath:@"gender"];
+		[me.JSON setObject:[[NSDate date] description] atPath:@"birth"];
+		[me.location.JSON setObject:__INT(888) atPath:@"lat"];
+		[me.location.JSON setObject:__INT(999) atPath:@"lon"];
+
+	// get values by property
+		
+		EXPECTED( [me.name isEqualToString:@"gavin"] );
+		EXPECTED( [me.city isEqualToString:@"beijing"] );
+		EXPECTED( [me.gender isEqualToString:@"male"] );
+		EXPECTED( [me.location.lat isEqualToNumber:__INT(888)] );
+		EXPECTED( [me.location.lon isEqualToNumber:__INT(999)] );
+		
+		EXPECTED( me.JSONData );
+		EXPECTED( me.JSONString );
+		
+	// insert
+		
+		me.SAVE();
+
+	// update
+
+		[me.JSON setObject:@"shenyang" atPath:@"city"];
+
+		EXPECTED( [me.city isEqualToString:@"shenyang"] );
+		
+		me.UPDATE();
+		
+		EXPECTED( User2.DB.succeed );
+		EXPECTED( User2.DB.total == 1 );
+
+		
+	// delete
+		
+		me.DELETE();
+		me = nil;
+		
+		EXPECTED( User2.DB.succeed );
+		EXPECTED( User2.DB.total == 0 );
+	}
+	
+	TIMES( 3 )
+	{
+	// clear
+		
+		User2.DB.EMPTY();
+
+		EXPECTED( User2.DB.succeed );
+		EXPECTED( User2.DB.total == 0 );
+
+	// create
+		
+		User2 * me = [User2 record];
+		
+		EXPECTED( me );
+		EXPECTED( me.deleted == NO );
+		EXPECTED( me.changed == NO );
+		EXPECTED( me.inserted == NO );
+
+		me.name = @"gavin";
+		me.gender = @"male";
+		me.birth = [NSDate date];
+		me.city = @"beijing";
+		me.location.lat = __INT(888);
+		me.location.lon = __INT(999);
+		
+		TIMES( 3 )
+		{
+			me.SAVE();
+
+			EXPECTED( User2.DB.succeed );
+			EXPECTED( User2.DB.total == 1 );
+		}
+
+	// copy by record
+
+		User2 * copy1 = [User2 record:me];
+
+		EXPECTED( copy1 );
+		EXPECTED( copy1.deleted == NO );
+		EXPECTED( copy1.changed == YES );
+		EXPECTED( copy1.inserted == NO );
+
+		EXPECTED( [copy1.name isEqualToString:me.name] );
+		EXPECTED( [copy1.city isEqualToString:me.city] );
+		EXPECTED( [copy1.gender isEqualToString:me.gender] );
+		EXPECTED( [copy1.location.lat isEqualToNumber:me.location.lat] );
+		EXPECTED( [copy1.location.lon isEqualToNumber:me.location.lon] );
+
+		copy1.SAVE();
+
+		EXPECTED( User2.DB.succeed );
+		EXPECTED( User2.DB.total == 2 );
+		
+	// copy by JSON
+
+		User2 * copy2 = [User2 record:copy1.JSON];
+
+		EXPECTED( copy2 );
+		EXPECTED( copy2.deleted == NO );
+		EXPECTED( copy2.changed == YES );
+		EXPECTED( copy2.inserted == NO );
+
+		EXPECTED( [copy2.name isEqualToString:me.name] );
+		EXPECTED( [copy2.city isEqualToString:me.city] );
+		EXPECTED( [copy2.gender isEqualToString:me.gender] );
+		EXPECTED( [copy2.location.lat isEqualToNumber:me.location.lat] );
+		EXPECTED( [copy2.location.lon isEqualToNumber:me.location.lon] );
+		
+		copy2.SAVE();
+		
+		EXPECTED( User2.DB.succeed );
+		EXPECTED( User2.DB.total == 3 );
+
+	// create by JSON String
+
+		User2 * copy3 = [User2 record:copy2.JSONString];
+		
+		EXPECTED( copy3 );
+		EXPECTED( copy3.deleted == NO );
+		EXPECTED( copy3.changed == YES );
+		EXPECTED( copy3.inserted == NO );
+		
+		EXPECTED( [copy3.name isEqualToString:me.name] );
+		EXPECTED( [copy3.city isEqualToString:me.city] );
+		EXPECTED( [copy3.gender isEqualToString:me.gender] );
+		EXPECTED( [copy3.location.lat isEqualToNumber:me.location.lat] );
+		EXPECTED( [copy3.location.lon isEqualToNumber:me.location.lon] );
+		
+		copy3.SAVE();
+		
+		EXPECTED( User2.DB.succeed );
+		EXPECTED( User2.DB.total == 4 );
+
+	// create by JSON Data
+		
+		User2 * copy4 = [User2 record:copy2.JSONData];
+		
+		EXPECTED( copy4 );
+		EXPECTED( copy4.deleted == NO );
+		EXPECTED( copy4.changed == YES );
+		EXPECTED( copy4.inserted == NO );
+
+		EXPECTED( [copy4.name isEqualToString:me.name] );
+		EXPECTED( [copy4.city isEqualToString:me.city] );
+		EXPECTED( [copy4.gender isEqualToString:me.gender] );
+		EXPECTED( [copy4.location.lat isEqualToNumber:me.location.lat] );
+		EXPECTED( [copy4.location.lon isEqualToNumber:me.location.lon] );
+		
+		copy4.SAVE();
+		
+		EXPECTED( User2.DB.succeed );
+		EXPECTED( User2.DB.total == 5 );
+
+	// create by String
+
+		User2 * copy5 = [User2 record:@"{ \
+							'name' : 'gavin', \
+							'city' : 'beijing', \
+							'gender' : 'male', \
+							'location' : { 'lat' : 888, 'lid' : 100, 'lon' : 999 } \
+						 }"];
+		
+		EXPECTED( copy5 );
+		EXPECTED( copy5.deleted == NO );
+		EXPECTED( copy5.changed == YES );
+		EXPECTED( copy5.inserted == NO );
+
+		EXPECTED( [copy5.name isEqualToString:@"gavin"] );
+		EXPECTED( [copy5.city isEqualToString:@"beijing"] );
+		EXPECTED( [copy5.gender isEqualToString:@"male"] );
+		EXPECTED( [copy5.location.lat isEqualToNumber:__INT(888)] );
+		EXPECTED( [copy5.location.lon isEqualToNumber:__INT(999)] );
+
+		copy5.SAVE();
+		
+		EXPECTED( User2.DB.succeed );
+		EXPECTED( User2.DB.total == 6 );
+		
+	// Query records
+		
+		User2.DB.GET_RECORDS();	// Results are BeeActiveRecord
+		
+		EXPECTED( User2.DB.succeed );
+		EXPECTED( User2.DB.resultArray.count == 6 );
+		EXPECTED( User2.DB.resultCount == 6 );
 
 	// Delete records
-	
-	User2.DB.WHERE( @"city", @"Columbus" ).DELETE();
-	
+
+		me.DELETE();
+		copy1.DELETE();
+		copy2.DELETE();
+		copy3.DELETE();
+		copy4.DELETE();
+		copy5.DELETE();
+		
 	// Count records
-	
-	User2.DB.COUNT();
-	NSAssert( User2.DB.succeed, @"" );
-	NSAssert( User2.DB.resultCount == 0, @"" );
-}
-TEST_CASE_END
 
-#pragma mark -
+		User2.DB.COUNT();
 
-TEST_CASE(BeeActiveRecord)
-{
-// Clear table
-
-	User2.DB.EMPTY();
-
-// test
-	
-	User2 * me;
-	User2 * copy;
-
-	me = [User2 record];
-	me.name = @"gavin";			// set value by property
-	me.city = @"beijing";		// set value by property
-	me.location.lat = __INT(888);
-	me.location.lon = __INT(999);
-	[me.JSON setObject:@"m" forKey:@"gender"];							// set value by JSON
-	[me.JSON setObject:[[NSDate date] description] forKey:@"birth"];	// set value by JSON
-	me.SAVE();
-
-	User2.DB.GET_RECORDS();	// Results are BeeActiveRecord
-	for ( User2 * info in User2.DB.resultArray )
-	{
-		VAR_DUMP( info );
+		NSAssert( User2.DB.succeed, @"" );
+		NSAssert( User2.DB.resultCount == 0, @"" );
 	}
-	
-	NSAssert( [me.name isEqualToString:@"gavin"], @"" );							// get value by property
-	NSAssert( [me.city isEqualToString:@"beijing"], @"" );							// get value by property
-	NSAssert( [me.gender isEqualToString:@"m"], @"" );								// get value by property
-	NSAssert( [me.location.lat isEqualToNumber:__INT(888)], @"" );
-	NSAssert( [me.location.lon isEqualToNumber:__INT(999)], @"" );
-
-	NSAssert( [[me.JSON objectForKey:@"name"] isEqualToString:@"gavin"], @"" );		// get value by JSON
-	NSAssert( [[me.JSON objectForKey:@"city"] isEqualToString:@"beijing"], @"" );	// get value by JSON
-	NSAssert( [[me.JSON objectForKey:@"gender"] isEqualToString:@"m"], @"" );		// get value by JSON
-	NSAssert( [[me.JSON numberAtPath:@"location.lat"] isEqualToNumber:__INT(888)], @"" );	// get value by JSON
-	NSAssert( [[me.JSON numberAtPath:@"location.lon"] isEqualToNumber:__INT(999)], @"" );		// get value by JSON
-
-	VAR_DUMP( me.JSON );		// convert object to JSON object
-	VAR_DUMP( me.JSONString );	// convert object to JSON string
-	VAR_DUMP( me.JSONData );	// convert object to JSON data
-
-// create by ActiveRecord
-
-	copy = [User2 record:me];
-	NSAssert( [copy.name isEqualToString:me.name], @"" );
-	NSAssert( [copy.city isEqualToString:me.city], @"" );
-	NSAssert( [copy.gender isEqualToString:me.gender], @"" );
-	NSAssert( [copy.location.lat isEqualToNumber:__INT(888)], @"" );
-	NSAssert( [copy.location.lon isEqualToNumber:__INT(999)], @"" );
-	copy.SAVE();
-	copy.DELETE();
-
-	User2.DB.GET_RECORDS();	// Results are BeeActiveRecord
-	for ( User2 * info in User2.DB.resultArray )
-	{
-		VAR_DUMP( info );
-	}
-	
-// create by JSON
-
-	copy = [User2 record:me.JSON];
-	NSAssert( [copy.name isEqualToString:me.name], @"" );
-	NSAssert( [copy.city isEqualToString:me.city], @"" );
-	NSAssert( [copy.gender isEqualToString:me.gender], @"" );
-	NSAssert( [copy.location.lat isEqualToNumber:__INT(888)], @"" );
-	NSAssert( [copy.location.lon isEqualToNumber:__INT(999)], @"" );
-	copy.SAVE();
-	copy.DELETE();
-
-	User2.DB.GET_RECORDS();	// Results are BeeActiveRecord
-	for ( User2 * info in User2.DB.resultArray )
-	{
-		VAR_DUMP( info );
-	}
-	
-// create by JSON String
-
-	copy = [User2 record:me.JSONString];
-	NSAssert( [copy.name isEqualToString:me.name], @"" );
-	NSAssert( [copy.city isEqualToString:me.city], @"" );
-	NSAssert( [copy.gender isEqualToString:me.gender], @"" );
-	NSAssert( [copy.location.lat isEqualToNumber:__INT(888)], @"" );
-	NSAssert( [copy.location.lon isEqualToNumber:__INT(999)], @"" );
-	copy.SAVE();
-	copy.DELETE();
-
-	User2.DB.GET_RECORDS();	// Results are BeeActiveRecord
-	for ( User2 * info in User2.DB.resultArray )
-	{
-		VAR_DUMP( info );
-	}
-	
-// create by JSON Data
-
-	copy = [User2 record:me.JSONData];
-	NSAssert( [copy.name isEqualToString:me.name], @"" );
-	NSAssert( [copy.city isEqualToString:me.city], @"" );
-	NSAssert( [copy.gender isEqualToString:me.gender], @"" );
-	NSAssert( [copy.location.lat isEqualToNumber:__INT(888)], @"" );
-	NSAssert( [copy.location.lon isEqualToNumber:__INT(999)], @"" );
-	copy.SAVE();
-	copy.DELETE();
-
-	User2.DB.GET_RECORDS();	// Results are BeeActiveRecord
-	for ( User2 * info in User2.DB.resultArray )
-	{
-		VAR_DUMP( info );
-	}
-	
-// create by String
-
-	copy = [User2 record:@"{ \
-			'name' : 'gavin', \
-			'city' : 'beijing', \
-			'gender' : 'm', \
-			'location' : { 'lat' : 888, 'lid' : 100, 'lon' : 999 } \
-			}"];
-	NSAssert( [copy.name isEqualToString:me.name], @"" );
-	NSAssert( [copy.city isEqualToString:me.city], @"" );
-	NSAssert( [copy.gender isEqualToString:me.gender], @"" );
-	NSAssert( [copy.location.lat isEqualToNumber:__INT(888)], @"" );
-	NSAssert( [copy.location.lon isEqualToNumber:__INT(999)], @"" );
-	copy.SAVE();
-	copy.DELETE();
-
-	User2.DB.GET_RECORDS();	// Results are BeeActiveRecord
-	for ( User2 * info in User2.DB.resultArray )
-	{
-		VAR_DUMP( info );
-	}
-	
-	me.DELETE();
-	
-	User2.DB.GET_RECORDS();	// Results are BeeActiveRecord
-	for ( User2 * info in User2.DB.resultArray )
-	{
-		VAR_DUMP( info );
-	}
-	
-// Insert 2 records into table 'table_User2'
-
-	User2 * record1 = [User2 record];
-	record1.name = @"gavin";
-	record1.gender = @"male";
-	record1.SAVE();
-
-	VAR_DUMP( record1.JSON );
-	VAR_DUMP( record1.JSONString );
-	VAR_DUMP( record1.JSONData );
-	
-	[record1.JSON setObject:@"1234" forKey:@"undefinedKey"];
-	[record1.JSON setObject:@"gavin.kwoe" forKey:@"name"];
-	
-	record1.city = @"Columbus";
-	record1.SAVE();
-
-	User2 * record2 = [User2 record];
-	record2.name = @"amanda";
-	record2.gender = @"female";
-	record2.city = @"Columbus";
-	record2.birth = [NSDate date];
-	record2.SAVE();
-
-	
-// Query records
-	
-	User2.DB.GET_RECORDS();	// Results are BeeActiveRecord
-	NSAssert( User2.DB.succeed, @"" );
-	NSAssert( User2.DB.resultCount > 0, @"" );
-
-	for ( User2 * info in User2.DB.resultArray )
-	{
-		VAR_DUMP( info );
-	}
-
-	User2.DB.WHERE( @"city", @"Columbus" ).GET_RECORDS(); // Results are BeeActiveRecord
-	NSAssert( User2.DB.succeed, @"" );
-	NSAssert( User2.DB.resultCount > 0, @"" );
-	
-	for ( User2 * info in User2.DB.resultArray )
-	{
-		VAR_DUMP( info );
-	}
-
-// Delete records
-
-	record1.DELETE();
-	record2.DELETE();
-
-	User2.DB.GET_RECORDS();	// Results are BeeActiveRecord
-//	NSAssert( User2.DB.succeed, @"" );
-//	NSAssert( User2.DB.resultCount == 0, @"" );
-	
-	for ( User2 * info in User2.DB.resultArray )
-	{
-		VAR_DUMP( info );
-	}
-	
-// Count records
-
-	User2.DB.COUNT();
-	NSAssert( User2.DB.succeed, @"" );
-	NSAssert( User2.DB.resultCount == 0, @"" );
 }
 TEST_CASE_END
 

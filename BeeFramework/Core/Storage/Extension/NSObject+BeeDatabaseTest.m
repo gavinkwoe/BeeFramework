@@ -27,7 +27,7 @@
 //	IN THE SOFTWARE.
 //
 //
-//  Bee_ActiveBaseTest.h
+//  NSObject+BeeDatabaseTest.h
 //
 
 #import "Bee.h"
@@ -36,9 +36,10 @@
 
 #pragma mark -
 
-TEST_CASE( ar_base )
+TEST_CASE( object_db )
 {
 }
 TEST_CASE_END
+
 
 #endif	// #if defined(__BEE_UNITTEST__) && __BEE_UNITTEST__

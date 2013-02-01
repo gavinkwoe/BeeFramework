@@ -47,6 +47,35 @@
 
 #pragma mark -
 
+#if defined(__BEE_LOG__) && __BEE_LOG__
+static BOOL			__enabled = YES;
+#else	// #if defined(__BEE_LOG__) && __BEE_LOG__
+static BOOL			__enabled = NO;
+#endif	// #if defined(__BEE_LOG__) && __BEE_LOG__
+
+static BOOL			__firstLine = YES;
+static NSUInteger	__indentTabs = 0;
+
+extern "C" void BeeLogToogle( void )
+{
+	__enabled = __enabled ? NO : YES;
+}
+
+extern "C" void BeeLogEnable( BOOL flag )
+{
+	__enabled = flag;
+}
+
+extern "C" BOOL BeeLogIsEnabled( void )
+{
+	return __enabled;
+}
+
+extern "C" void BeeLogIndent( NSUInteger tabs )
+{
+	__indentTabs = tabs;
+}
+
 extern "C" NSString * NSStringFormatted( NSString * format, va_list argList )
 {
 	return [[[NSString alloc] initWithFormat:format arguments:argList] autorelease];
@@ -55,17 +84,48 @@ extern "C" NSString * NSStringFormatted( NSString * format, va_list argList )
 extern "C" void BeeLog( NSObject * format, ... )
 {
 #if defined(__BEE_LOG__) && __BEE_LOG__
+
+	if ( NO == __enabled || nil == format )
+		return;
+
+	if ( __firstLine )
+	{
+		fprintf( stderr, "    												\n" );
+		fprintf( stderr, "    												\n" );
+		fprintf( stderr, "    	 ______    ______    ______					\n" );
+		fprintf( stderr, "    	/\\  __ \\  /\\  ___\\  /\\  ___\\			\n" );
+		fprintf( stderr, "    	\\ \\  __<  \\ \\  __\\_ \\ \\  __\\_		\n" );
+		fprintf( stderr, "    	 \\ \\_____\\ \\ \\_____\\ \\ \\_____\\		\n" );
+		fprintf( stderr, "    	  \\/_____/  \\/_____/  \\/_____/			\n" );
+		fprintf( stderr, "    												\n" );
+		fprintf( stderr, "    	Copyright (c) 2013 BEE creators				\n" );
+		fprintf( stderr, "    	Version %s									\n", BEE_VERSION );
+		fprintf( stderr, "    												\n" );
+		fprintf( stderr, "    	https://github.com/gavinkwoe/BeeFramework	\n" );
+		fprintf( stderr, "    												\n" );
+		fprintf( stderr, "    												\n" );
+		fprintf( stderr, "    												\n" );
+		
+		__firstLine = NO;
+	}
 	
 	va_list args;
 	va_start( args, format );
 	
+	char tabs[16] = "";
+
+	for ( int i = 0; i < __indentTabs; ++i )
+	{
+		tabs[i] = '\t';
+	}
+	
 	if ( [format isKindOfClass:[NSString class]] )
 	{
-		NSLog( NSStringFormatted((NSString *)format, args), nil );
+		fprintf( stderr, "Bee >   %s%s\n", tabs, [NSStringFormatted((NSString *)format, args) UTF8String] );
 	}
 	else
 	{
-		NSLog( [format description], nil );
+		fprintf( stderr, "Bee >   %s%s\n", tabs, [[format description] UTF8String] );
 	}
 
 	va_end( args );

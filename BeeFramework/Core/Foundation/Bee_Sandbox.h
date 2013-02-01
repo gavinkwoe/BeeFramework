@@ -40,6 +40,6 @@
 + (NSString *)libCachePath;	// 缓存目录，系统永远不会删除这里的文件，ITUNES会删除
 + (NSString *)tmpPath;		// 缓存目录，APP退出后，系统可能会删除这里的内容
 
-+ (NSString *)touch:(NSString *)path;
++ (BOOL)touch:(NSString *)path;
 
 @end

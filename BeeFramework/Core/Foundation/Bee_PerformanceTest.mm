@@ -27,7 +27,7 @@
 //	IN THE SOFTWARE.
 //
 //
-//  Bee_ActiveBaseTest.h
+//  Bee_PerformanceTest.h
 //
 
 #import "Bee.h"
@@ -36,8 +36,51 @@
 
 #pragma mark -
 
-TEST_CASE( ar_base )
+TEST_CASE( performance )
 {
+	TIMES( 3 )
+	{
+		PERF_ENTER
+		{
+		// step 1
+			
+			PERF_ENTER_( step_one )
+			{
+				TIMES( 10 )
+				{
+					rand();
+				}
+			}
+			PERF_LEAVE_( step_one )
+		
+		// step 2
+			
+			PERF_ENTER_( step_two )
+			{
+				TIMES( 10000 )
+				{
+					rand();
+				}
+			}
+			PERF_LEAVE_( step_two )
+		
+		// step 3
+			
+			PERF_MARK( step_three_1 );
+			{
+				TIMES( 10000 )
+				{
+					rand();
+				}
+			}
+			PERF_MARK( step_three_2 );
+
+		// print time
+
+			CC( @"step_three = %f", PERF_TIME( step_three_1, step_three_2 ) );
+		}
+		PERF_LEAVE
+	}
 }
 TEST_CASE_END
 

@@ -40,88 +40,102 @@
 		+ (NSString *)__name;
 
 #if __has_feature(objc_arc)
+
     #undef	DEF_STATIC_PROPERTY
     #define DEF_STATIC_PROPERTY( __name ) \
-        @dynamic __name; \
-        + (NSString *)__name \
-        { \
-            static NSString * __local = nil; \
-            if ( nil == __local ) \
-            { \
-                __local = [NSString stringWithFormat:@"%s", #__name]; \
-            } \
-            return __local; \
-        }
-#else
-    #undef	DEF_STATIC_PROPERTY
-    #define DEF_STATIC_PROPERTY( __name ) \
-		@dynamic __name; \
-		+ (NSString *)__name \
-		{ \
-			static NSString * __local = nil; \
-			if ( nil == __local ) \
+			@dynamic __name; \
+			+ (NSString *)__name \
 			{ \
-				__local = [[NSString stringWithFormat:@"%s", #__name] retain]; \
-			} \
-			return __local; \
-		}
+				static NSString * __local = nil; \
+				if ( nil == __local ) \
+				{ \
+					__local = [NSString stringWithFormat:@"%s", #__name]; \
+				} \
+				return __local; \
+			}
+
+#else
+
+    #undef	DEF_STATIC_PROPERTY
+    #define DEF_STATIC_PROPERTY( __name ) \
+			@dynamic __name; \
+			+ (NSString *)__name \
+			{ \
+				static NSString * __local = nil; \
+				if ( nil == __local ) \
+				{ \
+					__local = [[NSString stringWithFormat:@"%s", #__name] retain]; \
+				} \
+				return __local; \
+			}
+
 #endif
 
 #if __has_feature(objc_arc)
-    #undef	DEF_STATIC_PROPERTY2
+
+	#undef	DEF_STATIC_PROPERTY2
     #define DEF_STATIC_PROPERTY2( __name, __prefix ) \
-        @dynamic __name; \
-        + (NSString *)__name \
-        { \
-            static NSString * __local = nil; \
-            if ( nil == __local ) \
-            { \
-                __local = [NSString stringWithFormat:@"%@.%s", __prefix, #__name]; \
-            } \
-            return __local; \
-        }
-#else
-    #undef	DEF_STATIC_PROPERTY2
-    #define DEF_STATIC_PROPERTY2( __name, __prefix ) \
-		@dynamic __name; \
-		+ (NSString *)__name \
-		{ \
-			static NSString * __local = nil; \
-			if ( nil == __local ) \
+			@dynamic __name; \
+			+ (NSString *)__name \
 			{ \
-				__local = [[NSString stringWithFormat:@"%@.%s", __prefix, #__name] retain]; \
-			} \
-			return __local; \
-		}
+				static NSString * __local = nil; \
+				if ( nil == __local ) \
+				{ \
+					__local = [NSString stringWithFormat:@"%@.%s", __prefix, #__name]; \
+				} \
+				return __local; \
+			}
+
+#else
+
+	#undef	DEF_STATIC_PROPERTY2
+    #define DEF_STATIC_PROPERTY2( __name, __prefix ) \
+			@dynamic __name; \
+			+ (NSString *)__name \
+			{ \
+				static NSString * __local = nil; \
+				if ( nil == __local ) \
+				{ \
+					__local = [[NSString stringWithFormat:@"%@.%s", __prefix, #__name] retain]; \
+				} \
+				return __local; \
+			}
+
 #endif
 
 #if __has_feature(objc_arc)
-    #undef	DEF_STATIC_PROPERTY3
+
+	#undef	DEF_STATIC_PROPERTY3
     #define DEF_STATIC_PROPERTY3( __name, __prefix, __prefix2 ) \
-        @dynamic __name; \
-        + (NSString *)__name \
-        { \
-            static NSString * __local = nil; \
-            if ( nil == __local ) \
-            { \
-                __local = [NSString stringWithFormat:@"%@.%@.%s", __prefix, __prefix2, #__name]; \
-            } \
-            return __local; \
-        }
-#else
-    #undef	DEF_STATIC_PROPERTY3
-    #define DEF_STATIC_PROPERTY3( __name, __prefix, __prefix2 ) \
-		@dynamic __name; \
-		+ (NSString *)__name \
-		{ \
-			static NSString * __local = nil; \
-			if ( nil == __local ) \
+			@dynamic __name; \
+			+ (NSString *)__name \
 			{ \
-				__local = [[NSString stringWithFormat:@"%@.%@.%s", __prefix, __prefix2, #__name] retain]; \
-			} \
-			return __local; \
-		}
+				static NSString * __local = nil; \
+				if ( nil == __local ) \
+				{ \
+					__local = [NSString stringWithFormat:@"%@.%@.%s", __prefix, __prefix2, #__name]; \
+				} \
+				return __local; \
+			}
+
+#else
+
+	#undef	DEF_STATIC_PROPERTY3
+    #define DEF_STATIC_PROPERTY3( __name, __prefix, __prefix2 ) \
+			@dynamic __name; \
+			+ (NSString *)__name \
+			{ \
+				static NSString * __local = nil; \
+				if ( nil == __local ) \
+				{ \
+					__local = [[NSString stringWithFormat:@"%@.%@.%s", __prefix, __prefix2, #__name] retain]; \
+				} \
+				return __local; \
+			}
+
 #endif
+
+#pragma mark -
 
 #undef	AS_STATIC_PROPERTY_INT
 #define AS_STATIC_PROPERTY_INT( __name ) \
@@ -142,6 +156,7 @@
 #undef	DEF_INT
 #define DEF_INT	DEF_STATIC_PROPERTY_INT
 
+#pragma mark -
 
 #undef	AS_STATIC_PROPERTY_STRING
 #define AS_STATIC_PROPERTY_STRING( __name ) \

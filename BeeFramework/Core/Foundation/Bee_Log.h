@@ -40,11 +40,19 @@
 #undef	VAR_DUMP
 #define VAR_DUMP	BeeLog
 
+#undef	NSLog
+#define NSLog		BeeLog
+
 #if __cplusplus
 extern "C" {
 #endif
+
+	void BeeLogToogle( void );
+	void BeeLogEnable( BOOL flag );
+	BOOL BeeLogIsEnabled( void );
+	void BeeLogIndent( NSUInteger tabs );
 	
-void BeeLog( NSObject * format, ... );
+	void BeeLog( NSObject * format, ... );
 
 #if __cplusplus
 };

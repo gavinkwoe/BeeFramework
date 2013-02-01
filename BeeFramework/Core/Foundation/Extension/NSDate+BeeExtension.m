@@ -77,4 +77,9 @@
 	return (NSUInteger)(time * 1000.0f);
 }
 
++ (NSDate *)dateWithString:(NSString *)string
+{
+	return nil;
+}
+
 @end

@@ -65,16 +65,17 @@
 	return [[paths objectAtIndex:0] stringByAppendingFormat:@"/tmp"];
 }
 
-+ (NSString *)touch:(NSString *)path
++ (BOOL)touch:(NSString *)path
 {
 	if ( NO == [[NSFileManager defaultManager] fileExistsAtPath:path] )
 	{
-		[[NSFileManager defaultManager] createDirectoryAtPath:path
-								  withIntermediateDirectories:YES
-												   attributes:nil
-														error:NULL];
+		return [[NSFileManager defaultManager] createDirectoryAtPath:path
+										 withIntermediateDirectories:YES
+														  attributes:nil
+															   error:NULL];
 	}
-	return path;
+	
+	return NO;
 }
 
 @end

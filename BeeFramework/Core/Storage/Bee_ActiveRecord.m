@@ -83,6 +83,7 @@
 @dynamic UPDATE;
 @dynamic DELETE;
 
+@dynamic inserted;
 @synthesize changed = _changed;
 @synthesize deleted = _deleted;
 
@@ -364,7 +365,7 @@
 	NSString * JSONKey = self.activeJSONKey;
 
 	[self setValue:[NSNumber numberWithInt:-1] forKey:primaryKey];
-	
+
 	if ( _JSON )
 	{
 		NSDictionary * property = [propertySet objectForKey:JSONKey];
@@ -559,6 +560,7 @@
 		}
 
 		[self setObservers];
+		[self setPrimaryID:[NSNumber numberWithInt:-1]];
 		[self load];
 	}
 	return self;
@@ -1075,6 +1077,17 @@
 {
 	[self setValue:(pid ? pid : [NSNumber numberWithInt:-1])
 			forKey:self.activePrimaryKey];
+}
+
+- (BOOL)inserted
+{
+	NSNumber * number = self.primaryID;
+	if ( number && number.intValue >= 0 )
+	{
+		return YES;
+	}
+	
+	return NO;
 }
 
 - (BOOL)get
@@ -1831,11 +1844,8 @@
 	
 	[classType setAssociateConditions];
 	[classType setHasConditions];
-	if (table) {
-        [_from removeAllObjects];
-        self.FROM(table);
-    }
-	self.OFFSET( offset ).LIMIT( limit ).GET();
+
+	self.FROM( table ).OFFSET( offset ).LIMIT( limit ).GET();
 	if ( NO == self.succeed )
 		return [NSArray array];
 	
@@ -1853,6 +1863,8 @@
 
 	[_resultArray removeAllObjects];
 	[_resultArray addObjectsFromArray:activeRecords];
+	
+	_resultCount = activeRecords.count;
 	
 	[activeRecords release];
 	

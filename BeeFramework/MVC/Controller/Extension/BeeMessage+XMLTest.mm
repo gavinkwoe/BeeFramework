@@ -27,7 +27,7 @@
 //	IN THE SOFTWARE.
 //
 //
-//  Bee_ActiveBaseTest.h
+//  BeeMessage+XML.h
 //
 
 #import "Bee.h"
@@ -36,7 +36,7 @@
 
 #pragma mark -
 
-TEST_CASE( ar_base )
+TEST_CASE( message_xml )
 {
 }
 TEST_CASE_END
