@@ -108,6 +108,17 @@
 - (BeeDatabase *)orLike:(NSString *)field match:(id)value;
 - (BeeDatabase *)orNotLike:(NSString *)field match:(id)value;
 
+
+- (BeeDatabase *)beforelike:(NSString *)field match:(id)value;
+- (BeeDatabase *)notBeforeLike:(NSString *)field match:(id)value;
+- (BeeDatabase *)orBeforeLike:(NSString *)field match:(id)value;
+- (BeeDatabase *)orNotBeforeLike:(NSString *)field match:(id)value;
+
+- (BeeDatabase *)afterlike:(NSString *)field match:(id)value;
+- (BeeDatabase *)notAfterLike:(NSString *)field match:(id)value;
+- (BeeDatabase *)orAfterLike:(NSString *)field match:(id)value;
+- (BeeDatabase *)orNotAfterLike:(NSString *)field match:(id)value;
+
 - (BeeDatabase *)groupBy:(NSString *)by;
 
 - (BeeDatabase *)having:(NSString *)key value:(id)value;
@@ -1262,6 +1273,80 @@ static NSUInteger		__identSeed = 1;
 	[self internalLike:field match:value type:@"OR" side:@"both" not:YES];
 	return self;
 }
+
+- (BeeDatabase *)beforelike:(NSString *)field match:(id)value
+{
+	if ( nil == _database )
+		return self;
+    
+	[self internalLike:field match:value type:@"AND" side:@"before" not:NO];
+	return self;
+}
+
+- (BeeDatabase *)notBeforeLike:(NSString *)field match:(id)value
+{
+	if ( nil == _database )
+		return self;
+    
+	[self internalLike:field match:value type:@"AND" side:@"before" not:YES];
+	return self;
+}
+
+- (BeeDatabase *)orBeforeLike:(NSString *)field match:(id)value
+{
+	if ( nil == _database )
+		return self;
+    
+	[self internalLike:field match:value type:@"OR" side:@"before" not:NO];
+	return self;
+}
+
+- (BeeDatabase *)orNotBeforeLike:(NSString *)field match:(id)value
+{
+	if ( nil == _database )
+		return self;
+    
+	[self internalLike:field match:value type:@"OR" side:@"before" not:YES];
+	return self;
+}
+
+
+- (BeeDatabase *)afterlike:(NSString *)field match:(id)value
+{
+	if ( nil == _database )
+		return self;
+    
+	[self internalLike:field match:value type:@"AND" side:@"after" not:NO];
+	return self;
+}
+
+- (BeeDatabase *)notAfterLike:(NSString *)field match:(id)value
+{
+	if ( nil == _database )
+		return self;
+    
+	[self internalLike:field match:value type:@"AND" side:@"after" not:YES];
+	return self;
+}
+
+- (BeeDatabase *)orAfterLike:(NSString *)field match:(id)value
+{
+	if ( nil == _database )
+		return self;
+    
+	[self internalLike:field match:value type:@"OR" side:@"after" not:NO];
+	return self;
+}
+
+- (BeeDatabase *)orNotAfterLike:(NSString *)field match:(id)value
+{
+	if ( nil == _database )
+		return self;
+    
+	[self internalLike:field match:value type:@"OR" side:@"after" not:YES];
+	return self;
+}
+
 
 - (void)internalLike:(NSString *)field match:(NSObject *)match type:(NSString *)type side:(NSString *)side not:(BOOL)not
 {
@@ -2574,6 +2659,136 @@ static NSUInteger		__identSeed = 1;
 	
 	return [[block copy] autorelease];
 }
+
+
+- (BeeDatabaseBlockN)LIKE_BEFORE
+{
+	BeeDatabaseBlockN block = ^ BeeDatabase * ( id first, ... )
+	{
+		va_list args;
+		va_start( args, first );
+		
+		NSString * key = (NSString *)first;
+		NSObject * value = (NSObject *)va_arg( args, NSObject * );
+		va_end( args );
+		return [self beforelike:key match:value];
+	};
+	
+	return [[block copy] autorelease];
+}
+
+- (BeeDatabaseBlockN)NOT_LIKE_BEFORE
+{
+	BeeDatabaseBlockN block = ^ BeeDatabase * ( id first, ... )
+	{
+		va_list args;
+		va_start( args, first );
+		
+		NSString * key = (NSString *)first;
+		NSObject * value = (NSObject *)va_arg( args, NSObject * );
+		
+		return [self notBeforeLike:key match:value];
+	};
+	
+	return [[block copy] autorelease];
+}
+
+- (BeeDatabaseBlockN)OR_LIKE_BEFORE
+{
+	BeeDatabaseBlockN block = ^ BeeDatabase * ( id first, ... )
+	{
+		va_list args;
+		va_start( args, first );
+		
+		NSString * key = (NSString *)first;
+		NSObject * value = (NSObject *)va_arg( args, NSObject * );
+		va_end( args );
+		return [self orBeforeLike:key match:value];
+	};
+	
+	return [[block copy] autorelease];
+}
+
+- (BeeDatabaseBlockN)OR_NOT_LIKE_BEFORE
+{
+	BeeDatabaseBlockN block = ^ BeeDatabase * ( id first, ... )
+	{
+		va_list args;
+		va_start( args, first );
+		
+		NSString * key = (NSString *)first;
+		NSObject * value = (NSObject *)va_arg( args, NSObject * );
+		va_end( args );
+		return [self orNotBeforeLike:key match:value];
+	};
+	
+	return [[block copy] autorelease];
+}
+
+- (BeeDatabaseBlockN)LIKE_AFTER
+{
+	BeeDatabaseBlockN block = ^ BeeDatabase * ( id first, ... )
+	{
+		va_list args;
+		va_start( args, first );
+		
+		NSString * key = (NSString *)first;
+		NSObject * value = (NSObject *)va_arg( args, NSObject * );
+		va_end( args );
+		return [self afterlike:key match:value];
+	};
+	
+	return [[block copy] autorelease];
+}
+
+- (BeeDatabaseBlockN)NOT_LIKE_AFTER
+{
+	BeeDatabaseBlockN block = ^ BeeDatabase * ( id first, ... )
+	{
+		va_list args;
+		va_start( args, first );
+		
+		NSString * key = (NSString *)first;
+		NSObject * value = (NSObject *)va_arg( args, NSObject * );
+		
+		return [self notAfterLike:key match:value];
+	};
+	
+	return [[block copy] autorelease];
+}
+
+- (BeeDatabaseBlockN)OR_LIKE_AFTER
+{
+	BeeDatabaseBlockN block = ^ BeeDatabase * ( id first, ... )
+	{
+		va_list args;
+		va_start( args, first );
+		
+		NSString * key = (NSString *)first;
+		NSObject * value = (NSObject *)va_arg( args, NSObject * );
+		va_end( args );
+		return [self orAfterLike:key match:value];
+	};
+	
+	return [[block copy] autorelease];
+}
+
+- (BeeDatabaseBlockN)OR_NOT_LIKE_AFTER
+{
+	BeeDatabaseBlockN block = ^ BeeDatabase * ( id first, ... )
+	{
+		va_list args;
+		va_start( args, first );
+		
+		NSString * key = (NSString *)first;
+		NSObject * value = (NSObject *)va_arg( args, NSObject * );
+		va_end( args );
+		return [self orNotAfterLike:key match:value];
+	};
+	
+	return [[block copy] autorelease];
+}
+
 
 - (BeeDatabaseBlockN)GROUP_BY
 {
