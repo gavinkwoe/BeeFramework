@@ -288,7 +288,7 @@ DEF_INT( SEARCHBAR_STYLE_TOP,		1 );
 			_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 			_tableView.backgroundColor = [UIColor clearColor];
 			_tableView.rowHeight = 44;
-			_tableView.contentInset = _baseInsets;
+			//_tableView.contentInset = _baseInsets;
 //			_tableView.decelerationRate = _tableView.decelerationRate * 0.98f;
 			_tableView.showsVerticalScrollIndicator = YES;
 			_tableView.showsHorizontalScrollIndicator = NO;
@@ -372,7 +372,7 @@ DEF_INT( SEARCHBAR_STYLE_TOP,		1 );
 		}
 		else if ( [signal is:BeeUIBoard.WILL_APPEAR] )
 		{		
-			[self layoutViews:YES];		
+			[self layoutViews:YES];
 			[self asyncReloadData];
 						
 //			[self disableScrollsToTopPropertyOnAllSubviewsOf:_tableView];
@@ -411,14 +411,14 @@ DEF_INT( SEARCHBAR_STYLE_TOP,		1 );
 
 - (void)layoutSearchBar:(BOOL)animated
 {
-	if ( animated )
-	{
-		// Animate up or down
-		[UIView beginAnimations:nil context:nil];
-		[UIView setAnimationDuration:[BeeUIKeyboard sharedInstance].animationDuration];
-		[UIView setAnimationCurve:[BeeUIKeyboard sharedInstance].animationCurve];		
-		[UIView setAnimationBeginsFromCurrentState:YES];
-	}
+//	if ( animated )
+//	{
+//		// Animate up or down
+//		[UIView beginAnimations:nil context:nil];
+//		[UIView setAnimationDuration:[BeeUIKeyboard sharedInstance].animationDuration];
+//		[UIView setAnimationCurve:[BeeUIKeyboard sharedInstance].animationCurve];		
+//		[UIView setAnimationBeginsFromCurrentState:YES];
+//	}
 
 	if ( BeeUITableBoard.SEARCHBAR_STYLE_BOTTOM == _searchBarStyle )
 	{
@@ -441,7 +441,7 @@ DEF_INT( SEARCHBAR_STYLE_TOP,		1 );
 		CGRect bounds = self.viewBound;
 		CGRect searchFrame;
 		searchFrame.origin.x = 0.0f;
-		searchFrame.origin.y = 0.0f; // bounds.size.height - SEARCH_BAR_HEIGHT;
+		searchFrame.origin.y = _baseInsets.top; // bounds.size.height - SEARCH_BAR_HEIGHT;
 		searchFrame.size.width = bounds.size.width;
 		searchFrame.size.height = SEARCH_BAR_HEIGHT;
 		
@@ -472,20 +472,25 @@ DEF_INT( SEARCHBAR_STYLE_TOP,		1 );
 	
 	CGRect bounds = self.viewBound;
 	CGRect tableFrame;
-	tableFrame.origin = CGPointZero;
+	tableFrame.origin = CGPointMake(0, _baseInsets.top);
 	tableFrame.size.width = bounds.size.width;
-	tableFrame.size.height = bounds.size.height;
+	tableFrame.size.height = bounds.size.height-_baseInsets.top-_baseInsets.bottom;
+    
+    if ( NO == _searchBar.hidden )
+	{
+		tableFrame.size.height -= SEARCH_BAR_HEIGHT;
+        if (BeeUITableBoard.SEARCHBAR_STYLE_TOP == _searchBarStyle ) {
+            tableFrame.origin = CGPointMake(0, _baseInsets.top + SEARCH_BAR_HEIGHT);
+        }
+	}
+    
 	
 	if ( [BeeUIKeyboard sharedInstance].shown )
 	{
-		tableFrame.size.height -= [BeeUIKeyboard sharedInstance].height;
+		tableFrame.size.height -= ([BeeUIKeyboard sharedInstance].height - _baseInsets.bottom);
 	}
 	
-	if ( NO == _searchBar.hidden )
-	{
-		tableFrame.size.height -= SEARCH_BAR_HEIGHT;
-	}
-
+	
 	_tableView.frame = tableFrame;
 	
 	if ( animated )
@@ -513,18 +518,18 @@ DEF_INT( SEARCHBAR_STYLE_TOP,		1 );
 
 - (void)setBaseInsets:(UIEdgeInsets)insets
 {
-	if ( _tableView.tableHeaderView && NO == _tableView.tableHeaderView.hidden )
-	{
-		insets.top -= 20.0f;		
-	}
-
-	if ( _tableView.tableFooterView && NO == _tableView.tableFooterView.hidden )
-	{
-		insets.bottom -= 20.0f;		
-	}
+//    if ( _tableView.tableHeaderView && NO == _tableView.tableHeaderView.hidden )
+//	{
+//		insets.top -= 20.0f;		
+//	}
+//
+//	if ( _tableView.tableFooterView && NO == _tableView.tableFooterView.hidden )
+//	{
+//		insets.bottom -= 20.0f;		
+//	}
 	
 	_baseInsets = insets;
-	_tableView.contentInset = insets;
+	//_tableView.contentInset = insets;
 }
 
 - (UIEdgeInsets)getBaseInsets
@@ -639,7 +644,6 @@ DEF_INT( SEARCHBAR_STYLE_TOP,		1 );
 			{
 				_baseInsets = _tableView.contentInset;
 			}
-
 			[UIView beginAnimations:nil context:NULL];
 			[UIView setAnimationDuration:0.3f];
 			UIEdgeInsets insets = _baseInsets;
@@ -669,7 +673,6 @@ DEF_INT( SEARCHBAR_STYLE_TOP,		1 );
 	CGPoint offset;
 	offset.x = 0.0f;
 	offset.y = -1.0f * _baseInsets.top;
-	
 	[_tableView setContentOffset:offset animated:animated];
 }
 
@@ -807,23 +810,35 @@ DEF_INT( SEARCHBAR_STYLE_TOP,		1 );
 	
 	if ( BeeUITableBoard.SEARCHBAR_STYLE_TOP == _searchBarStyle )
 	{
-		self.tableView.frame = CGRectMake(0, 0, bounds.size.width, bounds.size.height);			
+		self.tableView.frame = CGRectMake(0, 0, bounds.size.width, bounds.size.height);
+		if (!_searchBar.hidden) {
+            if (BeeUITableBoard.SEARCHBAR_STYLE_TOP == _searchBarStyle) {
+                CGRect bounds = self.viewBound;
+                CGRect searchFrame;
+                searchFrame.origin.x = 0.0f;
+                searchFrame.origin.y = _baseInsets.top; // bounds.size.height - SEARCH_BAR_HEIGHT;
+                searchFrame.size.width = bounds.size.width;
+                searchFrame.size.height = SEARCH_BAR_HEIGHT;
+                _searchBar.frame = searchFrame;
+            }
+            self.tableView.frame = CGRectMake(0, SEARCH_BAR_HEIGHT, bounds.size.width, bounds.size.height - _baseInsets.top - _baseInsets.bottom);
+        }
 	}
 	else
 	{
 		if ( _searchBar.hidden )
 		{
-			self.tableView.frame = CGRectMake(0, 0, bounds.size.width, bounds.size.height);			
+			self.tableView.frame = CGRectMake(0, 0, bounds.size.width, bounds.size.height - _baseInsets.top - _baseInsets.bottom);			
 		}
 		else
 		{
-			self.tableView.frame = CGRectMake(0, 0, bounds.size.width, bounds.size.height - SEARCH_BAR_HEIGHT);
+			self.tableView.frame = CGRectMake(0, 0, bounds.size.width, bounds.size.height - SEARCH_BAR_HEIGHT - _baseInsets.top - _baseInsets.bottom);
 		}		
 	}
 	
 	if ( animated )
 	{
-		[UIView commitAnimations];		
+		[UIView commitAnimations];
 	}
 	
 	[self sendUISignal:BeeUIBoard.LAYOUT_VIEWS];
