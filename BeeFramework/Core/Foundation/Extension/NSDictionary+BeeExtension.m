@@ -277,6 +277,66 @@
 	return obj ? obj : other;
 }
 
+-(id)easyDict2NSObject:(Class)clazz{
+    id object = [[clazz alloc] init];
+    
+    NSUInteger			propertyCount = 0;
+    objc_property_t *	properties = class_copyPropertyList( clazz, &propertyCount );
+    
+    for ( NSUInteger i = 0; i < propertyCount; i++ )
+    {
+        const char *	name = property_getName(properties[i]);
+        NSString *		propertyName = [NSString stringWithCString:name encoding:NSUTF8StringEncoding];
+        const char *	attr = property_getAttributes(properties[i]);
+        NSUInteger		type = [BeeTypeEncoding typeOf:attr];
+        
+        NSObject * tempvalue = [self objectForKey:propertyName];
+        
+        NSObject *value = nil;
+        if (tempvalue) {
+            if ( BeeTypeEncoding.NSNUMBER == type )
+            {
+                value = [tempvalue asNSNumber];
+            }
+            else if ( BeeTypeEncoding.NSSTRING == type )
+            {
+                value = [tempvalue asNSString];
+            }
+            else if ( BeeTypeEncoding.NSDATE == type )
+            {
+                value = [tempvalue asNSDate];
+            }
+            else if ( BeeTypeEncoding.NSARRAY == type )
+            {
+                if ([tempvalue isKindOfClass:[NSArray class]]) {
+                    value = tempvalue;
+                }
+            }
+            else if ( BeeTypeEncoding.NSDICTIONARY == type )
+            {
+                if ([tempvalue isKindOfClass:[NSDictionary class]]) {
+                    value = tempvalue;
+                }
+            }
+            else if ( BeeTypeEncoding.OBJECT == type )
+            {
+                NSString *className = [BeeTypeEncoding classNameOf:attr];
+                if ([tempvalue isKindOfClass:NSClassFromString(className)]) {
+                    value = tempvalue;
+                }else if ([tempvalue isKindOfClass:[NSDictionary class]]) {
+                    value = [(NSDictionary *)tempvalue easyDict2NSObject:NSClassFromString(className)];
+                }
+                
+            }
+
+        }
+        [object setValue:value forKey:propertyName];
+        
+    }
+    
+    return [object autorelease];
+}
+
 @end
 
 #pragma mark -
