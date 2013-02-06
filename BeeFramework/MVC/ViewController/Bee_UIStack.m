@@ -145,6 +145,7 @@ static UIImage * __defaultImage = nil;
 @synthesize parentBoard = _parentBoard;
 @synthesize boards = _boards;
 @synthesize topBoard = _topBoard;
+@synthesize groupBoard = _groupBoard;
 
 DEF_INT( ANIMATION_TYPE_DEFAULT,	0 )
 DEF_INT( ANIMATION_TYPE_CUBE,		1 )

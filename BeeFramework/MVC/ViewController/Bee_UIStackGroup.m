@@ -103,6 +103,7 @@ DEF_SIGNAL( INDEX_CHANGED );
 	
 	if ( NO == [_stacks containsObject:nav] )
 	{
+        nav.groupBoard = self;
 		[_stacks addObject:nav];
 		[self.view addSubview:nav.view];
 		[self present:nav];

@@ -39,6 +39,7 @@
 
 @class BeeUIBoard;
 @class BeeUIStack;
+@class BeeUIStackGroup;
 
 #pragma mark -
 
@@ -64,9 +65,9 @@ AS_INT( ANIMATION_TYPE_FLIP )		// 翻页
 
 @property (nonatomic, retain) NSString *		name;
 @property (nonatomic, assign) BeeUIBoard *		parentBoard;
-
 @property (nonatomic, readonly) NSArray *		boards;
 @property (nonatomic, readonly) BeeUIBoard *	topBoard;
+@property (nonatomic, assign) BeeUIStackGroup * groupBoard;
 
 + (BeeUIStack *)stack;
 + (BeeUIStack *)stack:(NSString *)name;
