@@ -32,6 +32,8 @@
 
 #import "Bee_Precompile.h"
 #import "NSDictionary+BeeExtension.h"
+#import "Bee_Runtime.h"
+#import "NSObject+BeeTypeConversion.h"
 
 #include <objc/runtime.h>
 
