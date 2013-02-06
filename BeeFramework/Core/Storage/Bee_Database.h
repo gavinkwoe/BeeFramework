@@ -135,6 +135,16 @@ typedef BOOL			(^BeeDatabaseBoolBlock)( void );
 @property (nonatomic, readonly) BeeDatabaseBlockN	OR_LIKE;
 @property (nonatomic, readonly) BeeDatabaseBlockN	OR_NOT_LIKE;
 
+@property (nonatomic, readonly) BeeDatabaseBlockN	LIKE_BEFORE;
+@property (nonatomic, readonly) BeeDatabaseBlockN	NOT_LIKE_BEFORE;
+@property (nonatomic, readonly) BeeDatabaseBlockN	OR_LIKE_BEFORE;
+@property (nonatomic, readonly) BeeDatabaseBlockN	OR_NOT_LIKE_BEFORE;
+
+@property (nonatomic, readonly) BeeDatabaseBlockN	LIKE_AFTER;
+@property (nonatomic, readonly) BeeDatabaseBlockN	NOT_LIKE_AFTER;
+@property (nonatomic, readonly) BeeDatabaseBlockN	OR_LIKE_AFTER;
+@property (nonatomic, readonly) BeeDatabaseBlockN	OR_NOT_LIKE_AFTER;
+
 @property (nonatomic, readonly) BeeDatabaseBlockN	GROUP_BY;
 
 @property (nonatomic, readonly) BeeDatabaseBlockN	HAVING;
