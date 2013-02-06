@@ -69,6 +69,9 @@ typedef NSDictionary *	(^NSDictionaryAppendBlock)( NSString * key, id value );
 - (NSMutableDictionary *)mutableDictAtPath:(NSString *)path;
 - (NSMutableDictionary *)mutableDictAtPath:(NSString *)path otherwise:(NSMutableDictionary *)other;
 
+-(id)easyDict2NSObject:(Class)clazz;
+
+
 @end
 
 #pragma mark -
