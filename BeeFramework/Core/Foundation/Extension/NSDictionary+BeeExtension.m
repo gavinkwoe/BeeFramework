@@ -332,10 +332,10 @@
             }
 
         }
-        [object setValue:value forKey:propertyName];
         
+        [object setValue:value forKey:propertyName];
     }
-    
+    free( properties );
     return [object autorelease];
 }
 
