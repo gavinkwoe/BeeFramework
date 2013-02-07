@@ -82,6 +82,8 @@
 + (BeeRequest *)POST:(NSString *)url;
 + (BeeRequest *)POST:(NSString *)url postdata:(NSDictionary *)postdata;
 
+- (BeeRequest *)FILE:(NSString *)url savepath:(NSString *)savepath allowResume:(BOOL)allowResume sync:(BOOL)sync;
+
 + (BOOL)requesting:(NSString *)url;
 + (BOOL)requesting:(NSString *)url byResponder:(id)responder;
 

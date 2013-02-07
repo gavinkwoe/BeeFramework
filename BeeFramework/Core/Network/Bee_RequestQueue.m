@@ -205,6 +205,76 @@
 	return [[BeeRequestQueue sharedInstance] GET:url sync:NO];
 }
 
++ (BeeRequest *)FILE:(NSString *)url savepath:(NSString *)savepath allowResume:(BOOL)allowResume sync:(BOOL)sync{
+    return [[BeeRequestQueue sharedInstance] FILE:url savepath:savepath allowResume:allowResume sync:sync];
+}
+            
+- (BeeRequest *)FILE:(NSString *)url savepath:(NSString *)savepath allowResume:(BOOL)allowResume sync:(BOOL)sync {
+    if ( NO == _online )
+		return nil;
+	
+	if ( [self checkResourceBroken:url] )
+	{
+		return nil;
+	}
+    
+	BeeRequest * request = nil;
+	if ( NO == sync && _merge )
+	{
+		for ( BeeRequest * req in _requests )
+		{
+			if ( [req.url.absoluteString isEqualToString:url] )
+			{
+				return req;
+			}
+		}
+	}
+    
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
+	CC( @"GET %@\n", url );
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
+    
+	request = [[BeeRequest alloc] initWithURL:[NSURL URLWithString:url]];
+	[request setDelegate:self];
+    [request setDownloadProgressDelegate:self];
+    [request setShowAccurateProgress:YES];
+    [request setDownloadDestinationPath:savepath];
+    [request setAllowResumeForFileDownloads:YES];
+	[request setNumberOfTimesToRetryOnTimeout:4];
+#if TARGET_OS_IPHONE && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_4_0
+	[request setShouldContinueWhenAppEntersBackground:YES];
+#endif	// #if TARGET_OS_IPHONE && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_4_0
+	[request setThreadPriority:0.5];
+	[request setQueuePriority:NSOperationQueuePriorityLow];
+    
+	[_requests addObject:request];
+	
+	if ( self.whenCreate )
+	{
+		self.whenCreate( request );
+	}
+	if ( sync )
+	{
+		[request startSynchronous];
+	}
+	else
+	{
+		if ( _delay )
+		{
+			[request performSelector:@selector(startAsynchronous)
+						  withObject:nil
+						  afterDelay:_delay];
+		}
+		else
+		{
+			[request startAsynchronous];
+		}
+	}
+	return [request autorelease];
+}
+
+
+
 - (BeeRequest *)GET:(NSString *)url sync:(BOOL)sync
 {
 	if ( NO == _online )
@@ -304,7 +374,7 @@
 	request = [[BeeRequest alloc] initWithURL:[NSURL URLWithString:url]];
 	request.timeOutSeconds = DEFAULT_POST_TIMEOUT;
 	request.requestMethod = @"POST";
-	request.postFormat = ASIMultipartFormDataPostFormat; // ASIRawPostFormat;
+	//request.postFormat = ASIMultipartFormDataPostFormat; // ASIRawPostFormat;
 	[request setDelegate:self];
 	[request setDownloadProgressDelegate:self];
 	[request setUploadProgressDelegate:self];
