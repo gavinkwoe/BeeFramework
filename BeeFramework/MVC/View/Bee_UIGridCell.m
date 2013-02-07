@@ -181,10 +181,11 @@
 	if ( _cellLayout && [_cellLayout respondsToSelector:@selector(layoutInBound:forCell:)] )
 	{
 		[_cellLayout layoutInBound:self.bounds.size forCell:self];
-        if ([[_cellLayout class] respondsToSelector:@selector(sizeInBound:forData:)]) {
-            CGSize size = [[_cellLayout class] sizeInBound:self.bounds.size forData:self.cellData];
-            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, size.width,size.height);
-        }
+        
+//        if ([[_cellLayout class] respondsToSelector:@selector(sizeInBound:forData:)]) {
+//            CGSize size = [[_cellLayout class] sizeInBound:self.bounds.size forData:self.cellData];
+//            [super setFrame:CGRectMake(self.layer.frame.origin.x, self.layer.frame.origin.y, size.width,size.height)];
+//        }
 //		[_cellLayout cellLayout:self bound:self.bounds.size];
 	}
 
