@@ -279,7 +279,7 @@
 	return obj ? obj : other;
 }
 
--(id)easyDict2NSObject:(Class)clazz{
+-(id)convertForClass:(Class)clazz{
     id object = [[clazz alloc] init];
     
     NSUInteger			propertyCount = 0;
@@ -326,7 +326,7 @@
                 if ([tempvalue isKindOfClass:NSClassFromString(className)]) {
                     value = tempvalue;
                 }else if ([tempvalue isKindOfClass:[NSDictionary class]]) {
-                    value = [(NSDictionary *)tempvalue easyDict2NSObject:NSClassFromString(className)];
+                    value = [(NSDictionary *)tempvalue convertForClass:NSClassFromString(className)];
                 }
                 
             }
@@ -340,6 +340,7 @@
 }
 
 @end
+
 
 #pragma mark -
 
