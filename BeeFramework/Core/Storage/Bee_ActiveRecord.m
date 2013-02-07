@@ -660,24 +660,6 @@
 	return [[[[self class] alloc] initWithJSONString:string] autorelease];
 }
 
-+(NSArray *)recordsWithDictionaryArray:(NSArray *)dictArray{
-    NSMutableArray *array = [NSMutableArray array];
-    for(NSDictionary *dict in dictArray){
-        [array addObject:[self recordWithDictionary:dict]];
-    }
-    return array;
-}
-
-+(NSArray *)recordsAsynSaveWithArray:(NSArray *)array{
-    NSArray *results = [self recordsWithDictionaryArray:array];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-        for (BeeActiveRecord *record in results) {
-            record.SAVE();
-        }
-    });
-    return results;
-}
-
 - (void)load
 {
 	
