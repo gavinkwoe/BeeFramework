@@ -154,7 +154,7 @@ DEF_SIGNAL( TOUCH_UP_CANCEL )
 	self.contentMode = UIViewContentModeCenter;
 	self.adjustsImageWhenDisabled = YES;
 	self.adjustsImageWhenHighlighted = YES;
-	
+	self.titleTextAlignment = UITextAlignmentCenter;
 	if ( nil == _actions )
 	{
 		_actions = [[NSMutableArray alloc] init];
@@ -175,7 +175,7 @@ DEF_SIGNAL( TOUCH_UP_CANCEL )
 	_label.backgroundColor = [UIColor clearColor];
 	_label.font = [UIFont boldSystemFontOfSize:14.0f];
 	_label.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
-	_label.textAlignment = UITextAlignmentCenter;
+    _label.textAlignment = titleTextAlignment;
 	_label.textColor = [UIColor whiteColor];
 	_label.backgroundColor = [UIColor clearColor];
 	_label.lineBreakMode = UILineBreakModeTailTruncation;
