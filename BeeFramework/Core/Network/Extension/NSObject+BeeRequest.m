@@ -73,6 +73,13 @@
 	return req;
 }
 
+
+- (BeeRequest *)FILE:(NSString *)url savepath:(NSString *)savepath allowResume:(BOOL)allowResume sync:(BOOL)sync{
+    BeeRequest * req = [BeeRequestQueue FILE:url savepath:savepath allowResume:allowResume sync:sync];
+    [req addResponder:self];
+    return req;
+}
+
 - (BOOL)isRequestResponder
 {
 	if ( [self respondsToSelector:@selector(handleRequest:)] )

@@ -47,6 +47,7 @@
 - (BeeRequest *)HTTP_GET:(NSString *)url;
 - (BeeRequest *)HTTP_POST:(NSString *)url;
 - (BeeRequest *)HTTP_POST:(NSString *)url postdata:(NSDictionary *)postdata;
+- (BeeRequest *)FILE:(NSString *)url savepath:(NSString *)savepath allowResume:(BOOL)allowResume sync:(BOOL)sync;
 
 - (BOOL)isRequestResponder;
 - (BOOL)requestingURL;
