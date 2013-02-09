@@ -12,6 +12,9 @@ google groups: https://groups.google.com/d/forum/beeframework?hl=zh-CN
 
 --------------------
 
+Happy chinese new year~~~~
+![Fu](http://blog.whatsbug.com/wp-content/uploads/2013/02/fu.jpg)
+
 ##Who using Bee
 
 ####Companies
