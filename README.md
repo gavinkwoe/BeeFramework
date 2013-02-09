@@ -13,7 +13,7 @@ google groups: https://groups.google.com/d/forum/beeframework?hl=zh-CN
 --------------------
 
 Happy chinese new year~~~~
-![Fu](http://blog.whatsbug.com/wp-content/uploads/2013/02/fu.jpg)
+![Fu](http://blog.whatsbug.com/wp-content/uploads/2013/02/fu2.jpg)
 
 ##Who using Bee
 
