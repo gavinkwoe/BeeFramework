@@ -222,7 +222,7 @@
 				}
 			}
 		}
-		
+		free( properties );	
 		clazzType = class_getSuperclass( clazzType );
 		if ( nil == clazzType || clazzType == [BeeActiveRecord class] )
 			break;
