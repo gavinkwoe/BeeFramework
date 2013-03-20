@@ -239,6 +239,7 @@
 
 @dynamic CLASS_TYPE;
 @dynamic ASSOCIATE;
+@dynamic HAS;
 
 @dynamic resultArray;
 @dynamic resultCount;
@@ -925,7 +926,7 @@ static NSUInteger		__identSeed = 1;
 	if ( NO == succed )
 		return NO;
 	
-	NSDictionary * dict = [result resultDictionary];
+	NSDictionary * dict = [result resultDict];
 	if ( nil == dict )
 		return NO;
 	
@@ -1496,7 +1497,7 @@ static NSUInteger		__identSeed = 1;
 	{
 		while ( [result next] )
 		{
-			[_resultArray addObject:[result resultDictionary]];
+			[_resultArray addObject:[result resultDict]];
 		}
 		
 		_resultCount = _resultArray.count;
@@ -1682,7 +1683,7 @@ static NSUInteger		__identSeed = 1;
 		if ( NO == ret )
 			return 0;
 		
-		_resultCount = (NSUInteger)[result unsignedLongLongIntForColumn:@"numrows"];
+		_resultCount = (NSUInteger)[result longLongIntForColumn:@"numrows"];
 		_lastSucceed = YES;
 	}
     

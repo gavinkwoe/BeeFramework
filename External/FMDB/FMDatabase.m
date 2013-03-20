@@ -26,7 +26,7 @@
 
 + (BOOL)isSQLiteThreadSafe {
     // make sure to read the sqlite headers on this guy!
-    return sqlite3_threadsafe() != 0;
+    return sqlite3_threadsafe();
 }
 
 - (id)initWithPath:(NSString*)aPath {
@@ -149,6 +149,7 @@
 - (void)clearCachedStatements {
     
     for (FMStatement *cachedStmt in [_cachedStatements objectEnumerator]) {
+        //NSLog(@"cachedStmt: '%@'", cachedStmt);
         [cachedStmt close];
     }
     
@@ -184,6 +185,7 @@
 }
 
 - (void)setCachedStatement:(FMStatement*)statement forQuery:(NSString*)query {
+    //NSLog(@"setting query: %@", query);
     
     query = [query copy]; // in case we got handed in a mutable string...
     
@@ -288,15 +290,8 @@
     return sqlite3_errcode(_db);
 }
 
-
-- (NSError*)errorWithMessage:(NSString*)message {
-    NSDictionary* errorMessage = [NSDictionary dictionaryWithObject:message forKey:NSLocalizedDescriptionKey];
-    
-    return [NSError errorWithDomain:@"FMDatabase" code:sqlite3_errcode(_db) userInfo:errorMessage];    
-}
-
 - (NSError*)lastError {
-   return [self errorWithMessage:[self lastErrorMessage]];
+    return [NSError errorWithDomain:@"FMDatabase" code:sqlite3_errcode(_db) userInfo:[NSDictionary dictionaryWithObject:[self lastErrorMessage] forKey:NSLocalizedDescriptionKey]];
 }
 
 - (sqlite_int64)lastInsertRowId {
@@ -338,13 +333,7 @@
     
     // FIXME - someday check the return codes on these binds.
     else if ([obj isKindOfClass:[NSData class]]) {
-        const void *bytes = [obj bytes];
-        if (!bytes) {
-            // it's an empty NSData object, aka [NSData data].
-            // Don't pass a NULL pointer, or sqlite will bind a SQL null instead of a blob.
-            bytes = "";
-        }
-        sqlite3_bind_blob(pStmt, idx, bytes, (int)[obj length], SQLITE_STATIC);
+        sqlite3_bind_blob(pStmt, idx, [obj bytes], (int)[obj length], SQLITE_STATIC);
     }
     else if ([obj isKindOfClass:[NSDate class]]) {
         sqlite3_bind_double(pStmt, idx, [obj timeIntervalSince1970]);
@@ -362,9 +351,6 @@
         }
         else if (strcmp([obj objCType], @encode(long long)) == 0) {
             sqlite3_bind_int64(pStmt, idx, [obj longLongValue]);
-        }
-        else if (strcmp([obj objCType], @encode(unsigned long long)) == 0) {
-            sqlite3_bind_int64(pStmt, idx, (long long)[obj unsignedLongLongValue]);
         }
         else if (strcmp([obj objCType], @encode(float)) == 0) {
             sqlite3_bind_double(pStmt, idx, [obj floatValue]);
@@ -392,33 +378,28 @@
         if (last == '%') {
             switch (current) {
                 case '@':
-                    arg = va_arg(args, id);
-                    break;
+                    arg = va_arg(args, id); break;
                 case 'c':
                     // warning: second argument to 'va_arg' is of promotable type 'char'; this va_arg has undefined behavior because arguments will be promoted to 'int'
-                    arg = [NSString stringWithFormat:@"%c", va_arg(args, int)];
-                    break;
+                    arg = [NSString stringWithFormat:@"%c", va_arg(args, int)]; break;
                 case 's':
-                    arg = [NSString stringWithUTF8String:va_arg(args, char*)];
-                    break;
+                    arg = [NSString stringWithUTF8String:va_arg(args, char*)]; break;
                 case 'd':
                 case 'D':
                 case 'i':
-                    arg = [NSNumber numberWithInt:va_arg(args, int)];
-                    break;
+                    arg = [NSNumber numberWithInt:va_arg(args, int)]; break;
                 case 'u':
                 case 'U':
-                    arg = [NSNumber numberWithUnsignedInt:va_arg(args, unsigned int)];
-                    break;
+                    arg = [NSNumber numberWithUnsignedInt:va_arg(args, unsigned int)]; break;
                 case 'h':
                     i++;
                     if (i < length && [sql characterAtIndex:i] == 'i') {
                         //  warning: second argument to 'va_arg' is of promotable type 'short'; this va_arg has undefined behavior because arguments will be promoted to 'int'
-                        arg = [NSNumber numberWithShort:(short)(va_arg(args, int))];
+                        arg = [NSNumber numberWithShort:va_arg(args, int)];
                     }
                     else if (i < length && [sql characterAtIndex:i] == 'u') {
                         // warning: second argument to 'va_arg' is of promotable type 'unsigned short'; this va_arg has undefined behavior because arguments will be promoted to 'int'
-                        arg = [NSNumber numberWithUnsignedShort:(unsigned short)(va_arg(args, uint))];
+                        arg = [NSNumber numberWithUnsignedShort:va_arg(args, uint)];
                     }
                     else {
                         i--;
@@ -437,12 +418,10 @@
                     }
                     break;
                 case 'f':
-                    arg = [NSNumber numberWithDouble:va_arg(args, double)];
-                    break;
+                    arg = [NSNumber numberWithDouble:va_arg(args, double)]; break;
                 case 'g':
                     // warning: second argument to 'va_arg' is of promotable type 'float'; this va_arg has undefined behavior because arguments will be promoted to 'double'
-                    arg = [NSNumber numberWithFloat:(float)(va_arg(args, double))];
-                    break;
+                    arg = [NSNumber numberWithFloat:va_arg(args, double)]; break;
                 case 'l':
                     i++;
                     if (i < length) {
@@ -605,7 +584,7 @@
         while (idx < queryCount) {
             
             if (arrayArgs) {
-                obj = [arrayArgs objectAtIndex:(NSUInteger)idx];
+                obj = [arrayArgs objectAtIndex:idx];
             }
             else {
                 obj = va_arg(args, id);
@@ -745,7 +724,7 @@
                 sqlite3_finalize(pStmt);
                 
                 if (outErr) {
-                    *outErr = [self errorWithMessage:[NSString stringWithUTF8String:sqlite3_errmsg(_db)]];
+                    *outErr = [NSError errorWithDomain:[NSString stringWithUTF8String:sqlite3_errmsg(_db)] code:rc userInfo:nil];
                 }
                 
                 _isExecutingStatement = NO;
@@ -789,7 +768,7 @@
         while (idx < queryCount) {
             
             if (arrayArgs) {
-                obj = [arrayArgs objectAtIndex:(NSUInteger)idx];
+                obj = [arrayArgs objectAtIndex:idx];
             }
             else {
                 obj = va_arg(args, id);

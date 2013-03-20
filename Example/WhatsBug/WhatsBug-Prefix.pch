@@ -15,5 +15,5 @@
 #import <TargetConditionals.h>
 #endif
 
-#undef	NSLog
-#define	NSLog	BeeLog
+//#undef	NSLog
+//#define	NSLog	BeeLog

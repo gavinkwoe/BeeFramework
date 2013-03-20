@@ -93,7 +93,6 @@ DEF_SINGLETON( BeeDebugMessageModel )
 		}
 
 		_upperBound = MAX( MAX( MAX( _sendingCount, _succeedCount ), _failedCount ), _upperBound );
-		_upperBound = _upperBound;
 	};
 	
 	[self observeTick];

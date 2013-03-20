@@ -40,8 +40,8 @@
 #undef	VAR_DUMP
 #define VAR_DUMP	BeeLog
 
-#undef	NSLog
-#define NSLog		BeeLog
+//#undef	NSLog
+//#define NSLog		BeeLog
 
 #if __cplusplus
 extern "C" {
