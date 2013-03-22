@@ -892,11 +892,11 @@ static NSOperationQueue *sharedQueue = nil;
 		if (![self mainRequest]) {
 			[self buildPostBody];
 		}
-		
+		/*
 		if (![[self requestMethod] isEqualToString:@"GET"]) {
 			[self setDownloadCache:nil];
 		}
-		
+		*/
 		
 		// If we're redirecting, we'll already have a CFHTTPMessageRef
 		if (request) {
@@ -3577,8 +3577,8 @@ static NSOperationQueue *sharedQueue = nil;
 
 - (void)useDataFromCache
 {
-	NSDictionary *headers = [[self downloadCache] cachedResponseHeadersForURL:[self url]];
-	NSString *dataPath = [[self downloadCache] pathToCachedResponseDataForURL:[self url]];
+	NSDictionary *headers = [[self downloadCache] cachedResponseHeadersForURL:[[self downloadCache] cacheUrl:self]];
+	NSString *dataPath = [[self downloadCache] pathToCachedResponseDataForURL:[[self downloadCache] cacheUrl:self]];
 
 	ASIHTTPRequest *theRequest = self;
 	if ([self mainRequest]) {
@@ -3594,7 +3594,7 @@ static NSOperationQueue *sharedQueue = nil;
 		if ([theRequest downloadDestinationPath]) {
 			[theRequest setDownloadDestinationPath:dataPath];
 		} else {
-			[theRequest setRawResponseData:[NSMutableData dataWithData:[[self downloadCache] cachedResponseDataForURL:[self url]]]];
+			[theRequest setRawResponseData:[NSMutableData dataWithData:[[self downloadCache] cachedResponseDataForURL:[[self downloadCache] cacheUrl:self]]]];
 		}
 		[theRequest setContentLength:[[[self responseHeaders] objectForKey:@"Content-Length"] longLongValue]];
 		[theRequest setTotalBytesRead:[self contentLength]];
