@@ -72,6 +72,16 @@ DEF_SIGNAL( HIGHLIGHT_CHANGED )
     return self;
 }
 
+-(id)initWithCoder:(NSCoder *)aDecoder{
+    if( (self = [super initWithCoder:aDecoder]) )
+    {
+        [_barItems release];
+        _barItems = [[NSMutableArray alloc] init];
+        _barSignals = [[NSMutableDictionary alloc] init];
+    }
+    return self;
+}
+
 - (id)initWithFrame:(CGRect)frame
 {
     if( (self = [super initWithFrame:frame]) )
