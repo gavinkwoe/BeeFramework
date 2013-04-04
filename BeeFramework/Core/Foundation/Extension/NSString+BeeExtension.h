@@ -48,8 +48,6 @@ typedef NSString *	(^NSStringAppendBlock)( id format, ... );
 @property (nonatomic, readonly) NSString *			MD5;
 @property (nonatomic, readonly) NSData *			MD5Data;
 
-@property (nonatomic, readonly) NSString *			SHA1;
-
 - (NSArray *)allURLs;
 
 - (NSString *)urlByAppendingDict:(NSDictionary *)params;
