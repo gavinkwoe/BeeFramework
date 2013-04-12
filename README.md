@@ -60,52 +60,164 @@ P. MesonTech, http://www.mesontech.com.cn/home/mesontech.jsp
 
 --------------------
 
+##v0.3.0 changes
+
+1. Fully support for MacOS
+2. Fully support for UI template:
+	(now, only support for .xml format.)
+	(.html, .android, .json will support soon)
+
+		<?xml version="1.0" encoding="UTF-8"?>
+		<ui id="test">
+
+			<layout>
+				<container orientation="vertical" autoresize_height="false">
+					<view class="BeeUIButton" id="welcome" h="60%" style="welcome"/>
+					<space h="2.5%"/>
+					<container orientation="horizonal" h="10%">
+						<space w="4%"/>
+						<view class="BeeUIButton" id="facebook" w="92%" style="facebook"/>
+						<space w="4%"/>
+					</container>
+          		  	<space h="2.5%"/>
+					<container orientation="horizonal" h="10%">
+						<space w="4%"/>
+						<view class="BeeUIButton" id="twitter" w="44%" style="twitter"/>
+						<space w="4%"/>
+						<view class="BeeUIButton" id="google" w="44%" style="google"/>
+						<space w="4%"/>
+					</container>
+					<space h="2.5%"/>
+					<container orientation="horizonal" h="10%">
+						<space w="4%"/>
+						<view class="BeeUIButton" id="sign-up" w="44%" style="sign-up"/>
+						<space w="4%"/>
+						<view class="BeeUIButton" id="sign-in" w="44%" style="sign-in"/>
+						<space w="4%"/>
+					</container>
+				</container>
+			</layout>
+
+			<style id="welcome">
+				font:	'24, bold';
+				color:	#369;
+				text:	"We are the champion!";
+			</style>
+			<style id="facebook">
+				{
+					"font" :	"18, bold",
+					"color" :	"#666",
+					"text" :	"Facebook"
+				}
+			</style>
+			<style id="twitter">
+				{
+					"font" :	"18, bold",
+					"color" :	"#666",
+					"text" :	"Twitter"
+				}
+			</style>
+			<style id="google">
+				{
+					"font" :	"18, bold",
+					"color" :	"#666",
+					"text" :	"Google"
+				}
+			</style>
+			<style id="sign-up">
+				font:	'18, bold';
+				color:	#666;
+				text:	"Sign up";
+			</style>
+			<style id="sign-in">
+				font:	'18, bold';
+				color:	#666;
+				text:	"Sign in";
+			</style>
+
+		</ui>
+
+3. Fully support for UI query syntax, like jQUERY:
+
+	(in any view/viewController, you can coding like below:)
+	(see Lesson 14)
+
+		$(@"*").HIDE().XX().YY().ZZ().....;
+		$(@"#a").HIDE().XX().YY().ZZ().....;
+		$(@"h > i").HIDE().XX().YY().ZZ().....;
+		$(@".BeeUILabel").HIDE().XX().YY().ZZ().....;		
+		$(@"h").BEFORE( [BeeUILabel class], @"h3" );
+		$(@"h").AFTER( [BeeUILabel class], @"h4" );
+		NSAssert( $(@"h3").NEXT().view == $(@"h").view, @"" );
+		NSAssert( $(@"h4").PREV().view == $(@"h").view, @"" );
+		
+		$(@"h").EMPTY();
+		NSAssert( $(@"h").CHILDREN().count == 0, @"" );
+		NSAssert( 0 == $(@"h > i").count, @"" );
+		NSAssert( 0 == $(@"h > j").count, @"" );
+		NSAssert( $(@"h3").count > 0, @"" );
+		NSAssert( $(@"h4").count > 0, @"" );
+		
+		$(@"h").REMOVE();
+		NSAssert( 0 == $(@"h").count, @"" );
+		NSAssert( 0 == $(@"h > i").count, @"" );
+		NSAssert( 0 == $(@"h > j").count, @"" );
+		NSAssert( $(@"h3").count > 0, @"" );
+		NSAssert( $(@"h4").count > 0, @"" );
+		
+		$(self).EMPTY();
+		NSAssert( $(self).CHILDREN().count == 0, @"" );
+		NSAssert( $(self).CHILDREN().count == 0, @"" );
+		
+4. Fix some bugs
+
+
 ##v0.2.3 changes
 
 1. Refactoring the directory structure, Core and MVC completely separated, and the source files and the extensions completely separated
 2. Refactoring the code structure of BeeDatabase and BeeActiveRecord, more clearly
 3. Support the ActiveRecord inherition and nesting, support HAS/BELONG_TO operations, such as:
 
-	@interface Location : BeeActiveRecord    
-	...    
-	@end    
+		@interface Location : BeeActiveRecord    
+		...    
+		@end    
 
-	@interface User : BeeActiveRecord    
-	...    
-	@end    
+		@interface User : BeeActiveRecord    
+		...    
+		@end    
 	
-	@interface User2 : User    
-	@property (nonatomic, retain) Location * location;    
-	...    
-	@end    
+		@interface User2 : User    
+		@property (nonatomic, retain) Location * location;    
+		...    
+		@end    
 
-	Magzine * magzine = ...;    
-	Article.DB.BELONG_TO( magzine ).GET_RECORDS();    
-	Article.DB.BELONG_TO( magzine ).SAVE_ARRAY( result );    
+		Magzine * magzine = ...;    
+		Article.DB.BELONG_TO( magzine ).GET_RECORDS();    
+		Article.DB.BELONG_TO( magzine ).SAVE_ARRAY( result );    
 
-	Article * article = ...;    
-	Magzine.DB.HAS( article ).GET_RECORDS();    
+		Article * article = ...;    
+		Magzine.DB.HAS( article ).GET_RECORDS();    
 
 	(follow-up version will add more RUBY-like advanced features)    
 
 4. Support dot(.) opertions for BeeRequest & BeeMessage, such as：
 
-	self    
-	.HTTP_GET( @"http://www.qq.com" )    
-	.HEADER( @"header1", @"xxx" )    
-	.HEADER( @"header2", @"xxx" )    
-	.HEADER( @"header3", @"xxx" )    
-	.PARAM( @"key1", @"xxx" )    
-	.PARAM( @"key2", @"xxx" )    
-	.PARAM( @"key3", @"xxx" )    
-	.FILE( @"photo1.png", [NSData data] )    
-	.FILE( @"photo2.png", [NSData data] )    
-	.FILE( @"photo3.png", [NSData data] );    
+		self    
+		.HTTP_GET( @"http://www.qq.com" )    
+		.HEADER( @"header1", @"xxx" )    
+		.HEADER( @"header2", @"xxx" )    
+		.HEADER( @"header3", @"xxx" )    
+		.PARAM( @"key1", @"xxx" )    
+		.PARAM( @"key2", @"xxx" )    
+		.PARAM( @"key3", @"xxx" )    
+		.FILE( @"photo1.png", [NSData data] )    
+		.FILE( @"photo2.png", [NSData data] )    
+		.FILE( @"photo3.png", [NSData data] );    
 
-	self
-	.MSG( ArticleController.GET_ARTICLES )    
-	.TIMEOUT( 10.0f )    
-	.INPUT( @"magzine", _magzine );    
+		self
+		.MSG( ArticleController.GET_ARTICLES )    
+		.TIMEOUT( 10.0f )    
+		.INPUT( @"magzine", _magzine );    
 
 5. Fix some bugs (Thanks, I love U all!)
 
