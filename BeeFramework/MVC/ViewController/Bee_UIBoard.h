@@ -152,6 +152,7 @@ AS_INT( ANIMATION_TYPE_DEFAULT )	// 默认动画
 
 + (NSArray *)allBoards;
 + (BeeUIBoard *)board;
++ (BeeUIBoard *)boardWithNibName:(NSString *)nibNameOrNil;
 
 - (void)load;
 - (void)unload;

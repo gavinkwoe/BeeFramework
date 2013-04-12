@@ -171,6 +171,33 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 	return self;
 }
 
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if( (self = [super initWithCoder:aDecoder]) )
+    {
+		_direction = BeeUIScrollView.DIRECTION_VERTICAL;
+        _dataSource = self;
+        
+        _reloaded = NO;
+        _lineCount = 0;
+        
+        _total = 0;
+        [_items release];
+        _items = [[NSMutableArray alloc] init];
+        
+        [_reuseQueue release];
+        _reuseQueue = [[NSMutableArray alloc] init];
+        
+        _visibleStart = 0;
+        _visibleEnd = 0;
+        
+        _reachTop = NO;
+        _reachEnd = NO;		
+        _baseInsets = UIEdgeInsetsZero;
+    }
+    return self;
+}
+
 - (id)initWithFrame:(CGRect)frame
 {
 	self = [super initWithFrame:frame];

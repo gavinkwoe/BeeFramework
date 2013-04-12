@@ -2008,7 +2008,8 @@ static NSUInteger		__identSeed = 1;
 
 + (NSString *)fieldNameForIdentifier:(NSString *)identifier
 {
-	NSString * name = identifier.lowercaseString;
+	//NSString * name = identifier.lowercaseString;
+    NSString * name = identifier;
 	name = [name stringByReplacingOccurrencesOfString:@"." withString:@"_"];
 	name = [name stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
 	return name;
@@ -2016,6 +2017,10 @@ static NSUInteger		__identSeed = 1;
 
 + (NSString *)tableNameForClass:(Class)clazz
 {
+    //可通过mapRelationTable重定义表名
+    if ([clazz respondsToSelector:@selector(mapRelationTable)]) {
+        return [clazz performSelector:@selector(mapRelationTable)];
+    }
 	return [NSString stringWithFormat:@"table_%@",[clazz description].lowercaseString];
 }
 

@@ -127,6 +127,23 @@ DEF_SIGNAL( TOUCH_UP_CANCEL )
 	return view;
 }
 
+-(id) initWithCoder:(NSCoder *)aDecoder{
+    self = [super initWithCoder:aDecoder];
+    if ( self )
+	{
+		if ( nil == _actions )
+        {
+            _actions = [[NSMutableArray alloc] init];
+        }
+        
+        [self addTarget:self action:@selector(didTouchDown) forControlEvents:UIControlEventTouchDown];
+        [self addTarget:self action:@selector(didTouchDownRepeat) forControlEvents:UIControlEventTouchDownRepeat];
+        [self addTarget:self action:@selector(didTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+        [self addTarget:self action:@selector(didTouchUpOutside) forControlEvents:UIControlEventTouchUpOutside];
+	}
+	return self;
+}
+
 - (id)init
 {
 	self = [super init];
