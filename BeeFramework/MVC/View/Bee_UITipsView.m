@@ -30,6 +30,8 @@
 //  Bee_UITipsView.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import <QuartzCore/QuartzCore.h>
 #import "Bee_UITipsView.h"
 #import "Bee_UIKeyboard.h"
@@ -596,8 +598,9 @@ DEF_SIGNAL( DID_DISAPPEAR );
 			bound.size.height -= [BeeUIKeyboard sharedInstance].height;
 		}
 
-		bound.origin.y += 44.0f;
+//		bound.origin.y += 44.0f;
 		bound.size.height -= 44.0f;
+		bound.size.height -= 20.0f;
 
 		CGRect viewFrame;
 		viewFrame.origin.x = bound.origin.x + (bound.size.width - DEFAULT_TIPS_BUBBLE_WIDTH) / 2.0f;
@@ -651,7 +654,16 @@ DEF_SIGNAL( DID_DISAPPEAR );
 		_bubbleView = [[UIImageView alloc] initWithFrame:CGRectZero];
 		_bubbleView.backgroundColor = [UIColor clearColor];
 		_bubbleView.contentMode = UIViewContentModeCenter;
-		_bubbleView.image = [BeeUITipsCenter sharedInstance].bubble.stretched;
+		if ( [BeeUITipsCenter sharedInstance].bubble )
+		{
+			_bubbleView.image = [BeeUITipsCenter sharedInstance].bubble.stretched;
+		}
+		else
+		{
+			_bubbleView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.6f];
+			_bubbleView.layer.masksToBounds = YES;
+			_bubbleView.layer.cornerRadius = 4.0f;
+		}
 		[self addSubview:_bubbleView];
 
 		_iconView = [[UIImageView alloc] initWithFrame:CGRectZero];
@@ -737,7 +749,16 @@ DEF_SIGNAL( DID_DISAPPEAR );
 		_bubbleView = [[UIImageView alloc] initWithFrame:CGRectZero];
 		_bubbleView.backgroundColor = [UIColor clearColor];
 		_bubbleView.contentMode = UIViewContentModeCenter;
-		_bubbleView.image = [BeeUITipsCenter sharedInstance].bubble.stretched;
+		if ( [BeeUITipsCenter sharedInstance].bubble )
+		{
+			_bubbleView.image = [BeeUITipsCenter sharedInstance].bubble.stretched;
+		}
+		else
+		{
+			_bubbleView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.6f];
+			_bubbleView.layer.masksToBounds = YES;
+			_bubbleView.layer.cornerRadius = 4.0f;
+		}
 		[self addSubview:_bubbleView];
 		
 		_indicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectZero];
@@ -811,7 +832,16 @@ DEF_SIGNAL( DID_DISAPPEAR );
 		_bubbleView = [[UIImageView alloc] initWithFrame:CGRectZero];
 		_bubbleView.backgroundColor = [UIColor clearColor];
 		_bubbleView.contentMode = UIViewContentModeCenter;
-		_bubbleView.image = [BeeUITipsCenter sharedInstance].bubble.stretched;
+		if ( [BeeUITipsCenter sharedInstance].bubble )
+		{
+			_bubbleView.image = [BeeUITipsCenter sharedInstance].bubble.stretched;
+		}
+		else
+		{
+			_bubbleView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.6f];
+			_bubbleView.layer.masksToBounds = YES;
+			_bubbleView.layer.cornerRadius = 4.0f;
+		}
 		[self addSubview:_bubbleView];
 		
 		_indicator = [[UIProgressView alloc] initWithFrame:CGRectZero];
@@ -877,3 +907,5 @@ DEF_SIGNAL( DID_DISAPPEAR );
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

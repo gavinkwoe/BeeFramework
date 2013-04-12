@@ -384,26 +384,81 @@
 	return nil;
 }
 
+// thanks to @uxyheaven
 - (NSString *)SHA1
 {
-    const char *cstr = [self cStringUsingEncoding:NSUTF8StringEncoding];
-    NSData *data = [NSData dataWithBytes:cstr length:self.length];
-    
-    uint8_t digest[CC_SHA1_DIGEST_LENGTH];
-    
-    CC_SHA1(data.bytes, data.length, digest);
-    
-    NSMutableString* output = [NSMutableString stringWithCapacity:CC_SHA1_DIGEST_LENGTH * 2];
-    
-    for(int i = 0; i < CC_SHA1_DIGEST_LENGTH; i++)
-        [output appendFormat:@"%02x", digest[i]];
-    
+    const char *	cstr = [self cStringUsingEncoding:NSUTF8StringEncoding];
+    NSData *		data = [NSData dataWithBytes:cstr length:self.length];
+
+    uint8_t digest[CC_SHA1_DIGEST_LENGTH] = { 0 };
+    CC_SHA1( data.bytes, data.length, digest );
+
+    NSMutableString * output = [NSMutableString stringWithCapacity:CC_SHA1_DIGEST_LENGTH * 2];
+    for ( int i = 0; i < CC_SHA1_DIGEST_LENGTH; i++ )
+	{
+		[output appendFormat:@"%02x", digest[i]];
+	}
+
     return output;
 }
 
 - (NSString *)trim
 {
 	return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+
+- (NSString *)unwrap
+{
+	if ( self.length >= 2 )
+	{
+		if ( self.length == 2 )
+			return @"";
+
+		if ( [self hasPrefix:@"\""] && [self hasSuffix:@"\""] )
+		{
+			return [self substringWithRange:NSMakeRange(1, self.length - 2)];
+		}
+
+		if ( [self hasPrefix:@"'"] && [self hasSuffix:@"'"] )
+		{
+			return [self substringWithRange:NSMakeRange(1, self.length - 2)];
+		}
+	}
+
+	return self;
+}
+
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+- (CGSize)sizeWithFont:(UIFont *)font byWidth:(CGFloat)width
+{
+	return [self sizeWithFont:font
+			constrainedToSize:CGSizeMake(width, 999999.0f)
+				lineBreakMode:UILineBreakModeWordWrap];	
+}
+
+- (CGSize)sizeWithFont:(UIFont *)font byHeight:(CGFloat)height
+{
+	return [self sizeWithFont:font
+			constrainedToSize:CGSizeMake(999999.0f, height)
+				lineBreakMode:UILineBreakModeWordWrap];
+}
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
+- (BOOL)match:(NSString *)expression
+{
+	NSRegularExpression * regex = [NSRegularExpression regularExpressionWithPattern:expression
+																			options:NSRegularExpressionCaseInsensitive
+																			  error:nil];
+	if ( nil == regex )
+		return NO;
+	
+	NSUInteger numberOfMatches = [regex numberOfMatchesInString:self
+														options:0
+														  range:NSMakeRange(0, self.length)];
+	if ( 0 == numberOfMatches )
+		return NO;
+
+	return YES;
 }
 
 @end

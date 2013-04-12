@@ -71,10 +71,9 @@
 
 @interface BeeDatabase(BeeActiveRecord)
 
-@property (nonatomic, readonly) BeeDatabaseBlockN		BELONG_TO;
-@property (nonatomic, readonly) BeeDatabaseBlockN		HAS;
-
 @property (nonatomic, readonly) BeeDatabaseBlockN		SAVE;
+@property (nonatomic, readonly) BeeDatabaseBlockN		SAVE_DATA;
+@property (nonatomic, readonly) BeeDatabaseBlockN		SAVE_STRING;
 @property (nonatomic, readonly) BeeDatabaseBlockN		SAVE_ARRAY;
 @property (nonatomic, readonly) BeeDatabaseBlockN		SAVE_DICTIONARY;
 
@@ -84,6 +83,8 @@
 @property (nonatomic, readonly) BeeDatabaseObjectBlock	LAST_RECORD;
 @property (nonatomic, readonly) BeeDatabaseObjectBlockN	LAST_RECORD_BY_ID;
 
+- (id)saveData:(NSData *)data;
+- (id)saveString:(NSString *)string;
 - (id)saveArray:(NSArray *)array;
 - (id)saveDictionary:(NSDictionary *)dict;
 

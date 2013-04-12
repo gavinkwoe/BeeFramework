@@ -205,6 +205,8 @@ static void (* _origSendEvent)( id, SEL, UIEvent * );
 					[touch.view addSubview:border];
 					[border startAnimation];
                     [border release];
+					
+					CC( @"touch.view = %@", touch.view );
 				}
 				else if ( UITouchPhaseMoved == touch.phase )
 				{

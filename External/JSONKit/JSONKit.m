@@ -132,9 +132,9 @@
 #warning As of JSONKit v1.4, JK_ENABLE_CF_TRANSFER_OWNERSHIP_CALLBACKS is no longer required.  It is no longer a valid option.
 #endif
 
-#ifdef __OBJC_GC__
-#error JSONKit does not support Objective-C Garbage Collection
-#endif
+//#ifdef __OBJC_GC__
+//#error JSONKit does not support Objective-C Garbage Collection
+//#endif
 
 #if __has_feature(objc_arc)
 #error JSONKit does not support Objective-C Automatic Reference Counting (ARC)

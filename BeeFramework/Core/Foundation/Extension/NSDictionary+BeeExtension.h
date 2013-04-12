@@ -42,6 +42,9 @@ typedef NSDictionary *	(^NSDictionaryAppendBlock)( NSString * key, id value );
 
 @property (nonatomic, readonly) NSDictionaryAppendBlock	APPEND;
 
+- (NSObject *)objectOfAny:(NSArray *)array;
+- (NSString *)stringOfAny:(NSArray *)array;
+
 - (NSObject *)objectAtPath:(NSString *)path;
 - (NSObject *)objectAtPath:(NSString *)path otherwise:(NSObject *)other;
 
@@ -68,7 +71,9 @@ typedef NSDictionary *	(^NSDictionaryAppendBlock)( NSString * key, id value );
 
 - (NSMutableDictionary *)mutableDictAtPath:(NSString *)path;
 - (NSMutableDictionary *)mutableDictAtPath:(NSString *)path otherwise:(NSMutableDictionary *)other;
--(NSObject *)objectForClass:(Class)clazz;
+
+- (NSObject *)objectForClass:(Class)clazz;
+
 @end
 
 #pragma mark -

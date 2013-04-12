@@ -30,6 +30,8 @@
 //  Bee_UISegmentedControl.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISegmentedControl.h"
 #import "Bee_UISignal.h"
@@ -186,3 +188,5 @@ DEF_SIGNAL( HIGHLIGHT_CHANGED )
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

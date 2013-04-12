@@ -30,6 +30,8 @@
 //  Bee_UIDataPicker.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 
@@ -72,3 +74,5 @@ AS_SIGNAL( CONFIRMED )		// 确认
 - (void)setDate:(NSDate *)date animated:(BOOL)animated;
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

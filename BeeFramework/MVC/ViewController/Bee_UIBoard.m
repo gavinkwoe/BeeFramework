@@ -30,6 +30,8 @@
 //  Bee_UIBoard.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UIBoard.h"
 #import "Bee_UIStack.h"
@@ -64,7 +66,9 @@
 #undef	MAX_SIGNALS
 #define MAX_SIGNALS		(50)
 
-#define ORIENTATIONMASK(_orientation) (1<<_orientation)
+//// thanks to @inonomori
+//#undef	ORIENTATIONMASK
+//#define ORIENTATIONMASK( __x )		( 1 << __x )
 
 #pragma mark -
 
@@ -219,6 +223,10 @@
 @synthesize modalContentView = _modalContentView;
 @synthesize modalAnimationType = _modalAnimationType;
 
+@synthesize zoomed = _zoomed;
+@synthesize zoomRect = _zoomRect;
+@synthesize animationBlock = _animationBlock;
+
 @synthesize deactivated;
 @synthesize deactivating;
 @synthesize activating;
@@ -230,7 +238,8 @@
 @dynamic previousBoard;
 @dynamic nextBoard;
 
-@synthesize allowedOrientation = _allowedOrientation;
+@synthesize allowedPortrait = _allowedPortrait;
+@synthesize allowedLandscape = _allowedLandscape;
 
 #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 @synthesize createSeq = _createSeq;
@@ -249,6 +258,9 @@ DEF_SIGNAL( DID_APPEAR )			// 已经显示
 DEF_SIGNAL( WILL_DISAPPEAR )		// 将要隐藏
 DEF_SIGNAL( DID_DISAPPEAR )			// 已经隐藏
 DEF_SIGNAL( ORIENTATION_CHANGED )	// 方向变化
+
+DEF_SIGNAL( ANIMATION_BEGIN )		// 动画开始
+DEF_SIGNAL( ANIMATION_FINISH )		// 动画结束
 
 DEF_SIGNAL( MODALVIEW_WILL_SHOW )	// ModalView将要显示
 DEF_SIGNAL( MODALVIEW_DID_SHOWN )	// ModalView已经显示
@@ -269,6 +281,9 @@ DEF_INT( ANIMATION_TYPE_DEFAULT,	0 )
 DEF_INT( ANIMATION_TYPE_ALPHA,		0 )
 DEF_INT( ANIMATION_TYPE_BOUNCE,		1 )
 
+DEF_INT( BARBUTTON_LEFT,			UINavigationBar.BARBUTTON_LEFT )
+DEF_INT( BARBUTTON_RIGHT,			UINavigationBar.BARBUTTON_RIGHT )
+
 static NSUInteger				__createSeed = 0;
 static NSMutableArray *			__allBoards;
 
@@ -282,11 +297,10 @@ static NSMutableArray *			__allBoards;
 	return [[(BeeUIBoard *)[BeeRuntime allocByClass:[self class]] init] autorelease];
 }
 
-+ (BeeUIBoard *)boardWithNibName:(NSString *)nibNameOrNil{
-    BeeUIBoard *board = [[[self alloc]initWithNibName:nibNameOrNil bundle:nil]autorelease];
-    return board;
++ (BeeUIBoard *)boardWithNibName:(NSString *)nibNameOrNil
+{
+	return [[[self alloc] initWithNibName:nibNameOrNil bundle:nil] autorelease];
 }
-
 
 - (id)init
 {
@@ -295,7 +309,7 @@ static NSMutableArray *			__allBoards;
 	{
 		if ( nil == __allBoards )
 		{
-			__allBoards = [NSMutableArray nonRetainingArray];
+			__allBoards = [[NSMutableArray nonRetainingArray] retain];
 		}
 
 		[__allBoards insertObject:self atIndex:0];
@@ -303,6 +317,9 @@ static NSMutableArray *			__allBoards;
 		_lastSleep = [NSDate timeIntervalSinceReferenceDate];
 		_lastWeekup = [NSDate timeIntervalSinceReferenceDate];
 		
+		_zoomed = NO;
+		_zoomRect = CGRectZero;
+
 		_firstEnter = YES;
 		_presenting = NO;
 		_viewBuilt = NO;
@@ -312,9 +329,10 @@ static NSMutableArray *			__allBoards;
 		_createDate = [[NSDate date] retain];
 		
 		_modalAnimationType = BeeUIBoard.ANIMATION_TYPE_ALPHA;
-        UIInterfaceOrientationMaskAll
-		_allowedOrientation = ORIENTATIONMASK(UIInterfaceOrientationPortrait)|ORIENTATIONMASK(UIInterfaceOrientationPortraitUpsideDown)|ORIENTATIONMASK(UIInterfaceOrientationLandscapeLeft)|ORIENTATIONMASK(UIInterfaceOrientationLandscapeRight);
 		
+		_allowedPortrait = YES;
+		_allowedLandscape = NO;
+
 	#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 		_createSeq = __createSeed++;
 		_signalSeq = 0;
@@ -331,7 +349,6 @@ static NSMutableArray *			__allBoards;
 
 - (void)load
 {
-	
 }
 
 - (void)unload
@@ -350,6 +367,8 @@ static NSMutableArray *			__allBoards;
 	
 	[self freeDatas];
 	[self deleteViews];
+	
+	self.animationBlock = nil;
 	
 #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	[_signals removeAllObjects];
@@ -507,13 +526,13 @@ static NSMutableArray *			__allBoards;
 	CC( @"[%@] loadView", [[self class] description] );
 #endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 
-    if (self.nibName) {
-        [super loadView];
-        return;
-    }
-    
-	CGRect boardViewBound = [UIScreen mainScreen].bounds;
+	if ( self.nibName )
+	{
+		[super loadView];
+		return;
+	}
 
+	CGRect boardViewBound = [UIScreen mainScreen].bounds;
 	BeeUIBoardView * boardView = [[BeeUIBoardView alloc] initWithFrame:boardViewBound];
 	boardView.owner = self;
 
@@ -540,8 +559,14 @@ static NSMutableArray *			__allBoards;
 // Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-	if ( (_allowedOrientation & ORIENTATIONMASK(interfaceOrientation)) != 0 )
-		return YES;
+	if ( interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown )
+	{
+		return _allowedPortrait ? YES : NO;
+	}
+	else if ( interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight )
+	{
+		return _allowedLandscape ? YES : NO;
+	}
 	
 	return NO;	
 }
@@ -569,12 +594,34 @@ static NSMutableArray *			__allBoards;
 
 -(NSUInteger)supportedInterfaceOrientations
 {
-	return _allowedOrientation;
+	NSUInteger orientation = 0;
+
+	if ( _allowedPortrait )
+	{
+		orientation |= UIInterfaceOrientationMaskPortrait;
+	}
+
+	if ( _allowedLandscape )
+	{
+		orientation |= UIInterfaceOrientationMaskLandscape;
+	}
+
+	return orientation;
 }
 
 - (BOOL)shouldAutorotate
 {
-	return YES;
+	if ( _allowedLandscape )
+	{
+		return YES;
+	}
+	
+	if ( _allowedPortrait )
+	{
+		return YES;
+	}
+	
+	return NO;
 }
 
 #endif	// #if defined(__IPHONE_6_0)
@@ -777,10 +824,15 @@ static NSMutableArray *			__allBoards;
 	if ( [signal isKindOf:BeeUIBoard.SIGNAL] )
 	{
 		if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
-		{			
+		{
 			self.view.backgroundColor = [UIColor clearColor];
 //			self.navigationController.navigationBarHidden = YES;
-			
+
+			if ( _zoomed )
+			{
+				[self transformZoom:_zoomRect];
+			}
+
 			_modalMaskView = [[UIButton alloc] initWithFrame:self.viewBound];
 			_modalMaskView.hidden = YES;
 			_modalMaskView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.1f];
@@ -925,6 +977,9 @@ static NSMutableArray *			__allBoards;
 	if ( nil == self.modalContentView )
 		return;
 	
+	self.modalMaskView.hidden = NO;
+	self.modalContentView.hidden = NO;
+	
 	[self sendUISignal:BeeUIBoard.MODALVIEW_WILL_HIDE];
 	
 	if ( animated )
@@ -1017,10 +1072,8 @@ static NSMutableArray *			__allBoards;
 		{
 			[subview performSelector:@selector(resignFirstResponder)];
 		}
-		else
-		{
-			[self resignFirstResponderWalkThrough:subview];
-		}
+
+		[self resignFirstResponderWalkThrough:subview];
 	}
 }
 
@@ -1090,4 +1143,77 @@ static NSMutableArray *			__allBoards;
 	self.containedPopover = nil;
 }
 
+- (void)beginAnimation
+{
+	[UIView beginAnimations:nil context:nil];
+	[UIView setAnimationBeginsFromCurrentState:YES];
+}
+
+- (void)changeAnimationCurve:(UIViewAnimationCurve)curve
+{
+	[UIView setAnimationCurve:curve];
+}
+
+- (void)changeAnimationDuration:(NSTimeInterval)duration
+{
+	[UIView setAnimationDuration:duration];
+}
+
+- (void)changeAnimationDelay:(NSTimeInterval)delay
+{
+	[UIView setAnimationDelay:delay];
+}
+
+- (void)didAnimationDone
+{
+	[self sendUISignal:self.ANIMATION_FINISH];
+
+	if ( self.animationBlock )
+	{
+		self.animationBlock();
+	}
+}
+
+- (void)commitAnimation:(BeeUIBoardBlock)block
+{
+	self.animationBlock = block;
+
+	[self sendUISignal:self.ANIMATION_BEGIN];
+	
+	[UIView setAnimationDelegate:self];
+	[UIView setAnimationDidStopSelector:@selector(didAnimationDone)];
+	[UIView commitAnimations];
+}
+
+- (void)transformZoom:(CGRect)rect
+{
+	CGPoint center1 = CGPointMake( self.view.bounds.origin.x + (self.view.bounds.size.width / 2.0f), self.view.bounds.origin.y + (self.view.bounds.size.height / 2.0f) );
+	CGPoint center2 = CGPointMake( rect.origin.x + (rect.size.width / 2.0f), rect.origin.y + (rect.size.height / 2.0f) );
+	
+	CGFloat depthZ = rect.size.width;
+	CGFloat transZ = rect.size.width * ((self.view.bounds.size.width - rect.size.width) / self.view.bounds.size.width);
+	CGFloat transX = center1.x - center2.x;
+	CGFloat transY = center1.y - center2.y;
+	
+	CATransform3D transform = self.view.layer.transform;
+	transform.m34 = -(1.0f / depthZ);
+	transform = CATransform3DTranslate( transform, transX, transY, transZ );
+	self.view.layer.transform = transform;
+	
+	_zoomRect = rect;
+	_zoomed = YES;
+}
+
+- (void)transformReset
+{
+	[UIView setAnimationBeginsFromCurrentState:NO];
+	
+	self.view.layer.transform = CATransform3DIdentity;
+	
+	_zoomRect = CGRectZero;
+	_zoomed = NO;
+}
+
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

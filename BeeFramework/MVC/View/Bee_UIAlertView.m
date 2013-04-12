@@ -30,6 +30,8 @@
 //  Bee_UIAlertView.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UIAlertView.h"
 #import "Bee_UISignal.h"
@@ -228,3 +230,5 @@ DEF_SIGNAL( DID_DISMISS )
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

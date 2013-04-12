@@ -39,7 +39,7 @@ DEF_SINGLETON( LessonBaseBoard );
 	NSMutableString * text = [NSMutableString string];
 	for ( NSUInteger i = 0; i < self.signals.count; ++i )
 	{
-		BeeUISignal * signal = [self.signals objectAtIndex:i];
+		BeeUISignal * signal = [self.signals objectAtIndex:self.signals.count - i - 1];
 		[text appendFormat:@"[%d] %@\n", self.signalSeq - i, signal.name];
 	}
 

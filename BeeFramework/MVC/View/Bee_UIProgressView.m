@@ -30,6 +30,8 @@
 //  Bee_UIProgressView.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UIProgressView.h"
 #import "Bee_UISignal.h"
@@ -107,3 +109,5 @@
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

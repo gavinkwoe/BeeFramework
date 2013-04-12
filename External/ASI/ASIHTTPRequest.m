@@ -4530,8 +4530,10 @@ static NSOperationQueue *sharedQueue = nil;
 
 + (BOOL)isBandwidthThrottled
 {
+#if TARGET_OS_IPHONE
 	if ( forceThrottleBandwith )
 		return YES;
+#endif	// #if TARGET_OS_IPHONE
 	
 #if TARGET_OS_IPHONE
 	[bandwidthThrottlingLock lock];

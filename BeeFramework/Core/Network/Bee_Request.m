@@ -115,7 +115,7 @@ DEF_INT( STATE_CANCELLED,	5 );
 		_state = BeeRequest.STATE_CREATED;
 		_errorCode = 0;
 		
-		_responders = [NSMutableArray nonRetainingArray];
+		_responders = [[NSMutableArray nonRetainingArray] retain];
 		_userInfo = [[NSMutableDictionary alloc] init];
 		
 		_whenUpdate = nil;

@@ -80,6 +80,7 @@
 
 + (BeeRequest *)GET:(NSString *)url;
 + (BeeRequest *)POST:(NSString *)url;
++ (BeeRequest *)PUT:(NSString *)url;
 
 + (BOOL)requesting:(NSString *)url;
 + (BOOL)requesting:(NSString *)url byResponder:(id)responder;

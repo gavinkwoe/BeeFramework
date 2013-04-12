@@ -30,6 +30,8 @@
 //  Bee_UIActionSheet.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 
@@ -65,3 +67,5 @@ AS_SIGNAL( DID_DISMISS )	// 已经隐藏
 - (void)addDestructiveTitle:(NSString *)title signal:(NSString *)signal object:(NSObject *)object;
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

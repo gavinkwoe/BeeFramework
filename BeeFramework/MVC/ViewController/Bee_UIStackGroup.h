@@ -30,6 +30,8 @@
 //  Bee_UIStackGroup.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 #import "Bee_Singleton.h"
@@ -65,3 +67,5 @@ AS_SIGNAL( INDEX_CHANGED );	// 显示顺序变了
 - (void)remove:(BeeUIStack *)nav;
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

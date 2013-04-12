@@ -30,6 +30,8 @@
 //  UIView+PanGesture.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 
@@ -48,3 +50,5 @@ AS_SIGNAL( PAN_CANCELLED )			// 左右滑动取消
 @property (nonatomic, readonly) UIPanGestureRecognizer *		panGesture;
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

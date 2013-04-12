@@ -60,11 +60,17 @@
 static NSMutableDictionary * __primaryKeys = nil;
 static NSMutableDictionary * __properties = nil;
 static NSMutableDictionary * __usingAI = nil;
+static NSMutableDictionary * __usingUN = nil;
 static NSMutableDictionary * __usingJSON = nil;
 static NSMutableDictionary * __flags = nil;
 
 + (void)mapRelation
 {
+}
+
++ (NSString *)mapTableName
+{
+	return [NSString stringWithUTF8String:class_getName(self)];
 }
 
 + (void)mapPropertyAsKey:(NSString *)name
@@ -248,6 +254,7 @@ static NSMutableDictionary * __flags = nil;
 			[property setObject:name forKey:@"name"];
 			[property setObject:(key ? @"YES" : @"NO") forKey:@"key"];
 			[property setObject:[BeeDatabase fieldNameForIdentifier:name] forKey:@"field"];
+			[property setObject:[self description] forKey:@"byClass"];
 			
 			if ( domain )
 			{
@@ -315,7 +322,58 @@ static NSMutableDictionary * __flags = nil;
 		return NO;
 	
 	NSNumber * flag = [__usingAI objectForKey:[clazz description]];
-	return flag ? flag.boolValue : NO;
+	if ( flag )
+		return flag.boolValue;
+	
+	return NO;
+}
+
++ (void)useAutoIncrementFor:(Class)clazz andProperty:(NSString *)name
+{
+	if ( nil == __usingAI )
+	{
+		__usingAI = [[NSMutableDictionary alloc] init];
+	}
+	
+	NSString * key = [NSString stringWithFormat:@"%@.%@", [clazz description], name];
+	[__usingAI setObject:__INT(YES) forKey:key];
+}
+
++ (BOOL)usingAutoIncrementFor:(Class)clazz andProperty:(NSString *)name
+{
+	if ( nil == __usingAI )
+		return NO;
+
+	NSString * key = [NSString stringWithFormat:@"%@.%@", [clazz description], name];
+	NSNumber * flag = [__usingAI objectForKey:key];
+	if ( flag )
+		return flag.boolValue;
+
+	return NO;
+}
+
++ (void)useUniqueFor:(Class)clazz andProperty:(NSString *)name
+{
+	if ( nil == __usingUN )
+	{
+		__usingUN = [[NSMutableDictionary alloc] init];
+	}
+
+	NSString * key = [NSString stringWithFormat:@"%@.%@", [clazz description], name];
+	[__usingUN setObject:__INT(YES) forKey:key];
+}
+
++ (BOOL)usingUniqueFor:(Class)clazz andProperty:(NSString *)name
+{
+	if ( nil == __usingUN )
+		return NO;
+
+	NSString * key = [NSString stringWithFormat:@"%@.%@", [clazz description], name];
+	NSNumber * flag = [__usingUN objectForKey:key];
+	if ( flag )
+		return flag.boolValue;
+
+	return NO;
 }
 
 + (void)useJSON
@@ -437,11 +495,15 @@ static NSMutableDictionary * __flags = nil;
 	NSNumber * flag = [__flags objectForKey:className];
 	if ( nil == flag || NO == flag.boolValue )
 	{
+	// Step1, map relation between property and field
+		
 		[self mapRelation];
+		
+	// Step2, create table
 		
 		[NSObject DB]
 		.TABLE( self.tableName )
-		.FIELD( self.activePrimaryKey, @"INTEGER" ).PRIMARY_KEY();
+		.FIELD( self.activePrimaryKey, @"INTEGER" ).UNIQUE().PRIMARY_KEY();
 
 		if ( [self usingAutoIncrement] )
 		{
@@ -510,7 +572,12 @@ static NSMutableDictionary * __flags = nil;
 						{
 							[NSObject DB].FIELD( field, @"INTEGER" );
 						}
-						
+
+						if ( [self usingAutoIncrementFor:clazzType andProperty:field] )
+						{
+							[NSObject DB].AUTO_INREMENT();
+						}
+
 						if ( value && NO == [value isKindOfClass:[NonValue class]] )
 						{
 							[NSObject DB].DEFAULT( value );
@@ -530,10 +597,19 @@ static NSMutableDictionary * __flags = nil;
 			
 		[NSObject DB]
 		.CREATE_IF_NOT_EXISTS();
+
+	// Step3, do migration if needed
+
+//		"pragma table_info(\"test\")";
+//		"alter table \"test\" add column name";
+
+	// Step4, create index
 		
 		[NSObject DB]
 		.TABLE( self.tableName )
 		.INDEX_ON( self.activePrimaryKey, nil );
+		
+	// done
 		
 		[__flags setObject:__INT(YES) forKey:className];
 	}

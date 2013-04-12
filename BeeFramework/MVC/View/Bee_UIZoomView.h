@@ -30,6 +30,8 @@
 //  Bee_UIZoomView.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 
@@ -85,3 +87,5 @@ AS_SIGNAL( DOUBLE_TAPPED );
 - (void)setContent:(UIView *)contentView animated:(BOOL)animated;
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

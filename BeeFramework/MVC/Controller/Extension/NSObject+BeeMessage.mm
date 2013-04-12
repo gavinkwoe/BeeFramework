@@ -44,6 +44,7 @@
 @dynamic MSG;
 @dynamic MSG_IF_NOT_SENDING;
 @dynamic MSG_CANCEL_IF_SENDING;
+@dynamic CANCEL_MSG;
 
 - (BeeMessageBlockN)MSG
 {
@@ -79,6 +80,17 @@
 		[self cancelMessage:(NSString *)first];
 		
 		return [self message:(NSString *)first];
+	};
+	
+	return [[block copy] autorelease];
+}
+
+- (BeeMessageBlockN)CANCEL_MSG
+{
+	BeeMessageBlockN block = ^ BeeMessage * ( id first, ... )
+	{
+		[self cancelMessage:(NSString *)first];
+		return nil;
 	};
 	
 	return [[block copy] autorelease];

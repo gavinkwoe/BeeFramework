@@ -30,6 +30,8 @@
 //  Bee_UISegmentedControl.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 
@@ -54,3 +56,5 @@ AS_SIGNAL( HIGHLIGHT_CHANGED )	// 高亮改变
 - (void)addImage:(UIImage *)image tag:(NSInteger)tag;
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

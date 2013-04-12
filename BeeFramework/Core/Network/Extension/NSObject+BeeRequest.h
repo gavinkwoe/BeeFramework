@@ -39,12 +39,15 @@
 @interface NSObject(BeeRequestResponder)
 
 @property (nonatomic, readonly) BeeRequestBlockS	HTTP_GET;
+@property (nonatomic, readonly) BeeRequestBlockS	HTTP_PUT;
 @property (nonatomic, readonly) BeeRequestBlockS	HTTP_POST;
 
 - (BeeRequest *)GET:(NSString *)url;
+- (BeeRequest *)PUT:(NSString *)url;
 - (BeeRequest *)POST:(NSString *)url;
 
 - (BeeRequest *)HTTP_GET:(NSString *)url;
+- (BeeRequest *)HTTP_PUT:(NSString *)url;
 - (BeeRequest *)HTTP_POST:(NSString *)url;
 
 - (BOOL)isRequestResponder;

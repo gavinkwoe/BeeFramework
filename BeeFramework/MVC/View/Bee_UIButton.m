@@ -30,6 +30,8 @@
 //  Bee_UIButton.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UIButton.h"
 #import "Bee_UISignal.h"
@@ -44,16 +46,26 @@
 @synthesize button = _button;
 @synthesize state = _state;
 
-@synthesize title;
-@synthesize titleColor;
-@synthesize titleShadowColor;
-@synthesize image;
-@synthesize backgroundImage;
+@dynamic title;
+@dynamic titleColor;
+@dynamic titleShadowColor;
+@dynamic image;
+@dynamic backgroundImage;
+
+- (NSString *)title
+{
+	return [_button titleForState:_state];
+}
 
 - (void)setTitle:(NSString *)text
 {
 	[_button setTitle:text forState:_state];
 	[_button setNeedsDisplay];
+}
+
+- (UIColor *)titleColor
+{
+	return [_button titleColorForState:_state];
 }
 
 - (void)setTitleColor:(UIColor *)color
@@ -62,16 +74,31 @@
 	[_button setNeedsDisplay];
 }
 
+- (UIColor *)titleShadowColor
+{
+	return [_button titleShadowColorForState:_state];
+}
+
 - (void)setTitleShadowColor:(UIColor *)color
 {
 	[_button setTitleShadowColor:color forState:_state];
 	[_button setNeedsDisplay];
 }
 
+- (UIImage *)image
+{
+	return [_button imageForState:_state];
+}
+
 - (void)setImage:(UIImage *)img
 {
 	[_button setImage:img forState:_state];
 	[_button setNeedsDisplay];
+}
+
+- (UIImage *)backgroundImage
+{
+	return [_button backgroundImageForState:_state];
 }
 
 - (void)setBackgroundImage:(UIImage *)img
@@ -109,6 +136,7 @@ DEF_SIGNAL( TOUCH_UP_CANCEL )
 @synthesize titleColor;
 @synthesize titleFont;
 @synthesize titleInsets;
+@synthesize titleTextAlignment;
 
 @synthesize stateNormal;
 @synthesize stateHighlighted;
@@ -127,23 +155,6 @@ DEF_SIGNAL( TOUCH_UP_CANCEL )
 	return view;
 }
 
--(id) initWithCoder:(NSCoder *)aDecoder{
-    self = [super initWithCoder:aDecoder];
-    if ( self )
-	{
-		if ( nil == _actions )
-        {
-            _actions = [[NSMutableArray alloc] init];
-        }
-        
-        [self addTarget:self action:@selector(didTouchDown) forControlEvents:UIControlEventTouchDown];
-        [self addTarget:self action:@selector(didTouchDownRepeat) forControlEvents:UIControlEventTouchDownRepeat];
-        [self addTarget:self action:@selector(didTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-        [self addTarget:self action:@selector(didTouchUpOutside) forControlEvents:UIControlEventTouchUpOutside];
-	}
-	return self;
-}
-
 - (id)init
 {
 	self = [super init];
@@ -152,6 +163,17 @@ DEF_SIGNAL( TOUCH_UP_CANCEL )
 		[self initSelf];
 	}
 	return self;	
+}
+
+// thanks to @ilikeido
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if ( self )
+	{
+		[self initSelf];
+	}
+	return self;
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -216,6 +238,11 @@ DEF_SIGNAL( TOUCH_UP_CANCEL )
 	frame.size.height -= insets.bottom;
 
 	_label.frame = frame;
+}
+
+-(void) setTitleTextAlignment:(UITextAlignment)alignment{
+    titleTextAlignment = alignment;
+    [_label setTextAlignment:alignment];
 }
 
 - (void)dealloc
@@ -393,3 +420,5 @@ DEF_SIGNAL( TOUCH_UP_CANCEL )
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

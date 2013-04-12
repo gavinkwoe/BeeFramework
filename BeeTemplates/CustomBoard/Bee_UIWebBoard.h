@@ -40,5 +40,6 @@
 }
 
 @property (nonatomic, retain) BeeUIWebView *	webView;
+@property (nonatomic, assign) BOOL *		useHtmlDocumentTitle;
 
 @end

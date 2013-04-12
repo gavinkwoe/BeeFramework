@@ -30,6 +30,8 @@
 //  Bee_UIKeyboard.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 #import "Bee_Singleton.h"
@@ -68,3 +70,5 @@ AS_NOTIFICATION( HEIGHT_CHANGED )	// 输入法切换
 - (void)updateAccessorAnimated:(BOOL)animated;
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

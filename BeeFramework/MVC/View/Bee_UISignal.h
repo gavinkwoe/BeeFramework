@@ -30,6 +30,8 @@
 //  UIView+BeeUISignal.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "NSObject+BeeProperty.h"
 
@@ -53,14 +55,19 @@
 
 @interface BeeUISignal : NSObject
 {
+	BOOL				_foreign;
+	NSObject *			_foreignSource;
+	
 	BOOL				_dead;
 	BOOL				_reach;
 	NSUInteger			_jump;
 	id					_source;
 	id					_target;
 	NSString *			_name;
+	NSString *			_namePrefix;
 	NSObject *			_object;
 	NSObject *			_returnValue;
+	NSString *			_preSelector;
 
 	NSTimeInterval		_initTimeStamp;
 	NSTimeInterval		_sendTimeStamp;
@@ -71,14 +78,19 @@
 #endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 }
 
+@property (nonatomic, assign) BOOL				foreign;
+@property (nonatomic, assign) id				foreignSource;
+
 @property (nonatomic, assign) BOOL				dead;			// 杀死SIGNAL
 @property (nonatomic, assign) BOOL				reach;			// 是否触达顶级ViewController
 @property (nonatomic, assign) NSUInteger		jump;			// 转发次数
 @property (nonatomic, assign) id				source;			// 发送来源
 @property (nonatomic, assign) id				target;			// 转发目标
 @property (nonatomic, retain) NSString *		name;			// Signal名字
+@property (nonatomic, retain) NSString *		namePrefix;		// Signal前辍
 @property (nonatomic, retain) NSObject *		object;			// 附带参数
 @property (nonatomic, retain) NSObject *		returnValue;	// 返回值，默认为空
+@property (nonatomic, retain) NSString *		preSelector;	// 返回值，默认为空
 
 @property (nonatomic, assign) NSTimeInterval	initTimeStamp;
 @property (nonatomic, assign) NSTimeInterval	sendTimeStamp;
@@ -110,3 +122,5 @@ AS_STATIC_PROPERTY( NO_VALUE );
 - (void)returnNO;
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

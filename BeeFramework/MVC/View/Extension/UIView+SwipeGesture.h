@@ -30,6 +30,8 @@
 //  UIView+SwipeGesture.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 
@@ -48,3 +50,5 @@ AS_SIGNAL( SWIPE_RIGHT )	// 瞬间向右滑动
 @property (nonatomic, readonly) UISwipeGestureRecognizer *		swipeGesture;
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

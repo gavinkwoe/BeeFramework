@@ -30,6 +30,8 @@
 //  Bee_UITextView.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UITextView.h"
 #import "Bee_UISignal.h"
@@ -168,26 +170,6 @@ DEF_SIGNAL( RETURN )
     return self;	
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    if( (self = [super initWithCoder:aDecoder]) )
-    {
-		self.placeholder = @"";
-        self.placeHolderColor = [UIColor grayColor];
-        
-        _maxLength = 0;
-        
-        
-        [_agent release];
-        _agent = [[BeeUITextViewAgent alloc] init];
-        _agent.target = self;
-        
-        self.delegate = _agent;	
-
-    }
-    return self;
-}
-
 - (id)initWithFrame:(CGRect)frame
 {
 	self = [super initWithFrame:frame];
@@ -196,6 +178,17 @@ DEF_SIGNAL( RETURN )
 		[self initSelf];
     }
     return self;
+}
+
+// thanks to @ilikeido
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+	self = [super initWithCoder:aDecoder];
+	if ( self )
+	{
+		[self initSelf];
+	}
+	return self;
 }
 
 - (void)initSelf
@@ -314,3 +307,5 @@ DEF_SIGNAL( RETURN )
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

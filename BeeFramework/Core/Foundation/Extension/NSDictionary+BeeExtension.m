@@ -31,11 +31,11 @@
 //
 
 #import "Bee_Precompile.h"
+#import "Bee_Runtime.h"
 #import "NSDictionary+BeeExtension.h"
+#import "NSObject+BeeTypeConversion.h"
 
 #include <objc/runtime.h>
-#import "Bee_Runtime.h"
-#import "NSObject+BeeTypeConversion.h"
 
 #pragma mark -
 
@@ -66,6 +66,27 @@
 	};
 	
 	return [[block copy] autorelease];
+}
+
+- (NSObject *)objectOfAny:(NSArray *)array
+{
+	for ( NSString * key in array )
+	{
+		NSObject * obj = [self objectForKey:key];
+		if ( obj )
+			return obj;
+	}
+	
+	return nil;
+}
+
+- (NSString *)stringOfAny:(NSArray *)array
+{
+	NSObject * obj = [self objectOfAny:array];
+	if ( obj && [obj isKindOfClass:[NSString class]] )
+		return (NSString *)obj;
+	
+	return nil;
 }
 
 - (NSObject *)objectAtPath:(NSString *)path
@@ -114,7 +135,7 @@
 	}
 	
 	return (result == [NSNull null]) ? nil : result;
-	
+
 #else
 	
 	// thanks @lancy, changed: use native keyPath
@@ -279,9 +300,11 @@
 	return obj ? obj : other;
 }
 
-
--(NSObject *)objectForClass:(Class)clazz{
-    if ([clazz respondsToSelector:@selector(initFromDictionary:)]) {
+// thanks to @ilikeido
+- (NSObject *)objectForClass:(Class)clazz
+{
+    if ( [clazz respondsToSelector:@selector(initFromDictionary:)] )
+	{
         return [clazz performSelector:@selector(initFromDictionary:) withObject:self];
     }
     
@@ -297,65 +320,77 @@
         const char *	attr = property_getAttributes(properties[i]);
         NSUInteger		type = [BeeTypeEncoding typeOf:attr];
         
-        NSObject * tempvalue = [self objectForKey:propertyName];
-        
-        NSObject *value = nil;
-        if (tempvalue) {
+        NSObject *	tempValue = [self objectForKey:propertyName];
+        NSObject *	value = nil;
+		
+        if ( tempValue )
+		{
             if ( BeeTypeEncoding.NSNUMBER == type )
             {
-                value = [tempvalue asNSNumber];
+                value = [tempValue asNSNumber];
             }
             else if ( BeeTypeEncoding.NSSTRING == type )
             {
-                value = [tempvalue asNSString];
+                value = [tempValue asNSString];
             }
             else if ( BeeTypeEncoding.NSDATE == type )
             {
-                value = [tempvalue asNSDate];
+                value = [tempValue asNSDate];
             }
             else if ( BeeTypeEncoding.NSARRAY == type )
             {
-                if ([tempvalue isKindOfClass:[NSArray class]]) {
-                    SEL seltemp = NSSelectorFromString([NSString stringWithFormat:@"%@ConvertClass",propertyName]);
-                    if ([clazz respondsToSelector:seltemp]) {
-                        Class classtemp = [clazz performSelector:seltemp];
-                        NSMutableArray *arraytemp = [NSMutableArray array];
-                        for (NSObject *tempobject in (NSArray *)tempvalue) {
-                            if ([tempobject  isKindOfClass:[NSDictionary class]]) {
-                                [arraytemp addObject:[(NSDictionary *)tempobject objectForClass:classtemp]];
+                if ( [tempValue isKindOfClass:[NSArray class]] )
+				{
+                    SEL seltemp = NSSelectorFromString( [NSString stringWithFormat:@"%@ConvertClass", propertyName] );
+                    if ( [clazz respondsToSelector:seltemp] )
+					{
+                        Class				classTemp = [clazz performSelector:seltemp];
+                        NSMutableArray *	arrayTemp = [NSMutableArray array];
+						
+                        for ( NSObject * tempObject in (NSArray *)tempValue )
+						{
+                            if ( [tempObject  isKindOfClass:[NSDictionary class]] )
+							{
+                                [arrayTemp addObject:[(NSDictionary *)tempObject objectForClass:classTemp]];
                             }
                         }
-                        value = arraytemp;
-                    }else{
-                        value = tempvalue;
+						
+                        value = arrayTemp;
+                    }
+					else
+					{
+                        value = tempValue;
                     }
                 }
             }
             else if ( BeeTypeEncoding.NSDICTIONARY == type )
             {
-                if ([tempvalue isKindOfClass:[NSDictionary class]]) {
-                    value = tempvalue;
+                if ( [tempValue isKindOfClass:[NSDictionary class]] )
+				{
+                    value = tempValue;
                 }
             }
             else if ( BeeTypeEncoding.OBJECT == type )
             {
-                NSString *className = [BeeTypeEncoding classNameOf:attr];
-                if ([tempvalue isKindOfClass:NSClassFromString(className)]) {
-                    value = tempvalue;
-                }else if ([tempvalue isKindOfClass:[NSDictionary class]]) {
-                    value = [(NSDictionary *)tempvalue objectForClass:NSClassFromString(className)];
+                NSString * className = [BeeTypeEncoding classNameOf:attr];
+                if ( [tempValue isKindOfClass:NSClassFromString(className)] )
+				{
+                    value = tempValue;
                 }
-                
+				else if ( [tempValue isKindOfClass:[NSDictionary class]] )
+				{
+                    value = [(NSDictionary *)tempValue objectForClass:NSClassFromString(className)];
+                }
             }
-            
         }
         
         [object setValue:value forKey:propertyName];
     }
+	
     free( properties );
+	
     return [object autorelease];
 }
-
 
 @end
 

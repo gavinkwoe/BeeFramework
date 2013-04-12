@@ -47,6 +47,9 @@
 #undef	DEFAULT_POST_TIMEOUT
 #define DEFAULT_POST_TIMEOUT		(30.0f)			// 发协议30秒超时
 
+#undef	DEFAULT_PUT_TIMEOUT
+#define DEFAULT_PUT_TIMEOUT			(30.0f)			// 上传30秒超时
+
 #undef	DEFAULT_UPLOAD_TIMEOUT
 #define DEFAULT_UPLOAD_TIMEOUT		(120.0f)		// 上传图片120秒超时
 
@@ -58,6 +61,7 @@
 
 - (BeeRequest *)GET:(NSString *)url sync:(BOOL)sync;
 - (BeeRequest *)POST:(NSString *)url sync:(BOOL)sync;
+- (BeeRequest *)PUT:(NSString *)url sync:(BOOL)sync;
 
 - (void)cancelRequest:(BeeRequest *)request;
 - (void)cancelRequestByResponder:(id)responder;
@@ -334,6 +338,65 @@
 	return [request autorelease];
 }
 
++ (BeeRequest *)PUT:(NSString *)url
+{
+	return [[BeeRequestQueue sharedInstance] PUT:url sync:NO];
+}
+
+- (BeeRequest *)PUT:(NSString *)url sync:(BOOL)sync
+{
+	if ( NO == _online )
+		return nil;
+	
+	BeeRequest * request = nil;
+	
+#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
+	CC( @"PUT %@\n", url );
+#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
+
+	request = [[BeeRequest alloc] initWithURL:[NSURL URLWithString:url]];
+	request.timeOutSeconds = DEFAULT_PUT_TIMEOUT;
+	request.requestMethod = @"PUT";
+	request.postFormat = ASIURLEncodedPostFormat; // ASIRawPostFormat;
+	[request setDelegate:self];
+	[request setDownloadProgressDelegate:self];
+	[request setUploadProgressDelegate:self];
+	[request setNumberOfTimesToRetryOnTimeout:2];
+#if TARGET_OS_IPHONE && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_4_0
+	[request setShouldContinueWhenAppEntersBackground:YES];
+#endif	// #if TARGET_OS_IPHONE && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_4_0
+	
+	[request setThreadPriority:1.0];
+	[request setQueuePriority:NSOperationQueuePriorityHigh];
+	
+	[_requests addObject:request];
+	
+	if ( self.whenCreate )
+	{
+		self.whenCreate( request );
+	}
+	
+	if ( sync )
+	{
+		[request startSynchronous];
+	}
+	else
+	{
+		if ( _delay )
+		{
+			[request performSelector:@selector(startAsynchronous)
+						  withObject:nil
+						  afterDelay:_delay];
+		}
+		else
+		{
+			[request startAsynchronous];
+		}
+	}
+	
+	return [request autorelease];
+}
+
 + (BOOL)requesting:(NSString *)url
 {
 	return [[BeeRequestQueue sharedInstance] requesting:url];
@@ -554,7 +617,7 @@
 	BeeRequest * networkRequest = (BeeRequest *)request;
 	
 #if __BEE_DEVELOPMENT__
-	CC( @"\nHTTP %d(%@)\n%@\n",
+	CC( @"HTTP %d(%@)\n%@\n",
 		  request.responseStatusCode,
 		  request.responseStatusMessage,
 		  [request.url absoluteString] );

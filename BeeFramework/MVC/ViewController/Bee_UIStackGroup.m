@@ -30,6 +30,8 @@
 //  Bee_UIStackGroup.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UIBoard.h"
 #import "Bee_UIStack.h"
@@ -219,28 +221,40 @@ DEF_SIGNAL( INDEX_CHANGED );
 			{
 				for ( BeeUIStack * stack in _stacks )
 				{
-					[stack viewWillAppear:NO];
+					if ( [stack isViewLoaded] && NO == stack.view.hidden )
+					{
+						[stack viewWillAppear:NO];	
+					}
 				}
 			}
 			else if ( [signal is:BeeUIBoard.DID_APPEAR] )
 			{
 				for ( BeeUIStack * stack in _stacks )
 				{
-					[stack viewDidAppear:NO];
+					if ( [stack isViewLoaded] && NO == stack.view.hidden )
+					{
+						[stack viewDidAppear:NO];
+					}
 				}
 			}
 			else if ( [signal is:BeeUIBoard.WILL_DISAPPEAR] )
 			{
 				for ( BeeUIStack * stack in _stacks )
 				{
-					[stack viewWillDisappear:NO];
+					if ( [stack isViewLoaded] && NO == stack.view.hidden )
+					{
+						[stack viewWillDisappear:NO];
+					}
 				}
 			}
 			else if ( [signal is:BeeUIBoard.DID_DISAPPEAR] )
 			{
 				for ( BeeUIStack * stack in _stacks )
 				{
-					[stack viewDidDisappear:NO];
+					if ( [stack isViewLoaded] && NO == stack.view.hidden )
+					{
+						[stack viewDidDisappear:NO];
+					}
 				}
 			}
 		}
@@ -248,3 +262,5 @@ DEF_SIGNAL( INDEX_CHANGED );
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

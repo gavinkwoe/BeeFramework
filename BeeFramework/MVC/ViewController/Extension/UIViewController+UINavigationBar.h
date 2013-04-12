@@ -30,6 +30,8 @@
 //  Bee_UIBoard.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 #import "Bee_UILabel.h"
@@ -47,6 +49,9 @@ AS_INT( BARBUTTON_RIGHT )			// 右按钮
 AS_SIGNAL( BACK_BUTTON_TOUCHED )	// NavigationBar左按钮被点击
 AS_SIGNAL( DONE_BUTTON_TOUCHED )	// NavigationBar右按钮被点击
 
+#define BARBUTTON_LEFT_TOUCHED	BACK_BUTTON_TOUCHED
+#define BARBUTTON_RIGHT_TOUCHED	DONE_BUTTON_TOUCHED
+
 @end
 
 #pragma mark -
@@ -63,3 +68,5 @@ AS_SIGNAL( DONE_BUTTON_TOUCHED )	// NavigationBar右按钮被点击
 - (void)hideBarButton:(NSInteger)position;
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

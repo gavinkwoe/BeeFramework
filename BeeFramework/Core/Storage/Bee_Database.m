@@ -36,8 +36,8 @@
 #import "Bee_Sandbox.h"
 #import "Bee_ActiveRecord.h"
 #import "Bee_ActiveBase.h"
-#import "Bee_UnitTest.h"
 
+#import "NSArray+BeeExtension.h"
 #import "NSString+BeeExtension.h"
 #import "NSNumber+BeeExtension.h"
 #import "NSDictionary+BeeExtension.h"
@@ -156,6 +156,7 @@
 
 - (void)classType:(Class)clazz;
 - (void)associate:(NSObject *)obj;
+- (void)has:(NSObject *)obj;
 
 @end
 
@@ -166,6 +167,8 @@
 @dynamic autoOptimize;
 @dynamic ready;
 @dynamic total;
+@synthesize shadow = _shadow;
+@synthesize database = _database;
 @synthesize filePath = _filePath;
 @synthesize identifier = _identifier;
 
@@ -239,12 +242,17 @@
 
 @dynamic CLASS_TYPE;
 @dynamic ASSOCIATE;
+@dynamic HAS;
 
 @dynamic resultArray;
 @dynamic resultCount;
 @dynamic insertID;
 @dynamic succeed;
 
+@synthesize lastQuery = _lastQuery;
+@synthesize lastUpdate = _lastUpdate;
+
+static NSMutableArray *	__shadowDBs = nil;
 static BeeDatabase *	__sharedDB = nil;
 static NSUInteger		__identSeed = 1;
 
@@ -261,22 +269,40 @@ static NSUInteger		__identSeed = 1;
 
 - (NSUInteger)resultCount
 {
+	[self __internalResetSelect];
+	[self __internalResetWrite];
+	[self __internalResetCreate];
+	
 	return _resultCount;
 }
 
 - (NSInteger)insertID
 {
+	[self __internalResetSelect];
+	[self __internalResetWrite];
+	[self __internalResetCreate];
+
 	return _lastInsertID;
 }
 
 - (BOOL)succeed
 {
+	[self __internalResetSelect];
+	[self __internalResetWrite];
+	[self __internalResetCreate];
+
 	return _lastSucceed;
 }
 
 - (NSUInteger)total
 {
-	return [self count];
+	NSUInteger count = [self count];
+	
+	[self __internalResetSelect];
+	[self __internalResetWrite];
+	[self __internalResetCreate];
+
+	return count;
 }
 
 - (void)initSelf
@@ -294,8 +320,9 @@ static NSUInteger		__identSeed = 1;
 	_orderby = [[NSMutableArray alloc] init];
 	_set = [[NSMutableDictionary alloc] init];
 	_classType = [[NSMutableArray alloc] init];
-	_associate = [[NSMutableArray alloc] init];
-    
+	_associate = [[NSMutableArray nonRetainingArray] retain];
+    _has = [[NSMutableArray nonRetainingArray] retain];
+	
 	_table = [[NSMutableArray alloc] init];
 	_field = [[NSMutableArray alloc] init];
 	_index = [[NSMutableArray alloc] init];
@@ -304,22 +331,18 @@ static NSUInteger		__identSeed = 1;
 	_resultCount = 0;
 	
 	_identifier = __identSeed++;
+	
+	_lastQuery = [NSDate timeIntervalSinceReferenceDate];
+	_lastUpdate = [NSDate timeIntervalSinceReferenceDate];
 }
 
 + (BOOL)openSharedDatabase:(NSString *)path
 {
-	[self resetPrepareFlags];
-	
-	if ( __sharedDB )
-	{
-		if ( __sharedDB.ready && [__sharedDB.filePath isEqualToString:path] )
-			return YES;
-		
-		[__sharedDB close];
-		[__sharedDB release];
-		__sharedDB = nil;
-	}
-	
+	if ( __sharedDB.ready && [__sharedDB.filePath isEqualToString:path] )
+		return YES;
+
+	[self closeSharedDatabase];
+
 	__sharedDB = [[[self class] alloc] initWithPath:path];
 	if ( __sharedDB )
 	{
@@ -329,7 +352,7 @@ static NSUInteger		__identSeed = 1;
 			__sharedDB = nil;
 		}
 	}
-	
+
 	return (__sharedDB && __sharedDB.ready) ? YES : NO;
 }
 
@@ -340,6 +363,19 @@ static NSUInteger		__identSeed = 1;
 
 + (void)closeSharedDatabase
 {
+	if ( __shadowDBs )
+	{
+		for ( BeeDatabase * db in __shadowDBs )
+		{
+			[db close];
+		}
+		
+		[__shadowDBs removeAllObjects];
+		[__shadowDBs release];
+		__shadowDBs = nil;
+	}
+
+	[__sharedDB close];
 	[__sharedDB release];
 	__sharedDB = nil;
 	
@@ -351,17 +387,64 @@ static NSUInteger		__identSeed = 1;
 	if ( db != __sharedDB )
 	{
 		[db retain];
+
+		if ( __shadowDBs )
+		{
+			for ( BeeDatabase * db in __shadowDBs )
+			{
+				[db close];
+			}
+			
+			[__shadowDBs removeAllObjects];
+			[__shadowDBs release];
+			__shadowDBs = nil;
+		}
 		
+		[__sharedDB close];
 		[__sharedDB release];
 		__sharedDB = db;
 	}
-    
+
 	[self resetPrepareFlags];
 }
 
 + (BeeDatabase *)sharedDatabase
 {
+	if ( __shadowDBs.count )
+	{
+		return (BeeDatabase *)__shadowDBs.lastObject;
+	}
+
 	return __sharedDB;
+}
+
++ (void)scopeEnter
+{
+	if ( __sharedDB )
+	{
+		BeeDatabase * db = [[BeeDatabase alloc] initWithDatabase:__sharedDB.database];
+		if ( db )
+		{
+			db.shadow = YES;
+			
+			if ( nil == __shadowDBs )
+			{
+				__shadowDBs = [[NSMutableArray alloc] init];
+			}
+			
+			[__shadowDBs addObject:db];
+			
+			[db release];
+		}
+	}
+}
+
++ (void)scopeLeave
+{
+	if ( __shadowDBs && __shadowDBs.count )
+	{
+		[__shadowDBs removeObject:__shadowDBs.lastObject];		
+	}
 }
 
 - (id)init
@@ -370,6 +453,21 @@ static NSUInteger		__identSeed = 1;
 	if ( self )
 	{
 		[self initSelf];
+	}
+	return self;
+}
+
+- (id)initWithDatabase:(FMDatabase *)db
+{
+	self = [super init];
+	if ( self )
+	{
+		[self initSelf];
+
+		CC( @"[DB] open shadow '%p'", db );
+
+		self.database = db;
+		self.filePath = db.databasePath;
 	}
 	return self;
 }
@@ -434,7 +532,7 @@ static NSUInteger		__identSeed = 1;
     
 	[self close];
 	
-	CC( @"[DB] open '%@'", path );
+	CC( @"[DB] open at '%@'", path );
 	
 	NSFileManager * manager = [NSFileManager defaultManager];
 	
@@ -477,12 +575,23 @@ static NSUInteger		__identSeed = 1;
 {
 	if ( _database )
 	{
-		CC( @"[DB] open '%@'", _filePath );
+		if ( NO == _shadow )
+		{
+			CC( @"[DB] close '%p'", _database );
+			
+			[_database close];
+		}
+		else
+		{
+			CC( @"[DB] close shadow '%p'", _database );
+		}
 		
-		[_database close];
 		[_database release];
 		_database = nil;
 	}
+	
+	_lastQuery = [NSDate timeIntervalSinceReferenceDate];
+	_lastUpdate = [NSDate timeIntervalSinceReferenceDate];
 }
 
 - (void)clearState
@@ -494,9 +603,11 @@ static NSUInteger		__identSeed = 1;
 
 - (void)dealloc
 {
+	[self close];
+	
 	[_database release];
 	_database = nil;
-	
+
 	[_filePath release];
     
 	[_select removeAllObjects];
@@ -543,6 +654,9 @@ static NSUInteger		__identSeed = 1;
 	
 	[_associate removeAllObjects];
 	[_associate release];
+	
+	[_has removeAllObjects];
+	[_has release];
     
 	[super dealloc];
 }
@@ -553,8 +667,12 @@ static NSUInteger		__identSeed = 1;
 	[_table removeAllObjects];
 	[_index removeAllObjects];
 	
-	[_classType removeAllObjects];
-	[_associate removeAllObjects];
+	if ( NO == _batch )
+	{
+		[_classType removeAllObjects];
+		[_associate removeAllObjects];
+		[_has removeAllObjects];
+	}
 }
 
 - (BeeDatabase *)table:(NSString *)name
@@ -728,6 +846,7 @@ static NSUInteger		__identSeed = 1;
 	BOOL ret = [_database executeUpdate:sql];
 	if ( ret )
 	{
+		_lastUpdate = [NSDate timeIntervalSinceReferenceDate];
 		_lastSucceed = YES;
 	}
 	
@@ -843,6 +962,7 @@ static NSUInteger		__identSeed = 1;
 	BOOL ret = [_database executeUpdate:sql];
 	if ( ret )
 	{
+		_lastUpdate = [NSDate timeIntervalSinceReferenceDate];
 		_lastSucceed = YES;
 	}
 	
@@ -884,6 +1004,7 @@ static NSUInteger		__identSeed = 1;
 	BOOL ret = [_database executeUpdate:sql];
 	if ( ret )
 	{
+		_lastUpdate = [NSDate timeIntervalSinceReferenceDate];
 		_lastSucceed = YES;
 	}
 	
@@ -920,6 +1041,8 @@ static NSUInteger		__identSeed = 1;
 	FMResultSet * result = [_database executeQuery:@"SELECT COUNT(*) as 'numrows' FROM sqlite_master WHERE type ='table' AND name = ?", table];
 	if ( nil == result )
 		return NO;
+
+	_lastQuery = [NSDate timeIntervalSinceReferenceDate];
 	
 	BOOL succed = [result next];
 	if ( NO == succed )
@@ -950,6 +1073,7 @@ static NSUInteger		__identSeed = 1;
 	{
 		[_classType removeAllObjects];
 		[_associate removeAllObjects];
+		[_has removeAllObjects];
 	}
 	
 	_distinct = NO;
@@ -970,6 +1094,7 @@ static NSUInteger		__identSeed = 1;
 	{
 		[_classType removeAllObjects];
 		[_associate removeAllObjects];
+		[_has removeAllObjects];
 	}
 	
 	_limit = 0;
@@ -1498,8 +1623,10 @@ static NSUInteger		__identSeed = 1;
 		{
 			[_resultArray addObject:[result resultDictionary]];
 		}
-		
+
 		_resultCount = _resultArray.count;
+		
+		_lastQuery = [NSDate timeIntervalSinceReferenceDate];
 		_lastSucceed = YES;
 	}
     
@@ -1683,6 +1810,8 @@ static NSUInteger		__identSeed = 1;
 			return 0;
 		
 		_resultCount = (NSUInteger)[result unsignedLongLongIntForColumn:@"numrows"];
+		
+		_lastQuery = [NSDate timeIntervalSinceReferenceDate];
 		_lastSucceed = YES;
 	}
     
@@ -1762,6 +1891,8 @@ static NSUInteger		__identSeed = 1;
 	if ( ret )
 	{
 		_lastInsertID = (NSInteger)_database.lastInsertRowId;
+
+		_lastUpdate = [NSDate timeIntervalSinceReferenceDate];
 		_lastSucceed = YES;
 	}
     
@@ -1861,6 +1992,7 @@ static NSUInteger		__identSeed = 1;
 	BOOL ret = [_database executeUpdate:sql withArgumentsInArray:allValues];
 	if ( ret )
 	{
+		_lastUpdate = [NSDate timeIntervalSinceReferenceDate];
 		_lastSucceed = YES;
 		
 		// TODO: ...
@@ -1895,6 +2027,7 @@ static NSUInteger		__identSeed = 1;
 	BOOL ret = [_database executeUpdate:sql];
 	if ( ret )
 	{
+		_lastUpdate = [NSDate timeIntervalSinceReferenceDate];
 		_lastSucceed = YES;
 		
 		// TODO: ...
@@ -1929,6 +2062,7 @@ static NSUInteger		__identSeed = 1;
 	BOOL ret = [_database executeUpdate:sql];
 	if ( ret )
 	{
+		_lastUpdate = [NSDate timeIntervalSinceReferenceDate];
 		_lastSucceed = YES;
 		
 		// TODO: ...
@@ -1999,6 +2133,7 @@ static NSUInteger		__identSeed = 1;
 	BOOL ret = [_database executeUpdate:sql];
 	if ( ret )
 	{
+		_lastUpdate = [NSDate timeIntervalSinceReferenceDate];
 		_lastSucceed = YES;
 		
 		// TODO: ...
@@ -2008,8 +2143,7 @@ static NSUInteger		__identSeed = 1;
 
 + (NSString *)fieldNameForIdentifier:(NSString *)identifier
 {
-	//NSString * name = identifier.lowercaseString;
-    NSString * name = identifier;
+	NSString * name = identifier;
 	name = [name stringByReplacingOccurrencesOfString:@"." withString:@"_"];
 	name = [name stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
 	return name;
@@ -2017,11 +2151,12 @@ static NSUInteger		__identSeed = 1;
 
 + (NSString *)tableNameForClass:(Class)clazz
 {
-    //可通过mapRelationTable重定义表名
-    if ([clazz respondsToSelector:@selector(mapRelationTable)]) {
-        return [clazz performSelector:@selector(mapRelationTable)];
-    }
-	return [NSString stringWithFormat:@"table_%@",[clazz description].lowercaseString];
+	if ( [clazz respondsToSelector:@selector(mapTableName)] )
+	{
+		return [clazz performSelector:@selector(mapTableName)];
+	}
+
+	return [NSString stringWithFormat:@"table_%@", [clazz description]];
 }
 
 - (Class)classType
@@ -2093,6 +2228,14 @@ static NSUInteger		__identSeed = 1;
 		return;
     
 	[_associate addObject:obj];
+}
+
+- (void)has:(NSObject *)obj
+{
+	if ( nil == obj )
+		return;
+    
+	[_has addObject:obj];
 }
 
 - (BeeDatabaseBlockN)TABLE
@@ -2811,6 +2954,28 @@ static NSUInteger		__identSeed = 1;
 	BeeDatabaseBlockN block = ^ BeeDatabase * ( id first, ... )
 	{
 		[self associate:first];
+		return self;
+	};
+	
+	return [[block copy] autorelease];
+}
+
+- (BeeDatabaseBlockN)BELONG_TO
+{
+	BeeDatabaseBlockN block = ^ BeeDatabase * ( id first, ... )
+	{
+		[self associate:first];
+		return self;
+	};
+	
+	return [[block copy] autorelease];
+}
+
+- (BeeDatabaseBlockN)HAS
+{
+	BeeDatabaseBlockN block = ^ BeeDatabase * ( id first, ... )
+	{
+		[self has:first];
 		return self;
 	};
 	

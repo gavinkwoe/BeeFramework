@@ -30,6 +30,8 @@
 //  Bee_Orientation.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 #import "Bee_Singleton.h"
@@ -54,3 +56,5 @@ AS_NOTIFICATION( DIRECTION_CHANGED );	// 设备方向改变
 - (void)stopTrack;
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

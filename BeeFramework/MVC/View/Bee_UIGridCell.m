@@ -30,6 +30,8 @@
 //  Bee_UIGridCell.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 #import "Bee_UIGridCell.h"
@@ -58,6 +60,8 @@
 
 @implementation BeeUIGridCell
 
+@dynamic selected;
+
 @dynamic cellData;
 @dynamic cellLayout;
 
@@ -73,6 +77,8 @@
 
 	_cellData = nil;
 	_cellLayout = self;
+	
+	_selected = NO;
 }
 
 - (id)init
@@ -181,6 +187,14 @@
 	if ( _cellLayout && [_cellLayout respondsToSelector:@selector(layoutInBound:forCell:)] )
 	{
 		[_cellLayout layoutInBound:self.bounds.size forCell:self];
+		
+//		Class layoutClass = [_cellLayout class];
+//		if ( [layoutClass respondsToSelector:@selector(sizeInBound:forData:)] )
+//		{
+//			CGSize size = [layoutClass sizeInBound:self.bounds.size forData:self.cellData];
+//			[super setFrame:CGRectMake( self.frame.origin.x, self.frame.origin.y, size.width, size.height )];
+//		}
+
 //		[_cellLayout cellLayout:self bound:self.bounds.size];
 	}
 
@@ -195,12 +209,12 @@
 	[self layoutDidFinish];
 }
 
-- (NSObject *)cellData
+- (id)cellData
 {
 	return _cellData;
 }
 
-- (void)setCellData:(NSObject *)data
+- (void)setCellData:(id)data
 {
 	[self dataWillChange];
 
@@ -236,6 +250,23 @@
 	}
 }
 
+- (BOOL)selected
+{
+	return _selected;
+}
+
+- (void)setSelected:(BOOL)en
+{
+	if ( en != _selected )
+	{
+		[self stateWillChange];
+		
+		_selected = en;
+		
+		[self stateDidChanged];
+	}
+}
+
 - (void)dataWillChange
 {
 }
@@ -252,4 +283,16 @@
 {
 }
 
+- (void)stateWillChange
+{
+	
+}
+
+- (void)stateDidChanged
+{
+	
+}
+
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

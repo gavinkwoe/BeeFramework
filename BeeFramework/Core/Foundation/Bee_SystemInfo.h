@@ -32,20 +32,31 @@
 
 #import "Bee_Precompile.h"
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #define IOS6_OR_LATER	( [[[UIDevice currentDevice] systemVersion] compare:@"6.0"] != NSOrderedAscending )
 #define IOS5_OR_LATER	( [[[UIDevice currentDevice] systemVersion] compare:@"5.0"] != NSOrderedAscending )
 #define IOS4_OR_LATER	( [[[UIDevice currentDevice] systemVersion] compare:@"4.0"] != NSOrderedAscending )
 #define IOS3_OR_LATER	( [[[UIDevice currentDevice] systemVersion] compare:@"3.0"] != NSOrderedAscending )
 
+#else	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
+#define IOS6_OR_LATER	(NO)
+#define IOS5_OR_LATER	(NO)
+#define IOS4_OR_LATER	(NO)
+#define IOS3_OR_LATER	(NO)
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 @interface BeeSystemInfo : NSObject
 
 + (NSString *)osVersion;
-+ (NSString *)appVersion;
 
-+ (NSString *)deviceModel;
-+ (NSString *)deviceUUID;
++ (NSString *)appVersion	NS_AVAILABLE_IOS(4_0);
++ (NSString *)deviceModel	NS_AVAILABLE_IOS(4_0);
++ (NSString *)deviceUUID	NS_AVAILABLE_IOS(4_0);
 
-+ (BOOL)isJailBroken;
-+ (NSString *)jailBreaker;
++ (BOOL)isJailBroken		NS_AVAILABLE_IOS(4_0);
++ (NSString *)jailBreaker	NS_AVAILABLE_IOS(4_0);
 
 @end

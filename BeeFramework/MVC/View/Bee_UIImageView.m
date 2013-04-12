@@ -30,6 +30,8 @@
 //  Bee_UIImageView.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UIImageView.h"
 #import "Bee_UIActivityIndicatorView.h"
@@ -162,6 +164,9 @@ DEF_SIGNAL( LOAD_START )
 DEF_SIGNAL( LOAD_COMPLETED )
 DEF_SIGNAL( LOAD_FAILED )
 DEF_SIGNAL( LOAD_CANCELLED )
+
+DEF_SIGNAL( WILL_CHANGE )
+DEF_SIGNAL( DID_CHANGED )
 
 @synthesize gray = _gray;
 @synthesize rounded = _rounded;
@@ -339,6 +344,8 @@ PERF_LEAVE
 
 	if ( image != self.image )
 	{
+		[self sendUISignal:BeeUIImageView.WILL_CHANGE];
+		
 		[self cancelRequests];
 
 		if ( self.rounded )
@@ -377,6 +384,8 @@ PERF_LEAVE
 		self.transform = transform;
 
 		[super setImage:image];
+		
+		[self sendUISignal:BeeUIImageView.DID_CHANGED];
 	}
 	
 	[self setNeedsDisplay];
@@ -437,6 +446,21 @@ PERF_LEAVE
 	return _indicator;
 }
 
+- (void)readFromURL:(NSString *)value
+{
+	self.url = value;
+}
+
+- (void)readFromFile:(NSString *)value
+{
+	self.file = value;
+}
+
+- (void)readFromResource:(NSString *)value
+{
+	self.resource = value;
+}
+
 #pragma mark -
 #pragma mark NetworkRequestDelegate
 
@@ -468,21 +492,30 @@ PERF_LEAVE
 			UIImage * image = [UIImage imageWithData:data];
 			if ( image )
 			{
+				NSString * string = [request.url absoluteString];
+				[[BeeImageCache sharedInstance] saveImage:image forURL:string];
+				[[BeeImageCache sharedInstance] saveData:data forURL:string];
+
+				[self setLoading:NO];
+				self.loaded = YES;
+				
 				[self changeImage:image];
+
+				[self sendUISignal:BeeUIImageView.LOAD_COMPLETED];
 			}
-
-			NSString * string = [request.url absoluteString];
-			[[BeeImageCache sharedInstance] saveImage:image forURL:string];
-			[[BeeImageCache sharedInstance] saveData:data forURL:string];
-
-			[self setLoading:NO];
-			self.loaded = YES;
-			[self sendUISignal:BeeUIImageView.LOAD_COMPLETED];
+			else
+			{
+				[self setLoading:NO];
+				self.loaded = NO;
+				
+				[self sendUISignal:BeeUIImageView.LOAD_FAILED];
+			}
 		}
 		else
 		{
 			[self setLoading:NO];
 			self.loaded = NO;
+			
 			[self sendUISignal:BeeUIImageView.LOAD_FAILED];
 		}
 	}
@@ -504,3 +537,5 @@ PERF_LEAVE
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

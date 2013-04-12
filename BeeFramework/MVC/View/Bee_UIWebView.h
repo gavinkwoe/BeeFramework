@@ -30,6 +30,8 @@
 //  Bee_UIWebView.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 
@@ -59,3 +61,5 @@ AS_SIGNAL( DID_LOAD_CANCELLED )		// 加载取消
 + (BeeUIWebView *)spawn:(NSString *)tagString;
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

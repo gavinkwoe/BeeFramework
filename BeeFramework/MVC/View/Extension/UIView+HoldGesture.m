@@ -30,6 +30,8 @@
 //  Bee_UISignal.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 #import "Bee_Singleton.h"
@@ -164,3 +166,5 @@ DEF_SIGNAL( HOLD_CANCELLED )	// 长按取消
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

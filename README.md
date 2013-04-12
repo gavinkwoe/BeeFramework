@@ -12,6 +12,9 @@ google groups: https://groups.google.com/d/forum/beeframework?hl=zh-CN
 
 --------------------
 
+Happy chinese new year~~~~
+![Fu](http://blog.whatsbug.com/wp-content/uploads/2013/02/fu2.jpg)
+
 ##Who using Bee
 
 ####Companies
@@ -38,34 +41,22 @@ P. MesonTech, http://www.mesontech.com.cn/home/mesontech.jsp
 ####Projects
 
 1. Sina Finance(新浪财经)    
-   https://itunes.apple.com/us/app/xin-lang-cai-jing/id430165157?mt=8    
-   ![SF](http://a1465.phobos.apple.com/us/r1000/078/Purple/v4/fa/0e/31/fa0e317b-958d-d8d8-798c-eb6fdbd230f1/mzl.sorkiyhq.320x480-75.jpg)        
+   https://itunes.apple.com/us/app/xin-lang-cai-jing/id430165157?mt=8
 2. Mengtu(萌图)    
-   https://itunes.apple.com/us/app/meng-tu/id531292307?mt=8        
-   ![Mengtu](http://a1362.phobos.apple.com/us/r1000/094/Purple/v4/1a/e4/19/1ae41929-6b21-a7a9-93be-f3be9626421f/mzl.wqabsske.320x480-75.jpg)
+   https://itunes.apple.com/us/app/meng-tu/id531292307?mt=8    
 3. iLoushi(i楼市)    
-   iPhone: http://itunes.apple.com/cn/app/id464232572?mt=8    
-   iPad: https://itunes.apple.com/cn/app/id428916075?mt=8    
-   ![iLoushi](http://a1555.phobos.apple.com/us/r1000/116/Purple/v4/77/6e/72/776e7295-5305-df7b-1a13-e525ae417293/mzl.wovoonje.320x480-75.jpg)    
-   ![iLoushi2](http://a603.phobos.apple.com/us/r1000/060/Purple/v4/05/c3/90/05c3904e-5142-dfa8-878d-4be229f971c9/mzl.ogzcrgnc.480x480-75.jpg)    
+   http://itunes.apple.com/cn/app/id464232572?mt=8(iPhone)    
+   https://itunes.apple.com/cn/app/id428916075?mt=8(iPad)    
 4. Duopeng(多朋)    
-   https://itunes.apple.com/cn/app/id582172699?mt=8    
-   ![dp](http://a516.phobos.apple.com/us/r1000/120/Purple/v4/20/0c/fd/200cfdf0-63f5-d9c9-7a0b-119c11589be3/mzl.wkflamsl.320x480-75.jpg)    
+   http://www.duopeng.com/    
 5. Yiban(易班)    
    https://itunes.apple.com/app/yi-ban/id549775029?mt=8    
-   ![Yiban](http://a637.phobos.apple.com/us/r1000/064/Purple/v4/cb/8d/85/cb8d8504-f110-8be8-b1eb-4ef6182180fe/mzl.potwunae.320x480-75.jpg)    
 6. Golden carp(金鲤鱼理财)    
    https://itunes.apple.com/cn/app/id584687764    
-   ![GC](http://a548.phobos.apple.com/us/r1000/075/Purple/v4/e2/50/28/e25028e6-98dc-bad7-867c-cb031446e790/mzl.uzltuley.320x480-75.jpg)    
 7. Tivic(TV客)    
    http://mobile.91.com/Soft/Detail.aspx?Platform=iPhone&f_id=1373668    
-   ![Tivic](http://a230.phobos.apple.com/us/r1000/109/Purple/v4/53/47/ca/5347ca90-795a-b8c4-77d0-60dd5473e779/mzl.nbpcehkz.480x480-75.jpg)    
 8. Middling(Middling图书)    
-   https://itunes.apple.com/us/app/middling/id531625104?mt=8  
-   ![Middling](http://a769.phobos.apple.com/us/r1000/117/Purple/v4/cf/01/4f/cf014f7a-3191-9def-9939-260e2b7c53e5/mzl.pybwachz.320x480-75.jpg)    
-9. TWP    
-   https://itunes.apple.com/hk/app/key-links/id591719607?l=zh&mt=8    
-   ![TWP](http://a49.phobos.apple.com/us/r30/Purple/v4/58/37/76/58377666-b93c-a54d-a489-ce19470cadc1/mzl.kqmdqagz.480x480-75.jpg)        
+   https://itunes.apple.com/us/app/middling/id531625104?mt=8    
 
 --------------------
 

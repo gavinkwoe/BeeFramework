@@ -35,7 +35,7 @@
 #import "Bee_Message.h"
 #import "Bee_MessageQueue.h"
 #import "Bee_Controller.h"
-#import "NSObject+BeeMessage.h"
+
 #import <objc/runtime.h>
 
 #pragma mark -
@@ -70,9 +70,12 @@ DEF_INT( STATE_SENDING,		1 )
 DEF_INT( STATE_SUCCEED,		2 )
 DEF_INT( STATE_FAILED,		3 )
 DEF_INT( STATE_CANCELLED,	4 )
+DEF_INT( STATE_WAITING,		5 )
 
 @dynamic INPUT;
 @dynamic OUTPUT;
+@dynamic GET_INPUT;
+@dynamic GET_OUTPUT;
 @dynamic TIMEOUT;
 
 @synthesize unique = _unique;
@@ -111,7 +114,9 @@ DEF_INT( STATE_CANCELLED,	4 )
 #endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 
 @synthesize created;
+@synthesize arrived = _arrived;
 @synthesize sending;
+@synthesize waiting;
 @synthesize succeed;
 @synthesize failed;
 @synthesize cancelled;
@@ -147,6 +152,8 @@ DEF_INT( STATE_CANCELLED,	4 )
 		_initTimeStamp = [NSDate timeIntervalSinceReferenceDate];
 		_sendTimeStamp = _initTimeStamp;
 		_recvTimeStamp = _initTimeStamp;
+
+		_arrived = NO;
 
 		self.whenUpdate = nil;
 		
@@ -249,7 +256,8 @@ DEF_INT( STATE_CANCELLED,	4 )
 		_timer = [NSTimer scheduledTimerWithTimeInterval:_seconds
 												  target:self
 												selector:@selector(didMessageTimeout)
-												userInfo:nil repeats:NO];		
+												userInfo:nil
+												 repeats:NO];
 	}
 
 	_emitted = YES;
@@ -332,6 +340,7 @@ DEF_INT( STATE_CANCELLED,	4 )
 	if ( NO == _toldProgress )
 		return;
 	
+	_state = BeeMessage.STATE_WAITING;
 	_progressed = YES;
 	
 	if ( NO == self.disabled )
@@ -340,7 +349,7 @@ DEF_INT( STATE_CANCELLED,	4 )
 		{
 			self.whenUpdate( self );
 		}
-		
+
 		[self callResponder];
 	}
 	
@@ -352,7 +361,7 @@ DEF_INT( STATE_CANCELLED,	4 )
 	[self forwardResponder:self.responder];
 }
 
-- (void)forwardResponder:(id)obj
+- (void)forwardResponder:(NSObject *)obj
 {
 	if ( nil == obj )
 		return;
@@ -408,7 +417,7 @@ DEF_INT( STATE_CANCELLED,	4 )
 	
 	if ( obj && [obj respondsToSelector:@selector(handleMessage:)] )
 	{
-		[obj handleMessage:self];
+		[obj performSelector:@selector(handleMessage) withObject:self];
 	}	
 }
 
@@ -444,6 +453,7 @@ DEF_INT( STATE_CANCELLED,	4 )
 		
 		[self.input setObject:value forKey:key];
 	}
+	
 	va_end( args );
 	return self;
 }
@@ -467,6 +477,7 @@ DEF_INT( STATE_CANCELLED,	4 )
 		
 		[self.output setObject:value forKey:key];
 	}
+	
 	va_end( args );
 	return self;
 }
@@ -591,6 +602,19 @@ DEF_INT( STATE_CANCELLED,	4 )
 	}
 }
 
+- (BOOL)waiting
+{
+	return BeeMessage.STATE_WAITING == _state ? YES : NO;
+}
+
+- (void)setWaiting:(BOOL)flag
+{
+	if ( flag )
+	{
+		_nextState = BeeMessage.STATE_WAITING;
+	}
+}
+
 - (BOOL)succeed
 {
 	return BeeMessage.STATE_SUCCEED == _state ? YES : NO;
@@ -653,7 +677,16 @@ DEF_INT( STATE_CANCELLED,	4 )
 
 	_state = newState;
 	_nextState = newState;
-
+	
+	if ( BeeMessage.STATE_CREATED != _state )
+	{
+		if ( NO == _arrived )
+		{
+			// TODO:
+			_arrived = YES;			
+		}
+	}
+	
 	// Find an executer
 	if ( nil == _executer )
 	{
@@ -661,7 +694,7 @@ DEF_INT( STATE_CANCELLED,	4 )
 		if ( nil == self.executer )
 			return;
 	}
-	
+		
 	if ( [_executer respondsToSelector:@selector(route:)] )
 	{
 		[_executer route:self];
@@ -683,7 +716,7 @@ DEF_INT( STATE_CANCELLED,	4 )
 	else if ( BeeMessage.STATE_SENDING == _state )
 	{
 	#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
-		CC( @"\n[REQUEST]\n'%@'.parameters = %@", _message, [_input description] );
+		CC( @"[REQUEST]\n'%@'.parameters = %@", _message, [_input description] );
 	#endif	//#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 
 		if ( self.oneDirection )
@@ -699,43 +732,56 @@ DEF_INT( STATE_CANCELLED,	4 )
 			[self internalNotifySending];
 		}
 	}
+	else if ( BeeMessage.STATE_WAITING == _state )
+	{
+		// TODO: nothing to do
+	}
 	else if ( BeeMessage.STATE_SUCCEED == _state )
 	{
-	#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
-		CC( @"\n[SUCCEED]\n'%@'.input = \n%@\n'%@'.output = \n%@\n",
-		   _message, [_input description],
-		   _message, [_output description]
-		   );
-	#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
-		
-		[self internalStopTimer];
-		[self internalNotifySucceed];
-		
-		shouldRemove = YES;
-	}	
+		if ( _nextState == _state )
+        {
+		#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
+			CC( @"[SUCCEED]\n'%@'.input = \n%@\n'%@'.output = \n%@\n",
+			   _message, [_input description],
+			   _message, [_output description]
+			   );
+		#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
+			
+			[self internalStopTimer];
+			[self internalNotifySucceed];
+			
+			shouldRemove = YES;
+		}
+	}
 	else if ( BeeMessage.STATE_FAILED == _state )
 	{
-	#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
-		CC( @"\n[FAILED]\n'%@'.input = \n%@\n", _message, [_input description] );
-	#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
-		
-		[self internalStopTimer];
-		[self internalNotifyFailed];	
+		if ( _nextState == _state )
+        {
+		#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
+			CC( @"[FAILED]\n'%@'.input = \n%@\n", _message, [_input description] );
+		#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
+			
+			[self internalStopTimer];
+			[self internalNotifyFailed];	
 
-		shouldRemove = YES;
+			shouldRemove = YES;
+		}
 	}
 	else if ( BeeMessage.STATE_CANCELLED == _state )
 	{
-	#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
-		CC( @"\n[CANCELLED]\n'%@'.input = %@", _message, [_input description] );
-	#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
-		
-		[self cancelRequests];
-		
-		[self internalStopTimer];	
-		[self internalNotifyCancelled];
+        if ( _nextState == _state )
+        {
+		#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
+			CC( @"[CANCELLED]\n'%@'.input = %@", _message, [_input description] );
+		#endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
+			
+			[self cancelRequests];
+			
+			[self internalStopTimer];	
+			[self internalNotifyCancelled];
 
-		shouldRemove = YES;
+			shouldRemove = YES;
+		}
 	}
 
 	if ( [BeeMessageQueue sharedInstance].whenUpdate )
@@ -747,6 +793,26 @@ DEF_INT( STATE_CANCELLED,	4 )
 	{
 		[[BeeMessageQueue sharedInstance] removeMessage:self];
 	}
+}
+
+- (BeeMessageObjectBlockN)GET_INPUT
+{
+	BeeMessageObjectBlockN block = ^ id ( id first, ... )
+	{
+		return [self.input objectAtPath:(NSString *)first];
+	};
+	
+	return [[block copy] autorelease];
+}
+
+- (BeeMessageObjectBlockN)GET_OUTPUT
+{
+	BeeMessageObjectBlockN block = ^ id ( id first, ... )
+	{
+		return [self.output objectAtPath:(NSString *)first];
+	};
+	
+	return [[block copy] autorelease];
 }
 
 - (BeeMessageBlockN)INPUT
@@ -763,6 +829,7 @@ DEF_INT( STATE_CANCELLED,	4 )
 		{
 			[self.input setObject:value atPath:key];
 		}
+		
 		va_end( args );
 		return self;
 	};
@@ -784,6 +851,7 @@ DEF_INT( STATE_CANCELLED,	4 )
 		{
 			[self.output setObject:value atPath:key];
 		}
+		
 		va_end( args );
 		return self;
 	};

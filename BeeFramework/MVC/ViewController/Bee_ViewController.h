@@ -30,6 +30,8 @@
 //  Bee_ViewController.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "UIViewController+BeeExtension.h"
 
 #import "Bee_UIBoard.h"
@@ -39,3 +41,5 @@
 #import "UIViewController+BeeExtension.h"
 #import "UIViewController+BeeUISignal.h"
 #import "UIViewController+UINavigationBar.h"
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

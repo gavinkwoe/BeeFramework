@@ -30,6 +30,8 @@
 //  Bee_UITextView.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 
@@ -69,3 +71,5 @@ AS_SIGNAL( RETURN )				// 换行
 - (void)updatePlaceHolder;
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

@@ -39,7 +39,8 @@
 
 @interface NSObject(BeeActiveBase)
 
-+ (void)mapRelation;	// for subclass
++ (void)mapRelation;		// for subclass
++ (NSString *)mapTableName;	// for subclass
 
 + (void)mapPropertyAsKey:(NSString *)name;
 + (void)mapPropertyAsKey:(NSString *)name defaultValue:(id)value;
@@ -62,16 +63,23 @@
 + (BOOL)usingAutoIncrement;
 + (BOOL)usingAutoIncrementFor:(Class)clazz;
 
++ (void)useAutoIncrementFor:(Class)clazz andProperty:(NSString *)name;
++ (BOOL)usingAutoIncrementFor:(Class)clazz andProperty:(NSString *)name;
+
++ (void)useUniqueFor:(Class)clazz andProperty:(NSString *)name;
++ (BOOL)usingUniqueFor:(Class)clazz andProperty:(NSString *)name;
+
 + (void)useJSON;
 + (void)useJSONFor:(Class)clazz;
 + (BOOL)usingJSON;
 + (BOOL)usingJSONFor:(Class)clazz;
 
 - (NSString *)activePrimaryKey;
+- (NSString *)activeJSONKey;
+
 + (NSString *)activePrimaryKey;
 + (NSString *)activePrimaryKeyFor:(Class)clazz;
 
-- (NSString *)activeJSONKey;
 + (NSString *)activeJSONKey;
 + (NSString *)activeJSONKeyFor:(Class)clazz;
 

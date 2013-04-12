@@ -30,8 +30,11 @@
 //  Bee_UIStack.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
+#import "Bee_UINavigationBar.h"
 #import "Bee_UIImageView.h"
 #import "NSObject+BeeNotification.h"
 
@@ -62,11 +65,12 @@ AS_INT( ANIMATION_TYPE_PAGING )		// 竖直翻页
 AS_INT( ANIMATION_TYPE_SLIDE )		// 滑动
 AS_INT( ANIMATION_TYPE_FLIP )		// 翻页
 
-@property (nonatomic, retain) NSString *		name;
-@property (nonatomic, assign) BeeUIBoard *		parentBoard;
+@property (nonatomic, retain) NSString *				name;
+@property (nonatomic, assign) BeeUIBoard *				parentBoard;
 
-@property (nonatomic, readonly) NSArray *		boards;
-@property (nonatomic, readonly) BeeUIBoard *	topBoard;
+@property (nonatomic, readonly) BeeUINavigationBar *	navigationBar;
+@property (nonatomic, readonly) NSArray *				boards;
+@property (nonatomic, readonly) BeeUIBoard *			topBoard;
 
 + (BeeUIStack *)stack;
 + (BeeUIStack *)stack:(NSString *)name;
@@ -95,9 +99,6 @@ AS_INT( ANIMATION_TYPE_FLIP )		// 翻页
 - (BOOL)existsBoard:(BeeUIBoard *)board;
 - (BeeUIBoard *)getBoard:(Class)clazz;
 
-- (void)setBarBackgroundImage:(UIImage *)image;
-+ (void)setDefaultBarBackgroundImage:(UIImage *)image;
-
 @end
 
 #pragma mark -
@@ -106,3 +107,5 @@ AS_INT( ANIMATION_TYPE_FLIP )		// 翻页
 - (void)__enterBackground;
 - (void)__enterForeground;
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

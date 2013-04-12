@@ -48,6 +48,7 @@ typedef NSString *	(^NSStringAppendBlock)( id format, ... );
 @property (nonatomic, readonly) NSString *			MD5;
 @property (nonatomic, readonly) NSData *			MD5Data;
 
+// thanks to @uxyheaven
 @property (nonatomic, readonly) NSString *			SHA1;
 
 - (NSArray *)allURLs;
@@ -64,6 +65,9 @@ typedef NSString *	(^NSStringAppendBlock)( id format, ... );
 - (NSString *)URLDecoding;
 
 - (NSString *)trim;
+- (NSString *)unwrap;
+
+- (BOOL)match:(NSString *)expression;
 
 - (BOOL)empty;
 - (BOOL)notEmpty;
@@ -73,5 +77,10 @@ typedef NSString *	(^NSStringAppendBlock)( id format, ... );
 
 - (BOOL)isValueOf:(NSArray *)array;
 - (BOOL)isValueOf:(NSArray *)array caseInsens:(BOOL)caseInsens;
+
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+- (CGSize)sizeWithFont:(UIFont *)font byWidth:(CGFloat)width;
+- (CGSize)sizeWithFont:(UIFont *)font byHeight:(CGFloat)height;
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 
 @end

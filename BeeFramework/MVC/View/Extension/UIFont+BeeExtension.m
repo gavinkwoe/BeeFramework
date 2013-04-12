@@ -30,6 +30,8 @@
 //  UIFont+BeeExtension.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "UIFont+BeeExtension.h"
 
@@ -131,3 +133,5 @@ static NSString * __italicFontName = nil;
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

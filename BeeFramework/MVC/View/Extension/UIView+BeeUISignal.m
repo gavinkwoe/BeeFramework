@@ -30,6 +30,8 @@
 //  Bee_UISignal.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 #import "Bee_Log.h"
@@ -83,6 +85,11 @@
 	BeeUISignal * signal = [[[BeeUISignal alloc] init] autorelease];
 	if ( signal )
 	{
+		NSString * selName = self.tagString.lowercaseString;
+		selName = [selName stringByReplacingOccurrencesOfString:@"-" withString:@"_"];
+//		selName = [selName stringByReplacingOccurrencesOfString:@":" withString:@"_"];
+		
+		signal.preSelector = selName;	// v0.3.0 new feature, signal binding
 		signal.source = source ? source : self;
 		signal.target = self;
 		signal.name = name;		
@@ -93,3 +100,5 @@
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

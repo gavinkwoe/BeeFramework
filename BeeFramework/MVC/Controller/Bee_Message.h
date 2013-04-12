@@ -70,6 +70,7 @@ typedef id				(^BeeMessageObjectBlockN)( id key, ... );
 	NSTimer *					_timer;			// 计时器，消息可以单独设置超时
 	NSTimeInterval				_seconds;		// 超时时长（秒）
 	BOOL						_useCache;		// 是否使用Cache
+	BOOL						_arrived;		// 是否达到
 
 	BOOL						_toldProgress;	// 是否告知进度
 	BOOL						_progressed;	// 是否有新进度
@@ -110,12 +111,15 @@ AS_INT( ERROR_CODE_ROUTES )		// 路由错误
 
 AS_INT( STATE_CREATED )			// 消息被创建
 AS_INT( STATE_SENDING )			// 消息正在发送
+AS_INT( STATE_WAITING )			// 消息正在等待回应
 AS_INT( STATE_SUCCEED )			// 消息处理成功（本地或网络）
 AS_INT( STATE_FAILED )			// 消息处理失败（本地或网络）
 AS_INT( STATE_CANCELLED )		// 消息被取消了
 
 @property (nonatomic, readonly) BeeMessageBlockN		INPUT;
 @property (nonatomic, readonly) BeeMessageBlockN		OUTPUT;
+@property (nonatomic, readonly) BeeMessageObjectBlockN	GET_INPUT;
+@property (nonatomic, readonly) BeeMessageObjectBlockN	GET_OUTPUT;
 @property (nonatomic, readonly) BeeMessageBlockT		TIMEOUT;
 @property (nonatomic, readonly) BeeMessageBlockV		TOLD_PROGRESS;
 
@@ -155,7 +159,9 @@ AS_INT( STATE_CANCELLED )		// 消息被取消了
 #endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 
 @property (nonatomic, assign) BOOL						created;
+@property (nonatomic, assign) BOOL						arrived;
 @property (nonatomic, assign) BOOL						sending;
+@property (nonatomic, assign) BOOL						waiting;
 @property (nonatomic, assign) BOOL						succeed;
 @property (nonatomic, assign) BOOL						failed;
 @property (nonatomic, assign) BOOL						cancelled;

@@ -42,7 +42,7 @@
 
 #pragma mark -
 
-#define DEFAULT_MAX_COUNT	(16)
+#define DEFAULT_MAX_COUNT	(48)
 
 #pragma mark -
 
@@ -212,7 +212,9 @@ DEF_SINGLETON( BeeMemoryCache );
 		_cacheKeys = [[NSMutableArray alloc] init];
 		_cacheObjs = [[NSMutableDictionary alloc] init];
 
+	#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 		[self observeNotification:UIApplicationDidReceiveMemoryWarningNotification];
+	#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 	}
 
 	return self;
@@ -302,6 +304,7 @@ DEF_SINGLETON( BeeMemoryCache );
 
 - (void)handleNotification:(NSNotification *)notification
 {
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 	if ( [notification is:UIApplicationDidReceiveMemoryWarningNotification] )
 	{
 		if ( _clearWhenMemoryLow )
@@ -309,6 +312,7 @@ DEF_SINGLETON( BeeMemoryCache );
 			[self deleteAll];
 		}
 	}
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 }
 
 @end

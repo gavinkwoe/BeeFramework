@@ -715,10 +715,10 @@ PERF_LEAVE
 		[_items removeAllObjects];		
 	}
 	
-	if ( _reuseQueue )
-	{
-		[_reuseQueue removeAllObjects];
-	}	
+//	if ( _reuseQueue )
+//	{
+//		[_reuseQueue removeAllObjects];
+//	}	
 }
 
 - (void)releaseViewsBefore:(NSInteger)index

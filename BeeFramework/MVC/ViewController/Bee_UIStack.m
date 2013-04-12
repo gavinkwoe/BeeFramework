@@ -30,80 +30,19 @@
 //  Bee_UIStack.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UIBoard.h"
 #import "Bee_UIStack.h"
 #import "Bee_Runtime.h"
+#import "Bee_UINavigationBar.h"
 #import "UIView+BeeExtension.h"
 
 #pragma mark -
 
 #undef	UNUSED
 #define UNUSED( __x )	(void)(__x)
-
-#pragma mark -
-
-static UIImage * __defaultImage = nil;
-
-#pragma mark -
-
-@interface BeeUINavigationBar : UINavigationBar
-{
-	UIImage * _backgroundImage;
-}
-
-@property (nonatomic, retain) UIImage *	backgroundImage;
-
-@end
-
-#pragma mark -
-
-@implementation BeeUINavigationBar
-
-@dynamic backgroundImage;
-
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if ( self )
-	{
-    }
-    return self;
-}
-
-- (void)dealloc
-{
-    [_backgroundImage release];
-	
-    [super dealloc];
-}
-
-- (void)drawRect:(CGRect)rect
-{
-    if ( _backgroundImage )
-	{
-        [_backgroundImage drawInRect:rect];
-    }
-	else if ( __defaultImage )
-	{
-		[__defaultImage drawInRect:rect];
-	}
-	else
-	{
-        [super drawRect:rect];
-    }
-}
-
-- (void)setBackgroundImage:(UIImage *)image
-{
-	[image retain];
-	[_backgroundImage release];
-	_backgroundImage = image;
-	
-	[self setNeedsDisplay];
-}
-
-@end
 
 #pragma mark -
 
@@ -192,7 +131,6 @@ DEF_INT( ANIMATION_TYPE_FLIP,		5 )
 	{
 		self.name = name ? name : [clazz description];
 		self.navigationBarHidden = YES;
-		self.navigationBar.barStyle = UIBarStyleBlackOpaque;
 	}
 	return self;
 }
@@ -204,7 +142,6 @@ DEF_INT( ANIMATION_TYPE_FLIP,		5 )
 	{
 		self.name = name ? name : [[board class] description];
 		self.navigationBarHidden = YES;
-		self.navigationBar.barStyle = UIBarStyleBlackOpaque;
 	}
 	return self;
 }
@@ -332,6 +269,19 @@ DEF_INT( ANIMATION_TYPE_FLIP,		5 )
 		}
 		else if ( BeeUIStack.ANIMATION_TYPE_FLIP == type )
 		{
+			CATransition *animation = [CATransition animation];
+			animation.duration = 0.6f;
+			animation.timingFunction = UIViewAnimationCurveEaseInOut;
+			animation.fillMode = kCAFillModeForwards;
+			animation.type = @"flip";
+			animation.subtype = @"fromLeft";
+			animation.startProgress = 0.0f;
+			animation.endProgress = 1.0f;
+			animation.removedOnCompletion = YES;
+			[self.view.layer removeAnimationForKey:@"flip"];
+			[self.view.layer addAnimation:animation forKey:@"flip"];
+			
+			[super pushViewController:newBoard animated:NO];
 		}
 	}
 		
@@ -427,7 +377,20 @@ DEF_INT( ANIMATION_TYPE_FLIP,		5 )
 		}
 		else if ( BeeUIStack.ANIMATION_TYPE_FLIP == animType )
 		{
+			[super popViewControllerAnimated:NO];
 			
+			CATransition *animation = [CATransition animation];
+			animation.delegate = self;
+			animation.duration = 0.6f;
+			animation.timingFunction = UIViewAnimationCurveEaseInOut;
+			animation.fillMode = kCAFillModeForwards;
+			animation.type = @"flip";
+			animation.subtype = @"fromRight";
+			animation.startProgress = 0.0f;
+			animation.endProgress = 1.0f;
+			animation.removedOnCompletion = NO;
+			[self.view.layer removeAnimationForKey:@"flip"];
+			[self.view.layer addAnimation:animation forKey:@"flip"];
 		}
 	}
 }
@@ -651,29 +614,14 @@ DEF_INT( ANIMATION_TYPE_FLIP,		5 )
 	}
 }
 
-+ (void)setDefaultBarBackgroundImage:(UIImage *)image
-{
-	[image retain];
-	[__defaultImage release];
-	__defaultImage = image;
-}
-
 - (void)loadView
 {
 	[super loadView];
 
 	BeeUINavigationBar * bar = [[BeeUINavigationBar alloc] init];
+	bar.navigationController = self;
 	[self setValue:bar forKey:@"navigationBar"];
     [bar release];
-}
-
-- (void)setBarBackgroundImage:(UIImage *)image
-{
-	UINavigationBar * navBar = self.navigationBar;
-	if ( navBar && [navBar isKindOfClass:[BeeUINavigationBar class]] )
-	{
-		[(BeeUINavigationBar *)navBar setBackgroundImage:image];
-	}
 }
 
 // Called when the view is about to made visible. Default does nothing
@@ -742,3 +690,5 @@ DEF_INT( ANIMATION_TYPE_FLIP,		5 )
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

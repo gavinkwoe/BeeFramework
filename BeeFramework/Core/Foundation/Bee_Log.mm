@@ -73,7 +73,19 @@ extern "C" BOOL BeeLogIsEnabled( void )
 
 extern "C" void BeeLogIndent( NSUInteger tabs )
 {
-	__indentTabs = tabs;
+	__indentTabs += tabs;
+}
+
+extern "C" void BeeLogUnindent( NSUInteger tabs )
+{
+	if ( __indentTabs < tabs )
+	{
+		__indentTabs = 0;
+	}
+	else
+	{
+		__indentTabs -= tabs;	
+	}
 }
 
 extern "C" NSString * NSStringFormatted( NSString * format, va_list argList )
@@ -112,21 +124,39 @@ extern "C" void BeeLog( NSObject * format, ... )
 	va_list args;
 	va_start( args, format );
 	
-	char tabs[16] = "";
-
-	for ( int i = 0; i < __indentTabs; ++i )
+	NSString * text = nil;
+	NSString * tabs = nil;
+	
+	if ( __indentTabs )
 	{
-		tabs[i] = '\t';
+		tabs = [NSMutableString string];
+		
+		for ( int i = 0; i < __indentTabs; ++i )
+		{
+			[(NSMutableString *)tabs appendString:@"\t"];
+		}
+	}
+	else
+	{
+		tabs = @"";
 	}
 	
 	if ( [format isKindOfClass:[NSString class]] )
 	{
-		fprintf( stderr, "Bee >   %s%s\n", tabs, [NSStringFormatted((NSString *)format, args) UTF8String] );
+		text = [NSString stringWithFormat:@"Bee >   %@%@", tabs, NSStringFormatted((NSString *)format, args)];
 	}
 	else
 	{
-		fprintf( stderr, "Bee >   %s%s\n", tabs, [[format description] UTF8String] );
+		text = [NSString stringWithFormat:@"Bee >   %@%@", tabs, [format description]];
 	}
+
+	if ( [text rangeOfString:@"\n"].length )
+	{
+		text = [text stringByReplacingOccurrencesOfString:@"\n" withString:[NSString stringWithFormat:@"\n\t\t"]];
+	}
+
+	fprintf( stderr, [text UTF8String], NULL );
+	fprintf( stderr, "\n", NULL );
 
 	va_end( args );
 	

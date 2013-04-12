@@ -9,43 +9,13 @@
 
 #import "Bee.h"
 #import "Bee_Debug.h"
+#import "Bee_UnitTest.h"
 
 #pragma mark -
-#pragma mark UnitTest
 
 @implementation AppDelegate
 
 @synthesize window = _window;
-
-- (void)onCrash_divByZero
-{
-	int zeroDivisor = 0;
-	int result = 10 / zeroDivisor;
-#pragma unused(result)
-}
-
-- (void) onCrash_deallocatedObject
-{
-	// Note: EXC_BAD_ACCESS errors tend to cause the app to close stdout,
-	// which means you won't see the trace on your console.
-	// It is, however, stored to the error log file.
-	NSObject* object = [[NSObject alloc] init];
-	[object release];
-	NSLog(@"%@", object);
-}
-
-- (void) onCrash_outOfBounds
-{
-	NSArray* array = [NSArray arrayWithObject:[[[NSObject alloc] init] autorelease]];
-	NSLog(@"%@", [array objectAtIndex:100]);
-}
-
-- (void) onCrash_unimplementedSelector
-{
-	id notAViewController = [NSData data];
-	[notAViewController presentModalViewController:nil animated:NO];
-}
-
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {	
@@ -57,8 +27,6 @@
     [self.window makeKeyAndVisible];
 	
 	[BeeDebugger show];
-	
-//	[self onCrash_unimplementedSelector];
 
     return YES;
 }

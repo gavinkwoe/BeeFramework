@@ -35,11 +35,18 @@
 #import "Bee_Network.h"
 #import "Bee_ActiveRecord.h"
 
+typedef BeeActiveRecord *	(^BeeMessageBlockC)( Class clazz );
+typedef BeeActiveRecord *	(^BeeMessageBlockC2)( Class clazz, NSString * path );
+typedef NSArray *			(^BeeMessageBlockCA)( Class clazz );
+typedef NSArray *			(^BeeMessageBlockCA2)( Class clazz, NSString * path );
+
 #pragma mark -
 
 @interface BeeMessage(ActiveRecord)
 
-@property (nonatomic, readonly) BeeActiveRecord *	responseRecord;
-@property (nonatomic, readonly) NSArray *			responseRecordArray;
+@property (nonatomic, readonly) BeeMessageBlockC	responseRecord;
+@property (nonatomic, readonly) BeeMessageBlockCA	responseRecords;
+@property (nonatomic, readonly) BeeMessageBlockC2	responseRecordAtPath;
+@property (nonatomic, readonly) BeeMessageBlockCA2	responseRecordsAtPath;
 
 @end

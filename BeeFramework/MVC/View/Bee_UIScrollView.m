@@ -30,6 +30,14 @@
 //  Bee_UIScrollView.m
 //
 
+#undef	MAX_QUEUED_ITEMS
+#define	MAX_QUEUED_ITEMS	(32)
+
+#undef	PULL_LOADER_SIZE
+#define PULL_LOADER_SIZE	(60.0f)
+
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UIScrollView.h"
 #import "Bee_Runtime.h"
@@ -106,6 +114,9 @@
 - (void)syncPositions;
 - (void)calcPositions;
 
+- (void)syncPullPositions;
+- (void)syncPullInsets;
+
 - (void)releaseAllViews;
 - (void)releaseViewsBefore:(NSInteger)index;
 - (void)releaseViewsAfter:(NSInteger)index;
@@ -121,12 +132,16 @@
 
 @implementation BeeUIScrollView
 
-DEF_SIGNAL( RELOADED )		// 数据重新加载
-DEF_SIGNAL( REACH_TOP )		// 触顶
-DEF_SIGNAL( REACH_BOTTOM )	// 触底
+DEF_SIGNAL( RELOADED )			// 数据重新加载
+DEF_SIGNAL( REACH_TOP )			// 触顶
+DEF_SIGNAL( REACH_BOTTOM )		// 触底
 
+DEF_SIGNAL( DID_DRAG )
 DEF_SIGNAL( DID_STOP )
 DEF_SIGNAL( DID_SCROLL )
+
+DEF_SIGNAL( HEADER_REFRESH )	// 下拉刷新
+DEF_SIGNAL( FOOTER_REFRESH )	// 上拉刷新
 
 DEF_INT( DIRECTION_HORIZONTAL,	0 )
 DEF_INT( DIRECTION_VERTICAL,	1 )
@@ -146,8 +161,12 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 @synthesize reloading = _reloading;
 @synthesize reuseQueue = _reuseQueue;
 
+@synthesize scrollSpeed = _scrollSpeed;
 @synthesize scrollPercent;
 @synthesize height;
+
+@synthesize headerLoader = _headerLoader;
+@synthesize footerLoader = _footerLoader;
 
 + (BeeUIScrollView *)spawn
 {
@@ -171,33 +190,6 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 	return self;
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    if( (self = [super initWithCoder:aDecoder]) )
-    {
-		_direction = BeeUIScrollView.DIRECTION_VERTICAL;
-        _dataSource = self;
-        
-        _reloaded = NO;
-        _lineCount = 0;
-        
-        _total = 0;
-        [_items release];
-        _items = [[NSMutableArray alloc] init];
-        
-        [_reuseQueue release];
-        _reuseQueue = [[NSMutableArray alloc] init];
-        
-        _visibleStart = 0;
-        _visibleEnd = 0;
-        
-        _reachTop = NO;
-        _reachEnd = NO;		
-        _baseInsets = UIEdgeInsetsZero;
-    }
-    return self;
-}
-
 - (id)initWithFrame:(CGRect)frame
 {
 	self = [super initWithFrame:frame];
@@ -208,11 +200,23 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 	return self;
 }
 
+// thanks to @ilikeido
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+	self = [super initWithCoder:aDecoder];
+    if ( self )
+    {
+		[self initSelf];
+    }
+    return self;
+}
+
 - (void)initSelf
 {
 	_direction = BeeUIScrollView.DIRECTION_VERTICAL;
 	_dataSource = self;
 	
+	_shouldNotify = YES;
 	_reloaded = NO;
 	_lineCount = 0;
 	
@@ -235,6 +239,7 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 	self.contentInset = _baseInsets;
 	self.alwaysBounceVertical = NO;
 	self.alwaysBounceHorizontal = NO;
+	self.directionalLockEnabled = YES;
 	self.bounces = YES;
 	self.scrollEnabled = YES;
 	self.showsVerticalScrollIndicator = NO;
@@ -256,6 +261,7 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 	[_items release];
 	_items = nil;
 	
+	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(operateReloadData) object:nil];	
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 
 	[super dealloc];
@@ -349,6 +355,9 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 {
 	_baseInsets = insets;
 	self.contentInset = insets;
+
+	[self syncPullPositions];
+	[self syncPullInsets];
 }
 
 - (UIEdgeInsets)getBaseInsets
@@ -398,12 +407,19 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 		_reloading = NO;
 		
 		[self internalReloadData];
-		[self sendUISignal:BeeUIScrollView.RELOADED];
+		
+		if ( _shouldNotify )
+		{
+			[self sendUISignal:BeeUIScrollView.RELOADED];
+		}
 	}
 }
 
 - (void)internalReloadData
 {
+	if ( nil == _dataSource )
+		return;
+	
 	_lineCount = [_dataSource numberOfLinesInScrollView:self];
 	
 	for ( NSInteger i = 0; i < BEE_SCROLL_MAX_LINES; ++i )
@@ -416,14 +432,26 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 	[self releaseAllViews];
 	[self calcPositions];
 	[self syncPositions];
+	[self syncPullPositions];
+	[self syncPullInsets];
 	
 	_reloaded = YES;
 }
 
 - (void)setFrame:(CGRect)frame
 {
+	_shouldNotify = NO;
+	
 	[super setFrame:frame];
 
+	if ( CGSizeEqualToSize(self.contentSize, CGSizeZero) )
+	{
+		self.contentSize = frame.size;
+		self.contentInset = _baseInsets;
+	}
+	
+	_shouldNotify = YES;
+	
 	if ( NO == _reloaded )
 	{
 		[self syncReloadData];
@@ -432,6 +460,9 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 	{
 		[self asyncReloadData];	
 	}
+	
+	[self syncPullPositions];
+	[self syncPullInsets];
 }
 
 - (void)scrollToFirstPage:(BOOL)animated
@@ -553,7 +584,7 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 	[self setContentOffset:offset animated:animated];
 }
 
-- (UIView *)dequeueWithContentClass:(Class)clazz
+- (id)dequeueWithContentClass:(Class)clazz
 {
 	for ( UIView * reuseView in _reuseQueue )
 	{
@@ -607,6 +638,11 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 				
 		if ( item.view )
 		{
+			if ( _reuseQueue.count >= MAX_QUEUED_ITEMS )
+			{
+				[_reuseQueue removeObject:[_reuseQueue objectAtIndex:0]];
+			}
+
 			CC( @"UIScrollView, enqueue => (%p)", item.view );
 			[_reuseQueue addObject:item.view];
 			
@@ -614,6 +650,9 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 			item.view = nil;
 		}
 	}
+
+//	CGFloat rightEdge = self.contentOffset.x + (self.contentInset.left + self.contentInset.right) + self.bounds.size.width;
+//	CGFloat bottomEdge = self.contentOffset.y + (self.contentInset.top + self.contentInset.bottom) + self.bounds.size.height;
 	
 	for ( NSInteger j = _visibleStart; j < _total; ++j )
 	{
@@ -630,10 +669,10 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 				{
 					linePixels[item.line] += item.rect.origin.x + item.rect.size.width - self.contentOffset.x;
 				}
-				else if ( item.rect.origin.x > (self.contentOffset.x + self.bounds.size.width) )
-				{
-					linePixels[item.line] += 0.0f;
-				}
+//				else if ( item.rect.origin.x > rightEdge )
+//				{
+//					linePixels[item.line] += 0.0f;
+//				}
 				else
 				{
 					linePixels[item.line] += item.rect.size.width;
@@ -657,10 +696,10 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 				{
 					linePixels[item.line] += item.rect.origin.y + item.rect.size.height - self.contentOffset.y;
 				}
-				else if ( item.rect.origin.y > (self.contentOffset.y + self.bounds.size.height) )
-				{
-					linePixels[item.line] += 0.0f;
-				}
+//				else if ( item.rect.origin.y > bottomEdge )
+//				{
+//					linePixels[item.line] += 0.0f;
+//				}
 				else
 				{
 					linePixels[item.line] += item.rect.size.height;
@@ -681,6 +720,11 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 			
 			if ( item.view )
 			{
+				if ( _reuseQueue.count >= MAX_QUEUED_ITEMS )
+				{
+					[_reuseQueue removeObject:[_reuseQueue objectAtIndex:0]];
+				}
+
 				CC( @"UIScrollView, enqueue => (%p)", item.view );
 				[_reuseQueue addObject:item.view];
 
@@ -709,6 +753,11 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 
 		if ( item.view )
 		{
+			if ( _reuseQueue.count >= MAX_QUEUED_ITEMS )
+			{
+				[_reuseQueue removeObject:[_reuseQueue objectAtIndex:0]];
+			}
+
 			CC( @"UIScrollView, enqueue => (%p)", item.view );
 			[_reuseQueue addObject:item.view];
 			
@@ -779,7 +828,11 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 		{
 			if ( NO == _reachTop )
 			{
-				[self sendUISignal:BeeUIScrollView.REACH_TOP];
+				if ( _shouldNotify )
+				{
+					[self sendUISignal:BeeUIScrollView.REACH_TOP];
+				}
+				
 				_reachTop = YES;
 			}			
 		}
@@ -793,8 +846,12 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 		{
 			if ( NO == _reachEnd )
 			{
-				[self sendUISignal:BeeUIScrollView.REACH_BOTTOM];
-				_reachEnd = YES;			
+				if ( _shouldNotify )
+				{
+					[self sendUISignal:BeeUIScrollView.REACH_BOTTOM];
+				}
+				
+				_reachEnd = YES;
 			}
 		}
 		else
@@ -802,6 +859,21 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 			_reachEnd = NO;
 		}
 	}
+	
+	CGPoint			currentOffset = self.contentOffset;
+    NSTimeInterval	currentTime = [NSDate timeIntervalSinceReferenceDate];
+    NSTimeInterval	timeDiff = currentTime - _lastOffsetCapture;
+	
+    if ( timeDiff > 0.1 )
+	{
+		_scrollSpeed.x = ((currentOffset.x - _lastOffset.x) / 1000.0f);
+		_scrollSpeed.y = ((currentOffset.y - _lastOffset.y) / 1000.0f);
+		
+        _lastOffset = currentOffset;
+        _lastOffsetCapture = currentTime;
+    }
+	
+	CC( @"scrollSpeed = (%f, %f)", _scrollSpeed.x, _scrollSpeed.y );
 }
 
 - (void)calcPositions
@@ -971,10 +1043,10 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 		[_items removeAllObjects];		
 	}
 	
-	if ( _reuseQueue )
-	{
-		[_reuseQueue removeAllObjects];
-	}	
+//	if ( _reuseQueue )
+//	{
+//		[_reuseQueue removeAllObjects];
+//	}	
 }
 
 - (void)releaseViewsBefore:(NSInteger)index
@@ -983,6 +1055,238 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 
 - (void)releaseViewsAfter:(NSInteger)index
 {
+}
+
+- (void)showHeaderLoader:(BOOL)flag animated:(BOOL)animated
+{
+	if ( nil == _headerLoader )
+	{
+		_headerLoader = [[BeeUIPullLoader alloc] initWithFrame:CGRectZero];
+		_headerLoader.hidden = YES;
+		_headerLoader.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
+
+		if ( _direction == self.DIRECTION_HORIZONTAL )
+		{
+			_headerLoader.transform = CGAffineTransformMakeRotation( M_PI / 2.0f );
+		}
+		else
+		{
+			_headerLoader.transform = CGAffineTransformIdentity;
+		}
+
+		[self addSubview:_headerLoader];
+		[self bringSubviewToFront:_headerLoader];
+	}
+	
+	if ( flag )
+	{
+		_headerLoader.hidden = NO;
+	}
+	else
+	{
+		_headerLoader.hidden = YES;
+	}
+	
+	[self syncPullPositions];
+	[self syncPullInsets];
+}
+
+- (void)showFooterLoader:(BOOL)flag animated:(BOOL)animated
+{
+	if ( nil == _footerLoader )
+	{
+		_footerLoader = [[BeeUIPullLoader alloc] initWithFrame:CGRectZero];
+		_footerLoader.hidden = YES;
+		_footerLoader.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
+		
+		if ( _direction == self.DIRECTION_HORIZONTAL )
+		{
+			_headerLoader.transform = CGAffineTransformMakeRotation( M_PI / 2.0f * 3.0f );
+		}
+		else
+		{
+			_headerLoader.transform = CGAffineTransformMakeRotation( M_PI );
+		}
+
+		[self addSubview:_footerLoader];
+		[self bringSubviewToFront:_footerLoader];
+	}
+	
+	if ( flag )
+	{
+		_footerLoader.hidden = NO;
+	}
+	else
+	{
+		_footerLoader.hidden = YES;
+	}
+	
+	[self syncPullPositions];
+	[self syncPullInsets];
+}
+
+- (void)setHeaderLoading:(BOOL)en
+{
+	if ( _headerLoader )
+	{
+		if ( en )
+		{
+			if ( BeeUIPullLoader.STATE_LOADING != _headerLoader.state )
+			{
+				[_headerLoader changeState:BeeUIPullLoader.STATE_LOADING animated:YES];
+
+				[UIView beginAnimations:nil context:NULL];
+				[UIView setAnimationDuration:0.3f];
+				[UIView setAnimationBeginsFromCurrentState:YES];
+				[self syncPullInsets];
+				[UIView commitAnimations];
+			}
+		}
+		else
+		{
+			if ( BeeUIPullLoader.STATE_NORMAL != _headerLoader.state )
+			{
+				[_headerLoader changeState:BeeUIPullLoader.STATE_NORMAL animated:YES];
+
+				[UIView beginAnimations:nil context:NULL];
+				[UIView setAnimationDuration:0.3f];
+				[UIView setAnimationBeginsFromCurrentState:YES];
+				[self syncPullInsets];
+				[UIView commitAnimations];
+			}
+		}
+	}
+}
+
+- (void)setFooterLoading:(BOOL)en
+{
+	if ( _footerLoader )
+	{
+		if ( en )
+		{
+			if ( BeeUIPullLoader.STATE_LOADING != _footerLoader.state )
+			{
+				[_footerLoader changeState:BeeUIPullLoader.STATE_LOADING animated:YES];
+
+				[UIView beginAnimations:nil context:NULL];
+				[UIView setAnimationDuration:0.3f];
+				[UIView setAnimationBeginsFromCurrentState:YES];
+				[self syncPullInsets];
+				[UIView commitAnimations];
+			}
+		}
+		else
+		{
+			if ( BeeUIPullLoader.STATE_NORMAL != _footerLoader.state )
+			{
+				[_footerLoader changeState:BeeUIPullLoader.STATE_NORMAL animated:YES];
+
+				[UIView beginAnimations:nil context:NULL];
+				[UIView setAnimationDuration:0.3f];
+				[UIView setAnimationBeginsFromCurrentState:YES];
+				[self syncPullInsets];				
+				[UIView commitAnimations];
+			}
+		}
+	}
+}
+
+- (void)syncPullPositions
+{
+	if ( _headerLoader )
+	{
+		CGRect pullFrame;
+
+		if ( _direction == self.DIRECTION_HORIZONTAL )
+		{
+			pullFrame.origin.x = -PULL_LOADER_SIZE - _baseInsets.left;
+			pullFrame.origin.y = 0.0f;
+			pullFrame.size.width = PULL_LOADER_SIZE;
+			pullFrame.size.height = self.bounds.size.height;
+		}
+		else
+		{
+			pullFrame.origin.x = 0.0f;
+			pullFrame.origin.y = -PULL_LOADER_SIZE - _baseInsets.top;
+			pullFrame.size.width = self.bounds.size.width;
+			pullFrame.size.height = PULL_LOADER_SIZE;
+		}
+		
+		_headerLoader.frame = pullFrame;
+		
+		CC( @"headerLoader, frame = (%f,%f,%f,%f), insets = (%f,%f,%f,%f)",
+		   _headerLoader.frame.origin.x, _headerLoader.frame.origin.y,
+		   _headerLoader.frame.size.width, _headerLoader.frame.size.height,
+		   self.contentInset.top, self.contentInset.left,
+		   self.contentInset.bottom, self.contentInset.right
+		   );
+	}
+	
+	if ( _footerLoader )
+	{
+		CGRect pullFrame;
+		
+		if ( _direction == self.DIRECTION_HORIZONTAL )
+		{
+			pullFrame.origin.x = _baseInsets.left + _baseInsets.right + self.contentSize.width;
+			pullFrame.origin.y = 0.0f;
+			pullFrame.size.width = PULL_LOADER_SIZE;
+			pullFrame.size.height = self.bounds.size.height;
+		}
+		else
+		{
+			pullFrame.origin.x = 0.0f;
+			pullFrame.origin.y = _baseInsets.top + _baseInsets.bottom + self.contentSize.height;
+			pullFrame.size.width = self.bounds.size.width;
+			pullFrame.size.height = PULL_LOADER_SIZE;
+		}
+
+		_footerLoader.frame = pullFrame;
+	}
+}
+
+- (void)syncPullInsets
+{
+	UIEdgeInsets insets = _baseInsets;
+	
+	if ( _headerLoader )
+	{
+		if ( BeeUIPullLoader.STATE_LOADING == _headerLoader.state )
+		{
+			if ( _direction == self.DIRECTION_HORIZONTAL )
+			{
+				insets.left += _headerLoader.bounds.size.width;
+			}
+			else
+			{
+				insets.top += _headerLoader.bounds.size.height;
+			}
+		}
+		
+		CC( @"headerLoader, frame = (%f,%f,%f,%f), insets = (%f,%f,%f,%f)",
+		   _headerLoader.frame.origin.x, _headerLoader.frame.origin.y,
+		   _headerLoader.frame.size.width, _headerLoader.frame.size.height,
+		   self.contentInset.top, self.contentInset.left,
+		   self.contentInset.bottom, self.contentInset.right
+		   );
+	}
+	
+	if ( _footerLoader )
+	{
+		if ( BeeUIPullLoader.STATE_LOADING == _footerLoader.state )
+		{ 
+			if ( _direction == self.DIRECTION_HORIZONTAL )
+			{
+				insets.right += _footerLoader.bounds.size.width;
+			}
+			else
+			{
+				insets.bottom += _footerLoader.bounds.size.height;
+			}
+		}
+	}
+
+	self.contentInset = insets;
 }
 
 #pragma mark -
@@ -1013,101 +1317,171 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-//	if ( scrollView.dragging )
-//	{
-//		if ( NO == _pullLoader.hidden && BeeUIScrollView.STATE_LOADING != _pullLoader.state )
-//		{
-//			if ( BeeUIScrollView.STATE_NORMAL == _pullLoader.state )
-//			{
-//				_baseInsets = scrollView.contentInset;
-//			}
-//			
-//			CGFloat offset = scrollView.contentOffset.y;
-//			CGFloat boundY = -(_baseInsets.top + 60.0f);
-//			
-//			if ( offset < boundY )
-//			{
-//				if ( BeeUIScrollView.STATE_PULLING != _pullLoader.state )
-//				{
-//					[_pullLoader changeState:BeeUIScrollView.STATE_PULLING animated:YES];
-//				}				
-//			}
-//			else if ( offset < 0.0f )
-//			{
-//				if ( BeeUIScrollView.STATE_NORMAL != _pullLoader.state )
-//				{
-//					[_pullLoader changeState:BeeUIScrollView.STATE_NORMAL animated:YES];
-//				}				
-//			}
-//		}
-//	}
-	[self sendUISignal:BeeUIScrollView.DID_SCROLL];
+	if ( scrollView.dragging )
+	{
+		// header loader
+		if ( NO == _headerLoader.hidden && BeeUIPullLoader.STATE_LOADING != _headerLoader.state )
+		{
+			if ( _direction == self.DIRECTION_HORIZONTAL )
+			{
+				CGFloat offset = scrollView.contentOffset.x;
+				CGFloat boundX = -(_baseInsets.left + _headerLoader.bounds.size.width);
+				
+				if ( offset < boundX )
+				{
+					if ( BeeUIPullLoader.STATE_PULLING != _headerLoader.state )
+					{
+						[_headerLoader changeState:BeeUIPullLoader.STATE_PULLING animated:YES];
+					}
+				}
+				else if ( offset < 0.0f )
+				{
+					if ( BeeUIPullLoader.STATE_NORMAL != _headerLoader.state )
+					{
+						[_headerLoader changeState:BeeUIPullLoader.STATE_NORMAL animated:YES];
+					}
+				}
+			}
+			else
+			{
+				CGFloat offset = scrollView.contentOffset.y;
+				CGFloat boundY = -(_baseInsets.top + _headerLoader.bounds.size.height);
+				
+				if ( offset < boundY )
+				{
+					if ( BeeUIPullLoader.STATE_PULLING != _headerLoader.state )
+					{
+						[_headerLoader changeState:BeeUIPullLoader.STATE_PULLING animated:YES];
+					}
+				}
+				else if ( offset < 0.0f )
+				{
+					if ( BeeUIPullLoader.STATE_NORMAL != _headerLoader.state )
+					{
+						[_headerLoader changeState:BeeUIPullLoader.STATE_NORMAL animated:YES];
+					}
+				}
+			}
+		}
+		
+		// TODO: footer loader
+	}
+
+	if ( _shouldNotify )
+	{
+		[self sendUISignal:BeeUIScrollView.DID_SCROLL];
+	}
+	
 	[self syncPositions];
+	[self syncPullPositions];
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
 	[self syncPositions];
+	[self syncPullPositions];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-//	if ( decelerate )
-//	{
-//		if ( NO == _pullLoader.hidden && BeeUIScrollView.STATE_LOADING != _pullLoader.state )
-//		{
-//			CGFloat offset = scrollView.contentOffset.y;
-//			CGFloat boundY = -(_baseInsets.top + 80.0f);
-//			
-//			if ( offset <= boundY )
-//			{
-//				if ( BeeUIScrollView.STATE_LOADING != _pullLoader.state )
-//				{
-//					[UIView beginAnimations:nil context:NULL];
-//					[UIView setAnimationDuration:0.3f];
-//					UIEdgeInsets insets = _baseInsets;
-//					insets.top += _pullLoader.bounds.size.height;
-//					scrollView.contentInset = insets;
-//					[UIView commitAnimations];
-//					
-//					[_pullLoader changeState:BeeUIScrollView.STATE_LOADING animated:YES];
-//					
-//					[self sendUISignal:BeeUIFlowBoard.PULL_REFRESH];
-//				}
-//			}
-//			else
-//			{
-//				if ( BeeUIScrollView.STATE_NORMAL != _pullLoader.state )
-//				{
-//					[UIView beginAnimations:nil context:NULL];
-//					[UIView setAnimationDuration:0.3f];
-//					scrollView.contentInset = _baseInsets;				
-//					[UIView commitAnimations];
-//					
-//					[_pullLoader changeState:BeeUIScrollView.STATE_NORMAL animated:YES];
-//				}
-//			}
-//		}
-//	}
+	if ( decelerate )
+	{
+		// header loader
+		if ( NO == _headerLoader.hidden && BeeUIPullLoader.STATE_LOADING != _headerLoader.state )
+		{
+			if ( _direction == self.DIRECTION_HORIZONTAL )
+			{
+				CGFloat offset = scrollView.contentOffset.x;
+				CGFloat boundY = -(_baseInsets.left + _headerLoader.bounds.size.width);
+				
+				if ( offset <= boundY )
+				{
+					if ( BeeUIPullLoader.STATE_LOADING != _headerLoader.state )
+					{
+						[_headerLoader changeState:BeeUIPullLoader.STATE_LOADING animated:YES];
 	
-	[self sendUISignal:BeeUIScrollView.DID_STOP];
+						[self sendUISignal:self.HEADER_REFRESH];
+					}
+				}
+				else
+				{
+					if ( BeeUIPullLoader.STATE_NORMAL != _headerLoader.state )
+					{
+						[_headerLoader changeState:BeeUIPullLoader.STATE_NORMAL animated:YES];
+					}
+				}
+			}
+			else
+			{
+				CGFloat offset = scrollView.contentOffset.y;
+				CGFloat boundY = -(_baseInsets.top + _headerLoader.bounds.size.height);
+				
+				if ( offset <= boundY )
+				{
+					if ( BeeUIPullLoader.STATE_LOADING != _headerLoader.state )
+					{
+						[_headerLoader changeState:BeeUIPullLoader.STATE_LOADING animated:YES];
+
+						[self sendUISignal:self.HEADER_REFRESH];
+					}
+				}
+				else
+				{
+					if ( BeeUIPullLoader.STATE_NORMAL != _headerLoader.state )
+					{
+						[_headerLoader changeState:BeeUIPullLoader.STATE_NORMAL animated:YES];
+					}
+				}
+			}
+			
+			[UIView beginAnimations:nil context:NULL];
+			[UIView setAnimationDuration:0.3f];
+			[UIView setAnimationBeginsFromCurrentState:YES];
+			
+			CC( @"pulled" );
+			
+			[self syncPullPositions];
+			[self syncPullInsets];
+						
+			[UIView commitAnimations];
+		}
+		
+		// TODO: footer loader
+	}
+
+	if ( _shouldNotify )
+	{
+		[self sendUISignal:BeeUIScrollView.DID_DRAG];
+		[self sendUISignal:BeeUIScrollView.DID_STOP];
+	}
+	
 	[self syncPositions];
+	[self syncPullPositions];
 }
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
 {
 	[self syncPositions];
+	[self syncPullPositions];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-	[self sendUISignal:BeeUIScrollView.DID_STOP];
+	if ( _shouldNotify )
+	{
+		[self sendUISignal:BeeUIScrollView.DID_STOP];
+	}
+
 	[self syncPositions];
+	[self syncPullPositions];
 }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
 	[self syncPositions];
+	[self syncPullPositions];
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

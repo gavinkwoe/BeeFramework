@@ -30,6 +30,8 @@
 //  Bee_UIPullLoader.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 
@@ -65,3 +67,5 @@ AS_SIGNAL( STATE_CHANGED )	// 状态改变
 - (void)changeState:(NSInteger)state animated:(BOOL)animated;
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
