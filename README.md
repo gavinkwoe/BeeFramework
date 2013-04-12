@@ -15,9 +15,11 @@ google groups: https://groups.google.com/d/forum/beeframework?hl=zh-CN
 ##v0.3.0 changes
 
 1. Fully support for MacOS
-2. Fully support for UI template:
-	(now, only support for .xml format.)
-	(.html, .android, .json will support soon)
+2. Fully support for UI template:    
+	(now, only support for .xml format.)    
+	(.html, .android, .json will support soon)    
+
+	![Layout](http://blog.whatsbug.com/wp-content/uploads/2013/04/bee_view.png)
 
 		<?xml version="1.0" encoding="UTF-8"?>
 		<ui id="test">
@@ -91,8 +93,8 @@ google groups: https://groups.google.com/d/forum/beeframework?hl=zh-CN
 
 3. Fully support for UI query syntax, like jQUERY:
 
-	(in any view/viewController, you can coding like below:)
-	(see Lesson 14)
+	(in any view/viewController, you can coding like below:)    
+	(see Lesson 14)    
 
 		$(@"*").HIDE().XX().YY().ZZ().....;
 		$(@"#a").HIDE().XX().YY().ZZ().....;
