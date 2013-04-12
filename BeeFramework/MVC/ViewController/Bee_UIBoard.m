@@ -64,6 +64,8 @@
 #undef	MAX_SIGNALS
 #define MAX_SIGNALS		(50)
 
+#define ORIENTATIONMASK(_orientation) (1<<_orientation)
+
 #pragma mark -
 
 @interface BeeUIBoardView : UIView
@@ -304,7 +306,8 @@ static NSMutableArray *			__allBoards;
 		_createDate = [[NSDate date] retain];
 		
 		_modalAnimationType = BeeUIBoard.ANIMATION_TYPE_ALPHA;
-		_allowedOrientation = UIInterfaceOrientationPortrait|UIInterfaceOrientationPortraitUpsideDown|UIInterfaceOrientationLandscapeLeft|UIInterfaceOrientationLandscapeRight;
+        UIInterfaceOrientationMaskAll
+		_allowedOrientation = ORIENTATIONMASK(UIInterfaceOrientationPortrait)|ORIENTATIONMASK(UIInterfaceOrientationPortraitUpsideDown)|ORIENTATIONMASK(UIInterfaceOrientationLandscapeLeft)|ORIENTATIONMASK(UIInterfaceOrientationLandscapeRight);
 		
 	#if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 		_createSeq = __createSeed++;
@@ -525,7 +528,7 @@ static NSMutableArray *			__allBoards;
 // Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-	if ( (_allowedOrientation & interfaceOrientation) != 0 )
+	if ( (_allowedOrientation & ORIENTATIONMASK(interfaceOrientation)) != 0 )
 		return YES;
 	
 	return NO;	
@@ -554,29 +557,7 @@ static NSMutableArray *			__allBoards;
 
 -(NSUInteger)supportedInterfaceOrientations
 {
-	NSUInteger orientation = 0;
-
-	if ( (_allowedOrientation & UIInterfaceOrientationPortrait) != 0 )
-	{
-		orientation |= UIInterfaceOrientationMaskPortrait;
-	}
-
-	if ( (_allowedOrientation & UIInterfaceOrientationPortraitUpsideDown) != 0 )
-	{
-		orientation |= UIInterfaceOrientationMaskPortraitUpsideDown;
-	}
-
-	if ( (_allowedOrientation & UIInterfaceOrientationLandscapeLeft) != 0 )
-	{
-		orientation |= UIInterfaceOrientationMaskLandscapeLeft;
-	}
-
-	if ( (_allowedOrientation & UIInterfaceOrientationLandscapeRight) != 0 )
-	{
-		orientation |= UIInterfaceOrientationMaskLandscapeRight;
-	}
-
-	return orientation;
+	return _allowedOrientation;
 }
 
 - (BOOL)shouldAutorotate
