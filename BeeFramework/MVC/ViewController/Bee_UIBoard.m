@@ -282,6 +282,12 @@ static NSMutableArray *			__allBoards;
 	return [[(BeeUIBoard *)[BeeRuntime allocByClass:[self class]] init] autorelease];
 }
 
++ (BeeUIBoard *)boardWithNibName:(NSString *)nibNameOrNil{
+    BeeUIBoard *board = [[[self alloc]initWithNibName:nibNameOrNil bundle:nil]autorelease];
+    return board;
+}
+
+
 - (id)init
 {
 	self = [super init];
@@ -501,7 +507,13 @@ static NSMutableArray *			__allBoards;
 	CC( @"[%@] loadView", [[self class] description] );
 #endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 
+    if (self.nibName) {
+        [super loadView];
+        return;
+    }
+    
 	CGRect boardViewBound = [UIScreen mainScreen].bounds;
+
 	BeeUIBoardView * boardView = [[BeeUIBoardView alloc] initWithFrame:boardViewBound];
 	boardView.owner = self;
 

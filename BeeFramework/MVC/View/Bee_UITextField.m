@@ -161,6 +161,16 @@ DEF_SIGNAL( RETURN )
     return self;	
 }
 
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if( (self = [super initWithCoder:aDecoder]) )
+    {
+		[self initSelf];
+    }
+    return self;
+}
+
+
 - (id)initWithFrame:(CGRect)frame
 {
     if( (self = [super initWithFrame:frame]) )

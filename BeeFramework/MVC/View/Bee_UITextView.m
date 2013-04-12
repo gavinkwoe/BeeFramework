@@ -168,6 +168,26 @@ DEF_SIGNAL( RETURN )
     return self;	
 }
 
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if( (self = [super initWithCoder:aDecoder]) )
+    {
+		self.placeholder = @"";
+        self.placeHolderColor = [UIColor grayColor];
+        
+        _maxLength = 0;
+        
+        
+        [_agent release];
+        _agent = [[BeeUITextViewAgent alloc] init];
+        _agent.target = self;
+        
+        self.delegate = _agent;	
+
+    }
+    return self;
+}
+
 - (id)initWithFrame:(CGRect)frame
 {
 	self = [super initWithFrame:frame];
