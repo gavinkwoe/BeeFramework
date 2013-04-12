@@ -122,8 +122,24 @@ google groups: https://groups.google.com/d/forum/beeframework?hl=zh-CN
 		$(self).EMPTY();
 		NSAssert( $(self).CHILDREN().count == 0, @"" );
 		NSAssert( $(self).CHILDREN().count == 0, @"" );
-		
-4. Fix some bugs
+	
+4. Fully support for template/viewController signal bridging by ID:
+
+		template.xml
+		<view class="BeeUIButton" id="twitter"/>
+
+		template.mm
+		- (void)handleUISignal_twitter:(BeeUISignal *)signal
+		{
+			[super handleUISignal:signal];
+	
+			if ( [signal is:BeeUIButton.TOUCH_UP_INSIDE] )
+			{
+				// TODO:
+			}
+		}
+
+5. Fix some bugs
 
 
 ##v0.2.3 changes
