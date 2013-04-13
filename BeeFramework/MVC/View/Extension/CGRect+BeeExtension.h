@@ -30,6 +30,8 @@
 //  CGRect+BeeExtension.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 
 #pragma mark -
@@ -42,6 +44,8 @@ CGRect	AspectFitRect( CGRect rect, CGRect bound );
 
 CGSize	AspectFillSize( CGSize size, CGSize bound );
 CGRect	AspectFillRect( CGRect rect, CGRect bound );
+
+CGRect	CGRectFromString( NSString * str );
 
 CGPoint	CGPointZeroNan( CGPoint point );
 CGSize	CGSizeZeroNan( CGSize size );
@@ -71,3 +75,5 @@ CGRect	CGRectMakeBound( CGFloat w, CGFloat h );
 
 CGRect	CGSizeMakeBound( CGSize size );
 CGRect	CGRectToBound( CGRect frame );
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

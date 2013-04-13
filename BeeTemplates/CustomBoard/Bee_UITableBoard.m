@@ -53,7 +53,7 @@
 	self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
 	if ( self )
 	{
-		self.backgroundColor = [UIColor clearColor];
+//		self.backgroundColor = [UIColor clearColor];
 		self.selectionStyle = UITableViewCellSelectionStyleNone;
 		self.accessoryType = UITableViewCellAccessoryNone;
 		self.editingAccessoryType = UITableViewCellAccessoryNone;
@@ -194,6 +194,7 @@
 
 @implementation BeeUITableBoard
 
+@synthesize style = _style;
 @synthesize reloading = _reloading;
 @synthesize updating = _updating;
 @synthesize searching = _searching;
@@ -222,6 +223,7 @@ DEF_INT( SEARCHBAR_STYLE_TOP,		1 );
 
 - (void)load
 {
+	_style = UITableViewStylePlain;
 	_baseInsets = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f);
 	
 	_lastScrollPosition = CGPointZero;
@@ -242,9 +244,12 @@ DEF_INT( SEARCHBAR_STYLE_TOP,		1 );
 	if ( nil == cell )
 	{
 		cell = [[[BeeUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:clazzName] autorelease];
-		cell.gridCell = [(BeeUIGridCell *)[[BeeRuntime allocByClass:clazz] init] autorelease];
+		if ( [clazz isSubclassOfClass:[BeeUIGridCell class]] )
+		{
+			cell.gridCell = [(BeeUIGridCell *)[[BeeRuntime allocByClass:clazz] init] autorelease];			
+		}
 	}
-	
+
 	return cell;
 }
 
@@ -281,12 +286,15 @@ DEF_INT( SEARCHBAR_STYLE_TOP,		1 );
 		if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
 		{
 			CGRect bounds = self.viewBound;
+			_tableView = [[UITableView alloc] initWithFrame:bounds style:_style];
+			if ( _style == UITableViewStylePlain )
+			{
+				_tableView.backgroundColor = [UIColor clearColor];
+			}
 			
-			_tableView = [[UITableView alloc] initWithFrame:bounds];
+			_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 			_tableView.delegate = self;
 			_tableView.dataSource = self;
-			_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-			_tableView.backgroundColor = [UIColor clearColor];
 			_tableView.rowHeight = 44;
 			_tableView.contentInset = _baseInsets;
 //			_tableView.decelerationRate = _tableView.decelerationRate * 0.98f;

@@ -31,7 +31,9 @@
 //
 
 #import "Bee_Precompile.h"
+#import "Bee_Runtime.h"
 #import "NSDictionary+BeeExtension.h"
+#import "NSObject+BeeTypeConversion.h"
 
 #include <objc/runtime.h>
 
@@ -64,6 +66,27 @@
 	};
 	
 	return [[block copy] autorelease];
+}
+
+- (NSObject *)objectOfAny:(NSArray *)array
+{
+	for ( NSString * key in array )
+	{
+		NSObject * obj = [self objectForKey:key];
+		if ( obj )
+			return obj;
+	}
+	
+	return nil;
+}
+
+- (NSString *)stringOfAny:(NSArray *)array
+{
+	NSObject * obj = [self objectOfAny:array];
+	if ( obj && [obj isKindOfClass:[NSString class]] )
+		return (NSString *)obj;
+	
+	return nil;
 }
 
 - (NSObject *)objectAtPath:(NSString *)path
@@ -112,7 +135,7 @@
 	}
 	
 	return (result == [NSNull null]) ? nil : result;
-	
+
 #else
 	
 	// thanks @lancy, changed: use native keyPath
@@ -275,6 +298,98 @@
 {
 	NSMutableDictionary * obj = [self mutableDictAtPath:path];
 	return obj ? obj : other;
+}
+
+// thanks to @ilikeido
+- (NSObject *)objectForClass:(Class)clazz
+{
+    if ( [clazz respondsToSelector:@selector(initFromDictionary:)] )
+	{
+        return [clazz performSelector:@selector(initFromDictionary:) withObject:self];
+    }
+    
+    id object = [[clazz alloc] init];
+    
+    NSUInteger			propertyCount = 0;
+    objc_property_t *	properties = class_copyPropertyList( clazz, &propertyCount );
+    
+    for ( NSUInteger i = 0; i < propertyCount; i++ )
+    {
+        const char *	name = property_getName(properties[i]);
+        NSString *		propertyName = [NSString stringWithCString:name encoding:NSUTF8StringEncoding];
+        const char *	attr = property_getAttributes(properties[i]);
+        NSUInteger		type = [BeeTypeEncoding typeOf:attr];
+        
+        NSObject *	tempValue = [self objectForKey:propertyName];
+        NSObject *	value = nil;
+		
+        if ( tempValue )
+		{
+            if ( BeeTypeEncoding.NSNUMBER == type )
+            {
+                value = [tempValue asNSNumber];
+            }
+            else if ( BeeTypeEncoding.NSSTRING == type )
+            {
+                value = [tempValue asNSString];
+            }
+            else if ( BeeTypeEncoding.NSDATE == type )
+            {
+                value = [tempValue asNSDate];
+            }
+            else if ( BeeTypeEncoding.NSARRAY == type )
+            {
+                if ( [tempValue isKindOfClass:[NSArray class]] )
+				{
+                    SEL seltemp = NSSelectorFromString( [NSString stringWithFormat:@"%@ConvertClass", propertyName] );
+                    if ( [clazz respondsToSelector:seltemp] )
+					{
+                        Class				classTemp = [clazz performSelector:seltemp];
+                        NSMutableArray *	arrayTemp = [NSMutableArray array];
+						
+                        for ( NSObject * tempObject in (NSArray *)tempValue )
+						{
+                            if ( [tempObject  isKindOfClass:[NSDictionary class]] )
+							{
+                                [arrayTemp addObject:[(NSDictionary *)tempObject objectForClass:classTemp]];
+                            }
+                        }
+						
+                        value = arrayTemp;
+                    }
+					else
+					{
+                        value = tempValue;
+                    }
+                }
+            }
+            else if ( BeeTypeEncoding.NSDICTIONARY == type )
+            {
+                if ( [tempValue isKindOfClass:[NSDictionary class]] )
+				{
+                    value = tempValue;
+                }
+            }
+            else if ( BeeTypeEncoding.OBJECT == type )
+            {
+                NSString * className = [BeeTypeEncoding classNameOf:attr];
+                if ( [tempValue isKindOfClass:NSClassFromString(className)] )
+				{
+                    value = tempValue;
+                }
+				else if ( [tempValue isKindOfClass:[NSDictionary class]] )
+				{
+                    value = [(NSDictionary *)tempValue objectForClass:NSClassFromString(className)];
+                }
+            }
+        }
+        
+        [object setValue:value forKey:propertyName];
+    }
+	
+    free( properties );
+	
+    return [object autorelease];
 }
 
 @end

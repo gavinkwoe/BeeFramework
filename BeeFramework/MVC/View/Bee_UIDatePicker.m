@@ -30,6 +30,8 @@
 //  Bee_UIDatePicker.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UIDatePicker.h"
 #import "Bee_UISignal.h"
@@ -356,3 +358,5 @@ DEF_SIGNAL( CONFIRMED )
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

@@ -35,6 +35,7 @@
 #import "BeeMessage+JSON.h"
 #import "BeeMessage+HTTP.h"
 #import "BeeMessage+ActiveRecord.h"
+#import "NSDictionary+BeeExtension.h"
 
 #import "JSONKit.h"
 #import <objc/runtime.h>
@@ -44,18 +45,106 @@
 @implementation BeeMessage(ActiveRecord)
 
 @dynamic responseRecord;
-@dynamic responseRecordArray;
+@dynamic responseRecords;
+@dynamic responseRecordAtPath;
+@dynamic responseRecordsAtPath;
 
-- (BeeActiveRecord *)responseRecord
+- (BeeMessageBlockC)responseRecord
 {
-	// TODO:
-	return nil;
+	BeeMessageBlockC block = ^ BeeActiveRecord * ( Class clazz )
+	{
+		NSObject * obj = self.responseString;
+		if ( nil == obj )
+			return nil;
+		
+		BeeActiveRecord * record = (BeeActiveRecord *)[[clazz alloc] initWithObject:obj];
+		if ( nil == record )
+			return nil;
+		
+		return record;
+	};
+	
+	return [[block copy] autorelease];
 }
 
-- (NSArray *)responseRecordArray
+- (BeeMessageBlockCA)responseRecords
 {
-	// TODO:
-	return nil;
+	BeeMessageBlockCA block = ^ NSArray * ( Class clazz )
+	{
+		NSObject * obj = self.responseString;
+		if ( nil == obj || NO == [obj isKindOfClass:[NSArray class]] )
+			return nil;
+		
+		NSMutableArray * array = [[[NSMutableArray alloc] init] autorelease];
+		if ( nil == array )
+			return nil;
+		
+		for ( NSObject * elem in (NSArray *)obj )
+		{
+			BeeActiveRecord * record = (BeeActiveRecord *)[[clazz alloc] initWithObject:obj];
+			if ( nil == record )
+				return nil;
+			
+			[array addObject:record];
+		}
+
+		return array.count ? array : nil;
+	};
+	
+	return [[block copy] autorelease];
+}
+
+- (BeeMessageBlockC2)responseRecordAtPath
+{
+	BeeMessageBlockC2 block = ^ BeeActiveRecord * ( Class clazz, NSString * path )
+	{
+		NSObject * obj = self.responseString;
+		if ( nil == obj || NO == [obj isKindOfClass:[NSDictionary class]] )
+			return nil;
+		
+		obj = [(NSDictionary *)obj objectAtPath:path];
+		if ( nil == obj )
+			return nil;
+
+		BeeActiveRecord * record = (BeeActiveRecord *)[[clazz alloc] initWithObject:obj];
+		if ( nil == record )
+			return nil;
+
+		return record;
+	};
+	
+	return [[block copy] autorelease];
+}
+
+- (BeeMessageBlockCA2)responseRecordsAtPath
+{
+	BeeMessageBlockCA2 block = ^ NSArray * ( Class clazz, NSString * path )
+	{
+		NSObject * obj = self.responseString;
+		if ( nil == obj || NO == [obj isKindOfClass:[NSDictionary class]] )
+			return nil;
+		
+		obj = [(NSDictionary *)obj objectAtPath:path];
+		if ( nil == obj || NO == [obj isKindOfClass:[NSArray class]] )
+			return nil;
+
+		NSMutableArray * array = [[[NSMutableArray alloc] init] autorelease];
+		if ( nil == array )
+			return nil;
+
+		for ( NSObject * elem in (NSArray *)obj )
+		{
+			BeeActiveRecord * record = (BeeActiveRecord *)[[clazz alloc] initWithObject:obj];
+			if ( nil == record )
+				return nil;
+
+			[array addObject:record];
+		}
+		
+		return array.count ? array : nil;
+	};
+	
+	return [[block copy] autorelease];
 }
 
 @end

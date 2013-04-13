@@ -40,6 +40,7 @@
 @property (nonatomic, readonly) BeeMessageBlockN MSG;
 @property (nonatomic, readonly) BeeMessageBlockN MSG_IF_NOT_SENDING;
 @property (nonatomic, readonly) BeeMessageBlockN MSG_CANCEL_IF_SENDING;
+@property (nonatomic, readonly) BeeMessageBlockN CANCEL_MSG;
 
 - (BOOL)sendingMessage:(NSString *)msg;
 - (void)cancelMessage:(NSString *)msg;

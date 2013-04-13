@@ -30,6 +30,8 @@
 //  Bee_UIZoomView.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UIZoomView.h"
 #import "Bee_UISignal.h"
@@ -438,3 +440,5 @@ DEF_SIGNAL( DOUBLE_TAPPED );
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

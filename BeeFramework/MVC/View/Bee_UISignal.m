@@ -30,6 +30,8 @@
 //  Bee_UISignal.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 #import "Bee_Singleton.h"
@@ -43,6 +45,8 @@
 
 #undef	MAX_POOL_SIZE
 #define MAX_POOL_SIZE	(8)
+
+#define __USE_FOREIGN__	(1)
 
 #pragma mark - 
 
@@ -82,14 +86,19 @@
 
 @implementation BeeUISignal
 
+@synthesize foreign = _foreign;
+@synthesize foreignSource = _foreignSource;
+
 @synthesize dead = _dead;
 @synthesize reach = _reach;
 @synthesize jump = _jump;
 @synthesize source = _source;
 @synthesize target = _target;
 @synthesize name = _name;
+@synthesize namePrefix = _namePrefix;
 @synthesize object = _object;
 @synthesize returnValue = _returnValue;
+@synthesize preSelector = _preSelector;
 
 @synthesize initTimeStamp = _initTimeStamp;
 @synthesize sendTimeStamp = _sendTimeStamp;
@@ -144,7 +153,32 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 {	
 	if ( _dead )
 		return NO;
-	
+
+#if __USE_FOREIGN__
+	NSArray * nameComponents = [_name componentsSeparatedByString:@"."];
+	if ( nameComponents.count > 2 && [[nameComponents objectAtIndex:0] isEqualToString:@"signal"] )
+	{
+		NSString * sourceClassName = [[_source class] description];
+		NSString * namePrefix = [nameComponents objectAtIndex:1];
+
+		if ( [sourceClassName isEqualToString:namePrefix] )
+		{
+			self.foreign = NO;
+		}
+		else
+		{
+			self.namePrefix = namePrefix;
+			
+			self.foreign = YES;
+			self.foreignSource = self.source;
+		}
+	}
+	else
+	{
+		self.foreign = NO;
+	}
+#endif	// #if __USE_FOREIGN__
+
 	_sendTimeStamp = [NSDate timeIntervalSinceReferenceDate];
 	
 #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
@@ -192,6 +226,30 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 	}
 #endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 
+#if __USE_FOREIGN__
+	if ( _foreign )
+	{
+		if ( self.source == self.foreignSource )
+		{
+			NSString * targetClassName = [[target class] description];
+			if ( [targetClassName isEqualToString:self.namePrefix] )
+			{
+				self.source = target;
+			}	
+//			else
+//			{
+//				Class targetClass = NSClassFromString( targetClassName );
+//				Class sourceClass = NSClassFromString( self.namePrefix );
+//				
+//				if ( sourceClass == targetClass || [targetClass isSubclassOfClass:sourceClass] )
+//				{
+//					self.source = target;
+//				}
+//			}
+		}
+	}
+#endif	// #if __USE_FOREIGN__
+
 	if ( [_target isKindOfClass:[UIView class]] || [_target isKindOfClass:[UIViewController class]] )
 	{
 		_jump += 1;
@@ -211,6 +269,22 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 
 - (void)routes
 {
+// forward signal to user specialized signal handler first
+	
+	if ( _preSelector && _preSelector.length )
+	{
+		NSString *	selectorName = [NSString stringWithFormat:@"handleUISignal_%@:", _preSelector];
+		SEL			selector = NSSelectorFromString(selectorName);
+
+		if ( [_target respondsToSelector:selector] )
+		{
+			[_target performSelector:selector withObject:self];
+			return;
+		}
+	}
+
+// then guess signal handler
+	
 	NSArray * array = [_name componentsSeparatedByString:@"."];
 	if ( array && array.count > 1 )
 	{
@@ -364,11 +438,16 @@ DEF_STATIC_PROPERTY( NO_VALUE );
 #endif	// #if defined(__BEE_DEVELOPMENT__) && __BEE_DEVELOPMENT__
 	
 	[_name release];
+	[_namePrefix release];
 
 	[_object release];
 	[_returnValue release];
+	
+	[_preSelector release];
 	
 	[super dealloc];
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

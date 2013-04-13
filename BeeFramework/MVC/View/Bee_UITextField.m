@@ -30,6 +30,8 @@
 //  Bee_UITextField.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UITextField.h"
 #import "Bee_UISignal.h"
@@ -81,19 +83,22 @@
 {
 	if ( 1 == range.length )
 	{
-		[_target sendUISignal:BeeUITextField.TEXT_CHANGED];
+		NSString * text = [_target.text stringByReplacingCharactersInRange:range withString:@""];
+		[_target sendUISignal:BeeUITextField.TEXT_CHANGED withObject:text];
 		return YES;
 	}
-	
-	NSString * text = [_target.text stringByReplacingCharactersInRange:range withString:string];
-	if ( _target.maxLength > 0 && text.length > _target.maxLength )
+	else
 	{
-		[_target sendUISignal:BeeUITextField.TEXT_OVERFLOW];
-		return NO;
+		NSString * text = [_target.text stringByReplacingCharactersInRange:range withString:string];
+		if ( _target.maxLength > 0 && text.length > _target.maxLength )
+		{
+			[_target sendUISignal:BeeUITextField.TEXT_OVERFLOW];
+			return NO;
+		}
+		
+		[_target sendUISignal:BeeUITextField.TEXT_CHANGED withObject:text];
+		return YES;
 	}
-	
-	[_target sendUISignal:BeeUITextField.TEXT_CHANGED];
-	return YES;
 }
 
 - (BOOL)textFieldShouldClear:(UITextField *)textField
@@ -170,6 +175,17 @@ DEF_SIGNAL( RETURN )
     return self;
 }
 
+// thanks to @ilikeido
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+	self = [super initWithCoder:aDecoder];
+	if ( self )
+	{
+		[self initSelf];
+	}
+	return self;
+}
+
 - (void)initSelf
 {
     [_agent release];
@@ -222,3 +238,5 @@ DEF_SIGNAL( RETURN )
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

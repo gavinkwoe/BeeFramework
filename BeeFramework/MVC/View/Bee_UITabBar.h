@@ -30,6 +30,8 @@
 //  Bee_UITabBar.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 
@@ -64,3 +66,5 @@ AS_SIGNAL( HIGHLIGHT_CHANGED )	// 高亮改变
 - (void)addTitle:(NSString *)title image:(UIImage *)image tag:(NSInteger)tag signal:(NSString *)signal;
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

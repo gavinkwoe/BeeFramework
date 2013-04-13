@@ -30,6 +30,8 @@
 //  Bee_UIButton.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 
@@ -77,6 +79,7 @@ AS_SIGNAL( TOUCH_UP_CANCEL )	// 撤销
 @property (nonatomic, retain) UIColor *				titleColor;
 @property (nonatomic, retain) UIFont *				titleFont;
 @property (nonatomic, assign) UIEdgeInsets			titleInsets;
+@property (nonatomic, assign) UITextAlignment       titleTextAlignment;
 
 @property (nonatomic, readonly) BeeUIButtonState *	stateNormal;
 @property (nonatomic, readonly) BeeUIButtonState *	stateHighlighted;
@@ -90,3 +93,5 @@ AS_SIGNAL( TOUCH_UP_CANCEL )	// 撤销
 - (void)addSignal:(NSString *)signal forControlEvents:(UIControlEvents)controlEvents object:(NSObject *)object;
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

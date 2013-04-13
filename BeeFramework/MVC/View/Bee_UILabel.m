@@ -30,6 +30,8 @@
 //  Bee_UILabel.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UILabel.h"
 #import "UIView+BeeExtension.h"
@@ -93,3 +95,5 @@
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

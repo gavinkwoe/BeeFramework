@@ -30,6 +30,8 @@
 //  Bee_UILabel.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 
 #pragma mark -
@@ -40,3 +42,5 @@
 + (BeeUILabel *)spawn:(NSString *)tagString;
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

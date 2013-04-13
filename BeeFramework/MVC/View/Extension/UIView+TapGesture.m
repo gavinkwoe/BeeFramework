@@ -30,6 +30,8 @@
 //  Bee_UISignal.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 #import "Bee_Singleton.h"
@@ -202,6 +204,15 @@ DEF_SIGNAL( TAPPED );
 	__SingleTapGestureRecognizer * singleTapGesture = [self getTapGesture];
 	if ( singleTapGesture )
 	{
+		if ( flag )
+		{
+			self.userInteractionEnabled = YES;
+		}
+		else
+		{
+			self.userInteractionEnabled = NO;
+		}
+		
 		singleTapGesture.enabled = flag;
 	}
 }
@@ -260,3 +271,5 @@ DEF_SIGNAL( TAPPED );
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

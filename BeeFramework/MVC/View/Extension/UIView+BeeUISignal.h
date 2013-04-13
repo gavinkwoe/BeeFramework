@@ -30,6 +30,8 @@
 //  UIView+BeeUISignal.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 
@@ -47,3 +49,5 @@
 - (BeeUISignal *)sendUISignal:(NSString *)name withObject:(NSObject *)object from:(id)source;
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

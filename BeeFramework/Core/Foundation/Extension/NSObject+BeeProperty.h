@@ -44,6 +44,10 @@
     #undef	DEF_STATIC_PROPERTY
     #define DEF_STATIC_PROPERTY( __name ) \
 			@dynamic __name; \
+			- (NSString *)__name \
+			{ \
+				return (NSString *)[[self class] __name]; \
+			} \
 			+ (NSString *)__name \
 			{ \
 				static NSString * __local = nil; \
@@ -59,6 +63,10 @@
     #undef	DEF_STATIC_PROPERTY
     #define DEF_STATIC_PROPERTY( __name ) \
 			@dynamic __name; \
+			- (NSString *)__name \
+			{ \
+				return (NSString *)[[self class] __name]; \
+			} \
 			+ (NSString *)__name \
 			{ \
 				static NSString * __local = nil; \
@@ -76,6 +84,10 @@
 	#undef	DEF_STATIC_PROPERTY2
     #define DEF_STATIC_PROPERTY2( __name, __prefix ) \
 			@dynamic __name; \
+			- (NSString *)__name \
+			{ \
+				return (NSString *)[[self class] __name]; \
+			} \
 			+ (NSString *)__name \
 			{ \
 				static NSString * __local = nil; \
@@ -91,6 +103,10 @@
 	#undef	DEF_STATIC_PROPERTY2
     #define DEF_STATIC_PROPERTY2( __name, __prefix ) \
 			@dynamic __name; \
+			- (NSString *)__name \
+			{ \
+				return (NSString *)[[self class] __name]; \
+			} \
 			+ (NSString *)__name \
 			{ \
 				static NSString * __local = nil; \
@@ -108,6 +124,10 @@
 	#undef	DEF_STATIC_PROPERTY3
     #define DEF_STATIC_PROPERTY3( __name, __prefix, __prefix2 ) \
 			@dynamic __name; \
+			- (NSString *)__name \
+			{ \
+				return (NSString *)[[self class] __name]; \
+			} \
 			+ (NSString *)__name \
 			{ \
 				static NSString * __local = nil; \
@@ -123,6 +143,10 @@
 	#undef	DEF_STATIC_PROPERTY3
     #define DEF_STATIC_PROPERTY3( __name, __prefix, __prefix2 ) \
 			@dynamic __name; \
+			- (NSString *)__name \
+			{ \
+				return (NSString *)[[self class] __name]; \
+			} \
 			+ (NSString *)__name \
 			{ \
 				static NSString * __local = nil; \
@@ -145,6 +169,10 @@
 #undef	DEF_STATIC_PROPERTY_INT
 #define DEF_STATIC_PROPERTY_INT( __name, __value ) \
 		@dynamic __name; \
+		- (NSInteger)__name \
+		{ \
+			return (NSInteger)[[self class] __name]; \
+		} \
 		+ (NSInteger)__name \
 		{ \
 			return __value; \
@@ -166,6 +194,10 @@
 #undef	DEF_STATIC_PROPERTY_STRING
 #define DEF_STATIC_PROPERTY_STRING( __name, __value ) \
 		@dynamic __name; \
+		- (NSString *)__name \
+		{ \
+			return [[self class] __name]; \
+		} \
 		+ (NSString *)__name \
 		{ \
 			return __value; \

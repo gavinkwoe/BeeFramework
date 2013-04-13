@@ -30,6 +30,8 @@
 //  Bee_UIPullLoader.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UIPullLoader.h"
 #import "Bee_UIActivityIndicatorView.h"
@@ -100,15 +102,16 @@ DEF_INT( STATE_LOADING,	2 )
 	self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	
 	_arrow = [[UIImageView alloc] initWithFrame:CGRectZero];
-	_arrow.contentMode = UIViewContentModeCenter;
+	_arrow.contentMode = UIViewContentModeScaleAspectFit;
 	_arrow.backgroundColor = [UIColor clearColor];
 	_arrow.hidden = NO;
+	_arrow.image = [UIImage imageNamed:@"whiteArrow.png"];
 	[self addSubview:_arrow];
 	
     [_indicator release];
 	_indicator = [[BeeUIActivityIndicatorView alloc] initWithFrame:CGRectZero];
 	_indicator.hidden = YES;
-	_indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+	_indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhite;
 	[self addSubview:_indicator];
 	
 	_state = BeeUIPullLoader.STATE_NORMAL;
@@ -117,8 +120,8 @@ DEF_INT( STATE_LOADING,	2 )
 - (void)changeFrame:(CGRect)frame
 {
 	CGRect imageFrame;
-	imageFrame.size.width = frame.size.height;
-	imageFrame.size.height = frame.size.height;
+	imageFrame.size.width = frame.size.height * 0.5f;
+	imageFrame.size.height = frame.size.height * 0.5f;
 	imageFrame.origin.x = (frame.size.width - imageFrame.size.width) / 2.0f;
 	imageFrame.origin.y = (frame.size.height - imageFrame.size.height) / 2.0f;
 	_arrow.frame = imageFrame;
@@ -229,3 +232,5 @@ DEF_INT( STATE_LOADING,	2 )
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

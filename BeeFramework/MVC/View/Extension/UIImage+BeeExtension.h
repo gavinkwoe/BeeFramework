@@ -30,6 +30,8 @@
 //  UIImage+BeeExtension.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 
 #pragma mark -
@@ -47,4 +49,8 @@
 - (UIImage *)stretched;
 - (UIImage *)grayscale;
 
+- (UIColor *)patternColor;
+
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

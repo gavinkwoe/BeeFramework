@@ -30,6 +30,8 @@
 //  UIView+BeeBackground.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 #import "Bee_UIImageView.h"
@@ -59,7 +61,7 @@
 
 		self.textColor = [UIColor whiteColor];
 		self.textAlignment = UITextAlignmentCenter;
-		self.font = [UIFont boldSystemFontOfSize:24.0f];
+		self.font = [UIFont boldSystemFontOfSize:16.0f];
 		self.lineBreakMode = UILineBreakModeClip;
 		self.numberOfLines = 1;
 	}
@@ -109,6 +111,19 @@
 @dynamic hintColor;
 @dynamic backgroundImageView;
 @dynamic backgroundImage;
+
+@dynamic top;
+@dynamic bottom;
+@dynamic left;
+@dynamic right;
+@dynamic width;
+@dynamic height;
+
+@dynamic x;
+@dynamic y;
+@dynamic w;
+@dynamic h;
+@dynamic visible;
 
 - (__BeeBackgroundImageView *)__backgroundImageView
 {
@@ -197,13 +212,46 @@
 	
 	for ( UIView * subview in self.subviews )
 	{
-		if ( [subview.tagString isEqualToString:value] )
+		NSString * tag = subview.tagString;
+		if ( [tag isEqualToString:value] )
 		{
 			return subview;
 		}
 	}
 	
 	return nil;
+}
+
+- (UIView *)viewWithTagPath:(NSString *)path
+{
+	NSArray * array = [path componentsSeparatedByString:@"."];
+	if ( 0 == [array count] )
+	{
+		return nil;
+	}
+
+	UIView * result = self;
+
+	for ( NSString * subPath in array )
+	{
+		if ( 0 == subPath.length )
+			continue;
+
+		result = [result viewWithTagString:subPath];
+		if ( nil == result )
+			return nil;
+
+		if ( [array lastObject] == subPath )
+		{
+			return result;
+		}
+		else if ( NO == [result isKindOfClass:[UIView class]] )
+		{
+			return nil;
+		}
+	}
+
+	return result;
 }
 
 - (UIView *)viewAtPath:(NSString *)path
@@ -240,6 +288,50 @@
 	else
 	{
 		return nil;
+	}
+}
+
+- (UIView *)prevSibling
+{
+	if ( nil == self.superview )
+		return nil;
+	
+	if ( self.superview.subviews.count <= 1 )
+		return nil;
+	
+	NSUInteger count = self.superview.subviews.count;
+	NSUInteger index = [self.superview.subviews indexOfObject:self];
+	if ( 0 == index )
+	{
+		index = count - 1;
+	}
+	else
+	{
+		index = index - 1;
+	}
+
+	return [self.superview.subviews objectAtIndex:index];
+}
+
+- (UIView *)nextSibling
+{
+	if ( nil == self.superview )
+		return nil;
+
+	if ( self.superview.subviews.count <= 1 )
+		return nil;
+
+	NSUInteger count = self.superview.subviews.count;
+	NSUInteger index = [self.superview.subviews indexOfObject:self];
+
+	return [self.superview.subviews objectAtIndex:(index + 1) % count];
+}
+
+- (void)removeAllSubviews
+{
+	for ( UIView * view in [[self.subviews copy] autorelease] )
+	{
+		[view removeFromSuperview];
 	}
 }
 
@@ -329,4 +421,136 @@
 	return view;
 }
 
+- (CGFloat)top
+{
+	return self.frame.origin.y;
+}
+
+- (void)setTop:(CGFloat)top
+{
+	CGRect frame = self.frame;
+	frame.origin.y = top;
+	self.frame = frame;
+}
+
+- (CGFloat)left
+{
+	return self.frame.origin.x;
+}
+
+- (void)setLeft:(CGFloat)left
+{
+	CGRect frame = self.frame;
+	frame.origin.x = left;
+	self.frame = frame;
+}
+
+- (CGFloat)width
+{
+	return self.frame.size.width;
+}
+
+- (void)setWidth:(CGFloat)width
+{
+	CGRect frame = self.frame;
+	frame.size.width = width;
+	self.frame = frame;
+}
+
+- (CGFloat)height
+{
+	return self.frame.size.height;
+}
+
+- (void)setHeight:(CGFloat)height
+{
+	CGRect frame = self.frame;
+	frame.size.height = height;
+	self.frame = frame;
+}
+
+- (CGFloat)bottom
+{
+    return self.frame.size.height + self.frame.origin.y;
+}
+
+- (void)setBottom:(CGFloat)bottom
+{
+    CGRect frame = self.frame;
+    frame.origin.y = bottom - frame.size.height;
+	self.frame = frame;
+}
+
+- (CGFloat)right
+{
+    return self.frame.size.width + self.frame.origin.x;
+}
+
+- (void)setRight:(CGFloat)right
+{
+    CGRect frame = self.frame;
+    frame.origin.y = right - frame.size.width;
+	self.frame = frame;
+}
+
+- (CGFloat)x
+{
+	return self.frame.origin.x;
+}
+
+- (void)setX:(CGFloat)value
+{
+	CGRect frame = self.frame;
+	frame.origin.x = value;
+	self.frame = frame;
+}
+
+- (CGFloat)y
+{
+	return self.frame.origin.y;
+}
+
+- (void)setY:(CGFloat)value
+{
+	CGRect frame = self.frame;
+	frame.origin.y = value;
+	self.frame = frame;
+}
+
+- (CGFloat)w
+{
+	return self.frame.size.width;
+}
+
+- (void)setW:(CGFloat)width
+{
+	CGRect frame = self.frame;
+	frame.size.width = width;
+	self.frame = frame;
+}
+
+- (CGFloat)h
+{
+	return self.frame.size.height;
+}
+
+- (void)setH:(CGFloat)height
+{
+	CGRect frame = self.frame;
+	frame.size.height = height;
+	self.frame = frame;
+}
+
+- (BOOL)visible
+{
+	return self.hidden ? NO : YES;
+}
+
+- (void)setVisible:(BOOL)flag
+{
+	self.hidden = flag ? NO : YES;
+}
+
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

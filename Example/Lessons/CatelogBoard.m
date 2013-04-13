@@ -78,6 +78,12 @@
 	[super load];
 
 	_lessons = [[NSMutableArray alloc] init];
+
+    [_lessons addObject:[NSArray arrayWithObjects:@"Lesson12Board", @"Lesson12 (New)", @"How to coding BeeUILayout", nil]];
+    [_lessons addObject:[NSArray arrayWithObjects:@"Lesson13Board", @"Lesson13 (New)", @"How to write BeeUILayout XML", nil]];
+	[_lessons addObject:[NSArray arrayWithObjects:@"Lesson14Board", @"Lesson14 (New)", @"How to use BeeUIQuery", nil]];
+    [_lessons addObject:[NSArray arrayWithObjects:@"DribbbleBoard", @"Dribbble.com (New)", @"Demo for dribbble.com", nil]];
+	[_lessons addObject:[NSArray arrayWithObjects:@"WebViewBoard", @"WebView Demo (New)", @"Demo for BeeUIWebView", nil]];
 	[_lessons addObject:[NSArray arrayWithObjects:@"Lesson1Board", @"Lesson 1", @"How to use BeeUIBoard", nil]];
 	[_lessons addObject:[NSArray arrayWithObjects:@"Lesson2Board", @"Lesson 2", @"How to use BeeUISignal", nil]];
 	[_lessons addObject:[NSArray arrayWithObjects:@"Lesson3Board", @"Lesson 3", @"How to use BeeUIStack", nil]];
@@ -89,8 +95,6 @@
 	[_lessons addObject:[NSArray arrayWithObjects:@"Lesson9Board", @"Lesson 9 (New)", @"How to use BeeController", nil]];
 	[_lessons addObject:[NSArray arrayWithObjects:@"Lesson10Board", @"Lesson 10 (New)", @"How to use BeeModel & BeeCache", nil]];
 	[_lessons addObject:[NSArray arrayWithObjects:@"Lesson11Board", @"Lesson 11 (New)", @"How to use BeeActiveRecord", nil]];
-	[_lessons addObject:[NSArray arrayWithObjects:@"DribbbleBoard", @"Dribbble.com (New)", @"Demo for dribbble.com", nil]];
-	[_lessons addObject:[NSArray arrayWithObjects:@"WebViewBoard", @"WebView Demo (New)", @"Demo for BeeUIWebView", nil]];
 }
 
 - (void)unload
@@ -101,20 +105,17 @@
 	[super unload];
 }
 
-- (void)handleUISignal:(BeeUISignal *)signal
+- (void)handleUISignal_BeeUIBoard:(BeeUISignal *)signal
 {
 	[super handleUISignal:signal];
 
-	if ( [signal isKindOf:BeeUIBoard.SIGNAL] )
+	if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
 	{
-		if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
-		{
-			[self setTitleString:@"Examples"];
-			[self showNavigationBarAnimated:NO];
-		}
-		else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
-		{
-		}
+		[self setTitleString:@"Examples"];
+		[self showNavigationBarAnimated:NO];
+	}
+	else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
+	{
 	}
 }
 

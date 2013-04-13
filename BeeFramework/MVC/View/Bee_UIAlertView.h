@@ -30,6 +30,8 @@
 //  Bee_UIAlertView.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 
@@ -67,3 +69,5 @@ AS_SIGNAL( DID_DISMISS )	// 已经隐藏
 - (void)addButtonTitle:(NSString *)title signal:(NSString *)signal object:(NSDictionary *)object;
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

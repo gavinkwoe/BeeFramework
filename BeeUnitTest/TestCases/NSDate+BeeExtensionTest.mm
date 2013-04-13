@@ -31,6 +31,7 @@
 //
 
 #import "Bee.h"
+#import "Bee_UnitTest.h"
 
 #if defined(__BEE_UNITTEST__) && __BEE_UNITTEST__
 

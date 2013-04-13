@@ -104,7 +104,7 @@ static NSMutableArray *	__models = nil;
 {
 	if ( nil == __models )
 	{
-		__models = [NSMutableArray nonRetainingArray];
+		__models = [[NSMutableArray nonRetainingArray] retain];
 	}
 	
 	[__models addObject:self];

@@ -1,0 +1,130 @@
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Template</title>
+    <link rel="stylesheet" href="template.css" media="screen"/>
+    <script src="template.js"/>
+</head>
+<body>
+
+	<!--
+	 ----------------------------------
+	 |       | Title         |        |
+	 | Photo |               |  Like  |
+	 |       | Author / Date |        |
+	 ----------------------------------
+	 -->
+
+	<table>
+		<tr>
+			<td><image id="photo"/></td>
+			<td>
+				<table>
+					<tr>
+						<td><label id="title"/></td>
+					</tr>
+					<tr>
+						<td><label id="author"/></td>
+						<td><label id="date"/></td>
+					</tr>
+				</table>
+			</td>
+			<td><image id="like"/></td>
+		</tr>
+
+		<tr>
+			<td><a href="#"  target="_blank">002599</a></td>
+			<td><a href="#"  target="_blank">盛通股份</a></td>
+			<td class="myZhang">10.82</td>
+			<td class="myZhang">+3.24%</td>
+		</tr>
+		<tr>
+			<td><a href="#"  target="_blank">600704</a></td>
+			<td><a href="#"  target="_blank">物产中大</a></td>
+			<td class="myZhang">11.90</td>
+			<td class="myZhang">+3.75%</td>
+		</tr>
+		<tr>
+			<td><a href="#"  target="_blank">000768</a></td>
+			<td><a href="#"  target="_blank">西飞国际</a></td>
+			<td class="myZhang">8.90</td>
+			<td class="myZhang">+2.77%</td>
+		</tr>
+	</table>
+	
+	<UITemplate>
+		<UIGridCell >
+			<table id="feed">
+				<table id="col1">
+					<UIImageView id="photo"/>
+				</table>
+				<table id="col2">
+					<UIRow id="row2_1">
+						<UILabel id="title"/>
+					</UIRow>
+					<UIRow id="row2_2">
+						<UILabel id="author"/>
+						<UILabel id="date"/>
+					</UIRow>
+				</table>
+				<table id="col3">
+					<UIButton id="like"/>
+				</table>
+			</table>
+		</UIGridCell>
+	</UITemplate>
+	
+	<UIStyle id="col1">
+		width:20%
+	</UIStyle>
+
+	<UIStyle id="col2">
+		width:60%
+	</UIStyle>
+
+	<UIStyle id="col3">
+		width:20%
+	</UIStyle>
+	
+	<UIStyle id="row2_1">
+		height:50%
+	</UIStyle>
+	
+	<UIStyle id="row2_2">
+		height:50%
+	</UIStyle>
+
+<!--
+
+step1) parse
+
+	Create DOM Tree
+	|---info
+		|---mask
+		|---back
+		|---image
+		|---play
+		|---title
+		|---intro1
+		|---intro2
+
+step2) layout
+
+	Render Tree
+	|---style1 [info, info.mask, info.back]
+	|---style2 [info, info.mask, info.back]
+	|---style3 [info, info.mask, info.back]
+	|---style4 [info, info.mask, info.back]
+
+step3) layout
+
+	Layout Tree
+	|---vertical [info]
+		|---horizonal [info.mask, info.back, info.image]
+		|---horizonal [info.play, info.title, info.intro1, info.intro2]
+
+-->
+
+</body>
+</html>

@@ -53,28 +53,45 @@
 
 + (NSString *)osVersion
 {
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 	return [NSString stringWithFormat:@"%@ %@", [UIDevice currentDevice].systemName, [UIDevice currentDevice].systemVersion];
+#else	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+	return @"";
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 }
 
-+ (NSString *)appVersion
++ (NSString *)appVersion NS_AVAILABLE_IOS(4_0)
 {
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 	return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+#else	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+	return @"";
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 }
 
-+ (NSString *)deviceModel
++ (NSString *)deviceModel NS_AVAILABLE_IOS(4_0)
 {
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 	return [UIDevice currentDevice].model;
+#else	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+	return @"";
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 }
 
-+ (NSString *)deviceUUID
++ (NSString *)deviceUUID NS_AVAILABLE_IOS(4_0)
 {
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 	return [UIDevice currentDevice].uniqueIdentifier;
+#else	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+	return @"";
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 }
 
 static const char * __jb_app = NULL;
 
-+ (BOOL)isJailBroken
++ (BOOL)isJailBroken NS_AVAILABLE_IOS(4_0)
 {
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 	static const char * __jb_apps[] =
 	{
 		"/Application/Cydia.app", 
@@ -109,20 +126,22 @@ static const char * __jb_app = NULL;
 	{
 		return YES;
 	}
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 	
-    return NO;	
+    return NO;
 }
 
-+ (NSString *)jailBreaker
++ (NSString *)jailBreaker NS_AVAILABLE_IOS(4_0)
 {
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 	if ( __jb_app )
 	{
 		return [NSString stringWithUTF8String:__jb_app];
 	}
 	else
-	{
-		return @"";
-	}
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
+	return @"";
 }
 
 @end

@@ -31,6 +31,7 @@
 //
 
 #import "Bee.h"
+#import "Bee_UnitTest.h"
 
 #if defined(__BEE_UNITTEST__) && __BEE_UNITTEST__
 
@@ -377,8 +378,8 @@ TEST_CASE( ar2 )
 
 		EXPECTED( copy1 );
 		EXPECTED( copy1.deleted == NO );
-		EXPECTED( copy1.changed == YES );
-		EXPECTED( copy1.inserted == NO );
+		EXPECTED( copy1.changed == NO );
+		EXPECTED( copy1.inserted == YES );
 
 		EXPECTED( [copy1.name isEqualToString:me.name] );
 		EXPECTED( [copy1.city isEqualToString:me.city] );
@@ -389,7 +390,7 @@ TEST_CASE( ar2 )
 		copy1.SAVE();
 
 		EXPECTED( User2.DB.succeed );
-		EXPECTED( User2.DB.total == 2 );
+		EXPECTED( User2.DB.total == 1 );
 		
 	// copy by JSON
 
@@ -397,8 +398,8 @@ TEST_CASE( ar2 )
 
 		EXPECTED( copy2 );
 		EXPECTED( copy2.deleted == NO );
-		EXPECTED( copy2.changed == YES );
-		EXPECTED( copy2.inserted == NO );
+		EXPECTED( copy2.changed == NO );
+		EXPECTED( copy2.inserted == YES );
 
 		EXPECTED( [copy2.name isEqualToString:me.name] );
 		EXPECTED( [copy2.city isEqualToString:me.city] );
@@ -409,7 +410,7 @@ TEST_CASE( ar2 )
 		copy2.SAVE();
 		
 		EXPECTED( User2.DB.succeed );
-		EXPECTED( User2.DB.total == 3 );
+		EXPECTED( User2.DB.total == 1 );
 
 	// create by JSON String
 
@@ -417,8 +418,8 @@ TEST_CASE( ar2 )
 		
 		EXPECTED( copy3 );
 		EXPECTED( copy3.deleted == NO );
-		EXPECTED( copy3.changed == YES );
-		EXPECTED( copy3.inserted == NO );
+		EXPECTED( copy3.changed == NO );
+		EXPECTED( copy3.inserted == YES );
 		
 		EXPECTED( [copy3.name isEqualToString:me.name] );
 		EXPECTED( [copy3.city isEqualToString:me.city] );
@@ -429,7 +430,7 @@ TEST_CASE( ar2 )
 		copy3.SAVE();
 		
 		EXPECTED( User2.DB.succeed );
-		EXPECTED( User2.DB.total == 4 );
+		EXPECTED( User2.DB.total == 1 );
 
 	// create by JSON Data
 		
@@ -437,8 +438,8 @@ TEST_CASE( ar2 )
 		
 		EXPECTED( copy4 );
 		EXPECTED( copy4.deleted == NO );
-		EXPECTED( copy4.changed == YES );
-		EXPECTED( copy4.inserted == NO );
+		EXPECTED( copy4.changed == NO );
+		EXPECTED( copy4.inserted == YES );
 
 		EXPECTED( [copy4.name isEqualToString:me.name] );
 		EXPECTED( [copy4.city isEqualToString:me.city] );
@@ -449,7 +450,7 @@ TEST_CASE( ar2 )
 		copy4.SAVE();
 		
 		EXPECTED( User2.DB.succeed );
-		EXPECTED( User2.DB.total == 5 );
+		EXPECTED( User2.DB.total == 1 );
 
 	// create by String
 
@@ -462,7 +463,7 @@ TEST_CASE( ar2 )
 		
 		EXPECTED( copy5 );
 		EXPECTED( copy5.deleted == NO );
-		EXPECTED( copy5.changed == YES );
+		EXPECTED( copy5.changed == NO );
 		EXPECTED( copy5.inserted == NO );
 
 		EXPECTED( [copy5.name isEqualToString:@"gavin"] );
@@ -474,15 +475,15 @@ TEST_CASE( ar2 )
 		copy5.SAVE();
 		
 		EXPECTED( User2.DB.succeed );
-		EXPECTED( User2.DB.total == 6 );
+		EXPECTED( User2.DB.total == 2 );
 		
 	// Query records
 		
 		User2.DB.GET_RECORDS();	// Results are BeeActiveRecord
 		
 		EXPECTED( User2.DB.succeed );
-		EXPECTED( User2.DB.resultArray.count == 6 );
-		EXPECTED( User2.DB.resultCount == 6 );
+		EXPECTED( User2.DB.resultArray.count == 2 );
+		EXPECTED( User2.DB.resultCount == 2 );
 
 	// Delete records
 

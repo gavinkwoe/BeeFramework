@@ -30,6 +30,8 @@
 //  UIImage+BeeExtension.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "UIImage+BeeExtension.h"
 
@@ -206,4 +208,11 @@
 	return image;	
 }
 
+- (UIColor *)patternColor
+{
+	return [UIColor colorWithPatternImage:self];
+}
+
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

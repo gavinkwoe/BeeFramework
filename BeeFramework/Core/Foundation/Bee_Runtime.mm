@@ -75,23 +75,23 @@ DEF_INT( TYPE_NATIVEC,	2 )
 {
 	if ( BeeCallFrame.TYPE_OBJC == _type )
 	{
-		return [NSString stringWithFormat:@"[O] %@(0x%08x + %d) -> [%@ %@]", _process, _entry, _offset, _clazz, _method];
+		return [NSString stringWithFormat:@"[O] %@(0x%08x + %d) -> [%@ %@]", _process, (unsigned int)_entry, _offset, _clazz, _method];
 	}
 	else if ( BeeCallFrame.TYPE_NATIVEC == _type )
 	{
-		return [NSString stringWithFormat:@"[C] %@(0x%08x + %d) -> %@", _process, _entry, _offset, _method];
+		return [NSString stringWithFormat:@"[C] %@(0x%08x + %d) -> %@", _process, (unsigned int)_entry, _offset, _method];
 	}
 	else
 	{
-		return [NSString stringWithFormat:@"[X] <unknown>(0x%08x + %d)", _entry, _offset];
+		return [NSString stringWithFormat:@"[X] <unknown>(0x%08x + %d)", (unsigned int)_entry, _offset];
 	}	
 }
 
 + (NSUInteger)hex:(NSString *)text
 {
-	NSUInteger number = 0;
+	unsigned int number = 0;
 	[[NSScanner scannerWithString:text] scanHexInt:&number];
-	return number;
+	return (NSUInteger)number;
 }
 
 + (id)parseFormat1:(NSString *)line

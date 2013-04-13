@@ -31,6 +31,7 @@
 //
 
 #import "Bee.h"
+#import "Bee_UnitTest.h"
 
 #pragma mark -
 
@@ -128,7 +129,7 @@ static NSUInteger __succeedCount = 0;
 					__failedCount += 1;
 				}
 				
-				BeeLogIndent( 0 );
+				BeeLogUnindent( 1 );
 			}
 		}
 	}

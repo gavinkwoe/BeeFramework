@@ -30,6 +30,8 @@
 //  Bee_UITextView.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UITextView.h"
 #import "Bee_UISignal.h"
@@ -178,6 +180,17 @@ DEF_SIGNAL( RETURN )
     return self;
 }
 
+// thanks to @ilikeido
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+	self = [super initWithCoder:aDecoder];
+	if ( self )
+	{
+		[self initSelf];
+	}
+	return self;
+}
+
 - (void)initSelf
 {
 	self.opaque = NO;
@@ -294,3 +307,5 @@ DEF_SIGNAL( RETURN )
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

@@ -30,6 +30,8 @@
 //  Bee_UIActivityIndicatorView.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 
@@ -46,3 +48,5 @@ AS_SIGNAL( DID_STOP )	// 动画已经停止
 + (BeeUIActivityIndicatorView *)spawn:(NSString *)tagString;
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

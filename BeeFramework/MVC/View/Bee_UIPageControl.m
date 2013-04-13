@@ -30,6 +30,8 @@
 //  Bee_UIPageControl.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UIPageControl.h"
 #import "Bee_UISignal.h"
@@ -44,9 +46,11 @@
 @end
 
 @implementation BeeUIPageControl
-
+@synthesize dotImageNormals = _dotImageNormals;
 @synthesize dotImageNormal = _dotImageNormal;
+@synthesize dotImageHilites = _dotImageHilites;
 @synthesize dotImageHilite = _dotImageHilite;
+@synthesize dotImageSizes = _dotImageSizes;
 @synthesize dotSize = _dotSize;
 
 + (BeeUIPageControl *)spawn
@@ -97,45 +101,90 @@
 - (void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
 {
 	[super endTrackingWithTouch:touch withEvent:event];
-	
 	[self updateDotImages];
 }
 
 - (void)updateDotImages
 {
+    NSUInteger index = 0;
 	for ( UIView * subView in self.subviews )
 	{
-		NSUInteger index = 0;
-		
 		if ( [subView isKindOfClass:[UIImageView class]] )
 		{
-			index += 1;
-			
 			UIImageView * imageView = (UIImageView *)subView;
 			if ( self.currentPage == index )
 			{
-				if ( self.dotImageHilite )
+                if (self.dotImageHilites && [self.dotImageHilites count]> self.currentPage && [self.dotImageHilites objectAtIndex:self.currentPage] != [NSNull null]) {
+                    imageView.image = [self.dotImageHilites objectAtIndex:self.currentPage];
+                    if (self.dotImageSizes && [self.dotImageSizes count]>self.currentPage) {
+                        NSNumber *number = [self.dotImageSizes objectAtIndex:self.currentPage];
+                        CGSize size = [number CGSizeValue];
+                        imageView.frame = CGRectMake(imageView.frame.origin.x, imageView.frame.origin.y, size.width, size.height);
+                    }
+                }else if ( self.dotImageHilite )
 				{
 					imageView.image = self.dotImageHilite;					
 				}
 			}
 			else
 			{
-				if ( self.dotImageNormal )
+                
+				if (self.dotImageNormals && [self.dotImageNormals count]> index && [self.dotImageNormals objectAtIndex:self.currentPage] != [NSNull null]) {
+                  
+                    imageView.image = [self.dotImageNormals objectAtIndex:index];
+                    if (self.dotImageSizes && [self.dotImageSizes count]>index) {
+                        NSNumber *number = [self.dotImageSizes objectAtIndex:index];
+                        CGSize size = [number CGSizeValue];
+                        imageView.frame = CGRectMake(imageView.frame.origin.x, imageView.frame.origin.y, size.width, size.height);
+                    }
+                    
+                    
+                }else if ( self.dotImageNormal )
 				{
 					imageView.image = self.dotImageNormal;					
 				}
 			}
+            
+            index += 1;
 		}
 	}
+}
+
+-(void) setDotImageNormals:(NSArray *)dotImageNormals{
+    [_dotImageNormals release];
+    _dotImageNormals = [dotImageNormals retain];
+    [self updateDotImages];
+}
+
+-(void) setDotImageHilites:(NSArray *)dotImageHilites{
+    [_dotImageHilites release];
+    _dotImageHilites = [dotImageHilites retain];
+    [self updateDotImages];
+}
+
+-(void) setDotImageSizes:(NSArray *)dotImageSizes{
+    [_dotImageSizes release];
+    _dotImageSizes = [dotImageSizes retain];
+    [self updateDotImages];
+}
+
+
+-(void) setCurrentPage:(NSInteger)page{
+    [super setCurrentPage:page];
+    [self updateDotImages];
 }
 
 - (void)dealloc
 {
 	[_dotImageNormal release];
 	[_dotImageHilite release];
-
+    [_dotImageNormals release];
+    [_dotImageHilites release];
+    [_dotImageSizes release];
+    
 	[super dealloc];
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

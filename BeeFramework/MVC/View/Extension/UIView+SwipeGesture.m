@@ -30,6 +30,8 @@
 //  Bee_UISignal.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 #import "Bee_Singleton.h"
@@ -178,3 +180,5 @@ DEF_SIGNAL( SWIPE_RIGHT )
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

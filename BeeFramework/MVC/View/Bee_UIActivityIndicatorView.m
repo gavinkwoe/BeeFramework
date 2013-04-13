@@ -30,6 +30,8 @@
 //  Bee_UIActivityIndicatorView.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UIActivityIndicatorView.h"
 #import "Bee_UISignal.h"
@@ -146,3 +148,5 @@ DEF_SIGNAL( DID_STOP )
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

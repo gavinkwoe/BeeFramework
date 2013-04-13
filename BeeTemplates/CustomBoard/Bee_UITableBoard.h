@@ -56,6 +56,7 @@
 	UITableView *					_tableView;
 	UISearchBar *					_searchBar;	
 	BeeUIPullLoader *				_pullLoader;
+	UITableViewStyle				_style;
 	UIEdgeInsets					_baseInsets;
 	NSInteger						_searchBarStyle;
 
@@ -72,6 +73,7 @@ AS_INT( SEARCHBAR_STYLE_TOP );
 @property (nonatomic, retain) UITableView *					tableView;
 @property (nonatomic, retain) UISearchBar *					searchBar;
 @property (nonatomic, retain) BeeUIPullLoader *				pullLoader;
+@property (nonatomic, assign) UITableViewStyle				style;
 @property (nonatomic, assign) NSInteger						searchBarStyle;
 
 @property (nonatomic, assign) CGPoint						lastScrollPosition;

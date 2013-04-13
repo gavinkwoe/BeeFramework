@@ -30,6 +30,8 @@
 //  Bee_UIKeyboard.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UIKeyboard.h"
 #import "Bee_UISignal.h"
@@ -237,3 +239,5 @@ DEF_NOTIFICATION( HEIGHT_CHANGED );
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

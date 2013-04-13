@@ -70,7 +70,7 @@ DEF_SINGLETON( BeeTicker )
 	self = [super init];
 	if ( self )
 	{
-		_receives = [NSMutableArray nonRetainingArray];
+		_receives = [[NSMutableArray nonRetainingArray] retain];
 	}
 	
 	return self;

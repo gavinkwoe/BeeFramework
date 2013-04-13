@@ -30,6 +30,8 @@
 //  UIView+BeeExtension.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 
 #pragma mark -
@@ -47,5 +49,9 @@
 - (CGRect)viewFrame;
 - (CGRect)viewBound;
 - (CGSize)viewSize;
+- (CGFloat)viewWidth;
+- (CGFloat)viewHeight;
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

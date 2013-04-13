@@ -33,7 +33,6 @@
 #import "Bee_Precompile.h"
 #import "Bee_Log.h"
 #import "Bee_Runtime.h"
-#import "Bee_UnitTest.h"
 
 #import "NSObject+BeeTypeConversion.h"
 #import "NSDictionary+BeeExtension.h"
@@ -51,19 +50,20 @@
 #pragma mark -
 
 #undef	__USE_ID_AS_KEY__
-#define __USE_ID_AS_KEY__		(1)
+#define __USE_ID_AS_KEY__		(1)		// 默认使用.id做为主键
 
 #undef	__USE_FIRST_AS_KEY__
-#define __USE_FIRST_AS_KEY__	(1)
+#define __USE_FIRST_AS_KEY__	(1)		// 默认使用第一个NSNumber类型的字段做为主键
 
 #undef	__USE_JSON_DEFAULT__
-#define __USE_JSON_DEFAULT__	(1)
+#define __USE_JSON_DEFAULT__	(1)		// 默认保存JSON
 
 #pragma mark -
 
 @interface BeeActiveRecord()
 - (void)initSelf;
 - (void)setObservers;
+- (void)resetProperties;
 - (void)setPropertiesFrom:(NSDictionary *)dict;
 + (void)setAssociateConditions;
 + (void)setHasConditions;
@@ -122,7 +122,9 @@
 
 + (void)mapRelation
 {
+#if defined(__USE_ID_AS_KEY__) && __USE_ID_AS_KEY__
 	BOOL foundPrimaryKey = NO;
+#endif	// #if defined(__USE_ID_AS_KEY__) && __USE_ID_AS_KEY__
 	
 	for ( Class clazzType = self;; )
 	{
@@ -357,17 +359,29 @@
 		_JSON = [[NSMutableDictionary alloc] init];
 	}
 
+	[self resetProperties];
+}
+
+- (void)resetProperties
+{
 	_changed = NO;
 	_deleted = NO;
 	
 	NSMutableDictionary * propertySet = self.activePropertySet;
+	if ( nil == propertySet )
+		return;
+	
 	NSString * primaryKey = self.activePrimaryKey;
+	if ( primaryKey )
+	{
+		[self setValue:[NSNumber numberWithInt:-1] forKey:primaryKey];
+	}
+	
 	NSString * JSONKey = self.activeJSONKey;
-
-	[self setValue:[NSNumber numberWithInt:-1] forKey:primaryKey];
-
 	if ( _JSON )
 	{
+		[_JSON removeAllObjects];
+
 		NSDictionary * property = [propertySet objectForKey:JSONKey];
 		if ( property )
 		{
@@ -375,9 +389,9 @@
 			[_JSON setObject:[NSNumber numberWithInt:-1] atPath:path];
 		}
 	}
-
+	
 	if ( propertySet && propertySet.count )
-	{		
+	{
 		for ( NSString * key in propertySet.allKeys )
 		{
 			NSDictionary * property = [propertySet objectForKey:key];
@@ -385,7 +399,7 @@
 			NSString * name = [property objectForKey:@"name"];
 			NSString * path = [property objectForKey:@"path"];
 			NSNumber * type = [property objectForKey:@"type"];
-
+			
 			NSObject * json = nil;
 			NSObject * value = [property objectForKey:@"value"];
 			if ( value && NO == [value isKindOfClass:[NonValue class]] )
@@ -434,7 +448,7 @@
 						json = [arValue JSON];
 					}
 				}
-
+				
 				[self setValue:value forKey:name];
 				
 				if ( json )
@@ -447,7 +461,7 @@
 //				}
 			}
 		}
-	}	
+	}
 }
 
 - (void)setObservers
@@ -495,38 +509,54 @@
 
 - (id)init
 {
+	[BeeDatabase scopeEnter];
+
 	self = [super init];
 	if ( self )
 	{
 		[self initSelf];
 		
+		_changed = NO;
+		_deleted = NO;
+
 		[self setObservers];
 		[self load];
 	}
+	
+	[BeeDatabase scopeLeave];
+
 	return self;
 }
 
 - (id)initWithObject:(NSObject *)object
 {
+	[BeeDatabase scopeEnter];
+
 	self = [super init];
 	if ( self )
 	{
 		[self initSelf];
+		[self setPrimaryID:[NSNumber numberWithInt:-1]];
 
 		if ( [object isKindOfClass:[NSNumber class]] )
 		{
-			BeeDatabase * db = [self class].DB;
-			if ( db )
+			NSString * primaryKey = self.primaryKey;
+			if ( primaryKey )
 			{
-				db.WHERE( self.primaryKey, object ).GET();
-				if ( db.succeed )
+				BeeDatabase * db = [self class].DB;
+				if ( db )
 				{
-					NSObject * obj = [db.resultArray objectAtIndex:0];
-					if ( [obj isKindOfClass:[NSDictionary class]] )
+					db.WHERE( self.primaryKey, object ).GET();
+					if ( db.succeed )
 					{
-						[self setDictionary:(NSDictionary *)obj];
+						NSObject * obj = [db.resultArray objectAtIndex:0];
+						if ( [obj isKindOfClass:[NSDictionary class]] )
+						{
+							[self setDictionary:(NSDictionary *)obj];
+							[self setPrimaryID:(NSNumber *)object];
+						}
 					}
-				}				
+				}
 			}
 		}
 		else if ( [object isKindOfClass:[NSString class]] )
@@ -559,29 +589,44 @@
 			CC( @"Unknown object type" );
 		}
 
+		_changed = NO;
+		_deleted = NO;
+
 		[self setObservers];
-		[self setPrimaryID:[NSNumber numberWithInt:-1]];
 		[self load];
 	}
+	
+	[BeeDatabase scopeLeave];
+	
 	return self;
 }
 
 - (id)initWithDictionary:(NSDictionary *)otherDictionary
 {
+	[BeeDatabase scopeEnter];
+
 	self = [super init];
 	if ( self )
 	{
 		[self initSelf];
 		[self setDictionary:otherDictionary];
-		
+
+		_changed = NO;
+		_deleted = NO;
+
 		[self setObservers];
 		[self load];
 	}
+	
+	[BeeDatabase scopeLeave];
+
 	return self;
 }
 
 - (id)initWithJSONData:(NSData *)data
 {
+	[BeeDatabase scopeEnter];
+	
 	self = [super init];
 	if ( self )
 	{
@@ -593,14 +638,22 @@
 			[self setDictionary:(NSDictionary *)object];
 		}
 
+		_changed = NO;
+		_deleted = NO;
+
 		[self setObservers];
 		[self load];
 	}
+	
+	[BeeDatabase scopeLeave];
+	
 	return self;
 }
 
 - (id)initWithJSONString:(NSString *)string
 {
+	[BeeDatabase scopeEnter];
+	
 	self = [super init];
 	if ( self )
 	{
@@ -611,10 +664,16 @@
 		{
 			[self setDictionary:(NSDictionary *)object];
 		}
-		
+
+		_changed = NO;
+		_deleted = NO;
+
 		[self setObservers];
 		[self load];
 	}
+	
+	[BeeDatabase scopeLeave];
+	
 	return self;	
 }
 
@@ -819,105 +878,21 @@
 
 + (void)setHasConditions
 {
-	// TODO:
-	
-	NSMutableDictionary * propertySet = [[self class] activePropertySet];
-	
-	for ( NSString * key in propertySet.allKeys )
+	NSArray * objs = [super.DB hasObjects];
+	for ( NSObject * obj in objs )
 	{
-		NSDictionary * property = [propertySet objectForKey:key];
-		
-		NSString * name = [property objectForKey:@"name"];
-		NSNumber * type = [property objectForKey:@"type"];
-		NSString * className = [property objectForKey:@"className"];
+		// TODO:
 
-		if ( BeeTypeEncoding.OBJECT != type.intValue )
-			continue;
-
-		NSMutableArray * values = [NSMutableArray array];
-		
-		if ( className )
-		{
-			Class classType = NSClassFromString( className );
-			if ( classType )
-			{
-				NSArray * objs = [super.DB hasObjectsFor:classType];
-				for ( NSObject * obj in objs )
-				{
-					NSObject * value = [obj valueForKey:name];
-					[values addObject:value];
-				}
-			}
-		}
-
-		for ( NSObject * value in values )
-		{
-			if ( [value isKindOfClass:[BeeActiveRecord class]] )
-			{
-				BeeActiveRecord * record = (BeeActiveRecord *)value;
-				value = record.primaryID;
-			}
-
-			if ( value )
-			{
-				super.DB.WHERE( name, value );				
-			}
-		}
+//		Class clazz = [obj class];
+//		super.DB.WHERE( name, value );
 	}
 }
 
 - (void)setPropertiesFrom:(NSDictionary *)dict
 {
-	NSMutableDictionary * propertySet = self.activePropertySet;
-	NSString * primaryKey = self.activePrimaryKey;
-	NSString * JSONKey = self.activeJSONKey;
-
-// reset primary key
-	
-	[self setValue:[NSNumber numberWithInt:-1] forKey:primaryKey];
-	
-// reset properties
-
-	for ( NSString * key in propertySet.allKeys )
-	{
-		NSDictionary * property = [propertySet objectForKey:key];
-		
-		NSString * name = [property objectForKey:@"name"];
-		if ( [name isEqualToString:JSONKey] )
-			continue;
-
-		[self setValue:nil forKey:name];
-	}
-	
-// reset JSON
-
-	[_JSON removeAllObjects];
-
-// reset inner AR objects
-
-	for ( NSString * key in propertySet.allKeys )
-	{
-		NSDictionary *	property = [propertySet objectForKey:key];
-		NSNumber *		type = [property objectForKey:@"type"];
-
-		if ( BeeTypeEncoding.OBJECT == type.intValue )
-		{
-			NSString *	name = [property objectForKey:@"name"];
-			NSObject *	value = [self valueForKey:name];
-
-			if ( value && [value isKindOfClass:[BeeActiveRecord class]] )
-			{
-				BeeActiveRecord * record = (BeeActiveRecord *)value;
-				[record setPropertiesFrom:nil];
-			}
-		}
-	}
-
-	if ( nil == dict )
-		return;
-
 // set properties
 
+	NSMutableDictionary * propertySet = self.activePropertySet;
 	for ( NSString * key in propertySet.allKeys )
 	{
 		NSDictionary * property = [propertySet objectForKey:key];
@@ -1012,6 +987,7 @@
 
 - (void)setDictionary:(NSDictionary *)dict
 {
+	[self resetProperties];
 	[self setPropertiesFrom:dict];
 	
 	[_JSON setDictionary:dict];
@@ -1063,6 +1039,11 @@
 	}
 }
 
+- (NSDictionary *)JSONDictionary
+{
+	return [NSMutableDictionary dictionaryWithDictionary:self.JSON];
+}
+
 - (NSString *)primaryKey
 {
 	return self.activePrimaryKey;
@@ -1093,6 +1074,9 @@
 - (BOOL)get
 {
 	NSString * primaryKey = self.activePrimaryKey;
+	if ( nil == primaryKey )
+		return NO;
+	
 	NSNumber * primaryID = [self valueForKey:primaryKey];
 	if ( nil == primaryID || primaryID.intValue < 0 )
 		return NO;
@@ -1108,6 +1092,7 @@
 		NSDictionary * dict = [super.DB.resultArray objectAtIndex:0];
 		if ( dict )
 		{
+			[self resetProperties];
 			[self setPropertiesFrom:dict];
 
 			NSString * json = [dict objectForKey:self.activeJSONKey];
@@ -1131,6 +1116,9 @@
 - (BOOL)exists
 {
 	NSString * primaryKey = self.activePrimaryKey;
+	if ( nil == primaryKey )
+		return NO;
+	
 	NSNumber * primaryID = [self valueForKey:primaryKey];
 	if ( nil == primaryID || primaryID.intValue < 0 )
 		return NO;
@@ -1157,10 +1145,10 @@
 // if already inserted into table, no nessecery insert again
 
 	NSString *		primaryKey = self.activePrimaryKey;
-	NSNumber *		primaryID = [self valueForKey:primaryKey];
-	
-	if ( primaryID && primaryID.intValue >= 0 )
-		return NO;
+//	NSNumber *		primaryID = [self valueForKey:primaryKey];
+//	
+//	if ( primaryID && primaryID.intValue >= 0 )
+//		return NO;
 
 	NSString *		JSONKey = self.activeJSONKey;
 	NSDictionary *	propertySet = self.activePropertySet;
@@ -1195,8 +1183,18 @@
 		
 		NSString * name = [property objectForKey:@"name"];
 		NSNumber * type = [property objectForKey:@"type"];
+		
+		NSString * byClass = [property objectForKey:@"byClass"];
+		if ( byClass )
+		{
+			Class byClassType = NSClassFromString( byClass );
+			if ( byClassType && [NSObject usingAutoIncrementFor:byClassType andProperty:name] )
+			{
+				continue;
+			}
+		}
 
-		if ( [name isEqualToString:JSONKey] || [name isEqualToString:primaryKey] )
+		if ( [name isEqualToString:JSONKey] )
 			continue;
 
 		NSObject * value = [self valueForKey:name];
@@ -1205,6 +1203,12 @@
 			if ( BeeTypeEncoding.NSNUMBER == type.intValue )
 			{
 				value = [value asNSNumber];
+
+				// bug fix
+				if ( [name isEqualToString:primaryKey] && [(NSNumber *)value integerValue] < 0 )
+				{
+					continue;
+				}
 			}
 			else if ( BeeTypeEncoding.NSSTRING == type.intValue )
 			{
@@ -1232,7 +1236,7 @@
 			{
 //				value = [value asNSNumber];
 			}
-
+			
 			if ( name && value )
 			{
 				super.DB.SET( name, value );
@@ -1251,7 +1255,11 @@
 	{
 		_changed = NO;
 
-		[self setValue:[NSNumber numberWithInt:super.DB.insertID] forKey:primaryKey];
+		if ( primaryKey )
+		{
+			[self setValue:[NSNumber numberWithInt:super.DB.insertID] forKey:primaryKey];
+		}
+		
 		return YES;
 	}
 	
@@ -1265,9 +1273,11 @@
 
 // if already inserted into table, no nessecery insert again
 
-	NSString *		primaryKey = self.activePrimaryKey;
-	NSNumber *		primaryID = [self valueForKey:primaryKey];
-
+	NSString * primaryKey = self.activePrimaryKey;
+	if ( nil == primaryKey )
+		return NO;
+	
+	NSNumber * primaryID = [self valueForKey:primaryKey];
 	if ( primaryID && primaryID.intValue < 0 )
 		return NO;
 
@@ -1331,8 +1341,14 @@
 				{
 					BeeActiveRecord * record = (BeeActiveRecord *)value;
 					NSString * primaryKey = [value class].activePrimaryKey;
-					
-					value = [record valueForKey:primaryKey];
+					if ( primaryKey )
+					{
+						value = [record valueForKey:primaryKey];
+					}
+					else
+					{
+						value = nil;
+					}
 				}
 				else
 				{
@@ -1369,10 +1385,13 @@
 	if ( _deleted )
 		return NO;
 	
-	NSString *		JSONKey = self.activeJSONKey;
-	NSString *		primaryKey = self.activePrimaryKey;
-	NSObject *		primaryID = [self valueForKey:primaryKey];
-	NSDictionary *	propertySet = self.activePropertySet;
+	NSString * primaryKey = self.activePrimaryKey;
+	if ( nil == primaryKey )
+		return NO;
+	
+	NSObject * primaryID = [self valueForKey:primaryKey];
+	if ( nil == primaryID )
+		return NO;
 
 	super.DB
 	.FROM( self.tableName )
@@ -1381,6 +1400,9 @@
 
 	if ( super.DB.succeed )
 	{
+		NSString *		JSONKey = self.activeJSONKey;
+		NSDictionary *	propertySet = self.activePropertySet;
+
 		[self setValue:[NSNumber numberWithInt:-1] forKey:primaryKey];
 		
 		for ( NSString * key in propertySet.allKeys )
@@ -1549,10 +1571,9 @@
 
 @implementation BeeDatabase(BeeActiveRecord)
 
-@dynamic BELONG_TO;
-@dynamic HAS;
-
 @dynamic SAVE;
+@dynamic SAVE_DATA;
+@dynamic SAVE_STRING;
 @dynamic SAVE_ARRAY;
 @dynamic SAVE_DICTIONARY;
 
@@ -1561,26 +1582,6 @@
 @dynamic FIRST_RECORD_BY_ID;
 @dynamic LAST_RECORD;
 @dynamic LAST_RECORD_BY_ID;
-
-- (BeeDatabaseBlockN)BELONG_TO
-{
-	BeeDatabaseBlockN block = ^ BeeDatabase * ( id first, ... )
-	{
-		return self.ASSOCIATE( first );
-	};
-	
-	return [[block copy] autorelease];
-}
-
-- (BeeDatabaseBlockN)HAS
-{
-	BeeDatabaseBlockN block = ^ BeeDatabase * ( id first, ... )
-	{
-		return self.ASSOCIATE( first );
-	};
-
-	return [[block copy] autorelease];
-}
 
 - (BeeDatabaseBlockN)SAVE
 {
@@ -1594,8 +1595,36 @@
 		{
 			return [self saveDictionary:(NSDictionary *)first];
 		}
-		
+		else if ( [first isKindOfClass:[NSString class]] )
+		{
+			return [self saveString:(NSString *)first];
+		}
+		else if ( [first isKindOfClass:[NSData class]] )
+		{
+			return [self saveData:(NSData *)first];
+		}
+
 		return self;
+	};
+	
+	return [[block copy] autorelease];
+}
+
+- (BeeDatabaseBlockN)SAVE_DATA
+{
+	BeeDatabaseBlockN block = ^ BeeDatabase * ( id first, ... )
+	{
+		return [self saveData:(NSData *)first];
+	};
+	
+	return [[block copy] autorelease];
+}
+
+- (BeeDatabaseBlockN)SAVE_STRING
+{
+	BeeDatabaseBlockN block = ^ BeeDatabase * ( id first, ... )
+	{
+		return [self saveString:(NSString *)first];
 	};
 	
 	return [[block copy] autorelease];
@@ -1669,6 +1698,47 @@
 	};
 	
 	return [[block copy] autorelease];
+}
+
+- (id)saveData:(NSData *)data
+{
+	NSObject * obj = [data objectFromJSONData];
+	if ( nil == obj )
+		return self;
+	
+	if ( [obj isKindOfClass:[NSArray class]] )
+	{
+		return [self saveArray:(NSArray *)obj];
+	}
+	else if ( [obj isKindOfClass:[NSDictionary class]] )
+	{
+		return [self saveDictionary:(NSDictionary *)obj];
+	}
+	
+	return self;
+}
+
+- (id)saveString:(NSString *)string
+{
+	if ( string && [string rangeOfString:@"'"].length > 0 )
+	{
+		string = [string stringByReplacingOccurrencesOfString:@"'" withString:@"\""];	
+	}
+		
+	NSObject * obj = [string objectFromJSONString];
+	if ( nil == obj )
+		return self;
+	
+	if ( [obj isKindOfClass:[NSArray class]] )
+	{
+		return [self saveArray:(NSArray *)obj];
+	}
+	else if ( [obj isKindOfClass:[NSDictionary class]] )
+	{
+		return [self saveDictionary:(NSDictionary *)obj];
+	}
+	
+	return self;
 }
 
 - (id)saveArray:(NSArray *)array
@@ -1842,10 +1912,22 @@
 	if ( nil == primaryKey )
 		return [NSArray array];
 	
+	self.FROM( table );
+	
+	if ( offset )
+	{
+		self.OFFSET( offset );
+	}
+	
+	if ( limit )
+	{
+		self.LIMIT( limit );
+	}
+
 	[classType setAssociateConditions];
 	[classType setHasConditions];
 
-	self.FROM( table ).OFFSET( offset ).LIMIT( limit ).GET();
+	self.GET();
 	if ( NO == self.succeed )
 		return [NSArray array];
 	

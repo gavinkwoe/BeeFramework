@@ -30,6 +30,8 @@
 //  Bee_UIGridCell.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
 
@@ -48,15 +50,18 @@
 
 @interface BeeUIGridCell : UIView
 {
-	NSObject *	_cellData;
+	BOOL		_selected;
+	id			_cellData;
 	NSObject *	_cellLayout;
 }
 
-@property (nonatomic, retain) NSObject *		cellData;
+@property (nonatomic, retain) id				cellData;
 @property (nonatomic, assign) NSObject *		cellLayout;
 
 @property (nonatomic, readonly) NSArray *		childCells;
 @property (nonatomic, readonly) BeeUIGridCell *	superCell;
+
+@property (nonatomic, assign) BOOL				selected;
 
 - (void)load;
 - (void)unload;
@@ -69,4 +74,9 @@
 - (void)layoutWillBegin;
 - (void)layoutDidFinish;
 
+- (void)stateWillChange;
+- (void)stateDidChanged;
+
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

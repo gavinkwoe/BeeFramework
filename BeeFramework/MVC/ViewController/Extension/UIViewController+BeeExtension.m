@@ -30,6 +30,8 @@
 //  UIView+BeeBackground.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "UIView+BeeExtension.h"
 #import "UIViewController+BeeExtension.h"
@@ -134,4 +136,16 @@
 	return self.viewFrame.size;
 }
 
+- (CGFloat)viewWidth
+{
+	return self.viewFrame.size.width;
+}
+
+- (CGFloat)viewHeight
+{
+	return self.viewFrame.size.height;
+}
+
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

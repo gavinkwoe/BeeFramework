@@ -30,6 +30,8 @@
 //  UIFont+BeeExtension.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 
 #pragma mark -
@@ -39,3 +41,5 @@
 + (void)setBoldFontName:(NSString *)name;
 + (void)setItalicFontName:(NSString *)name;
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

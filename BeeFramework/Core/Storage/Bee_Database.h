@@ -58,8 +58,9 @@ typedef BOOL			(^BeeDatabaseBoolBlock)( void );
 	BOOL					_autoOptimize;	// TO BE DONE
 	BOOL					_batch;
 	NSUInteger				_identifier;
-	
 	NSString *				_filePath;
+	
+	BOOL					_shadow;
 	FMDatabase *			_database;
 
 	NSMutableArray *		_select;
@@ -87,10 +88,17 @@ typedef BOOL			(^BeeDatabaseBoolBlock)( void );
 	NSMutableArray *		_classType;
 	NSMutableArray *		_associate;
 	NSMutableArray *		_has;
+	
+	NSTimeInterval			_lastQuery;
+	NSTimeInterval			_lastUpdate;
 }
 
 @property (nonatomic, assign) BOOL					autoOptimize;	// TO BE DONE
 @property (nonatomic, retain) NSString *			filePath;
+
+@property (nonatomic, assign) BOOL					shadow;
+@property (nonatomic, retain) FMDatabase *			database;
+
 @property (nonatomic, readonly) NSUInteger			total;
 @property (nonatomic, readonly) BOOL				ready;
 @property (nonatomic, readonly) NSUInteger			identifier;
@@ -166,12 +174,16 @@ typedef BOOL			(^BeeDatabaseBoolBlock)( void );
 
 @property (nonatomic, readonly) BeeDatabaseBlockN	CLASS_TYPE;	// for activeRecord
 @property (nonatomic, readonly) BeeDatabaseBlockN	ASSOCIATE;	// for activeRecord
+@property (nonatomic, readonly) BeeDatabaseBlockN	BELONG_TO;	// for activeRecord
 @property (nonatomic, readonly) BeeDatabaseBlockN	HAS;		// for activeRecord
 
 @property (nonatomic, readonly) NSArray *			resultArray;
 @property (nonatomic, readonly) NSUInteger			resultCount;
 @property (nonatomic, readonly) NSInteger			insertID;
 @property (nonatomic, readonly) BOOL				succeed;
+
+@property (nonatomic, readonly) NSTimeInterval		lastQuery;
+@property (nonatomic, readonly) NSTimeInterval		lastUpdate;
 
 + (BOOL)openSharedDatabase:(NSString *)path;
 + (BOOL)existsSharedDatabase:(NSString *)path;
@@ -180,7 +192,11 @@ typedef BOOL			(^BeeDatabaseBoolBlock)( void );
 + (void)setSharedDatabase:(BeeDatabase *)db;
 + (BeeDatabase *)sharedDatabase;
 
++ (void)scopeEnter;
++ (void)scopeLeave;
+
 - (id)initWithPath:(NSString *)path;
+- (id)initWithDatabase:(FMDatabase *)db;
 
 + (BOOL)exists:(NSString *)path;
 - (BOOL)open:(NSString *)path;

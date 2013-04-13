@@ -30,6 +30,8 @@
 //  Bee_UITabBar.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_UITabBar.h"
 #import "Bee_UISignal.h"
@@ -79,6 +81,17 @@ DEF_SIGNAL( HIGHLIGHT_CHANGED )
         [self initSelf];
     }
     return self;
+}
+
+// thanks to @ilikeido
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+	self = [super initWithCoder:aDecoder];
+	if ( self )
+	{
+		[self initSelf];
+	}
+	return self;
 }
 
 - (void)initSelf
@@ -232,3 +245,5 @@ DEF_SIGNAL( HIGHLIGHT_CHANGED )
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

@@ -40,11 +40,17 @@
 @implementation NSObject(BeeRequestResponder)
 
 @dynamic HTTP_GET;
+@dynamic HTTP_PUT;
 @dynamic HTTP_POST;
 
 - (BeeRequest *)GET:(NSString *)url
 {
 	return [self HTTP_GET:url];
+}
+
+- (BeeRequest *)PUT:(NSString *)url
+{
+	return [self HTTP_PUT:url];
 }
 
 - (BeeRequest *)POST:(NSString *)url
@@ -55,6 +61,13 @@
 - (BeeRequest *)HTTP_GET:(NSString *)url
 {
 	BeeRequest * req = [BeeRequestQueue GET:url];
+	[req addResponder:self];
+	return req;
+}
+
+- (BeeRequest *)HTTP_PUT:(NSString *)url
+{
+	BeeRequest * req = [BeeRequestQueue PUT:url];
 	[req addResponder:self];
 	return req;
 }
@@ -85,6 +98,18 @@
 		return req;
 	};
 
+	return [[block copy] autorelease];
+}
+
+- (BeeRequestBlockS)HTTP_PUT
+{
+	BeeRequestBlockS block = ^ BeeRequest * ( NSString * url )
+	{
+		BeeRequest * req = [BeeRequestQueue PUT:url];
+		[req addResponder:self];
+		return req;
+	};
+	
 	return [[block copy] autorelease];
 }
 

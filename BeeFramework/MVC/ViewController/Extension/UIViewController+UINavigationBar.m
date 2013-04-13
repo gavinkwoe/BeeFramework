@@ -30,6 +30,8 @@
 //  Bee_UIBoard.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_Log.h"
 #import "Bee_UISignal.h"
@@ -99,7 +101,19 @@ DEF_INT( BARBUTTON_RIGHT,	1 )
 
 - (void)showBarButton:(NSInteger)position image:(UIImage *)image
 {
-	UIButton * button = [[[UIButton alloc] initWithFrame:CGRectMake(0, 0, image.size.width, image.size.height)] autorelease];
+	CGRect buttonFrame = CGRectMake(0, 0, image.size.width + 10.0f, self.navigationController.navigationBar.frame.size.height);
+
+	if ( buttonFrame.size.width <= 24.0f )
+	{
+		buttonFrame.size.width = 24.0f;
+	}
+
+	if ( buttonFrame.size.height <= 24.0f )
+	{
+		buttonFrame.size.height = 24.0f;
+	}
+
+	UIButton * button = [[[UIButton alloc] initWithFrame:buttonFrame] autorelease];
 	button.contentMode = UIViewContentModeScaleAspectFit;
 	button.backgroundColor = [UIColor clearColor];
 	[button setImage:image forState:UIControlStateNormal];
@@ -157,3 +171,5 @@ DEF_INT( BARBUTTON_RIGHT,	1 )
 }
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

@@ -30,6 +30,8 @@
 //  Bee_UIImageView.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "Bee_Cache.h"
 #import "Bee_Network.h"
@@ -77,6 +79,9 @@ AS_SIGNAL( LOAD_COMPLETED )		// 加载完成
 AS_SIGNAL( LOAD_FAILED )		// 加载失败
 AS_SIGNAL( LOAD_CANCELLED )		// 加载取消
 
+AS_SIGNAL( WILL_CHANGE )		// 图将要变了
+AS_SIGNAL( DID_CHANGED )		// 图已经变了
+
 @property (nonatomic, assign) BOOL							gray;	// 是否变为灰色
 @property (nonatomic, assign) BOOL							rounded;		// 是否裁剪为圆型
 @property (nonatomic, assign) BOOL							loading;
@@ -96,4 +101,10 @@ AS_SIGNAL( LOAD_CANCELLED )		// 加载取消
 
 - (void)clear;
 
+- (void)readFromURL:(NSString *)url;
+- (void)readFromFile:(NSString *)url;
+- (void)readFromResource:(NSString *)url;
+
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

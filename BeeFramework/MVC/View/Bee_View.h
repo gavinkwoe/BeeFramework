@@ -30,6 +30,9 @@
 //  Bee_View.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
+#import "Bee_UISignal.h"
 #import "Bee_UIActionSheet.h"
 #import "Bee_UIAlertView.h"
 #import "Bee_UIActivityIndicatorView.h"
@@ -39,6 +42,8 @@
 #import "Bee_UIKeyboard.h"
 #import "Bee_UIImageView.h"
 #import "Bee_UILabel.h"
+#import "Bee_UIMatrixView.h"
+#import "Bee_UINavigationBar.h"
 #import "Bee_UIOrientation.h"
 #import "Bee_UIProgressView.h"
 #import "Bee_UIPageControl.h"
@@ -63,3 +68,5 @@
 #import "UIView+PanGesture.h"
 #import "UIView+SwipeGesture.h"
 #import "UIView+TapGesture.h"
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

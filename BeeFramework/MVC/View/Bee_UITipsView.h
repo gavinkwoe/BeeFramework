@@ -30,6 +30,8 @@
 //  Bee_UITipsView.h
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import <Foundation/Foundation.h>
 #import "Bee_UISignal.h"
 #import "Bee_Singleton.h"
@@ -178,3 +180,5 @@ AS_SINGLETON( BeeUITipsCenter )
 - (BeeUITipsView *)presentProgressTips:(NSString *)message inView:(UIView *)view;
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

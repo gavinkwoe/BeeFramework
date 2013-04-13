@@ -30,6 +30,8 @@
 //  UIView+BeeExtension.m
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #import "Bee_Precompile.h"
 #import "CGRect+BeeExtension.h"
 
@@ -112,6 +114,27 @@ CGRect AspectFillRect( CGRect rect, CGRect bound )
 	newRect.size.height = newSize.height;
 	
 	return newRect;
+}
+
+CGRect CGRectFromString( NSString * str )
+{
+	CGRect rect = CGRectZero;
+	
+	NSArray * array = [str componentsSeparatedByString:@","];
+	if ( array && array.count == 4 )
+	{
+		NSString *	x = [array objectAtIndex:0];
+		NSString *	y = [array objectAtIndex:1];
+		NSString *	w = [array objectAtIndex:2];
+		NSString *	h = [array objectAtIndex:3];
+		
+		rect.origin.x = x.floatValue;
+		rect.origin.y = y.floatValue;
+		rect.size.width = w.floatValue;
+		rect.size.height = h.floatValue;
+	}
+	
+	return rect;
 }
 
 CGPoint CGPointZeroNan( CGPoint point )
@@ -261,3 +284,5 @@ CGRect CGRectToBound( CGRect frame )
 	rect.size = frame.size;
 	return rect;	
 }
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

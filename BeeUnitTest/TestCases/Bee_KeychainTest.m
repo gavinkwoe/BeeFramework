@@ -31,6 +31,7 @@
 //
 
 #import "Bee.h"
+#import "Bee_UnitTest.h"
 
 #if defined(__BEE_UNITTEST__) && __BEE_UNITTEST__
 
@@ -40,6 +41,5 @@ TEST_CASE( keychain )
 {
 }
 TEST_CASE_END
-
 
 #endif	// #if defined(__BEE_UNITTEST__) && __BEE_UNITTEST__

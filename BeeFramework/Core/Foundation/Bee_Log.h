@@ -43,6 +43,9 @@
 #undef	NSLog
 #define NSLog		BeeLog
 
+#undef	TODO
+#define TODO( desc, ... )
+
 #if __cplusplus
 extern "C" {
 #endif
@@ -50,7 +53,9 @@ extern "C" {
 	void BeeLogToogle( void );
 	void BeeLogEnable( BOOL flag );
 	BOOL BeeLogIsEnabled( void );
+	
 	void BeeLogIndent( NSUInteger tabs );
+	void BeeLogUnindent( NSUInteger tabs );
 	
 	void BeeLog( NSObject * format, ... );
 
