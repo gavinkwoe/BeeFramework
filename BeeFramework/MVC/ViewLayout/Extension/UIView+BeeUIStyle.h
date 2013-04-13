@@ -47,4 +47,9 @@
 
 @end
 
+@interface UIView(BeeUIStyle_Text)
+- (void)setLineBreakMode:(UILineBreakMode)lineBreakMode;
+- (void)setTextAlignment:(UITextAlignment)textAlignment;
+@end
+
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

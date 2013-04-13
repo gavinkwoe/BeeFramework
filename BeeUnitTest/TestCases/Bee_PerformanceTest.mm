@@ -64,9 +64,9 @@ TEST_CASE( performance )
 				}
 			}
 			PERF_LEAVE_( step_two )
-		
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-value"
 		// step 3
-			
 			PERF_MARK( step_three_1 );
 			{
 				TIMES( 10000 )
@@ -75,7 +75,7 @@ TEST_CASE( performance )
 				}
 			}
 			PERF_MARK( step_three_2 );
-
+#pragma clang diagnostic pop
 		// print time
 
 			CC( @"step_three = %f", PERF_TIME( step_three_1, step_three_2 ) );
