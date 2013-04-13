@@ -1,8 +1,12 @@
-#Bee framework
+#{bee} framework
 
-A rapid development framework for iOS applications.
-By geek, for geek.
+a rapid dev framework for iOS.    
+by geek, for geek.    
 
+###It's possible to develop an iOS app in less than 3 days.
+
+
+##Join us
 --------------------
 
 QQ Group:      79054681    
@@ -10,16 +14,17 @@ website:       http://www.bee-framework.com
 email:         gavinkwoe@gmail.com    
 google groups: https://groups.google.com/d/forum/beeframework?hl=zh-CN
 
---------------------
-
 ##v0.3.0 changes
+--------------------
 
 1. Fully support for MacOS
 2. Fully support for UI template:    
-	(now, only support for .xml format.)    
-	(.html, .android, .json will support soon)    
+
+	view:
 
 	![Layout](http://blog.whatsbug.com/wp-content/uploads/2013/04/bee_view.png)
+
+	code:
 
 		<?xml version="1.0" encoding="UTF-8"?>
 		<ui id="test">
@@ -96,12 +101,17 @@ google groups: https://groups.google.com/d/forum/beeframework?hl=zh-CN
 	(in any view/viewController, you can coding like below:)    
 	(see Lesson 14)    
 
-		$(@"*").HIDE().XX().YY().ZZ().....;
-		$(@"#a").HIDE().XX().YY().ZZ().....;
-		$(@"h > i").HIDE().XX().YY().ZZ().....;
-		$(@".BeeUILabel").HIDE().XX().YY().ZZ().....;		
+		$(@"*").HIDE()...;
+
+		$(@"#a").HIDE()....;
+
+		$(@"h > i").HIDE()....;
+
+		$(@".BeeUILabel").HIDE()....;		
+
 		$(@"h").BEFORE( [BeeUILabel class], @"h3" );
 		$(@"h").AFTER( [BeeUILabel class], @"h4" );
+
 		NSAssert( $(@"h3").NEXT().view == $(@"h").view, @"" );
 		NSAssert( $(@"h4").PREV().view == $(@"h").view, @"" );
 		
@@ -125,10 +135,12 @@ google groups: https://groups.google.com/d/forum/beeframework?hl=zh-CN
 	
 4. Fully support for template/viewController signal bridging by ID:
 
-		template.xml
-		<view class="BeeUIButton" id="twitter"/>
+	template.xml
 
-		template.mm
+		<view id="twitter"/>
+
+	template.mm
+
 		- (void)handleUISignal_twitter:(BeeUISignal *)signal
 		{
 			[super handleUISignal:signal];
@@ -143,6 +155,7 @@ google groups: https://groups.google.com/d/forum/beeframework?hl=zh-CN
 
 
 ##v0.2.3 changes
+--------------------
 
 1. Refactoring the directory structure, Core and MVC completely separated, and the source files and the extensions completely separated
 2. Refactoring the code structure of BeeDatabase and BeeActiveRecord, more clearly
@@ -192,16 +205,9 @@ google groups: https://groups.google.com/d/forum/beeframework?hl=zh-CN
 5. Fix some bugs (Thanks, I love U all!)
 
 ##v0.2 changes
+--------------------
 
-1. Add overload graph in BeeDebugger    
-2. Add BeeDatabase(based on FMDB) and BeeActiveRecord    
-3. Fix some bugs
-4. Move precompile options to 'Bee_Precompile.h'     
-
-From now, you can use SQLITE everywhere in fantastic way!    
-See 'Lession11' & 'Bee_ActiveRecordTest.h/.m' & 'BeeDatabaseTest.h/.m'    
-
-Fantastic BeeDatabase:
+1. BeeDatabase:
 
 	self.DB
 	    .TABLE( @"tableName" )
@@ -217,7 +223,7 @@ Fantastic BeeDatabase:
 	    .GET();
 	NSAssert( self.DB.resultArray.count > 0, nil );
 
-Fantastic BeeActiveRecord:
+2. Fantastic BeeActiveRecord:
 
 	// UserInfo.h
 	
@@ -256,26 +262,31 @@ Fantastic BeeActiveRecord:
 		user.INSERT();		
 	}
 	
-New overload graph:
+3. New overload graph:
 
-![Debugger](http://blog.whatsbug.com/wp-content/uploads/2012/12/bee_5.png)
+	![Debugger](http://blog.whatsbug.com/wp-content/uploads/2012/12/bee_5.png)
+
+4. Fix some bugs
+5. Move precompile options to 'Bee_Precompile.h'     
 
 ##v0.1 changes
-
-1. Add more DEMOs (useful~~)
-2. Add Heatmap (cool~~)
-
-![Debugger](http://blog.whatsbug.com/wp-content/uploads/2012/11/bee_1.png)
-![Debugger](http://blog.whatsbug.com/wp-content/uploads/2012/11/bee_2.png)
-![Debugger](http://blog.whatsbug.com/wp-content/uploads/2012/11/bee_3.png)
-![Debugger](http://blog.whatsbug.com/wp-content/uploads/2012/11/bee_4.png)
-
-
 --------------------
 
-##Who using Bee
+1. Add more lessons
 
-####Companies
+	![Debugger](http://blog.whatsbug.com/wp-content/uploads/2012/11/bee_1.png)
+
+2. Add heatmap
+
+	![Debugger](http://blog.whatsbug.com/wp-content/uploads/2012/11/bee_3.png)
+
+3. Add debugger
+
+	![Debugger](http://blog.whatsbug.com/wp-content/uploads/2012/11/bee_4.png)
+
+
+##Companies are using {bee}
+--------------------
 
 A. China Mobile, http://www.chinamobileltd.com/en/global/home.php    
 B. China Unicom, http://www.chinaunicom.com.cn/    
@@ -296,7 +307,9 @@ P. MesonTech, http://www.mesontech.com.cn/home/mesontech.jsp
 
 ![Vendors](http://blog.whatsbug.com/wp-content/uploads/2013/01/bee_2013.jpg)
 
-####Projects
+
+##Apps are using {bee}
+--------------------
 
 1. Sina Finance(新浪财经)    
    https://itunes.apple.com/us/app/xin-lang-cai-jing/id430165157?mt=8
