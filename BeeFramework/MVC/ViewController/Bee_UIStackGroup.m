@@ -203,18 +203,10 @@ DEF_SIGNAL( INDEX_CHANGED );
 
 - (void)handleUISignal:(BeeUISignal *)signal
 {
-	if ( signal.source != self )
+	[super handleUISignal:signal];
+
+	if ( signal.source == self )
 	{
-		BeeUIStack * stack = self.topStack;
-		if ( stack )
-		{
-			[signal forward:stack];
-		}
-	}
-	else
-	{
-		[super handleUISignal:signal];
-		
 		if ( [signal isKindOf:BeeUIBoard.SIGNAL] )
 		{
 			if ( [signal is:BeeUIBoard.WILL_APPEAR] )
