@@ -62,9 +62,6 @@ extern BeeUIQueryObjectBlockN	__getQueryBlock( id context );
 #undef	$
 #define $ __getQueryBlock( self )
 
-#undef	function
-#define function	^
-
 #pragma mark -
 
 @interface BeeUIQuery : BeeUICollection
