@@ -864,7 +864,7 @@ static NSMutableArray *			__allBoards;
 		}
 	}
 	
-	if ( self.parentBoard )
+	if ( self.parentBoard && NO == [signal isKindOf:BeeUIBoard.SIGNAL] )
 	{
 		[signal forward:self.parentBoard.view];
 	}
