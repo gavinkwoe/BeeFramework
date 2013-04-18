@@ -376,7 +376,11 @@ DEF_SINGLETON( BeeDebugViewBoard )
 	BeeUITableViewCell * cell = [self dequeueWithContentClass:[BeeDebugViewCell class]];
 	if ( cell )
 	{
-		cell.cellData = [[BeeUIBoard allBoards] objectAtIndex:indexPath.row];
+        if (indexPath.row == [[BeeUIBoard allBoards] count]) {
+            NSLog(@"当allBoards数等于indexPath.row");//原因暂不知。
+        }else{
+            cell.cellData = [[BeeUIBoard allBoards] objectAtIndex:indexPath.row];
+        }
 	}
 	return cell;
 }
