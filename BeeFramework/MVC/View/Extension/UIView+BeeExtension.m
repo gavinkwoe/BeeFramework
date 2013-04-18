@@ -337,7 +337,7 @@
 
 - (UIViewController *)viewController
 {
-	if ( nil != self.superview )
+	if ( nil == self.superview )
 		return nil;
 	
 	id nextResponder = [self nextResponder];
@@ -347,7 +347,7 @@
 	}
 	else
 	{
-		return nil;
+		return [nextResponder viewController];
 	}
 }
 
