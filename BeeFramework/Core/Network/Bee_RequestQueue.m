@@ -298,7 +298,7 @@
 	request = [[BeeRequest alloc] initWithURL:[NSURL URLWithString:url]];
 	request.timeOutSeconds = DEFAULT_POST_TIMEOUT;
 	request.requestMethod = @"POST";
-	request.postFormat = ASIMultipartFormDataPostFormat; // ASIRawPostFormat;
+//	request.postFormat = ASIMultipartFormDataPostFormat; // ASIRawPostFormat;
 	[request setDelegate:self];
 	[request setDownloadProgressDelegate:self];
 	[request setUploadProgressDelegate:self];
