@@ -101,12 +101,12 @@
 
 		if ( color.length == 3 )
 		{
-			NSUInteger hexRGB = (NSUInteger)[color longLongValue];
+			NSUInteger hexRGB = (NSUInteger)strtol(color.UTF8String , nil, 16);;
 			return [UIColor fromShortHexValue:hexRGB alpha:alpha];
 		}
 		else if ( color.length == 6 )
 		{
-			NSUInteger hexRGB = (NSUInteger)[color longLongValue];
+			NSUInteger hexRGB = (NSUInteger)strtol(color.UTF8String , nil, 16);;
 			return [UIColor fromHexValue:hexRGB];
 		}
     }
@@ -116,12 +116,12 @@
 		
 		if ( color.length == 8 )
 		{
-			NSUInteger hexRGB = (NSUInteger)[color longLongValue];
+			NSUInteger hexRGB = (NSUInteger)strtol(color.UTF8String , nil, 16);;
 			return [UIColor fromHexValue:hexRGB];
 		}
 		else if ( color.length == 6 )
 		{
-			NSUInteger hexRGB = (NSUInteger)[color longLongValue];
+			NSUInteger hexRGB = (NSUInteger)strtol(color.UTF8String , nil, 16);;
 			return [UIColor fromHexValue:hexRGB alpha:1.0f];
 		}
 	}
