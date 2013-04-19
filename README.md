@@ -7,7 +7,7 @@ by geek, for geek.
 
 ##[Download SDK](http://www.bee-framework.com/download/bee_SDK_0_3_0.zip)
 
-#####http://www.bee-framework.com/download/bee_SDK_0_3_0.zip
+Lastest version: **http://www.bee-framework.com/download/bee_SDK_0_3_0.zip**
 
 ![SDK](http://blog.whatsbug.com/wp-content/uploads/2013/04/bee_sdk_1.png)
 ![SDK](http://blog.whatsbug.com/wp-content/uploads/2013/04/bee_sdk_2.png)
