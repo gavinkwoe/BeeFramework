@@ -5,7 +5,7 @@
 //	 \ \_____\ \ \_____\ \ \_____\
 //	  \/_____/  \/_____/  \/_____/
 //
-//	Copyright (c) 2013 BEE creators
+//	Copyright (c) 2012 BEE creators
 //	http://www.whatsbug.com
 //
 //	Permission is hereby granted, free of charge, to any person obtaining a
@@ -27,15 +27,10 @@
 //	IN THE SOFTWARE.
 //
 //
+//  WebViewBoard.h
+//
 
-#import <UIKit/UIKit.h>
-#import "AppDelegate.h"
+#import "Bee_UIWebBoard.h"
 
-int main(int argc, char *argv[])
-{
-	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	int retVal = UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
-    [pool release];
-	
-    return retVal;
-}
+@interface WebViewBoard : BeeUIWebBoard
+@end

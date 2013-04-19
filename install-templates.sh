@@ -176,6 +176,13 @@ copy_xcode4_project_templates(){
 	copy_files External/TouchXML "$LIBS_DIR"
 	echo done!
 	
+	
+	print_template_banner "Installing Xcode 4 Examples Lessons iOS template"
+	LIBS_DIR="$DST_DIR""lib_examples.xctemplate/libs/"
+	mkdir -p "$LIBS_DIR"
+	echo ...copying touchXML files
+	copy_files Example/Lessons "$LIBS_DIR"
+	echo done!
 
 	# Move File Templates to correct position
 	DST_DIR="$HOME/Library/Developer/Xcode/Templates/File Templates/$BEE_IOS_DST_DIR/"

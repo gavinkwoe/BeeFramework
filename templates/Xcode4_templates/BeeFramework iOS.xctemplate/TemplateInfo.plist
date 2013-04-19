@@ -15,6 +15,7 @@
 		<string>com.beeframework.lib_reachabilitiy.lib</string>
 		<string>com.beeframework.lib_touchXML.lib</string>
 		<string>com.beeframework.lib_asi.lib</string>		
+		<string>com.beeframework.lib_examples.lib</string>		
 	</array>
 	<key>Concrete</key>
 	<true/>
@@ -35,30 +36,6 @@
 			<string>Supporting Files</string>
 			<key>Path</key>
 			<string>main.m</string>
-		</dict>
-		<key>HelloWorldLayer.h</key>
-		<dict>
-			<key>Path</key>
-			<string>HelloWorldLayer.h</string>
-			<key>TargetIndices</key>
-			<array/>
-		</dict>
-		<key>HelloWorldLayer.m</key>
-		<dict>
-			<key>Path</key>
-			<string>HelloWorldLayer.m</string>
-		</dict>
-		<key>IntroLayer.h</key>
-		<dict>
-			<key>Path</key>
-			<string>IntroLayer.h</string>
-			<key>TargetIndices</key>
-			<array/>
-		</dict>
-		<key>IntroLayer.m</key>
-		<dict>
-			<key>Path</key>
-			<string>IntroLayer.m</string>
 		</dict>
 		<key>AppDelegate.h</key>
 		<dict>
@@ -85,10 +62,6 @@
 		<string>main.m</string>
 		<string>AppDelegate.h</string>
 		<string>AppDelegate.m</string>
-		<string>HelloWorldLayer.h</string>
-		<string>HelloWorldLayer.m</string>
-		<string>IntroLayer.h</string>
-		<string>IntroLayer.m</string>
 	</array>
 	<key>Options</key>
 	<array>
