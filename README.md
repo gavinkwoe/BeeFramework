@@ -3,11 +3,11 @@
 a rapid dev framework for iOS.    
 by geek, for geek.    
 
-###It's possible to develop an iOS app in less than 3 days.
+#####It's possible to develop an iOS app in less than 3 days.
 
-##Download
+##[Download SDK](http://www.bee-framework.com/download/bee_SDK_0_3_0.zip)
 
-Lastest version: **http://www.bee-framework.com/download/bee_SDK_0_3_0.zip**
+#####http://www.bee-framework.com/download/bee_SDK_0_3_0.zip
 
 ![SDK](http://blog.whatsbug.com/wp-content/uploads/2013/04/bee_sdk_1.png)
 ![SDK](http://blog.whatsbug.com/wp-content/uploads/2013/04/bee_sdk_2.png)
