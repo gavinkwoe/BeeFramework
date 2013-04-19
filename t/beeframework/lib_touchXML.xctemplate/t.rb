@@ -4,13 +4,14 @@
 require "rexml/document" 
 
 file = File.new("TemplateInfo.xml","w+")    #新建XML文件， 将以下内容写入 。
-
+file.puts '<?xml version="1.0" encoding="UTF-8"?>'
 file.puts '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">'
 
 doc = REXML::Document.new       #创建XML内容 
 
 el = doc.add_element 'plist', { "version"=>"1.0"}
 
+el = el.add_element 'dict', {}
 
 k1 = el.add_element 'key', {}
 k1.add_text "Description"
@@ -76,6 +77,9 @@ Dir["./**/*.h","./**/*.m"].each{
     # p ".h=#{x}"
     d_key_3 = d.add_element 'key', {}
     d_key_3.add_text "TargetIndices"
+    
+    d_key_array = d.add_element 'array', {}
+    
   end
 }
 
@@ -96,7 +100,7 @@ Dir["./**/*.h","./**/*.m"].each{
 }
 
 # 
-formatter = REXML::Formatters::Pretty.new
+formatter = REXML::Formatters::Pretty.new(4)
 
 # Compact uses as little whitespace as possible
 formatter.compact = true
