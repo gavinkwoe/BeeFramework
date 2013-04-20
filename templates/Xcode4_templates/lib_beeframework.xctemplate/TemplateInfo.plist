@@ -1115,9 +1115,7 @@
                 <key>TargetIndices</key>
                 <array/>
             </dict>
-            <key>
-                libs/BeeFramework/MVC/ViewController/Extension/UIViewController+UINavigationBar.h
-            </key>
+            <key>libs/BeeFramework/MVC/ViewController/Extension/UIViewController+UINavigationBar.h</key>
             <dict>
                 <key>Group</key>
                 <array>
@@ -1126,9 +1124,7 @@
                     <string>BeeFramework/MVC/ViewController/Extension</string>
                 </array>
                 <key>Path</key>
-                <string>
-                    libs/BeeFramework/MVC/ViewController/Extension/UIViewController+UINavigationBar.h
-                </string>
+                <string>libs/BeeFramework/MVC/ViewController/Extension/UIViewController+UINavigationBar.h</string>
                 <key>TargetIndices</key>
                 <array/>
             </dict>
@@ -2181,9 +2177,7 @@
                 <key>Path</key>
                 <string>libs/BeeFramework/MVC/ViewController/Extension/UIViewController+BeeUISignal.m</string>
             </dict>
-            <key>
-                libs/BeeFramework/MVC/ViewController/Extension/UIViewController+UINavigationBar.m
-            </key>
+            <key>libs/BeeFramework/MVC/ViewController/Extension/UIViewController+UINavigationBar.m</key>
             <dict>
                 <key>Group</key>
                 <array>
@@ -2192,9 +2186,7 @@
                     <string>BeeFramework/MVC/ViewController/Extension</string>
                 </array>
                 <key>Path</key>
-                <string>
-                    libs/BeeFramework/MVC/ViewController/Extension/UIViewController+UINavigationBar.m
-                </string>
+                <string>libs/BeeFramework/MVC/ViewController/Extension/UIViewController+UINavigationBar.m</string>
             </dict>
             <key>libs/BeeFramework/MVC/ViewLayout/Bee_UICollection.m</key>
             <dict>
@@ -2702,9 +2694,7 @@
             <string>libs/BeeFramework/MVC/ViewController/Bee_ViewController.h</string>
             <string>libs/BeeFramework/MVC/ViewController/Extension/UIViewController+BeeExtension.h</string>
             <string>libs/BeeFramework/MVC/ViewController/Extension/UIViewController+BeeUISignal.h</string>
-            <string>
-                libs/BeeFramework/MVC/ViewController/Extension/UIViewController+UINavigationBar.h
-            </string>
+            <string>libs/BeeFramework/MVC/ViewController/Extension/UIViewController+UINavigationBar.h</string>
             <string>libs/BeeFramework/MVC/ViewLayout/Bee_UICollection.h</string>
             <string>libs/BeeFramework/MVC/ViewLayout/Bee_UILayout.h</string>
             <string>libs/BeeFramework/MVC/ViewLayout/Bee_UIQuery.h</string>
@@ -2796,9 +2786,7 @@
             <string>libs/BeeFramework/MVC/ViewController/Bee_ViewController.m</string>
             <string>libs/BeeFramework/MVC/ViewController/Extension/UIViewController+BeeExtension.m</string>
             <string>libs/BeeFramework/MVC/ViewController/Extension/UIViewController+BeeUISignal.m</string>
-            <string>
-                libs/BeeFramework/MVC/ViewController/Extension/UIViewController+UINavigationBar.m
-            </string>
+            <string>libs/BeeFramework/MVC/ViewController/Extension/UIViewController+UINavigationBar.m</string>
             <string>libs/BeeFramework/MVC/ViewLayout/Bee_UICollection.m</string>
             <string>libs/BeeFramework/MVC/ViewLayout/Bee_UILayout.m</string>
             <string>libs/BeeFramework/MVC/ViewLayout/Bee_UIQuery.m</string>
