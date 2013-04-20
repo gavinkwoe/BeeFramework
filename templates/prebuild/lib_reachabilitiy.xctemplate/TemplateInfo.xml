@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version='1.0'>
+    <dict>
+        <key>Description</key>
+        <string>This is a template description.</string>
+        <key>Identifier</key>
+        <string>com.beeframework.lib_reachabilitiy.lib</string>
+        <key>Kind</key>
+        <string>Xcode.Xcode3.ProjectTemplateUnitKind</string>
+        <key>Definitions</key>
+        <dict>
+            <key>libs/Reachability/Reachability.h</key>
+            <dict>
+                <key>Group</key>
+                <array>
+                    <string>libs</string>
+                    <string>lib_reachabilitiy</string>
+                    <string>Reachability</string>
+                </array>
+                <key>Path</key>
+                <string>libs/Reachability/Reachability.h</string>
+                <key>TargetIndices</key>
+                <array/>
+            </dict>
+            <key>libs/Reachability/Reachability.m</key>
+            <dict>
+                <key>Group</key>
+                <array>
+                    <string>libs</string>
+                    <string>lib_reachabilitiy</string>
+                    <string>Reachability</string>
+                </array>
+                <key>Path</key>
+                <string>libs/Reachability/Reachability.m</string>
+            </dict>
+        </dict>
+        <key>Nodes</key>
+        <array>
+            <string>libs/Reachability/Reachability.h</string>
+            <string>libs/Reachability/Reachability.m</string>
+        </array>
+    </dict>
+</plist>
