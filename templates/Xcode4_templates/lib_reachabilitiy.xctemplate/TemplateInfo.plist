@@ -16,7 +16,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_reachabilitiy</string>
-                    <string>src</string>
+                    <string>Reachability</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Reachability/Reachability.h</string>
@@ -29,7 +29,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_reachabilitiy</string>
-                    <string>src</string>
+                    <string>Reachability</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Reachability/Reachability.m</string>

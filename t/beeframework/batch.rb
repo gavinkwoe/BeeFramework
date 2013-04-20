@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby -wKU
 # encoding: UTF-8
 
-dest_dir = '/Users/dudan/work/BeeFramework/templates/Xcode4_templates'
+dest_dir = '/Volumes/data/Github/BeeFramework/templates/Xcode4_templates'
 
 Dir.foreach('.') do |f|  
   if /lib/ =~ f

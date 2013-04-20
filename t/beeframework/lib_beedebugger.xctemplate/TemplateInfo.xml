@@ -16,7 +16,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/ASIHTTPRequest+Bee.h</string>
@@ -29,7 +29,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_Debug.h</string>
@@ -42,7 +42,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugCrashReporter.h</string>
@@ -55,7 +55,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugDashBoard.h</string>
@@ -68,7 +68,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugDetailView.h</string>
@@ -81,7 +81,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugHeatmapModel.h</string>
@@ -94,7 +94,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugMemoryModel.h</string>
@@ -107,7 +107,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugMessageBoard.h</string>
@@ -120,7 +120,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugMessageModel.h</string>
@@ -133,7 +133,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugNetworkBoard.h</string>
@@ -146,7 +146,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugNetworkModel.h</string>
@@ -159,7 +159,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugPieView.h</string>
@@ -172,7 +172,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugPlotsView.h</string>
@@ -185,7 +185,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugSampleView.h</string>
@@ -198,7 +198,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugSandboxBoard.h</string>
@@ -211,7 +211,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugUtility.h</string>
@@ -224,7 +224,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugViewBoard.h</string>
@@ -237,7 +237,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugViewModel.h</string>
@@ -250,7 +250,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugWindow.h</string>
@@ -263,7 +263,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/ASIHTTPRequest+Bee.m</string>
@@ -274,7 +274,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_Debug.m</string>
@@ -285,7 +285,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugDashBoard.m</string>
@@ -296,7 +296,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugDetailView.m</string>
@@ -307,7 +307,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugHeatmapModel.m</string>
@@ -318,7 +318,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugMemoryModel.m</string>
@@ -329,7 +329,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugMessageBoard.m</string>
@@ -340,7 +340,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugMessageModel.m</string>
@@ -351,7 +351,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugNetworkBoard.m</string>
@@ -362,7 +362,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugNetworkModel.m</string>
@@ -373,7 +373,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugPieView.m</string>
@@ -384,7 +384,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugPlotsView.m</string>
@@ -395,7 +395,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugSampleView.m</string>
@@ -406,7 +406,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugSandboxBoard.m</string>
@@ -417,7 +417,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugUtility.m</string>
@@ -428,7 +428,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugViewBoard.m</string>
@@ -439,7 +439,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugViewModel.m</string>
@@ -450,10 +450,21 @@
                 <array>
                     <string>libs</string>
                     <string>lib_beedebugger</string>
-                    <string>src</string>
+                    <string>BeeDebugger</string>
                 </array>
                 <key>Path</key>
                 <string>libs/BeeDebugger/Bee_DebugWindow.m</string>
+            </dict>
+            <key>libs/BeeDebugger/Bee_DebugCrashReporter.mm</key>
+            <dict>
+                <key>Group</key>
+                <array>
+                    <string>libs</string>
+                    <string>lib_beedebugger</string>
+                    <string>BeeDebugger</string>
+                </array>
+                <key>Path</key>
+                <string>libs/BeeDebugger/Bee_DebugCrashReporter.mm</string>
             </dict>
         </dict>
         <key>Nodes</key>
@@ -495,6 +506,7 @@
             <string>libs/BeeDebugger/Bee_DebugViewBoard.m</string>
             <string>libs/BeeDebugger/Bee_DebugViewModel.m</string>
             <string>libs/BeeDebugger/Bee_DebugWindow.m</string>
+            <string>libs/BeeDebugger/Bee_DebugCrashReporter.mm</string>
         </array>
     </dict>
 </plist>

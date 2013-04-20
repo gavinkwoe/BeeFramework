@@ -16,7 +16,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_fmdb</string>
-                    <string>src</string>
+                    <string>FMDB</string>
                 </array>
                 <key>Path</key>
                 <string>libs/FMDB/FMDatabase.h</string>
@@ -29,7 +29,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_fmdb</string>
-                    <string>src</string>
+                    <string>FMDB</string>
                 </array>
                 <key>Path</key>
                 <string>libs/FMDB/FMDatabaseAdditions.h</string>
@@ -42,7 +42,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_fmdb</string>
-                    <string>src</string>
+                    <string>FMDB</string>
                 </array>
                 <key>Path</key>
                 <string>libs/FMDB/FMDatabasePool.h</string>
@@ -55,7 +55,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_fmdb</string>
-                    <string>src</string>
+                    <string>FMDB</string>
                 </array>
                 <key>Path</key>
                 <string>libs/FMDB/FMDatabaseQueue.h</string>
@@ -68,7 +68,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_fmdb</string>
-                    <string>src</string>
+                    <string>FMDB</string>
                 </array>
                 <key>Path</key>
                 <string>libs/FMDB/FMResultSet.h</string>
@@ -81,7 +81,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_fmdb</string>
-                    <string>src</string>
+                    <string>FMDB</string>
                 </array>
                 <key>Path</key>
                 <string>libs/FMDB/FMDatabase.m</string>
@@ -92,7 +92,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_fmdb</string>
-                    <string>src</string>
+                    <string>FMDB</string>
                 </array>
                 <key>Path</key>
                 <string>libs/FMDB/FMDatabaseAdditions.m</string>
@@ -103,7 +103,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_fmdb</string>
-                    <string>src</string>
+                    <string>FMDB</string>
                 </array>
                 <key>Path</key>
                 <string>libs/FMDB/FMDatabasePool.m</string>
@@ -114,7 +114,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_fmdb</string>
-                    <string>src</string>
+                    <string>FMDB</string>
                 </array>
                 <key>Path</key>
                 <string>libs/FMDB/FMDatabaseQueue.m</string>
@@ -125,7 +125,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_fmdb</string>
-                    <string>src</string>
+                    <string>FMDB</string>
                 </array>
                 <key>Path</key>
                 <string>libs/FMDB/FMResultSet.m</string>

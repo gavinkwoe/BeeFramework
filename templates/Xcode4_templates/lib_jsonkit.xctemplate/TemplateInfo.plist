@@ -16,7 +16,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_jsonkit</string>
-                    <string>src</string>
+                    <string>JSONKit</string>
                 </array>
                 <key>Path</key>
                 <string>libs/JSONKit/JSONKit.h</string>
@@ -29,7 +29,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_jsonkit</string>
-                    <string>src</string>
+                    <string>JSONKit</string>
                 </array>
                 <key>Path</key>
                 <string>libs/JSONKit/JSONKit.m</string>

@@ -16,7 +16,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/CatelogBoard.h</string>
@@ -29,7 +29,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/DribbbleBoard.h</string>
@@ -42,7 +42,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/DribbbleController.h</string>
@@ -55,7 +55,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/DribbbleModel.h</string>
@@ -68,7 +68,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/DribbblePhotoBoard.h</string>
@@ -81,7 +81,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson10Board.h</string>
@@ -94,7 +94,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson10Model.h</string>
@@ -107,7 +107,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson11Board.h</string>
@@ -120,7 +120,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson11Model.h</string>
@@ -133,7 +133,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson12Board.h</string>
@@ -146,7 +146,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson13Board.h</string>
@@ -159,7 +159,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson14Board.h</string>
@@ -172,7 +172,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson1Board.h</string>
@@ -185,7 +185,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson2Board.h</string>
@@ -198,7 +198,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson3Board.h</string>
@@ -211,7 +211,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson4Board.h</string>
@@ -224,7 +224,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson5Board.h</string>
@@ -237,7 +237,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson6Board.h</string>
@@ -250,7 +250,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson7_1Board.h</string>
@@ -263,7 +263,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson7_2Board.h</string>
@@ -276,7 +276,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson7_3Board.h</string>
@@ -289,7 +289,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson7_4Board.h</string>
@@ -302,7 +302,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson7_5Board.h</string>
@@ -315,7 +315,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson7_7Board.h</string>
@@ -328,7 +328,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson7Board.h</string>
@@ -341,7 +341,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson8Board.h</string>
@@ -354,7 +354,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson9Board.h</string>
@@ -367,7 +367,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson9Controller.h</string>
@@ -380,7 +380,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/LessonBaseBoard.h</string>
@@ -393,7 +393,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/WebViewBoard.h</string>
@@ -406,7 +406,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/CatelogBoard.m</string>
@@ -417,7 +417,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/DribbbleBoard.m</string>
@@ -428,7 +428,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/DribbbleModel.m</string>
@@ -439,7 +439,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/DribbblePhotoBoard.m</string>
@@ -450,7 +450,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson10Board.m</string>
@@ -461,7 +461,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson10Model.m</string>
@@ -472,7 +472,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson11Board.m</string>
@@ -483,7 +483,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson11Model.m</string>
@@ -494,7 +494,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson12Board.m</string>
@@ -505,7 +505,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson13Board.m</string>
@@ -516,7 +516,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson14Board.m</string>
@@ -527,7 +527,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson1Board.m</string>
@@ -538,7 +538,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson2Board.m</string>
@@ -549,7 +549,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson3Board.m</string>
@@ -560,7 +560,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson4Board.m</string>
@@ -571,7 +571,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson5Board.m</string>
@@ -582,7 +582,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson6Board.m</string>
@@ -593,7 +593,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson7_1Board.m</string>
@@ -604,7 +604,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson7_2Board.m</string>
@@ -615,7 +615,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson7_3Board.m</string>
@@ -626,7 +626,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson7_4Board.m</string>
@@ -637,7 +637,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson7_5Board.m</string>
@@ -648,7 +648,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson7_7Board.m</string>
@@ -659,7 +659,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson7Board.m</string>
@@ -670,7 +670,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson8Board.m</string>
@@ -681,7 +681,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson9Board.m</string>
@@ -692,7 +692,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/Lesson9Controller.m</string>
@@ -703,7 +703,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/LessonBaseBoard.m</string>
@@ -714,10 +714,21 @@
                 <array>
                     <string>libs</string>
                     <string>lib_examples</string>
-                    <string>src</string>
+                    <string>Lessons</string>
                 </array>
                 <key>Path</key>
                 <string>libs/Lessons/WebViewBoard.m</string>
+            </dict>
+            <key>libs/Lessons/DribbbleController.mm</key>
+            <dict>
+                <key>Group</key>
+                <array>
+                    <string>libs</string>
+                    <string>lib_examples</string>
+                    <string>Lessons</string>
+                </array>
+                <key>Path</key>
+                <string>libs/Lessons/DribbbleController.mm</string>
             </dict>
         </dict>
         <key>Nodes</key>
@@ -781,6 +792,7 @@
             <string>libs/Lessons/Lesson9Controller.m</string>
             <string>libs/Lessons/LessonBaseBoard.m</string>
             <string>libs/Lessons/WebViewBoard.m</string>
+            <string>libs/Lessons/DribbbleController.mm</string>
         </array>
     </dict>
 </plist>

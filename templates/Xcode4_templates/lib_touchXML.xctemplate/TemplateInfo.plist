@@ -16,7 +16,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML/Creation</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/Creation/CXMLDocument_CreationExtensions.h</string>
@@ -29,7 +29,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML/Creation</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/Creation/CXMLNode_CreationExtensions.h</string>
@@ -42,7 +42,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/CXHTMLDocument.h</string>
@@ -55,7 +55,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/CXMLDocument.h</string>
@@ -68,7 +68,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/CXMLDocument_PrivateExtensions.h</string>
@@ -81,7 +81,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/CXMLElement.h</string>
@@ -94,7 +94,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/CXMLElement_CreationExtensions.h</string>
@@ -107,7 +107,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/CXMLElement_ElementTreeExtensions.h</string>
@@ -120,7 +120,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/CXMLNamespaceNode.h</string>
@@ -133,7 +133,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/CXMLNode.h</string>
@@ -146,7 +146,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/CXMLNode_PrivateExtensions.h</string>
@@ -159,7 +159,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/CXMLNode_XPathExtensions.h</string>
@@ -172,7 +172,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML/Tidy</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/Tidy/CTidy.h</string>
@@ -185,7 +185,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/TouchXML.h</string>
@@ -198,7 +198,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML/Creation</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/Creation/CXMLDocument_CreationExtensions.m</string>
@@ -209,7 +209,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML/Creation</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/Creation/CXMLNode_CreationExtensions.m</string>
@@ -220,7 +220,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/CXHTMLDocument.m</string>
@@ -231,7 +231,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/CXMLDocument.m</string>
@@ -242,7 +242,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/CXMLDocument_PrivateExtensions.m</string>
@@ -253,7 +253,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/CXMLElement.m</string>
@@ -264,7 +264,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/CXMLElement_CreationExtensions.m</string>
@@ -275,7 +275,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/CXMLElement_ElementTreeExtensions.m</string>
@@ -286,7 +286,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/CXMLNamespaceNode.m</string>
@@ -297,7 +297,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/CXMLNode.m</string>
@@ -308,7 +308,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/CXMLNode_PrivateExtensions.m</string>
@@ -319,7 +319,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/CXMLNode_XPathExtensions.m</string>
@@ -330,7 +330,7 @@
                 <array>
                     <string>libs</string>
                     <string>lib_touchXML</string>
-                    <string>src</string>
+                    <string>TouchXML/Tidy</string>
                 </array>
                 <key>Path</key>
                 <string>libs/TouchXML/Tidy/CTidy.m</string>

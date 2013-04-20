@@ -47,11 +47,7 @@
 				<!--http://stackoverflow.com/questions/8493261/including-libsqlite3-dylib-in-xcode-4-project-template-->
 				<key>OTHER_LDFLAGS</key>
                 <array>
-                    <string>-lz</string>
-                    <string>-ObjC</string>
 					<string>-lxml2</string>
-					<string>-lsqlite3</string>
-					<string>-llibz</string>
                 </array>
 				
 				<key>FRAMEWORK_SEARCH_PATHS</key>
@@ -59,7 +55,7 @@
                     <string>/usr/lib/libxml2.dylib</string>
                 </array>
 				
-				<key>ALWAYS_SEARCH_USER_PATHS</key>
+				<key>HEADER_SEARCH_PATHS</key>
                 <array>
                     <string>$(SDKROOT)/usr/include/libxml2</string>
                 </array>
