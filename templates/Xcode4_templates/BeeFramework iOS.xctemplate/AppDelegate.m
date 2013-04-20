@@ -9,7 +9,7 @@
 
 #import "Bee.h"
 #import "Bee_Debug.h"
-#import "Bee_UnitTest.h"
+// #import "Bee_UnitTest.h"
 
 #pragma mark -
 
@@ -19,7 +19,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {	
-	[BeeUnitTest runTests];
+	// [BeeUnitTest runTests];
 
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     self.window.backgroundColor = [UIColor whiteColor];

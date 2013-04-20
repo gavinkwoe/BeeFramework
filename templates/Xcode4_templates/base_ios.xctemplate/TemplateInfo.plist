@@ -99,14 +99,14 @@
 			<key>Path</key>
 			<string>Resources/Default-568h@2x.png</string>
 		</dict>
-		<key>Resources/Icon.png</key>
+		<key>Resources/icon.png</key>
 		<dict>
 			<key>Group</key>
 			<string>Resources</string>
 			<key>Path</key>
 			<string>Resources/icon.png</string>
 		</dict>
-		<key>Resources/Icon@2x.png</key>
+		<key>Resources/icon@2x.png</key>
 		<dict>
 			<key>Group</key>
 			<string>Resources</string>

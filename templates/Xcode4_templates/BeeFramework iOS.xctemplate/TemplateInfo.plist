@@ -39,10 +39,19 @@
 		</dict>
 		<key>AppDelegate.h</key>
 		<dict>
+			<key>Group</key>
+			<string>Supporting Files</string>
 			<key>Path</key>
 			<string>AppDelegate.h</string>
 			<key>TargetIndices</key>
 			<array/>
+		</dict>
+		<key>AppDelegate.m</key>
+		<dict>
+			<key>Group</key>
+			<string>Supporting Files</string>
+			<key>Path</key>
+			<string>AppDelegate.m</string>
 		</dict>
 		<key>libsqlite3.0.dylib</key>
         <dict>
@@ -84,7 +93,6 @@
 		<string>main.m</string>
 		<string>AppDelegate.h</string>
 		<string>AppDelegate.m</string>
-		
 		<string>libz.dylib</string>
 		<string>libxml2.dylib</string>
 		<string>libsqlite3.0.dylib</string>
