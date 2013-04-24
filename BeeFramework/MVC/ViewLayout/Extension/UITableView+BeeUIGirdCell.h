@@ -7,7 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+@class BeeUIGridCell;
 
-@interface UITableView_BeeUIGirdCell : NSObject
+@interface UITableViewCell (BeeUIGirdCell)
+@property(nonatomic,retain) BeeUIGridCell *gridCell;
+@end
 
+@interface UITableView (BeeUIGirdCell)
+-(UITableViewCell *) dequeueReusableCellWithBeeUIGirdCellClass:(Class) class;
 @end
