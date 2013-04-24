@@ -345,10 +345,7 @@
 	{
 		return (UIViewController *)nextResponder;
 	}
-	else
-	{
-		return [nextResponder viewController];
-	}
+	return nil;
 }
 
 - (__BeeHintLabel *)__hintLabel
