@@ -39,7 +39,7 @@
     .END_LAYOUT()
     .REBUILD();
 
-	$(@"*").EACH( function( UIView * view ) {
+	$(@"*").EACH( ^( UIView * view ) {
 		view.hintString = view.tagString;
 	});
 }
@@ -119,7 +119,7 @@
 	.END_LAYOUT()
 	.REBUILD();
 
-	$(@"*").EACH( function( UIView * view ) {
+	$(@"*").EACH( ^( UIView * view ) {
 		view.hintString = view.tagString;
 	});
 }

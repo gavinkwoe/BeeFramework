@@ -348,34 +348,16 @@
 
 - (NSString *)MD5
 {
-	NSData * value;
-	
-	value = [NSData dataWithBytes:[self UTF8String] length:[self length]];
-	value = [value MD5];
-
-	if ( value )
-	{
-		char			tmp[16];
-		unsigned char *	hex = (unsigned char *)malloc( 2048 + 1 );
-		unsigned char *	bytes = (unsigned char *)[value bytes];
-		unsigned long	length = [value length];
-		
-		hex[0] = '\0';
-		
-		for ( unsigned long i = 0; i < length; ++i )
-		{
-			sprintf( tmp, "%02X", bytes[i] );
-			strcat( (char *)hex, tmp );
-		}
-		
-		NSString * result = [NSString stringWithUTF8String:(const char *)hex];
-		free( hex );
-		return result;
-	}
-	else
-	{
-		return nil;
-	}
+    const char *cStr = [self UTF8String];
+    unsigned char result[CC_MD5_DIGEST_LENGTH];
+    CC_MD5(cStr, strlen(cStr), result);
+    
+    return [NSString stringWithFormat:@"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
+            result[0], result[1], result[2], result[3],
+            result[4], result[5], result[6], result[7],
+            result[8], result[9], result[10], result[11],
+            result[12], result[13], result[14], result[15]
+            ];
 }
 
 - (NSData *)MD5Data

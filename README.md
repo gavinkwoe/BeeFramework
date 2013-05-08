@@ -3,19 +3,24 @@
 a rapid dev framework for iOS.    
 by geek, for geek.    
 
-###It's possible to develop an iOS app in less than 3 days.
+#####It's possible to develop an iOS app in less than 3 days.
 
+##[Download SDK](http://www.bee-framework.com/download/bee_SDK_0_3_0.zip)
+
+Lastest version: **http://www.bee-framework.com/download/bee_SDK_0_3_0.zip**
+
+![SDK](http://blog.whatsbug.com/wp-content/uploads/2013/04/bee_sdk_1.png)
+![SDK](http://blog.whatsbug.com/wp-content/uploads/2013/04/bee_sdk_2.png)
+![SDK](http://blog.whatsbug.com/wp-content/uploads/2013/04/bee_SDK_3.png)
 
 ##Join us
---------------------
 
-QQ Group:      79054681    
-website:       http://www.bee-framework.com    
-email:         gavinkwoe@gmail.com    
-google groups: https://groups.google.com/d/forum/beeframework?hl=zh-CN
+QQ Group:      **79054681**    
+website:       **http://www.bee-framework.com**    
+email:         **gavinkwoe@gmail.com**    
+google groups: **https://groups.google.com/d/forum/beeframework?hl=zh-CN**
 
 ##v0.3.0 changes
---------------------
 
 1. Fully support for MacOS
 2. Fully support for UI template:    
@@ -155,7 +160,6 @@ google groups: https://groups.google.com/d/forum/beeframework?hl=zh-CN
 
 
 ##v0.2.3 changes
---------------------
 
 1. Refactoring the directory structure, Core and MVC completely separated, and the source files and the extensions completely separated
 2. Refactoring the code structure of BeeDatabase and BeeActiveRecord, more clearly
@@ -205,7 +209,6 @@ google groups: https://groups.google.com/d/forum/beeframework?hl=zh-CN
 5. Fix some bugs (Thanks, I love U all!)
 
 ##v0.2 changes
---------------------
 
 1. BeeDatabase:
 
@@ -270,7 +273,6 @@ google groups: https://groups.google.com/d/forum/beeframework?hl=zh-CN
 5. Move precompile options to 'Bee_Precompile.h'     
 
 ##v0.1 changes
---------------------
 
 1. Add more lessons
 
@@ -286,7 +288,6 @@ google groups: https://groups.google.com/d/forum/beeframework?hl=zh-CN
 
 
 ##Companies are using {bee}
---------------------
 
 A. China Mobile, http://www.chinamobileltd.com/en/global/home.php    
 B. China Unicom, http://www.chinaunicom.com.cn/    
@@ -309,7 +310,6 @@ P. MesonTech, http://www.mesontech.com.cn/home/mesontech.jsp
 
 
 ##Apps are using {bee}
---------------------
 
 1. Sina Finance(新浪财经)    
    https://itunes.apple.com/us/app/xin-lang-cai-jing/id430165157?mt=8
