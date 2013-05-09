@@ -2578,8 +2578,10 @@ static NSUInteger		__identSeed = 1;
 			NSObject * value = va_arg( args, NSObject * );
 			if ( nil == value )
 				break;
-			
-			[array addObject:(NSString *)value];
+			if ([value isKindOfClass:[NSArray class]])
+                [array addObjectsFromArray:(id)value];
+            else
+			    [array addObject:(NSString *)value];
 		}
         va_end( args );
 		return [self whereIn:key values:array];
@@ -2604,7 +2606,10 @@ static NSUInteger		__identSeed = 1;
 			if ( nil == value )
 				break;
 			
-			[array addObject:(NSString *)value];
+			if ([value isKindOfClass:[NSArray class]])
+                [array addObjectsFromArray:(id)value];
+            else
+			    [array addObject:(NSString *)value];
 		}
         va_end( args );
 		return [self orWhereIn:key values:array];
@@ -2629,7 +2634,10 @@ static NSUInteger		__identSeed = 1;
 			if ( nil == value )
 				break;
 			
-			[array addObject:(NSString *)value];
+			if ([value isKindOfClass:[NSArray class]])
+                [array addObjectsFromArray:(id)value];
+            else
+			    [array addObject:(NSString *)value];
 		}
 		va_end( args );
 		return [self whereNotIn:key values:array];
@@ -2654,7 +2662,10 @@ static NSUInteger		__identSeed = 1;
 			if ( nil == value )
 				break;
 			
-			[array addObject:(NSString *)value];
+			if ([value isKindOfClass:[NSArray class]])
+                [array addObjectsFromArray:(id)value];
+            else
+			    [array addObject:(NSString *)value];
 		}
         va_end( args );
 		return [self orWhereNotIn:key values:array];
