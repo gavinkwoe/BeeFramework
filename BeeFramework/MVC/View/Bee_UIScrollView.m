@@ -1365,6 +1365,49 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 		}
 		
 		// TODO: footer loader
+        if ( NO == _footerLoader.hidden && BeeUIPullLoader.STATE_LOADING != _footerLoader.state)
+        {
+            if ( _direction == self.DIRECTION_HORIZONTAL )
+			{
+				CGFloat offset = scrollView.contentOffset.x;
+				CGFloat boundX = (_baseInsets.right + _footerLoader.bounds.size.width);
+				
+				if ( offset > boundX )
+				{
+					if ( BeeUIPullLoader.STATE_PULLING != _footerLoader.state )
+					{
+						[_footerLoader changeState:BeeUIPullLoader.STATE_PULLING animated:YES];
+					}
+				}
+				else if ( offset > scrollView.contentSize.width )
+				{
+					if ( BeeUIPullLoader.STATE_NORMAL != _footerLoader.state )
+					{
+						[_footerLoader changeState:BeeUIPullLoader.STATE_NORMAL animated:YES];
+					}
+				}
+			}
+			else
+			{
+				CGFloat offset = scrollView.contentOffset.y;
+				CGFloat boundY = (_baseInsets.bottom + _footerLoader.bounds.size.height);
+				
+				if ( offset > boundY )
+				{
+					if ( BeeUIPullLoader.STATE_PULLING != _footerLoader.state )
+					{
+						[_footerLoader changeState:BeeUIPullLoader.STATE_PULLING animated:YES];
+					}
+				}
+				else if ( offset > scrollView.contentSize.height )
+				{
+					if ( BeeUIPullLoader.STATE_NORMAL != _footerLoader.state )
+					{
+						[_footerLoader changeState:BeeUIPullLoader.STATE_NORMAL animated:YES];
+					}
+				}
+			}
+        }
 	}
 
 	if ( _shouldNotify )
@@ -1447,6 +1490,64 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 		}
 		
 		// TODO: footer loader
+        if ( NO == _footerLoader.hidden && BeeUIPullLoader.STATE_LOADING != _footerLoader.state)
+        {
+            if ( _direction == self.DIRECTION_HORIZONTAL )
+			{
+				CGFloat offset = scrollView.contentOffset.x;
+				CGFloat boundX = (_baseInsets.right + _footerLoader.bounds.size.width);
+				
+				if ( offset > boundX )
+				{
+					if ( BeeUIPullLoader.STATE_LOADING != _footerLoader.state )
+					{
+						[_footerLoader changeState:BeeUIPullLoader.STATE_LOADING animated:YES];
+                        
+                        [self sendUISignal:self.FOOTER_REFRESH];
+					}
+				}
+				else if ( offset > scrollView.contentSize.width )
+				{
+					if ( BeeUIPullLoader.STATE_NORMAL != _footerLoader.state )
+					{
+						[_footerLoader changeState:BeeUIPullLoader.STATE_NORMAL animated:YES];
+					}
+				}
+			}
+			else
+			{
+				CGFloat offset = scrollView.contentOffset.y;
+				CGFloat boundY = (_baseInsets.bottom + _footerLoader.bounds.size.height);
+				
+				if ( offset > boundY )
+				{
+					if ( BeeUIPullLoader.STATE_LOADING != _footerLoader.state )
+					{
+						[_footerLoader changeState:BeeUIPullLoader.STATE_LOADING animated:YES];
+                        
+                        [self sendUISignal:self.FOOTER_REFRESH];
+					}
+				}
+				else if ( offset > scrollView.contentSize.height )
+				{
+					if ( BeeUIPullLoader.STATE_NORMAL != _footerLoader.state )
+					{
+						[_footerLoader changeState:BeeUIPullLoader.STATE_NORMAL animated:YES];
+					}
+				}
+			}
+            
+            [UIView beginAnimations:nil context:NULL];
+			[UIView setAnimationDuration:0.3f];
+			[UIView setAnimationBeginsFromCurrentState:YES];
+			
+			CC( @"pulled" );
+			
+			[self syncPullPositions];
+			[self syncPullInsets];
+            
+			[UIView commitAnimations];
+        }
 	}
 
 	if ( _shouldNotify )
