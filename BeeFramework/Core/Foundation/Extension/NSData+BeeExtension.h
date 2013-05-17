@@ -41,4 +41,11 @@
 @property (nonatomic, readonly) NSData *	MD5;
 @property (nonatomic, readonly) NSString *	MD5String;
 
+//base 64 support
+@property (nonatomic, readonly) NSData *    Base64Encode;
+@property (nonatomic, readonly) NSString *  Base64EncodeString;
+
+@property (nonatomic, readonly) NSData *    Base64Decode;
+@property (nonatomic, readonly) NSString *  Base64DecodeString;
+
 @end
