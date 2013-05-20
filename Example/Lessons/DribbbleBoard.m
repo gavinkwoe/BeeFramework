@@ -166,7 +166,7 @@
 	if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
 	{
 		[self showNavigationBarAnimated:NO];
-		[self showPullLoader:YES animated:NO];
+    [self showPullLoader:YES animated:YES];//显示下拉时最上面的信息
 		
 		self.pullLoader.arrow.image = [UIImage imageNamed:@"bug.png"];
 
