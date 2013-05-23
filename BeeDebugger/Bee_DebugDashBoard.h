@@ -100,7 +100,7 @@
 	BeeDebugNetworkView *	_networkView;
 }
 
-AS_SINGLETON( BeeDebugDashBoard )
+AS_SINGLETON
 
 @end
 

@@ -44,7 +44,7 @@
 	BOOL			_pause;
 }
 
-AS_SINGLETON(BeeMessageQueue)
+AS_SINGLETON;
 
 @property (nonatomic, copy) BeeMessageBlock	whenCreate;
 @property (nonatomic, copy) BeeMessageBlock	whenUpdate;

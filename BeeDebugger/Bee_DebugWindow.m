@@ -47,7 +47,7 @@
 
 @implementation BeeDebugShortcut
 
-DEF_SINGLETON( BeeDebugShortcut )
+DEF_SINGLETON
 
 DEF_SIGNAL( TOGGLE_HEATMAP )
 DEF_SIGNAL( TOGGLE_DEBUGGER )
@@ -124,7 +124,7 @@ DEF_SIGNAL( TOGGLE_DEBUGGER )
 	UIView * _bottomView;
 }
 
-AS_SINGLETON( BeeDebugBoard );
+AS_SINGLETON;
 
 @end
 
@@ -132,7 +132,7 @@ AS_SINGLETON( BeeDebugBoard );
 
 @implementation BeeDebugBoard
 
-DEF_SINGLETON( BeeDebugBoard );
+DEF_SINGLETON;
 
 - (void)load
 {
@@ -256,7 +256,7 @@ DEF_SINGLETON( BeeDebugBoard );
 
 @implementation BeeDebugWindow
 
-DEF_SINGLETON( BeeDebugWindow )
+DEF_SINGLETON
 
 - (id)init
 {
@@ -307,7 +307,7 @@ DEF_SINGLETON( BeeDebugWindow )
 
 @implementation BeeDebugHeatmap
 
-DEF_SINGLETON( BeeDebugHeatmap )
+DEF_SINGLETON
 
 - (id)init
 {

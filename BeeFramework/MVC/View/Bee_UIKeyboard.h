@@ -52,7 +52,7 @@
 	UIViewAnimationCurve	_animationCurve;
 }
 
-AS_SINGLETON( BeeUIKeyboard )
+AS_SINGLETON
 
 AS_NOTIFICATION( SHOWN )			// 键盘弹出
 AS_NOTIFICATION( HIDDEN )			// 键盘收起

@@ -50,7 +50,7 @@
 
 @implementation BeeImageCache
 
-DEF_SINGLETON( BeeImageCache );
+DEF_SINGLETON;
 
 - (id)init
 {

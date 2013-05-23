@@ -44,7 +44,7 @@
 	NSString *	_logPath;
 }
 
-AS_SINGLETON( BeeDebugCrashReporter );
+AS_SINGLETON;
 
 @property (nonatomic, assign) BOOL			installed;
 @property (nonatomic, retain) NSString *	logPath;

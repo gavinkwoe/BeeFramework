@@ -197,7 +197,7 @@
 
 @implementation BeeDebugNetworkBoard
 
-DEF_SINGLETON( BeeDebugNetworkBoard )
+DEF_SINGLETON
 
 - (void)handleUISignal:(BeeUISignal *)signal
 {

@@ -51,7 +51,7 @@
 	dispatch_queue_t _backQueue;
 }
 
-AS_SINGLETON( BeeTaskQueue );
+AS_SINGLETON;
 
 - (dispatch_queue_t)foreQueue;
 - (dispatch_queue_t)backQueue;

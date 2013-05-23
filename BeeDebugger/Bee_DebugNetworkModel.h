@@ -86,7 +86,7 @@
 @property (nonatomic, readonly) NSMutableArray *	history;
 @property (nonatomic, readonly) NSUInteger			bandWidth;
 
-AS_SINGLETON( BeeDebugNetworkModel )
+AS_SINGLETON
 
 - (void)changeBandWidth:(NSUInteger)bw;
 

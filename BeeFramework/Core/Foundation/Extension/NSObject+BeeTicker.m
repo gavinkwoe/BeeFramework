@@ -47,7 +47,7 @@
 @property (nonatomic, readonly)	NSTimer *			timer;
 @property (nonatomic, readonly)	NSTimeInterval		lastTick;
 
-AS_SINGLETON( BeeTicker )
+AS_SINGLETON
 
 - (void)addReceive:(NSObject *)obj;
 - (void)removeReceive:(NSObject *)obj;
@@ -63,7 +63,7 @@ AS_SINGLETON( BeeTicker )
 @synthesize timer = _timer;
 @synthesize lastTick = _lastTick;
 
-DEF_SINGLETON( BeeTicker )
+DEF_SINGLETON
 
 - (id)init
 {

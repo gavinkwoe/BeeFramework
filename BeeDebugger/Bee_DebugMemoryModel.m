@@ -54,7 +54,7 @@
 @synthesize upperBound = _upperBound;
 @synthesize warningMode = _warningMode;
 
-DEF_SINGLETON( BeeDebugMemoryModel )
+DEF_SINGLETON
 
 - (void)load
 {

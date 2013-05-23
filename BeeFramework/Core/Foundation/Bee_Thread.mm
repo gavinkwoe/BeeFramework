@@ -37,7 +37,7 @@
 
 @implementation BeeTaskQueue
 
-DEF_SINGLETON( BeeTaskQueue )
+DEF_SINGLETON
 
 - (id)init
 {

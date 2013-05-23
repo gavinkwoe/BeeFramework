@@ -43,7 +43,7 @@
 
 @implementation BeeUIKeyboard
 
-DEF_SINGLETON( BeeUIKeyboard )
+DEF_SINGLETON
 
 DEF_NOTIFICATION( SHOWN );
 DEF_NOTIFICATION( HIDDEN );

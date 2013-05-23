@@ -61,7 +61,7 @@
 #pragma mark -
 
 @interface BeeDebugViewBoard : BeeUITableBoard
-AS_SINGLETON( BeeDebugViewBoard )
+AS_SINGLETON
 @end
 
 #endif	// #if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__

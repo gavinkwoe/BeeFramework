@@ -179,7 +179,7 @@
 
 @implementation BeeUITipsCenter
 
-DEF_SINGLETON( BeeUITipsCenter )
+DEF_SINGLETON
 
 @synthesize defaultContainerView = _defaultContainerView;
 

@@ -48,7 +48,7 @@ static NSMutableArray * __subControllers = nil;
 @synthesize prefix = _prefix;
 @synthesize mapping = _mapping;
 
-DEF_SINGLETON( BeeController );
+DEF_SINGLETON;
 
 + (NSString *)MESSAGE
 {

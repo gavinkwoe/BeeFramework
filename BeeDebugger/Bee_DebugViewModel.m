@@ -47,7 +47,7 @@
 @synthesize upperBound = _upperBound;
 @synthesize chartDatas = _chartDatas;
 
-DEF_SINGLETON( BeeDebugViewModel )
+DEF_SINGLETON
 
 - (void)load
 {
