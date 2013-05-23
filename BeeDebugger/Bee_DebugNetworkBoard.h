@@ -59,7 +59,7 @@
 #pragma mark -
 
 @interface BeeDebugNetworkBoard : BeeUITableBoard
-AS_SINGLETON( BeeDebugNetworkBoard )
+AS_SINGLETON
 @end
 
 #endif	// #if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__

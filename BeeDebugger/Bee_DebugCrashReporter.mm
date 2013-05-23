@@ -76,7 +76,7 @@
 @synthesize installed = _installed;
 @synthesize logPath = _logPath;
 
-DEF_SINGLETON( BeeDebugCrashReporter )
+DEF_SINGLETON
 
 static void signalHandler( int signal )
 {

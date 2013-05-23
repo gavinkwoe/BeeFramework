@@ -321,7 +321,7 @@
 
 @implementation BeeDebugViewBoard
 
-DEF_SINGLETON( BeeDebugViewBoard )
+DEF_SINGLETON
 
 - (void)load
 {

@@ -243,7 +243,7 @@ static void (* _origSendEvent)( id, SEL, UIEvent * );
 @synthesize heatmapTap = _heatmapTap;
 @synthesize heatmapDrag = _heatmapDrag;
 
-DEF_SINGLETON( BeeDebugHeatmapModel )
+DEF_SINGLETON
 
 - (void)load
 {

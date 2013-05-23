@@ -58,7 +58,7 @@
 @synthesize history = _history;
 @synthesize bandWidth = _bandWidth;
 
-DEF_SINGLETON( BeeDebugNetworkModel )
+DEF_SINGLETON
 
 - (void)load
 {

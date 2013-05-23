@@ -36,11 +36,11 @@
 #if defined(__BEE_UNITTEST__) && __BEE_UNITTEST__
 
 @interface SingletonTest : NSObject
-AS_SINGLETON( SingletonTest )
+AS_SINGLETON
 @end
 
 @implementation SingletonTest
-DEF_SINGLETON( SingletonTest )
+DEF_SINGLETON
 @end
 
 #pragma mark -

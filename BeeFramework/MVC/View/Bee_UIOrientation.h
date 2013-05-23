@@ -45,7 +45,7 @@
 	// TODO: 显示方向指示器
 }
 
-AS_SINGLETON( BeeUIOrientation );
+AS_SINGLETON;
 
 AS_NOTIFICATION( ANGLE_CHANGED );		// 设备角度改变
 AS_NOTIFICATION( DIRECTION_CHANGED );	// 设备方向改变

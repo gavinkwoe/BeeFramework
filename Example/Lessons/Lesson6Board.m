@@ -69,7 +69,7 @@
 
 @implementation Lesson6Board
 
-DEF_SINGLETON( Lesson6Board );
+DEF_SINGLETON;
 
 - (void)load
 {

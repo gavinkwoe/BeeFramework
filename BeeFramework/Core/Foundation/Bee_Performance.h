@@ -92,7 +92,7 @@
 	NSMutableDictionary *	_tags;
 }
 
-AS_SINGLETON( BeePerformance );
+AS_SINGLETON;
 
 @property (nonatomic, readonly) NSMutableDictionary *	records;
 @property (nonatomic, retain) NSMutableDictionary *		tags;
