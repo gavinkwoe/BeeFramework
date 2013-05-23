@@ -63,7 +63,7 @@
 @property (nonatomic, readonly) NSUInteger			upperBound;
 @property (nonatomic, readonly) BOOL				warningMode;
 
-AS_SINGLETON( BeeDebugMemoryModel )
+AS_SINGLETON
 
 - (void)allocAll;
 - (void)freeAll;

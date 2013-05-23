@@ -54,7 +54,7 @@
 @property (nonatomic, readonly) NSUInteger				upperBound;
 @property (nonatomic, readonly) NSMutableDictionary *	chartDatas;
 
-AS_SINGLETON( BeeDebugViewModel )
+AS_SINGLETON
 
 - (NSArray *)plotsForBoard:(BeeUIBoard *)board;
 

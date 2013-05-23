@@ -38,7 +38,7 @@
 #pragma mark -
 
 @interface BeeDebugShortcut : UIWindow
-AS_SINGLETON( BeeDebugShortcut )
+AS_SINGLETON
 AS_SIGNAL( TOGGLE_HEATMAP )
 AS_SIGNAL( TOGGLE_DEBUGGER )
 @end
@@ -46,13 +46,13 @@ AS_SIGNAL( TOGGLE_DEBUGGER )
 #pragma mark -
 
 @interface BeeDebugWindow : UIWindow
-AS_SINGLETON( BeeDebugWindow )
+AS_SINGLETON
 @end
 
 #pragma mark -
 
 @interface BeeDebugHeatmap : UIWindow
-AS_SINGLETON( BeeDebugHeatmap )
+AS_SINGLETON
 @end
 
 #endif	// #if defined(__BEE_DEBUGGER__) && __BEE_DEBUGGER__

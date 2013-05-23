@@ -77,7 +77,7 @@ AS_SIGNAL( DELETE_ALL )
 	BeeDebugToolCell *	_toolCell;
 }
 
-AS_SINGLETON( BeeDebugSandboxBoard )
+AS_SINGLETON
 
 AS_SIGNAL( CONFIRM_DELETE_ALL )
 

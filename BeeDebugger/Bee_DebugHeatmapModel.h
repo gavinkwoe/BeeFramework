@@ -54,7 +54,7 @@
 @property (nonatomic, readonly) NSUInteger *		heatmapTap;
 @property (nonatomic, readonly) NSUInteger *		heatmapDrag;
 
-AS_SINGLETON( BeeDebugHeatmapModel )
+AS_SINGLETON
 
 - (void)recordTapAtLocation:(CGPoint)location;
 - (void)recordDragAtLocation:(CGPoint)location;

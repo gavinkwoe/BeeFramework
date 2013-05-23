@@ -243,7 +243,7 @@ DEF_SIGNAL( DELETE_ALL )
 
 @implementation BeeDebugSandboxBoard
 
-DEF_SINGLETON( BeeDebugSandboxBoard )
+DEF_SINGLETON
 
 DEF_SIGNAL( CONFIRM_DELETE_ALL )
 

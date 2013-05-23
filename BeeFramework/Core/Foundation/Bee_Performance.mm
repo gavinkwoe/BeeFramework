@@ -38,7 +38,7 @@
 
 @implementation BeePerformance
 
-DEF_SINGLETON( BeePerformance );
+DEF_SINGLETON;
 
 @synthesize records = _records;
 @synthesize tags = _tags;

@@ -57,7 +57,7 @@
 @synthesize cachePath = _cachePath;
 @synthesize cacheUser = _cacheUser;
 
-DEF_SINGLETON( BeeFileCache );
+DEF_SINGLETON;
 
 - (id)init
 {
@@ -198,7 +198,7 @@ DEF_SINGLETON( BeeFileCache );
 @synthesize cacheKeys = _cacheKeys;
 @synthesize cacheObjs = _cacheObjs;
 
-DEF_SINGLETON( BeeMemoryCache );
+DEF_SINGLETON;
 
 - (id)init
 {

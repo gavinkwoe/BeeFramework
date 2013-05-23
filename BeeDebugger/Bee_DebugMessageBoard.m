@@ -242,7 +242,7 @@
 
 @implementation BeeDebugMessageBoard
 
-DEF_SINGLETON( BeeDebugMessageBoard )
+DEF_SINGLETON
 
 - (void)handleUISignal:(BeeUISignal *)signal
 {

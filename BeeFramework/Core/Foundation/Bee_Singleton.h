@@ -33,15 +33,15 @@
 #import "Bee_Precompile.h"
 
 #undef	AS_SINGLETON
-#define AS_SINGLETON( __class ) \
-		+ (__class *)sharedInstance;
+#define AS_SINGLETON \
+		+ (instancetype)sharedInstance;
 
 #undef	DEF_SINGLETON
-#define DEF_SINGLETON( __class ) \
-		+ (__class *)sharedInstance \
+#define DEF_SINGLETON \
+		+ (instancetype)sharedInstance \
 		{ \
 			static dispatch_once_t once; \
-			static __class * __singleton__; \
-			dispatch_once( &once, ^{ __singleton__ = [[__class alloc] init]; } ); \
+			static id __singleton__; \
+			dispatch_once( &once, ^{ __singleton__ = [[self alloc] init]; } ); \
 			return __singleton__; \
 		}
