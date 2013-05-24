@@ -79,7 +79,51 @@
 
 + (NSDate *)dateWithString:(NSString *)string
 {
-	return nil;
+    NSDateFormatter * dateformatter = [[NSDateFormatter alloc] init];
+    [dateformatter setTimeZone:[NSTimeZone localTimeZone]];
+    //    [dateformatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+    NSDate * date = nil;
+    NSString * regDateAndTimeString = @"^(\\d{4})([/-])(\\d{2})([/-])(\\d{2}) (\\d{2}):(\\d{2})(:)(\\d{2})$";
+    NSString * regDateString = @"(\\d{4})([/-])(\\d{2})([/-])(\\d{2})";
+    NSString * regTimeString = @"(\\d{2}):(\\d{2})(:)(\\d{2})";
+    //date and time
+    NSRegularExpression * reg = [NSRegularExpression regularExpressionWithPattern:regDateAndTimeString
+                                                                          options:NSRegularExpressionCaseInsensitive
+                                                                            error:nil];
+    if ([reg numberOfMatchesInString:string
+                             options:NSMatchingReportProgress
+                               range:NSMakeRange(0, string.length)] > 0)
+    {
+        [dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    }
+    
+    //date
+    reg = [NSRegularExpression regularExpressionWithPattern:regDateString
+                                                    options:NSRegularExpressionCaseInsensitive
+                                                      error:nil];
+    if ([reg numberOfMatchesInString:string
+                             options:NSMatchingReportProgress
+                               range:NSMakeRange(0, string.length)] > 0)
+    {
+        [dateformatter setDateFormat:@"yyyy-MM-dd"];
+    }
+    
+    //time
+    reg = [NSRegularExpression regularExpressionWithPattern:regTimeString
+                                                    options:NSRegularExpressionCaseInsensitive
+                                                      error:nil];
+    if ([reg numberOfMatchesInString:string
+                             options:NSMatchingReportProgress
+                               range:NSMakeRange(0, string.length)] > 0)
+    {
+        [dateformatter setDateFormat:@"HH:mm:ss"];
+    }
+    date = [dateformatter dateFromString:string];
+    SAFE_RELEASE( dateformatter );
+    
+    return date;
+
+//	return nil;
 }
 
 @end

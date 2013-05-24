@@ -39,6 +39,13 @@
 
 - (NSString *)stringWithDateFormat:(NSString *)format;
 + (NSUInteger)timeStamp;
+
+//support
+//
+//1:yyyy-MM-dd HH:mm:ss or yyyy/MM/dd HH:mm:ss
+//2:yyyy-MM-dd
+//3:HH:mm:ss
+//
 + (NSDate *)dateWithString:(NSString *)string;
 
 @end
