@@ -45,7 +45,9 @@ DEF_SINGLETON( BeeTaskQueue )
 	if ( self )
 	{
 		_foreQueue = dispatch_get_main_queue();
-		_backQueue = dispatch_queue_create( "com.Bee.taskQueue", nil );     // 后台的queue为什么要用串行queue，并发queue不行吗？
+		_backQueue = dispatch_queue_create( "com.Bee.taskQueue", nil );
+        // 后台的queue为什么要用串行queue，并发queue不行吗？
+        // 要是有前后依赖的两个 block 分发到同一个串行 queue 中会产生死锁
 	}
 	
 	return self;

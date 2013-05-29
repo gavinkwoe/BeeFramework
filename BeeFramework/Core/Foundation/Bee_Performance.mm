@@ -58,10 +58,10 @@ DEF_SINGLETON( BeePerformance );
 {
     // 直接调用 release 会比现在的性能差吗？
     // 为什么采用这种形式 ？
-	[_tags removeAllObjects];
+//	[_tags removeAllObjects];
 	[_tags release];
 	
-	[_records removeAllObjects];
+//	[_records removeAllObjects];
 	[_records release];
 
 	[super dealloc];

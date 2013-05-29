@@ -67,6 +67,7 @@
 
 - (NSArray *)head:(NSUInteger)count
 {
+    /*
 	if ( [self count] < count )
 	{
 		return self;
@@ -81,7 +82,18 @@
 				break;
 		}
 		return tempFeeds;
-	}
+	}*/
+    
+    // 不检查范围会报 NSRangeException 异常的！
+    if (self.count < count)
+    {
+        return self;
+    }
+    else
+    {
+        NSRange subRange = NSMakeRange(0, count);
+        return [self subarrayWithRange:subRange];
+    }
 }
 
 - (NSArray *)tail:(NSUInteger)count
@@ -103,9 +115,18 @@
 //	}
 
 // thansk @lancy, changed: NSArray tail: count
-
-	NSRange range = NSMakeRange( self.count - count, count );
-	return [self subarrayWithRange:range];      // 不检查范围会报 NSRangeException 异常的！
+    
+    NSInteger _count;
+    _count = (count > self.count) ? self.count : count;
+    if ( _count )
+    {
+        NSRange range = NSMakeRange( self.count - count, count );
+        return [self subarrayWithRange:range];      // 不检查范围会报 NSRangeException 异常的！
+    }
+	else
+    {
+        return self;
+    }
 }
 
 - (id)safeObjectAtIndex:(NSUInteger)index

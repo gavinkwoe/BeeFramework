@@ -139,11 +139,9 @@
 #else
 	
 	// thanks @lancy, changed: use native keyPath
-	
 	NSString *	keyPath = [path stringByReplacingOccurrencesOfString:separator withString:@"."];
 	NSRange		range = NSMakeRange( 0, 1 );
-
-    // 多余！keypath 会做验证的！
+    
 	if ( [[keyPath substringWithRange:range] isEqualToString:@"."] )
 	{
 		keyPath = [keyPath substringFromIndex:1];
@@ -177,10 +175,14 @@
 - (BOOL)boolAtPath:(NSString *)path otherwise:(BOOL)other
 {
 	NSObject * obj = [self objectAtPath:path];  // 找不到会返回 nil
-	if ( [obj isKindOfClass:[NSNull class]] )   // NSNull 是对象，nil不是对象是int
+	/*
+    if ( [obj isKindOfClass:[NSNull class]] )   // NSNull 是对象，nil不是对象是int
 	{
 		return NO;
-	}
+	}*/
+    if ( !obj ) {
+        return NO;
+    }
 	else if ( [obj isKindOfClass:[NSNumber class]] )
 	{
 		return [(NSNumber *)obj intValue] ? YES : NO;
@@ -208,10 +210,14 @@
 - (NSNumber *)numberAtPath:(NSString *)path
 {
 	NSObject * obj = [self objectAtPath:path];
+    /*
 	if ( [obj isKindOfClass:[NSNull class]] )  // NSNull 是对象， nil不是对象是int
 	{
 		return nil;
-	}
+	}*/
+    if ( !obj ) {
+        return nil;
+    }
 	else if ( [obj isKindOfClass:[NSNumber class]] )
 	{
 		return (NSNumber *)obj;
@@ -410,7 +416,7 @@
 {
 	if ( 0 == [path length] )
 		return NO;
-	
+	/*
 	if ( nil == separator )
 	{
 		path = [path stringByReplacingOccurrencesOfString:@"." withString:@"/"];
@@ -459,7 +465,15 @@
 	}
 
 	[upperDict setObject:obj forKey:subPath];
-	return YES;
+	return YES;*/
+    
+    // separator, Default: "."
+    if ( separator ) {
+        [path stringByReplacingOccurrencesOfString:separator withString:@"."];
+    }
+    
+    [self setValue:obj forKeyPath:path];
+    return YES;
 }
 
 - (BOOL)setKeyValues:(id)first, ...

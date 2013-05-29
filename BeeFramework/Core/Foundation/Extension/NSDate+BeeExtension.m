@@ -76,8 +76,11 @@
     // time 为double类型， 字面量1000.0f为float型
     // 两者相乘会把 1000.0f 转换为 double 类型
     // 建议把 1000.0f 替换为 1000.0
+    /*
 	NSTimeInterval time = [NSDate timeIntervalSinceReferenceDate];
-	return (NSUInteger)(time * 1000.0f);
+	return (NSUInteger)(time * 1000.0f);*/
+    NSTimeInterval time = [NSDate timeIntervalSinceReferenceDate];
+	return (NSUInteger)(time * 1000.0);
 }
 
 + (NSDate *)dateWithString:(NSString *)string
