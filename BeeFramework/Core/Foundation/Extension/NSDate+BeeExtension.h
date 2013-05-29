@@ -39,6 +39,6 @@
 
 - (NSString *)stringWithDateFormat:(NSString *)format;
 + (NSUInteger)timeStamp;
-+ (NSDate *)dateWithString:(NSString *)string;
++ (NSDate *)dateWithString:(NSString *)string;  // 暂未实现
 
 @end

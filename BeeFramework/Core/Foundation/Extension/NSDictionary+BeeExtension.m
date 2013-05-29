@@ -113,7 +113,7 @@
 	NSObject * result = nil;
 	NSDictionary * dict = self;
 	
-	for ( NSString * subPath in array )
+	for ( NSString * subPath in array )     // 顺序无关的？
 	{
 		if ( 0 == [subPath length] )
 			continue;
@@ -143,13 +143,16 @@
 	NSString *	keyPath = [path stringByReplacingOccurrencesOfString:separator withString:@"."];
 	NSRange		range = NSMakeRange( 0, 1 );
 
+    // 多余！keypath 会做验证的！
 	if ( [[keyPath substringWithRange:range] isEqualToString:@"."] )
 	{
 		keyPath = [keyPath substringFromIndex:1];
 	}
 
-	NSObject * result = [self valueForKeyPath:keyPath];
-	return (result == [NSNull null]) ? nil : result;
+	NSObject * result = [self valueForKeyPath:keyPath]; // 找不到结果会返回 nil
+//	return (result == [NSNull null]) ? nil : result;
+    return result;
+    
 	
 #endif
 }
@@ -173,8 +176,8 @@
 
 - (BOOL)boolAtPath:(NSString *)path otherwise:(BOOL)other
 {
-	NSObject * obj = [self objectAtPath:path];
-	if ( [obj isKindOfClass:[NSNull class]] )
+	NSObject * obj = [self objectAtPath:path];  // 找不到会返回 nil
+	if ( [obj isKindOfClass:[NSNull class]] )   // NSNull 是对象，nil不是对象是int
 	{
 		return NO;
 	}
@@ -193,10 +196,10 @@
 			// YES/Yes/yes/TRUE/Ture/true/1
 			return YES;
 		}
-		else
-		{
-			return NO;
-		}
+        else
+        {
+            return NO;
+        }
 	}
 
 	return other;
@@ -205,7 +208,7 @@
 - (NSNumber *)numberAtPath:(NSString *)path
 {
 	NSObject * obj = [self objectAtPath:path];
-	if ( [obj isKindOfClass:[NSNull class]] )
+	if ( [obj isKindOfClass:[NSNull class]] )  // NSNull 是对象， nil不是对象是int
 	{
 		return nil;
 	}
@@ -414,6 +417,7 @@
 		separator = @"/";
 	}
 	
+    // 可以使用 keypath 代替以下内容
 	NSArray * array = [path componentsSeparatedByString:separator]; 
 	if ( 0 == [array count] )
 	{

@@ -56,6 +56,8 @@ DEF_SINGLETON( BeePerformance );
 
 - (void)dealloc
 {
+    // 直接调用 release 会比现在的性能差吗？
+    // 为什么采用这种形式 ？
 	[_tags removeAllObjects];
 	[_tags release];
 	
@@ -104,6 +106,7 @@ DEF_SINGLETON( BeePerformance );
 	return time;
 }
 
+// 做什么的？
 + (void)watchClass:(Class)clazz
 {
 	[self watchClass:clazz andSelector:nil];

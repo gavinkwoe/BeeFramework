@@ -65,8 +65,8 @@ typedef NSArray *	(^NSMutableArrayAppendBlock)( id obj );
 - (NSMutableArray *)popHead;
 - (NSMutableArray *)popHeadN:(NSUInteger)n;
 
-- (NSMutableArray *)keepHead:(NSUInteger)n;
-- (NSMutableArray *)keepTail:(NSUInteger)n;
+- (NSMutableArray *)keepHead:(NSUInteger)n; // and remove the others
+- (NSMutableArray *)keepTail:(NSUInteger)n; // see upon
 
 - (void)insertObjectNoRetain:(id)anObject atIndex:(NSUInteger)index;
 - (void)addObjectNoRetain:(NSObject *)obj;

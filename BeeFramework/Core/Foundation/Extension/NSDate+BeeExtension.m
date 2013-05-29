@@ -55,7 +55,7 @@
 - (NSString *)stringWithDateFormat:(NSString *)format
 {
 #if 0
-	
+	// Convert NSNumber to NSDate
 	NSTimeInterval time = [self timeIntervalSince1970];
 	NSUInteger timeUint = (NSUInteger)time;
 	return [[NSNumber numberWithUnsignedInteger:timeUint] stringWithDateFormat:format];
@@ -73,6 +73,9 @@
 
 + (NSUInteger)timeStamp
 {
+    // time 为double类型， 字面量1000.0f为float型
+    // 两者相乘会把 1000.0f 转换为 double 类型
+    // 建议把 1000.0f 替换为 1000.0
 	NSTimeInterval time = [NSDate timeIntervalSinceReferenceDate];
 	return (NSUInteger)(time * 1000.0f);
 }
