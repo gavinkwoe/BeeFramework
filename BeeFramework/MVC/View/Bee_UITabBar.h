@@ -64,7 +64,9 @@ AS_SIGNAL( HIGHLIGHT_CHANGED )	// 高亮改变
 - (void)addTitle:(NSString *)title image:(UIImage *)image;
 - (void)addTitle:(NSString *)title image:(UIImage *)image tag:(NSInteger)tag;
 - (void)addTitle:(NSString *)title image:(UIImage *)image tag:(NSInteger)tag signal:(NSString *)signal;
-
+    //zhouxl 取消item的徽章  设置item的徽章，在tabbar加载完成显示出来时设置
+- (void)clearBadgeValueOnIndex:(NSInteger)index;
+- (void)setBadgeValue:(NSInteger)value onIndex:(NSInteger)index;
 @end
 
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
