@@ -24,6 +24,10 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		08528001175B091800B60F98 /* NSFileManager+BeeExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = 08527FFF175B091800B60F98 /* NSFileManager+BeeExtension.h */; };
+		08528002175B091800B60F98 /* NSFileManager+BeeExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 08528000175B091800B60F98 /* NSFileManager+BeeExtension.m */; };
+		08528003175B092B00B60F98 /* NSFileManager+BeeExtension.m in CopyFiles */ = {isa = PBXBuildFile; fileRef = 08528000175B091800B60F98 /* NSFileManager+BeeExtension.m */; };
+		08528004175B092D00B60F98 /* NSFileManager+BeeExtension.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 08527FFF175B091800B60F98 /* NSFileManager+BeeExtension.h */; };
 		08E0114017552682002E89EA /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 08E0113F17552682002E89EA /* libsqlite3.dylib */; };
 		635881FA16535ADD00C700F5 /* StaticLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 635881F916535ADD00C700F5 /* StaticLibrary.m */; };
 		6358820C16535B4600C700F5 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6358820016535B4600C700F5 /* libz.dylib */; };
@@ -1112,12 +1116,16 @@
 				63BA05761717F36500CBC625 /* TouchXML.h in CopyFiles */,
 				63BA05791717F39600CBC625 /* libxml2.dylib in CopyFiles */,
 				63BA057C1717F39E00CBC625 /* libsqlite3.dylib in CopyFiles */,
+				08528003175B092B00B60F98 /* NSFileManager+BeeExtension.m in CopyFiles */,
+				08528004175B092D00B60F98 /* NSFileManager+BeeExtension.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		08527FFF175B091800B60F98 /* NSFileManager+BeeExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+BeeExtension.h"; sourceTree = "<group>"; };
+		08528000175B091800B60F98 /* NSFileManager+BeeExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+BeeExtension.m"; sourceTree = "<group>"; };
 		08E0113F17552682002E89EA /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		635881F016535ADD00C700F5 /* libBee.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libBee.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		635881F716535ADD00C700F5 /* StaticLibrary-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "StaticLibrary-Prefix.pch"; sourceTree = "<group>"; };
@@ -1728,6 +1736,8 @@
 				63BA01B91717F35200CBC625 /* NSObject+BeeTypeConversion.m */,
 				63BA01BA1717F35200CBC625 /* NSString+BeeExtension.h */,
 				63BA01BB1717F35200CBC625 /* NSString+BeeExtension.m */,
+				08527FFF175B091800B60F98 /* NSFileManager+BeeExtension.h */,
+				08528000175B091800B60F98 /* NSFileManager+BeeExtension.m */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -2421,6 +2431,7 @@
 				63BA056D1717F36500CBC625 /* CXMLNode_XPathExtensions.h in Headers */,
 				63BA05711717F36500CBC625 /* CTidy.h in Headers */,
 				63BA05751717F36500CBC625 /* TouchXML.h in Headers */,
+				08528001175B091800B60F98 /* NSFileManager+BeeExtension.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2700,6 +2711,7 @@
 				63BA056B1717F36500CBC625 /* CXMLNode_PrivateExtensions.m in Sources */,
 				63BA056F1717F36500CBC625 /* CXMLNode_XPathExtensions.m in Sources */,
 				63BA05731717F36500CBC625 /* CTidy.m in Sources */,
+				08528002175B091800B60F98 /* NSFileManager+BeeExtension.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
