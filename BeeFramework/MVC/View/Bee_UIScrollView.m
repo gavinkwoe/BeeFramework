@@ -879,7 +879,26 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 - (void)calcPositions
 {
 	if ( 0 == _total )
-		return;
+	{
+        //The contentSize must be larger than the scrollview's frame for there to be anything to scroll. :)
+        if ( BeeUIScrollView.DIRECTION_HORIZONTAL == _direction )
+        {
+            if (_headerLoader || _footerLoader)
+            {
+                self.contentSize = CGSizeMake(self.bounds.size.width + PULL_LOADER_SIZE, self.height);
+            }
+            
+        }
+        else
+        {
+            if (_headerLoader || _footerLoader)
+            {
+                self.contentSize = CGSizeMake(self.width, self.bounds.size.height + PULL_LOADER_SIZE);
+            }
+        }
+        
+        return;
+    }
 	
 	CGRect bounds = self.bounds;
 	CGFloat itemPixels = 0.0f;
@@ -1101,11 +1120,11 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 		
 		if ( _direction == self.DIRECTION_HORIZONTAL )
 		{
-			_headerLoader.transform = CGAffineTransformMakeRotation( M_PI / 2.0f * 3.0f );
+			_footerLoader.transform = CGAffineTransformMakeRotation( M_PI / 2.0f * 3.0f );
 		}
 		else
 		{
-			_headerLoader.transform = CGAffineTransformMakeRotation( M_PI );
+			_footerLoader.transform = CGAffineTransformMakeRotation( M_PI );
 		}
 
 		[self addSubview:_footerLoader];
