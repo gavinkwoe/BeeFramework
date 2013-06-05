@@ -84,3 +84,17 @@ typedef NSString *	(^NSStringAppendBlock)( id format, ... );
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 
 @end
+
+
+@interface NSString(CommonRegularCheck)
+
+- (BOOL) isEmail;                   //邮箱
+- (BOOL) isUrl;                     //url地址
+- (BOOL) isChinaPhone;              //家庭电话
+- (BOOL) isChinaMobile;             //手机号码
+- (BOOL) isQQNumber;                //QQ号码
+- (BOOL) isChinaZipCode;            //邮编
+- (BOOL) isIPAddress;               //ID地址
+- (BOOL) isUserIDNumber;            //身份证
+
+@end
