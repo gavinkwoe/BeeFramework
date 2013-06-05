@@ -56,82 +56,115 @@
 
 - (BeeUITipsView *)presentMessageTips:(NSString *)message
 {
-	UIView * container = nil;
-	
-	if ( [self isKindOfClass:[UIView class]] )
-	{
-		container = (UIView *)self;
-	}
-	else if ( [self isKindOfClass:[UIViewController class]] )
-	{
-		container = ((UIViewController *)self).view;
-	}
-
-	return [[BeeUITipsCenter sharedInstance] presentMessageTips:message inView:container];
+    [self presentMessageTips:message finished:nil];
 }
 
 - (BeeUITipsView *)presentSuccessTips:(NSString *)message
 {
-	UIView * container = nil;
-	
-	if ( [self isKindOfClass:[UIView class]] )
-	{
-		container = (UIView *)self;
-	}
-	else if ( [self isKindOfClass:[UIViewController class]] )
-	{
-		container = ((UIViewController *)self).view;
-	}
-	
-	return [[BeeUITipsCenter sharedInstance] presentSuccessTips:message inView:container];
+    [self presentSuccessTips:message finished:nil];
 }
 
 - (BeeUITipsView *)presentFailureTips:(NSString *)message
 {
-	UIView * container = nil;
-	
-	if ( [self isKindOfClass:[UIView class]] )
-	{
-		container = (UIView *)self;
-	}
-	else if ( [self isKindOfClass:[UIViewController class]] )
-	{
-		container = ((UIViewController *)self).view;
-	}
-	
-	return [[BeeUITipsCenter sharedInstance] presentFailureTips:message inView:container];
+    [self presentFailureTips:message finished:nil];
 }
 
 - (BeeUITipsView *)presentLoadingTips:(NSString *)message
 {
-	UIView * container = nil;
-	
-	if ( [self isKindOfClass:[UIView class]] )
-	{
-		container = (UIView *)self;
-	}
-	else if ( [self isKindOfClass:[UIViewController class]] )
-	{
-		container = ((UIViewController *)self).view;
-	}
-	
-	return [[BeeUITipsCenter sharedInstance] presentLoadingTips:message inView:container];	
+    [self presentLoadingTips:message finished:nil];
 }
 
 - (BeeUITipsView *)presentProgressTips:(NSString *)message
 {
-	UIView * container = nil;
-	
-	if ( [self isKindOfClass:[UIView class]] )
-	{
-		container = (UIView *)self;
-	}
-	else if ( [self isKindOfClass:[UIViewController class]] )
-	{
-		container = ((UIViewController *)self).view;
-	}
-	
-	return [[BeeUITipsCenter sharedInstance] presentProgressTips:message inView:container];
+    [self presentProgressTips:message finished:nil];
+}
+
+
+- (BeeUITipsView *)presentMessageTips:(NSString *)message
+                             finished:(BeeTipsFinishedBlock) block
+{
+    UIView * container = nil;
+    
+    if ( [self isKindOfClass:[UIView class]] )
+    {
+        container = (UIView *)self;
+    }
+    else if ( [self isKindOfClass:[UIViewController class]] )
+    {
+        container = ((UIViewController *)self).view;
+    }
+    
+    return [[BeeUITipsCenter sharedInstance] presentMessageTips:message inView:container finishedBlock:block];
+}
+
+
+- (BeeUITipsView *)presentSuccessTips:(NSString *)message
+                             finished:(BeeTipsFinishedBlock) block
+{
+    UIView * container = nil;
+    
+    if ( [self isKindOfClass:[UIView class]] )
+    {
+        container = (UIView *)self;
+    }
+    else if ( [self isKindOfClass:[UIViewController class]] )
+    {
+        container = ((UIViewController *)self).view;
+    }
+    
+    return [[BeeUITipsCenter sharedInstance] presentSuccessTips:message inView:container finishedBlock:block];
+}
+
+
+- (BeeUITipsView *)presentFailureTips:(NSString *)message
+                             finished:(BeeTipsFinishedBlock) block
+{
+    UIView * container = nil;
+    
+    if ( [self isKindOfClass:[UIView class]] )
+    {
+        container = (UIView *)self;
+    }
+    else if ( [self isKindOfClass:[UIViewController class]] )
+    {
+        container = ((UIViewController *)self).view;
+    }
+    
+    return [[BeeUITipsCenter sharedInstance] presentFailureTips:message inView:container finishedBlock:block];
+}
+
+- (BeeUITipsView *)presentLoadingTips:(NSString *)message
+                             finished:(BeeTipsFinishedBlock) block
+{
+    UIView * container = nil;
+    
+    if ( [self isKindOfClass:[UIView class]] )
+    {
+        container = (UIView *)self;
+    }
+    else if ( [self isKindOfClass:[UIViewController class]] )
+    {
+        container = ((UIViewController *)self).view;
+    }
+    
+    return [[BeeUITipsCenter sharedInstance] presentLoadingTips:message inView:container finishedBlock:block];
+}
+
+- (BeeUITipsView *)presentProgressTips:(NSString *)message
+                              finished:(BeeTipsFinishedBlock) block
+{
+    UIView * container = nil;
+    
+    if ( [self isKindOfClass:[UIView class]] )
+    {
+        container = (UIView *)self;
+    }
+    else if ( [self isKindOfClass:[UIViewController class]] )
+    {
+        container = ((UIViewController *)self).view;
+    }
+    
+    return [[BeeUITipsCenter sharedInstance] presentProgressTips:message inView:container finishedBlock:block];
 }
 
 - (void)dismissTips
@@ -448,6 +481,12 @@ DEF_SINGLETON( BeeUITipsCenter )
 	}
 	
 	[_tipsDisappear removeFromSuperview];
+    
+    if (nil != _tipsDisappear.tipFinishedBlock)
+    {
+        _tipsDisappear.tipFinishedBlock();
+    }
+    
 	_tipsDisappear = nil;
 	
 	[_tipsAppear internalDidAppear];
@@ -456,47 +495,75 @@ DEF_SINGLETON( BeeUITipsCenter )
 
 - (BeeUITipsView *)presentMessageTips:(NSString *)message inView:(UIView *)view
 {
-	BeeUIMessageTipsView * tips = [[BeeUIMessageTipsView alloc] init];
-	tips.iconView.image = _messageIcon;
-	tips.labelView.text = message;
-	[tips presentInView:view];
-	return [tips autorelease];
+    return [self presentMessageTips:message inView:view finishedBlock:nil];
 }
 
 - (BeeUITipsView *)presentSuccessTips:(NSString *)message inView:(UIView *)view
 {
-	BeeUIMessageTipsView * tips = [[BeeUIMessageTipsView alloc] init];
-	tips.iconView.image = _successIcon;
-	tips.labelView.text = message;
-	[tips presentInView:view];
-	return [tips autorelease];
+    return [self presentSuccessTips:message inView:view finishedBlock:nil];
 }
 
 - (BeeUITipsView *)presentFailureTips:(NSString *)message inView:(UIView *)view
 {
-	BeeUIMessageTipsView * tips = [[BeeUIMessageTipsView alloc] init];
-	tips.iconView.image = _failureIcon;
-	tips.labelView.text = message;
-	[tips presentInView:view];
-	return [tips autorelease];
+    return [self presentFailureTips:message inView:view finishedBlock:nil];
 }
 
 - (BeeUITipsView *)presentLoadingTips:(NSString *)message inView:(UIView *)view
 {
-	BeeUILoadingTipsView * tips = [[BeeUILoadingTipsView alloc] init];
-	tips.labelView.text = message;
-	[tips presentInView:view];
-	[tips.indicator startAnimating];
-	return [tips autorelease];
+    return [self presentLoadingTips:message inView:view finishedBlock:nil];
 }
 
 - (BeeUITipsView *)presentProgressTips:(NSString *)message inView:(UIView *)view
 {
-	BeeUIProgressTipsView * tips = [[BeeUIProgressTipsView alloc] init];
-	tips.labelView.text = message;
-	[tips presentInView:view];
-	[tips updateProgress:0.0f];
-	return [tips autorelease];
+    return [self presentProgressTips:message inView:view finishedBlock:nil];
+}
+
+- (BeeUITipsView *)presentMessageTips:(NSString *)message inView:(UIView *)view finishedBlock:(BeeTipsFinishedBlock) block
+{
+    BeeUIMessageTipsView * tips = [[BeeUIMessageTipsView alloc] init];
+    tips.iconView.image = _messageIcon;
+    tips.tipFinishedBlock = block;
+    tips.labelView.text = message;
+    [tips presentInView:view];
+    return [tips autorelease];
+}
+- (BeeUITipsView *)presentSuccessTips:(NSString *)message inView:(UIView *)view finishedBlock:(BeeTipsFinishedBlock) block
+{
+    BeeUIMessageTipsView * tips = [[BeeUIMessageTipsView alloc] init];
+    tips.iconView.image = _successIcon;
+    tips.tipFinishedBlock = block;
+    tips.labelView.text = message;
+    [tips presentInView:view];
+    return [tips autorelease];
+}
+- (BeeUITipsView *)presentFailureTips:(NSString *)message inView:(UIView *)view finishedBlock:(BeeTipsFinishedBlock) block
+{
+    BeeUIMessageTipsView * tips = [[BeeUIMessageTipsView alloc] init];
+    tips.iconView.image = _failureIcon;
+    tips.tipFinishedBlock = block;
+    tips.labelView.text = message;
+    [tips presentInView:view];
+    return [tips autorelease];
+}
+
+- (BeeUITipsView *)presentLoadingTips:(NSString *)message inView:(UIView *)view finishedBlock:(BeeTipsFinishedBlock) block
+{
+    BeeUILoadingTipsView * tips = [[BeeUILoadingTipsView alloc] init];
+    tips.labelView.text = message;
+    tips.tipFinishedBlock = block;
+    [tips presentInView:view];
+    [tips.indicator startAnimating];
+    return [tips autorelease];
+}
+
+- (BeeUITipsView *)presentProgressTips:(NSString *)message inView:(UIView *)view finishedBlock:(BeeTipsFinishedBlock) block
+{
+    BeeUIProgressTipsView * tips = [[BeeUIProgressTipsView alloc] init];
+    tips.labelView.text = message;
+    tips.tipFinishedBlock = block;
+    [tips presentInView:view];
+    [tips updateProgress:0.0f];
+    return [tips autorelease];
 }
 
 @end
@@ -541,6 +608,8 @@ DEF_SIGNAL( DID_DISAPPEAR );
 {	
 	[_timer invalidate];
 	_timer = nil;
+    
+    Block_release( _tipFinishedBlock  );
 
 	[super dealloc];
 }
