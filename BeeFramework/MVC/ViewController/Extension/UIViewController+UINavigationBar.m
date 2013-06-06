@@ -65,7 +65,7 @@ DEF_INT( BARBUTTON_RIGHT,	1 )
 {
 	[self.navigationController setNavigationBarHidden:NO animated:animated];
 }
-
+    //隐藏navBar
 - (void)hideNavigationBarAnimated:(BOOL)animated
 {
 	[self.navigationController setNavigationBarHidden:YES animated:animated];
@@ -148,12 +148,19 @@ DEF_INT( BARBUTTON_RIGHT,	1 )
 
 - (void)showBarButton:(NSInteger)position custom:(UIView *)view
 {
+        //添加点击事件,zhouxl
+    UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc]init];
+    view.userInteractionEnabled = YES;
+    [view addGestureRecognizer:tap];
 	if ( UINavigationBar.BARBUTTON_LEFT == position )
 	{
+        
+    [tap addTarget:self action:@selector(didLeftBarButtonTouched)];
 		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:view] autorelease];
 	}
 	else
 	{
+    [tap addTarget:self action:@selector(didRightBarButtonTouched)];
 		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:view] autorelease];
 	}
 }
