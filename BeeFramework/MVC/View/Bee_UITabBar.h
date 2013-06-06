@@ -64,6 +64,8 @@ AS_SIGNAL( HIGHLIGHT_CHANGED )	// 高亮改变
 - (void)addTitle:(NSString *)title image:(UIImage *)image;
 - (void)addTitle:(NSString *)title image:(UIImage *)image tag:(NSInteger)tag;
 - (void)addTitle:(NSString *)title image:(UIImage *)image tag:(NSInteger)tag signal:(NSString *)signal;
+- (void)addTitle:(NSString *)title image:(UIImage *)image setFinishedSelectedImage:(UIImage *)selectedImage withFinishedUnselectedImage:(UIImage *)UnselectedImage tag:(NSInteger)tag signal:(NSString *)signal;
+
 
 @end
 
