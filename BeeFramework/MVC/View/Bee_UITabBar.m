@@ -198,6 +198,7 @@ DEF_SIGNAL( HIGHLIGHT_CHANGED )
 		UITabBarItem * item = [_barItems objectAtIndex:index];
 
 		[self setSelectedItem:item];
+    [self clearBadgeValueOnIndex:index];//zhouxl
 		[self tabBar:self didSelectItem:item];
 	}
 	else
@@ -243,7 +244,26 @@ DEF_SIGNAL( HIGHLIGHT_CHANGED )
 				withObject:[NSNumber numberWithInt:item.tag]];	
 	}
 }
+    //zhouxl->
+- (void)clearBadgeValueOnIndex:(NSInteger)index{
+    ((UITabBarItem* )[self.items objectAtIndex:index]).badgeValue = nil;
+}
 
+- (void)setBadgeValue:(NSInteger)value onIndex:(NSInteger)index{
+    NSString* valueStr = [NSString stringWithFormat:@"%d",value];
+    if (index<0 || index>= _barItems.count) {
+        BeeLog(@"tabbar :the index is out!");
+    }else if(value == 0){
+        ((UITabBarItem* )[self.items objectAtIndex:index]).badgeValue = nil;
+    }else if(value < 0){
+        BeeLog(@"the value below 0!!!");
+    }else
+    {
+       ((UITabBarItem* )[self.items objectAtIndex:index]).badgeValue = valueStr;
+    }
+    
+}
+    //<-zhouxl
 @end
 
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
