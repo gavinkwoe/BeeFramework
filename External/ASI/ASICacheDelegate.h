@@ -100,4 +100,6 @@ typedef enum _ASICacheStoragePolicy {
 // Clear cached data stored for the passed storage policy
 - (void)clearCachedResponsesForStoragePolicy:(ASICacheStoragePolicy)cachePolicy;
 
+- (NSURL*) cacheUrl:(ASIHTTPRequest*) request;
+
 @end
