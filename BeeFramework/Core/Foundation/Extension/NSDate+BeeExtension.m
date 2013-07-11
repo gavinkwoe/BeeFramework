@@ -73,8 +73,7 @@
 
 + (NSUInteger)timeStamp
 {
-	NSTimeInterval time = [NSDate timeIntervalSinceReferenceDate];
-	return (NSUInteger)(time * 1000.0f);
+	return (NSUInteger)[[NSDate date] timeIntervalSince1970];
 }
 
 + (NSDate *)dateWithString:(NSString *)string

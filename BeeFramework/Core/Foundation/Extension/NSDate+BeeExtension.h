@@ -38,6 +38,11 @@
 @property (nonatomic, readonly) NSNumber *	number;
 
 - (NSString *)stringWithDateFormat:(NSString *)format;
+
+/**
+ * Unix timestamp,in other langage you must translate to standard.
+ * http://en.wikipedia.org/wiki/Unix_time
+ */
 + (NSUInteger)timeStamp;
 + (NSDate *)dateWithString:(NSString *)string;
 
