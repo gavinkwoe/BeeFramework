@@ -472,9 +472,6 @@
 		63BA04691717F35200CBC625 /* Bee_UIStyle.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63BA02501717F35200CBC625 /* Bee_UIStyle.h */; };
 		63BA046A1717F35200CBC625 /* Bee_UIStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BA02511717F35200CBC625 /* Bee_UIStyle.m */; };
 		63BA046B1717F35200CBC625 /* Bee_UIStyle.m in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63BA02511717F35200CBC625 /* Bee_UIStyle.m */; };
-		63BA046C1717F35200CBC625 /* Bee_UIStyle.m.mine in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63BA02521717F35200CBC625 /* Bee_UIStyle.m.mine */; };
-		63BA046D1717F35200CBC625 /* Bee_UIStyle.m.r7277 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63BA02531717F35200CBC625 /* Bee_UIStyle.m.r7277 */; };
-		63BA046E1717F35200CBC625 /* Bee_UIStyle.m.r7278 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63BA02541717F35200CBC625 /* Bee_UIStyle.m.r7278 */; };
 		63BA046F1717F35200CBC625 /* Bee_UITemplate.h in Headers */ = {isa = PBXBuildFile; fileRef = 63BA02551717F35200CBC625 /* Bee_UITemplate.h */; };
 		63BA04701717F35200CBC625 /* Bee_UITemplate.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63BA02551717F35200CBC625 /* Bee_UITemplate.h */; };
 		63BA04711717F35200CBC625 /* Bee_UITemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BA02561717F35200CBC625 /* Bee_UITemplate.m */; };
@@ -987,9 +984,6 @@
 				63BA04671717F35200CBC625 /* Bee_UIQuery.m in CopyFiles */,
 				63BA04691717F35200CBC625 /* Bee_UIStyle.h in CopyFiles */,
 				63BA046B1717F35200CBC625 /* Bee_UIStyle.m in CopyFiles */,
-				63BA046C1717F35200CBC625 /* Bee_UIStyle.m.mine in CopyFiles */,
-				63BA046D1717F35200CBC625 /* Bee_UIStyle.m.r7277 in CopyFiles */,
-				63BA046E1717F35200CBC625 /* Bee_UIStyle.m.r7278 in CopyFiles */,
 				63BA04701717F35200CBC625 /* Bee_UITemplate.h in CopyFiles */,
 				63BA04721717F35200CBC625 /* Bee_UITemplate.m in CopyFiles */,
 				63BA04741717F35200CBC625 /* Bee_UITemplateAndroid.h in CopyFiles */,
@@ -1356,9 +1350,6 @@
 		63BA024F1717F35200CBC625 /* Bee_UIQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bee_UIQuery.m; sourceTree = "<group>"; };
 		63BA02501717F35200CBC625 /* Bee_UIStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bee_UIStyle.h; sourceTree = "<group>"; };
 		63BA02511717F35200CBC625 /* Bee_UIStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bee_UIStyle.m; sourceTree = "<group>"; };
-		63BA02521717F35200CBC625 /* Bee_UIStyle.m.mine */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Bee_UIStyle.m.mine; sourceTree = "<group>"; };
-		63BA02531717F35200CBC625 /* Bee_UIStyle.m.r7277 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Bee_UIStyle.m.r7277; sourceTree = "<group>"; };
-		63BA02541717F35200CBC625 /* Bee_UIStyle.m.r7278 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Bee_UIStyle.m.r7278; sourceTree = "<group>"; };
 		63BA02551717F35200CBC625 /* Bee_UITemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bee_UITemplate.h; sourceTree = "<group>"; };
 		63BA02561717F35200CBC625 /* Bee_UITemplate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bee_UITemplate.m; sourceTree = "<group>"; };
 		63BA02571717F35200CBC625 /* Bee_UITemplateAndroid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bee_UITemplateAndroid.h; sourceTree = "<group>"; };
@@ -1973,9 +1964,6 @@
 				63BA024F1717F35200CBC625 /* Bee_UIQuery.m */,
 				63BA02501717F35200CBC625 /* Bee_UIStyle.h */,
 				63BA02511717F35200CBC625 /* Bee_UIStyle.m */,
-				63BA02521717F35200CBC625 /* Bee_UIStyle.m.mine */,
-				63BA02531717F35200CBC625 /* Bee_UIStyle.m.r7277 */,
-				63BA02541717F35200CBC625 /* Bee_UIStyle.m.r7278 */,
 				63BA02551717F35200CBC625 /* Bee_UITemplate.h */,
 				63BA02561717F35200CBC625 /* Bee_UITemplate.m */,
 				63BA02571717F35200CBC625 /* Bee_UITemplateAndroid.h */,
