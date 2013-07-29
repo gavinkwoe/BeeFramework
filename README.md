@@ -7,7 +7,7 @@ To get started, checkout [{Bee} developer manual](https://github.com/gavinkwoe/B
 ## Feature list
 <br/>
 
-![Bee vs other](http://blog.whatsbug.com/wp-content/uploads/2013/07/bee_vs_other.png)
+![Bee vs other](http://blog.whatsbug.com/wp-content/uploads/2013/07/bee_vs_other1.png)
 
 ## Lastest version
 
