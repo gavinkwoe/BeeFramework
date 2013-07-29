@@ -165,7 +165,14 @@ DEF_SIGNAL( HIGHLIGHT_CHANGED )
 
 - (void)addTitle:(NSString *)title image:(UIImage *)image tag:(NSInteger)tag signal:(NSString *)signal
 {
+	[self addTitle:title image:image setFinishedSelectedImage:nil withFinishedUnselectedImage:nil tag:tag signal:signal];
+}
+
+- (void)addTitle:(NSString *)title image:(UIImage *)image setFinishedSelectedImage:(UIImage *)selectedImage withFinishedUnselectedImage:(UIImage *)UnselectedImage tag:(NSInteger)tag signal:(NSString *)signal
+{
 	UITabBarItem * item = [[[UITabBarItem alloc] initWithTitle:title image:image tag:tag] autorelease];
+    [item setFinishedSelectedImage:selectedImage withFinishedUnselectedImage:UnselectedImage];
+    
 	if ( item )
 	{
 		[_barItems addObject:item];
