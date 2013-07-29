@@ -113,7 +113,7 @@
 	NSObject * result = nil;
 	NSDictionary * dict = self;
 	
-	for ( NSString * subPath in array )
+	for ( NSString * subPath in array )     // 顺序无关的？
 	{
 		if ( 0 == [subPath length] )
 			continue;
@@ -139,17 +139,18 @@
 #else
 	
 	// thanks @lancy, changed: use native keyPath
-	
 	NSString *	keyPath = [path stringByReplacingOccurrencesOfString:separator withString:@"."];
 	NSRange		range = NSMakeRange( 0, 1 );
-
+    
 	if ( [[keyPath substringWithRange:range] isEqualToString:@"."] )
 	{
 		keyPath = [keyPath substringFromIndex:1];
 	}
 
-	NSObject * result = [self valueForKeyPath:keyPath];
-	return (result == [NSNull null]) ? nil : result;
+	NSObject * result = [self valueForKeyPath:keyPath]; // 找不到结果会返回 nil
+//	return (result == [NSNull null]) ? nil : result;
+    return result;
+    
 	
 #endif
 }
@@ -173,11 +174,15 @@
 
 - (BOOL)boolAtPath:(NSString *)path otherwise:(BOOL)other
 {
-	NSObject * obj = [self objectAtPath:path];
-	if ( [obj isKindOfClass:[NSNull class]] )
+	NSObject * obj = [self objectAtPath:path];  // 找不到会返回 nil
+	/*
+    if ( [obj isKindOfClass:[NSNull class]] )   // NSNull 是对象，nil不是对象是int
 	{
 		return NO;
-	}
+	}*/
+    if ( !obj ) {
+        return NO;
+    }
 	else if ( [obj isKindOfClass:[NSNumber class]] )
 	{
 		return [(NSNumber *)obj intValue] ? YES : NO;
@@ -193,10 +198,10 @@
 			// YES/Yes/yes/TRUE/Ture/true/1
 			return YES;
 		}
-		else
-		{
-			return NO;
-		}
+        else
+        {
+            return NO;
+        }
 	}
 
 	return other;
@@ -205,10 +210,14 @@
 - (NSNumber *)numberAtPath:(NSString *)path
 {
 	NSObject * obj = [self objectAtPath:path];
-	if ( [obj isKindOfClass:[NSNull class]] )
+    /*
+	if ( [obj isKindOfClass:[NSNull class]] )  // NSNull 是对象， nil不是对象是int
 	{
 		return nil;
-	}
+	}*/
+    if ( !obj ) {
+        return nil;
+    }
 	else if ( [obj isKindOfClass:[NSNumber class]] )
 	{
 		return (NSNumber *)obj;
@@ -407,13 +416,14 @@
 {
 	if ( 0 == [path length] )
 		return NO;
-	
+	/*
 	if ( nil == separator )
 	{
 		path = [path stringByReplacingOccurrencesOfString:@"." withString:@"/"];
 		separator = @"/";
 	}
 	
+    // 可以使用 keypath 代替以下内容
 	NSArray * array = [path componentsSeparatedByString:separator]; 
 	if ( 0 == [array count] )
 	{
@@ -455,7 +465,15 @@
 	}
 
 	[upperDict setObject:obj forKey:subPath];
-	return YES;
+	return YES;*/
+    
+    // separator, Default: "."
+    if ( separator ) {
+        [path stringByReplacingOccurrencesOfString:separator withString:@"."];
+    }
+    
+    [self setValue:obj forKeyPath:path];
+    return YES;
 }
 
 - (BOOL)setKeyValues:(id)first, ...

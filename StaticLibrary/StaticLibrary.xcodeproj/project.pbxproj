@@ -24,6 +24,11 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		08528001175B091800B60F98 /* NSFileManager+BeeExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = 08527FFF175B091800B60F98 /* NSFileManager+BeeExtension.h */; };
+		08528002175B091800B60F98 /* NSFileManager+BeeExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 08528000175B091800B60F98 /* NSFileManager+BeeExtension.m */; };
+		08528003175B092B00B60F98 /* NSFileManager+BeeExtension.m in CopyFiles */ = {isa = PBXBuildFile; fileRef = 08528000175B091800B60F98 /* NSFileManager+BeeExtension.m */; };
+		08528004175B092D00B60F98 /* NSFileManager+BeeExtension.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 08527FFF175B091800B60F98 /* NSFileManager+BeeExtension.h */; };
+		08E0114017552682002E89EA /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 08E0113F17552682002E89EA /* libsqlite3.dylib */; };
 		635881FA16535ADD00C700F5 /* StaticLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 635881F916535ADD00C700F5 /* StaticLibrary.m */; };
 		6358820C16535B4600C700F5 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6358820016535B4600C700F5 /* libz.dylib */; };
 		6358820D16535B4600C700F5 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6358820116535B4600C700F5 /* AVFoundation.framework */; };
@@ -709,9 +714,7 @@
 		63BA05741717F36500CBC625 /* CTidy.m in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63BA053F1717F36500CBC625 /* CTidy.m */; };
 		63BA05751717F36500CBC625 /* TouchXML.h in Headers */ = {isa = PBXBuildFile; fileRef = 63BA05401717F36500CBC625 /* TouchXML.h */; };
 		63BA05761717F36500CBC625 /* TouchXML.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63BA05401717F36500CBC625 /* TouchXML.h */; };
-		63BA05781717F39600CBC625 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 63BA05771717F39600CBC625 /* libxml2.dylib */; };
 		63BA05791717F39600CBC625 /* libxml2.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63BA05771717F39600CBC625 /* libxml2.dylib */; };
-		63BA057B1717F39E00CBC625 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 63BA057A1717F39E00CBC625 /* libsqlite3.dylib */; };
 		63BA057C1717F39E00CBC625 /* libsqlite3.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63BA057A1717F39E00CBC625 /* libsqlite3.dylib */; };
 		985B33B016B2986C005E6F76 /* ASIAuthenticationDialog.h in Headers */ = {isa = PBXBuildFile; fileRef = 985B32BD16B2986C005E6F76 /* ASIAuthenticationDialog.h */; };
 		985B33B116B2986C005E6F76 /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 985B32BE16B2986C005E6F76 /* ASIAuthenticationDialog.m */; };
@@ -1113,12 +1116,17 @@
 				63BA05761717F36500CBC625 /* TouchXML.h in CopyFiles */,
 				63BA05791717F39600CBC625 /* libxml2.dylib in CopyFiles */,
 				63BA057C1717F39E00CBC625 /* libsqlite3.dylib in CopyFiles */,
+				08528003175B092B00B60F98 /* NSFileManager+BeeExtension.m in CopyFiles */,
+				08528004175B092D00B60F98 /* NSFileManager+BeeExtension.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		08527FFF175B091800B60F98 /* NSFileManager+BeeExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+BeeExtension.h"; sourceTree = "<group>"; };
+		08528000175B091800B60F98 /* NSFileManager+BeeExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+BeeExtension.m"; sourceTree = "<group>"; };
+		08E0113F17552682002E89EA /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		635881F016535ADD00C700F5 /* libBee.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libBee.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		635881F716535ADD00C700F5 /* StaticLibrary-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "StaticLibrary-Prefix.pch"; sourceTree = "<group>"; };
 		635881F816535ADD00C700F5 /* StaticLibrary.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StaticLibrary.h; sourceTree = "<group>"; };
@@ -1523,6 +1531,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08E0114017552682002E89EA /* libsqlite3.dylib in Frameworks */,
 				6358820C16535B4600C700F5 /* libz.dylib in Frameworks */,
 				6358820D16535B4600C700F5 /* AVFoundation.framework in Frameworks */,
 				6358820E16535B4600C700F5 /* CFNetwork.framework in Frameworks */,
@@ -1535,8 +1544,6 @@
 				6358821516535B4600C700F5 /* Security.framework in Frameworks */,
 				6358821616535B4600C700F5 /* SystemConfiguration.framework in Frameworks */,
 				6358821716535B4600C700F5 /* UIKit.framework in Frameworks */,
-				63BA05781717F39600CBC625 /* libxml2.dylib in Frameworks */,
-				63BA057B1717F39E00CBC625 /* libsqlite3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1546,6 +1553,7 @@
 		635881E516535ADD00C700F5 = {
 			isa = PBXGroup;
 			children = (
+				08E0113F17552682002E89EA /* libsqlite3.dylib */,
 				63BA01621717F35200CBC625 /* BeeDebugger */,
 				63BA018F1717F35200CBC625 /* BeeFramework */,
 				63BA02841717F35200CBC625 /* BeeTemplates */,
@@ -1728,6 +1736,8 @@
 				63BA01B91717F35200CBC625 /* NSObject+BeeTypeConversion.m */,
 				63BA01BA1717F35200CBC625 /* NSString+BeeExtension.h */,
 				63BA01BB1717F35200CBC625 /* NSString+BeeExtension.m */,
+				08527FFF175B091800B60F98 /* NSFileManager+BeeExtension.h */,
+				08528000175B091800B60F98 /* NSFileManager+BeeExtension.m */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -2421,6 +2431,7 @@
 				63BA056D1717F36500CBC625 /* CXMLNode_XPathExtensions.h in Headers */,
 				63BA05711717F36500CBC625 /* CTidy.h in Headers */,
 				63BA05751717F36500CBC625 /* TouchXML.h in Headers */,
+				08528001175B091800B60F98 /* NSFileManager+BeeExtension.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2450,7 +2461,7 @@
 		635881E716535ADD00C700F5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = tencent;
 			};
 			buildConfigurationList = 635881EA16535ADD00C700F5 /* Build configuration list for PBXProject "StaticLibrary" */;
@@ -2700,6 +2711,7 @@
 				63BA056B1717F36500CBC625 /* CXMLNode_PrivateExtensions.m in Sources */,
 				63BA056F1717F36500CBC625 /* CXMLNode_XPathExtensions.m in Sources */,
 				63BA05731717F36500CBC625 /* CTidy.m in Sources */,
+				08528002175B091800B60F98 /* NSFileManager+BeeExtension.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2719,6 +2731,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -2743,6 +2759,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -2763,7 +2783,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "StaticLibrary/StaticLibrary-Prefix.pch";
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = Bee;
 				SKIP_INSTALL = YES;
 			};
@@ -2776,7 +2796,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "StaticLibrary/StaticLibrary-Prefix.pch";
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = Bee;
 				SKIP_INSTALL = YES;
 			};

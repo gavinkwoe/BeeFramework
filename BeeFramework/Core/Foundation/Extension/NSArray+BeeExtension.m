@@ -67,6 +67,7 @@
 
 - (NSArray *)head:(NSUInteger)count
 {
+    /*
 	if ( [self count] < count )
 	{
 		return self;
@@ -74,14 +75,25 @@
 	else
 	{
 		NSMutableArray * tempFeeds = [NSMutableArray array];
-		for ( NSObject * elem in self )
+		for ( NSObject * elem in self ) // 添加的对象是顺序无关的？
 		{
 			[tempFeeds addObject:elem];
 			if ( [tempFeeds count] >= count )
 				break;
 		}
 		return tempFeeds;
-	}
+	}*/
+    
+    // 不检查范围会报 NSRangeException 异常的！
+    if (self.count < count)
+    {
+        return self;
+    }
+    else
+    {
+        NSRange subRange = NSMakeRange(0, count);
+        return [self subarrayWithRange:subRange];
+    }
 }
 
 - (NSArray *)tail:(NSUInteger)count
@@ -103,9 +115,18 @@
 //	}
 
 // thansk @lancy, changed: NSArray tail: count
-
-	NSRange range = NSMakeRange( self.count - count, count );
-	return [self subarrayWithRange:range];
+    
+    NSInteger _count;
+    _count = (count > self.count) ? self.count : count;
+    if ( _count )
+    {
+        NSRange range = NSMakeRange( self.count - count, count );
+        return [self subarrayWithRange:range];      // 不检查范围会报 NSRangeException 异常的！
+    }
+	else
+    {
+        return self;
+    }
 }
 
 - (id)safeObjectAtIndex:(NSUInteger)index
@@ -148,13 +169,22 @@ static void			__TTReleaseNoOp( CFAllocatorRef allocator, const void * value ) { 
 
 - (NSMutableArray *)pushHeadN:(NSArray *)all
 {
+    /*
 	if ( [all count] )
 	{	
 		for ( NSUInteger i = [all count]; i > 0; --i )
 		{
 			[self insertObject:[all objectAtIndex:i - 1] atIndex:0];
 		}
-	}
+	}*/
+    
+    NSInteger count;
+    if ( (count  = [all count]) )
+    {
+        NSIndexSet *insertSet;
+        insertSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, count)];
+        [self insertObjects:all atIndexes:insertSet];
+    }
 	
 	return self;
 }
