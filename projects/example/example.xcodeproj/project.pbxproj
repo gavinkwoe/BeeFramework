@@ -117,15 +117,11 @@
 		CBDA7F2D17A4127D00EE3C2E /* ServiceInspector_Border.m in Sources */ = {isa = PBXBuildFile; fileRef = CBDA7E0117A4127D00EE3C2E /* ServiceInspector_Border.m */; };
 		CBDA7F2E17A4127D00EE3C2E /* ServiceInspector_Indicator.m in Sources */ = {isa = PBXBuildFile; fileRef = CBDA7E0317A4127D00EE3C2E /* ServiceInspector_Indicator.m */; };
 		CBDA7F2F17A4127D00EE3C2E /* ServiceInspector_WindowHook.m in Sources */ = {isa = PBXBuildFile; fileRef = CBDA7E0517A4127D00EE3C2E /* ServiceInspector_WindowHook.m */; };
-		CBDA7F3017A4127D00EE3C2E /* ServiceLocation.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CBDA7E0717A4127D00EE3C2E /* ServiceLocation.bundle */; };
 		CBDA7F3117A4127D00EE3C2E /* ServiceLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = CBDA7E0917A4127D00EE3C2E /* ServiceLocation.m */; };
-		CBDA7F3217A4127D00EE3C2E /* ServiceLogger.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CBDA7E0B17A4127D00EE3C2E /* ServiceLogger.bundle */; };
 		CBDA7F3317A4127D00EE3C2E /* ServiceLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = CBDA7E0D17A4127D00EE3C2E /* ServiceLogger.m */; };
 		CBDA7F3417A4127D00EE3C2E /* ServiceLogger_Window.m in Sources */ = {isa = PBXBuildFile; fileRef = CBDA7E0F17A4127D00EE3C2E /* ServiceLogger_Window.m */; };
-		CBDA7F3517A4127D00EE3C2E /* ServicePush.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CBDA7E1117A4127D00EE3C2E /* ServicePush.bundle */; };
 		CBDA7F3617A4127D00EE3C2E /* ServicePush.m in Sources */ = {isa = PBXBuildFile; fileRef = CBDA7E1317A4127D00EE3C2E /* ServicePush.m */; };
 		CBDA7F3717A4127D00EE3C2E /* ServicePush_Notification.m in Sources */ = {isa = PBXBuildFile; fileRef = CBDA7E1517A4127D00EE3C2E /* ServicePush_Notification.m */; };
-		CBDA7F3817A4127D00EE3C2E /* ServiceUpdater.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CBDA7E1717A4127D00EE3C2E /* ServiceUpdater.bundle */; };
 		CBDA7F3917A4127D00EE3C2E /* ServiceUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = CBDA7E1917A4127D00EE3C2E /* ServiceUpdater.m */; };
 		CBDA884417A6447800EE3C2E /* Bee_MVC.mm in Sources */ = {isa = PBXBuildFile; fileRef = CBDA862617A6447600EE3C2E /* Bee_MVC.mm */; };
 		CBDA884517A6447800EE3C2E /* Bee_Controller.mm in Sources */ = {isa = PBXBuildFile; fileRef = CBDA862917A6447600EE3C2E /* Bee_Controller.mm */; };
@@ -540,20 +536,16 @@
 		CBDA7E0317A4127D00EE3C2E /* ServiceInspector_Indicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceInspector_Indicator.m; sourceTree = "<group>"; };
 		CBDA7E0417A4127D00EE3C2E /* ServiceInspector_WindowHook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceInspector_WindowHook.h; sourceTree = "<group>"; };
 		CBDA7E0517A4127D00EE3C2E /* ServiceInspector_WindowHook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceInspector_WindowHook.m; sourceTree = "<group>"; };
-		CBDA7E0717A4127D00EE3C2E /* ServiceLocation.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ServiceLocation.bundle; sourceTree = "<group>"; };
 		CBDA7E0817A4127D00EE3C2E /* ServiceLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceLocation.h; sourceTree = "<group>"; };
 		CBDA7E0917A4127D00EE3C2E /* ServiceLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceLocation.m; sourceTree = "<group>"; };
-		CBDA7E0B17A4127D00EE3C2E /* ServiceLogger.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ServiceLogger.bundle; sourceTree = "<group>"; };
 		CBDA7E0C17A4127D00EE3C2E /* ServiceLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceLogger.h; sourceTree = "<group>"; };
 		CBDA7E0D17A4127D00EE3C2E /* ServiceLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceLogger.m; sourceTree = "<group>"; };
 		CBDA7E0E17A4127D00EE3C2E /* ServiceLogger_Window.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceLogger_Window.h; sourceTree = "<group>"; };
 		CBDA7E0F17A4127D00EE3C2E /* ServiceLogger_Window.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceLogger_Window.m; sourceTree = "<group>"; };
-		CBDA7E1117A4127D00EE3C2E /* ServicePush.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ServicePush.bundle; sourceTree = "<group>"; };
 		CBDA7E1217A4127D00EE3C2E /* ServicePush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServicePush.h; sourceTree = "<group>"; };
 		CBDA7E1317A4127D00EE3C2E /* ServicePush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServicePush.m; sourceTree = "<group>"; };
 		CBDA7E1417A4127D00EE3C2E /* ServicePush_Notification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServicePush_Notification.h; sourceTree = "<group>"; };
 		CBDA7E1517A4127D00EE3C2E /* ServicePush_Notification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServicePush_Notification.m; sourceTree = "<group>"; };
-		CBDA7E1717A4127D00EE3C2E /* ServiceUpdater.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ServiceUpdater.bundle; sourceTree = "<group>"; };
 		CBDA7E1817A4127D00EE3C2E /* ServiceUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceUpdater.h; sourceTree = "<group>"; };
 		CBDA7E1917A4127D00EE3C2E /* ServiceUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceUpdater.m; sourceTree = "<group>"; };
 		CBDA862217A6447600EE3C2E /* Bee_Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bee_Application.h; sourceTree = "<group>"; };
@@ -1381,7 +1373,6 @@
 		CBDA7E0617A4127D00EE3C2E /* ServiceLocation */ = {
 			isa = PBXGroup;
 			children = (
-				CBDA7E0717A4127D00EE3C2E /* ServiceLocation.bundle */,
 				CBDA7E0817A4127D00EE3C2E /* ServiceLocation.h */,
 				CBDA7E0917A4127D00EE3C2E /* ServiceLocation.m */,
 			);
@@ -1391,7 +1382,6 @@
 		CBDA7E0A17A4127D00EE3C2E /* ServiceLogger */ = {
 			isa = PBXGroup;
 			children = (
-				CBDA7E0B17A4127D00EE3C2E /* ServiceLogger.bundle */,
 				CBDA7E0C17A4127D00EE3C2E /* ServiceLogger.h */,
 				CBDA7E0D17A4127D00EE3C2E /* ServiceLogger.m */,
 				CBDA7E0E17A4127D00EE3C2E /* ServiceLogger_Window.h */,
@@ -1403,7 +1393,6 @@
 		CBDA7E1017A4127D00EE3C2E /* ServicePush */ = {
 			isa = PBXGroup;
 			children = (
-				CBDA7E1117A4127D00EE3C2E /* ServicePush.bundle */,
 				CBDA7E1217A4127D00EE3C2E /* ServicePush.h */,
 				CBDA7E1317A4127D00EE3C2E /* ServicePush.m */,
 				CBDA7E1417A4127D00EE3C2E /* ServicePush_Notification.h */,
@@ -1415,7 +1404,6 @@
 		CBDA7E1617A4127D00EE3C2E /* ServiceUpdater */ = {
 			isa = PBXGroup;
 			children = (
-				CBDA7E1717A4127D00EE3C2E /* ServiceUpdater.bundle */,
 				CBDA7E1817A4127D00EE3C2E /* ServiceUpdater.h */,
 				CBDA7E1917A4127D00EE3C2E /* ServiceUpdater.m */,
 			);
@@ -2488,10 +2476,6 @@
 				CBDA7F2117A4127D00EE3C2E /* ServiceDebugger_DashMessageCell.xml in Resources */,
 				CBDA7F2317A4127D00EE3C2E /* ServiceDebugger_DashNetworkCell.xml in Resources */,
 				CBDA7F2B17A4127D00EE3C2E /* ServiceInspector.bundle in Resources */,
-				CBDA7F3017A4127D00EE3C2E /* ServiceLocation.bundle in Resources */,
-				CBDA7F3217A4127D00EE3C2E /* ServiceLogger.bundle in Resources */,
-				CBDA7F3517A4127D00EE3C2E /* ServicePush.bundle in Resources */,
-				CBDA7F3817A4127D00EE3C2E /* ServiceUpdater.bundle in Resources */,
 				CBDA895417A656D700EE3C2E /* avatar-donglin.png in Resources */,
 				CBDA895517A656D700EE3C2E /* avatar-gelosie.jpg in Resources */,
 				CBDA895617A656D700EE3C2E /* avatar-heaven.jpg in Resources */,

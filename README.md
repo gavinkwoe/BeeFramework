@@ -2,10 +2,13 @@
 
 {Bee} is a modern mobile application framework for faster and easier app development, created and maintained by [Gavin Kwoe](http://www.weibo.com/gavinkwoe) and [QFish](http://qfish.net).
 
-To get started, checkout [{Bee} developer manual](https://github.com/gavinkwoe/BeeFramework/blob/master/document/developer_manual.pdf)
+* To get started, checkout [{Bee} developer manual](https://github.com/gavinkwoe/BeeFramework/blob/master/document)
+
+* To write an interface, checkout [{Bee} interface builder](http://ib.bee-framework.com)
+
+* To write an controller, checkout [{Bee} scaffold code generator](https://github.com/gavinkwoe/BeeFramework/blob/master/tools)
 
 ## Feature list
-<br/>
 
 ![Bee vs other](http://blog.whatsbug.com/wp-content/uploads/2013/07/bee_vs_other1.png)
 
