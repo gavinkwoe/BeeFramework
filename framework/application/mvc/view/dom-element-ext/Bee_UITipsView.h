@@ -116,7 +116,7 @@ AS_SIGNAL( DID_DISAPPEAR );		// 已经隐藏
 @property (nonatomic, retain) UIImage *					successIcon;
 @property (nonatomic, retain) UIImage *					failureIcon;
 
-AS_SINGLETON
+AS_SINGLETON( BeeUITipsCenter );
 
 + (void)setDefaultContainerView:(UIView *)view;
 + (void)setDefaultMessageIcon:(UIImage *)image;

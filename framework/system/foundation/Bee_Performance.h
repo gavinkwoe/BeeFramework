@@ -78,7 +78,7 @@
 
 @interface BeePerformance : NSObject
 
-AS_SINGLETON;
+AS_SINGLETON(BeePerformance)
 
 @property (nonatomic, readonly) NSMutableDictionary *	records;
 @property (nonatomic, retain) NSMutableDictionary *		tags;

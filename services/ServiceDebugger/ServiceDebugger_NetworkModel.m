@@ -81,7 +81,7 @@
 @synthesize history = _history;
 @synthesize bandWidth = _bandWidth;
 
-DEF_SINGLETON
+DEF_SINGLETON( ServiceDebugger_NetworkModel )
 
 DEF_INT( BANDWIDTH_CURRENT,	0 )
 DEF_INT( BANDWIDTH_GPRS,	1 )

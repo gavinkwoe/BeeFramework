@@ -53,7 +53,7 @@
 @property (nonatomic, readonly) NSUInteger			upperBound;
 @property (nonatomic, readonly) BOOL				warningMode;
 
-AS_SINGLETON
+AS_SINGLETON( ServiceDebugger_MemoryModel );
 
 - (void)allocAll;
 - (void)freeAll;

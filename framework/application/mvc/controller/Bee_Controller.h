@@ -41,7 +41,7 @@
 @property (nonatomic, retain) NSString *			prefix;
 @property (nonatomic, retain) NSMutableDictionary *	mapping;
 
-AS_SINGLETON;
+AS_SINGLETON(BeeController)
 
 + (NSString *)MESSAGE;		// 消息类别
 + (NSString *)MESSAGE_TYPE;	// = MESSAGE

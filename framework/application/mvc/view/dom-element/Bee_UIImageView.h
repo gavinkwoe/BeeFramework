@@ -44,7 +44,7 @@
 
 @interface BeeImageCache : NSObject
 
-AS_SINGLETON
+AS_SINGLETON( BeeImageCache )
 
 - (BOOL)hasCachedForURL:(NSString *)url;
 - (UIImage *)imageForURL:(NSString *)url;

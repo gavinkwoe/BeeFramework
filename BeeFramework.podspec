@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "BeeFramework"
-  s.version      = "0.3"
+  s.version      = "0.4"
   s.summary      = "Bee Framework is a rapid developemnt framework for iOS."
   s.description  = <<-DESC
     Bee Framework is a MVC Framework to develop iOS application. 
@@ -12,18 +12,18 @@ Pod::Spec.new do |s|
   s.platform     = :ios
 
   s.author       = { "gavinkwoe" => "gavinkwoe@gmail.com"}
-  s.source       = { :git => "https://github.com/stcui/BeeFramework.git", :tag => "0.3"}
+  s.source       = { :git => "https://github.com/stcui/BeeFramework.git", :tag => "0.4"}
   s.resource  = "BeeDebugger/*.png"
 
-  s.source_files = 'BeeDebugger/**/*.{h,m}', 'BeeFramework/**/*.{h,m,mm}', 'BeeTemplates/**/*.{h,m,mm}', 'BeeUnitTest/**/*.{h,m,mm}'
-  s.frameworks = 'CoreMedia', 'CoreVideo', 'AVFoundation', 'Security', 'SystemConfiguration', 'QuartzCore', 'MobileCoreServices', 'CFNetwork'
-  s.library = 'z'
-  s.xcconfig = { 'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/include/libz' }
+  s.source_files = 'framework/*.{h,m,mm}', 'framework/application/**/*.{h,m,mm}','framework/service/**/*.{h,m,mm}','framework/system/**/*.{h,m,mm}', 'framework-ext/**/*.{h,m,mm}', 'services/**/*.{h,m,mm}'
+  s.frameworks = 'CoreMedia', 'CoreVideo', 'AVFoundation', 'Security', 'SystemConfiguration', 'QuartzCore', 'MobileCoreServices', 'CFNetwork', 'CoreVideo'
+  s.library = 'z', 'sqlite3', 'xml2'
+  s.xcconfig = { 'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/include/libz $(SDKROOT)/usr/include/libxml2' }
 
   s.dependency 'JSONKit'
   s.dependency 'ASIHTTPRequest'
   s.dependency 'Reachability'
-  s.dependency 'SFHFKeychainUtils'
+  s.dependency 'OpenUDID'
   s.dependency 'FMDB'
   s.dependency 'TouchXML'
 end

@@ -68,7 +68,7 @@ static NSMutableArray * __sharedQueue = nil;
 @synthesize timer = _timer;
 @synthesize pause = _pause;
 
-DEF_SINGLETON;
+DEF_SINGLETON(BeeMessageQueue)
 
 - (NSArray *)allMessages
 {

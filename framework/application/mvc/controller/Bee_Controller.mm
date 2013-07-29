@@ -61,7 +61,7 @@ static NSMutableArray * __subControllers = nil;
 @synthesize prefix = _prefix;
 @synthesize mapping = _mapping;
 
-DEF_SINGLETON;
+DEF_SINGLETON(BeeController)
 
 + (BOOL)autoLoad
 {

@@ -60,7 +60,7 @@
 @property (nonatomic, readonly) NSMutableArray *	history;
 @property (nonatomic, readonly) NSUInteger			bandWidth;
 
-AS_SINGLETON
+AS_SINGLETON( ServiceDebugger_NetworkModel )
 
 AS_INT( BANDWIDTH_CURRENT )
 AS_INT( BANDWIDTH_GPRS )

@@ -67,7 +67,7 @@
 @synthesize failedPlots = _failedPlots;
 @synthesize history = _history;
 
-DEF_SINGLETON
+DEF_SINGLETON( ServiceDebugger_MessageModel )
 
 - (void)load
 {

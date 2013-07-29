@@ -38,7 +38,7 @@
 #pragma mark -
 
 @interface BeeUIKeyboard : NSObject
-AS_SINGLETON
+AS_SINGLETON( BeeUIKeyboard );
 
 AS_NOTIFICATION( SHOWN )			// 键盘弹出
 AS_NOTIFICATION( HIDDEN )			// 键盘收起

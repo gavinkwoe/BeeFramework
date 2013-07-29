@@ -58,7 +58,7 @@
 @synthesize timer = _timer;
 @synthesize lastTick = _lastTick;
 
-DEF_SINGLETON
+DEF_SINGLETON( BeeTicker )
 
 - (id)init
 {

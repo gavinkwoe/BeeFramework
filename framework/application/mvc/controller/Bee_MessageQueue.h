@@ -37,7 +37,7 @@
 
 @interface BeeMessageQueue : NSObject
 
-AS_SINGLETON;
+AS_SINGLETON(BeeMessageQueue)
 
 @property (nonatomic, copy) BeeMessageBlock	whenCreate;
 @property (nonatomic, copy) BeeMessageBlock	whenUpdate;
