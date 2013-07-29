@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui namespace="SplashBoard_iPhone">
+	
+	<image id="bg"/>
+	<image id="logo"/>
+	<image id="slogan"/>
+	
+	<view id="zoom-in-here"/>
+
+	<style type="text/css">
+		#bg {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			image-src: url(splash-bg.png);
+			image-mode: top;
+		}
+		
+		#logo {
+			width: 100%;
+			height: auto;
+			position: absolute;
+			top: 36%;
+			left: 0px;
+			image-src: url(splash-logo.png);
+			image-mode: center;
+		}
+		
+		#zoom-in-here {
+			width: 10px;
+			height: 10px;
+			position: absolute;
+			top: 234px;
+			left: 60px;
+		}
+
+		#slogan {
+			width: 100%;
+			height: auto;
+			position: absolute;
+			top: 90%;
+			left: 0px;
+			image-src: url(splash-slogan.png);
+			image-mode: center;
+		}
+		
+	</style>
+</ui>
