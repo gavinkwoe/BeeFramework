@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ui namespace="DribbbleBoardTab_iPhone">
+
+    <linear class="wrapper" orientation="h">
+		<image id="bg"/>
+		<linear id="popular" class="item-wrapper" orientation="h">
+			<image id="popular-bg" class="item-active-bg"></image>
+			<button id="popular-button" class="item-icon">Popular</button>
+		</linear>
+		<linear id="everyone" class="item-wrapper" orientation="h">
+			<image id="everyone-bg" class="item-active-bg"></image>
+			<button id="everyone-button" class="item-icon">Everyone</button>
+		</linear>
+		<linear id="debuts" class="item-wrapper" orientation="h">
+			<image id="debuts-bg" class="item-active-bg"></image>
+			<button id="debuts-button" class="item-icon">Debuts</button>
+		</linear>
+    </linear>
+
+    <style type="text/css">
+		#bg {
+			background-color: #333;
+			image: url(tab-bar.png) !important;
+			image-insets: 0 25;
+			image-mode: fit;
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
+
+        .wrapper {
+			width: 100%;
+			height: 100%;
+			float: center;
+        }
+
+		.item-wrapper {
+			width: 33.3%;
+			height: 100%;
+		}
+
+		.item-active-bg {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			left: 0;
+			top: 0px;
+			image-src: url(tab-item.png);
+		}
+		
+		.item-icon {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+		}
+
+    </style>
+</ui>

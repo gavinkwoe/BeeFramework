@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<anim name="Splash">
+
+	<fade-in target="#logo" duration="0.5" delay="1.0"/>
+	<fade-in target="#slogan" duration="0.5" delay="1.0"/>
+	<bounce target="#logo" duration="0.5" delay="1.0">
+		<fade-out target="self" duration="0.5" delay="0.25f"/>
+		<zoom-in target="#zoom-in-here" duration="0.75"/>
+	</bounce>
+	
+</anim>

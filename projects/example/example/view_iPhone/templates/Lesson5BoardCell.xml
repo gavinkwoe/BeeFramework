@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui namespace="Lesson5BoardCell">
+	
+	<linear orientation="v" class="wrapper">
+		<view class="inner-bg"/>
+		<label class="sub-title">
+			A quick brown fox jump over the lazy dog
+		</label>
+		<label class="sub-content">
+			A quick brown fox jump over the lazy dog
+		</label>
+		<button id="button"/>
+	</linear>
+
+	</linear>
+	
+	<style type="text/css">
+		
+		.wrapper {
+			margin-top: 10px;
+			width: 100%;
+			height: 64px;
+		}
+		
+		.inner-bg {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			background-color: #fff;
+			padding: 0px 8px;
+			border-radius: 8px;
+		}
+		
+		.sub-title {
+			width: 100%;
+			height: 24px;
+			margin-top: 10px;
+			padding: 0px 20px;
+			color: #333;
+			font-size: 16px;
+			font-weight: bold;
+			text-align: left;
+			line-num: 999;
+			line-break: word-wrap;
+		}
+		
+		.sub-content {
+			width: 100%;
+			height: 24px;
+			margin-bottom: 10px;
+			padding: 0px 20px;
+			color: #333;
+			font-size: 14px;
+			font-weight: lighter;
+			text-align: left;
+			line-num: 999;
+			line-break: word-wrap;
+		}
+		
+		#button {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+		}
+		
+		</style>
+	
+</ui>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui namespace="AboutBoardCell_iPhone">
+	
+	<linear orientation="v" class="wrapper">
+		<linear orientation="v" class="inner-wrapper">
+			<view class="inner-bg"/>
+			<label class="sub-title">
+				0.4.0
+			</label>
+			<label class="sub-content">
+				1. 重新梳理目录结构，分为applicaton、service、system、vendor四部分
+				2. 全新的XML模版技术，完美支持CSS
+				3. 全新的QUERY技术，与jQUERY语法兼容
+				4. 全新的自动布局算法，开发复杂界面游刃有余
+				5. 全新的Service技术，即插即用
+				6. 基于JSON Schema的代码生成技术，不再需要手写服务器对接代码
+				7. 全新的Mock server技术，支持本地模拟网络接口调用
+				8. 全新的In-app debugger，简化无用功能
+				9. 全新的ActiveObject技术，支持任何对象的序列化与反序列化
+				10. 增加AppSkeleton
+				11. 增加异步自执行Routine
+				12. 修改BUG
+				---------------------------------------------------
+				1. Refactory the directory structure, divided into four parts, applicaton, service, system and vendor.
+				2. New XML template technology, perfect support for CSS
+				3. New QUERY technology, compatible with the jQUERY grammar
+				4. New automatic layout algorithm, easy to handle complex UI development task
+				5. New Service technology, plug-and-play
+				6. New mocking server technology, simulate network requests.
+				7. New ActiveObject technology, support any object serialization and deserialization
+				8. New In-app debugger, simplify the useless function
+				9. Code generator for JSON schema, no longer need to handwritten server docking code
+				10. Add BeeUISkeleton, an simple and powerful application entry
+				11. Add BeeRoutine, an BeeMessage which can asynchronous and by-self executing
+				12. Fix some BUG
+			</label>
+		</linear>
+		<linear orientation="v" class="inner-wrapper">
+			<view class="inner-bg"/>
+			<label class="sub-title">
+				0.3.0
+			</label>
+			<label class="sub-content">
+				1. 支持Mac OS
+				2. 支持XML模版
+				3. 支持jQUERY语法
+				4. 支持Signal桥接
+				5. 修改BUG
+				---------------------------------------------------
+				1. Fully support for MacOS
+				2. Fully support for UI template (xml)
+				3. Fully support for UI query syntax, like jQUERY
+				4. Fully support for template/viewController signal bridging by ID
+				5. Fix some bugs
+			</label>
+		</linear>
+		<linear orientation="v" class="inner-wrapper">
+			<view class="inner-bg"/>
+			<label class="sub-title">
+				0.2.3
+			</label>
+			<label class="sub-content">
+				1. 重构MVC
+				2. 支持XML模版
+				3. 支持jQUERY语法
+				4. 支持Signal桥接
+				5. 修改BUG
+				---------------------------------------------------
+				1. Refactoring the directory structure, Core and MVC completely separated, and the source files and the extensions completely separated
+				2. Refactoring the code structure of BeeDatabase and BeeActiveRecord, more clearly
+				3. Support the ActiveRecord inherition and nesting, support HAS/BELONG_TO operations
+				4. Support dot(.) opertions for BeeRequest and BeeMessage
+				5. Fix some bugs
+			</label>
+		</linear>
+		<linear orientation="v" class="inner-wrapper">
+			<view class="inner-bg"/>
+			<label class="sub-title">
+				0.2.0
+			</label>
+			<label class="sub-content">
+				1. 增加BeeDatabase
+				2. 增加BeeActiveRecord
+				3. 增加负载图
+				4. 修改BUG
+				5. 将编译选项移到Bee_Precompile.h
+				---------------------------------------------------
+				1. Add BeeDatabase
+				2. Add BeeActiveRecord
+				3. Overload graph
+				4. Fix some bugs
+				5. Move precompile options to 'Bee_Precompile.h'
+			</label>
+		</linear>
+		<linear orientation="v" class="inner-wrapper">
+			<view class="inner-bg"/>
+			<label class="sub-title">
+				0.1.0
+			</label>
+			<label class="sub-content">
+				1. 初始版本
+				2. 基础教程
+				3. In-app调试器
+				---------------------------------------------------
+				1. Draft version
+				2. Toturial
+				3. In-app debugger
+			</label>
+		</linear>
+	</linear>
+	
+	<style type="text/css">
+		.wrapper {
+			width: 100%;
+			height: auto;
+		}
+
+		.title {
+			width: 100%;
+			height: auto;
+			color: #fff;
+			margin-top: 14px;
+			padding-left: 20px;
+			margin-bottom: 4px;
+			font-size: 24px;
+			font-weight: bold;
+			text-align: left;
+			line-num: 1;
+			line-break: tail-trunc;
+		}
+
+		.inner-wrapper {
+			margin-top: 10px;
+			width: 100%;
+			height: auto;
+		}
+
+		.inner-bg {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			background-color: #fff;
+			padding: 0px 8px;
+			border-radius: 8px;
+		}
+		
+		.sub-title {
+			width: 100%;
+			height: auto;
+			padding: 0px 20px;
+			margin-top: 10px;
+			color: #333;
+			font-size: 18px;
+			font-weight: bold;
+			text-align: left;
+			line-num: 2;
+			line-break: word-wrap;
+		}
+
+		.sub-content {
+			width: 100%;
+			height: auto;
+			margin-top: 10px;
+			margin-bottom: 10px;
+			padding: 0px 20px;
+			color: #333;
+			font-size: 14px;
+			font-weight: lighter;
+			text-align: left;
+			line-num: 999;
+			line-break: word-wrap;
+		}
+		
+	</style>
+	
+</ui>

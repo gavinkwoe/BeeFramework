@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui namespace="DribbbleDetailBoardHeader_iPhone">
+	
+	<linear orientation="v" class="wrapper">
+		
+		<linear orientation="h" class="player-wrapper">
+			<image id="avatar" class="avatar"/>
+			<linear orientation="v" class="player-right-wrapper">
+				<label id="title" class="title"/>
+				<linear orientation="h" class="player-name-wrapper">
+					<label class="gray-text">by</label>
+					<label id="name" class="name"></label>
+					<label id="time" class="gray-text"></label>
+				</linear>
+			</linear>
+		</linear>
+
+		<linear orientation="v" class="photo-wrapper">
+			<image class="bg"/>
+			<image id="photo" class="photo"/>
+			<linear orientation="h" class="bottom-line">
+				<image id="view-icon" class="bottom-icon"/>
+				<label id="view-num" class="bottom-text">0</label>
+				<image id="comment-icon" class="bottom-icon"/>
+				<label id="comment-num" class="bottom-text">0</label>
+				<image id="like-icon" class="bottom-icon"/>
+				<label id="like-num" class="bottom-text">0</label>
+			</linear>
+		</linear>
+
+	</linear>
+	
+	<style type="text/css">
+		
+		.wrapper {
+			width: 100%;
+			height: auto;
+			padding: 10px;
+		}
+
+		.player-wrapper {
+			width: 100%;
+			height: 44px;
+			margin-bottom: 10px;
+		}
+		
+		.avatar {
+			width: 44px;
+			height: 44px;
+			padding: 2px;
+			background-color: #999;
+			border-radius: 6px;
+			border-width: 2px;
+			border-color: white;
+			image-mode: fill;
+			image-loading: white;
+		}
+		
+		.player-right-wrapper {
+			width: auto;
+			height: 100%;
+			margin-left: 6px;
+		}
+		
+		.title {
+			width: auto;
+			height: 50%;
+			font-size: 14px;
+			font-weight: bold;
+			color: white;
+		}
+		
+		.player-name-wrapper {
+			width: auto;
+			height: 50%;
+		}
+
+		.gray-text {
+			width: auto;
+			height: 100%;
+			font-size: 12px;
+			font-weight: bold;
+			color: #999;
+		}
+		
+		.name {
+			width: auto;
+			height: 100%;
+			font-size: 12px;
+			font-weight: bold;
+			color: white;
+			margin-left: 6px;
+			margin-right: 6px;
+		}
+		
+		.photo-wrapper {
+			width: 100%;
+			height: auto;
+		}
+		
+		.bg {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			background-color: white;
+//			shadow-color: black 0.2;
+//			shadow-offset: 0.5px 0.5px;
+//			shadow-opacity: 1.0;
+//			shadow-radius: 2px;
+		}
+
+		.photo {
+			width: 100%;
+			height: 320px;
+			padding: 5px;
+			background-color: #999;
+			image-mode: fill;
+			image-loading: white;
+		}
+		
+		.bottom-line {
+			width: auto;
+			height: 16px;
+			padding-left: 5px;
+			padding-right: 5px;
+			margin-bottom: 13px;
+		}
+		
+		.bottom-icon {
+			width: 15px;
+			height: 100%;
+			margin-left: 2px;
+			margin-right: 2px;
+			image-mode: center;
+		}
+		
+		.bottom-text {
+			width: auto;
+			height: 100%;
+			margin-left: 2px;
+			margin-right: 6px;
+			color: #999;
+			font-size: 12px;
+			font-weight: bold;
+		}
+		
+		#view-icon {
+			image-src: url(icon-views.png);
+		}
+
+		#comment-icon {
+			image-src: url(icon-comments.png);
+		}
+
+		#like-icon {
+			image-src: url(icon-hearts.png);
+		}
+
+	</style>
+	
+</ui>
