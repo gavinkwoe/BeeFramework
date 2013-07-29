@@ -506,6 +506,73 @@ DEF_INT( STATE_CANCELLED,	5 );
 	return [[block copy] autorelease];
 }
 
+- (BeeRequestBlockN) PARAMS
+{
+    BeeRequestBlockN block = ^ BeeRequest * ( id first, ... )
+    {
+        va_list args;
+        va_start( args , first );
+        
+        
+        BOOL bFirst = YES;
+        
+        for ( ;; )
+        {
+            NSString *key = nil;
+            if (bFirst)
+            {
+                bFirst = NO;
+                key = [first asNSString];
+            }
+            else
+            {
+                key = [va_arg( args, NSObject * ) asNSString];
+            }
+            
+            if ( nil == key )
+                break;
+            
+            NSObject * value = [va_arg( args, NSObject * ) asNSString];
+            if ( nil == value )
+                break;
+            
+            if ( [self.requestMethod is:@"GET"] )
+            {
+                NSString * base = [self.url absoluteString];
+                NSString * params = [NSString queryStringFromKeyValues:key, value, nil];
+                NSString * query = self.url.query;
+                
+                NSURL * newURL = nil;
+                
+                if ( query.length )
+                {
+                    newURL = [NSURL URLWithString:[base stringByAppendingFormat:@"&%@", params]];
+                }
+                else
+                {
+                    newURL = [NSURL URLWithString:[base stringByAppendingFormat:@"?%@", params]];
+                }
+                
+                if ( newURL )
+                {
+                    [self setURL:newURL];
+                }
+            }
+            
+            else
+            {
+                [self setPostValue:value forKey:key];
+            }
+            
+        }
+        
+        va_end( args );
+        
+        return self;
+    };
+    return [[block copy] autorelease];
+}
+
 - (BeeRequestBlockN)FILE
 {
 	BeeRequestBlockN block = ^ BeeRequest * ( id first, ... )

@@ -85,6 +85,7 @@ AS_INT( STATE_CANCELLED );
 @property (nonatomic, readonly) BeeRequestBlockN		HEADER;	// directly set header
 @property (nonatomic, readonly) BeeRequestBlockN		BODY;	// directly set body
 @property (nonatomic, readonly) BeeRequestBlockN		PARAM;	// add key value
+@property (nonatomic, readonly) BeeRequestBlockN		PARAMS;	// add keys values
 @property (nonatomic, readonly) BeeRequestBlockN		FILE;	// add file data
 
 @property (nonatomic, assign) NSUInteger				state;

@@ -38,6 +38,9 @@
 
 #pragma mark -
 
+
+typedef void    (^BeeTipsFinishedBlock)( void );
+
 @class BeeUITipsView;
 
 @interface NSObject(BeeUITipsView)
@@ -49,6 +52,22 @@
 - (BeeUITipsView *)presentFailureTips:(NSString *)message;
 - (BeeUITipsView *)presentLoadingTips:(NSString *)message;
 - (BeeUITipsView *)presentProgressTips:(NSString *)message;
+
+
+- (BeeUITipsView *)presentMessageTips:(NSString *)message
+                             finished:(BeeTipsFinishedBlock) block;
+
+- (BeeUITipsView *)presentSuccessTips:(NSString *)message
+                             finished:(BeeTipsFinishedBlock) block;
+
+- (BeeUITipsView *)presentFailureTips:(NSString *)message
+                             finished:(BeeTipsFinishedBlock) block;
+
+- (BeeUITipsView *)presentLoadingTips:(NSString *)message
+                             finished:(BeeTipsFinishedBlock) block;
+
+- (BeeUITipsView *)presentProgressTips:(NSString *)message
+                              finished:(BeeTipsFinishedBlock) block;
 
 - (void)dismissTips;
 
@@ -83,6 +102,9 @@ AS_SIGNAL( DID_DISAPPEAR );		// 已经隐藏
 @property (nonatomic, assign) BOOL				timeLimit;
 @property (nonatomic, assign) BOOL				exclusive;
 @property (nonatomic, assign) BOOL				fullScreen;
+
+//完成调用block
+@property (nonatomic, strong) BeeTipsFinishedBlock  tipFinishedBlock;
 
 - (void)present;
 - (void)presentInView:(UIView *)view;
@@ -178,6 +200,12 @@ AS_SINGLETON( BeeUITipsCenter )
 - (BeeUITipsView *)presentFailureTips:(NSString *)message inView:(UIView *)view;
 - (BeeUITipsView *)presentLoadingTips:(NSString *)message inView:(UIView *)view;
 - (BeeUITipsView *)presentProgressTips:(NSString *)message inView:(UIView *)view;
+
+- (BeeUITipsView *)presentMessageTips:(NSString *)message inView:(UIView *)view finishedBlock:(BeeTipsFinishedBlock) block;
+- (BeeUITipsView *)presentSuccessTips:(NSString *)message inView:(UIView *)view finishedBlock:(BeeTipsFinishedBlock) block;
+- (BeeUITipsView *)presentFailureTips:(NSString *)message inView:(UIView *)view finishedBlock:(BeeTipsFinishedBlock) block;
+- (BeeUITipsView *)presentLoadingTips:(NSString *)message inView:(UIView *)view finishedBlock:(BeeTipsFinishedBlock) block;
+- (BeeUITipsView *)presentProgressTips:(NSString *)message inView:(UIView *)view finishedBlock:(BeeTipsFinishedBlock) block;
 
 @end
 

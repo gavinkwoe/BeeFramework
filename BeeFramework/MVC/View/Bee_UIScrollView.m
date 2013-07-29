@@ -879,7 +879,26 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 - (void)calcPositions
 {
 	if ( 0 == _total )
-		return;
+	{
+        //The contentSize must be larger than the scrollview's frame for there to be anything to scroll. :)
+        if ( BeeUIScrollView.DIRECTION_HORIZONTAL == _direction )
+        {
+            if (_headerLoader || _footerLoader)
+            {
+                self.contentSize = CGSizeMake(self.bounds.size.width + PULL_LOADER_SIZE, self.height);
+            }
+            
+        }
+        else
+        {
+            if (_headerLoader || _footerLoader)
+            {
+                self.contentSize = CGSizeMake(self.width, self.bounds.size.height + PULL_LOADER_SIZE);
+            }
+        }
+        
+        return;
+    }
 	
 	CGRect bounds = self.bounds;
 	CGFloat itemPixels = 0.0f;
@@ -1101,11 +1120,11 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 		
 		if ( _direction == self.DIRECTION_HORIZONTAL )
 		{
-			_headerLoader.transform = CGAffineTransformMakeRotation( M_PI / 2.0f * 3.0f );
+			_footerLoader.transform = CGAffineTransformMakeRotation( M_PI / 2.0f * 3.0f );
 		}
 		else
 		{
-			_headerLoader.transform = CGAffineTransformMakeRotation( M_PI );
+			_footerLoader.transform = CGAffineTransformMakeRotation( M_PI );
 		}
 
 		[self addSubview:_footerLoader];
@@ -1365,6 +1384,49 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 		}
 		
 		// TODO: footer loader
+        if ( NO == _footerLoader.hidden && BeeUIPullLoader.STATE_LOADING != _footerLoader.state)
+        {
+            if ( _direction == self.DIRECTION_HORIZONTAL )
+			{
+				CGFloat offset = scrollView.contentOffset.x;
+				CGFloat boundX = (_baseInsets.right + _footerLoader.bounds.size.width);
+				
+				if ( offset > boundX )
+				{
+					if ( BeeUIPullLoader.STATE_PULLING != _footerLoader.state )
+					{
+						[_footerLoader changeState:BeeUIPullLoader.STATE_PULLING animated:YES];
+					}
+				}
+				else if ( offset > scrollView.contentSize.width )
+				{
+					if ( BeeUIPullLoader.STATE_NORMAL != _footerLoader.state )
+					{
+						[_footerLoader changeState:BeeUIPullLoader.STATE_NORMAL animated:YES];
+					}
+				}
+			}
+			else
+			{
+				CGFloat offset = scrollView.contentOffset.y;
+				CGFloat boundY = (_baseInsets.bottom + _footerLoader.bounds.size.height);
+				
+				if ( offset > boundY )
+				{
+					if ( BeeUIPullLoader.STATE_PULLING != _footerLoader.state )
+					{
+						[_footerLoader changeState:BeeUIPullLoader.STATE_PULLING animated:YES];
+					}
+				}
+				else if ( offset > scrollView.contentSize.height )
+				{
+					if ( BeeUIPullLoader.STATE_NORMAL != _footerLoader.state )
+					{
+						[_footerLoader changeState:BeeUIPullLoader.STATE_NORMAL animated:YES];
+					}
+				}
+			}
+        }
 	}
 
 	if ( _shouldNotify )
@@ -1447,6 +1509,64 @@ DEF_INT( DIRECTION_VERTICAL,	1 )
 		}
 		
 		// TODO: footer loader
+        if ( NO == _footerLoader.hidden && BeeUIPullLoader.STATE_LOADING != _footerLoader.state)
+        {
+            if ( _direction == self.DIRECTION_HORIZONTAL )
+			{
+				CGFloat offset = scrollView.contentOffset.x;
+				CGFloat boundX = (_baseInsets.right + _footerLoader.bounds.size.width);
+				
+				if ( offset > boundX )
+				{
+					if ( BeeUIPullLoader.STATE_LOADING != _footerLoader.state )
+					{
+						[_footerLoader changeState:BeeUIPullLoader.STATE_LOADING animated:YES];
+                        
+                        [self sendUISignal:self.FOOTER_REFRESH];
+					}
+				}
+				else if ( offset > scrollView.contentSize.width )
+				{
+					if ( BeeUIPullLoader.STATE_NORMAL != _footerLoader.state )
+					{
+						[_footerLoader changeState:BeeUIPullLoader.STATE_NORMAL animated:YES];
+					}
+				}
+			}
+			else
+			{
+				CGFloat offset = scrollView.contentOffset.y;
+				CGFloat boundY = (_baseInsets.bottom + _footerLoader.bounds.size.height);
+				
+				if ( offset > boundY )
+				{
+					if ( BeeUIPullLoader.STATE_LOADING != _footerLoader.state )
+					{
+						[_footerLoader changeState:BeeUIPullLoader.STATE_LOADING animated:YES];
+                        
+                        [self sendUISignal:self.FOOTER_REFRESH];
+					}
+				}
+				else if ( offset > scrollView.contentSize.height )
+				{
+					if ( BeeUIPullLoader.STATE_NORMAL != _footerLoader.state )
+					{
+						[_footerLoader changeState:BeeUIPullLoader.STATE_NORMAL animated:YES];
+					}
+				}
+			}
+            
+            [UIView beginAnimations:nil context:NULL];
+			[UIView setAnimationDuration:0.3f];
+			[UIView setAnimationBeginsFromCurrentState:YES];
+			
+			CC( @"pulled" );
+			
+			[self syncPullPositions];
+			[self syncPullInsets];
+            
+			[UIView commitAnimations];
+        }
 	}
 
 	if ( _shouldNotify )

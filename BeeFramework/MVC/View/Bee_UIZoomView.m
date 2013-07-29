@@ -195,7 +195,7 @@ DEF_SIGNAL( DOUBLE_TAPPED );
 	self = [super init];
 	if ( self )
 	{
-		[self initSelf:CGRectZero];		
+//		[self initSelf:CGRectZero];		
 	}
 	return self;
 }

@@ -444,3 +444,62 @@
 }
 
 @end
+
+
+@implementation NSString(CommonRegularCheck)
+
+
+- (BOOL) isEmail
+{
+    NSString *emailRegex = @"\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:self];
+}
+- (BOOL) isUrl
+{
+    NSString *emailRegex = @"[a-zA-z]+://[^\\s]*";
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:self];
+}
+
+- (BOOL) isChinaPhone
+{
+    NSString *emailRegex = @"\\d{3}-\\d{8}|\\d{4}-\\d{7}";
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:self];
+}
+- (BOOL) isChinaMobile
+{
+    NSString *emailRegex = @"^(1(([35][0-9])|(47)|[8][0126789]))\\d{8}$";
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:self];
+}
+
+- (BOOL) isQQNumber
+{
+    NSString *emailRegex = @"[1-9][0-9]{4,}";
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:self];
+}
+
+- (BOOL) isChinaZipCode
+{
+    NSString *emailRegex = @"[1-9]\\d{5}(?!\\d)";
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:self];
+}
+- (BOOL) isIPAddress
+{
+    NSString *emailRegex = @"\\d+\\.\\d+\\.\\d+\\.\\d+";
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:self];
+}
+
+- (BOOL) isUserIDNumber
+{
+    NSString *emailRegex = @"((11|12|13|14|15|21|22|23|31|32|33|34|35|36|37|41|42|43|44|45|46|50|51|52|53|54|61|62|63|64|65)[0-9]{4})(([1|2][0-9]{3}[0|1][0-9][0-3][0-9][0-9]{3}[X0-9])|([0-9]{2}[0|1][0-9][0-3][0-9][0-9]{3}))";
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:self];
+}
+
+@end
