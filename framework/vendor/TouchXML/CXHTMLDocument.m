@@ -39,7 +39,7 @@
 #import "CXHTMLDocument.h"
 
 #include <libxml/parser.h>
-#include <libxml/htmlparser.h>
+//#include <libxml/htmlparser.h>
 #include <libxml/HTMLtree.h>
 #include <libxml/xpath.h>
 
