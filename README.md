@@ -8,7 +8,7 @@
 
 * To write an controller, checkout [{Bee} scaffold code generator](https://github.com/gavinkwoe/BeeFramework/blob/master/tools)
 
-## 0.4.0
+## 0.4.0 (new)
 
 1. Refactory the directory structure, divided into four parts, applicaton, service, system and vendor.
 2. New XML template technology, perfect support for CSS
