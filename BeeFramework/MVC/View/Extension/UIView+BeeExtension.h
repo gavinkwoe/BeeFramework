@@ -78,12 +78,15 @@
 @property (assign, nonatomic) CGFloat			right;
 @property (assign, nonatomic) CGFloat			width;
 @property (assign, nonatomic) CGFloat			height;
-
 @property (assign, nonatomic) CGFloat			x;
 @property (assign, nonatomic) CGFloat			y;
 @property (assign, nonatomic) CGFloat			w;
 @property (assign, nonatomic) CGFloat			h;
-
+@property (assign, nonatomic) CGFloat           centerX;
+@property (assign, nonatomic) CGFloat           centerY;
+@property (assign, nonatomic) CGPoint           origin;
+@property (assign, nonatomic) CGSize            size;
+@property (readonly, nonatomic) CGPoint         boundsCenter;
 @property (assign, nonatomic) BOOL				visible;
 
 - (UIView *)viewWithTagString:(NSString *)value;
