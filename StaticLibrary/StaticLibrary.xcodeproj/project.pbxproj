@@ -217,7 +217,6 @@
 		63BA036A1717F35200CBC625 /* NSObject+BeeRequest.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63BA01C41717F35200CBC625 /* NSObject+BeeRequest.h */; };
 		63BA036B1717F35200CBC625 /* NSObject+BeeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BA01C51717F35200CBC625 /* NSObject+BeeRequest.m */; };
 		63BA036C1717F35200CBC625 /* NSObject+BeeRequest.m in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63BA01C51717F35200CBC625 /* NSObject+BeeRequest.m */; };
-		63BA036D1717F35200CBC625 /* 0.2.4.zip in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63BA01C71717F35200CBC625 /* 0.2.4.zip */; };
 		63BA036E1717F35200CBC625 /* Bee_ActiveBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 63BA01C81717F35200CBC625 /* Bee_ActiveBase.h */; };
 		63BA036F1717F35200CBC625 /* Bee_ActiveBase.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63BA01C81717F35200CBC625 /* Bee_ActiveBase.h */; };
 		63BA03701717F35200CBC625 /* Bee_ActiveBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BA01C91717F35200CBC625 /* Bee_ActiveBase.m */; };
@@ -530,14 +529,8 @@
 		63BA04A61717F35200CBC625 /* UITextView+BeeUIStyle.m in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63BA02711717F35200CBC625 /* UITextView+BeeUIStyle.m */; };
 		63BA04A71717F35200CBC625 /* UIView+BeeUILayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 63BA02721717F35200CBC625 /* UIView+BeeUILayout.h */; };
 		63BA04A81717F35200CBC625 /* UIView+BeeUILayout.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63BA02721717F35200CBC625 /* UIView+BeeUILayout.h */; };
-		63BA04A91717F35200CBC625 /* UIView+BeeUILayout.h.mine in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63BA02731717F35200CBC625 /* UIView+BeeUILayout.h.mine */; };
-		63BA04AA1717F35200CBC625 /* UIView+BeeUILayout.h.r7277 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63BA02741717F35200CBC625 /* UIView+BeeUILayout.h.r7277 */; };
-		63BA04AB1717F35200CBC625 /* UIView+BeeUILayout.h.r7278 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63BA02751717F35200CBC625 /* UIView+BeeUILayout.h.r7278 */; };
 		63BA04AC1717F35200CBC625 /* UIView+BeeUILayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BA02761717F35200CBC625 /* UIView+BeeUILayout.m */; };
 		63BA04AD1717F35200CBC625 /* UIView+BeeUILayout.m in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63BA02761717F35200CBC625 /* UIView+BeeUILayout.m */; };
-		63BA04AE1717F35200CBC625 /* UIView+BeeUILayout.m.mine in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63BA02771717F35200CBC625 /* UIView+BeeUILayout.m.mine */; };
-		63BA04AF1717F35200CBC625 /* UIView+BeeUILayout.m.r7277 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63BA02781717F35200CBC625 /* UIView+BeeUILayout.m.r7277 */; };
-		63BA04B01717F35200CBC625 /* UIView+BeeUILayout.m.r7278 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63BA02791717F35200CBC625 /* UIView+BeeUILayout.m.r7278 */; };
 		63BA04B11717F35200CBC625 /* UIView+BeeUIQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 63BA027A1717F35200CBC625 /* UIView+BeeUIQuery.h */; };
 		63BA04B21717F35200CBC625 /* UIView+BeeUIQuery.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63BA027A1717F35200CBC625 /* UIView+BeeUIQuery.h */; };
 		63BA04B31717F35200CBC625 /* UIView+BeeUIQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BA027B1717F35200CBC625 /* UIView+BeeUIQuery.m */; };
@@ -856,7 +849,6 @@
 				63BA03681717F35200CBC625 /* Bee_RequestQueue.m in CopyFiles */,
 				63BA036A1717F35200CBC625 /* NSObject+BeeRequest.h in CopyFiles */,
 				63BA036C1717F35200CBC625 /* NSObject+BeeRequest.m in CopyFiles */,
-				63BA036D1717F35200CBC625 /* 0.2.4.zip in CopyFiles */,
 				63BA036F1717F35200CBC625 /* Bee_ActiveBase.h in CopyFiles */,
 				63BA03711717F35200CBC625 /* Bee_ActiveBase.m in CopyFiles */,
 				63BA03731717F35200CBC625 /* Bee_ActiveRecord.h in CopyFiles */,
@@ -1013,13 +1005,7 @@
 				63BA04A41717F35200CBC625 /* UITextView+BeeUIStyle.h in CopyFiles */,
 				63BA04A61717F35200CBC625 /* UITextView+BeeUIStyle.m in CopyFiles */,
 				63BA04A81717F35200CBC625 /* UIView+BeeUILayout.h in CopyFiles */,
-				63BA04A91717F35200CBC625 /* UIView+BeeUILayout.h.mine in CopyFiles */,
-				63BA04AA1717F35200CBC625 /* UIView+BeeUILayout.h.r7277 in CopyFiles */,
-				63BA04AB1717F35200CBC625 /* UIView+BeeUILayout.h.r7278 in CopyFiles */,
 				63BA04AD1717F35200CBC625 /* UIView+BeeUILayout.m in CopyFiles */,
-				63BA04AE1717F35200CBC625 /* UIView+BeeUILayout.m.mine in CopyFiles */,
-				63BA04AF1717F35200CBC625 /* UIView+BeeUILayout.m.r7277 in CopyFiles */,
-				63BA04B01717F35200CBC625 /* UIView+BeeUILayout.m.r7278 in CopyFiles */,
 				63BA04B21717F35200CBC625 /* UIView+BeeUIQuery.h in CopyFiles */,
 				63BA04B41717F35200CBC625 /* UIView+BeeUIQuery.m in CopyFiles */,
 				63BA04B61717F35200CBC625 /* UIView+BeeUIStyle.h in CopyFiles */,
@@ -1222,7 +1208,6 @@
 		63BA01C21717F35200CBC625 /* Bee_RequestQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bee_RequestQueue.m; sourceTree = "<group>"; };
 		63BA01C41717F35200CBC625 /* NSObject+BeeRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+BeeRequest.h"; sourceTree = "<group>"; };
 		63BA01C51717F35200CBC625 /* NSObject+BeeRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+BeeRequest.m"; sourceTree = "<group>"; };
-		63BA01C71717F35200CBC625 /* 0.2.4.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = 0.2.4.zip; sourceTree = "<group>"; };
 		63BA01C81717F35200CBC625 /* Bee_ActiveBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bee_ActiveBase.h; sourceTree = "<group>"; };
 		63BA01C91717F35200CBC625 /* Bee_ActiveBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bee_ActiveBase.m; sourceTree = "<group>"; };
 		63BA01CA1717F35200CBC625 /* Bee_ActiveRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bee_ActiveRecord.h; sourceTree = "<group>"; };
@@ -1379,13 +1364,7 @@
 		63BA02701717F35200CBC625 /* UITextView+BeeUIStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+BeeUIStyle.h"; sourceTree = "<group>"; };
 		63BA02711717F35200CBC625 /* UITextView+BeeUIStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+BeeUIStyle.m"; sourceTree = "<group>"; };
 		63BA02721717F35200CBC625 /* UIView+BeeUILayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+BeeUILayout.h"; sourceTree = "<group>"; };
-		63BA02731717F35200CBC625 /* UIView+BeeUILayout.h.mine */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "UIView+BeeUILayout.h.mine"; sourceTree = "<group>"; };
-		63BA02741717F35200CBC625 /* UIView+BeeUILayout.h.r7277 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "UIView+BeeUILayout.h.r7277"; sourceTree = "<group>"; };
-		63BA02751717F35200CBC625 /* UIView+BeeUILayout.h.r7278 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "UIView+BeeUILayout.h.r7278"; sourceTree = "<group>"; };
 		63BA02761717F35200CBC625 /* UIView+BeeUILayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+BeeUILayout.m"; sourceTree = "<group>"; };
-		63BA02771717F35200CBC625 /* UIView+BeeUILayout.m.mine */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "UIView+BeeUILayout.m.mine"; sourceTree = "<group>"; };
-		63BA02781717F35200CBC625 /* UIView+BeeUILayout.m.r7277 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "UIView+BeeUILayout.m.r7277"; sourceTree = "<group>"; };
-		63BA02791717F35200CBC625 /* UIView+BeeUILayout.m.r7278 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "UIView+BeeUILayout.m.r7278"; sourceTree = "<group>"; };
 		63BA027A1717F35200CBC625 /* UIView+BeeUIQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+BeeUIQuery.h"; sourceTree = "<group>"; };
 		63BA027B1717F35200CBC625 /* UIView+BeeUIQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+BeeUIQuery.m"; sourceTree = "<group>"; };
 		63BA027C1717F35200CBC625 /* UIView+BeeUIStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+BeeUIStyle.h"; sourceTree = "<group>"; };
@@ -1749,7 +1728,6 @@
 		63BA01C61717F35200CBC625 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
-				63BA01C71717F35200CBC625 /* 0.2.4.zip */,
 				63BA01C81717F35200CBC625 /* Bee_ActiveBase.h */,
 				63BA01C91717F35200CBC625 /* Bee_ActiveBase.m */,
 				63BA01CA1717F35200CBC625 /* Bee_ActiveRecord.h */,
@@ -2001,13 +1979,7 @@
 				63BA02701717F35200CBC625 /* UITextView+BeeUIStyle.h */,
 				63BA02711717F35200CBC625 /* UITextView+BeeUIStyle.m */,
 				63BA02721717F35200CBC625 /* UIView+BeeUILayout.h */,
-				63BA02731717F35200CBC625 /* UIView+BeeUILayout.h.mine */,
-				63BA02741717F35200CBC625 /* UIView+BeeUILayout.h.r7277 */,
-				63BA02751717F35200CBC625 /* UIView+BeeUILayout.h.r7278 */,
 				63BA02761717F35200CBC625 /* UIView+BeeUILayout.m */,
-				63BA02771717F35200CBC625 /* UIView+BeeUILayout.m.mine */,
-				63BA02781717F35200CBC625 /* UIView+BeeUILayout.m.r7277 */,
-				63BA02791717F35200CBC625 /* UIView+BeeUILayout.m.r7278 */,
 				63BA027A1717F35200CBC625 /* UIView+BeeUIQuery.h */,
 				63BA027B1717F35200CBC625 /* UIView+BeeUIQuery.m */,
 				63BA027C1717F35200CBC625 /* UIView+BeeUIStyle.h */,
