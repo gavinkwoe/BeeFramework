@@ -60,7 +60,7 @@ DEF_SINGLETON( ServiceDebugger_Window )
 		self.windowLevel = UIWindowLevelNormal + 1.0f;
 
 		self.rootViewController = [ServiceDebugger_DashBoard board];
-		self.rootViewController.view;
+		[self.rootViewController view];
 	}
 	return self;
 }
