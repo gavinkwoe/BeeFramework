@@ -69,7 +69,7 @@
 
 ## Community
 
-* Follow [@老郭为人民服务 on Weibo](www.weibo.com/gavinkwoe).
+* Follow [@老郭为人民服务 on Weibo](http://www.weibo.com/gavinkwoe).
 * QQ Group: 79054681
 
 ## Build and run
