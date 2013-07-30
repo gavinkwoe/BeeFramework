@@ -3,9 +3,9 @@
 {Bee} is a modern mobile application framework for faster and easier app development, created and maintained by [Gavin Kwoe](http://www.weibo.com/gavinkwoe) and [QFish](http://qfish.net).
 
 * To get started, checkout [{Bee} developer manual](https://github.com/gavinkwoe/BeeFramework/blob/master/document)
-* 国人请前往这里查看文档 [{Bee} developer manual](https://github.com/gavinkwoe/BeeFramework/blob/master/document)
-
 * Follow [@老郭为人民服务 on Weibo](http://www.weibo.com/gavinkwoe) or Join us, QQ Group: `79054681`
+
+* 从这里开始，请查看文档 [{Bee} 开发者手册](https://github.com/gavinkwoe/BeeFramework/blob/master/document)
 * 关注 [@老郭为人民服务 的新浪微博](http://www.weibo.com/gavinkwoe) 或加入我们, QQ群 `79054681`
 
 ## [{Bee} interface builder >>>](http://ib.bee-framework.com/)
