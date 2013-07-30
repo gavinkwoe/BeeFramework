@@ -194,4 +194,4 @@ Copyright 2013 ~ 2014, [Geek-Zoo Studio, Inc.](http://www.geek-zoo.com)
 You may want to see more great open source projects brought you by Chinese developers. See more in the [Projects repo](https://github.com/OpenSourceChina/Projects) of [OpenSourceChina](https://github.com/OpenSourceChina).
 
 * Join us, please contact [gavinkwoe](https://github.com/gavinkwoe) or
- [Onevcat](https://github.com/onevcat)
+ [onevcat](https://github.com/onevcat)
