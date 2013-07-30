@@ -21,6 +21,7 @@
 		630587EA17539CAA0042B2EF /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 630587DC17539CA90042B2EF /* Security.framework */; };
 		630587EB17539CAA0042B2EF /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 630587DD17539CA90042B2EF /* SystemConfiguration.framework */; };
 		630587EC17539CAA0042B2EF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 630587DE17539CA90042B2EF /* UIKit.framework */; };
+		A091172E17A75BAB00FB5C55 /* ASIHTTPRequest+Bee.m in Sources */ = {isa = PBXBuildFile; fileRef = A091172D17A75BAB00FB5C55 /* ASIHTTPRequest+Bee.m */; };
 		CBC0DDF517A6B8BB00C8EF93 /* Bee_MVC.mm in Sources */ = {isa = PBXBuildFile; fileRef = CBC0DBD717A6B8BA00C8EF93 /* Bee_MVC.mm */; };
 		CBC0DDF617A6B8BB00C8EF93 /* Bee_Controller.mm in Sources */ = {isa = PBXBuildFile; fileRef = CBC0DBDA17A6B8BA00C8EF93 /* Bee_Controller.mm */; };
 		CBC0DDF717A6B8BB00C8EF93 /* Bee_Message.mm in Sources */ = {isa = PBXBuildFile; fileRef = CBC0DBDC17A6B8BA00C8EF93 /* Bee_Message.mm */; };
@@ -291,6 +292,8 @@
 		630587DE17539CA90042B2EF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = "<absolute>"; };
 		63CE8C3F173F79C10047A716 /* libBee.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libBee.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		63CE8C46173F79C10047A716 /* lib-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "lib-Prefix.pch"; sourceTree = "<group>"; };
+		A091172C17A75BAB00FB5C55 /* ASIHTTPRequest+Bee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ASIHTTPRequest+Bee.h"; sourceTree = "<group>"; };
+		A091172D17A75BAB00FB5C55 /* ASIHTTPRequest+Bee.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ASIHTTPRequest+Bee.m"; sourceTree = "<group>"; };
 		CBC0DBD317A6B8BA00C8EF93 /* Bee_Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bee_Application.h; sourceTree = "<group>"; };
 		CBC0DBD417A6B8BA00C8EF93 /* Bee_ApplicationConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bee_ApplicationConfig.h; sourceTree = "<group>"; };
 		CBC0DBD617A6B8BA00C8EF93 /* Bee_MVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bee_MVC.h; sourceTree = "<group>"; };
@@ -1694,6 +1697,8 @@
 		CBC0DDAD17A6B8BB00C8EF93 /* vendor */ = {
 			isa = PBXGroup;
 			children = (
+				A091172C17A75BAB00FB5C55 /* ASIHTTPRequest+Bee.h */,
+				A091172D17A75BAB00FB5C55 /* ASIHTTPRequest+Bee.m */,
 				CBC0DDAE17A6B8BB00C8EF93 /* ASI */,
 				CBC0DDC317A6B8BB00C8EF93 /* Bee_Vendor.h */,
 				CBC0DDC417A6B8BB00C8EF93 /* Bee_VendorConfig.h */,
@@ -2101,6 +2106,7 @@
 				CBC0DEE117A6B8BB00C8EF93 /* CXMLNode_CreationExtensions.m in Sources */,
 				CBC0DEE217A6B8BB00C8EF93 /* CXMLNode_PrivateExtensions.m in Sources */,
 				CBC0DEE317A6B8BB00C8EF93 /* CXMLNode_XPathExtensions.m in Sources */,
+				A091172E17A75BAB00FB5C55 /* ASIHTTPRequest+Bee.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -44,7 +44,7 @@
 #import "ASIInputStream.h"
 #import "ASINetworkQueue.h"
 #import "ASIProgressDelegate.h"
-
+#import "ASIHTTPRequest+Bee.h"
 #import "JSONKit.h"
 
 #import "FMDatabase.h"

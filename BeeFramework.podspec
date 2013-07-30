@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/stcui/BeeFramework.git", :tag => "0.4"}
   s.resource  = "services/**/*.bundle"
 
-  s.source_files = 'framework/*.{h,m,mm}', 'framework/application/**/*.{h,m,mm}','framework/service/**/*.{h,m,mm}','framework/system/**/*.{h,m,mm}', 'framework-ext/**/*.{h,m,mm}', 'services/**/*.{h,m,mm}', 'framework/vendor/*.h'
+  s.source_files = 'framework/*.{h,m,mm}', 'framework/application/**/*.{h,m,mm}','framework/service/**/*.{h,m,mm}','framework/system/**/*.{h,m,mm}', 'services/**/*.{h,m,mm}', 'framework/vendor/*.[hm]'
   s.frameworks = 'CoreMedia', 'CoreVideo', 'AVFoundation', 'Security', 'SystemConfiguration', 'QuartzCore', 'MobileCoreServices', 'CFNetwork', 'CoreVideo'
   s.library = 'z', 'sqlite3', 'xml2'
   s.xcconfig = { 'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/include/libz $(SDKROOT)/usr/include/libxml2' }
