@@ -5,19 +5,30 @@
 * To get started, checkout [{Bee} developer manual](https://github.com/gavinkwoe/BeeFramework/blob/master/document)
 * 国人请前往这里查看文档 [{Bee} developer manual](https://github.com/gavinkwoe/BeeFramework/blob/master/document)
 
-* Follow [@老郭为人民服务 on Weibo](http://www.weibo.com/gavinkwoe).
-* QQ Group: `79054681`
+* Follow [@老郭为人民服务 on Weibo](http://www.weibo.com/gavinkwoe) or Join us, QQ Group: `79054681`
+* 关注 [@老郭为人民服务 的新浪微博](http://www.weibo.com/gavinkwoe) 或加入我们, QQ群 `79054681`
 
 ## [{Bee} interface builder >>>](http://ib.bee-framework.com/)
+
+1. In browser editor, support Chrome, Safari, Firefox
+2. What you write what you see
+2. High fidelity user interface effects
 
 ![Interface builder](http://blog.whatsbug.com/wp-content/uploads/2013/07/interface-builder.png)
 
 
 ## [{Bee} Code generater >>>](https://github.com/gavinkwoe/BeeFramework/blob/master/tools)
 
+1. Use `.json` file to generates both `MODEL` and `CONTROLLER` codes for you
+
 ![Scaffold](http://blog.whatsbug.com/wp-content/uploads/2013/07/scaffold.png)
 
+## Feature list
+
+![Bee vs other](http://blog.whatsbug.com/wp-content/uploads/2013/07/bee_vs_other1.png)
+
 ## Change log
+
 #### 0.4.0 (Lastest version)
 
 1. Refactory the directory structure, divided into four parts, applicaton, service, system and vendor.
@@ -63,15 +74,25 @@
 2. Toturial
 3. In-app debugger
 
-## Feature list
-
-![Bee vs other](http://blog.whatsbug.com/wp-content/uploads/2013/07/bee_vs_other1.png)
-
 ## Lastest version
 
 * [Download the lastest release](https://github.com/gavinkwoe/BeeFramework/archive/master.zip)
-* Clone the repo (CLI), `git clone git@github.com:gavinkwoe/BeeFramework.git`.
-* Clone the repo (HTTP), `https://github.com/gavinkwoe/BeeFramework.git`.
+
+		https://github.com/gavinkwoe/BeeFramework/archive/master.zip
+
+* Clone the repo (CLI)
+
+		git clone git@github.com:gavinkwoe/BeeFramework.git
+
+* Clone the repo (HTTP)
+
+		https://github.com/gavinkwoe/BeeFramework.git
+
+* Import from CocoaPods (by [stcui](https://github.com/stcui))
+
+		Add below to `Podfile` and run `pod install`
+		platform :ios
+		pod 'BeeFramework', :head
 
 ## Bug tracker
 
@@ -84,52 +105,29 @@
 2. Choose target, 'lib' or 'example'
 3. Build and run
 
-## CocoaPods (by [stcui](https://github.com/stcui))
-<br/>
-
-Add below to `Podfile` and run `pod install`
-
-	platform :ios
-	pod 'BeeFramework', :head
-
 ## Contributors
 
-**STCui**
+**STCui** [https://github.com/stcui](https://github.com/stcui)
 
-+ [https://github.com/stcui](https://github.com/stcui)
+**ilikeido** [https://github.com/ilikeido](https://github.com/ilikeido)
 
-**ilikeido**
+**gelosie** [https://github.com/gelosie](https://github.com/gelosie)
 
-+ [https://github.com/ilikeido](https://github.com/ilikeido)
+**lancy** [https://github.com/lancy](https://github.com/lancy)
 
-**gelosie**
+**uxyheaven** [https://github.com/uxyheaven](https://github.com/uxyheaven)
 
-+ [https://github.com/gelosie](https://github.com/gelosie)
+**Yulong** [https://github.com/Yulong](https://github.com/Yulong)
 
-**lancy**
+**esseak** [https://github.com/esseak](https://github.com/esseak)
 
-+ [https://github.com/lancy](https://github.com/lancy)
-
-**uxyheaven**
-
-+ [https://github.com/uxyheaven](https://github.com/uxyheaven)
-
-**Yulong**
-
-+ [https://github.com/Yulong](https://github.com/Yulong)
-
-**esseak**
-
-+ [https://github.com/esseak](https://github.com/esseak)
-
-**inonomori**
-
-+ [https://github.com/inonomori](https://github.com/inonomori)
+**inonomori** [https://github.com/inonomori](https://github.com/inonomori)
 
 ## Copyright and license
-<br/>
 
-Copyright 2013 ~ 2014, [Geek-Zoo Studio, Inc.](http://www.geek-zoo.com) and [INSTHUB Beijing HQ](http://www.insthub.com)
+Copyright 2013 ~ 2014, [Geek-Zoo Studio, Inc.](http://www.geek-zoo.com)
+
+{Bee} is under MIT license.
 
 
 	 ______    ______    ______
@@ -161,7 +159,7 @@ Copyright 2013 ~ 2014, [Geek-Zoo Studio, Inc.](http://www.geek-zoo.com) and [INS
 	FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 	IN THE SOFTWARE.
 
-## Who use {bee}
+## Companies use {bee}
 
 * [China Mobile](http://www.chinamobileltd.com/en/global/home.php)
 * [China Unicom](http://www.chinaunicom.com.cn/)
@@ -180,7 +178,7 @@ Copyright 2013 ~ 2014, [Geek-Zoo Studio, Inc.](http://www.geek-zoo.com) and [INS
 * [Distance Education Group](http://www.sdeg.cn/sdegPortal/)
 * [MesonTech](http://www.mesontech.com.cn/home/mesontech.jsp)
 
-## Apps
+## Apps use {Bee}
 
 * [Sina Finance](https://itunes.apple.com/us/app/xin-lang-cai-jing/id430165157?mt=8)
 * [Mengtu](https://itunes.apple.com/us/app/meng-tu/id531292307?mt=8)
@@ -191,15 +189,9 @@ Copyright 2013 ~ 2014, [Geek-Zoo Studio, Inc.](http://www.geek-zoo.com) and [INS
 * [Tivic](http://mobile.91.com/Soft/Detail.aspx?Platform=iPhone&f_id=1373668)
 * [Middling](https://itunes.apple.com/us/app/middling/id531625104?mt=8)
 
-## iOS - Recommend projects
+## More Incredible Projects from OpenSourceChina
 
-###[VVDocumenter-Xcode](https://github.com/onevcat/VVDocumenter-Xcode) by [onevcat](https://github.com/onevcat)
+You may want to see more great open source projects brought you by Chinese developers. See more in the [Projects repo](https://github.com/OpenSourceChina/Projects) of [OpenSourceChina](https://github.com/OpenSourceChina).
 
-Writing document is so important for developing, but it is really painful with Xcode. Think about how much time you are wasting in pressing '*' or '/', and typing the parameters again and again. Now, you can find the method (or any code) you want to document to, and type in `///`, the document will be generated for you and all params and return will be extracted into a beatiful Javadoc style. You can just fill the inline placeholders to finish your document。
-
-Here is an image which can show what it exactly does.
-
-![Screenshot](https://raw.github.com/onevcat/VVDocumenter-Xcode/master/ScreenShot.gif)
-
-
-
+* Join us, please contact [gavinkwoe](https://github.com/gavinkwoe) or
+ [Onevcat](https://github.com/onevcat)
