@@ -90,7 +90,8 @@
 
 * Import from CocoaPods (by [stcui](https://github.com/stcui))
 
-		Add below to `Podfile` and run `pod install`
+	Add below to `Podfile` and run `pod install`
+
 		platform :ios
 		pod 'BeeFramework', :head
 
