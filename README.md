@@ -8,7 +8,17 @@
 
 * To write an controller, checkout [{Bee} scaffold code generator](https://github.com/gavinkwoe/BeeFramework/blob/master/tools)
 
-## 0.4.0 (new)
+## {Bee} interface builder
+
+![Interface builder](http://blog.whatsbug.com/wp-content/uploads/2013/07/interface-builder.png)
+
+
+## {Bee} Code generater
+
+![Scaffold](http://blog.whatsbug.com/wp-content/uploads/2013/07/scaffold.png)
+
+## Change log
+#### 0.4.0 (Lastest version)
 
 1. Refactory the directory structure, divided into four parts, applicaton, service, system and vendor.
 2. New XML template technology, perfect support for CSS
@@ -23,7 +33,7 @@
 11. Add BeeRoutine, an BeeMessage which can asynchronous and by-self executing
 12. Fix some BUG
 
-## 0.3.0
+#### 0.3.0
 
 1. Fully support for MacOS
 2. Fully support for UI template (xml)
@@ -31,7 +41,7 @@
 4. Fully support for template/viewController signal bridging by ID
 5. Fix some bugs
 
-## 0.2.3
+#### 0.2.3
 
 1. Refactoring the directory structure, Core and MVC completely separated, and the source files and the extensions completely separated
 2. Refactoring the code structure of BeeDatabase and BeeActiveRecord, more clearly
@@ -39,7 +49,7 @@
 4. Support dot(.) opertions for BeeRequest and BeeMessage
 5. Fix some bugs
 
-## 0.2.0
+#### 0.2.0
 
 1. Add BeeDatabase
 2. Add BeeActiveRecord
@@ -47,7 +57,7 @@
 4. Fix some bugs
 5. Move precompile options to 'Bee_Precompile.h'
 
-## 0.1.0
+#### 0.1.0
 
 1. Draft version
 2. Toturial
