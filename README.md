@@ -4,12 +4,12 @@
 
 * To get started, checkout [{Bee} developer manual](https://github.com/gavinkwoe/BeeFramework/blob/master/document)
 
-## [{Bee} interface builder](http://ib.bee-framework.com/)
+## [{Bee} interface builder >>>](http://ib.bee-framework.com/)
 
 ![Interface builder](http://blog.whatsbug.com/wp-content/uploads/2013/07/interface-builder.png)
 
 
-## [{Bee} Code generater](https://github.com/gavinkwoe/BeeFramework/blob/master/tools)
+## [{Bee} Code generater >>>](https://github.com/gavinkwoe/BeeFramework/blob/master/tools)
 
 ![Scaffold](http://blog.whatsbug.com/wp-content/uploads/2013/07/scaffold.png)
 
