@@ -5,6 +5,9 @@
 * To get started, checkout [{Bee} developer manual](https://github.com/gavinkwoe/BeeFramework/blob/master/document)
 * 国人请前往这里查看文档 [{Bee} developer manual](https://github.com/gavinkwoe/BeeFramework/blob/master/document)
 
+* Follow [@老郭为人民服务 on Weibo](http://www.weibo.com/gavinkwoe).
+* QQ Group: `79054681`
+
 ## [{Bee} interface builder >>>](http://ib.bee-framework.com/)
 
 ![Interface builder](http://blog.whatsbug.com/wp-content/uploads/2013/07/interface-builder.png)
@@ -74,11 +77,6 @@
 
 * Have a bug or a feature request? [Please open a new issue](https://github.com/gavinkwoe/BeeFramework/issues).
 * Before opening any issue, please read the [Issue Guidelines](https://github.com/necolas/issue-guidelines), written by [Nicolas Gallagher](https://github.com/necolas/).
-
-## Community
-
-* Follow [@老郭为人民服务 on Weibo](http://www.weibo.com/gavinkwoe).
-* QQ Group: 79054681
 
 ## Build and run
 
@@ -192,3 +190,16 @@ Copyright 2013 ~ 2014, [Geek-Zoo Studio, Inc.](http://www.geek-zoo.com) and [INS
 * [Golden carp](https://itunes.apple.com/cn/app/id584687764)
 * [Tivic](http://mobile.91.com/Soft/Detail.aspx?Platform=iPhone&f_id=1373668)
 * [Middling](https://itunes.apple.com/us/app/middling/id531625104?mt=8)
+
+## iOS - Recommend projects
+
+###[VVDocumenter-Xcode](https://github.com/onevcat/VVDocumenter-Xcode) by [onevcat](https://github.com/onevcat)
+
+Writing document is so important for developing, but it is really painful with Xcode. Think about how much time you are wasting in pressing '*' or '/', and typing the parameters again and again. Now, you can find the method (or any code) you want to document to, and type in `///`, the document will be generated for you and all params and return will be extracted into a beatiful Javadoc style. You can just fill the inline placeholders to finish your document。
+
+Here is an image which can show what it exactly does.
+
+![Screenshot](https://raw.github.com/onevcat/VVDocumenter-Xcode/master/ScreenShot.gif)
+
+
+
