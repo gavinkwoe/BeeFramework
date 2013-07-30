@@ -60,7 +60,8 @@
 ## Lastest version
 
 * [Download the lastest release](https://github.com/gavinkwoe/BeeFramework/archive/master.zip)
-* Or clone the repo, `git clone git@github.com:gavinkwoe/BeeFramework.git`.
+* Clone the repo (CLI), `git clone git@github.com:gavinkwoe/BeeFramework.git`.
+* Clone the repo (HTTP), `https://github.com/gavinkwoe/BeeFramework.git`.
 
 ## Bug tracker
 
