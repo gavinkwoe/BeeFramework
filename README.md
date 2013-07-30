@@ -14,7 +14,7 @@
 2. What you write what you see
 2. High fidelity user interface effects
 
-![Interface builder](http://blog.whatsbug.com/wp-content/uploads/2013/07/interface-builder.png)
+![Interface builder](http://blog.whatsbug.com/wp-content/uploads/2013/07/beeibpreview.gif)
 
 
 ## [{Bee} Code generater >>>](https://github.com/gavinkwoe/BeeFramework/blob/master/tools)
