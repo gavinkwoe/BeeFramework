@@ -80,13 +80,14 @@
 - (UIViewController *)viewController
 {
 	UIView * view = self;
-	while ( nil != view )
-	{
-		if ( nil == view.superview )
-			break;
-
-		view = view.superview;
-	}
+	
+//	while ( nil != view )
+//	{
+//		if ( nil == view.superview )
+//			break;
+//
+//		view = view.superview;
+//	}
 
 	UIResponder * nextResponder = [view nextResponder];	
 	if ( [nextResponder isKindOfClass:[UIViewController class]] )
