@@ -10,18 +10,24 @@
 
 ## [{Bee} interface builder >>>](http://ib.bee-framework.com/)
 
+
 1. In browser editor, support Chrome, Safari, Firefox
 2. What you write what you see
 2. High fidelity user interface effects
 
 ![Interface builder](http://blog.whatsbug.com/wp-content/uploads/2013/07/beeibpreview.gif)
 
-
 ## [{Bee} Code generater >>>](https://github.com/gavinkwoe/BeeFramework/blob/master/tools)
+
 
 1. Use `.json` file to generates both `MODEL` and `CONTROLLER` codes for you
 
 ![Scaffold](http://blog.whatsbug.com/wp-content/uploads/2013/07/scaffold.png)
+
+## [{Bee} SDK >>>](http://bee-framework.com/download/BeeFramework_SDK_0.4.0.pkg.zip)
+
+
+![Scaffold](http://blog.whatsbug.com/wp-content/uploads/2013/08/SDK.png)
 
 ## Feature list
 
