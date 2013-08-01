@@ -216,7 +216,7 @@ DEF_INT( NSDATE,		6 )
 		{
 			return BeeTypeEncoding.NSNUMBER;
 		}
-		else if ( 0 == strcmp((const char *)typeClazz, "NSString") )
+		else if ( 0 == strcmp((const char *)typeClazz, "NSString") || 0 == strcmp((const char *)typeClazz, "NSMutableString"))
 		{
 			return BeeTypeEncoding.NSSTRING;
 		}
@@ -224,11 +224,11 @@ DEF_INT( NSDATE,		6 )
 		{
 			return BeeTypeEncoding.NSDATE;
 		}
-		else if ( 0 == strcmp((const char *)typeClazz, "NSArray") )
+		else if ( 0 == strcmp((const char *)typeClazz, "NSArray") || 0 == strcmp((const char *)typeClazz, "NSMutableArray"))
 		{
 			return BeeTypeEncoding.NSARRAY;
 		}
-		else if ( 0 == strcmp((const char *)typeClazz, "NSDictionary") )
+		else if ( 0 == strcmp((const char *)typeClazz, "NSDictionary") || 0 == strcmp((const char *)typeClazz, "NSMutableDictionary"))
 		{
 			return BeeTypeEncoding.NSDICTIONARY;
 		}
