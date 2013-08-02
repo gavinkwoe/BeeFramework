@@ -233,7 +233,7 @@ DEF_SINGLETON( BeeUIRouter )
 
 //	if ( [url isEqualToString:self.url] )
 //		return YES;
-    [self viewWillAppear:NO]; 
+    
 	if ( animated )
 	{
 		CATransition * transition = [CATransition animation];
@@ -291,7 +291,7 @@ DEF_SINGLETON( BeeUIRouter )
 			[newItem.stack viewDidAppear:NO];
 		}
 	}
-    
+    [self viewWillAppear:NO]; 
     [self viewDidAppear:NO];
 	[self postNotification:self.STACK_DID_CHANGED];
 	[self sendUISignal:self.DID_CHANGED];
@@ -363,6 +363,17 @@ DEF_SINGLETON( BeeUIRouter )
 			}
 		}
 	}
+}
+
+- (void)clear;{
+    for ( BeeUIRouterItem * item in _mapping.allValues )
+	{
+        if ( item.stack )
+		{
+            [item.stack.view removeFromSuperview];
+		}
+    }
+    [_mapping removeAllObjects];
 }
 
 #pragma mark -
