@@ -3,29 +3,108 @@
 {Bee} is a modern mobile application framework for faster and easier app development, created and maintained by [Gavin Kwoe](http://www.weibo.com/gavinkwoe) and [QFish](http://qfish.net).
 
 * To get started, checkout [{Bee} developer manual](https://github.com/gavinkwoe/BeeFramework/blob/master/document)
+* Follow [@老郭为人民服务 on Weibo](http://www.weibo.com/gavinkwoe) or Join us, QQ Group: `79054681`
 
-* To write an interface, checkout [{Bee} interface builder](http://ib.bee-framework.com)
+* 从这里开始，请查看文档 [{Bee} 开发者手册](https://github.com/gavinkwoe/BeeFramework/blob/master/document)
+* 关注 [@老郭为人民服务 的新浪微博](http://www.weibo.com/gavinkwoe) 或加入我们, QQ群 `79054681`
 
-* To write an controller, checkout [{Bee} scaffold code generator](https://github.com/gavinkwoe/BeeFramework/blob/master/tools)
+## [{Bee} interface builder >>>](http://ib.bee-framework.com/)
+
+
+1. In browser editor, support Chrome, Safari, Firefox
+2. What you write what you see
+2. High fidelity user interface effects
+
+![Interface builder](http://blog.whatsbug.com/wp-content/uploads/2013/07/beeibpreview.gif)
+
+## [{Bee} Code generater >>>](https://github.com/gavinkwoe/BeeFramework/blob/master/tools)
+
+
+1. Use `.json` file to generates both `MODEL` and `CONTROLLER` codes for you
+
+![Scaffold](http://blog.whatsbug.com/wp-content/uploads/2013/07/scaffold.png)
+
+## [{Bee} SDK >>>](http://bee-framework.com/download/BeeFramework_SDK_0.4.0.pkg.zip)
+
+
+![Scaffold](http://blog.whatsbug.com/wp-content/uploads/2013/08/SDK.png)
 
 ## Feature list
 
 ![Bee vs other](http://blog.whatsbug.com/wp-content/uploads/2013/07/bee_vs_other1.png)
 
+## Change log
+
+#### 0.4.0 (Lastest version)
+
+1. Refactory the directory structure, divided into four parts, applicaton, service, system and vendor.
+2. New XML template technology, perfect support for CSS
+3. New QUERY technology, compatible with the jQUERY grammar
+4. New automatic layout algorithm, easy to handle complex UI development task
+5. New Service technology, plug-and-play
+6. New mocking server technology, simulate network requests.
+7. New ActiveObject technology, support any object serialization and deserialization
+8. New In-app debugger, simplify the useless function
+9. Code generator for JSON schema, no longer need to handwritten server docking code
+10. Add BeeUISkeleton, an simple and powerful application entry
+11. Add BeeRoutine, an BeeMessage which can asynchronous and by-self executing
+12. Fix some BUG
+
+#### 0.3.0
+
+1. Fully support for MacOS
+2. Fully support for UI template (xml)
+3. Fully support for UI query syntax, like jQUERY
+4. Fully support for template/viewController signal bridging by ID
+5. Fix some bugs
+
+#### 0.2.3
+
+1. Refactoring the directory structure, Core and MVC completely separated, and the source files and the extensions completely separated
+2. Refactoring the code structure of BeeDatabase and BeeActiveRecord, more clearly
+3. Support the ActiveRecord inherition and nesting, support HAS/BELONG_TO operations
+4. Support dot(.) opertions for BeeRequest and BeeMessage
+5. Fix some bugs
+
+#### 0.2.0
+
+1. Add BeeDatabase
+2. Add BeeActiveRecord
+3. Overload graph
+4. Fix some bugs
+5. Move precompile options to 'Bee_Precompile.h'
+
+#### 0.1.0
+
+1. Draft version
+2. Toturial
+3. In-app debugger
+
 ## Lastest version
 
-* [Download the lastest release](https://github.com/twbs/bootstrap/zipball/master)
-* Or clone the repo, `git clone git@github.com:gavinkwoe/BeeFramework.git`.
+* [Download the lastest release](https://github.com/gavinkwoe/BeeFramework/archive/master.zip)
+
+		https://github.com/gavinkwoe/BeeFramework/archive/master.zip
+
+* Clone the repo (CLI)
+
+		git clone git@github.com:gavinkwoe/BeeFramework.git
+
+* Clone the repo (HTTP)
+
+		https://github.com/gavinkwoe/BeeFramework.git
+
+* Import from CocoaPods (by [stcui](https://github.com/stcui))
+
+	Add below to `Podfile` and run `pod install`
+
+		platform :ios
+		pod 'BeeFramework', :head
 
 ## Bug tracker
 
 * Have a bug or a feature request? [Please open a new issue](https://github.com/gavinkwoe/BeeFramework/issues).
 * Before opening any issue, please read the [Issue Guidelines](https://github.com/necolas/issue-guidelines), written by [Nicolas Gallagher](https://github.com/necolas/).
-
-## Community
-
-* Follow [@老郭为人民服务 on Weibo](www.weibo.com/gavinkwoe).
-* QQ Group: 79054681
 
 ## Build and run
 
@@ -33,52 +112,29 @@
 2. Choose target, 'lib' or 'example'
 3. Build and run
 
-## CocoaPods (by [stcui](https://github.com/stcui))
-<br/>
-
-Add below to `Podfile` and run `pod install`
-
-	platform :ios
-	pod 'BeeFramework', :head
-
 ## Contributors
 
-**STCui**
+**STCui** [https://github.com/stcui](https://github.com/stcui)
 
-+ [https://github.com/stcui](https://github.com/stcui)
+**ilikeido** [https://github.com/ilikeido](https://github.com/ilikeido)
 
-**ilikeido**
+**gelosie** [https://github.com/gelosie](https://github.com/gelosie)
 
-+ [https://github.com/ilikeido](https://github.com/ilikeido)
+**lancy** [https://github.com/lancy](https://github.com/lancy)
 
-**gelosie**
+**uxyheaven** [https://github.com/uxyheaven](https://github.com/uxyheaven)
 
-+ [https://github.com/gelosie](https://github.com/gelosie)
+**Yulong** [https://github.com/Yulong](https://github.com/Yulong)
 
-**lancy**
+**esseak** [https://github.com/esseak](https://github.com/esseak)
 
-+ [https://github.com/lancy](https://github.com/lancy)
-
-**uxyheaven**
-
-+ [https://github.com/uxyheaven](https://github.com/uxyheaven)
-
-**Yulong**
-
-+ [https://github.com/Yulong](https://github.com/Yulong)
-
-**esseak**
-
-+ [https://github.com/esseak](https://github.com/esseak)
-
-**inonomori**
-
-+ [https://github.com/inonomori](https://github.com/inonomori)
+**inonomori** [https://github.com/inonomori](https://github.com/inonomori)
 
 ## Copyright and license
-<br/>
 
-Copyright 2013 ~ 2014, [Geek-Zoo Studio, Inc.](http://www.geek-zoo.com) and [INSTHUB Beijing HQ](http://www.insthub.com)
+Copyright 2013 ~ 2014, [Geek-Zoo Studio, Inc.](http://www.geek-zoo.com)
+
+{Bee} is under MIT license.
 
 
 	 ______    ______    ______
@@ -110,7 +166,7 @@ Copyright 2013 ~ 2014, [Geek-Zoo Studio, Inc.](http://www.geek-zoo.com) and [INS
 	FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 	IN THE SOFTWARE.
 
-## Who use {bee}
+## Companies use {bee}
 
 * [China Mobile](http://www.chinamobileltd.com/en/global/home.php)
 * [China Unicom](http://www.chinaunicom.com.cn/)
@@ -129,7 +185,7 @@ Copyright 2013 ~ 2014, [Geek-Zoo Studio, Inc.](http://www.geek-zoo.com) and [INS
 * [Distance Education Group](http://www.sdeg.cn/sdegPortal/)
 * [MesonTech](http://www.mesontech.com.cn/home/mesontech.jsp)
 
-## Apps
+## Apps use {Bee}
 
 * [Sina Finance](https://itunes.apple.com/us/app/xin-lang-cai-jing/id430165157?mt=8)
 * [Mengtu](https://itunes.apple.com/us/app/meng-tu/id531292307?mt=8)
@@ -139,3 +195,11 @@ Copyright 2013 ~ 2014, [Geek-Zoo Studio, Inc.](http://www.geek-zoo.com) and [INS
 * [Golden carp](https://itunes.apple.com/cn/app/id584687764)
 * [Tivic](http://mobile.91.com/Soft/Detail.aspx?Platform=iPhone&f_id=1373668)
 * [Middling](https://itunes.apple.com/us/app/middling/id531625104?mt=8)
+* [iMyBags](https://itunes.apple.com/us/app/imybags/id672167473?ls=1&mt=8)
+
+## More Incredible Projects from OpenSourceChina
+
+You may want to see more great open source projects brought you by Chinese developers. See more in the [Projects repo](https://github.com/OpenSourceChina/Projects) of [OpenSourceChina](https://github.com/OpenSourceChina).
+
+* Join us, please contact [gavinkwoe](https://github.com/gavinkwoe) or
+ [onevcat](https://github.com/onevcat)

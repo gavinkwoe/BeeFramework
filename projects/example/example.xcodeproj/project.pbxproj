@@ -260,14 +260,6 @@
 		CBDA88CA17A6447800EE3C2E /* BeeUIQuery+Traversing.m in Sources */ = {isa = PBXBuildFile; fileRef = CBDA874B17A6447700EE3C2E /* BeeUIQuery+Traversing.m */; };
 		CBDA88CB17A6447800EE3C2E /* BeeUIQuery+Value.m in Sources */ = {isa = PBXBuildFile; fileRef = CBDA874D17A6447700EE3C2E /* BeeUIQuery+Value.m */; };
 		CBDA88CC17A6447800EE3C2E /* Bee_UITemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = CBDA875017A6447700EE3C2E /* Bee_UITemplate.m */; };
-		CBDA88CD17A6447800EE3C2E /* Bee_UITemplateCompiler.m in Sources */ = {isa = PBXBuildFile; fileRef = CBDA875317A6447700EE3C2E /* Bee_UITemplateCompiler.m */; };
-		CBDA88CE17A6447800EE3C2E /* Bee_UITemplateContext.m in Sources */ = {isa = PBXBuildFile; fileRef = CBDA875517A6447700EE3C2E /* Bee_UITemplateContext.m */; };
-		CBDA88CF17A6447800EE3C2E /* Bee_UITemplateSyntaxEXPR.m in Sources */ = {isa = PBXBuildFile; fileRef = CBDA875717A6447700EE3C2E /* Bee_UITemplateSyntaxEXPR.m */; };
-		CBDA88D017A6447800EE3C2E /* Bee_UITemplateSyntaxFOR.m in Sources */ = {isa = PBXBuildFile; fileRef = CBDA875917A6447700EE3C2E /* Bee_UITemplateSyntaxFOR.m */; };
-		CBDA88D117A6447800EE3C2E /* Bee_UITemplateSyntaxIF.m in Sources */ = {isa = PBXBuildFile; fileRef = CBDA875B17A6447700EE3C2E /* Bee_UITemplateSyntaxIF.m */; };
-		CBDA88D217A6447800EE3C2E /* Bee_UITemplateSyntaxTEXT.m in Sources */ = {isa = PBXBuildFile; fileRef = CBDA875D17A6447700EE3C2E /* Bee_UITemplateSyntaxTEXT.m */; };
-		CBDA88D317A6447800EE3C2E /* Bee_UITemplateSyntaxTree.m in Sources */ = {isa = PBXBuildFile; fileRef = CBDA875F17A6447700EE3C2E /* Bee_UITemplateSyntaxTree.m */; };
-		CBDA88D417A6447800EE3C2E /* Bee_UITemplateTokenlizer.m in Sources */ = {isa = PBXBuildFile; fileRef = CBDA876117A6447700EE3C2E /* Bee_UITemplateTokenlizer.m */; };
 		CBDA88D517A6447800EE3C2E /* UIView+BeeUITemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = CBDA876417A6447700EE3C2E /* UIView+BeeUITemplate.m */; };
 		CBDA88D617A6447800EE3C2E /* UIViewController+BeeUITemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = CBDA876617A6447700EE3C2E /* UIViewController+BeeUITemplate.m */; };
 		CBDA88D717A6447800EE3C2E /* Bee_UITemplateAndroid.m in Sources */ = {isa = PBXBuildFile; fileRef = CBDA876917A6447700EE3C2E /* Bee_UITemplateAndroid.m */; };
@@ -824,22 +816,6 @@
 		CBDA874D17A6447700EE3C2E /* BeeUIQuery+Value.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "BeeUIQuery+Value.m"; sourceTree = "<group>"; };
 		CBDA874F17A6447700EE3C2E /* Bee_UITemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bee_UITemplate.h; sourceTree = "<group>"; };
 		CBDA875017A6447700EE3C2E /* Bee_UITemplate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bee_UITemplate.m; sourceTree = "<group>"; };
-		CBDA875217A6447700EE3C2E /* Bee_UITemplateCompiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bee_UITemplateCompiler.h; sourceTree = "<group>"; };
-		CBDA875317A6447700EE3C2E /* Bee_UITemplateCompiler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bee_UITemplateCompiler.m; sourceTree = "<group>"; };
-		CBDA875417A6447700EE3C2E /* Bee_UITemplateContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bee_UITemplateContext.h; sourceTree = "<group>"; };
-		CBDA875517A6447700EE3C2E /* Bee_UITemplateContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bee_UITemplateContext.m; sourceTree = "<group>"; };
-		CBDA875617A6447700EE3C2E /* Bee_UITemplateSyntaxEXPR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bee_UITemplateSyntaxEXPR.h; sourceTree = "<group>"; };
-		CBDA875717A6447700EE3C2E /* Bee_UITemplateSyntaxEXPR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bee_UITemplateSyntaxEXPR.m; sourceTree = "<group>"; };
-		CBDA875817A6447700EE3C2E /* Bee_UITemplateSyntaxFOR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bee_UITemplateSyntaxFOR.h; sourceTree = "<group>"; };
-		CBDA875917A6447700EE3C2E /* Bee_UITemplateSyntaxFOR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bee_UITemplateSyntaxFOR.m; sourceTree = "<group>"; };
-		CBDA875A17A6447700EE3C2E /* Bee_UITemplateSyntaxIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bee_UITemplateSyntaxIF.h; sourceTree = "<group>"; };
-		CBDA875B17A6447700EE3C2E /* Bee_UITemplateSyntaxIF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bee_UITemplateSyntaxIF.m; sourceTree = "<group>"; };
-		CBDA875C17A6447700EE3C2E /* Bee_UITemplateSyntaxTEXT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bee_UITemplateSyntaxTEXT.h; sourceTree = "<group>"; };
-		CBDA875D17A6447700EE3C2E /* Bee_UITemplateSyntaxTEXT.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bee_UITemplateSyntaxTEXT.m; sourceTree = "<group>"; };
-		CBDA875E17A6447700EE3C2E /* Bee_UITemplateSyntaxTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bee_UITemplateSyntaxTree.h; sourceTree = "<group>"; };
-		CBDA875F17A6447700EE3C2E /* Bee_UITemplateSyntaxTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bee_UITemplateSyntaxTree.m; sourceTree = "<group>"; };
-		CBDA876017A6447700EE3C2E /* Bee_UITemplateTokenlizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bee_UITemplateTokenlizer.h; sourceTree = "<group>"; };
-		CBDA876117A6447700EE3C2E /* Bee_UITemplateTokenlizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bee_UITemplateTokenlizer.m; sourceTree = "<group>"; };
 		CBDA876317A6447700EE3C2E /* UIView+BeeUITemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+BeeUITemplate.h"; sourceTree = "<group>"; };
 		CBDA876417A6447700EE3C2E /* UIView+BeeUITemplate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+BeeUITemplate.m"; sourceTree = "<group>"; };
 		CBDA876517A6447700EE3C2E /* UIViewController+BeeUITemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+BeeUITemplate.h"; sourceTree = "<group>"; };
@@ -1922,34 +1898,10 @@
 			children = (
 				CBDA874F17A6447700EE3C2E /* Bee_UITemplate.h */,
 				CBDA875017A6447700EE3C2E /* Bee_UITemplate.m */,
-				CBDA875117A6447700EE3C2E /* compiler */,
 				CBDA876217A6447700EE3C2E /* extension */,
 				CBDA876717A6447700EE3C2E /* parsers */,
 			);
 			path = template;
-			sourceTree = "<group>";
-		};
-		CBDA875117A6447700EE3C2E /* compiler */ = {
-			isa = PBXGroup;
-			children = (
-				CBDA875217A6447700EE3C2E /* Bee_UITemplateCompiler.h */,
-				CBDA875317A6447700EE3C2E /* Bee_UITemplateCompiler.m */,
-				CBDA875417A6447700EE3C2E /* Bee_UITemplateContext.h */,
-				CBDA875517A6447700EE3C2E /* Bee_UITemplateContext.m */,
-				CBDA875617A6447700EE3C2E /* Bee_UITemplateSyntaxEXPR.h */,
-				CBDA875717A6447700EE3C2E /* Bee_UITemplateSyntaxEXPR.m */,
-				CBDA875817A6447700EE3C2E /* Bee_UITemplateSyntaxFOR.h */,
-				CBDA875917A6447700EE3C2E /* Bee_UITemplateSyntaxFOR.m */,
-				CBDA875A17A6447700EE3C2E /* Bee_UITemplateSyntaxIF.h */,
-				CBDA875B17A6447700EE3C2E /* Bee_UITemplateSyntaxIF.m */,
-				CBDA875C17A6447700EE3C2E /* Bee_UITemplateSyntaxTEXT.h */,
-				CBDA875D17A6447700EE3C2E /* Bee_UITemplateSyntaxTEXT.m */,
-				CBDA875E17A6447700EE3C2E /* Bee_UITemplateSyntaxTree.h */,
-				CBDA875F17A6447700EE3C2E /* Bee_UITemplateSyntaxTree.m */,
-				CBDA876017A6447700EE3C2E /* Bee_UITemplateTokenlizer.h */,
-				CBDA876117A6447700EE3C2E /* Bee_UITemplateTokenlizer.m */,
-			);
-			path = compiler;
 			sourceTree = "<group>";
 		};
 		CBDA876217A6447700EE3C2E /* extension */ = {
@@ -2679,14 +2631,6 @@
 				CBDA88CA17A6447800EE3C2E /* BeeUIQuery+Traversing.m in Sources */,
 				CBDA88CB17A6447800EE3C2E /* BeeUIQuery+Value.m in Sources */,
 				CBDA88CC17A6447800EE3C2E /* Bee_UITemplate.m in Sources */,
-				CBDA88CD17A6447800EE3C2E /* Bee_UITemplateCompiler.m in Sources */,
-				CBDA88CE17A6447800EE3C2E /* Bee_UITemplateContext.m in Sources */,
-				CBDA88CF17A6447800EE3C2E /* Bee_UITemplateSyntaxEXPR.m in Sources */,
-				CBDA88D017A6447800EE3C2E /* Bee_UITemplateSyntaxFOR.m in Sources */,
-				CBDA88D117A6447800EE3C2E /* Bee_UITemplateSyntaxIF.m in Sources */,
-				CBDA88D217A6447800EE3C2E /* Bee_UITemplateSyntaxTEXT.m in Sources */,
-				CBDA88D317A6447800EE3C2E /* Bee_UITemplateSyntaxTree.m in Sources */,
-				CBDA88D417A6447800EE3C2E /* Bee_UITemplateTokenlizer.m in Sources */,
 				CBDA88D517A6447800EE3C2E /* UIView+BeeUITemplate.m in Sources */,
 				CBDA88D617A6447800EE3C2E /* UIViewController+BeeUITemplate.m in Sources */,
 				CBDA88D717A6447800EE3C2E /* Bee_UITemplateAndroid.m in Sources */,

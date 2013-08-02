@@ -233,6 +233,38 @@ DEF_INT( STATE_HIGHLIGHTED,	3 )
 	}	
 }
 
++ (CGSize)sizeInBound:(CGSize)bound forData:(NSObject *)data
+{
+	BeeUICell * cell = [self temporary];
+	if ( cell )
+	{
+		cell.data = data;
+		
+		CGRect cellFrame = [cell.layout estimateFrameBy:CGSizeMakeBound(bound)];
+		return cellFrame.size;
+	}
+	
+	return [super estimateUISizeByBound:bound forData:data];
+}
+
+- (CGSize)sizeInBound:(CGSize)bound
+{
+	return [[self class] sizeInBound:bound forData:self.data];
+}
+
+- (void)layoutInBound:(CGSize)bound forCell:(BeeUICell *)cell
+{
+	BeeUILayout * viewLayout = [cell layout];
+	if ( viewLayout )
+	{
+		viewLayout.RELAYOUT();
+	}
+	else
+	{
+		[cell layoutSubviews];
+	}
+}
+
 #pragma mark -
 
 - (void)initSelf
