@@ -233,7 +233,7 @@ DEF_SINGLETON( BeeUIRouter )
 
 //	if ( [url isEqualToString:self.url] )
 //		return YES;
-
+    [self viewWillAppear:NO]; 
 	if ( animated )
 	{
 		CATransition * transition = [CATransition animation];
@@ -291,7 +291,8 @@ DEF_SINGLETON( BeeUIRouter )
 			[newItem.stack viewDidAppear:NO];
 		}
 	}
-
+    
+    [self viewDidAppear:NO];
 	[self postNotification:self.STACK_DID_CHANGED];
 	[self sendUISignal:self.DID_CHANGED];
 
