@@ -458,8 +458,9 @@
 					}
 				}
 			}
-            
-			[object setValue:value forKey:propertyName];
+            if (value) {
+                [object setValue:value forKey:propertyName];
+            }
 		}
 		
 		free( properties );
