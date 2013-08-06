@@ -260,6 +260,47 @@ static NSMutableArray *		__allBoards = nil;
 	return [[[self alloc] initWithNibName:nibNameOrNil bundle:nil] autorelease];
 }
 
+-(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+#if (__ON__ == __BEE_DEVELOPMENT__)
+		if ( nil == __allBoards )
+		{
+			__allBoards = [[NSMutableArray nonRetainingArray] retain];
+		}
+        
+		[__allBoards insertObject:self atIndex:0];
+#endif	// #if (__ON__ == __BEE_DEVELOPMENT__)
+		
+		_firstEnter = YES;
+		_presenting = NO;
+		_viewBuilt = NO;
+		_dataLoaded = NO;
+		_state = self.STATE_DEACTIVATED;
+		
+		_createDate = [[NSDate date] retain];
+		_lastSleep = [NSDate timeIntervalSinceReferenceDate];
+		_lastWeekup = [NSDate timeIntervalSinceReferenceDate];
+        
+		_allowedPortrait = YES;
+		_allowedLandscape = NO;
+        
+#if (__ON__ == __BEE_DEVELOPMENT__)
+		_createSeq = __createSeed++;
+		_signalSeq = 0;
+		_signals = [[NSMutableArray alloc] init];
+        
+		_callstack = [[NSMutableArray alloc] init];
+		[_callstack addObjectsFromArray:[BeeRuntime callstack:16]];
+#endif	// #if (__ON__ == __BEE_DEVELOPMENT__)
+		
+		self.name = [BeeUIBoard generateName];
+        
+		[self load];
+    }
+    return self;
+}
+
 - (id)init
 {
 	self = [super init];
