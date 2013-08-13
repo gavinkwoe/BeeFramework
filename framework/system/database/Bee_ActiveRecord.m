@@ -1784,10 +1784,19 @@ DEF_NUMBER( INVALID_ID,	-1 )
 	{
 		_changed = NO;
 
-		if ( primaryKey )
-		{
-			[self setValue:[NSNumber numberWithInteger:super.DB.insertID] forKey:primaryKey];
-		}
+		if ( primaryKey && ![self valueForKey:primaryKey])
+        {
+            NSDictionary * property = [propertySet objectForKey:primaryKey];
+            NSNumber * type = [property objectForKey:@"type"];
+            if ( BeeTypeEncoding.NSNUMBER == type.intValue )
+			{
+				[self setValue:[NSNumber numberWithInteger:super.DB.insertID] forKey:primaryKey];
+			}
+			else if ( BeeTypeEncoding.NSSTRING == type.intValue )
+			{
+				[self setValue:[NSString stringWithFormat:@"%d",super.DB.insertID] forKey:primaryKey];
+			}
+        }
 	}
 
 	[BeeDatabase scopeLeave];
