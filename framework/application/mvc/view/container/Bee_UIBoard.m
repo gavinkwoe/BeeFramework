@@ -449,6 +449,16 @@ static NSMutableArray *		__allBoards = nil;
 	
 	[self createViews];
 	[self loadDatas];
+    
+    if (_allowedLandscape && !_allowedPortrait) {
+        if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait || [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortraitUpsideDown) {
+            [[UIApplication sharedApplication]setStatusBarOrientation:UIDeviceOrientationLandscapeRight animated:NO];
+        }
+    }else if(_allowedPortrait && !_allowedLandscape){
+        if ([UIApplication sharedApplication].statusBarOrientation == UIDeviceOrientationLandscapeRight || [UIApplication sharedApplication].statusBarOrientation == UIDeviceOrientationLandscapeLeft) {
+            [[UIApplication sharedApplication]setStatusBarOrientation:UIDeviceOrientationPortrait animated:NO];
+        }
+    }
 
     [super viewDidLoad];
 }
