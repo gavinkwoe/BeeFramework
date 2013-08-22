@@ -5,8 +5,8 @@
 * To get started, checkout [{Bee} developer manual](https://github.com/gavinkwoe/BeeFramework/blob/master/document)
 * Follow [@老郭为人民服务 on Weibo](http://www.weibo.com/gavinkwoe) or Join us, QQ Group: `79054681`
 
-* 从这里开始，请查看文档 [{Bee} 开发者手册](https://github.com/gavinkwoe/BeeFramework/blob/master/document)
-* 关注 [@老郭为人民服务 的新浪微博](http://www.weibo.com/gavinkwoe) 或加入我们, QQ群 `79054681`
+
+<b>如果喜欢{Bee}框架，请在您使用的项目中注明出处，并推荐给您的朋友。谢谢。</b>
 
 ## [{Bee} interface builder >>>](http://ib.bee-framework.com/)
 
