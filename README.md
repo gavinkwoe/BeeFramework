@@ -2,12 +2,14 @@
 
 {Bee} is a powerful framework for faster and easier app development, created and maintained by [Gavin Kwoe](https://github.com/gavinkwoe) and [QFish](https://github.com/qfish).
 
-<b>If you like {Bee} framework, please recommend to your friends.</b>
-
 * Contact us, email [gavinkwoe@gmail.com](gavinkwoe@gmail.com)
 * Contact us, follow [@老郭为人民服务 on 新浪微博](http://www.weibo.com/gavinkwoe)
+<br>
+
 * Join us, QQ Group: `79054681`
 * Join us, Developer forum: [forum.bee-framework.com](http://forum.bee-framework.com) 
+
+<b>If you like this framework, please recommend to your friends.</b>
 
 ### Lastest version
 
