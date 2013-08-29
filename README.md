@@ -1,6 +1,7 @@
 # [{Bee} Framework v0.4.0](http://www.bee-framework.com)
 
 {Bee} is a powerful framework for faster and easier app development, created and maintained by [Gavin Kwoe](https://github.com/gavinkwoe) and [QFish](https://github.com/qfish).
+Special thanks to [Geek-Zoo Studio, Inc.](http://www.geek-zoo.com), they provide big support to us.
 
 * Contact us, email <b> [gavinkwoe@gmail.com](gavinkwoe@gmail.com) </b>
 * Contact us, follow <b> [@老郭为人民服务 on 新浪微博](http://www.weibo.com/gavinkwoe) </b>
@@ -41,6 +42,12 @@
 2. Choose target, 'lib' or 'example'
 3. Build and run
 
+### Documents
+
+* [<< Developer manual >> 开发者手册](https://github.com/gavinkwoe/BeeFramework/blob/master/document)
+* [<< Template manual >> 模版使用手册](https://github.com/gavinkwoe/BeeFramework/wiki/Bee-Templates-Manual)
+* [<< CSS cheatsheet >> CSS说明书](https://github.com/gavinkwoe/BeeFramework/blob/master/document)
+
 ### Architecture
 
 ![Bee architecture](http://blog.whatsbug.com/wp-content/uploads/2013/08/architect2.png)
@@ -51,23 +58,17 @@
 
 ### Tools
 
-#### [Online interface builder](http://ib.bee-framework.com/)
+#### [Online interface builder >>](http://ib.bee-framework.com/)
 
 ![Interface builder](http://blog.whatsbug.com/wp-content/uploads/2013/07/beeibpreview.gif)
 
-#### [API code generator](https://github.com/gavinkwoe/BeeFramework/blob/master/tools)
+#### [API code generator >>](https://github.com/gavinkwoe/BeeFramework/blob/master/tools)
 
 ![Scaffold](http://blog.whatsbug.com/wp-content/uploads/2013/07/scaffold.png)
 
-#### [Official SDK](http://bee-framework.com/download/BeeFramework_SDK_0.4.0.pkg.zip)
+#### [Official SDK >>](http://bee-framework.com/download/BeeFramework_SDK_0.4.0.pkg.zip)
 
 ![SDK](http://blog.whatsbug.com/wp-content/uploads/2013/08/SDK.png)
-
-### Documents
-
-* [<< Developer manual >>](https://github.com/gavinkwoe/BeeFramework/blob/master/document)
-* [<< Template manual >>](https://github.com/gavinkwoe/BeeFramework/wiki/Bee-Templates-Manual)
-* [<< CSS cheatsheet >>](https://github.com/gavinkwoe/BeeFramework/blob/master/document)
 
 ### Change log
 
