@@ -1,41 +1,75 @@
 # [{Bee} Framework v0.4.0](http://www.bee-framework.com)
 
-{Bee} is a modern mobile application framework for faster and easier app development, created and maintained by [Gavin Kwoe](http://www.weibo.com/gavinkwoe) and [QFish](http://qfish.net).
+{Bee} is a powerful framework for faster and easier app development, created and maintained by [Gavin Kwoe](https://github.com/gavinkwoe) and [QFish](https://github.com/qfish).
 
-* To get started, checkout [{Bee} developer manual](https://github.com/gavinkwoe/BeeFramework/blob/master/document)
-* Follow [@老郭为人民服务 on Weibo](http://www.weibo.com/gavinkwoe)
+<b>If you like {Bee} framework, please recommend to your friends.</b>
+
+* Contact us, email [gavinkwoe@gmail.com](gavinkwoe@gmail.com)
+* Contact us, follow [@老郭为人民服务 on 新浪微博](http://www.weibo.com/gavinkwoe)
 * Join us, QQ Group: `79054681`
 * Join us, Developer forum: [forum.bee-framework.com](http://forum.bee-framework.com) 
 
+### Lastest version
 
-<b>如果喜欢{Bee}框架，请在您使用的项目中注明出处，并推荐给您的朋友。谢谢。</b>
+* [Download the lastest release](https://github.com/gavinkwoe/BeeFramework/archive/master.zip)
 
-## [{Bee} interface builder >>>](http://ib.bee-framework.com/)
+		https://github.com/gavinkwoe/BeeFramework/archive/master.zip
 
+* Clone the repo (CLI)
 
-1. In browser editor, support Chrome, Safari, Firefox
-2. What you write what you see
-2. High fidelity user interface effects
+		git clone git@github.com:gavinkwoe/BeeFramework.git
 
-![Interface builder](http://blog.whatsbug.com/wp-content/uploads/2013/07/beeibpreview.gif)
+* Clone the repo (HTTP)
 
-## [{Bee} Code generater >>>](https://github.com/gavinkwoe/BeeFramework/blob/master/tools)
+		https://github.com/gavinkwoe/BeeFramework.git
 
+* Import from CocoaPods (by [stcui](https://github.com/stcui))
 
-1. Use `.json` file to generates both `MODEL` and `CONTROLLER` codes for you
+	Add below to `Podfile` and run `pod install`
 
-![Scaffold](http://blog.whatsbug.com/wp-content/uploads/2013/07/scaffold.png)
+		platform :ios
+		pod 'BeeFramework', :head
 
-## [{Bee} SDK >>>](http://bee-framework.com/download/BeeFramework_SDK_0.4.0.pkg.zip)
+### Bug tracker
 
+* Have a bug or a feature request? [Please open a new issue](https://github.com/gavinkwoe/BeeFramework/issues).
+* Before opening any issue, please read the [Issue Guidelines](https://github.com/necolas/issue-guidelines), written by [Nicolas Gallagher](https://github.com/necolas/).
 
-![Scaffold](http://blog.whatsbug.com/wp-content/uploads/2013/08/SDK.png)
+### Build and run
 
-## Feature list
+1. Open `/projects/BeeFramework.xcworkspace`
+2. Choose target, 'lib' or 'example'
+3. Build and run
+
+### Architecture
+
+![Bee architecture](http://blog.whatsbug.com/wp-content/uploads/2013/08/architect2.png)
+
+### Feature list
 
 ![Bee vs other](http://blog.whatsbug.com/wp-content/uploads/2013/07/bee_vs_other1.png)
 
-## Change log
+### Tools
+
+#### [Online interface builder](http://ib.bee-framework.com/)
+
+![Interface builder](http://blog.whatsbug.com/wp-content/uploads/2013/07/beeibpreview.gif)
+
+#### [API code generator](https://github.com/gavinkwoe/BeeFramework/blob/master/tools)
+
+![Scaffold](http://blog.whatsbug.com/wp-content/uploads/2013/07/scaffold.png)
+
+#### [Official SDK](http://bee-framework.com/download/BeeFramework_SDK_0.4.0.pkg.zip)
+
+![SDK](http://blog.whatsbug.com/wp-content/uploads/2013/08/SDK.png)
+
+### Documents
+
+* [<< Developer manual >>](https://github.com/gavinkwoe/BeeFramework/blob/master/document)
+* [<< Template manual >>](https://github.com/gavinkwoe/BeeFramework/wiki/Bee-Templates-Manual)
+* [<< CSS cheatsheet >>](https://github.com/gavinkwoe/BeeFramework/blob/master/document)
+
+### Change log
 
 #### 0.4.0 (Lastest version)
 
@@ -81,38 +115,6 @@
 1. Draft version
 2. Toturial
 3. In-app debugger
-
-## Lastest version
-
-* [Download the lastest release](https://github.com/gavinkwoe/BeeFramework/archive/master.zip)
-
-		https://github.com/gavinkwoe/BeeFramework/archive/master.zip
-
-* Clone the repo (CLI)
-
-		git clone git@github.com:gavinkwoe/BeeFramework.git
-
-* Clone the repo (HTTP)
-
-		https://github.com/gavinkwoe/BeeFramework.git
-
-* Import from CocoaPods (by [stcui](https://github.com/stcui))
-
-	Add below to `Podfile` and run `pod install`
-
-		platform :ios
-		pod 'BeeFramework', :head
-
-## Bug tracker
-
-* Have a bug or a feature request? [Please open a new issue](https://github.com/gavinkwoe/BeeFramework/issues).
-* Before opening any issue, please read the [Issue Guidelines](https://github.com/necolas/issue-guidelines), written by [Nicolas Gallagher](https://github.com/necolas/).
-
-## Build and run
-
-1. Open `/projects/BeeFramework.xcworkspace`
-2. Choose target, 'lib' or 'example'
-3. Build and run
 
 ## Contributors
 
