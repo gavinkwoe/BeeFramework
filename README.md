@@ -1,14 +1,20 @@
-# [{Bee} Framework v0.4.0](http://www.bee-framework.com)
+BeeFramework : the next generation
+==================================
 
-{Bee} is a powerful framework for faster and easier app development, created and maintained by [Gavin Kwoe](https://github.com/gavinkwoe) and [QFish](https://github.com/qfish).
-Special thanks to [Geek-Zoo Studio, Inc.](http://www.geek-zoo.com), they provide big support to us.
+BeeFramework is a new generation of development framework which makes faster and easier app development, created and maintained by [Gavin Kwoe](https://github.com/gavinkwoe) and [QFish](https://github.com/qfish).
+
+![Bee logo](http://blog.whatsbug.com/wp-content/uploads/2013/08/bee-logo.png)
 
 * Contact us, email <b> [gavinkwoe@gmail.com](gavinkwoe@gmail.com) </b>
 * Contact us, follow <b> [@老郭为人民服务 on 新浪微博](http://www.weibo.com/gavinkwoe) </b>
 * Join us, QQ Group <b><a> 79054681 </a></b>
 * Join us, Developer forum <b> [forum.bee-framework.com](http://forum.bee-framework.com) </b>
 
-<b>If you like this framework, please recommend to your friends.</b>
+### Special thanks to
+
+[![Geek-Zoo](http://geek-zoo.com/images/logo-01.png)](http://www.geek-zoo.com)
+
+They provide awesome design and development works continues to help the open-source community even better.
 
 ### Lastest version
 
