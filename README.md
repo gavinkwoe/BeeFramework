@@ -1,4 +1,4 @@
-##BeeFramework : the mobile app development framework
+##BeeFramework : the app development framework
 
 BeeFramework is a new generation of development framework which makes faster and easier app development, created and maintained by [Gavin Kwoe](https://github.com/gavinkwoe) and [QFish](https://github.com/qfish).
 
