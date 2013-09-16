@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ui namespace="DribbbleDetailComment_iPhone">
+
+	<linear orientation="h" class="wrapper">
+		<image id="avatar" class="avatar"/>
+		<linear orientation="v" class="right-wrapper">
+			<label id="name" class="name"/>
+			<label id="text" class="text"></label>
+			<label id="time" class="time"></label>
+		</linear>
+	</linear>
+
+    <style type="text/css">
+		
+		.wrapper {
+			width: 100%;
+			height: auto;
+			margin-top: 10px;
+		}
+
+		.avatar {
+			width: 44px;
+			height: 44px;
+			padding: 2px;
+			margin-left: 10px;
+			background-color: #999;
+			border-radius: 6px;
+			border-width: 2px;
+			border-color: white;
+			image-mode: fill;
+			image-loading: white;
+		}
+
+		.right-wrapper {
+			width: 246px;
+			height: auto;
+			margin-left: 10px;
+		}
+
+		.name {
+			width: 100%;
+			height: auto;
+			font-size: 14px;
+			font-weight: bold;
+			text-align: left;
+			color: gray;
+			margin-top: 2px;
+			margin-bottom: 2px;
+		}
+
+		.text {
+			width: 100%;
+			height: auto;
+			font-size: 14px;
+			font-weight: bold;
+			text-align: left;
+			color: white;
+			margin-top: 2px;
+			margin-bottom: 2px;
+			line-break: word-wrap;
+			line-num: 999;
+		}
+		
+		.time {
+			width: 100%;
+			height: auto;
+			font-size: 12px;
+			font-weight: bold;
+			text-align: left;
+			color: #999;
+			margin-top: 2px;
+			margin-bottom: 2px;
+		}
+
+	</style>
+</ui>

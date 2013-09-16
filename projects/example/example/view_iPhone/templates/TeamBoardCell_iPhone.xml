@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui namespace="TeamBoardCell_iPhone">
+
+	<linear orientation="v" class="outter-wrapper">
+		
+		<label class="title">Thanks to</label>
+
+		<linear orientation="v" class="wrapper">
+			<view class="inner-bg"/>
+			<image class="sub-logo" src="geek-zoo.png"/>
+			<label class="sub-content">
+				They provide holistic solutions that include user interface, information architecture, logic flow, user experience, visual effects, back/front end coding.
+			</label>
+			<linear orientation="h" class="button-wrapper">
+				<button id="call" class="sub-button">
+					Call
+				</button>
+				<button id="website" class="sub-button">
+					Website
+				</button>
+			</linear>
+		</linear>
+
+		<label class="title">Developers</label>
+
+		<linear orientation="v" class="wrapper">
+			<view class="inner-bg"/>
+			<linear orientation="h" class="profile-wrapper">
+				<image class="profile-avatar" src="avatar-laoguo.png"/>
+				<linear orientation="v" class="profile-right-wrapper">
+					<label class="profile-name">Guo</label>
+					<label class="profile-title">iOS Developer</label>
+					<button id="guo" class="profile-contact">github.com</button>
+				</linear>
+			</linear>
+			<label class="profile-intro">
+				The creator of BeeFramework, if any problem about {Bee}, contact me.
+			</label>
+		</linear>
+
+		<linear orientation="v" class="wrapper">
+			<view class="inner-bg"/>
+			<linear orientation="h" class="profile-wrapper">
+				<image class="profile-avatar" src="avatar-qfish.png"/>
+				<linear orientation="v" class="profile-right-wrapper">
+					<label class="profile-name">QFish</label>
+					<label class="profile-title">iOS Developer</label>
+					<button id="qfish" class="profile-contact">github.com</button>
+				</linear>
+			</linear>
+			<label class="profile-intro">
+				Love coding and hand-drawing, while he is also skilled in HTML and CSS and JS.
+				What he always saying is "Fight, a way of surviving ~".
+			</label>
+		</linear>
+
+		<linear orientation="v" class="wrapper">
+			<view class="inner-bg"/>
+			<linear orientation="h" class="profile-wrapper">
+				<image class="profile-avatar" src="avatar-howie.png"/>
+				<linear orientation="v" class="profile-right-wrapper">
+					<label class="profile-name">Howie</label>
+					<label class="profile-title">Android Developer</label>
+					<button id="howie" class="profile-contact">github.com</button>
+				</linear>
+			</linear>
+			<label class="profile-intro">
+				Like to drink beer.
+			</label>
+		</linear>
+		
+		<linear orientation="v" class="wrapper">
+			<view class="inner-bg"/>
+			<linear orientation="h" class="profile-wrapper">
+				<image class="profile-avatar" src="avatar-houxin.png"/>
+				<linear orientation="v" class="profile-right-wrapper">
+					<label class="profile-name">Houxin</label>
+					<label class="profile-title">Android Developer</label>
+					<button id="houxin" class="profile-contact">github.com</button>
+				</linear>
+			</linear>
+			<label class="profile-intro">
+				This guy is too lazy to say nothing.
+			</label>
+		</linear>
+		
+		<linear orientation="v" class="wrapper">
+			<view class="inner-bg"/>
+			<linear orientation="h" class="profile-wrapper">
+				<image class="profile-avatar" src="avatar-donglin.png"/>
+				<linear orientation="v" class="profile-right-wrapper">
+					<label class="profile-name">Donglin</label>
+					<label class="profile-title">
+						Web developer &amp; designer
+					</label>
+					<button id="donglin" class="profile-contact2">dribbble.com</button>
+				</linear>
+			</linear>
+			<label class="profile-intro">
+				Information technology professional capable of managing technology projects from concept to completion with remarkable deadline sensitivity. Over experienced UI/UX design, Front-coding, Product Management/Design/Mapping, Mobile App Nerd. Compatible team player through complete project cycles , testing , and final implementation , Excellent communication skills.
+			</label>
+		</linear>
+
+		<label class="title">Contributors</label>
+
+		<linear orientation="v" class="wrapper">
+			<view class="inner-bg"/>
+			<linear orientation="h" class="profile-wrapper">
+				<image class="profile-avatar" src="avatar-stcui.jpg"/>
+				<linear orientation="v" class="profile-right-wrapper">
+					<label class="profile-name">STCui</label>
+					<label class="profile-title">Major contributor</label>
+					<button id="stcui" class="profile-contact">github.com</button>
+				</linear>
+			</linear>
+			<label class="profile-intro">
+				Coffee driven programmer, mixed with Cocoa.
+			</label>
+		</linear>
+
+		<linear orientation="v" class="wrapper">
+			<view class="inner-bg"/>
+			<linear orientation="h" class="profile-wrapper">
+				<image class="profile-avatar" src="avatar-ilikeido.jpg"/>
+				<linear orientation="v" class="profile-right-wrapper">
+					<label class="profile-name">ilikeido</label>
+					<label class="profile-title">Major contributor</label>
+					<button id="ilikeido" class="profile-contact">github.com</button>
+				</linear>
+			</linear>
+			<label class="profile-intro">
+				Just like his nickname , he is engaged in all he was interested in working ,some in java , nodejs , android and ios.
+			</label>
+		</linear>
+		
+		<linear orientation="v" class="wrapper">
+			<view class="inner-bg"/>
+			<linear orientation="h" class="profile-wrapper">
+				<image class="profile-avatar" src="avatar-heaven.jpg"/>
+				<linear orientation="v" class="profile-right-wrapper">
+					<label class="profile-name">uxyheaven</label>
+					<label class="profile-title">Major contributor</label>
+					<button id="uxyheaven" class="profile-contact">github.com</button>
+				</linear>
+			</linear>
+			<label class="profile-intro">
+				Previous work is the knockoff cellphones project manager. Current work is the IOS developer. Next work maybe start a business.
+			</label>
+		</linear>
+		
+		<linear orientation="v" class="wrapper">
+			<view class="inner-bg"/>
+			<linear orientation="h" class="profile-wrapper">
+				<image class="profile-avatar" src="avatar-lancy.jpg"/>
+				<linear orientation="v" class="profile-right-wrapper">
+					<label class="profile-name">Lancy</label>
+					<label class="profile-title">Major contributor</label>
+					<button id="lancy" class="profile-contact">github.com</button>
+				</linear>
+			</linear>
+			<label class="profile-intro">
+				iOS Desigrammer, currently a student at Sun Yat-Sen University. Blog: gracelancy.com
+			</label>
+		</linear>
+		
+		<linear orientation="v" class="wrapper">
+			<view class="inner-bg"/>
+			<linear orientation="h" class="profile-wrapper">
+				<image class="profile-avatar" src="avatar-yulong.jpeg"/>
+				<linear orientation="v" class="profile-right-wrapper">
+					<label class="profile-name">Yulong</label>
+					<label class="profile-title">Major contributor</label>
+					<button id="yulong" class="profile-contact">github.com</button>
+				</linear>
+			</linear>
+			<label class="profile-intro">
+			</label>
+		</linear>
+		
+		<linear orientation="v" class="wrapper">
+			<view class="inner-bg"/>
+			<linear orientation="h" class="profile-wrapper">
+				<image class="profile-avatar" src="avatar-nonomori.png"/>
+				<linear orientation="v" class="profile-right-wrapper">
+					<label class="profile-name">inonomori</label>
+					<label class="profile-title">Major contributor</label>
+					<button id="inonomori" class="profile-contact">github.com</button>
+				</linear>
+			</linear>
+			<label class="profile-intro">
+				It's really surprised me that I was included in the contributors' list since I have only contributed a few lines of code actually. I'm kinda new to iOS development. It is only half a year since I have started learning iOS development from scratch. I'm not a pro so far but my skill is improved everyday. Thanks for those folks helped me during my study. 
+			</label>
+		</linear>
+		
+		<linear orientation="v" class="wrapper">
+			<view class="inner-bg"/>
+			<linear orientation="h" class="profile-wrapper">
+				<image class="profile-avatar"/>
+				<linear orientation="v" class="profile-right-wrapper">
+					<label class="profile-name">esseak</label>
+					<label class="profile-title">Major contributor</label>
+					<button id="esseak" class="profile-contact">github.com</button>
+				</linear>
+			</linear>
+			<label class="profile-intro">
+			</label>
+		</linear>
+
+	</linear>
+
+	<style type="text/css">
+		
+		.outter-wrapper {
+			width: 100%;
+			height: auto;
+		}
+
+		.wrapper {
+			margin-top: 10px;
+			width: 100%;
+			height: auto;
+		}
+
+		.title {
+			width: 100%;
+			height: auto;
+			color: #fff;
+			margin-top: 10px;
+			padding-left: 20px;
+			font-size: 24px;
+			font-weight: bold;
+			text-align: left;
+			line-num: 1;
+			line-break: tail-trunc;
+		}
+
+		.inner-bg {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			background-color: #fff;
+			padding: 0px 8px;
+			border-radius: 8px;
+		}
+		
+		.sub-logo {
+			width: auto;
+			height: auto;
+			margin-left: 18px;
+			margin-top: 10px;
+			color: #333;
+			font-size: 18px;
+			font-weight: bold;
+			text-align: left;
+			line-num: 2;
+			line-break: word-wrap;
+		}
+
+		.sub-content {
+			width: 100%;
+			height: auto;
+			margin-top: 10px;
+			margin-bottom: 10px;
+			padding: 0px 20px;
+			color: #333;
+			font-size: 14px;
+			font-weight: lighter;
+			text-align: left;
+			line-num: 999;
+			line-break: word-wrap;
+		}
+		
+		.button-wrapper {
+			width: 100%;
+			height: auto;
+			float: center;
+			padding-left: 20px;
+			padding-right: 20px;
+			margin-bottom: 10px;
+		}
+
+		.sub-button {
+			width: 130px;
+			height: 44px;
+			margin-left: 6px;
+			button-image: url(contact-them.png);
+		}
+
+		.profile-wrapper {
+			width: 100%;
+			height: auto;
+		}
+		
+		.profile-avatar {
+			width: 100px;
+			height: 100px;
+			padding: 10px;
+			image-mode: fill;
+			margin-top: 2px;
+			margin-left: 10px;
+			background-color: #999;
+			border-radius: 8px;
+		}
+		
+		.profile-right-wrapper {
+			width: 180px;
+			height: auto;
+		}
+		
+		.profile-name {
+			width: 100%;
+			height: auto;
+			margin-top: 14px;
+			color: #333;
+			font-size: 18px;
+			font-weight: bold;
+			text-align: left;
+			line-num: 1;
+			line-break: tail-trunc;
+		}
+		
+		.profile-title {
+			width: 100%;
+			height: auto;
+			margin-top: 4px;
+			margin-bottom: 10px;
+			color: #ea7a23;
+			font-size: 14px;
+			font-weight: bold;
+			text-align: left;
+			line-num: 2;
+			line-break: tail-trunc;
+		}
+		
+		.profile-contact {
+			width: 80px;
+			height: 24px;
+			font-size: 12px;
+			font-weight: bold;
+			background-color: #1ea756;
+			border-radius: 8px;
+		}
+		
+		.profile-contact2 {
+			width: 96px;
+			height: 24px;
+			font-size: 12px;
+			font-weight: bold;
+			background-color: #f233a4;
+			border-radius: 8px;
+		}
+		
+		.profile-intro {
+			width: 100%;
+			height: auto;
+			margin-bottom: 10px;
+			padding: 0px 20px;
+			color: #333;
+			font-size: 14px;
+			font-weight: lighter;
+			text-align: left;
+			line-num: 999;
+			line-break: word-wrap;
+		}
+		
+		#mask {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+		}
+
+	</style>
+	
+</ui>

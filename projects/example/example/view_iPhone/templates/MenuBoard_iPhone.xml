@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui namespace="MenuBoard_iPhone">
+	
+	<linear orientation="v" class="wrapper">
+		<image id="item-bg" class="item-icon"/>
+		<linear orientation="v" class="item-wrapper">
+			<label class="item-text">Demo</label>
+			<button id="demo" class="item-mask"/>
+		</linear>
+		<linear orientation="v" class="item-wrapper">
+			<label class="item-text">Tutor</label>
+			<button id="tutor" class="item-mask"/>
+		</linear>
+		<linear orientation="v" class="item-wrapper">
+			<label class="item-text">Team</label>
+			<button id="team" class="item-mask"/>
+		</linear>
+		<linear orientation="v" class="item-wrapper">
+			<label class="item-text">About</label>
+			<button id="about" class="item-mask"/>
+		</linear>
+	</linear>
+
+	<style type="text/css">
+		.wrapper {
+			width: 60px;
+			height: 100%;
+		}
+		.item-wrapper {
+			width: 100%;
+			height: 54px;
+			margin-top: 6px;
+		}
+		.item-icon {
+			width: 100%;
+			height: 54px;
+			position: absolute;
+			left: 0px;
+			top: 6px;
+			image-mode: center;
+			image-src: url(menu-icon-green.png);
+		}
+		
+		.item-text {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			font-size: 12px;
+			font-weight: bold;
+		}
+		.item-mask {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+		}
+	</style>
+	
+</ui>
