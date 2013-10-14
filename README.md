@@ -6,7 +6,7 @@ BeeFramework is a new generation of development framework which makes faster and
 
 * Contact us, email <b> [gavinkwoe@gmail.com](gavinkwoe@gmail.com) </b>
 * Contact us, follow <b> [@老郭为人民服务 on 新浪微博](http://www.weibo.com/gavinkwoe) </b>
-* Join us, QQ Group <b><a> 79054681 </a></b>
+* Join us, QQ Group <b><a> (#1)79054681 </a><a> (#2)314365063 </a></b>
 * Join us, Developer forum <b> [forum.bee-framework.com](http://forum.bee-framework.com) </b>
 
 ### Special thanks to
