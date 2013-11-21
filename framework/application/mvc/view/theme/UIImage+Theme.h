@@ -63,6 +63,25 @@
 
 - (NSData *)dataWithExt:(NSString *)ext;
 
+// 圆角
+typedef enum {
+    UIImageRoundedCornerTopLeft = 1,
+    UIImageRoundedCornerTopRight = 1 << 1,
+    UIImageRoundedCornerBottomRight = 1 << 2,
+    UIImageRoundedCornerBottomLeft = 1 << 3
+} UIImageRoundedCorner;
+
+-(UIImage *) roundedRectWith:(float)radius;
+-(UIImage *) roundedRectWith:(float)radius cornerMask:(UIImageRoundedCorner)cornerMask;
+
+#pragma mark - 待完善
+-(void) saveAsPngWithPath:(NSString *)path;
+// compression is 0(most)..1(least)
+-(void) saveAsJpgWithPath:(NSString *)path compressionQuality:(CGFloat)quality;
+-(void) saveAsPhotoWithPath:(NSString *)path;
+
+// 高斯模糊
+-(UIImage*) stackBlur:(NSUInteger)radius;
 @end
 
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
