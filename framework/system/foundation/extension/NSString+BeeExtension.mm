@@ -455,6 +455,12 @@
 	return self;
 }
 
+- (BOOL)isNormal{
+    NSString *regex = @"([^%&',;=!~?$x22]+$)";
+	NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+	
+	return [pred evaluateWithObject:self];
+}
 - (BOOL)isUserName
 {
 	NSString *		regex = @"(^[A-Za-z0-9]{3,20}$)";
