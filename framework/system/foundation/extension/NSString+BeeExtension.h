@@ -84,6 +84,7 @@ typedef NSMutableString *	(^NSMutableStringReplaceBlock)( NSString * string, NSS
 - (BOOL)isValueOf:(NSArray *)array;
 - (BOOL)isValueOf:(NSArray *)array caseInsens:(BOOL)caseInsens;
 
+- (BOOL)isNormal;
 - (BOOL)isTelephone;
 - (BOOL)isUserName;
 - (BOOL)isPassword;
