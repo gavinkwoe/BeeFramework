@@ -456,7 +456,7 @@
 }
 
 - (BOOL)isNormal{
-    NSString *regex = @"([^%&',;=!~?$x22]+$)";
+    NSString *regex = @"([^%&',;=!~?$]+)";
 	NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
 	
 	return [pred evaluateWithObject:self];
