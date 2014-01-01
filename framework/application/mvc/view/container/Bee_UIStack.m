@@ -451,6 +451,29 @@
 	}
 }
 
+#pragma mark -
+
+// Override to allow orientations other than the default portrait orientation.
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return [self.topViewController shouldAutorotateToInterfaceOrientation:interfaceOrientation];
+}
+
+
+#if defined(__IPHONE_6_0)
+
+-(NSUInteger)supportedInterfaceOrientations
+{
+    return [self.topViewController supportedInterfaceOrientations];
+}
+
+- (BOOL)shouldAutorotate
+{
+	return [self.topViewController shouldAutorotate];
+}
+
+#endif	// #if defined(__IPHONE_6_0)
+
 @end
 
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

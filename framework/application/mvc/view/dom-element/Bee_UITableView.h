@@ -37,8 +37,16 @@
 
 #pragma mark -
 
+@interface UITableViewCell (BeeUICell)
+@property(nonatomic,retain) UIView *contentCell;
+@end
+
+@interface UITableView (BeeUICell)
+- (id)dequeueWithContentClass:(Class)clazz;
+@end
+
 @interface BeeUITableView : UITableView
-// TODO:
+
 @end
 
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

@@ -465,17 +465,19 @@ static void __uncaughtExceptionHandler( NSException * exception )
 		for ( unsigned int i = 0; i < classesCount; ++i )
 		{
 			Class classType = classes[i];
-
-//			if ( NO == class_conformsToProtocol( classType, @protocol(NSObject)) )
-//				continue;
+            
+            //			if ( NO == class_conformsToProtocol( classType, @protocol(NSObject)) )
+            //				continue;
 			if ( NO == class_respondsToSelector( classType, @selector(doesNotRecognizeSelector:) ) )
 				continue;
 			if ( NO == class_respondsToSelector( classType, @selector(methodSignatureForSelector:) ) )
 				continue;
-//			if ( NO == [classType isSubclassOfClass:[NSObject class]] )
-//				continue;
-
-			[__allClasses addObject:classType];
+            //			if ( NO == [classType isSubclassOfClass:[NSObject class]] )
+            //				continue;
+            
+            const char *name = class_getName(classType);
+            NSString *className = [NSString stringWithCString:name encoding:NSUTF8StringEncoding];
+			[__allClasses addObject:className];
 		}
 		
 		free( classes );
@@ -484,18 +486,26 @@ static void __uncaughtExceptionHandler( NSException * exception )
 	return __allClasses;
 }
 
++(BOOL)clazz:(Class)clazz isSubclassOfClass:(Class)superClass{
+    register Class cls;
+    for (cls = clazz; cls; cls = class_getSuperclass(cls))
+		if (cls == (Class)superClass)
+			return YES;
+    return NO;
+}
+
 + (NSArray *)allSubClassesOf:(Class)superClass
 {
 	NSMutableArray * results = [[[NSMutableArray alloc] init] autorelease];
 	
-	for ( Class classType in [self allClasses] )
+	for ( NSString *name in [self allClasses] )
 	{
+        Class classType = objc_getClass([name UTF8String]);
 		if ( classType == superClass )
 			continue;
-		
-		if ( NO == [classType isSubclassOfClass:superClass] )
+		if ( ![BeeRuntime clazz:classType isSubclassOfClass:superClass] )
 			continue;
-
+        
 		[results addObject:classType];
 	}
 	
