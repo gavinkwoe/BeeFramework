@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -30,6 +30,7 @@
 //
 
 #import "NSObject+BeeUserDefaults.h"
+#import "Bee_UserDefaults.h"
 #import "Bee_SystemInfo.h"
 
 // ----------------------------------
@@ -65,13 +66,7 @@
 
 	key = [self persistenceKey:key];
 	
-	id value = [[NSUserDefaults standardUserDefaults] objectForKey:key];
-	return value;
-}
-
-- (id)userDefaultsRead:(NSString *)key
-{
-	return [[self class] userDefaultsRead:key];
+	return [[BeeUserDefaults sharedInstance] objectForKey:key];
 }
 
 + (void)userDefaultsWrite:(id)value forKey:(NSString *)key
@@ -81,13 +76,7 @@
 	
 	key = [self persistenceKey:key];
 	
-	[[NSUserDefaults standardUserDefaults] setObject:value forKey:key];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-- (void)userDefaultsWrite:(id)value forKey:(NSString *)key
-{
-	[[self class] userDefaultsWrite:value forKey:key];
+	[[BeeUserDefaults sharedInstance] setObject:value forKey:key];
 }
 
 + (void)userDefaultsRemove:(NSString *)key
@@ -97,18 +86,22 @@
 
 	key = [self persistenceKey:key];
 	
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
+	[[BeeUserDefaults sharedInstance] removeObjectForKey:key];
+}
+
+- (id)userDefaultsRead:(NSString *)key
+{
+	return [[self class] userDefaultsRead:key];
+}
+
+- (void)userDefaultsWrite:(id)value forKey:(NSString *)key
+{
+	[[self class] userDefaultsWrite:value forKey:key];
 }
 
 - (void)userDefaultsRemove:(NSString *)key
 {
-	if ( nil == key )
-		return;
-
 	[[self class] userDefaultsRemove:key];
-    
 }
 
 + (id)readObject
@@ -120,7 +113,7 @@
 {
 	key = [self persistenceKey:key];
 	
-	NSObject * value = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+	id value = [[BeeUserDefaults sharedInstance] objectForKey:key];
 	if ( value )
 	{
 		return [self objectFromAny:value];
@@ -144,13 +137,11 @@
 	NSString * value = [obj objectToString];
 	if ( value && value.length )
 	{
-		[[NSUserDefaults standardUserDefaults] setObject:value forKey:key];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+		[[BeeUserDefaults sharedInstance] setObject:value forKey:key];
 	}
 	else
 	{
-		[[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+		[[BeeUserDefaults sharedInstance] removeObjectForKey:key];
 	}
 }
 
@@ -162,9 +153,8 @@
 + (void)removeObjectForKey:(NSString *)key
 {
 	key = [self persistenceKey:key];
-	
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+
+	[[BeeUserDefaults sharedInstance] removeObjectForKey:key];
 }
 
 + (id)readFromUserDefaults:(NSString *)key
@@ -176,7 +166,7 @@
 	if ( nil == jsonString || NO == [jsonString isKindOfClass:[NSString class]] )
 		return nil;
 
-	NSString * decodedObject = [jsonString objectFromJSONString];
+	NSObject * decodedObject = [jsonString objectFromJSONStringWithParseOptions:JKParseOptionValidFlags error:nil];
 	if ( nil == decodedObject )
 		return nil;
 	

@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -33,10 +33,8 @@
 
 #pragma mark -
 
-@interface TeamBoardCell_iPhone : BeeUICell
-@end
-
-#pragma mark -
-
 @interface TeamBoard_iPhone : BeeUIBoard
+
+AS_OUTLET( BeeUIScrollView, list )
+
 @end

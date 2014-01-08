@@ -117,7 +117,7 @@ Here is an example for api.dribbble.com, copy it into code editor, and save it a
 
 Type the command below in terminal, and press enter.
 
-	>> scaffold ./dribbble.json
+	>> bee schema build ./dribbble.json
     												
     	 ______    ______    ______				
     	/\  __ \  /\  ___\  /\  ___\			

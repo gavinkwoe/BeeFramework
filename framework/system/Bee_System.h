@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -30,11 +30,35 @@
 //
 
 #import "Bee_Precompile.h"
+
 #import "Bee_SystemConfig.h"
+#import "Bee_SystemPackage.h"
+
+// Service
+
+#import "Bee_Service.h"
+
+// Cache
 
 #import "Bee_Cache.h"
 #import "Bee_Foundation.h"
 #import "Bee_Network.h"
 #import "Bee_Resource.h"
-#import "Bee_Storage.h"
-#import "Bee_Service.h"
+
+// Database
+
+#import "Bee_Database.h"
+#import "Bee_ActiveBuilder.h"
+#import "Bee_ActiveObject.h"
+#import "Bee_ActiveProtocol.h"
+#import "Bee_ActiveRecord.h"
+#import "BeeDatabase+BeeActiveRecord.h"
+#import "NSArray+BeeActiveRecord.h"
+#import "NSDictionary+BeeActiveRecord.h"
+#import "NSObject+BeeActiveRecord.h"
+#import "NSObject+BeeDatabase.h"
+
+// Localiation
+
+#import "Bee_Language.h"
+#import "Bee_LanguageSetting.h"

@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -34,6 +34,10 @@
 // ----------------------------------
 // Source code
 // ----------------------------------
+
+#pragma mark -
+
+DEF_PACKAGE( BeePackage_System, BeeMemoryCache, memoryCache );
 
 #pragma mark -
 
@@ -148,6 +152,16 @@ DEF_SINGLETON( BeeMemoryCache );
 	[_cacheObjs removeAllObjects];
 	
 	_cachedCount = 0;
+}
+
+- (id)objectForKeyedSubscript:(id)key
+{
+	return [self objectForKey:key];
+}
+
+- (void)setObject:(id)obj forKeyedSubscript:(id)key
+{
+	[self setObject:obj forKey:key];
 }
 
 #pragma mark -

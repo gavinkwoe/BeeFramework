@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -30,7 +30,14 @@
 //
 
 #import "Bee_Precompile.h"
+#import "Bee_Package.h"
 #import "Bee_Singleton.h"
+
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
+#pragma mark -
+
+AS_PACKAGE( BeePackage, BeeTicker, ticker );
 
 #pragma mark -
 
@@ -42,8 +49,9 @@
 
 @interface BeeTicker : NSObject
 
-@property (nonatomic, readonly)	NSTimer *			timer;
-@property (nonatomic, readonly)	NSTimeInterval		lastTick;
+@property (nonatomic, readonly)	CADisplayLink *		timer;
+@property (nonatomic, readonly)	NSTimeInterval		timestamp;
+@property (nonatomic, assign) NSTimeInterval		interval;
 
 AS_SINGLETON( BeeTicker )
 
@@ -51,3 +59,5 @@ AS_SINGLETON( BeeTicker )
 - (void)removeReceiver:(NSObject *)obj;
 
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -154,6 +154,53 @@
 
 	int years = floor((double)delta/MONTH/12.0);
 	return years <= 1 ? @"1年前" : [NSString stringWithFormat:@"%d年前", years];
+}
+
+- (NSString *)timeLeft
+{
+	long int delta = lround( [self timeIntervalSinceDate:[NSDate date]] );
+
+    NSMutableString * result = [NSMutableString string];
+    
+    if ( delta >= YEAR )
+    {
+		NSInteger years = ( delta / YEAR );
+        [result appendFormat:@"%d年", years];
+        delta -= years * YEAR ;
+    }
+    
+	if ( delta >= MONTH )
+	{
+        NSInteger months = ( delta / MONTH );
+        [result appendFormat:@"%d月", months];
+        delta -= months * MONTH ;
+	}
+    
+    if ( delta >= DAY )
+    {
+        NSInteger days = ( delta / DAY );
+        [result appendFormat:@"%d天", days];
+        delta -= days * DAY ;
+    }
+    
+    if ( delta >= HOUR )
+    {
+        NSInteger hours = ( delta / HOUR );
+        [result appendFormat:@"%d小时", hours];
+        delta -= hours * HOUR ;
+    }
+    
+    if ( delta >= MINUTE )
+    {
+        NSInteger minutes = ( delta / MINUTE );
+        [result appendFormat:@"%d分钟", minutes];
+        delta -= minutes * MINUTE ;
+    }
+
+	NSInteger seconds = ( delta / SECOND );
+	[result appendFormat:@"%d秒", seconds];
+
+	return result;
 }
 
 + (long long)timeStamp

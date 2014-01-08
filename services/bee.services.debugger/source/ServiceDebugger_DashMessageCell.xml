@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui namespace="ServiceDebugger_DashMessageCell">
+
+	<linear orientation="v" class="wrapper">
+		<linear orientation="h" class="line1">
+			<label id="title">Message</label>
+			<label id="count1" class="subtitle">0</label>
+			<label id="count2" class="subtitle">0</label>
+			<!-- <button id="more">MORE ></button> -->
+		</linear>
+		<linear orientation="h" class="line2">
+			<plots id="plots1" class="plots"/>
+			<plots id="plots2" class="plots"/>
+			<plots id="plots3" class="plots"/>
+		</linear>
+		<linear orientation="h" class="line3">
+			<button id="freeze" class="button">PAUSE</button>
+			<button id="cancel" class="button">CANCEL</button>
+		</linear>
+		<view class="bottom-line"/>
+	</linear>
+	
+	<style type="text/css">
+		
+		.wrapper {
+			width: 100%;
+			height: auto;
+		}
+
+		.line1 {
+			width: 100%;
+			height: 30px;
+		}
+		
+		#title {
+			margin-left: 10px;
+			width: 60px;
+			height: 100%;
+			color: orange;
+			text-align: left;
+			font-size: 12px;
+			font-weight: bold;
+		}
+		
+		.subtitle {
+			margin-left: 10px;
+			width: auto;
+			height: 100%;
+			color: gray;
+			text-align: left;
+			font-size: 12px;
+			font-weight: bold;
+		}
+		
+		#more {
+			float: right;
+			width: 60px;
+			height: 100%;
+			color: orange;
+			text-align: center;
+			font-size: 12px;
+			font-weight: bold;
+		}
+		
+		.line2 {
+			width: 100%;
+			height: 60px;
+		}
+		
+		.plots {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+		}
+		
+		.line3 {
+			margin-top: 2px;
+			width: 98%;
+			height: 30px;
+			float: center;
+		}
+		
+		.button {
+			height: 100%;
+			color: #aaa;
+			font-size: 10px;
+			border-color: gray 0.3;
+			border-width: 0.5px;
+			background-color: gray 0.2;
+		}
+		
+		#cancel {
+			width: 30%;
+			padding-left: 2px;
+			padding-right: 2px;
+		}
+		
+		#freeze {
+			width: 32%;
+			padding-left: 2px;
+			padding-right: 2px;
+		}
+		
+		.bottom-line {
+			margin-top: 5px;
+			width: 100%;
+			height: 1px;
+			background-color: #333 0.8;
+		}
+		
+	</style>
+	
+</ui>

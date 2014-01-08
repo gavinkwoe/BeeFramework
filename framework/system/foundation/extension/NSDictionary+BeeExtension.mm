@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -356,7 +356,7 @@
         return [clazz performSelector:@selector(fFromDictionary:) withObject:self];
     }
 
-    id object = [[clazz alloc] init];
+    id object = [[[clazz alloc] init] autorelease];
 	if ( nil == object )
 		return nil;
     
@@ -371,7 +371,7 @@
 			NSString *		propertyName = [NSString stringWithCString:name encoding:NSUTF8StringEncoding];
 			const char *	attr = property_getAttributes(properties[i]);
 			NSUInteger		type = [BeeTypeEncoding typeOf:attr];
-			
+
 			NSObject *	tempValue = [self objectForKey:propertyName];
 			NSObject *	value = nil;
 			
@@ -458,7 +458,9 @@
 					}
 				}
 			}
-            if (value) {
+            
+            if ( nil != value )
+            {
                 [object setValue:value forKey:propertyName];
             }
 		}
@@ -469,8 +471,8 @@
 		if ( nil == clazzType )
 			break;
 	}
-		
-    return [object autorelease];
+
+    return object;
 }
 
 @end
@@ -508,6 +510,18 @@ static void			__TTReleaseNoOp( CFAllocatorRef allocator, const void * value ) {}
 	callbacks.retain = __TTRetainNoOp;
 	callbacks.release = __TTReleaseNoOp;
 	return [(NSMutableDictionary *)CFDictionaryCreateMutable( NULL, 0, &kCFTypeDictionaryKeyCallBacks, &callbacks ) autorelease];
+}
+
+- (NSString *)stringOfAny:(NSArray *)array removeAll:(BOOL)flag
+{
+	NSString * result = [self stringOfAny:array];
+	
+	if ( flag )
+	{
+		[self removeObjectsForKeys:array];
+	}
+	
+	return result;
 }
 
 - (BOOL)setObject:(NSObject *)obj atPath:(NSString *)path

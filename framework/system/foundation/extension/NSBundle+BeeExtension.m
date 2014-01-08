@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -30,12 +30,26 @@
 //
 
 #import "NSBundle+BeeExtension.h"
+#import "Bee_SystemInfo.h"
 
 #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 
 #pragma mark -
 
 @implementation NSBundle(BeeExntension)
+
+@dynamic fullPath;
+@dynamic pathName;
+
+- (NSString *)fullPath
+{
+	return [self.resourcePath stringByDeletingLastPathComponent];
+}
+
+- (NSString *)pathName
+{
+	return [[self.resourcePath lastPathComponent] stringByDeletingPathExtension];
+}
 
 - (NSData *)data:(NSString *)resName
 {
@@ -49,17 +63,53 @@
 {
 	NSString *	extension = [resName pathExtension];
 	NSString *	fullName = [resName substringToIndex:(resName.length - extension.length - 1)];
-
-	NSString *	path = [NSString stringWithFormat:@"%@/%@@2x.%@", self.resourcePath, fullName, extension];
-	NSString *	path2 = [NSString stringWithFormat:@"%@/%@.%@", self.resourcePath, fullName, extension];
-
-	UIImage * image = [UIImage imageWithContentsOfFile:path];
-	if ( nil == image )
+	UIImage *	image = nil;
+	
+	if ( nil == image && [BeeSystemInfo isDevicePad] )
 	{
-		image = [UIImage imageWithContentsOfFile:path2];
+		NSString *	path = [NSString stringWithFormat:@"%@/%@@2x.%@", self.resourcePath, fullName, extension];
+		NSString *	path2 = [NSString stringWithFormat:@"%@/%@.%@", self.resourcePath, fullName, extension];
+		
+		image = [[[UIImage alloc] initWithContentsOfFile:path] autorelease];
+		if ( nil == image )
+		{
+			image = [[[UIImage alloc] initWithContentsOfFile:path2] autorelease];
+		}
 	}
 
+	if ( nil == image && [BeeSystemInfo isPhoneRetina4] )
+	{
+		NSString *	path = [NSString stringWithFormat:@"%@/%@-568h@2x.%@", self.resourcePath, fullName, extension];
+		NSString *	path2 = [NSString stringWithFormat:@"%@/%@-568h.%@", self.resourcePath, fullName, extension];
+		
+		image = [[[UIImage alloc] initWithContentsOfFile:path] autorelease];
+		if ( nil == image )
+		{
+			image = [[[UIImage alloc] initWithContentsOfFile:path2] autorelease];
+		}
+	}
+
+	if ( nil == image )
+	{
+		NSString *	path = [NSString stringWithFormat:@"%@/%@@2x.%@", self.resourcePath, fullName, extension];
+		NSString *	path2 = [NSString stringWithFormat:@"%@/%@.%@", self.resourcePath, fullName, extension];
+		
+		image = [[[UIImage alloc] initWithContentsOfFile:path] autorelease];
+		if ( nil == image )
+		{
+			image = [[[UIImage alloc] initWithContentsOfFile:path2] autorelease];
+		}
+	}
+	
 	return image;
+}
+
+- (NSString *)string:(NSString *)resName
+{
+	NSString *	path = [NSString stringWithFormat:@"%@/%@", self.resourcePath, resName];
+	NSString *	data = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL];
+	
+	return data;
 }
 
 @end

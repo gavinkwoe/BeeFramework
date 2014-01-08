@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -33,8 +33,13 @@
 
 #pragma mark -
 
-#define AS_NOTIFICATION( __name )	AS_STATIC_PROPERTY( __name )
-#define DEF_NOTIFICATION( __name )	DEF_STATIC_PROPERTY3( __name, @"notify", [self description] )
+#undef	AS_NOTIFICATION
+#define AS_NOTIFICATION( __name ) \
+		AS_STATIC_PROPERTY( __name )
+
+#undef	DEF_NOTIFICATION
+#define DEF_NOTIFICATION( __name ) \
+		DEF_STATIC_PROPERTY3( __name, @"notify", [self description] )
 
 #undef	ON_NOTIFICATION
 #define ON_NOTIFICATION( __notification ) \
@@ -67,6 +72,8 @@
 - (void)handleNotification:(NSNotification *)notification;
 
 - (void)observeNotification:(NSString *)name;
+- (void)observeAllNotifications;
+
 - (void)unobserveNotification:(NSString *)name;
 - (void)unobserveAllNotifications;
 

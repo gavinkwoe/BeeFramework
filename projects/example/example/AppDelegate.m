@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -39,14 +39,29 @@
 
 - (void)load
 {
+	bee.ui.config.ASR = YES;
+	bee.ui.config.iOS7Mode = YES;
+	bee.ui.config.cacheAsyncLoad = YES;
+	bee.ui.config.cacheAsyncSave = YES;
+
+	[BeeUITipsCenter setDefaultBubble:[UIImage imageNamed:@"alertBox.png"]];
+	[BeeUITipsCenter setDefaultMessageIcon:[UIImage imageNamed:@"index-new-league-icon.png"]];
+	[BeeUITipsCenter setDefaultSuccessIcon:[UIImage imageNamed:@"index-new-league-icon.png"]];
+	[BeeUITipsCenter setDefaultFailureIcon:[UIImage imageNamed:@"index-new-league-icon.png"]];
+	
+	[BeeUINavigationBar setBackgroundImage:[UIImage imageNamed:@"navigation-bar.png"]];
+	[BeeUINavigationBar setTitleColor:[UIColor whiteColor]];
+
 	if ( [BeeSystemInfo isDevicePad] )
 	{
-		self.window.rootViewController = [AppBoard_iPad sharedInstance];
+		self.window.rootViewController = [AppBoard_iPhone sharedInstance]; // [AppBoard_iPad sharedInstance];
 	}
 	else
 	{
 		self.window.rootViewController = [AppBoard_iPhone sharedInstance];
 	}
+	
+	[BeeUITipsCenter setDefaultContainerView:self.window.rootViewController.view];
 }
 
 - (void)unload

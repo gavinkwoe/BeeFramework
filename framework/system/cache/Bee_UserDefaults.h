@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -30,6 +30,25 @@
 //
 
 #import "Bee_Precompile.h"
+#import "Bee_Package.h"
 #import "Bee_Foundation.h"
+#import "Bee_SystemConfig.h"
+#import "Bee_SystemPackage.h"
+#import "Bee_CacheProtocol.h"
 
 #pragma mark -
+
+AS_PACKAGE( BeePackage_System, BeeUserDefaults, userDefaults );
+
+#pragma mark -
+
+#define AS_USERDEFAULT( __name )	AS_STATIC_PROPERTY( __name )
+#define DEF_USERDEFAULT( __name )	DEF_STATIC_PROPERTY3( __name, @"userdefault", [self description] )
+
+#pragma mark -
+
+@interface BeeUserDefaults : NSObject<BeeCacheProtocol>
+
+AS_SINGLETON( BeeUserDefaults )
+
+@end

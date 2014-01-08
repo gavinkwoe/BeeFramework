@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -97,6 +97,8 @@ typedef NSDictionary *	(^NSDictionaryAppendBlock)( NSString * key, id value );
 @property (nonatomic, readonly) NSDictionaryAppendBlock	APPEND;
 
 + (NSMutableDictionary *)nonRetainingDictionary;			// copy from Three20
+
+- (NSString *)stringOfAny:(NSArray *)array removeAll:(BOOL)flag;
 
 - (BOOL)setObject:(NSObject *)obj atPath:(NSString *)path;
 - (BOOL)setObject:(NSObject *)obj atPath:(NSString *)path separator:(NSString *)separator;

@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -31,6 +31,8 @@
 
 #import "Bee_Precompile.h"
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 #pragma mark -
 
 @interface NSObject(BeeTicker)
@@ -38,3 +40,5 @@
 - (void)unobserveTick;
 - (void)handleTick:(NSTimeInterval)elapsed;
 @end
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

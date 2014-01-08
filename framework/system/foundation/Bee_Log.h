@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -30,45 +30,106 @@
 //
 
 #import "Bee_Precompile.h"
+#import "Bee_Package.h"
+#import "Bee_Package.h"
 #import "Bee_Singleton.h"
+#import "Bee_SystemConfig.h"
+#import "Bee_SystemPackage.h"
+
+#pragma mark -
+
+AS_PACKAGE( BeePackage_System, BeeLogger, logger );
 
 #pragma mark -
 
 typedef enum
 {
-	BeeLogLevelNone			= 0,
-	BeeLogLevelInfo			= 100,
-	BeeLogLevelPerf			= 100 + 1,
-	BeeLogLevelProgress		= 100 + 2,
-	BeeLogLevelWarn			= 200,
-	BeeLogLevelError		= 300
+	BeeLogLevelNone		= 0,
+	BeeLogLevelInfo		= 100,
+	BeeLogLevelPerf		= 200,
+	BeeLogLevelWarn		= 300,
+	BeeLogLevelError	= 400
 } BeeLogLevel;
 
 #pragma mark -
 
+#if __BEE_LOG__
+
+#if __BEE_DEVELOPMENT__
+
 #undef	CC
-#define CC( ... )			[[BeeLogger sharedInstance] level:BeeLogLevelNone format:__VA_ARGS__];
+#define CC( ... )		[[BeeLogger sharedInstance] file:@(__FILE__) line:__LINE__ function:@(__PRETTY_FUNCTION__) level:BeeLogLevelNone format:__VA_ARGS__];
 
 #undef	INFO
-#define INFO( ... )			[[BeeLogger sharedInstance] level:BeeLogLevelInfo format:__VA_ARGS__];
+#define INFO( ... )		[[BeeLogger sharedInstance] file:@(__FILE__) line:__LINE__ function:@(__PRETTY_FUNCTION__) level:BeeLogLevelInfo format:__VA_ARGS__];
 
 #undef	PERF
-#define PERF( ... )			[[BeeLogger sharedInstance] level:BeeLogLevelPerf format:__VA_ARGS__];
+#define PERF( ... )		[[BeeLogger sharedInstance] file:@(__FILE__) line:__LINE__ function:@(__PRETTY_FUNCTION__) level:BeeLogLevelPerf format:__VA_ARGS__];
 
 #undef	WARN
-#define WARN( ... )			[[BeeLogger sharedInstance] level:BeeLogLevelWarn format:__VA_ARGS__];
+#define WARN( ... )		[[BeeLogger sharedInstance] file:@(__FILE__) line:__LINE__ function:@(__PRETTY_FUNCTION__) level:BeeLogLevelWarn format:__VA_ARGS__];
 
 #undef	ERROR
-#define ERROR( ... )		[[BeeLogger sharedInstance] level:BeeLogLevelError format:__VA_ARGS__];
+#define ERROR( ... )	[[BeeLogger sharedInstance] file:@(__FILE__) line:__LINE__ function:@(__PRETTY_FUNCTION__) level:BeeLogLevelError format:__VA_ARGS__];
 
-#undef	PROGRESS
-#define PROGRESS( ... )		[[BeeLogger sharedInstance] level:BeeLogLevelProgress format:__VA_ARGS__];
+#undef	PRINT
+#define PRINT( ... )	[[BeeLogger sharedInstance] file:@(__FILE__) line:__LINE__ function:@(__PRETTY_FUNCTION__) level:BeeLogLevelNone format:__VA_ARGS__];
+
+#else	// #if __BEE_DEVELOPMENT__
+
+#undef	CC
+#define CC( ... )		[[BeeLogger sharedInstance] level:BeeLogLevelNone format:__VA_ARGS__];
+
+#undef	INFO
+#define INFO( ... )		[[BeeLogger sharedInstance] level:BeeLogLevelInfo format:__VA_ARGS__];
+
+#undef	PERF
+#define PERF( ... )		[[BeeLogger sharedInstance] level:BeeLogLevelPerf format:__VA_ARGS__];
+
+#undef	WARN
+#define WARN( ... )		[[BeeLogger sharedInstance] level:BeeLogLevelWarn format:__VA_ARGS__];
+
+#undef	ERROR
+#define ERROR( ... )	[[BeeLogger sharedInstance] level:BeeLogLevelError format:__VA_ARGS__];
+
+#undef	PRINT
+#define PRINT( ... )	[[BeeLogger sharedInstance] level:BeeLogLevelNone format:__VA_ARGS__];
+
+#endif	// #if __BEE_DEVELOPMENT__
 
 #undef	VAR_DUMP
-#define VAR_DUMP( __obj )	[[BeeLogger sharedInstance] level:BeeLogLevelNone format:[__obj description]];
+#define VAR_DUMP( __obj )	PRINT( [__obj description] );
 
 #undef	OBJ_DUMP
-#define OBJ_DUMP( __obj )	[[BeeLogger sharedInstance] level:BeeLogLevelNone format:[__obj objectToDictionary]];
+#define OBJ_DUMP( __obj )	PRINT( [__obj objectToDictionary] );
+
+#else	// #if __BEE_LOG__
+
+#undef	CC
+#define CC( ... )
+
+#undef	INFO
+#define INFO( ... )
+
+#undef	PERF
+#define PERF( ... )
+
+#undef	WARN
+#define WARN( ... )
+
+#undef	ERROR
+#define ERROR( ... )
+
+#undef	PRINT
+#define PRINT( ... )
+
+#undef	VAR_DUMP
+#define VAR_DUMP( __obj )
+
+#undef	OBJ_DUMP
+#define OBJ_DUMP( __obj )
+
+#endif	// #if __BEE_LOG__
 
 #undef	TODO
 #define TODO( desc, ... )
@@ -76,7 +137,12 @@ typedef enum
 #pragma mark -
 
 @interface BeeBacklog : NSObject
+@property (nonatomic, retain) NSString *		module;
 @property (nonatomic, assign) BeeLogLevel		level;
+@property (nonatomic, readonly) NSString *		levelString;
+@property (nonatomic, retain) NSString *		file;
+@property (nonatomic, assign) NSUInteger		line;
+@property (nonatomic, retain) NSString *		func;
 @property (nonatomic, retain) NSDate *			time;
 @property (nonatomic, retain) NSString *		text;
 @end
@@ -87,8 +153,9 @@ typedef enum
 
 AS_SINGLETON( BeeLogger );
 
+@property (nonatomic, assign) BOOL				showLevel;
+@property (nonatomic, assign) BOOL				showModule;
 @property (nonatomic, assign) BOOL				enabled;
-@property (nonatomic, assign) BOOL				backlog;
 @property (nonatomic, retain) NSMutableArray *	backlogs;
 @property (nonatomic, assign) NSUInteger		indentTabs;
 
@@ -101,8 +168,13 @@ AS_SINGLETON( BeeLogger );
 - (void)unindent;
 - (void)unindent:(NSUInteger)tabs;
 
+#if __BEE_DEVELOPMENT__
+- (void)file:(NSString *)file line:(NSUInteger)line function:(NSString *)function level:(BeeLogLevel)level format:(NSString *)format, ...;
+- (void)file:(NSString *)file line:(NSUInteger)line function:(NSString *)function level:(BeeLogLevel)level format:(NSString *)format args:(va_list)args;
+#else	// #if __BEE_DEVELOPMENT__
 - (void)level:(BeeLogLevel)level format:(NSString *)format, ...;
 - (void)level:(BeeLogLevel)level format:(NSString *)format args:(va_list)args;
+#endif	// #if __BEE_DEVELOPMENT__
 
 @end
 

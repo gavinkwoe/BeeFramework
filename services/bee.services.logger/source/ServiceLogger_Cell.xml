@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui namespace="ServiceLogger_Cell">
+	
+	<linear orientation="v" class="wrapper">
+		<linear orientation="h" class="info">
+			<label id="level"/>
+			<label id="module"/>
+			<label id="time"/>
+		</linear>
+		<label id="text"/>
+	</linear>
+
+	<style type="text/css">
+		
+		ui {
+			background-color: #222;
+			border-color: #333;
+			border-width: 1px;
+		}
+		
+		.wrapper {
+			width: 100%;
+			height: auto;
+		}
+		
+		.info {
+			margin-top: 4px;
+			width: 100%;
+			height: 14px;
+		}
+
+		#level {
+			width: 20%;
+			height: 100%;
+			color: orange;
+			text-align: left;
+			font-size: 11px;
+			font-weight: bold;
+			padding-left: 10px;
+		}
+
+		#module {
+			width: 30%;
+			height: 100%;
+			color: #3fb4ff;
+			text-align: left;
+			font-size: 11px;
+			font-weight: bold;
+		}
+
+		#time {
+			width: 50%;
+			height: 100%;
+			color: #3fb4ff;
+			text-align: left;
+			font-size: 11px;
+			font-weight: bold;
+		}
+
+		#text {
+			padding-left: 10px;
+			padding-right: 10px;
+			margin-bottom: 6px;
+			width: 100%;
+			height: auto;
+			color: #fff;
+			text-align: left;
+			font-size: 11px;
+			line-num: 5;
+		}
+		
+	</style>
+	
+</ui>

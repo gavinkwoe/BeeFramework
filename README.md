@@ -1,21 +1,94 @@
-##BeeFramework : the app development framework
+![Bee logo](http://www.0xbee.com/images/banner.png)
 
-BeeFramework is a new generation of development framework which makes faster and easier app development, created and maintained by [Gavin Kwoe](https://github.com/gavinkwoe) and [QFish](https://github.com/qfish).
+BeeFramework is a semi-hybrid framework that allows you to create mobile apps using Objective-C and XML/CSS for the iPhone and iPad and more, created and maintained by [Gavin.Kwoe](http://www.weibo.com/gavinkwoe) and [QFish](http://weibo.com/u/2987815507).
 
-![Bee logo](http://blog.whatsbug.com/wp-content/uploads/2013/08/bee-logo.png)
+## How to install
 
-* Contact us, email <b> [gavinkwoe@gmail.com](gavinkwoe@gmail.com) </b>
-* Contact us, follow <b> [@老郭为人民服务 on 新浪微博](http://www.weibo.com/gavinkwoe) </b>
-* Join us, QQ Group <b><a> (#1)79054681 </a><a> (#2)314365063 </a></b>
-* Join us, Developer forum <b> [forum.bee-framework.com](http://forum.bee-framework.com) </b>
+1. Download the source code
+2. Drag and drop `/framework` folder into your project
+3. Drag and drop `/services` folder into your project
+4. Build and run
 
-### Special thanks to
+## Demo app
 
-[![Geek-Zoo](http://geek-zoo.com/images/logo-01.png)](http://www.geek-zoo.com)
+![1](http://blog.whatsbug.com/wp-content/uploads/2014/01/bee_template_code.png)
+![2](http://blog.whatsbug.com/wp-content/uploads/2014/01/bee_ui_1.png)
+![3](http://blog.whatsbug.com/wp-content/uploads/2014/01/bee_service_3d_inspector.png)
 
-They provide awesome design and development works continues to help the open-source community even better.
+## Features
 
-### Lastest version
+- CLI
+- MVC
+	- View
+		- Application
+		- Config
+		- Container
+			- Board
+			- Stack
+			- Router
+			- Window
+		- CSS style sheet
+		- XML template
+		- DOM
+			- Animation/Transition
+			- Data binding
+			- Capability
+			- Elements
+			- Elements ext
+			- Signaling
+			- Auto layout
+			- Query (jQuery-like syntax)
+		- View-Model
+			- Once
+			- Paging
+			- Stream
+		- Other
+			- Color
+			- Font
+			- Image
+			- Metrics
+	- Model
+	- Controller
+		- Message
+		- MessageController
+		- Queue
+		- Routine
+		- Extensions
+			- Message + JSON
+			- Message + HTTP
+			- Message + XML
+			- Message + ActiveRecord
+- System
+	- Cache
+		- File
+		- Memory
+		- Keychain
+		- UserDefaults
+	- Database
+		- SQLite wrapper
+		- ActiveRecord
+		- Driver
+	- Foundation
+		- Assertion
+		- Log
+		- Performance
+		- Runtime
+		- Sandbox
+		- Singleton
+		- System information
+		- Thread
+		- Ticker
+		- UnitTest
+	- Localization
+	- Network
+		- HTTP client
+		- HTTP server
+		- Reachability
+		- Socket
+	- Resource
+	- Service
+
+## Lastest version
 
 * [Download the lastest release](https://github.com/gavinkwoe/BeeFramework/archive/master.zip)
 
@@ -29,55 +102,79 @@ They provide awesome design and development works continues to help the open-sou
 
 		https://github.com/gavinkwoe/BeeFramework.git
 
-* Import from CocoaPods (by [stcui](https://github.com/stcui))
+* Import from CocoaPods ( thanks to [stcui](https://github.com/stcui) )
 
 	Add below to `Podfile` and run `pod install`
 
 		platform :ios
 		pod 'BeeFramework', :head
 
-### Bug tracker
+## Bug tracker
 
 * Have a bug or a feature request? [Please open a new issue](https://github.com/gavinkwoe/BeeFramework/issues).
 * Before opening any issue, please read the [Issue Guidelines](https://github.com/necolas/issue-guidelines), written by [Nicolas Gallagher](https://github.com/necolas/).
 
-### Build and run
 
-1. Open `/projects/BeeFramework.xcworkspace`
-2. Choose target, 'lib' or 'example'
-3. Build and run
+## License
 
-### Documents
+[![Geek-Zoo](http://geek-zoo.com/images/logo-01.png)](http://www.geek-zoo.com)
 
-* [<< Developer manual >> 开发者手册](https://github.com/gavinkwoe/BeeFramework/blob/master/document)
-* [<< Template manual >> 模版使用手册](https://github.com/gavinkwoe/BeeFramework/wiki/Bee-Templates-Manual)
-* [<< CSS cheatsheet >> CSS说明书](https://github.com/gavinkwoe/BeeFramework/blob/master/document)
+Copyright (c) 2014-2015, [Geek Zoo Studio](http://www.geek-zoo.com)
 
-### Architecture
+	 ______    ______    ______
+	/\  __ \  /\  ___\  /\  ___\
+	\ \  __<  \ \  __\_ \ \  __\_
+	 \ \_____\ \ \_____\ \ \_____\
+	  \/_____/  \/_____/  \/_____/
 
-![Bee architecture](http://blog.whatsbug.com/wp-content/uploads/2013/08/architect2.png)
 
-### Feature list
+	Copyright (c) 2014-2015, Geek Zoo Studio
+	http://www.bee-framework.com
 
-![Bee vs other](http://blog.whatsbug.com/wp-content/uploads/2013/07/bee_vs_other1.png)
 
-### Tools
+	Permission is hereby granted, free of charge, to any person obtaining a
+	copy of this software and associated documentation files (the "Software"),
+	to deal in the Software without restriction, including without limitation
+	the rights to use, copy, modify, merge, publish, distribute, sublicense,
+	and/or sell copies of the Software, and to permit persons to whom the
+	Software is furnished to do so, subject to the following conditions:
 
-#### [Online interface builder >>](http://ib.bee-framework.com/)
+	The above copyright notice and this permission notice shall be included in
+	all copies or substantial portions of the Software.
 
-![Interface builder](http://blog.whatsbug.com/wp-content/uploads/2013/07/beeibpreview.gif)
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+	FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+	IN THE SOFTWARE.
 
-#### [API code generator >>](https://github.com/gavinkwoe/BeeFramework/blob/master/tools)
+## Change log
 
-![Scaffold](http://blog.whatsbug.com/wp-content/uploads/2013/07/scaffold.png)
+#### 0.5.0
 
-#### [Official SDK >>](http://bee-framework.com/download/BeeFramework_SDK_0.4.0.pkg.zip)
+1. New MVVM architecture
+2. New Package technology
+3. New Signal routing technology
+4. New HTTP server technology
+5. New CSS parser, support more CSS syntax
+6. New ScrollView, support complex layout
+7. More jQuery-like syntax
+8. Refactory directory structure
+9. Refactory animation system
+10. Support multi-language
+11. Support manifest.json
+12. New 3D UI inspector plugin
+13. New grid system plugin
+14. New alipay plugin
+15. New location plugin
+16. New push notification plugin
+17. New social share plugin
+18. New splash plugin
+19. Bug fix
 
-![SDK](http://blog.whatsbug.com/wp-content/uploads/2013/08/SDK.png)
-
-### Change log
-
-#### 0.4.0 (Lastest version)
+#### 0.4.0
 
 1. Refactory the directory structure, divided into four parts, applicaton, service, system and vendor.
 2. New XML template technology, perfect support for CSS
@@ -124,88 +221,18 @@ They provide awesome design and development works continues to help the open-sou
 
 ## Contributors
 
-**STCui** [https://github.com/stcui](https://github.com/stcui)
-
-**ilikeido** [https://github.com/ilikeido](https://github.com/ilikeido)
-
-**gelosie** [https://github.com/gelosie](https://github.com/gelosie)
-
-**lancy** [https://github.com/lancy](https://github.com/lancy)
-
-**uxyheaven** [https://github.com/uxyheaven](https://github.com/uxyheaven)
-
-**Yulong** [https://github.com/Yulong](https://github.com/Yulong)
-
-**esseak** [https://github.com/esseak](https://github.com/esseak)
-
-**inonomori** [https://github.com/inonomori](https://github.com/inonomori)
-
-## Copyright and license
-
-Copyright 2013 ~ 2014, [Geek-Zoo Studio, Inc.](http://www.geek-zoo.com)
-
-{Bee} is under MIT license.
-
-
-	 ______    ______    ______
-	/\  __ \  /\  ___\  /\  ___\
-	\ \  __<  \ \  __\_ \ \  __\_
-	 \ \_____\ \ \_____\ \ \_____\
-	  \/_____/  \/_____/  \/_____/
-
-
-	Copyright (c) 2013-2014, {Bee} open source community
-	http://www.bee-framework.com
-
-
-	Permission is hereby granted, free of charge, to any person obtaining a
-	copy of this software and associated documentation files (the "Software"),
-	to deal in the Software without restriction, including without limitation
-	the rights to use, copy, modify, merge, publish, distribute, sublicense,
-	and/or sell copies of the Software, and to permit persons to whom the
-	Software is furnished to do so, subject to the following conditions:
-
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-	FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
-	IN THE SOFTWARE.
-
-## Companies use {bee}
-
-* [China Mobile](http://www.chinamobileltd.com/en/global/home.php)
-* [China Unicom](http://www.chinaunicom.com.cn/)
-* [China Telecom](http://www.chinatelecom.com.cn/)
-* [Tencent](http://www.qq.com/)
-* [Baidu](http://www.baidu.com/)
-* [Sina](http://www.sina.com.cn/)
-* [iFeng](http://www.ifeng.com/)
-* [Novagin](http://www.novagin.com/cn/index.htm)
-* [IGRS Lab](http://www.tivic.com/)
-* [Front network](http://www.frontnetwork.com/)
-* [Middling industries](http://www.middlingindustries.com/)
-* [iLouShi](http://www.iloushi.cn/)
-* [Duopeng](http://www.duopeng.com/)
-* [VoiceFrom](http://voicefrom.me/)
-* [Distance Education Group](http://www.sdeg.cn/sdegPortal/)
-* [MesonTech](http://www.mesontech.com.cn/home/mesontech.jsp)
-
-## Apps use {Bee}
-
-* [Sina Finance](https://itunes.apple.com/us/app/xin-lang-cai-jing/id430165157?mt=8)
-* [Mengtu](https://itunes.apple.com/us/app/meng-tu/id531292307?mt=8)
-* [iLoushi](http://itunes.apple.com/cn/app/id464232572?mt=8)
-* [Duopeng](http://www.duopeng.com/)
-* [Yiban](https://itunes.apple.com/app/yi-ban/id549775029?mt=8)
-* [Golden carp](https://itunes.apple.com/cn/app/id584687764)
-* [Tivic](http://mobile.91.com/Soft/Detail.aspx?Platform=iPhone&f_id=1373668)
-* [Middling](https://itunes.apple.com/us/app/middling/id531625104?mt=8)
-* [iMyBags](https://itunes.apple.com/us/app/imybags/id672167473?ls=1&mt=8)
+Name|Type
+-|-
+**Gavin.Kwoe**|[https://github.com/gavinkwoe](https://github.com/gavinkwoe)
+**QFish**|[https://github.com/qfish](https://github.com/qfish)
+**STCui**|[https://github.com/stcui](https://github.com/stcui)
+**ilikeido**|[https://github.com/ilikeido](https://github.com/ilikeido)
+**gelosie**|[https://github.com/gelosie](https://github.com/gelosie)
+**lancy**|[https://github.com/lancy](https://github.com/lancy)
+**uxyheaven**|[https://github.com/uxyheaven](https://github.com/uxyheaven)
+**Yulong**|[https://github.com/Yulong](https://github.com/Yulong)
+**esseak**|[https://github.com/esseak](https://github.com/esseak)
+**inonomori**|[https://github.com/inonomori](https://github.com/inonomori)
 
 ## More Incredible Projects from OpenSourceChina
 

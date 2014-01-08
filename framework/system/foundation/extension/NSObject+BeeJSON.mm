@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -73,6 +73,68 @@
 	return results;
 }
 
++ (id)objectsFromAny:(id)any
+{
+	if ( nil == any )
+	{
+		return nil;
+	}
+	
+	if ( [any isKindOfClass:[NSArray class]] )
+	{
+		return [self objectsFromArray:any];
+	}
+	else if ( [any isKindOfClass:[NSDictionary class]] )
+	{
+		id obj = [self objectFromDictionary:any];
+		if ( nil == obj )
+			return nil;
+
+		if ( [obj isKindOfClass:[NSArray class]] )
+		{
+			return obj;
+		}
+		else
+		{
+			return [NSArray arrayWithObject:obj];
+		}
+	}
+	else if ( [any isKindOfClass:[NSString class]] )
+	{
+		id obj = [self objectFromString:any];
+		if ( nil == obj )
+			return nil;
+		
+		if ( [obj isKindOfClass:[NSArray class]] )
+		{
+			return obj;
+		}
+		else
+		{
+			return [NSArray arrayWithObject:obj];
+		}
+	}
+	else if ( [any isKindOfClass:[NSData class]] )
+	{
+		id obj = [self objectFromData:any];
+		if ( nil == obj )
+			return nil;
+		
+		if ( [obj isKindOfClass:[NSArray class]] )
+		{
+			return obj;
+		}
+		else
+		{
+			return [NSArray arrayWithObject:obj];
+		}
+	}
+	else
+	{
+		return [NSArray arrayWithObject:any];
+	}
+}
+
 + (id)objectFromDictionary:(id)dict
 {
 	if ( nil == dict )
@@ -99,10 +161,12 @@
 	{
 		return nil;
 	}
-	
-	NSObject * obj = [(NSString *)str objectFromJSONString];
+	NSError * error = nil;
+	NSObject * obj = [(NSString *)str objectFromJSONStringWithParseOptions:JKParseOptionValidFlags error:&error];
+
 	if ( nil == obj )
 	{
+		ERROR( @"%@", error );
 		return nil;
 	}
 	
@@ -149,11 +213,18 @@
 	}
 
 	NSObject * obj = [(NSData *)data objectFromJSONData];
-	if ( obj && [obj isKindOfClass:[NSDictionary class]] )
+	if ( obj )
 	{
-		return [(NSDictionary *)obj objectForClass:[self class]];
+		if ( [obj isKindOfClass:[NSDictionary class]] )
+		{
+			return [(NSDictionary *)obj objectForClass:[self class]];
+		}
+		else if ( [obj isKindOfClass:[NSArray class]] )
+		{
+			return [self objectsFromAny:obj];
+		}
 	}
-	
+
 	return nil;
 }
 
@@ -544,10 +615,12 @@
 	else
 	{
 		NSDictionary * dict = [self objectToDictionaryUntilRootClass:rootClass];
-		if ( dict )
+		if ( nil == dict )
 		{
-			json = [dict JSONString];
+			dict = [NSDictionary dictionary];
 		}
+		
+		json = [dict JSONString];
 	}
 
 	if ( nil == json || 0 == json.length )

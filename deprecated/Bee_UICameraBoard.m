@@ -78,7 +78,7 @@ DEF_SIGNAL( MANUAL_FOCUS )	// 用户触屏手动对焦
 {
 	[super load];
 
-	[[BeeUIOrientation sharedInstance] startTrack];
+	[[BeeUIOrientation sharedInstance] startTracking];
 
 #if !TARGET_IPHONE_SIMULATOR
 	_videoQueue = dispatch_queue_create( "com.bee.processingQueue", NULL );
@@ -201,7 +201,7 @@ DEF_SIGNAL( MANUAL_FOCUS )	// 用户触屏手动对焦
 
 //	[_previewImage release];
 
-	[[BeeUIOrientation sharedInstance] stopTrack];
+	[[BeeUIOrientation sharedInstance] stopTracking];
 
 	[super unload];
 }

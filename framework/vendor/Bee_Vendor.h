@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open-source orgnization
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -32,6 +32,7 @@
 #import "Bee_Precompile.h"
 #import "Bee_VendorConfig.h"
 
+// HTTP
 #import "ASIAuthenticationDialog.h"
 #import "ASICacheDelegate.h"
 #import "ASIDataCompressor.h"
@@ -45,16 +46,25 @@
 #import "ASINetworkQueue.h"
 #import "ASIProgressDelegate.h"
 
+// JSON
 #import "JSONKit.h"
 
+// SQLite
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabasePool.h"
 #import "FMDatabaseQueue.h"
 #import "FMResultSet.h"
 
+// UDID
 #import "OpenUDID.h"
 
+// Network
 #import "Reachability.h"
 
+// XML
 #import "TouchXML.h"
+
+// zip/unzip
+#import "ZipArchive.h"
+

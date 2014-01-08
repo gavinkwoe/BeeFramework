@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -35,6 +35,7 @@
 
 typedef NSMutableArray *	(^NSArrayAppendBlock)( id obj );
 typedef NSMutableArray *	(^NSMutableArrayAppendBlock)( id obj );
+typedef NSComparisonResult	(^NSMutableArrayCompareBlock)( id left, id right );
 
 #pragma mark -
 
@@ -49,6 +50,8 @@ typedef NSMutableArray *	(^NSMutableArrayAppendBlock)( id obj );
 - (id)safeObjectAtIndex:(NSInteger)index;
 - (NSArray *)safeSubarrayWithRange:(NSRange)range;
 
+- (NSString *)join:(NSString *)delimiter;
+
 @end
 
 #pragma mark -
@@ -58,6 +61,16 @@ typedef NSMutableArray *	(^NSMutableArrayAppendBlock)( id obj );
 @property (nonatomic, readonly) NSMutableArrayAppendBlock	APPEND;
 
 + (NSMutableArray *)nonRetainingArray;			// copy from Three20
+
+- (void)addUniqueObject:(id)object compare:(NSMutableArrayCompareBlock)compare;
+- (void)addUniqueObjects:(const id [])objects count:(NSUInteger)count compare:(NSMutableArrayCompareBlock)compare;
+- (void)addUniqueObjectsFromArray:(NSArray *)array compare:(NSMutableArrayCompareBlock)compare;
+
+- (void)unique;
+- (void)unique:(NSMutableArrayCompareBlock)compare;
+
+- (void)sort;
+- (void)sort:(NSMutableArrayCompareBlock)compare;
 
 - (NSMutableArray *)pushHead:(NSObject *)obj;
 - (NSMutableArray *)pushHeadN:(NSArray *)all;
@@ -76,5 +89,7 @@ typedef NSMutableArray *	(^NSMutableArrayAppendBlock)( id obj );
 - (void)addObjectNoRetain:(NSObject *)obj;
 - (void)removeObjectNoRelease:(NSObject *)obj;
 - (void)removeAllObjectsNoRelease;
+
+- (void)removeObject:(NSObject *)obj usingComparator:(NSMutableArrayCompareBlock)cmptr;
 
 @end
