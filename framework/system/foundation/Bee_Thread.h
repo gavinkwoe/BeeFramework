@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -30,21 +30,39 @@
 //
 
 #import "Bee_Precompile.h"
+#import "Bee_Package.h"
 #import "Bee_Singleton.h"
 
 #pragma mark -
 
-#define FOREGROUND_BEGIN		[BeeTaskQueue enqueueForeground:^{
-#define FOREGROUND_BEGIN_(x)	[BeeTaskQueue enqueueForegroundWithDelay:(dispatch_time_t)x block:^{
+AS_PACKAGE( BeePackage, BeeThread, thread );
+AS_PACKAGE( BeePackage, BeeThread, taskQueue );
+
+#pragma mark -
+
+@class BeeThread;
+@compatibility_alias BeeTaskQueue BeeThread;
+
+typedef BeeThread * (^BeeThreadBlock)( dispatch_block_t block );
+
+#pragma mark -
+
+#define FOREGROUND_BEGIN		[BeeThread enqueueForeground:^{
+#define FOREGROUND_BEGIN_(x)	[BeeThread enqueueForegroundWithDelay:(dispatch_time_t)x block:^{
 #define FOREGROUND_COMMIT		}];
 
-#define BACKGROUND_BEGIN		[BeeTaskQueue enqueueBackground:^{
-#define BACKGROUND_BEGIN_(x)	[BeeTaskQueue enqueueBackgroundWithDelay:(dispatch_time_t)x block:^{
+#define BACKGROUND_BEGIN		[BeeThread enqueueBackground:^{
+#define BACKGROUND_BEGIN_(x)	[BeeThread enqueueBackgroundWithDelay:(dispatch_time_t)x block:^{
 #define BACKGROUND_COMMIT		}];
 
 #pragma mark -
 
-@interface BeeTaskQueue : NSObject
+@interface BeeThread : NSObject
+
+@property (nonatomic, readonly) BeeThreadBlock	MAIN;
+@property (nonatomic, readonly) BeeThreadBlock	FORK;
+
+AS_SINGLETON( BeeThread )
 
 + (dispatch_queue_t)foreQueue;
 + (dispatch_queue_t)backQueue;

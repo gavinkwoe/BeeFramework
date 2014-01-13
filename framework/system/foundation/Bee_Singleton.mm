@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -53,7 +53,7 @@
 	INFO( @"Loading singletons ..." );
 	
 	[[BeeLogger sharedInstance] indent];
-	[[BeeLogger sharedInstance] disable];
+//	[[BeeLogger sharedInstance] disable];
 
 	NSMutableArray * availableClasses = [NSMutableArray arrayWithArray:[BeeRuntime allSubClassesOf:[NSObject class]]];
 	[availableClasses sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
@@ -66,14 +66,14 @@
 		{
 			[classType sharedInstance];
 			
-			[[BeeLogger sharedInstance] enable];
-			PROGRESS( [classType description], @"OK" );
-			[[BeeLogger sharedInstance] disable];
+//			[[BeeLogger sharedInstance] enable];
+			INFO( @"%@ loaded", [classType description] );
+//			[[BeeLogger sharedInstance] disable];
 		}
 	}
 
 	[[BeeLogger sharedInstance] unindent];
-	[[BeeLogger sharedInstance] enable];
+//	[[BeeLogger sharedInstance] enable];
 
 #endif	// #if defined(__PRELOAD_SINGLETON__) && __PRELOAD_SINGLETON__
 

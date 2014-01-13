@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -30,8 +30,15 @@
 //
 
 #import "Bee_Precompile.h"
+#import "Bee_Package.h"
 #import "Bee_Foundation.h"
 #import "Bee_CacheProtocol.h"
+#import "Bee_SystemConfig.h"
+#import "Bee_SystemPackage.h"
+
+#pragma mark -
+
+AS_PACKAGE( BeePackage_System, BeeFileCache, fileCache );
 
 #pragma mark -
 
@@ -43,8 +50,5 @@
 AS_SINGLETON( BeeFileCache );
 
 - (NSString *)fileNameForKey:(NSString *)key;
-
-- (id)serialize:(id)obj;
-- (id)unserialize:(id)data;
 
 @end

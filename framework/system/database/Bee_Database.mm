@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -39,16 +39,27 @@
 
 #pragma mark -
 
+DEF_PACKAGE( BeePackage_System, BeeDatabase, db );
+
+#pragma mark -
+
+#undef	__USE_WRITE_QUEUE__
+#define __USE_WRITE_QUEUE__		(__ON__)
+
+#pragma mark -
+
 @interface BeeDatabase()
 {
 	BOOL					_autoOptimize;	// TO BE DONE
 	BOOL					_batch;
-	NSUInteger				_identifier;
+	NSInteger				_identifier;
 	NSString *				_filePath;
 	
 	BOOL					_shadow;
 	FMDatabase *			_database;
-	
+	NSMutableArray *		_writeQueue;
+	NSCondition *			_condition;
+
 	NSMutableArray *		_select;
 	BOOL					_distinct;
 	NSMutableArray *		_from;
@@ -197,6 +208,9 @@
 - (void)associate:(NSObject *)obj;
 - (void)has:(NSObject *)obj;
 
+- (void)executeWriteOperations;
+- (void)executeWriteOperation;
+
 @end
 
 #pragma mark -
@@ -285,6 +299,9 @@
 @dynamic CLASS_TYPE;
 @dynamic ASSOCIATE;
 @dynamic HAS;
+
+@dynamic LOCK;		// for multi-thread
+@dynamic UNLOCK;	// for multi-thread
 
 @dynamic resultArray;
 @dynamic resultCount;
@@ -443,6 +460,11 @@ static NSUInteger		__identSeed = 1;
 	return __sharedDB;
 }
 
++ (BeeDatabase *)sharedInstance
+{
+	return [self sharedDatabase];
+}
+
 + (void)scopeEnter
 {
 	if ( __sharedDB )
@@ -497,11 +519,15 @@ static NSUInteger		__identSeed = 1;
 	_field = [[NSMutableArray alloc] init];
 	_index = [[NSMutableArray alloc] init];
 	
+	_writeQueue = [[NSMutableArray alloc] init];
 	_resultArray = [[NSMutableArray alloc] init];
 	_resultCount = 0;
-	
+		
 	_identifier = __identSeed++;
 	
+	_condition = [[NSCondition alloc] init];
+	[_condition setName:[NSString stringWithFormat:@"db-%d", _identifier]];
+
 	_lastQuery = [NSDate timeIntervalSinceReferenceDate];
 	_lastUpdate = [NSDate timeIntervalSinceReferenceDate];
 }
@@ -523,8 +549,6 @@ static NSUInteger		__identSeed = 1;
 	{
 		[self initSelf];
 
-//		INFO( @"[DB] open shadow '%p'", db );
-
 		self.database = db;
 		self.filePath = db.databasePath;
 	}
@@ -544,11 +568,15 @@ static NSUInteger		__identSeed = 1;
 
 - (void)dealloc
 {
+	[self executeWriteOperations];
 	[self close];
 	
 	[_database release];
 	_database = nil;
-	
+
+	[_condition release];
+	_condition = nil;
+
 	[_filePath release];
     
 	[_select removeAllObjects];
@@ -661,7 +689,7 @@ static NSUInteger		__identSeed = 1;
 	if ( nil == fullName )
 		return NO;
 	
-	INFO( @"[DB] open '%@'", fullName );
+	INFO( @"'%@' opened", fullName );
 	
 	_database = [[FMDatabase alloc] initWithPath:fullName];
     if ( nil == _database )
@@ -694,14 +722,10 @@ static NSUInteger		__identSeed = 1;
 	{
 		if ( NO == _shadow )
 		{
-			INFO( @"[DB] close '%p'", _database );
+			INFO( @"'%p' closed", _database );
 			
 			[_database close];
 		}
-//		else
-//		{
-//			INFO( @"[DB] close shadow '%p'", _database );
-//		}
 		
 		[_database release];
 		_database = nil;
@@ -898,8 +922,6 @@ static NSUInteger		__identSeed = 1;
 	
 	if ( 0 == _field.count )
 		return NO;
-    
-	PERF_MARK(a);
 	
 	NSString * sql = [self internalCompileCreate:table];
 	[self __internalResetCreate];
@@ -910,10 +932,6 @@ static NSUInteger		__identSeed = 1;
 		_lastUpdate = [NSDate timeIntervalSinceReferenceDate];
 		_lastSucceed = YES;
 	}
-	
-	PERF_MARK(b);
-	
-	INFO( @"[DB] %s = %.0f(ms)", __PRETTY_FUNCTION__, PERF_TIME(a, b) * 1000.0f );
 	
 	return ret;
 }
@@ -953,8 +971,6 @@ static NSUInteger		__identSeed = 1;
 	if ( 0 == _index.count )
 		return NO;
 	
-	PERF_MARK(a);
-	
 	NSString * sql = [self internalCompileIndex:table];
 	[self __internalResetCreate];
 	
@@ -964,10 +980,6 @@ static NSUInteger		__identSeed = 1;
 		_lastUpdate = [NSDate timeIntervalSinceReferenceDate];
 		_lastSucceed = YES;
 	}
-	
-	PERF_MARK(b);
-	
-	INFO( @"[DB] %s = %.0f(ms)", __PRETTY_FUNCTION__, PERF_TIME(a, b) * 1000.0f );
 	
 	return ret;
 }
@@ -996,8 +1008,6 @@ static NSUInteger		__identSeed = 1;
 
 	if ( nil == table || 0 == table.length )
 		return NO;
-	
-	PERF_MARK(a);
 	
 	NSString * sql = [self internalCompileExist:table as:@"numrows"];
 
@@ -1033,9 +1043,6 @@ static NSUInteger		__identSeed = 1;
 			_lastQuery = [NSDate timeIntervalSinceReferenceDate];
 		}
 	}
-	
-	PERF_MARK(b);
-	INFO( @"[DB] %s = %.0f(ms)", __PRETTY_FUNCTION__, PERF_TIME(a, b) * 1000.0f );
 
 	return exists;
 }
@@ -1405,8 +1412,6 @@ static NSUInteger		__identSeed = 1;
 	NSString * sql = [self internalCompileSelect:nil];
 	
 	[self __internalResetSelect];
-    
-	PERF_MARK(a);
 	
 	FMResultSet * result = [_database executeQuery:sql];
 	if ( result )
@@ -1435,10 +1440,6 @@ static NSUInteger		__identSeed = 1;
 		_lastQuery = [NSDate timeIntervalSinceReferenceDate];
 		_lastSucceed = YES;
 	}
-	
-	PERF_MARK(b);
-
-	INFO( @"[DB] %s = %.0f(ms)", __PRETTY_FUNCTION__, PERF_TIME(a, b) * 1000.0f );
     
 	return _resultArray;
 }
@@ -1467,8 +1468,6 @@ static NSUInteger		__identSeed = 1;
 	
 	BOOL succeed = NO;
 	
-	PERF_MARK(a);
-	
 	FMResultSet * result = [_database executeQuery:sql];
 	if ( result )
 	{
@@ -1481,10 +1480,6 @@ static NSUInteger		__identSeed = 1;
 			_lastSucceed = YES;
 		}
 	}
-	
-	PERF_MARK(b);
-	
-	INFO( @"[DB] %s = %.0f(ms)", __PRETTY_FUNCTION__, PERF_TIME(a, b) * 1000.0f );
     
 	return _resultCount;
 }
@@ -1513,8 +1508,6 @@ static NSUInteger		__identSeed = 1;
 		
 		table = [_from objectAtIndex:0];
 	}
-
-	PERF_MARK(a);
 	
 	NSMutableArray * allValues = [NSMutableArray array];
 	NSString * sql = [self internalCompileInsert:table values:allValues];
@@ -1529,10 +1522,6 @@ static NSUInteger		__identSeed = 1;
 		_lastUpdate = [NSDate timeIntervalSinceReferenceDate];
 		_lastSucceed = YES;
 	}
-
-	PERF_MARK(b);
-	
-	INFO( @"[DB] %s = %.0f(ms)", __PRETTY_FUNCTION__, PERF_TIME(a, b) * 1000.0f );
     
 	return _lastInsertID;
 }
@@ -1561,8 +1550,6 @@ static NSUInteger		__identSeed = 1;
 		
 		table = [_from objectAtIndex:0];
 	}
-    
-	PERF_MARK(a);
 
 	NSMutableArray * allValues = [NSMutableArray array];
 	NSString * sql = [self internalCompileUpdate:table values:allValues];
@@ -1577,10 +1564,6 @@ static NSUInteger		__identSeed = 1;
 
 		// TODO: ...
 	}
-	
-	PERF_MARK(b);
-
-	INFO( @"[DB] %s = %.0f(ms)", __PRETTY_FUNCTION__, PERF_TIME(a, b) * 1000.0f );
 	
 	return ret;
 }
@@ -1611,8 +1594,6 @@ static NSUInteger		__identSeed = 1;
 		table = [BeeDatabase tableNameForIdentifier:table];
 	}
 	
-	PERF_MARK(a);
-	
 	NSString * sql = [self internalCompileEmpty:table];
 
 	[self __internalResetWrite];
@@ -1625,10 +1606,6 @@ static NSUInteger		__identSeed = 1;
 		
 		// TODO: ...
 	}
-
-	PERF_MARK(b);
-	
-	INFO( @"[DB] %s = %.0f(ms)", __PRETTY_FUNCTION__, PERF_TIME(a, b) * 1000.0f );
 	
 	return ret;
 }
@@ -1658,8 +1635,6 @@ static NSUInteger		__identSeed = 1;
 	if ( 0 == _where.count && 0 == _like.count )
 		return NO;
 	
-	PERF_MARK(a);
-	
 	NSString * sql = [self internalCompileDelete:table];
 	
 	[self __internalResetWrite];
@@ -1672,10 +1647,6 @@ static NSUInteger		__identSeed = 1;
 		
 		// TODO: ...
 	}
-	
-	PERF_MARK(b);
-	
-	INFO( @"[DB] %s = %.0f(ms)", __PRETTY_FUNCTION__, PERF_TIME(a, b) * 1000.0f );
 	
 	return ret;
 }
@@ -1705,8 +1676,6 @@ static NSUInteger		__identSeed = 1;
 	{
 		table = [BeeDatabase tableNameForIdentifier:table];
 	}
-
-	PERF_MARK(a);
 	
 	NSString * sql = [self internalCompileTrunc:table];
     
@@ -1720,10 +1689,6 @@ static NSUInteger		__identSeed = 1;
 		
 		// TODO: ...
 	}
-	
-	PERF_MARK(b);
-	
-	INFO( @"[DB] %s = %.0f(ms)", __PRETTY_FUNCTION__, PERF_TIME(a, b) * 1000.0f );
 	
 	return ret;
 }
@@ -1897,11 +1862,11 @@ static NSUInteger		__identSeed = 1;
 	{
 		if ( [value isKindOfClass:[NSNumber class]] )
 		{
-			sql = [NSString stringWithFormat:@"%@ %@ %@ %@", prefix, key, expr, value];
+			[sql appendFormat:@"%@ %@ %@ %@", prefix, key, expr, value];
 		}
 		else
 		{
-			sql = [NSString stringWithFormat:@"%@ %@ %@ '%@'", prefix, key, expr, value];
+			[sql appendFormat:@"%@ %@ %@ '%@'", prefix, key, expr, value];
 		}
 	}
 	
@@ -2501,6 +2466,18 @@ static NSUInteger		__identSeed = 1;
 
 #pragma mark -
 
+- (void)executeWriteOperations
+{
+	
+}
+
+- (void)executeWriteOperation
+{
+	
+}
+
+#pragma mark -
+
 + (NSString *)fieldNameForIdentifier:(NSString *)identifier
 {
 	NSString * name = identifier.trim.unwrap;
@@ -2800,7 +2777,9 @@ static NSUInteger		__identSeed = 1;
 		
 		NSString * field = (NSString *)first;
 		NSString * alias = (NSString *)va_arg( args, NSString * );
+		
 		va_end( args );
+		
 		return [self selectMax:field alias:alias];
 	};
 	
@@ -2826,7 +2805,9 @@ static NSUInteger		__identSeed = 1;
 		
 		NSString * field = (NSString *)first;
 		NSString * alias = (NSString *)va_arg( args, NSString * );
+		
 		va_end(args);
+		
 		return [self selectMin:field alias:alias];
 	};
     
@@ -2852,7 +2833,9 @@ static NSUInteger		__identSeed = 1;
 		
 		NSString * field = (NSString *)first;
 		NSString * alias = (NSString *)va_arg( args, NSString * );
+		
 		va_end( args );
+		
 		return [self selectAvg:field alias:alias];
 	};
 	
@@ -2916,7 +2899,9 @@ static NSUInteger		__identSeed = 1;
 		
 		NSString * key = (NSString *)first;
 		NSObject * value = (NSObject *)va_arg( args, NSObject * );
+		
 		va_end( args );
+		
 		return [self where:key value:value];
 	};
 	
@@ -2932,7 +2917,9 @@ static NSUInteger		__identSeed = 1;
 		
 		NSString * key = (NSString *)first;
 		NSObject * value = (NSObject *)va_arg( args, NSObject * );
+		
 		va_end( args );
+		
 		return [self orWhere:key value:value];
 	};
 	
@@ -3002,7 +2989,9 @@ static NSUInteger		__identSeed = 1;
 			    [array addObject:(NSString *)value];
 			}
 		}
+		
         va_end( args );
+		
 		return [self whereIn:key values:array];
 	};
 	
@@ -3034,7 +3023,9 @@ static NSUInteger		__identSeed = 1;
 			    [array addObject:(NSString *)value];
 			}
 		}
+		
         va_end( args );
+		
 		return [self orWhereIn:key values:array];
 	};
 	
@@ -3066,7 +3057,9 @@ static NSUInteger		__identSeed = 1;
 			    [array addObject:(NSString *)value];
 			}
 		}
+		
 		va_end( args );
+		
 		return [self whereNotIn:key values:array];
 	};
 	
@@ -3098,7 +3091,9 @@ static NSUInteger		__identSeed = 1;
 			    [array addObject:(NSString *)value];
 			}
 		}
+		
         va_end( args );
+		
 		return [self orWhereNotIn:key values:array];
 	};
 	
@@ -3114,7 +3109,9 @@ static NSUInteger		__identSeed = 1;
 		
 		NSString * key = (NSString *)first;
 		NSObject * value = (NSObject *)va_arg( args, NSObject * );
+		
 		va_end( args );
+		
 		return [self like:key match:value];
 	};
 	
@@ -3131,6 +3128,8 @@ static NSUInteger		__identSeed = 1;
 		NSString * key = (NSString *)first;
 		NSObject * value = (NSObject *)va_arg( args, NSObject * );
 		
+		va_end( args );
+		
 		return [self notLike:key match:value];
 	};
 	
@@ -3146,7 +3145,9 @@ static NSUInteger		__identSeed = 1;
 		
 		NSString * key = (NSString *)first;
 		NSObject * value = (NSObject *)va_arg( args, NSObject * );
+		
 		va_end( args );
+		
 		return [self orLike:key match:value];
 	};
 	
@@ -3162,7 +3163,9 @@ static NSUInteger		__identSeed = 1;
 		
 		NSString * key = (NSString *)first;
 		NSObject * value = (NSObject *)va_arg( args, NSObject * );
+		
 		va_end( args );
+		
 		return [self orNotLike:key match:value];
 	};
 	
@@ -3188,7 +3191,9 @@ static NSUInteger		__identSeed = 1;
 		
 		NSString * key = (NSString *)first;
 		NSObject * value = (NSObject *)va_arg( args, NSObject * );
+		
 		va_end( args );
+		
 		return [self having:key value:value];
 	};
 	
@@ -3204,7 +3209,9 @@ static NSUInteger		__identSeed = 1;
 		
 		NSString * key = (NSString *)first;
 		NSObject * value = (NSObject *)va_arg( args, NSObject * );
+		
 		va_end( args );
+		
 		return [self orHaving:key value:value];
 	};
 	
@@ -3250,7 +3257,9 @@ static NSUInteger		__identSeed = 1;
 		
 		NSString * by = (NSString *)first;
 		NSString * direction = (NSString *)va_arg( args, NSString * );
+		
 		va_end( args );
+		
 		return [self orderBy:by direction:direction];
 	};
 	
@@ -3296,87 +3305,82 @@ static NSUInteger		__identSeed = 1;
 		
 		NSString * key = (NSString *)first;
 		NSObject * value = (NSObject *)va_arg( args, NSObject * );
+		
 		va_end( args );
+		
 		return [self set:key value:value];
 	};
 	
 	return [[block copy] autorelease];
 }
 
-- (BeeDatabaseBlock)GET
+- (BeeDatabaseArrayBlock)GET
 {
-	BeeDatabaseBlock block = ^ BeeDatabase * ( void )
+	BeeDatabaseArrayBlock block = ^ NSArray * ( void )
 	{
-		[self get];
-		return self;
+		return [self get];
 	};
 	
 	return [[block copy] autorelease];
 }
 
-- (BeeDatabaseBlock)COUNT
+- (BeeDatabaseUintBlock)COUNT
 {
-	BeeDatabaseBlock block = ^ BeeDatabase * ( void )
+	BeeDatabaseUintBlock block = ^ NSUInteger ( void )
 	{
-		[self count];
-		return self;
+		return [self count];
 	};
 	
 	return [[block copy] autorelease];
 }
 
-- (BeeDatabaseBlock)INSERT
+- (BeeDatabaseIntBlock)INSERT
 {
-	BeeDatabaseBlock block = ^ BeeDatabase * ( void )
+	BeeDatabaseIntBlock block = ^ NSInteger ( void )
 	{
-		[self insert];
-		return self;
+		return [self insert];
 	};
 	
 	return [[block copy] autorelease];
 }
 
-- (BeeDatabaseBlock)UPDATE
+- (BeeDatabaseBoolBlock)UPDATE
 {
-	BeeDatabaseBlock block = ^ BeeDatabase * ( void )
+	BeeDatabaseBoolBlock block = ^ BOOL ( void )
 	{
-		[self update];
-		return self;
+		return [self update];
 	};
 	
 	return [[block copy] autorelease];
 }
 
-- (BeeDatabaseBlock)EMPTY
+- (BeeDatabaseBoolBlock)EMPTY
 {
-	BeeDatabaseBlock block = ^ BeeDatabase * ( void )
+	BeeDatabaseBoolBlock block = ^ BOOL ( void )
 	{
-		[self empty];
-		return self;
+		return [self empty];
 	};
 	
 	return [[block copy] autorelease];
 }
 
-- (BeeDatabaseBlock)TRUNCATE
+- (BeeDatabaseBoolBlock)TRUNCATE
 {
-	BeeDatabaseBlock block = ^ BeeDatabase * ( void )
+	BeeDatabaseBoolBlock block = ^ BOOL ( void )
 	{
-		[self truncate];
-		return self;
+		return [self truncate];
 	};
 	
 	return [[block copy] autorelease];
 }
 
-- (BeeDatabaseBlock)DELETE
+- (BeeDatabaseBoolBlock)DELETE
 {
-	BeeDatabaseBlock block = ^ BeeDatabase * ( void )
+	BeeDatabaseBoolBlock block = ^ BOOL ( void )
 	{
-		[self delete];
-		return self;
+		return [self delete];
 	};
-	
+
 	return [[block copy] autorelease];
 }
 
@@ -3440,6 +3444,36 @@ static NSUInteger		__identSeed = 1;
 	BeeDatabaseBlock block = ^ BeeDatabase * ( void )
 	{
 		_batch = NO;
+		return self;
+	};
+	
+	return [[block copy] autorelease];
+}
+
+- (BeeDatabaseBlock)LOCK
+{
+	BeeDatabaseBlock block = ^ BeeDatabase * ( void )
+	{
+		if ( _condition )
+		{
+			[_condition lock];
+		}
+
+		return self;
+	};
+	
+	return [[block copy] autorelease];
+}
+
+- (BeeDatabaseBlock)UNLOCK
+{
+	BeeDatabaseBlock block = ^ BeeDatabase * ( void )
+	{
+		if ( _condition )
+		{
+			[_condition unlock];
+		}
+
 		return self;
 	};
 	

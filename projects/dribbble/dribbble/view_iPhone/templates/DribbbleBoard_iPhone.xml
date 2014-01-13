@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<template namespace="DribbbleBoard_iPhone">
+	
+	<list id="list"/>
+	<view id="tabbar" type="DribbbleBoardTab_iPhone"/>
+	
+	<style type="text/css">
+		
+		#list {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 100%;
+			height: 100%;
+			padding-bottom: 44px;
+		}
+		
+		#tabbar {
+			position: absolute;
+			left: 0px;
+			bottom: 0px;
+			width: 100%;
+			height: 44px;
+		}
+		
+	</style>
+
+	<!--
+	<list>
+		<section id="section1">
+			<item id="header" type="DribbbleBoardHeader_iPhone"/>
+			<item id="item" type="DribbbleBoardCell_iPhone"/>
+			<item id="footer" type="DribbbleBoardFooter_iPhone"/>
+		</section>
+		<section id="section2">
+			<item id="header" type="DribbbleBoardHeader_iPhone"/>
+			<item id="item" type="DribbbleBoardCell_iPhone"/>
+			<item id="footer" type="DribbbleBoardFooter_iPhone"/>
+		</section>
+	</list>
+	-->
+</template>

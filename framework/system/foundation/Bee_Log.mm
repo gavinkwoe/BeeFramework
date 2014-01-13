@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -30,13 +30,17 @@
 //
 
 #import "Bee_Log.h"
+#import "Bee_SystemInfo.h"
 #import "Bee_UnitTest.h"
-#import "Bee_Sandbox.h"
 #import "NSArray+BeeExtension.h"
 
 // ----------------------------------
 // Source code
 // ----------------------------------
+
+#pragma mark -
+
+DEF_PACKAGE( BeePackage_System, BeeLogger, logger );
 
 #pragma mark -
 
@@ -47,7 +51,12 @@
 
 @implementation BeeBacklog
 
+@synthesize module = _module;
 @synthesize level = _level;
+@dynamic levelString;
+@synthesize file = _file;
+@synthesize line = _line;
+@synthesize func = _func;
 @synthesize time = _time;
 @synthesize text = _text;
 
@@ -58,17 +67,41 @@
 	{
 		self.level = BeeLogLevelNone;
 		self.time = [NSDate date];
-		self.text = nil;
 	}
 	return self;
 }
 
 - (void)dealloc
 {
+	self.module = nil;
+	self.file = nil;
+	self.func = nil;
 	self.time = nil;
 	self.text = nil;
-	
+
 	[super dealloc];
+}
+
+- (NSString *)levelString
+{
+	if ( BeeLogLevelInfo == self.level )
+	{
+		return @"INFO";
+	}
+	else if ( BeeLogLevelPerf == self.level )
+	{
+		return @"PERF";
+	}
+	else if ( BeeLogLevelWarn == self.level )
+	{
+		return @"WARN";
+	}
+	else if ( BeeLogLevelError == self.level )
+	{
+		return @"ERROR";
+	}
+
+	return @"SYSTEM";
 }
 
 @end
@@ -77,11 +110,16 @@
 
 @interface BeeLogger()
 {
+	BOOL				_showLevel;
+	BOOL				_showModule;
+	
 	BOOL				_enabled;
-	BOOL				_backlog;
 	NSMutableArray *	_backlogs;
 	NSUInteger			_indentTabs;
 }
+
+- (void)printLogo;
+
 @end
 
 #pragma mark -
@@ -90,18 +128,34 @@
 
 DEF_SINGLETON( BeeLogger );
 
+@synthesize showLevel = _showLevel;
+@synthesize showModule = _showModule;
+
 @synthesize enabled = _enabled;
-@synthesize backlog = _backlog;
 @synthesize backlogs = _backlogs;
 @synthesize indentTabs = _indentTabs;
+
++ (BOOL)autoLoad
+{
+	[[BeeLogger sharedInstance] printLogo];
+
+	return YES;
+}
 
 - (id)init
 {
 	self = [super init];
 	if ( self )
 	{
+	#if __BEE_DEVELOPMENT__
+		self.showLevel = YES;
+		self.showModule = NO;
+	#else	// #if __BEE_DEVELOPMENT__
+		self.showLevel = YES;
+		self.showModule = NO;
+	#endif	// #if __BEE_DEVELOPMENT__
+		
 		self.enabled = YES;
-		self.backlog = YES;
 		self.backlogs = [NSMutableArray array];
 		self.indentTabs = 0;
 	}
@@ -113,6 +167,30 @@ DEF_SINGLETON( BeeLogger );
 	self.backlogs = nil;
 	
 	[super dealloc];
+}
+
+- (void)printLogo
+{
+#if TARGET_OS_IPHONE
+	fprintf( stderr, "    												\n" );
+	fprintf( stderr, "    												\n" );
+	fprintf( stderr, "    	 ______    ______    ______					\n" );
+	fprintf( stderr, "    	/\\  __ \\  /\\  ___\\  /\\  ___\\			\n" );
+	fprintf( stderr, "    	\\ \\  __<  \\ \\  __\\_ \\ \\  __\\_		\n" );
+	fprintf( stderr, "    	 \\ \\_____\\ \\ \\_____\\ \\ \\_____\\		\n" );
+	fprintf( stderr, "    	  \\/_____/  \\/_____/  \\/_____/			\n" );
+	fprintf( stderr, "    												\n" );
+	fprintf( stderr, "    												\n" );
+	fprintf( stderr, "    	version %s									\n", [BEE_VERSION UTF8String] );
+	fprintf( stderr, "    												\n" );
+	fprintf( stderr, "%s	\n", [BeeSystemInfo OSVersion].UTF8String );
+	fprintf( stderr, "%s	\n", [BeeSystemInfo deviceModel].UTF8String );
+	fprintf( stderr, "    												\n" );
+	fprintf( stderr, "UUID: %s	\n", [BeeSystemInfo deviceUUID].UTF8String );
+	fprintf( stderr, "Home: %s	\n", [NSBundle mainBundle].bundlePath.UTF8String );
+	fprintf( stderr, "    												\n" );
+	fprintf( stderr, "    												\n" );
+#endif	// #if TARGET_OS_IPHONE
 }
 
 - (void)toggle
@@ -127,7 +205,7 @@ DEF_SINGLETON( BeeLogger );
 
 - (void)disable
 {
-	_enabled = YES;
+	_enabled = NO;
 }
 
 - (void)indent
@@ -160,7 +238,11 @@ DEF_SINGLETON( BeeLogger );
 	}
 }
 
+#if __BEE_DEVELOPMENT__
+- (void)file:(NSString *)file line:(NSUInteger)line function:(NSString *)function level:(BeeLogLevel)level format:(NSString *)format, ...
+#else	// #if __BEE_DEVELOPMENT__
 - (void)level:(BeeLogLevel)level format:(NSString *)format, ...
+#endif	// #if __BEE_DEVELOPMENT__
 {
 #if (__ON__ == __BEE_LOG__)
 	
@@ -169,50 +251,33 @@ DEF_SINGLETON( BeeLogger );
 
 	va_list args;
 	va_start( args, format );
-	
+
+#if __BEE_DEVELOPMENT__
+	[self file:file line:line function:function level:level format:format args:args];
+#else	// #if __BEE_DEVELOPMENT__
 	[self level:level format:format args:args];
+#endif	// #if __BEE_DEVELOPMENT__
 
 	va_end( args );
-	
+
 #endif	// #if (__ON__ == __BEE_LOG__)
 }
 
+#if __BEE_DEVELOPMENT__
+- (void)file:(NSString *)file line:(NSUInteger)line function:(NSString *)function level:(BeeLogLevel)level format:(NSString *)format args:(va_list)args
+#else	// #if __BEE_DEVELOPMENT__
 - (void)level:(BeeLogLevel)level format:(NSString *)format args:(va_list)args
+#endif	// #if __BEE_DEVELOPMENT__
 {
 #if (__ON__ == __BEE_LOG__)
 	
 	if ( NO == _enabled )
 		return;
 	
-	// formatting
-	
-	NSString * prefix = nil;
-	
-	if ( BeeLogLevelInfo == level )
-	{
-		prefix = @"INFO";
-	}
-	else if ( BeeLogLevelPerf == level )
-	{
-		prefix = @"PERF";
-	}
-	else if ( BeeLogLevelWarn == level )
-	{
-		prefix = @"WARN";
-	}
-	else if ( BeeLogLevelError == level )
-	{
-		prefix = @"ERROR";
-	}
-	
-	if ( prefix )
-	{
-		prefix = [NSString stringWithFormat:@"[%@]", prefix];
-		prefix = [prefix stringByPaddingToLength:8 withString:@" " startingAtIndex:0];
-	}
-	
+// formatting
+
+	NSMutableString * text = [NSMutableString string];
 	NSMutableString * tabs = nil;
-	NSMutableString * text = nil;
 	
 	if ( _indentTabs > 0 )
 	{
@@ -224,32 +289,64 @@ DEF_SINGLETON( BeeLogger );
 		}
 	}
 	
-	text = [NSMutableString string];
-	
-	if ( prefix && prefix.length )
+	NSString * module = nil;
+
+#if __BEE_DEVELOPMENT__
+	module = [[file lastPathComponent] stringByDeletingPathExtension];
+	if ( [module hasPrefix:@"Bee_"] )
 	{
-		[text appendString:prefix];
+		module = [module substringFromIndex:@"Bee_".length];
 	}
-	
+#endif	// #if __BEE_DEVELOPMENT__
+
+	if ( self.showLevel || self.showModule )
+	{
+		NSMutableString * temp = [NSMutableString string];
+
+		if ( self.showLevel )
+		{
+			if ( BeeLogLevelInfo == level )
+			{
+				[temp appendString:@"[INFO]"];
+			}
+			else if ( BeeLogLevelPerf == level )
+			{
+				[temp appendString:@"[PERF]"];
+			}
+			else if ( BeeLogLevelWarn == level )
+			{
+				[temp appendString:@"[WARN]"];
+			}
+			else if ( BeeLogLevelError == level )
+			{
+				[temp appendString:@"[ERROR]"];
+			}
+		}
+
+		if ( self.showModule )
+		{
+			if ( module && module.length )
+			{
+				[temp appendFormat:@" [%@]", module];
+			}
+		}
+		
+		if ( temp.length )
+		{
+			NSString * temp2 = [temp stringByPaddingToLength:((temp.length / 8) + 1) * 8 withString:@" " startingAtIndex:0];
+			[text appendString:temp2];
+		}
+	}
+
 	if ( tabs && tabs.length )
 	{
 		[text appendString:tabs];
 	}
-	
-	if ( BeeLogLevelProgress == level )
+
+	NSString * content = [[[NSString alloc] initWithFormat:(NSString *)format arguments:args] autorelease];
+	if ( content && content.length )
 	{
-		NSString *	name = [format stringByPaddingToLength:32 withString:@" " startingAtIndex:0];
-		NSString *	state = va_arg( args, NSString * );
-		
-		[text appendFormat:@"%@\t\t\t\t[%@]", name, state];
-	}
-	else
-	{
-		NSString * content = [[[NSString alloc] initWithFormat:(NSString *)format arguments:args] autorelease];
-		if ( content && content.length )
-		{
-			[text appendString:content];
-		}
+		[text appendString:content];
 	}
 	
 	if ( [text rangeOfString:@"\n"].length )
@@ -264,25 +361,36 @@ DEF_SINGLETON( BeeLogger );
 	
 	fprintf( stderr, [text UTF8String], NULL );
 	fprintf( stderr, "\n", NULL );
-	
+
 	// back log
 	
-	if ( _backlog )
+#if __BEE_DEVELOPMENT__
+	if ( BeeLogLevelError == level || BeeLogLevelWarn == level )
 	{
 		BeeBacklog * log = [[[BeeBacklog alloc] init] autorelease];
-		log.level = level;
-		log.text = text;
-		
-		[_backlogs pushTail:log];
-		[_backlogs keepTail:MAX_BACKLOG];
+		if ( log )
+		{
+			log.level = level;
+			log.text = text;
+			log.module = module;
+			log.file = file;
+			log.line = line;
+			log.func = function;
+			
+			[_backlogs pushTail:log];
+			[_backlogs keepTail:MAX_BACKLOG];
+		}
 	}
-	
+#endif	// #if __BEE_DEVELOPMENT__
 #endif	// #if (__ON__ == __BEE_LOG__)
 }
 
 @end
 
-extern "C" void BeeLog( NSString * format, ... )
+#if __cplusplus
+extern "C"
+#endif	// #if __cplusplus
+void BeeLog( NSString * format, ... )
 {
 #if (__ON__ == __BEE_LOG__)
 	
@@ -292,10 +400,14 @@ extern "C" void BeeLog( NSString * format, ... )
 	va_list args;
 	va_start( args, format );
 	
+#if __BEE_DEVELOPMENT__
+	[[BeeLogger sharedInstance] file:nil line:0 function:nil level:BeeLogLevelInfo format:format args:args];
+#else	// #if __BEE_DEVELOPMENT__
 	[[BeeLogger sharedInstance] level:BeeLogLevelInfo format:format args:args];
-	
+#endif	// #if __BEE_DEVELOPMENT__
+
 	va_end( args );
-	
+
 #endif	// #if (__ON__ == __BEE_LOG__)
 }
 

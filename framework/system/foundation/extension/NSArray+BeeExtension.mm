@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -129,6 +129,34 @@
 	return [NSMutableArray arrayWithArray:self];
 }
 
+- (NSString *)join:(NSString *)delimiter
+{
+	if ( 0 == self.count )
+	{
+		return @"";
+	}
+	else if ( 1 == self.count )
+	{
+		return [[self objectAtIndex:0] asNSString];
+	}
+	else
+	{
+		NSMutableString * result = [NSMutableString string];
+		
+		for ( NSUInteger i = 0; i < self.count; ++i )
+		{
+			[result appendString:[[self objectAtIndex:i] asNSString]];
+			
+			if ( i + 1 < self.count )
+			{
+				[result appendString:delimiter];
+			}
+		}
+		
+		return result;
+	}
+}
+
 @end
 
 #pragma mark -
@@ -160,6 +188,165 @@ static void			__TTReleaseNoOp( CFAllocatorRef allocator, const void * value ) { 
 	callbacks.retain = __TTRetainNoOp;
 	callbacks.release = __TTReleaseNoOp;
 	return [(NSMutableArray *)CFArrayCreateMutable( nil, 0, &callbacks ) autorelease];
+}
+
+- (void)addUniqueObject:(id)object compare:(NSMutableArrayCompareBlock)compare
+{
+	BOOL found = NO;
+	
+	for ( id obj in self )
+	{
+		if ( compare )
+		{
+			NSComparisonResult result = compare( obj, object );
+			if ( NSOrderedSame == result )
+			{
+				found = YES;
+				break;
+			}
+		}
+		else if ( [obj class] == [object class] && [obj respondsToSelector:@selector(compare:)] )
+		{
+			NSComparisonResult result = [obj compare:object];
+			if ( NSOrderedSame == result )
+			{
+				found = YES;
+				break;
+			}
+		}
+	}
+	
+	if ( NO == found )
+	{
+		[self addObject:object];
+	}
+}
+
+- (void)addUniqueObjects:(const id [])objects count:(NSUInteger)count compare:(NSMutableArrayCompareBlock)compare
+{
+	for ( int i = 0; i < count; ++i )
+	{
+		BOOL	found = NO;
+		id		object = objects[i];
+
+		for ( id obj in self )
+		{
+			if ( compare )
+			{
+				NSComparisonResult result = compare( obj, object );
+				if ( NSOrderedSame == result )
+				{
+					found = YES;
+					break;
+				}
+			}
+			else if ( [obj class] == [object class] && [obj respondsToSelector:@selector(compare:)] )
+			{
+				NSComparisonResult result = [obj compare:object];
+				if ( NSOrderedSame == result )
+				{
+					found = YES;
+					break;
+				}
+			}
+		}
+
+		if ( NO == found )
+		{
+			[self addObject:object];
+		}
+	}
+}
+
+- (void)addUniqueObjectsFromArray:(NSArray *)array compare:(NSMutableArrayCompareBlock)compare
+{
+	for ( id object in array )
+	{
+		BOOL found = NO;
+
+		for ( id obj in self )
+		{
+			if ( compare )
+			{
+				NSComparisonResult result = compare( obj, object );
+				if ( NSOrderedSame == result )
+				{
+					found = YES;
+					break;
+				}
+			}
+			else if ( [obj class] == [object class] && [obj respondsToSelector:@selector(compare:)] )
+			{
+				NSComparisonResult result = [obj compare:object];
+				if ( NSOrderedSame == result )
+				{
+					found = YES;
+					break;
+				}
+			}
+		}
+		
+		if ( NO == found )
+		{
+			[self addObject:object];
+		}
+	}
+}
+
+- (void)unique
+{
+	[self unique:^NSComparisonResult(id left, id right) {
+		return [left compare:right];
+	}];
+}
+
+- (void)unique:(NSMutableArrayCompareBlock)compare
+{
+	if ( self.count <= 1 )
+	{
+		return;
+	}
+
+	// Optimize later ...
+
+	NSMutableArray * dupArray = [NSMutableArray nonRetainingArray];
+	NSMutableArray * delArray = [NSMutableArray nonRetainingArray];
+
+	[dupArray addObjectsFromArray:self];
+	[dupArray sortUsingComparator:compare];
+	
+	for ( NSUInteger i = 0; i < dupArray.count; ++i )
+	{
+		id elem1 = [dupArray safeObjectAtIndex:i];
+		id elem2 = [dupArray safeObjectAtIndex:(i + 1)];
+		
+		if ( elem1 && elem2 )
+		{
+			if ( NSOrderedSame == compare(elem1, elem2) )
+			{
+				[delArray addObject:elem1];
+			}
+		}
+	}
+	
+	for ( id delElem in delArray )
+	{
+		[self removeObject:delElem];
+	}
+}
+
+- (void)sort
+{
+	[self sort:^NSComparisonResult(id left, id right) {
+		return [left compare:right];
+	}];
+}
+
+- (void)sort:(NSMutableArrayCompareBlock)compare
+{
+	[self sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+		return compare( obj1, obj2 );
+	}];
 }
 
 - (NSMutableArray *)pushHead:(NSObject *)obj
@@ -321,6 +508,24 @@ static void			__TTReleaseNoOp( CFAllocatorRef allocator, const void * value ) { 
 	}	
 	
 	[self removeAllObjects];
+}
+
+- (void)removeObject:(NSObject *)obj usingComparator:(NSMutableArrayCompareBlock)cmptr
+{
+	if ( nil == cmptr || nil == obj )
+		return;
+	
+	NSMutableArray * objectsWillRemove = [NSMutableArray nonRetainingArray];
+	for ( id obj2 in self )
+	{
+		NSComparisonResult result = cmptr( obj, obj2 );
+		if ( NSOrderedSame == result )
+		{
+			[objectsWillRemove addObject:obj2];
+		}
+	}
+	
+	[self removeObjectsInArray:objectsWillRemove];
 }
 
 @end

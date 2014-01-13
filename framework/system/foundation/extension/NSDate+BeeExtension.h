@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -38,6 +38,7 @@
 #define HOUR	(60 * MINUTE)
 #define DAY		(24 * HOUR)
 #define MONTH	(30 * DAY)
+#define YEAR	(12 * MONTH)
 
 #pragma mark -
 
@@ -53,6 +54,7 @@
 
 - (NSString *)stringWithDateFormat:(NSString *)format;
 - (NSString *)timeAgo;
+- (NSString *)timeLeft;
 
 + (long long)timeStamp;
 

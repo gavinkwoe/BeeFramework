@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -34,6 +34,10 @@
 // ----------------------------------
 // Source code
 // ----------------------------------
+
+#pragma mark -
+
+DEF_PACKAGE( BeePackage_System, BeeFileCache, fileCache );
 
 #pragma mark -
 
@@ -104,13 +108,7 @@ DEF_SINGLETON( BeeFileCache );
 
 - (id)objectForKey:(id)key
 {
-	NSData * data = [NSData dataWithContentsOfFile:[self fileNameForKey:key]];
-	if ( data )
-	{
-		return [self unserialize:data];
-	}
-	
-	return nil;
+	return [NSData dataWithContentsOfFile:[self fileNameForKey:key]];
 }
 
 - (void)setObject:(id)object forKey:(id)key
@@ -121,20 +119,13 @@ DEF_SINGLETON( BeeFileCache );
 	}
 	else
 	{
-		NSData * data = nil;
-		
-		if ( [object isKindOfClass:[NSData class]] )
+		NSData * data = [object asNSData];
+		if ( data )
 		{
-			data = (NSData *)object;
+			[data writeToFile:[self fileNameForKey:key]
+					  options:NSDataWritingAtomic
+						error:NULL];
 		}
-		else
-		{
-			data = [self serialize:object];
-		}
-		
-		[data writeToFile:[self fileNameForKey:key]
-				  options:NSDataWritingAtomic
-					error:NULL];
 	}
 }
 
@@ -152,20 +143,14 @@ DEF_SINGLETON( BeeFileCache );
 													error:NULL];
 }
 
-- (NSData *)serialize:(id)obj
+- (id)objectForKeyedSubscript:(id)key
 {
-	if ( [obj isKindOfClass:[NSData class]] )
-		return obj;
-	
-	if ( [obj respondsToSelector:@selector(JSONData)] )
-		return [obj JSONData];
-	
-	return nil;
+	return [self objectForKey:key];
 }
 
-- (id)unserialize:(NSData *)data
+- (void)setObject:(id)obj forKeyedSubscript:(id)key
 {
-	return [data objectFromJSONData];
+	[self setObject:obj forKey:key];
 }
 
 @end

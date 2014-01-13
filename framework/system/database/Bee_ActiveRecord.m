@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -102,7 +102,7 @@ DEF_NUMBER( INVALID_ID,	-1 )
 	INFO( @"Loading tables ..." );
 	
 	[[BeeLogger sharedInstance] indent];
-	[[BeeLogger sharedInstance] disable];
+//	[[BeeLogger sharedInstance] disable];
 
 	NSArray * availableClasses = [BeeRuntime allSubClassesOf:[BeeActiveRecord class]];
 	
@@ -113,13 +113,13 @@ DEF_NUMBER( INVALID_ID,	-1 )
 
 		[BeeActiveBuilder buildTableFor:classType untilRootClass:[BeeActiveRecord class]];
 
-		[[BeeLogger sharedInstance] enable];
-		PROGRESS( [classType description], @"OK" );
-		[[BeeLogger sharedInstance] disable];
+//		[[BeeLogger sharedInstance] enable];
+		INFO( @"%@ loaded", [classType description] );
+//		[[BeeLogger sharedInstance] disable];
 	}
 
 	[[BeeLogger sharedInstance] unindent];
-	[[BeeLogger sharedInstance] enable];
+//	[[BeeLogger sharedInstance] enable];
 	
 #endif	// #if defined(__PRECREATE_TABLES__) && __PRECREATE_TABLES__
 	
@@ -218,7 +218,7 @@ DEF_NUMBER( INVALID_ID,	-1 )
 					}
 					else if ( [value isKindOfClass:[NSString class]] )
 					{
-						NSObject * obj = [(NSString *)value objectFromJSONString];
+						NSObject * obj = [(NSString *)value objectFromJSONStringWithParseOptions:JKParseOptionValidFlags error:nil];
 						if ( [obj isKindOfClass:[NSArray class]] )
 						{
 							array = (NSArray *)obj;
@@ -323,7 +323,7 @@ DEF_NUMBER( INVALID_ID,	-1 )
 					}
 					else if ( [value isKindOfClass:[NSString class]] )
 					{
-						NSObject * obj = [(NSString *)value objectFromJSONString];
+						NSObject * obj = [(NSString *)value objectFromJSONStringWithParseOptions:JKParseOptionValidFlags error:nil];
 						if ( [obj isKindOfClass:[NSArray class]] )
 						{
 							array = (NSArray *)obj;
@@ -542,7 +542,7 @@ DEF_NUMBER( INVALID_ID,	-1 )
 					}
 					else if ( [value isKindOfClass:[NSString class]] )
 					{
-						NSObject * obj = [(NSString *)value objectFromJSONString];
+						NSObject * obj = [(NSString *)value objectFromJSONStringWithParseOptions:JKParseOptionValidFlags error:nil];
 						if ( [obj isKindOfClass:[NSArray class]] )
 						{
 							array = (NSArray *)obj;
@@ -746,7 +746,8 @@ DEF_NUMBER( INVALID_ID,	-1 )
 		_deleted = NO;
 
 		[self setObservers];
-		[self load];
+//		[self load];
+		[self performLoad];
 	}
 	
 	[BeeDatabase scopeLeave];
@@ -802,7 +803,8 @@ DEF_NUMBER( INVALID_ID,	-1 )
 		_deleted = NO;
 		
 		[self setObservers];
-		[self load];
+//		[self load];
+		[self performLoad];
 	}
 	
 	[BeeDatabase scopeLeave];
@@ -890,7 +892,8 @@ DEF_NUMBER( INVALID_ID,	-1 )
 		_deleted = NO;
 
 		[self setObservers];
-		[self load];
+//		[self load];
+		[self performLoad];
 	}
 	
 	[BeeDatabase scopeLeave];
@@ -912,7 +915,8 @@ DEF_NUMBER( INVALID_ID,	-1 )
 		_deleted = NO;
 
 		[self setObservers];
-		[self load];
+//		[self load];
+		[self performLoad];
 	}
 	
 	[BeeDatabase scopeLeave];
@@ -939,7 +943,8 @@ DEF_NUMBER( INVALID_ID,	-1 )
 		_deleted = NO;
 
 		[self setObservers];
-		[self load];
+//		[self load];
+		[self performLoad];
 	}
 	
 	[BeeDatabase scopeLeave];
@@ -966,7 +971,8 @@ DEF_NUMBER( INVALID_ID,	-1 )
 		_deleted = NO;
 
 		[self setObservers];
-		[self load];
+//		[self load];
+		[self performLoad];
 	}
 	
 	[BeeDatabase scopeLeave];
@@ -1119,7 +1125,9 @@ DEF_NUMBER( INVALID_ID,	-1 )
 {
 //	[self update];
 
-	[self unload];
+//	[self unload];
+	[self performUnload];
+	
 	[self removeObservers];
 	
 #if __JSON_SERIALIZATION__
@@ -1226,7 +1234,7 @@ DEF_NUMBER( INVALID_ID,	-1 )
 				}
 				else if ( [value isKindOfClass:[NSString class]] )
 				{
-					NSObject * obj = [(NSString *)value objectFromJSONString];
+					NSObject * obj = [(NSString *)value objectFromJSONStringWithParseOptions:JKParseOptionValidFlags error:nil];
 					if ( [obj isKindOfClass:[NSArray class]] )
 					{
 						array = (NSArray *)obj;
@@ -1298,7 +1306,7 @@ DEF_NUMBER( INVALID_ID,	-1 )
 			{
 				if ( [value isKindOfClass:[NSString class]] )
 				{
-					value = [(NSString *)value objectFromJSONString];
+					value = [(NSString *)value objectFromJSONStringWithParseOptions:JKParseOptionValidFlags error:nil];
 					if ( NO == [value isKindOfClass:[NSDictionary class]] )
 					{
 						value = [NSMutableDictionary dictionary];
@@ -1669,7 +1677,7 @@ DEF_NUMBER( INVALID_ID,	-1 )
 				}
 				else if ( [value isKindOfClass:[NSString class]] )
 				{
-					NSObject * obj = [(NSString *)value objectFromJSONString];
+					NSObject * obj = [(NSString *)value objectFromJSONStringWithParseOptions:JKParseOptionValidFlags error:nil];
 					if ( [obj isKindOfClass:[NSArray class]] )
 					{
 						array = (NSArray *)obj;
@@ -1877,7 +1885,7 @@ DEF_NUMBER( INVALID_ID,	-1 )
 				}
 				else if ( [value isKindOfClass:[NSString class]] )
 				{
-					NSObject * obj = [(NSString *)value objectFromJSONString];
+					NSObject * obj = [(NSString *)value objectFromJSONStringWithParseOptions:JKParseOptionValidFlags error:nil];
 					if ( [obj isKindOfClass:[NSArray class]] )
 					{
 						array = (NSArray *)obj;
@@ -2149,6 +2157,8 @@ DEF_NUMBER( INVALID_ID,	-1 )
 		}
 		else
 		{
+			self.changed = YES;	// force to update
+			
 			ret = [self update];
 		}
 		return ret;

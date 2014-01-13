@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -30,7 +30,15 @@
 //
 
 #import "Bee_Precompile.h"
+#import "Bee_Package.h"
 #import "Bee_Foundation.h"
+#import "Bee_SystemConfig.h"
+#import "Bee_SystemPackage.h"
+#import "Bee_CacheProtocol.h"
+
+#pragma mark -
+
+AS_PACKAGE( BeePackage_System, BeeKeychain, keychain );
 
 #pragma mark -
 
@@ -39,7 +47,11 @@
 
 #pragma mark -
 
-@interface BeeKeychain : NSObject
+@interface BeeKeychain : NSObject<BeeCacheProtocol>
+
+@property (nonatomic, retain) NSString * defaultDomain;
+
+AS_SINGLETON( BeeKeychain )
 
 + (void)setDefaultDomain:(NSString *)domain;
 

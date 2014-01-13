@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -30,21 +30,16 @@
 //
 
 #import "TeamBoard_iPhone.h"
+#import "TeamBoardCell_iPhone.h"
+#import "PullLoader.h"
+#import "FootLoader.h"
 #import "AppBoard_iPhone.h"
 
 #pragma mark -
 
-@implementation TeamBoardCell_iPhone
-SUPPORT_AUTOMATIC_LAYOUT( YES );
-SUPPORT_RESOURCE_LOADING( YES );
-@end
-
-#pragma mark -
-
 @implementation TeamBoard_iPhone
-{
-	BeeUIScrollView *	_scroll;
-}
+
+DEF_OUTLET( BeeUIScrollView, list )
 
 SUPPORT_AUTOMATIC_LAYOUT( YES );
 SUPPORT_RESOURCE_LOADING( YES );
@@ -57,41 +52,63 @@ SUPPORT_RESOURCE_LOADING( YES );
 {
 }
 
-ON_SIGNAL2( BeeUIBoard, signal )
+#pragma mark -
+
+ON_CREATE_VIEWS( signal )
 {
-	[super handleUISignal:signal];
+	self.view.backgroundColor = SHORT_RGB( 0x333 );
 	
-	if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
+	self.navigationBarShown = YES;
+	self.navigationBarTitle = @"Team";
+	self.navigationBarLeft = [UIImage imageNamed:@"menu-button.png"];
+
+	self.list.lineCount = 1;
+	self.list.animationDuration = 0.25f;
+	self.list.baseInsets = bee.ui.config.baseInsets;
+	
+	self.list.whenReloading = ^
 	{
-		self.view.backgroundColor = SHORT_RGB( 0x333 );
+		self.list.total = 1;
 		
-		[self showNavigationBarAnimated:NO];
-		[self showBarButton:BeeUINavigationBar.LEFT image:[UIImage imageNamed:@"menu-button.png"]];
-		[self setTitleString:@"Team"];
-		
-		_scroll = [BeeUIScrollView new];
-		_scroll.dataSource = self;
-		_scroll.vertical = YES;
-		[self.view addSubview:_scroll];
-	}
-	else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
-	{
-		SAFE_RELEASE_SUBVIEW( _scroll );
-	}
-	else if ( [signal is:BeeUIBoard.LAYOUT_VIEWS] )
-	{
-		_scroll.frame = self.viewBound;
-	}
-	else if ( [signal is:BeeUIBoard.WILL_APPEAR] )
-	{
-		[_scroll asyncReloadData];
-	}
+		BeeUIScrollItem * item = self.list.items[0];
+		item.clazz = [TeamBoardCell_iPhone class];
+	};
+}
+
+ON_DELETE_VIEWS( signal )
+{
+}
+
+ON_LAYOUT_VIEWS( signal )
+{
+}
+
+ON_WILL_APPEAR( signal )
+{
+	[self.list reloadData];
+	
+	bee.ui.router.view.pannable = YES;
+}
+
+ON_DID_APPEAR( signal )
+{
+}
+
+ON_WILL_DISAPPEAR( signal )
+{
+	bee.ui.router.view.pannable = NO;
+}
+
+ON_DID_DISAPPEAR( signal )
+{
 }
 
 ON_SIGNAL3( BeeUINavigationBar, LEFT_TOUCHED, signal )
 {
 	[[AppBoard_iPhone sharedInstance] showMenu];
 }
+
+#pragma mark -
 
 ON_SIGNAL3( TeamBoardCell_iPhone, call, signal )
 {
@@ -113,7 +130,7 @@ ON_SIGNAL3( TeamBoardCell_iPhone, guo, signal )
 
 ON_SIGNAL3( TeamBoardCell_iPhone, qfish, signal )
 {
-	NSURL * url = [NSURL URLWithString:@"https://github.com/qfish"];
+	NSURL * url = [NSURL URLWithString:@"http://qfi.sh"];
 	[[UIApplication sharedApplication] openURL:url];
 }
 
@@ -175,23 +192,6 @@ ON_SIGNAL3( TeamBoardCell_iPhone, esseak, signal )
 {
 	NSURL * url = [NSURL URLWithString:@"https://github.com/esseak"];
 	[[UIApplication sharedApplication] openURL:url];
-}
-
-- (NSInteger)numberOfViewsInScrollView:(BeeUIScrollView *)scrollView
-{
-	return 1;
-}
-
-- (UIView *)scrollView:(BeeUIScrollView *)scrollView viewForIndex:(NSInteger)index scale:(CGFloat)scale
-{
-	TeamBoardCell_iPhone * cell = [scrollView dequeueWithContentClass:[TeamBoardCell_iPhone class]];
-	cell.data = nil;
-	return cell;
-}
-
-- (CGSize)scrollView:(BeeUIScrollView *)scrollView sizeForIndex:(NSInteger)index
-{
-	return [TeamBoardCell_iPhone estimateUISizeByWidth:scrollView.width forData:nil];
 }
 
 @end

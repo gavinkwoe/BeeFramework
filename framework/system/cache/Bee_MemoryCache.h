@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -30,8 +30,15 @@
 //
 
 #import "Bee_Precompile.h"
+#import "Bee_Package.h"
 #import "Bee_Foundation.h"
 #import "Bee_CacheProtocol.h"
+#import "Bee_SystemConfig.h"
+#import "Bee_SystemPackage.h"
+
+#pragma mark -
+
+AS_PACKAGE( BeePackage_System, BeeMemoryCache, memoryCache );
 
 #pragma mark -
 
@@ -40,8 +47,8 @@
 @property (nonatomic, assign) BOOL					clearWhenMemoryLow;
 @property (nonatomic, assign) NSUInteger			maxCacheCount;
 @property (nonatomic, assign) NSUInteger			cachedCount;
-@property (nonatomic, retain) NSMutableArray *		cacheKeys;
-@property (nonatomic, retain) NSMutableDictionary *	cacheObjs;
+@property (atomic, retain) NSMutableArray *			cacheKeys;
+@property (atomic, retain) NSMutableDictionary *	cacheObjs;
 
 AS_SINGLETON( BeeMemoryCache );
 

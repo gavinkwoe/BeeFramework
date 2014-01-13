@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -30,7 +30,6 @@
 //
 
 #import "Bee_Thread.h"
-
 #import "Bee_UnitTest.h"
 
 // ----------------------------------
@@ -39,19 +38,24 @@
 
 #pragma mark -
 
-@interface BeeTaskQueue()
+DEF_PACKAGE( BeePackage, BeeThread, thread );
+DEF_PACKAGE( BeePackage, BeeThread, taskQueue );
+
+#pragma mark -
+
+@interface BeeThread()
 {
 	dispatch_queue_t _foreQueue;
 	dispatch_queue_t _backQueue;
 }
-
-AS_SINGLETON( BeeTaskQueue )
-
 @end
 
-@implementation BeeTaskQueue
+@implementation BeeThread
 
-DEF_SINGLETON( BeeTaskQueue )
+DEF_SINGLETON( BeeThread )
+
+@dynamic MAIN;
+@dynamic FORK;
 
 - (id)init
 {
@@ -67,7 +71,7 @@ DEF_SINGLETON( BeeTaskQueue )
 
 + (dispatch_queue_t)foreQueue
 {
-	return [[BeeTaskQueue sharedInstance] foreQueue];
+	return [[BeeThread sharedInstance] foreQueue];
 }
 
 - (dispatch_queue_t)foreQueue
@@ -77,7 +81,7 @@ DEF_SINGLETON( BeeTaskQueue )
 
 + (dispatch_queue_t)backQueue
 {
-	return [[BeeTaskQueue sharedInstance] backQueue];
+	return [[BeeThread sharedInstance] backQueue];
 }
 
 - (dispatch_queue_t)backQueue
@@ -92,7 +96,7 @@ DEF_SINGLETON( BeeTaskQueue )
 
 + (void)enqueueForeground:(dispatch_block_t)block
 {
-	return [[BeeTaskQueue sharedInstance] enqueueForeground:block];
+	return [[BeeThread sharedInstance] enqueueForeground:block];
 }
 
 - (void)enqueueForeground:(dispatch_block_t)block
@@ -102,7 +106,7 @@ DEF_SINGLETON( BeeTaskQueue )
 
 + (void)enqueueBackground:(dispatch_block_t)block
 {
-	return [[BeeTaskQueue sharedInstance] enqueueBackground:block];
+	return [[BeeThread sharedInstance] enqueueBackground:block];
 }
 
 - (void)enqueueBackground:(dispatch_block_t)block
@@ -112,7 +116,7 @@ DEF_SINGLETON( BeeTaskQueue )
 
 + (void)enqueueForegroundWithDelay:(dispatch_time_t)ms block:(dispatch_block_t)block
 {
-	[[BeeTaskQueue sharedInstance] enqueueForegroundWithDelay:ms block:block];
+	[[BeeThread sharedInstance] enqueueForegroundWithDelay:ms block:block];
 }
 
 - (void)enqueueForegroundWithDelay:(dispatch_time_t)ms block:(dispatch_block_t)block
@@ -123,13 +127,35 @@ DEF_SINGLETON( BeeTaskQueue )
 
 + (void)enqueueBackgroundWithDelay:(dispatch_time_t)ms block:(dispatch_block_t)block
 {
-	[[BeeTaskQueue sharedInstance] enqueueBackgroundWithDelay:ms block:block];
+	[[BeeThread sharedInstance] enqueueBackgroundWithDelay:ms block:block];
 }
 
 - (void)enqueueBackgroundWithDelay:(dispatch_time_t)ms block:(dispatch_block_t)block
 {
 	dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, ms * USEC_PER_SEC);
 	dispatch_after( time, _backQueue, block );	
+}
+
+- (BeeThreadBlock)MAIN
+{
+	BeeThreadBlock block = ^ BeeThread * ( dispatch_block_t block )
+	{
+		[self enqueueForeground:block];
+		return self;
+	};
+
+	return [[block copy] autorelease];
+}
+
+- (BeeThreadBlock)FORK
+{
+	BeeThreadBlock block = ^ BeeThread * ( dispatch_block_t block )
+	{
+		[self enqueueBackground:block];
+		return self;
+	};
+	
+	return [[block copy] autorelease];
 }
 
 @end

@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -31,9 +31,6 @@
 
 #import "Bee_Precompile.h"
 
-#import "Bee_HTTPRequest.h"
-#import "Bee_HTTPRequestQueue.h"
-#import "Bee_HTTPMockServer.h"
-#import "Bee_HTTPConfig.h"
-
-#import "NSObject+BeeHTTPRequest.h"
+#import "Bee_HTTP.h"
+#import "Bee_Socket.h"
+#import "Bee_Reachability.h"

@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -30,11 +30,22 @@
 //
 
 #import "Bee_Precompile.h"
+#import "Bee_SystemConfig.h"
+#import "Bee_SystemPackage.h"
 
 #pragma mark -
 
+#if __BEE_DEVELOPMENT__
+
 #undef	ASSERT
 #define ASSERT( __expr )	BeeAssert( (__expr) ? YES : NO, #__expr, __PRETTY_FUNCTION__, __FILE__, __LINE__ )
+
+#else	// #if __BEE_DEVELOPMENT__
+
+#undef	ASSERT
+#define ASSERT( __expr )
+
+#endif	// #if __BEE_DEVELOPMENT__
 
 #if __cplusplus
 extern "C" {

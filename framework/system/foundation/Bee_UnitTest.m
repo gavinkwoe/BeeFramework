@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -85,24 +85,32 @@ static NSUInteger __succeedCount = 0;
 	NSArray * availableClasses = [BeeRuntime allSubClassesOf:[BeeTestCase class]];
 	for ( Class classType in availableClasses )
 	{
+		[[BeeLogger sharedInstance] disable];
+		
 		BOOL ret = [classType runTests];
+
+		[[BeeLogger sharedInstance] enable];
+
+		NSString * classTypeDesc = [classType description];
+		NSString * classTypePadding = [classTypeDesc stringByPaddingToLength:48 withString:@" " startingAtIndex:0];
+		
 		if ( ret )
 		{
 			__succeedCount += 1;
 			
-			PROGRESS( [classType description], @"OK" );
+			PRINT( [NSString stringWithFormat:@"%@\t\t\t\t[PASS]", classTypePadding] );
 		}
 		else
 		{
 			__failedCount += 1;
-			
-			PROGRESS( [classType description], @"FAIL" );
+
+			PRINT( [NSString stringWithFormat:@"%@\t\t\t\t[FAIL]", classTypePadding] );
 		}
 	}
 
 	INFO( @"" );
 	INFO( @"Failed:  %d", __failedCount );
-	INFO( @"Pass:    %.1f %c", (__succeedCount * 1.0f) / ((__succeedCount + __failedCount) * 1.0f) * 100, '%' );
+	INFO( @"Pass:    %.1f", (__succeedCount * 1.0f) / ((__succeedCount + __failedCount) * 1.0f) * 100 );
 
 	[[BeeLogger sharedInstance] unindent];
 

@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -30,7 +30,14 @@
 //
 
 #import "Bee_Precompile.h"
+#import "Bee_Package.h"
+#import "Bee_SystemConfig.h"
+#import "Bee_SystemPackage.h"
 #import "NSObject+BeeProperty.h"
+
+#pragma mark -
+
+AS_PACKAGE( BeePackage_System, BeeRuntime, runtime );
 
 #pragma mark -
 
@@ -43,25 +50,8 @@
 #undef	BREAK_POINT_IF
 #define BREAK_POINT_IF( __x )	if ( __x ) { [BeeRuntime breakPoint]; }
 
-#pragma mark -
-
-@interface BeeCallFrame : NSObject
-
-AS_INT( TYPE_UNKNOWN )
-AS_INT( TYPE_OBJC )
-AS_INT( TYPE_NATIVEC )
-
-@property (nonatomic, assign) NSUInteger	type;
-@property (nonatomic, retain) NSString *	process;
-@property (nonatomic, assign) NSUInteger	entry;
-@property (nonatomic, assign) NSUInteger	offset;
-@property (nonatomic, retain) NSString *	clazz;
-@property (nonatomic, retain) NSString *	method;
-
-+ (id)parse:(NSString *)line;
-+ (id)unknown;
-
-@end
+#undef	BB
+#define BB						[BeeRuntime breakPoint];
 
 #pragma mark -
 
@@ -90,13 +80,42 @@ AS_INT( NSDATE )
 
 #pragma mark -
 
+@interface BeeCallFrame : NSObject
+
+AS_INT( TYPE_UNKNOWN )
+AS_INT( TYPE_OBJC )
+AS_INT( TYPE_NATIVEC )
+
+@property (nonatomic, assign) NSUInteger	type;
+@property (nonatomic, retain) NSString *	process;
+@property (nonatomic, assign) NSUInteger	entry;
+@property (nonatomic, assign) NSUInteger	offset;
+@property (nonatomic, retain) NSString *	clazz;
+@property (nonatomic, retain) NSString *	method;
+
++ (id)parse:(NSString *)line;
++ (id)unknown;
+
+@end
+
+#pragma mark -
+
 @interface BeeRuntime : NSObject
+
+@property (nonatomic, readonly) NSArray *	allClasses;
+@property (nonatomic, readonly) NSArray *	callstack;
+@property (nonatomic, readonly) NSArray *	callframes;
+
+AS_SINGLETON( BeeRuntime )
 
 + (id)allocByClass:(Class)clazz;
 + (id)allocByClassName:(NSString *)clazzName;
 
 + (NSArray *)allClasses;
 + (NSArray *)allSubClassesOf:(Class)clazz;
+
++ (NSArray *)allInstanceMethodsOf:(Class)clazz;
++ (NSArray *)allInstanceMethodsOf:(Class)clazz withPrefix:(NSString *)prefix;
 
 + (NSArray *)callstack:(NSUInteger)depth;
 + (NSArray *)callframes:(NSUInteger)depth;

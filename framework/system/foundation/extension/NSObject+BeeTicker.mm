@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -34,6 +34,8 @@
 #import "Bee_Ticker.h"
 #import "Bee_UnitTest.h"
 #import "NSArray+BeeExtension.h"
+
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 
 // ----------------------------------
 // Source code
@@ -73,3 +75,4 @@ TEST_CASE( NSObject_BeeTicker )
 TEST_CASE_END
 
 #endif	// #if defined(__BEE_UNITTEST__) && __BEE_UNITTEST__
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

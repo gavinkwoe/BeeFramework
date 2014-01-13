@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'BeeFramework' target in the 'BeeFramework' project
+//
+
+#ifdef __OBJC__
+	#import <Foundation/Foundation.h>
+#endif

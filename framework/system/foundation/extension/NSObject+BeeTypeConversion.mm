@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -42,6 +42,21 @@
 
 @implementation NSObject(BeeTypeConversion)
 
+- (NSInteger)asInteger
+{
+	return [[self asNSNumber] integerValue];
+}
+
+- (float)asFloat
+{
+	return [[self asNSNumber] floatValue];
+}
+
+- (BOOL)asBool
+{
+	return [[self asNSNumber] boolValue];
+}
+
 - (NSNumber *)asNSNumber
 {
 	if ( [self isKindOfClass:[NSNumber class]] )
@@ -76,7 +91,17 @@
 	else if ( [self isKindOfClass:[NSData class]] )
 	{
 		NSData * data = (NSData *)self;
-		return [[[NSString alloc] initWithBytes:data.bytes length:data.length encoding:NSUTF8StringEncoding] autorelease];
+		
+		NSString * text = [[[NSString alloc] initWithBytes:data.bytes length:data.length encoding:NSUTF8StringEncoding] autorelease];
+		if ( nil == text )
+		{
+			text = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+			if ( nil == text )
+			{
+				text = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+			}
+		}
+		return text;
 	}
 	else
 	{
@@ -150,6 +175,15 @@
 
 - (NSData *)asNSData
 {
+	if ( [self isKindOfClass:[NSString class]] )
+	{
+		return [(NSString *)self dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+	}
+	else if ( [self isKindOfClass:[NSData class]] )
+	{
+		return (NSData *)self;
+	}
+
 	return nil;
 }
 

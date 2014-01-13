@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -31,29 +31,17 @@
 
 #import "AboutBoard_iPhone.h"
 #import "AppBoard_iPhone.h"
-
-#pragma mark -
-
-@implementation AboutBoardCell_iPhone
-
-SUPPORT_AUTOMATIC_LAYOUT( YES );
-SUPPORT_RESOURCE_LOADING( YES );
-
-- (void)dataDidChanged
-{
-}
-
-@end
+#import "PullLoader.h"
+#import "FootLoader.h"
 
 #pragma mark -
 
 @implementation AboutBoard_iPhone
-{
-	BeeUIScrollView *	_scroll;
-}
 
 SUPPORT_AUTOMATIC_LAYOUT( YES );
 SUPPORT_RESOURCE_LOADING( YES );
+
+DEF_OUTLET( BeeUIScrollView, list );
 
 - (void)load
 {
@@ -63,57 +51,60 @@ SUPPORT_RESOURCE_LOADING( YES );
 {
 }
 
-ON_SIGNAL2( BeeUIBoard, signal )
+#pragma mark -
+
+ON_CREATE_VIEWS( signal )
 {
-	[super handleUISignal:signal];
+	self.view.backgroundColor = SHORT_RGB( 0x333 );
 	
-	if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
+	self.navigationBarShown = YES;
+	self.navigationBarTitle = @"About";
+	self.navigationBarLeft = [UIImage imageNamed:@"menu-button.png"];
+
+	self.list.lineCount = 1;
+	self.list.animationDuration = 0.25f;
+	self.list.baseInsets = bee.ui.config.baseInsets;
+
+	self.list.whenReloading = ^
 	{
-		self.view.backgroundColor = SHORT_RGB( 0x333 );
-		
-		[self showNavigationBarAnimated:NO];
-		[self showBarButton:BeeUINavigationBar.LEFT image:[UIImage imageNamed:@"menu-button.png"]];
-		[self setTitleString:@"About"];
-		
-		_scroll = [BeeUIScrollView new];
-		_scroll.dataSource = self;
-		_scroll.vertical = YES;
-		[self.view addSubview:_scroll];
-	}
-	else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
-	{
-		SAFE_RELEASE_SUBVIEW( _scroll );
-	}
-	else if ( [signal is:BeeUIBoard.LAYOUT_VIEWS] )
-	{
-		_scroll.frame = self.viewBound;
-	}
-	else if ( [signal is:BeeUIBoard.WILL_APPEAR] )
-	{
-		[_scroll asyncReloadData];
-	}
+		self.list.total = 1;
+
+		BeeUIScrollItem * item = self.list.items[0];
+		item.clazz = [AboutBoardCell_iPhone class];
+	};
+}
+
+ON_DELETE_VIEWS( signal )
+{
+}
+
+ON_LAYOUT_VIEWS( signal )
+{
+}
+
+ON_WILL_APPEAR( signal )
+{
+	[self.list reloadData];
+
+	bee.ui.router.view.pannable = YES;
+}
+
+ON_DID_APPEAR( signal )
+{
+}
+
+ON_WILL_DISAPPEAR( signal )
+{
+	bee.ui.router.view.pannable = NO;
+}
+
+ON_DID_DISAPPEAR( signal )
+{
 }
 
 ON_SIGNAL3( BeeUINavigationBar, LEFT_TOUCHED, signal )
 {
 	[[AppBoard_iPhone sharedInstance] showMenu];
-}
-
-- (NSInteger)numberOfViewsInScrollView:(BeeUIScrollView *)scrollView
-{
-	return 1;
-}
-
-- (UIView *)scrollView:(BeeUIScrollView *)scrollView viewForIndex:(NSInteger)index scale:(CGFloat)scale
-{
-	AboutBoardCell_iPhone * cell = [scrollView dequeueWithContentClass:[AboutBoardCell_iPhone class]];
-	cell.data = nil;
-	return cell;
-}
-
-- (CGSize)scrollView:(BeeUIScrollView *)scrollView sizeForIndex:(NSInteger)index
-{
-	return [AboutBoardCell_iPhone estimateUISizeByWidth:scrollView.width forData:nil];
 }
 
 @end

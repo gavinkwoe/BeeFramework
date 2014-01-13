@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<template namespace="DribbbleDetailComment_iPhone" version="1">
+	<linear orientation="h" class="wrapper">
+		<image id="avatar" class="avatar"/>
+		<linear orientation="v" class="right-wrapper">
+			<label id="name" class="name"/>
+			<label id="text" class="text"></label>
+			<label id="time" class="time"></label>
+		</linear>
+	</linear>
+    <style type="text/css">
+		
+		.wrapper {
+			width: 100%;
+			height: auto;
+			margin-top: 4px;
+		}
+
+		.avatar {
+			width: 44px;
+			height: 44px;
+			padding: 2px;
+			margin-left: 6px;
+			background-color: #999;
+			border-radius: 6px;
+			border-width: 2px;
+			border-color: white;
+			image-mode: fill;
+			image-loading: white;
+		}
+
+		.right-wrapper {
+			width: 256px;
+			height: auto;
+			margin-left: 6px;
+		}
+
+		.name {
+			width: 100%;
+			height: auto;
+			font-size: 14px;
+			font-weight: bold;
+			text-align: left;
+			color: gray;
+		}
+
+		.text {
+			width: 100%;
+			height: auto;
+			font-size: 14px;
+			font-weight: bold;
+			text-align: left;
+			color: white;
+			margin-top: 2px;
+			line-break: word-wrap;
+			line-num: 999;
+		}
+		
+		.time {
+			width: 100%;
+			height: auto;
+			font-size: 12px;
+			font-weight: bold;
+			text-align: left;
+			color: #999;
+			margin-top: 4px;
+			margin-bottom: 4px;
+		}
+
+	</style>
+</template>
