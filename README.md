@@ -216,7 +216,7 @@ Copyright (c) 2014-2015, [Geek Zoo Studio](http://www.geek-zoo.com)
 #### 0.1.0
 
 1. Draft version
-2. Toturial
+2. Tutorial
 3. In-app debugger
 
 ## Contributors
