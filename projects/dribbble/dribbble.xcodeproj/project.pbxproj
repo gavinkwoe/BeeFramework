@@ -441,7 +441,6 @@
 		CBCD70AF1874699400344B9B /* ServiceNetworkServer.m in Sources */ = {isa = PBXBuildFile; fileRef = CBCD70091874699400344B9B /* ServiceNetworkServer.m */; };
 		CBCD70B01874699400344B9B /* bee.services.push.m in Sources */ = {isa = PBXBuildFile; fileRef = CBCD700C1874699400344B9B /* bee.services.push.m */; };
 		CBCD70B11874699400344B9B /* bee.services.push.md in Resources */ = {isa = PBXBuildFile; fileRef = CBCD700D1874699400344B9B /* bee.services.push.md */; };
-		CBCD70B21874699400344B9B /* ServicePush.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CBCD700F1874699400344B9B /* ServicePush.bundle */; };
 		CBCD70B31874699400344B9B /* ServicePush.m in Sources */ = {isa = PBXBuildFile; fileRef = CBCD70111874699400344B9B /* ServicePush.m */; };
 		CBCD70B41874699400344B9B /* ServicePush_Notification.m in Sources */ = {isa = PBXBuildFile; fileRef = CBCD70131874699400344B9B /* ServicePush_Notification.m */; };
 		CBCD70B51874699400344B9B /* bee.services.share.m in Sources */ = {isa = PBXBuildFile; fileRef = CBCD70161874699400344B9B /* bee.services.share.m */; };
@@ -1408,7 +1407,6 @@
 		CBCD700B1874699400344B9B /* bee.services.push.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bee.services.push.h; sourceTree = "<group>"; };
 		CBCD700C1874699400344B9B /* bee.services.push.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = bee.services.push.m; sourceTree = "<group>"; };
 		CBCD700D1874699400344B9B /* bee.services.push.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bee.services.push.md; sourceTree = "<group>"; };
-		CBCD700F1874699400344B9B /* ServicePush.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ServicePush.bundle; sourceTree = "<group>"; };
 		CBCD70101874699400344B9B /* ServicePush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServicePush.h; sourceTree = "<group>"; };
 		CBCD70111874699400344B9B /* ServicePush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServicePush.m; sourceTree = "<group>"; };
 		CBCD70121874699400344B9B /* ServicePush_Notification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServicePush_Notification.h; sourceTree = "<group>"; };
@@ -3317,7 +3315,6 @@
 		CBCD700E1874699400344B9B /* source */ = {
 			isa = PBXGroup;
 			children = (
-				CBCD700F1874699400344B9B /* ServicePush.bundle */,
 				CBCD70101874699400344B9B /* ServicePush.h */,
 				CBCD70111874699400344B9B /* ServicePush.m */,
 				CBCD70121874699400344B9B /* ServicePush_Notification.h */,
@@ -3718,7 +3715,6 @@
 				CBCD709E1874699400344B9B /* bee.services.logger.md in Resources */,
 				CBBB41901820EE9C00CBDE5E /* navigation-bar-64@2x.png in Resources */,
 				CBCD0C661827B38300490BF8 /* splash1.xml in Resources */,
-				CBCD70B21874699400344B9B /* ServicePush.bundle in Resources */,
 				CBCD70C41874699400344B9B /* bee.services.share.tencentweibo.md in Resources */,
 				CBA37BCE17BCB54E00F0D727 /* DribbbleBoard_iPhone.xml in Resources */,
 				CBCD708C1874699400344B9B /* bee.services.grid.md in Resources */,

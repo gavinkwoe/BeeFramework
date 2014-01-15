@@ -68,7 +68,8 @@ DEF_SIGNAL( DID_DISMISS )
 
 - (id)init
 {
-	self = [super init];
+//	self = [super init];
+	self = [super initWithTitle:nil message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:nil];
 	if ( self )
 	{
 		self.delegate = self;

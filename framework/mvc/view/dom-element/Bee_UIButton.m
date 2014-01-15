@@ -185,7 +185,7 @@ DEF_SIGNAL( DRAG_EXIT )			// 退出
 
 - (id)init
 {
-	self = [super init];
+	self = [super initWithFrame:CGRectZero];
 	if ( self )
 	{
 		[self initSelf];
