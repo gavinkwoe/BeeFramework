@@ -47,13 +47,15 @@
 	bee.cli.LINE( nil );
 }
 
-+ (void)execute
++ (BOOL)execute
 {
 	bee.cli.LINE( nil );
 	bee.cli.LINE( @"{Bee} scaffold v0.1" );
 	bee.cli.LINE( nil );
 	bee.cli.LINE( @"Copyright (c) 2014-2015, Geek Zoo Studio" );
 	bee.cli.LINE( nil );
+	
+	return YES;
 }
 
 @end

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>2832C2E4-D32B-41CA-B915-356DA11088CC</string>
+	<key>IDESourceControlProjectName</key>
+	<string>BeeFramework</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>9A303A14-0F0E-452A-8253-B82ED4F04EDE</key>
+		<string>https://github.com/gavinkwoe/BeeFramework.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>projects/BeeFramework.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>9A303A14-0F0E-452A-8253-B82ED4F04EDE</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/gavinkwoe/BeeFramework.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>9A303A14-0F0E-452A-8253-B82ED4F04EDE</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>9A303A14-0F0E-452A-8253-B82ED4F04EDE</string>
+			<key>IDESourceControlWCCName</key>
+			<string>BeeFramework</string>
+		</dict>
+	</array>
+</dict>
+</plist>
