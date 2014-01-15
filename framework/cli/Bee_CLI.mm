@@ -138,7 +138,9 @@ DEF_SINGLETON( BeeCLI );
 			}
 		#endif	// #if (TARGET_OS_MAC)
 
-			vfprintf( stderr, (const char *)[(NSString *)first UTF8String], args );
+			NSString * text = [[NSString alloc] initWithFormat:(NSString *)first arguments:args];
+			fprintf( stderr, "%s", [text UTF8String] );
+			[text release];
 		}
 
 	#if (TARGET_OS_MAC)

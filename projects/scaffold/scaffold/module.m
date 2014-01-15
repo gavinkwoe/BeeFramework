@@ -50,12 +50,12 @@
 	[module_help execute];
 }
 
-+ (void)execute
++ (BOOL)execute
 {
 	if ( bee.cli.arguments.count == 0 )
 	{
 		[self usage];
-		return;
+		return NO;
 	}
 	
 	BOOL		handled = NO;
@@ -67,10 +67,11 @@
 		NSString * moduleCommand = [classType command];
 		if ( moduleCommand && [moduleCommand isEqualToString:command] )
 		{
-			[classType execute];
-
-			handled = YES;
-			return;
+			handled = [classType execute];
+			if ( handled )
+			{
+				return YES;
+			}
 		}
 	}
 	
@@ -78,6 +79,8 @@
 	{
 		[self usage];
 	}
+	
+	return NO;
 }
 
 @end
