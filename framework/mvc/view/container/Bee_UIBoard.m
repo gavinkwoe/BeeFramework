@@ -339,7 +339,8 @@ static NSMutableArray *		__allBoards = nil;
 
 - (id)init
 {
-	self = [super init];
+//	self = [super init];
+	self = [super initWithNibName:nil bundle:nil];
 	if ( self )
 	{
 		[self initSelf];
