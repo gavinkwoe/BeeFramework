@@ -34,7 +34,7 @@
 
 #pragma mark -
 
-BEE_EXTERN void echo( NSString * text, ... );
+BEE_EXTERN void http_echo( NSString * text, ... );
 BEE_EXTERN void line( NSString * text, ... );
 BEE_EXTERN void file( NSString * filePath );
 BEE_EXTERN void header( NSString * key, NSString * value );
