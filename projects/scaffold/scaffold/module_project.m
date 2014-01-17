@@ -290,7 +290,7 @@
 {
 }
 
-+ (void)execute
++ (BOOL)execute
 {
 	NSString * command1 = [bee.cli.arguments objectAtIndex:0];
 	NSString * command2 = [bee.cli.arguments objectAtIndex:1];
@@ -298,15 +298,23 @@
 	if ( [command2 isEqualToString:@"create"] )
 	{
 		[self project_create];
+		
+		return YES;
 	}
 	else if ( [command2 isEqualToString:@"build"] )
 	{
 		[self project_build];
+		
+		return YES;
 	}
 	else if ( [command2 isEqualToString:@"test"] )
 	{
 		[self project_test];
+		
+		return YES;
 	}
+	
+	return NO;
 }
 
 @end

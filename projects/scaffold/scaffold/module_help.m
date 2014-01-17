@@ -47,15 +47,12 @@
 	bee.cli.LINE( nil );
 }
 
-+ (void)execute
++ (BOOL)execute
 {
-	bee.cli.LINE( nil );
 	bee.cli.LINE( @"Usage:" );
 	bee.cli.LINE( @"	bee <command> [arguments ...]" );
 	bee.cli.LINE( nil );
 	bee.cli.LINE( @"Commands:" );
-	bee.cli.LINE( @"	version" );
-	bee.cli.LINE( @"	help" );
 	bee.cli.LINE( @"	schema build <file>" );
 	bee.cli.LINE( @"	schema build <file> <path>" );
 	bee.cli.LINE( @"	schema test <file>" );
@@ -63,6 +60,8 @@
 //	bee.cli.LINE( @"	project create <name> <path>" );
 //	bee.cli.LINE( @"	project build" );
 //	bee.cli.LINE( @"	project test" );
+	bee.cli.LINE( @"	version" );
+	bee.cli.LINE( @"	help" );
 	bee.cli.LINE( nil );
 	bee.cli.LINE( @"Example:" );
 	bee.cli.LINE( @"	bee schema build my.json ~/Desktop" );
@@ -71,6 +70,8 @@
 //	bee.cli.LINE( @"	bee project build" );
 //	bee.cli.LINE( @"	bee project test" );
 	bee.cli.LINE( nil );
+	
+	return YES;
 }
 
 @end

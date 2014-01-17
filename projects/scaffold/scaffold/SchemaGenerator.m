@@ -2969,7 +2969,7 @@ DEF_INT( TYPE_OBJECT,		6 )
 	inputFullPath = [inputFullPath stringByReplacingOccurrencesOfString:@"//" withString:@"/"];
 	inputExtension = [NSString stringWithFormat:@".%@", [inputFullPath pathExtension]];
 	
-	outputPath = [NSString stringWithFormat:@"%@/generated_%@", self.outputPath ? self.outputPath : self.inputPath, date];
+	outputPath = [NSString stringWithFormat:@"%@/%@", self.outputPath ? self.outputPath : self.inputPath, date];
 	[BeeSandbox touch:[NSString stringWithFormat:@"%@", outputPath]];
 	
 	outputFullPath = [NSString stringWithFormat:@"%@/%@", outputPath, self.inputFile];

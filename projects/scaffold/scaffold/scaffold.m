@@ -34,16 +34,14 @@
 
 #pragma mark -
 
-@interface BeeScaffold()
-- (void)printLogo;
-@end
-
-#pragma mark -
-
 @implementation BeeScaffold
 
-- (void)printLogo
+- (void)argc:(int)argc argv:(const char * [])argv
 {
+//	bee.system.logger.enabled = NO;
+
+	[bee.cli argc:argc argv:argv];
+
 	bee.cli.LINE( nil );
 	bee.cli.GREEN().LINE( @"   ______    ______    ______    ______   ______   ______    __       _____		" );
 	bee.cli.GREEN().LINE( @"  /\\  ___\\  /\\  ___\\  /\\  __ \\  /\\  ___\\ /\\  ___\\ /\\  __ \\  /\\ \\     /\\  __ \\	" );
@@ -71,11 +69,6 @@
 	bee.cli.GREEN().LINE( @"   _.-'                                ''._	" );
 	bee.cli.GREEN().LINE( @" -'                                        '-" );
 	bee.cli.LINE( nil );
-}
-
-- (void)argc:(int)argc argv:(const char * [])argv
-{
-	[self printLogo];
 
 	[module execute];
 }
