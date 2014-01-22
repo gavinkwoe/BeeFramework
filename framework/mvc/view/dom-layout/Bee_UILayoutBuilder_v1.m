@@ -299,7 +299,7 @@
 {
 	if ( CGSizeEqualToSize(parentFrame.size, CGSizeZero) )
 		return;
-
+    
 	for ( BeeUILayout * child in thisLayout.childs )
 	{
 		BeeUIStyle * childStyle = [self styleForLayout:child];
@@ -308,32 +308,29 @@
 			ERROR( @"'%@', style not found", child.name );
 			continue;
 		}
-
+        
 		UIEdgeInsets	childMargin = [childStyle estimateMarginBy:parentFrame];
 		UIEdgeInsets	childPadding = [childStyle estimatePaddingBy:parentFrame];
 		CGSize			childOffset = CGSizeZero;
 		CGRect			childFrame = [self getFrameForLayout:child];
 		BOOL			childFrameChanged = NO;
-		
-//		UIEdgeInsets	childMargin = [childStyle estimateMarginBy:parentFrame];
-//		CGSize			offset = CGSizeZero;
-//		CGRect			frame = [self getFrameForLayout:child];
-//		BOOL			frameChanged = NO;
-
+        
 		if ( NO == [childStyle isRelativePosition] )
 		{
+            //			childOffset = CGSizeMake( childFrame.origin.x, childFrame.origin.y );
+			
 			if ( [childStyle needAdjustW] )
 			{
 				childFrame.size.width = [childStyle estimateWBy:parentFrame];
 			}
-
+            
 			if ( [childStyle needAdjustH] )
 			{
 				childFrame.size.height = [childStyle estimateHBy:parentFrame];
 			}
-
-//			childFrame.origin.x += childPadding.left;
-//			childFrame.origin.y += childPadding.top;
+            
+            //			childFrame.origin.x += childPadding.left;
+            //			childFrame.origin.y += childPadding.top;
 			childFrame.size.width -= (childPadding.left + childPadding.right);
 			childFrame.size.height -= (childPadding.top + childPadding.bottom);
 			
@@ -341,14 +338,20 @@
 			{
 				childFrame.origin.x = [childStyle estimateRightBy:parentFrame] - childFrame.size.width;
 				childFrame.origin.x -= childMargin.right;
+				
+				CGSize distance = CGRectGetDistance( parentFrame, childFrame );
+				childOffset.width += distance.width;
 			}
-
+            
 			if ( childStyle.bottom )
 			{
 				childFrame.origin.y = [childStyle estimateBottomBy:parentFrame] - childFrame.size.height;
 				childFrame.origin.y -= childMargin.bottom;
+				
+				CGSize distance = CGRectGetDistance( parentFrame, childFrame );
+				childOffset.height += distance.height;
 			}
-
+            
 			childFrameChanged = [self setFrame:childFrame forLayout:child];
 		}
 		else if ( [childStyle isFloating] || [childStyle isVFloating] )
@@ -390,7 +393,7 @@
 				{
 					childFrame = CGRectAlignLeft( childFrame, parentFrame );
 				}
-
+				
 				CGSize distance = CGRectGetDistance( parentFrame, childFrame );
 				childOffset.width += distance.width;
 			}
@@ -409,29 +412,26 @@
 				{
 					childFrame = CGRectAlignTop( childFrame, parentFrame );
 				}
-
+				
 				CGSize distance = CGRectGetDistance( parentFrame, childFrame );
 				childOffset.height += distance.height;
 			}
-			
+            
+			childFrame.origin.x += childPadding.left;
+			childFrame.origin.y += childPadding.top;
+			childFrame.size.width -= (childPadding.left + childPadding.right);
+			childFrame.size.height -= (childPadding.top + childPadding.bottom);
+            
+			childFrameChanged = [self setFrame:childFrame forLayout:child];
+		}
+        
+		if ( childFrameChanged )
+		{
 			// reset the childs'frame
 			if ( NO == CGSizeEqualToSize(childOffset, CGSizeZero) )
 			{
 				[self offsetChildsFrame:childOffset forLayout:child];
 			}
-
-//			// ???
-//			childFrame.origin.x += childPadding.left;
-//			childFrame.origin.y += childPadding.top;
-//			childFrame.size.width -= (childPadding.left + childPadding.right);
-//			childFrame.size.height -= (childPadding.top + childPadding.bottom);
-			childFrameChanged = [self setFrame:childFrame forLayout:child];
-		}
-
-		// ???
-		if ( childFrameChanged )
-		{
-			[self estimateForLayout:child inBound:childFrame];
 		}
 	}
 }
