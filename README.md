@@ -9,6 +9,21 @@ BeeFramework is a semi-hybrid framework that allows you to create mobile apps us
 3. Drag and drop `/services` folder into your project
 4. Build and run
 
+## Demo app
+
+A demo app for dribbble.com, as fast as native, as flexible as web. See `/projects/dribbble` demo for more information.
+
+![1](http://blog.whatsbug.com/wp-content/uploads/2014/01/dribbble-1.png)
+![2](http://blog.whatsbug.com/wp-content/uploads/2014/01/dribbble-2.png)
+
+## Demo app - Wireframe mode
+
+![1](http://blog.whatsbug.com/wp-content/uploads/2014/01/dribbble-3.png)
+
+## Demo app - Inspector mode
+
+![1](http://blog.whatsbug.com/wp-content/uploads/2014/01/dribbble-4.png)
+
 ## Semi-Hybrid UI
 
 Semi-hybrid offers you a new approach to UI development using XML/CSS, you can reuse these templates in any project based on BeeFramework. See `/projects/dribbble` demo for more information.
@@ -55,13 +70,6 @@ For example:
 > ./scaffold schema build ./example/dribbble.json
 > ./scaffold schema test ./example/dribbble.json
 </pre>
-
-## Demo app
-
-As fast as native, as flexible as web. See `/projects/dribbble` demo for more information.
-
-![1](http://blog.whatsbug.com/wp-content/uploads/2014/01/bee_ui_1.png)
-![2](http://blog.whatsbug.com/wp-content/uploads/2014/01/bee_service_3d_inspector.png)
 
 ## Features
 
