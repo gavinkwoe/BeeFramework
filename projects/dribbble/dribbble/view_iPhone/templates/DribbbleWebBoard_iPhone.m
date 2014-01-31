@@ -1,159 +1,92 @@
 //
-//  WebViewBoard_iPhone.m
-//  ActionInChina
+//	 ______    ______    ______
+//	/\  __ \  /\  ___\  /\  ___\
+//	\ \  __<  \ \  __\_ \ \  __\_
+//	 \ \_____\ \ \_____\ \ \_____\
+//	  \/_____/  \/_____/  \/_____/
 //
-//  Created by QFish on 4/16/13.
-//  Copyright (c) 2013 GeekZoo. All rights reserved.
+//
+//	Copyright (c) 2014-2015, Geek Zoo Studio
+//	http://www.bee-framework.com
+//
+//
+//	Permission is hereby granted, free of charge, to any person obtaining a
+//	copy of this software and associated documentation files (the "Software"),
+//	to deal in the Software without restriction, including without limitation
+//	the rights to use, copy, modify, merge, publish, distribute, sublicense,
+//	and/or sell copies of the Software, and to permit persons to whom the
+//	Software is furnished to do so, subject to the following conditions:
+//
+//	The above copyright notice and this permission notice shall be included in
+//	all copies or substantial portions of the Software.
+//
+//	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+//	FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+//	IN THE SOFTWARE.
 //
 
-#import "AppBoard_iPhone.h"
-#import "WebViewBoard_iPhone.h"
+#import "DribbbleWebBoard_iPhone.h"
 
 #pragma mark -
 
-@implementation WebViewBoard_iPhone
-{
-	BOOL _showLoading;
-    UIToolbar * _toolbar;
-    
-    UIBarButtonItem * _back;
-    UIBarButtonItem * _stop;
-    UIBarButtonItem * _forward;
-    UIBarButtonItem * _refresh;
-    UIBarButtonItem * _flexible;
-	UIBarButtonItem * _fixed;
-}
+@implementation DribbbleWebBoard_iPhone
 
-@synthesize showLoading = _showLoading;
-@synthesize useHTMLTitle = _useHTMLTitle;
+@synthesize url = _url;
 
-@synthesize toolbar = _toolbar;
-@synthesize defaultTitle = _defaultTitle;
-
-@synthesize backBoard = _backBoard;
+DEF_OUTLET( BeeUIWebView,				web )
+DEF_OUTLET( DribbbleWebBoardTab_iPhone,	tabbar )
 
 - (void)load
 {
-	[super load];
-	
-	self.showLoading = YES;
-	self.isToolbarHiden = NO;
 }
 
 - (void)unload
 {
-	self.htmlString = nil;
-	self.urlString = nil;
-	self.defaultTitle = nil;
-	
-	[super unload];
+	self.url = nil;
 }
 
-#pragma mark [B] UISignal
+#pragma mark -
 
-ON_SIGNAL2( BeeUIBoard, signal )
+
+#pragma mark -
+
+ON_CREATE_VIEWS( signal )
 {
-	[super handleUISignal:signal];
+//	self.allowedSwipeToBack = YES;
 	
-	if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
-	{
-        self.view.backgroundColor = HEX_RGB( 0xdfdfdf );
-
-        [self showNavigationBarAnimated:NO];
-        [self showBarButton:BeeUINavigationBar.LEFT image:[UIImage imageNamed:@"navigation-back.png"]];
-        
-		if ( self.defaultTitle && self.defaultTitle.length )
-		{
-			self.titleString = self.defaultTitle;
-		}
-		else
-		{
-			self.titleString = @"浏览器";
-		}
-        
-        _webView = [[BeeUIWebView alloc] init];
-        _webView.scalesPageToFit = YES;
-        [self.view addSubview:_webView];
-        
-        if ( !_isToolbarHiden )
-        {
-            _toolbar = [[UIToolbar alloc] init];
-            _toolbar.autoresizesSubviews = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
-			_toolbar.backgroundColor = [UIColor clearColor];
-            _toolbar.tintColor = [UIColor grayColor];
-			_toolbar.translucent = YES;
-			
-            [self.view addSubview:_toolbar];
-        }
-        
-        [self setupToolbar];
-		[self updateUI];
-	}
-	else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
-	{
-        [self.webView stopLoading];
-        
-        SAFE_RELEASE( _back );
-        SAFE_RELEASE( _stop );
-        SAFE_RELEASE( _forward );
-        SAFE_RELEASE( _refresh );
-        SAFE_RELEASE( _urlString );
-		
-		SAFE_RELEASE( _flexible );
-		SAFE_RELEASE( _fixed );
-		
-        SAFE_RELEASE_SUBVIEW( _webView );
-	}
-	else if ( [signal is:BeeUIBoard.LOAD_DATAS] )
-	{
-	}
-	else if ( [signal is:BeeUIBoard.LAYOUT_VIEWS] )
-	{
-		if ( _isToolbarHiden )
-		{
-			_webView.frame = self.view.bounds;
-		}
-		else
-		{
-			int toolbarHeight = 44.0f;
-
-			CGRect frame = self.view.frame;
-			frame.size.height -= toolbarHeight;
-            if ( IOS7_OR_EARLIER )
-            {
-                frame.origin.y = 0;
-            }
-			_webView.frame = frame;
-			
-			frame.origin.y += frame.size.height;
-			frame.size.height = toolbarHeight;
-			_toolbar.frame = frame;
-		}
-	}
-	else if ( [signal is:BeeUIBoard.WILL_APPEAR] )
-    {
-	}
-    else if ( [signal is:BeeUIBoard.DID_APPEAR] )
-    {
-		bee.ext.appBoard.menuShown = NO;
-
-		if ( self.firstEnter )
-		{
-			[self refresh];
-		}
-	}
+	self.view.backgroundColor = SHORT_RGB( 0x444 );
+	
+	self.navigationBarShown = YES;
+	self.navigationBarTitle = @"Dribbble"; // self.shot.title;
+	self.navigationBarLeft  = [UIImage imageNamed:@"navigation-back.png"];
+	
+	self.tabbar.canGoBack = NO;
+	self.tabbar.canGoForward = NO;
+	self.tabbar.loading = NO;
 }
+
+ON_DELETE_VIEWS( signal )
+{
+}
+
+ON_WILL_APPEAR( signal )
+{
+}
+
+ON_DID_APPEAR( signal )
+{
+	self.web.url = self.url;
+}
+
+#pragma mark -
 
 ON_LEFT_BUTTON_TOUCHED( signal )
 {
-	if ( self.backBoard )
-	{
-		[self.stack popToBoard:self.backBoard animated:YES];
-	}
-	else
-	{
-		[self.stack popBoardAnimated:YES];
-	}
+	[self.stack popBoardAnimated:YES];
 }
 
 ON_RIGHT_BUTTON_TOUCHED( signal )
@@ -162,127 +95,56 @@ ON_RIGHT_BUTTON_TOUCHED( signal )
 
 #pragma mark -
 
-- (void)refresh
+ON_SIGNAL2( BeeUIWebView, signal )
 {
-    if ( self.urlString )
-    {
-//        if ( [self.urlString isUrl]  )
-//        {
-             self.webView.url = self.urlString;
-//        }
-//        else
-//        {
-//            [self.stack performSelector:@selector(popBoardAnimated:) withObject:@YES afterDelay:2.0];
-//        }
-    }
-    else if ( self.htmlString )
-    {
-        self.webView.html = self.htmlString;
-    }
-}
-
-- (void)updateUI
-{
-	if ( self.useHTMLTitle )
+	self.tabbar.canGoBack = self.web.canGoBack;
+	self.tabbar.canGoForward = self.web.canGoForward;
+	
+	if ( [signal is:BeeUIWebView.DID_LOAD_FINISH] || [signal is:BeeUIWebView.DID_LOAD_FAILED] || [signal is:BeeUIWebView.DID_LOAD_CANCELLED] )
 	{
-		NSString * title = [self.webView stringByEvaluatingJavaScriptFromString:@"document.title"];
-		if ( title && title.length )
-		{
-			self.titleString = title;
-		}
+		self.navigationBarRight = nil;
+
+		self.tabbar.loading = NO;
+	}
+	else
+	{
+		BeeUIActivityIndicatorView * activity = [BeeUIActivityIndicatorView spawn];
+		[activity startAnimating];
+		[activity setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhite];
+		self.navigationBarRight = activity;
+		
+		self.tabbar.loading = YES;
 	}
 	
-	_back.enabled = self.webView.canGoBack;
-	_forward.enabled = self.webView.canGoForward;
-		
-	if ( _webView.loading )
+	NSString * title = [self.web stringByEvaluatingJavaScriptFromString:@"document.title"];
+	if ( title && title.length )
 	{
-        [_toolbar setItems:@[ _flexible, _back, _flexible, _forward, _flexible, _flexible, _flexible, _stop, _flexible ] animated:NO];
-    }
-    else
-    {
-        [_toolbar setItems:@[ _flexible, _back, _flexible, _forward, _flexible, _flexible, _flexible, _refresh , _flexible] animated:NO];
-    }
+		self.titleString = title;
+	}
 }
 
 #pragma mark -
 
-- (void)setupToolbar
+ON_SIGNAL3( DribbbleWebBoardTab_iPhone, go_backward, signal )
 {
-    _flexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    _fixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-	
-    _back = \
-    [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"browser-baritem-back.png"]
-                                     style:UIBarButtonItemStylePlain
-                                    target:self.webView
-                                    action:@selector(goBack)];
-    
-    _forward = \
-    [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"browser-baritem-forward.png"]
-                                     style:UIBarButtonItemStylePlain
-                                    target:self.webView
-                                    action:@selector(goForward)];
-    
-    _refresh = \
-    [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"browser-baritem-refresh.png"]
-                                     style:UIBarButtonItemStylePlain
-                                    target:self.webView
-                                    action:@selector(reload)];
-
-    _stop = \
-    [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"browser-baritem-stop.png"]
-                                     style:UIBarButtonItemStylePlain
-                                    target:self.webView
-                                    action:@selector(stopLoading)];
-    
+	if ( self.web.canGoBack )
+	{
+		[self.web goBack];
+	}
 }
 
-#pragma mark - UIWebViewDelegate
-
-ON_SIGNAL2( BeeUIWebView, signal )
+ON_SIGNAL3( DribbbleWebBoardTab_iPhone, go_forward, signal )
 {
-	[self updateUI];
-    
-    if ( [signal is:BeeUIWebView.DID_START] )
-    {
-		if ( _showLoading )
-		{
-			BeeUIActivityIndicatorView * activity = [BeeUIActivityIndicatorView spawn];
-			[activity startAnimating];
-			[activity setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhite];
-			[self showBarButton:BeeUINavigationBar.RIGHT custom:activity];
-//			[self presentLoadingTips:__TEXT(@"tips_loading")].useMask = NO;
-		}
-    }
-    else if ( [signal is:BeeUIWebView.DID_LOAD_FINISH] )
-    {
-		if ( _showLoading )
-		{
-			[self dismissTips];
-			[self hideBarButton:BeeUINavigationBar.RIGHT];
-//			[self presentSuccessTips:@"加载成功"];
-		}
-    }
-    else if ( [signal is:BeeUIWebView.DID_LOAD_CANCELLED] )
-    {
-		if ( _showLoading )
-		{
-			[self dismissTips];
-			[self hideBarButton:BeeUINavigationBar.RIGHT];
-//			[self presentSuccessTips:@"取消加载"];
-		}
-    }
-    else if( [signal is:BeeUIWebView.DID_LOAD_FAILED] )
-    {
-		if ( _showLoading )
-		{
-			[self dismissTips];
-			[self hideBarButton:BeeUINavigationBar.RIGHT];
-			
-			[self presentSuccessTips:__TEXT(@"error_network")];
-		}
-    }
+	if ( self.web.canGoForward )
+	{
+		[self.web goForward];
+	}
+}
+
+ON_SIGNAL3( DribbbleWebBoardTab_iPhone, refresh, signal )
+{
+	[self.web stopLoading];
+	[self.web reload];
 }
 
 @end

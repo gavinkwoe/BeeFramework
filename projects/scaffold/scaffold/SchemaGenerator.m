@@ -1837,7 +1837,7 @@ DEF_INT( TYPE_OBJECT,		6 )
 			rspKey = property.elemClass;
 		}
 	}
-	
+
 	code.LINE( @"@interface %@%@ : BeeAPI", prefix, msgKey );
 	
 	NSArray * params = [self methodParams];

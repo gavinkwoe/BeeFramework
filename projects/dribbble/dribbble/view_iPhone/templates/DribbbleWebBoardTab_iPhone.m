@@ -29,41 +29,44 @@
 //	IN THE SOFTWARE.
 //
 
-#import "DribbbleBoardTab_iPhone.h"
+#import "DribbbleWebBoardTab_iPhone.h"
 
 #pragma mark -
 
-@implementation DribbbleBoardTab_iPhone
+@implementation DribbbleWebBoardTab_iPhone
 
-DEF_OUTLET( BeeUIButton, popular );
-DEF_OUTLET( BeeUIButton, everyone );
-DEF_OUTLET( BeeUIButton, debuts );
+DEF_OUTLET( BeeUIButton, go_backward );
+DEF_OUTLET( BeeUIButton, go_forward );
+DEF_OUTLET( BeeUIButton, refresh );
 
-- (void)selectPopular
+@dynamic canGoBack;
+@dynamic canGoForward;
+@dynamic loading;
+
+- (void)setCanGoBack:(BOOL)flag
 {
-	$(self.popular).ADD_CLASS( @"active" );
-	$(self.everyone).REMOVE_CLASS( @"active" );
-	$(self.debuts).REMOVE_CLASS( @"active" );
-
-    self.RELAYOUT();
+	self.go_backward.data = [UIImage imageNamed:@"browser-baritem-back.png"];
+	self.go_backward.enabled = flag;
+	self.go_backward.alpha = flag ? 1.0f : 0.4f;
 }
 
-- (void)selectEveryone
+- (void)setCanGoForward:(BOOL)flag
 {
-	$(self.popular).REMOVE_CLASS( @"active" );
-	$(self.everyone).ADD_CLASS( @"active" );
-	$(self.debuts).REMOVE_CLASS( @"active" );
-
-    self.RELAYOUT();
+	self.go_forward.data = [UIImage imageNamed:@"browser-baritem-forward.png"];
+	self.go_forward.enabled = flag;
+	self.go_forward.alpha = flag ? 1.0f : 0.4f;
 }
 
-- (void)selectDebuts
+- (void)setLoading:(BOOL)flag
 {
-	$(self.popular).REMOVE_CLASS( @"active" );
-	$(self.everyone).REMOVE_CLASS( @"active" );
-	$(self.debuts).ADD_CLASS( @"active" );
-
-    self.RELAYOUT();
+	if ( flag )
+	{
+		self.refresh.data = [UIImage imageNamed:@"browser-baritem-stop.png"];
+	}
+	else
+	{
+		self.refresh.data = [UIImage imageNamed:@"browser-baritem-refresh.png"];
+	}
 }
 
 @end

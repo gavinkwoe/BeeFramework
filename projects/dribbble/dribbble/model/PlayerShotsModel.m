@@ -29,18 +29,18 @@
 //	IN THE SOFTWARE.
 //
 
-#import "ShotListModel.h"
+#import "PlayerShotsModel.h"
 
 #pragma mark -
 
 #undef	PER_PAGE
-#define PER_PAGE	(10)
+#define PER_PAGE	(30)
 
 #pragma mark -
 
-@implementation ShotListModel
+@implementation PlayerShotsModel
 
-@synthesize type = _type;
+@synthesize player_id = _player_id;
 @synthesize shots = _shots;
 
 - (void)load
@@ -54,7 +54,7 @@
 - (void)unload
 {
 	self.shots = nil;
-	self.type = nil;
+	self.player_id = nil;
 }
 
 #pragma mark -
@@ -62,22 +62,15 @@
 - (void)loadCache
 {
 	[self.shots removeAllObjects];
-	[self.shots addUniqueObjectsFromArray:[SHOT readObjectForKey:self.type]
-								  compare:^NSComparisonResult(id left, id right) {
-									  return [((SHOT *)left).id compare:((SHOT *)right).id];
-								  }];
 }
 
 - (void)saveCache
 {
-	[SHOT saveObject:self.shots forKey:self.type];
 }
 
 - (void)clearCache
 {
 	[self.shots removeAllObjects];
-
-	[SHOT removeObjectForKey:self.type];
 }
 
 #pragma mark -
@@ -97,14 +90,14 @@
 
 - (void)gotoPage:(NSUInteger)page
 {
-	[API_SHOTS_LIST cancel];
+	[API_PLAYERS_ID_SHOTS cancel];
 
-	API_SHOTS_LIST * api = [API_SHOTS_LIST api];
+	API_PLAYERS_ID_SHOTS * api = [API_PLAYERS_ID_SHOTS api];
 	
 	@weakify(api);
 	@weakify(self);
 
-	api.list = self.type;
+	api.id = self.player_id;
 	api.req.page = @(page);
 	api.req.per_page = @(PER_PAGE);
 	
@@ -152,39 +145,6 @@
 	};
 	
 	[api send];
-}
-
-@end
-
-#pragma mark -
-
-@implementation ShotEveryoneListModel
-
-- (void)load
-{
-	self.type = LIST_EVERYONE;
-}
-
-@end
-
-#pragma mark -
-
-@implementation ShotPopularListModel
-
-- (void)load
-{
-	self.type = LIST_POPULAR;
-}
-
-@end
-
-#pragma mark -
-
-@implementation ShotDebutsListModel
-
-- (void)load
-{
-	self.type = LIST_DEBUTS;
 }
 
 @end

@@ -29,23 +29,18 @@
 //	IN THE SOFTWARE.
 //
 
-#import "DribbbleDetailBoardHeader_iPhone.h"
+#import "DribbbleDetailBoardPhoto_iPhone.h"
 #import "model.h"
 
 #pragma mark -
 
-@implementation DribbbleDetailBoardHeader_iPhone
+@implementation DribbbleDetailBoardPhoto_iPhone
 
 - (void)dataDidChanged
 {
 	SHOT * shot = self.data;
 	if ( shot )
 	{
-		$(@"#avatar").DATA( shot.player.avatar_url );
-		$(@"#title").DATA( shot.title );
-		$(@"#name").DATA( shot.player.name );
-		$(@"#time").DATA( [[shot.created_at asNSDate] stringWithDateFormat:@"MM.dd.yyyy"] );
-		
 		$(@"#photo").DATA( shot.image_url );
 		$(@"#view-num").DATA( shot.views_count );
 		$(@"#comment-num").DATA( shot.comments_count );

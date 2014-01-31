@@ -34,20 +34,9 @@
 
 #pragma mark -
 
-@interface ShotListModel : BeeStreamViewModel
+@interface PlayerShotsModel : BeeStreamViewModel
 
-@property (nonatomic, retain) NSString *		type;
+@property (nonatomic, retain) NSString *		player_id;
 @property (nonatomic, retain) NSMutableArray *	shots;
 
-@end
-
-#pragma mark -
-
-@interface ShotEveryoneListModel : ShotListModel
-@end
-
-@interface ShotPopularListModel : ShotListModel
-@end
-
-@interface ShotDebutsListModel : ShotListModel
 @end

@@ -83,7 +83,7 @@ ON_CREATE_VIEWS( signal )
 	[_splash makeKeyAndVisible];
 
 	[self observeNotification:SplashBoard_iPhone.PLAY_DONE];
-	
+
 	[_router open:@"team" animated:NO];
 }
 

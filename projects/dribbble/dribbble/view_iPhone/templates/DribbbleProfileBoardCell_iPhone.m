@@ -29,27 +29,48 @@
 //	IN THE SOFTWARE.
 //
 
-#import "DribbbleBoardCell_iPhone.h"
+#import "DribbbleProfileBoardCell_iPhone.h"
 
 #pragma mark -
 
-@implementation DribbbleBoardCell_iPhone
+@implementation DribbbleProfileBoardCell_iPhone
 
-DEF_OUTLET( BeeUIImageView,	photo )
-DEF_OUTLET( BeeUILabel,		view_num )
-DEF_OUTLET( BeeUILabel,		comment_num )
-DEF_OUTLET( BeeUILabel,		like_num )
+DEF_OUTLET( BeeUIImageView,	bg )
+DEF_OUTLET( BeeUILabel,		follower )
+DEF_OUTLET( BeeUILabel,		following )
+DEF_OUTLET( BeeUILabel,		shots )
+DEF_OUTLET( BeeUILabel,		name )
+DEF_OUTLET( BeeUIImageView,	url_icon )
+DEF_OUTLET( BeeUILabel,		url_text )
+DEF_OUTLET( BeeUIImageView,	location_icon )
+DEF_OUTLET( BeeUILabel,		location_text )
+DEF_OUTLET( BeeUIImageView,	avatar )
 
 - (void)dataDidChanged
 {
-	SHOT * shot = self.data;
-	if ( shot )
+	PLAYER * player = self.data;
+	if ( player )
 	{
-		$(self.photo).BIND_DATA( shot.image_teaser_url );
-//		$(self.photo).BIND_DATA( shot.image_url );
-		$(self.view_num).BIND_DATA( shot.views_count );
-		$(self.comment_num).BIND_DATA( shot.comments_count );
-		$(self.like_num).BIND_DATA( shot.likes_count );
+		self.bg.data = @"http://d13yacurqjgara.cloudfront.net/users/14268/screenshots/992731/attachments/116296/huge.jpg";
+		self.follower.data = player.followers_count;
+		self.following.data = player.following_count;
+		self.shots.data = player.shots_count;
+		self.name.data = player.name;
+		self.url_icon.data = @"";
+		self.url_text.data = player.url;
+		
+		self.location_icon.data = @"";
+		
+		if ( player.location && player.location.length )
+		{
+			self.location_text.data = [NSString stringWithFormat:@"From %@", player.location];
+		}
+		else
+		{
+			self.location_text.data = @"Unknown";
+		}
+		
+		self.avatar.data = player.avatar_url;
 	}
 }
 

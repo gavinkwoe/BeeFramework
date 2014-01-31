@@ -29,31 +29,25 @@
 //	IN THE SOFTWARE.
 //
 
+#import "DribbbleProfileBoard_iPhone.h"
+#import "DribbbleProfileBoardCell_iPhone.h"
 #import "DribbbleDetailBoard_iPhone.h"
-#import "DribbbleDetailBoardPlayer_iPhone.h"
-#import "DribbbleDetailBoardPhoto_iPhone.h"
-#import "DribbbleDetailBoardComment_iPhone.h"
-#import "DribbblePreviewBoard_iPhone.h"
-#import "DribbbleWebBoard_iPhone.h"
+#import "DribbbleBoardCell_iPhone.h"
 #import "PullLoader.h"
 #import "FootLoader.h"
 
 #pragma mark -
 
-@interface DribbbleDetailBoard_iPhone()
-AS_SIGNAL( VIEW_PROFILE )
-AS_SIGNAL( VIEW_URL )
+@interface DribbbleProfileBoard_iPhone()
 @end
 
 #pragma mark -
 
-@implementation DribbbleDetailBoard_iPhone
+@implementation DribbbleProfileBoard_iPhone
 
-DEF_SIGNAL( VIEW_PROFILE )
-DEF_SIGNAL( VIEW_URL )
+@synthesize player = _player;
 
-DEF_MODEL( ShotInfoModel,		info );
-DEF_MODEL( ShotCommentsModel,	comments );
+DEF_MODEL( PlayerShotsModel,	playerShots );
 
 DEF_OUTLET( BeeUIScrollView,	list );
 
@@ -62,17 +56,16 @@ SUPPORT_RESOURCE_LOADING( YES );
 
 - (void)load
 {
-	self.info = [ShotInfoModel modelWithObserver:self];
-	self.comments = [ShotCommentsModel modelWithObserver:self];
+	self.playerShots = [PlayerShotsModel modelWithObserver:self];
 }
 
 - (void)unload
 {
-	[self.comments removeAllObservers];
-	self.comments = nil;
+	[self.playerShots cancelMessages];
+	[self.playerShots removeObserver:self];
+	self.playerShots = nil;
 	
-	[self.info removeAllObservers];
-	self.info = nil;
+	self.player = nil;
 }
 
 #pragma mark -
@@ -81,7 +74,7 @@ ON_CREATE_VIEWS( signal )
 {
 	self.view.backgroundColor = SHORT_RGB( 0x444 );
 
-	self.allowedSwipeToBack = YES;
+//	self.allowedSwipeToBack = YES;
 	
 	self.navigationBarShown = YES;
 	self.navigationBarTitle = @"Dribbble";
@@ -89,7 +82,7 @@ ON_CREATE_VIEWS( signal )
 
 	self.list.headerClass = [PullLoader class];
 	self.list.headerShown = YES;
-	
+
 	self.list.footerClass = [FootLoader class];
 	self.list.footerShown = YES;
 
@@ -100,49 +93,51 @@ ON_CREATE_VIEWS( signal )
 	
 	self.list.whenReloading = ^
 	{
-		self.list.total = 2 + self.comments.comments.count;
+		self.list.total = 1 + self.playerShots.shots.count;
 
-		BeeUIScrollItem * player = self.list.items[0];
-		player.clazz = [DribbbleDetailBoardPlayer_iPhone class];
-		player.data = self.info.shot;
-		player.order = 0;
-		player.size = CGSizeAuto;
-
-		BeeUIScrollItem * photo = self.list.items[1];
-		photo.clazz = [DribbbleDetailBoardPhoto_iPhone class];
-		photo.data = self.info.shot;
-		photo.order = 0;
-		photo.size = CGSizeAuto;
-
-		for ( NSUInteger i = 0; i < self.comments.comments.count; ++i )
+		NSUInteger index = 0;
+		
+		BeeUIScrollItem * profile = self.list.items[index++];
+		profile.clazz = [DribbbleProfileBoardCell_iPhone class];
+		profile.data = self.player;
+		profile.order = 0;
+		profile.rule = BeeUIScrollLayoutRule_Line;
+		profile.size = CGSizeAuto;
+		
+		for ( SHOT * shot in self.playerShots.shots )
 		{
-			BeeUIScrollItem * comment = self.list.items[2 + i];
-			comment.clazz = [DribbbleDetailBoardComment_iPhone class];
-			comment.data = self.comments.comments[i];
-			comment.order = 0;
-			comment.size = CGSizeAuto;
+			BeeUIScrollItem * item = self.list.items[index++];
+			item.clazz = [DribbbleBoardCell_iPhone class];
+			item.data = shot;
+			item.order = 0;
+			item.rule = BeeUIScrollLayoutRule_Tile;
+			item.size = CGSizeMake( self.list.frame.size.width, self.list.frame.size.width * 0.75f );
 		}
 	};
 	
 	self.list.whenHeaderRefresh = ^
 	{
-		[self.info reload];
-		[self.comments firstPage];
+		[self.playerShots firstPage];
 	};
 	
 	self.list.whenFooterRefresh = ^
 	{
-		[self.comments nextPage];
+		[self.playerShots nextPage];
 	};
 	
 	self.list.whenReachBottom = ^
 	{
-		[self.comments nextPage];
+		[self.playerShots nextPage];
 	};
 }
 
 ON_DELETE_VIEWS( signal )
 {
+}
+
+ON_LOAD_DATAS( signal )
+{
+	self.playerShots.player_id = [self.player.id asNSString];
 }
 
 ON_LAYOUT_VIEWS( signal )
@@ -151,16 +146,11 @@ ON_LAYOUT_VIEWS( signal )
 
 ON_WILL_APPEAR( signal )
 {
-	if ( NO == self.info.loaded )
+	if ( NO == self.playerShots.loaded )
 	{
-		[self.info reload];
+		[self.playerShots firstPage];
 	}
-
-	if ( NO == self.comments.loaded )
-	{
-		[self.comments firstPage];
-	}
-
+	
 	[self.list reloadData];
 }
 
@@ -189,97 +179,33 @@ ON_RIGHT_BUTTON_TOUCHED( signal )
 
 #pragma mark -
 
-ON_SIGNAL3( DribbbleDetailBoardPlayer_iPhone, mask, signal )
+ON_SIGNAL3( DribbbleBoardCell_iPhone, mask, signal )
 {
-	[self presentSuccessTips:@"TODO"];
-}
-
-#pragma mark -
-
-ON_SIGNAL3( DribbbleDetailBoardPhoto_iPhone, mask, signal )
-{
-	DribbblePreviewBoard_iPhone * board = [DribbblePreviewBoard_iPhone board];
-	board.shot = self.info.shot;
+	SHOT * shot = signal.sourceCell.data;
+	
+	DribbbleDetailBoard_iPhone * board = [DribbbleDetailBoard_iPhone board];
+	board.info.shot_id = shot.id;
+	board.info.shot = shot;
+	board.comments.shot_id = shot.id;
 	[self.stack pushBoard:board animated:YES];
 }
 
 #pragma mark -
 
-ON_SIGNAL3( DribbbleDetailBoardComment_iPhone, mask, signal )
+ON_SIGNAL3( PlayerShotsModel, RELOADING, signal )
 {
-	COMMENT * comment = signal.sourceCell.data;
-	NSArray * urls = [comment.body allURLs];
-
-	if ( urls.count )
-	{
-		BeeUIActionSheet * actionSheet = [[[BeeUIActionSheet alloc] init] autorelease];
-		
-		[actionSheet addButtonTitle:[NSString stringWithFormat:@"%@", comment.player.name]
-							 signal:self.VIEW_PROFILE
-							 object:comment.player];
-
-		for ( NSString * url in urls )
-		{
-			[actionSheet addButtonTitle:url signal:self.VIEW_URL object:url];
-		}
-
-		[actionSheet addCancelTitle:@"Cancel"];
-		
-		[actionSheet showInViewController:self];
-	}
-	else
-	{
-		[self presentSuccessTips:@"TODO"];
-	}
-}
-
-#pragma mark -
-
-ON_SIGNAL3( DribbbleDetailBoard_iPhone, VIEW_PROFILE, signal )
-{
-	[self presentSuccessTips:@"TODO"];
-}
-
-ON_SIGNAL3( DribbbleDetailBoard_iPhone, VIEW_URL, signal )
-{
-	DribbbleWebBoard_iPhone * board = [DribbbleWebBoard_iPhone board];
-	board.url = signal.object;
-	[self.stack pushBoard:board animated:YES];
-}
-
-#pragma mark -
-
-ON_SIGNAL3( ShotInfoModel, RELOADING, signal )
-{
-	self.list.headerLoading = self.info.loaded;
+	self.list.headerLoading = self.playerShots.loaded;
 	self.list.footerLoading = YES;
 }
 
-ON_SIGNAL3( ShotInfoModel, RELOADED, signal )
+ON_SIGNAL3( PlayerShotsModel, RELOADED, signal )
 {
 	self.list.headerLoading = NO;
 	self.list.footerLoading = NO;
-	self.list.footerMore = self.comments.more;
+	self.list.footerMore = self.playerShots.more;
 	
 //	[self transitionFade];
-	
-	[self.list reloadData];
-}
 
-ON_SIGNAL3( ShotCommentsModel, RELOADING, signal )
-{
-	self.list.headerLoading = self.info.loaded;
-	self.list.footerLoading = YES;
-}
-
-ON_SIGNAL3( ShotCommentsModel, RELOADED, signal )
-{
-	self.list.headerLoading = NO;
-	self.list.footerLoading = NO;
-	self.list.footerMore = self.comments.more;
-	
-//	[self transitionFade];
-	
 	[self.list reloadData];
 }
 

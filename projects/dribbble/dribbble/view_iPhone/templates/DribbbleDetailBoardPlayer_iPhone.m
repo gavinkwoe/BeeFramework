@@ -29,12 +29,12 @@
 //	IN THE SOFTWARE.
 //
 
-#import "DribbbleDetailBoardHeader_iPhone.h"
+#import "DribbbleDetailBoardPlayer_iPhone.h"
 #import "model.h"
 
 #pragma mark -
 
-@implementation DribbbleDetailBoardHeader_iPhone
+@implementation DribbbleDetailBoardPlayer_iPhone
 
 - (void)dataDidChanged
 {
@@ -45,11 +45,6 @@
 		$(@"#title").DATA( shot.title );
 		$(@"#name").DATA( shot.player.name );
 		$(@"#time").DATA( [[shot.created_at asNSDate] stringWithDateFormat:@"MM.dd.yyyy"] );
-		
-		$(@"#photo").DATA( shot.image_url );
-		$(@"#view-num").DATA( shot.views_count );
-		$(@"#comment-num").DATA( shot.comments_count );
-		$(@"#like-num").DATA( shot.likes_count );
 	}
 }
 

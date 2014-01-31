@@ -30,24 +30,13 @@
 //
 
 #import "Bee.h"
+#import "DribbbleWebBoardTab_iPhone.h"
 
-@interface WebViewBoard_iPhone : BeeUIBoard<UIWebViewDelegate>
+@interface DribbbleWebBoard_iPhone : BeeUIBoard
 
-@property (nonatomic, assign) BOOL				showLoading;
-@property (nonatomic, assign) BOOL				useHTMLTitle;
+@property (nonatomic, retain) NSString *	url;
 
-@property (nonatomic, retain) UIToolbar *		toolbar;
-@property (nonatomic, retain) BeeUIWebView *	webView;
-@property (nonatomic, copy) NSString *			urlString;
-@property (nonatomic, copy) NSString *          htmlString;
-@property (nonatomic, copy) NSString *			defaultTitle;
-
-@property (nonatomic, assign) BOOL              isToolbarHiden;
-
-@property (nonatomic, assign) id				backBoard;
-
-- (void)refresh;
-
-ON_SIGNAL2( BeeUIBoard, signal );
+AS_OUTLET( BeeUIWebView,				web )
+AS_OUTLET( DribbbleWebBoardTab_iPhone,	tabbar )
 
 @end

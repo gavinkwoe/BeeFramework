@@ -34,7 +34,7 @@
 #pragma mark -
 
 #undef	PER_PAGE
-#define PER_PAGE	(10)
+#define PER_PAGE	(20)
 
 #pragma mark -
 
@@ -77,7 +77,10 @@
 {
 	[API_SHOTS_ID_COMMENTS cancel];
 
-	__block API_SHOTS_ID_COMMENTS * api = [API_SHOTS_ID_COMMENTS api];
+	API_SHOTS_ID_COMMENTS * api = [API_SHOTS_ID_COMMENTS api];
+	
+	@weakify(api);
+	@weakify(self);
 	
 	api.id = [self.shot_id asNSString];
 	api.req.page = @(page);
@@ -85,6 +88,9 @@
 	
 	api.whenUpdate = ^
 	{
+		@normalize(api);
+		@normalize(self);
+
 		if ( api.sending )
 		{
 			[self sendUISignal:self.RELOADING];
@@ -99,11 +105,19 @@
 				}
 				else
 				{
-					[self.comments addObjectsFromArray:api.resp.comments];
-					[self.comments unique:^NSComparisonResult(id left, id right) {
-						return [((COMMENT *)left).id compare:((COMMENT *)right).id];
-					}];
-					
+					if ( page <= 1 )
+					{
+						[self.comments removeAllObjects];
+						[self.comments addObjectsFromArray:api.resp.comments];
+					}
+					else
+					{
+						[self.comments addObjectsFromArray:api.resp.comments];
+						[self.comments unique:^NSComparisonResult(id left, id right) {
+							return [((COMMENT *)left).id compare:((COMMENT *)right).id];
+						}];
+					}
+										
 					self.more = (self.comments.count >= api.resp.total.intValue) ? NO : YES;
 					self.loaded = YES;
 				}

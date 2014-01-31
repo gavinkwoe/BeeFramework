@@ -31,6 +31,8 @@
 
 #import "Bee.h"
 
+#import "PlayerShotsModel.h"
+
 #import "ShotCommentsModel.h"
 #import "ShotInfoModel.h"
 #import "ShotListModel.h"

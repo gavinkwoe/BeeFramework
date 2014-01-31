@@ -33,14 +33,14 @@
 
 #pragma mark -
 
-@interface DribbbleBoardTab_iPhone : BeeUICell
+@interface DribbbleWebBoardTab_iPhone : BeeUICell
 
-AS_OUTLET( BeeUIButton, popular );
-AS_OUTLET( BeeUIButton, everyone );
-AS_OUTLET( BeeUIButton, debuts );
+AS_OUTLET( BeeUIButton, go_backward );
+AS_OUTLET( BeeUIButton, go_forward );
+AS_OUTLET( BeeUIButton, refresh );
 
-- (void)selectEveryone;
-- (void)selectPopular;
-- (void)selectDebuts;
+@property (nonatomic, assign) BOOL	canGoBack;
+@property (nonatomic, assign) BOOL	canGoForward;
+@property (nonatomic, assign) BOOL	loading;
 
 @end

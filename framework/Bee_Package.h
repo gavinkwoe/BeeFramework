@@ -81,6 +81,46 @@
 
 #pragma mark -
 
+/**
+ * An Objective-C wrapper for android-like package, not thread-safe.
+ *
+ * It's the base class of all sub-packages, DO NOT use this class directly.
+ *
+ * Step 1) You must include the files below first:
+ *
+ @code
+ #import "Bee_Precompile.h"
+ #import "Bee_Package.h"
+ @endcode
+ *
+ * Step 2) Declare package in .h file:
+ *
+ @code
+ ...
+ AS_PACKAGE( BeePackage, BeeCLI, cli );
+                         ^^^^^^  ^^^
+ ...
+ @endcode
+ *
+ * Step 3) Define package in .m/.mm file:
+ *
+ @code
+ ...
+ DEF_PACKAGE( BeePackage, BeeCLI, cli );
+                          ^^^^^^  ^^^
+ ...
+ @endcode
+ *
+ * Step 4) Once the package was defined, you can use it like this:
+ *
+ @code
+ BeeCLI * instance = bee.cli;
+ ASSERT( nil != instance );
+ ASSERT( [instance isKindOfClass:[BeeCLI class]] );
+ @endcode
+ *
+ */
+
 @interface BeePackage : NSObject
 @property (nonatomic, readonly) NSArray * loadedPackages;
 @end

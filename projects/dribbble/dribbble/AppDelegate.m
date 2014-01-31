@@ -38,22 +38,24 @@
 
 - (void)load
 {
+	[UIApplication sharedApplication].statusBarHidden = NO;
+	
 	bee.ui.config.ASR = YES;
 	bee.ui.config.iOS7Mode = YES;
-	bee.ui.config.highPerformance = YES;
-	bee.ui.config.cacheAsyncLoad = YES;
-	bee.ui.config.cacheAsyncSave = YES;
-
-	[BeeUINavigationBar setTitleColor:[UIColor whiteColor]];
-	[BeeUINavigationBar setBackgroundColor:[UIColor blackColor]];
-	[BeeUINavigationBar setBackgroundTintColor:[[UIColor darkGrayColor] colorWithAlphaComponent:0.6f]];
+//	bee.ui.config.highPerformance = YES;
+//	bee.ui.config.cacheAsyncLoad = YES;
+//	bee.ui.config.cacheAsyncSave = YES;
 
 	if ( IOS7_OR_LATER )
 	{
+		[BeeUINavigationBar setTitleColor:[UIColor whiteColor]];
 		[BeeUINavigationBar setBackgroundImage:[UIImage imageNamed:@"navigation-bar-64.png"]];
 	}
 	else
 	{
+		[BeeUINavigationBar setTitleColor:[UIColor whiteColor]];
+//		[BeeUINavigationBar setBackgroundColor:[UIColor blackColor]];
+//		[BeeUINavigationBar setBackgroundTintColor:[[UIColor darkGrayColor] colorWithAlphaComponent:0.6f]];
 		[BeeUINavigationBar setBackgroundImage:[UIImage imageNamed:@"navigation-bar.png"]];
 	}
 

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
+
 <template namespace="DribbbleBoardTab_iPhone" version="1">
 
     <linear class="wrapper" orientation="h">
@@ -17,7 +18,7 @@
 			left: 0;
 			top: 0;
 		}
-
+			
         .wrapper {
 			width: 100%;
 			height: 100%;
@@ -28,13 +29,30 @@
 			width: 33.3%;
 			height: 100%;
 			color: #666;
-			font-size: 14px;
-			font-weight: bold;
+			font-size: 13px;
+			font-weight: lighter;
 		}
 
 		.active {
 			color: #fff;
 			background-image: url(tab-item.png);
+		}
+		
+		@media(device:iOS7)
+		{
+			#bg {
+				alpha: 0.7;
+			}
+
+			.item {
+				color: #ccc;
+				alpha: 0.7;
+			}
+		
+			.active {
+				color: #fff;
+				alpha: 0.85;
+			}
 		}
 
     </style>

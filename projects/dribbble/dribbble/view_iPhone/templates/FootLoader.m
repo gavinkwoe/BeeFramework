@@ -35,18 +35,17 @@
 
 @implementation FootLoader
 
-+ (void)load
-{
-	[FootLoader setDefaultSize:CGSizeMake( [UIScreen mainScreen].bounds.size.width, 50 )];
-	[FootLoader setDefaultClass:[FootLoader class]];
-}
+SUPPORT_AUTOMATIC_LAYOUT( YES )
+SUPPORT_RESOURCE_LOADING( YES )
+
+DEF_OUTLET( BeeUILabel,					state )
+DEF_OUTLET( BeeUIActivityIndicatorView,	indicator )
 
 - (void)load
 {
-	self.FROM_RESOURCE( @"FootLoader.xml" );
-	
-	$(@"#ind").HIDE();
-	$(@"#state").DATA( __TEXT(@"tips_more") );
+	self.alpha = 0.0f;
+	self.indicator.hidden = YES;
+	self.state.data = @"Click to load more";
 }
 
 - (void)unload
@@ -57,26 +56,39 @@
 
 ON_SIGNAL3( BeeUIFootLoader, STATE_CHANGED, signal )
 {
-	BeeUIActivityIndicatorView * indicator = (BeeUIActivityIndicatorView *)$(@"#ind").view;
+	if ( self.animated )
+	{
+		[UIView beginAnimations:nil context:nil];
+		[UIView setAnimationBeginsFromCurrentState:YES];
+		[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+		[UIView setAnimationDuration:0.25f];
+	}
 
 	if ( self.loading )
 	{
-		[indicator startAnimating];
-		
-		$(@"#state").DATA( @"Loading..." );
+		self.alpha = 1.0f;
+		self.indicator.animating = YES;
+		self.state.data = @"Loading...";
 	}
 	else
 	{
-		[indicator stopAnimating];
+		self.indicator.animating = NO;
 
 		if ( self.more )
 		{
-			$(@"#state").DATA( @"Click to load more" );
+			self.alpha = 1.0f;
+			self.state.data = @"Click to load more";
 		}
 		else
 		{
-			$(@"#state").DATA( @"No more" );
+			self.alpha = 0.0f;
+			self.state.data = @"No more";
 		}
+	}
+	
+	if ( self.animated )
+	{
+		[UIView commitAnimations];
 	}
 }
 

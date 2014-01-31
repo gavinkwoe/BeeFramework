@@ -36,19 +36,26 @@
 @implementation DribbbleBoardCell_iPhone
 
 DEF_OUTLET( BeeUIImageView,	photo )
+DEF_OUTLET( BeeUIImageView,	avatar )
 DEF_OUTLET( BeeUILabel,		view_num )
 DEF_OUTLET( BeeUILabel,		comment_num )
 DEF_OUTLET( BeeUILabel,		like_num )
+
+- (BOOL)dataWillChange:(id)newData
+{
+	return newData != self.data;
+}
 
 - (void)dataDidChanged
 {
 	SHOT * shot = self.data;
 	if ( shot )
 	{
-		$(self.photo).DATA( shot.image_teaser_url );
-		$(self.view_num).DATA( shot.views_count );
-		$(self.comment_num).DATA( shot.comments_count );
-		$(self.like_num).DATA( shot.likes_count );
+		self.avatar.data = shot.player.avatar_url;
+		self.photo.data = shot.image_url;
+		self.view_num.data = shot.views_count;
+		self.comment_num.data = shot.comments_count;
+		self.like_num.data = shot.likes_count;
 	}
 }
 

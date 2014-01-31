@@ -34,11 +34,17 @@
 
 #pragma mark -
 
-@interface DribbbleBoardCell_iPhone : BeeUICell
+@interface DribbbleProfileBoardCell_iPhone : BeeUICell
 
-AS_OUTLET( BeeUIImageView,	photo )
-AS_OUTLET( BeeUILabel,		view_num )
-AS_OUTLET( BeeUILabel,		comment_num )
-AS_OUTLET( BeeUILabel,		like_num )
+AS_OUTLET( BeeUIImageView,	bg )
+AS_OUTLET( BeeUILabel,		follower )
+AS_OUTLET( BeeUILabel,		following )
+AS_OUTLET( BeeUILabel,		shots )
+AS_OUTLET( BeeUILabel,		name )
+AS_OUTLET( BeeUIImageView,	url_icon )
+AS_OUTLET( BeeUILabel,		url_text )
+AS_OUTLET( BeeUIImageView,	location_icon )
+AS_OUTLET( BeeUILabel,		location_text )
+AS_OUTLET( BeeUIImageView,	avatar )
 
 @end

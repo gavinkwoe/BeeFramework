@@ -33,5 +33,5 @@
 
 #pragma mark -
 
-@interface DribbbleDetailBoardHeader_iPhone : BeeUICell
+@interface DribbbleDetailBoardPhoto_iPhone : BeeUICell
 @end

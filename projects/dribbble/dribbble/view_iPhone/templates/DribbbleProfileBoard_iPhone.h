@@ -34,10 +34,11 @@
 
 #pragma mark -
 
-@interface DribbbleDetailBoard_iPhone : BeeUIBoard
+@interface DribbbleProfileBoard_iPhone : BeeUIBoard
 
-AS_MODEL( ShotInfoModel,		info );
-AS_MODEL( ShotCommentsModel,	comments );
+@property (nonatomic, retain) PLAYER *	player;
+
+AS_MODEL( PlayerShotsModel,		playerShots );
 
 AS_OUTLET( BeeUIScrollView,		list );
 
