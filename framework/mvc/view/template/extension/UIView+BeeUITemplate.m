@@ -56,6 +56,11 @@
 {
 	if ( nil == self.layout )
 	{
+		self.FROM_NAME( [self UIResourceName] );
+	}
+	
+	if ( nil == self.layout )
+	{
 		Class viewClass = [self class];
 		for ( ;; )
 		{

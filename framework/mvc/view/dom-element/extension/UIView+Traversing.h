@@ -38,6 +38,9 @@
 
 @interface UIView(Traversing)
 
+@property (nonatomic, readonly) UIView *	rootView;
+@property (nonatomic, readonly) NSUInteger	inheritanceLevel;
+
 - (UIView *)subview:(NSString *)name;
 - (UIView *)viewAtPath:(NSString *)name;
 - (UIView *)prevSibling;

@@ -78,7 +78,16 @@ DEF_SIGNAL( CONFIRMED )
 	{
 		self.delegate = self;
 		self.date = [NSDate date];
-		self.title = @"\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+		
+		if ( IOS7_OR_LATER )
+		{
+			self.title = @"\n\n\n\n\n\n\n\n\n\n\n\n\n";
+		}
+		else
+		{
+			self.title = @"\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+		}
+
 		self.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
 	//	self.actionSheetStyle = UIActionSheetStyleDefault;
 		self.cancelButtonIndex = [self addButtonWithTitle:@"确定"];

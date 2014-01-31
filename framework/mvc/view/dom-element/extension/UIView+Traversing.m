@@ -37,6 +37,35 @@
 
 @implementation UIView(Traversing)
 
+@dynamic inheritanceLevel;
+
+- (UIView *)rootView
+{
+	for ( UIView * view = self;; )
+	{
+		if ( nil == view.superview )
+		{
+			return view;
+		}
+
+		view = view.superview;
+	}
+	
+	return nil;
+}
+
+- (NSUInteger)inheritanceLevel
+{
+	NSUInteger level = 0;
+	
+	for ( UIView * view = self.superview; nil != view; view = view.superview )
+	{
+		level += 1;
+	}
+	
+	return level;
+}
+
 - (UIView *)subview:(NSString *)name
 {
 	if ( nil == name || 0 == [name length] )

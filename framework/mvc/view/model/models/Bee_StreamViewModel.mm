@@ -47,6 +47,8 @@ DEF_SIGNAL( RELOADED )
 
 - (void)load
 {
+	self.loaded = NO;
+	self.more = NO;
 }
 
 - (void)unload

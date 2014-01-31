@@ -65,7 +65,7 @@
 
 - (void)load
 {
-	self.layer.shouldRasterize = YES;
+//	self.layer.shouldRasterize = YES;
 	
 	self.label = [[[BeeUILabel alloc] init] autorelease];
 	self.label.hidden = NO;
@@ -134,7 +134,7 @@ DEF_SINGLETON( ServiceInspector_Window )
 	self.backgroundColor = [UIColor blackColor];
 	self.hidden = YES;
 	self.windowLevel = UIWindowLevelStatusBar + 3.0f;
-	self.layer.shouldRasterize = YES;
+//	self.layer.shouldRasterize = YES;
 
 	self.pannable = YES;
 	self.pinchable = YES;
@@ -186,9 +186,17 @@ DEF_SINGLETON( ServiceInspector_Window )
 	
 	viewFrame.origin.x = origin.x + view.center.x - view.bounds.size.width / 2.0f;
 	viewFrame.origin.y = origin.y + view.center.y - view.bounds.size.height / 2.0f;
+
+	if ( [view isKindOfClass:[UIScrollView class]] || [view isKindOfClass:[UITableView class]] )
+	{
+		CGPoint viewOrigin = [self convertPoint:CGPointZero toView:view];
+		viewFrame.origin.x -= viewOrigin.x;
+		viewFrame.origin.y -= viewOrigin.y;
+	}
+		
 	viewFrame.size.width = view.bounds.size.width;
 	viewFrame.size.height = view.bounds.size.height;
-
+	
 	CGFloat overflowWidth = screenBound.size.width * 1.5;
 	CGFloat overflowHeight = screenBound.size.height * 1.5;
 	
@@ -202,40 +210,9 @@ DEF_SINGLETON( ServiceInspector_Window )
 	ServiceInspector_Layer * layer = [[ServiceInspector_Layer alloc] init];
 	if ( layer )
 	{
-		NSString * classType = [[view class] description];
-		if ( [classType isEqualToString:@"UIWindow"] )
-		{
-			layer.backgroundColor = RGB( 1, 59, 79 ); // [[UIColor redColor] colorWithAlphaComponent:0.25f];
-		}
-		else if ( [classType isEqualToString:@"UILayoutContainerView"] )
-		{
-			layer.backgroundColor = RGB( 2, 84, 112 ); // [[UIColor orangeColor] colorWithAlphaComponent:0.25f];
-		}
-		else if ( [classType isEqualToString:@"UINavigationTransitionView"] )
-		{
-			layer.backgroundColor = RGB( 4, 106, 141 ); // [[UIColor orangeColor] colorWithAlphaComponent:0.25f];
-		}
-		else if ( [classType isEqualToString:@"UIViewControllerWrapperView"] )
-		{
-			layer.backgroundColor = RGB( 6, 141, 187 ); // [[UIColor orangeColor] colorWithAlphaComponent:0.25f];
-		}
-		else
-		{
-			layer.backgroundColor = [UIColor blackColor]; // [UIColor yellowColor];
-		}
-
-//		if ( [view isContainable] )
-//		{
-//			layer.layer.borderWidth = 3.0f;
-//			layer.layer.borderColor = HEX_RGB( 0xed145b ).CGColor;
-//		}
-//		else
-//		{
-			layer.layer.borderWidth = 2.0f;
-			layer.layer.borderColor = HEX_RGB( 0x39b54a ).CGColor;
-//		}
-		
-		layer.backgroundColor = [layer.backgroundColor colorWithAlphaComponent:0.1f];
+		layer.layer.borderWidth = 1.5f;
+		layer.layer.borderColor = HEX_RGBA( 0x39b54a, 0.8f ).CGColor;
+		layer.backgroundColor = HEX_RGBA( 0x636363, 0.05f );
 
 		CGPoint anchor;
 		anchor.x = (screenBound.size.width / 2.0f - viewFrame.origin.x) / viewFrame.size.width;
@@ -293,7 +270,7 @@ DEF_SINGLETON( ServiceInspector_Window )
 - (void)transformLayers:(BOOL)setFrames
 {
     CATransform3D transform2 = CATransform3DIdentity;
-    transform2.m34 = -0.001;
+    transform2.m34 = -0.002;
 	transform2 = CATransform3DTranslate( transform2, _rotateY * -2.5f, 0, 0 );
 	transform2 = CATransform3DTranslate( transform2, 0, _rotateX * 3.5f, 0 );
 
@@ -345,9 +322,9 @@ DEF_SINGLETON( ServiceInspector_Window )
 
 - (void)show
 {
-	_rotateX = -20.0f;
-	_rotateY = 0.0f;
-	_distance = -1.25f;
+	_rotateX = 5.0f;
+	_rotateY = 30.0f;
+	_distance = -1.0f;
 	_animating = NO;
 
 //	[self setAlpha:1.0f];

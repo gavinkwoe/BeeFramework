@@ -80,6 +80,7 @@ typedef BeeUILayout *	(^BeeUILayoutBlockCS)( Class clazz, NSString * tag );
 
 @property (nonatomic, assign) BOOL						enabled;
 @property (nonatomic, assign) BOOL						isRoot;
+@property (nonatomic, readonly) NSString *				DOMPath;
 
 @property (nonatomic, readonly) BeeUILayoutBlockN		ADD;
 @property (nonatomic, readonly) BeeUILayoutBlockN		REMOVE;

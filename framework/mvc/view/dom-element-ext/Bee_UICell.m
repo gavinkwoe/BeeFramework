@@ -268,19 +268,23 @@ SUPPORT_SIZE_ESTIMATING( YES )
 
 - (void)setFrame:(CGRect)rc
 {
-	[self frameWillChange];
-
-	[super setFrame:rc];
-
-	if ( NO == CGSizeEqualToSize( [super frame].size, CGSizeZero ) )
+	BOOL shouldChange = [self frameWillChange:rc];
+	if ( shouldChange )
 	{
-		CGRect bound = CGRectMake( 0, 0, rc.size.width, rc.size.height );
+		[self frameWillChange];	// backward compatible
 		
-		[self relayoutSubviews:bound];
-		[self setNeedsDisplay];
+		[super setFrame:rc];
+
+		if ( NO == CGSizeEqualToSize( [super frame].size, CGSizeZero ) )
+		{
+			CGRect bound = CGRectMake( 0, 0, rc.size.width, rc.size.height );
+			
+			[self relayoutSubviews:bound];
+			[self setNeedsDisplay];
+		}
+		
+		[self frameDidChanged];
 	}
-	
-	[self frameDidChanged];
 }
 
 - (void)setCenter:(CGPoint)pt
@@ -359,49 +363,34 @@ SUPPORT_SIZE_ESTIMATING( YES )
 
 - (void)bindData:(id)newData
 {
-PERF_ENTER_( a )
-	
-	[self dataWillChange];
-
-PERF_LEAVE_( a )
-
-	if ( _data != newData )
+	BOOL shouldChange = [self dataWillChange:newData];
+	if ( shouldChange )
 	{
+		[self dataWillChange];
+
 		[newData retain];
 		[_data release];
 		_data = newData;
+		
+		[self dataDidChanged];
+		
+		[self relayoutSubviews:self.bounds];
 	}
-
-PERF_ENTER_( b )
-	
-	[self dataDidChanged];
-	
-PERF_LEAVE_( b )
-	
-PERF_ENTER_( c )
-	
-	[self relayoutSubviews:self.bounds];
-	
-PERF_LEAVE_( c )
-	
-//	[self setNeedsDisplay];
 }
 
 - (void)unbindData
 {
-	[self dataWillReset];
-	
-	[_data release];
-	_data = nil;
-	
-	[self dataDidReset];
-
-//	for ( UIView * view in self.subviews )
-//	{
-//		[view unbindData];
-//	}
-
-//	[self setNeedsDisplay];
+	BOOL shouldChange = [self dataWillChange:nil];
+	if ( shouldChange )
+	{
+		[self dataWillChange];
+		
+		[_data release];
+		_data = nil;
+		
+		[self dataDidChanged];
+		[self relayoutSubviews:self.bounds];
+	}
 }
 
 #pragma mark -
@@ -491,14 +480,22 @@ PERF_LEAVE_( c )
 
 #pragma mark -
 
+- (BOOL)frameWillChange:(CGRect)newRect
+{
+	return YES;
+}
+
 - (void)frameWillChange
 {
-	
 }
 
 - (void)frameDidChanged
 {
-	
+}
+
+- (BOOL)dataWillChange:(id)newData
+{
+	return YES;
 }
 
 - (void)dataWillChange
@@ -506,14 +503,6 @@ PERF_LEAVE_( c )
 }
 
 - (void)dataDidChanged
-{
-}
-
-- (void)dataWillReset
-{
-}
-
-- (void)dataDidReset
 {
 }
 

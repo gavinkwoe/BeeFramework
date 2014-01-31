@@ -231,7 +231,7 @@ DEF_SIGNAL( DOUBLE_TAPPED );
 		_innerView.backgroundColor = [UIColor clearColor];
 		_innerView.zoomScale = 1.0f;
 		_innerView.minimumZoomScale = 0.8f;
-		_innerView.maximumZoomScale = 4.0f;
+		_innerView.maximumZoomScale = 2.8f;
 		_innerView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
 		_innerView.contentMode = UIViewContentModeScaleAspectFit;
 		_innerView.contentOffset = CGPointZero;

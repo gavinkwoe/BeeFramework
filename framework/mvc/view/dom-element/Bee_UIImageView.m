@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2014-2015, Geek Zoo Studio
+//	Copyright (c) 2013-2014, {Bee} open source community
 //	http://www.bee-framework.com
 //
 //
@@ -42,8 +42,8 @@
 #import "UIImage+BeeExtension.h"
 
 #import "UIView+BeeUISignal.h"
-#import "UIView+Transition.h"
 #import "UIView+LifeCycle.h"
+#import "UIView+Transition.h"
 
 #pragma mark -
 
@@ -236,7 +236,9 @@ PERF_LEAVE
 }
 
 - (void)initSelf;
+
 - (void)changeImage:(UIImage *)image;
+- (void)changeImage:(UIImage *)image animated:(BOOL)animated;
 
 @end
 
@@ -264,6 +266,7 @@ DEF_SIGNAL( LOAD_CACHE )
 @synthesize loadedURL = _loadedURL;
 @synthesize loaded	= _loaded;
 @synthesize defaultImage = _defaultImage;
+@synthesize enableAllEvents = _enableAllEvents;
 
 @synthesize url;
 @synthesize file;
@@ -305,9 +308,9 @@ DEF_SIGNAL( LOAD_CACHE )
 	{
 		self.hidden = NO;
 		self.backgroundColor = [UIColor clearColor];
+		self.contentMode = UIViewContentModeCenter;
 		self.layer.masksToBounds = YES;
 		self.layer.opaque = YES;
-		self.contentMode = UIViewContentModeCenter;
 
 		_loading = NO;
 		_loaded	 = NO;
@@ -337,6 +340,7 @@ DEF_SIGNAL( LOAD_CACHE )
 	self.loadedURL = nil;
 	self.loading = NO;
 	self.defaultImage = nil;
+
 	self.image = nil;
 	
 	[_indicator removeFromSuperview];
@@ -353,116 +357,115 @@ DEF_SIGNAL( LOAD_CACHE )
 	[self GET:string useCache:useCache placeHolder:nil];
 }
 
-- (void)GET:(NSString *)string useCache:(BOOL)useCache placeHolder:(UIImage *)defaultImage
+- (void)GET:(NSString *)newURL useCache:(BOOL)useCache placeHolder:(UIImage *)defaultImage
 {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 
-	self.defaultImage = defaultImage;
-
-	if ( nil == string || 0 == string.length )
+	if ( nil == newURL || 0 == newURL.length )
 	{
-		[self changeImage:nil];
+		[self changeImage:self.defaultImage];
 		return;
 	}
 
-	if ( NO == [string hasPrefix:@"http://"] )
+	if ( NO == [newURL hasPrefix:@"http://"] )
 	{
-		string = [NSString stringWithFormat:@"http://%@", string];
+		newURL = [NSString stringWithFormat:@"http://%@", newURL];
+	}
+
+	if ( [self requestingURL:newURL] )
+	{
+//		[self setNeedsDisplay];
+		return;
 	}
 	
-//	if ( [string isEqualToString:self.loadedURL] ) // TODO
+//	if ( self.loadedURL && [self.loadedURL isEqualToString:newURL] )
 //	{
 ////		[self setNeedsDisplay];
 //		return;
 //	}
 
-	if ( [self requestingURL:string] )
-	{
-//		[self setNeedsDisplay];
-		return;
-	}
+	self.defaultImage = defaultImage;
+	self.loadedURL = newURL;
+	self.loading = NO;
+	self.loaded = NO;
 
-	self.loading	= NO;
-	self.loadedURL	= string;
-	self.loaded		= NO;
-	
 	[self cancelRequests];
 
-	if ( useCache )
+	BeeImageCache * cache = [BeeImageCache sharedInstance];
+	if ( [cache hasCachedForURL:newURL] )
 	{
-		BeeImageCache * cache = [BeeImageCache sharedInstance];
-		if ( [BeeUIConfig sharedInstance].cacheAsyncLoad )
+//		[self changeImage:nil];
+//		[self performSelector:@selector(loadFromCache:) withObject:newURL afterDelay:0.25f];
+		[self loadFromCache:newURL];
+	}
+	else
+	{
+		[self changeImage:self.defaultImage];
+		[self performSelector:@selector(loadFromWeb:) withObject:newURL afterDelay:0.25f];
+	}
+}
+
+- (void)loadFromCache:(NSString *)newURL
+{
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+
+	BeeImageCache * cache = [BeeImageCache sharedInstance];
+	if ( [cache hasCachedForURL:newURL] )
+	{
+		UIImage * image = [cache memoryImageForURL:newURL];
+		if ( image )
 		{
-			if ( [cache hasMemoryCachedForURL:string] )
+			[self changeImage:image];
+			[self setLoaded:YES];
+			
+			if ( self.enableAllEvents )
 			{
-				UIImage * image = [cache memoryImageForURL:string];
-				if ( image )
-				{
-					[self changeImage:image];
-					self.loaded = YES;
-
-					[self sendUISignal:BeeUIImageView.LOAD_CACHE];
-					return;
-				}	
-			}
-			else if ( [cache hasFileCachedForURL:string] )
-			{
-				[self changeImage:self.defaultImage];
-
-				BACKGROUND_BEGIN
-				{
-					UIImage * newImage = [cache fileImageForURL:string];
-					if ( newImage )
-					{
-						FOREGROUND_BEGIN
-						{
-							if ( newImage )
-							{
-								[self changeImage:newImage];
-								self.loaded = YES;
-								
-								[self sendUISignal:BeeUIImageView.LOAD_CACHE];
-							}
-							else
-							{
-								[self HTTP_GET:string].timeOutSeconds = 45.0f;
-							}
-
-							return;
-						}
-						FOREGROUND_COMMIT
-					}
-				}
-				BACKGROUND_COMMIT
-
-				return;
+				[self sendUISignal:BeeUIImageView.LOAD_CACHE];
 			}
 		}
 		else
 		{
-			if ( [cache hasCachedForURL:string] )
+			[self changeImage:self.defaultImage];
+			[self performSelector:@selector(loadFromFile:) withObject:newURL afterDelay:0.25f];
+		}
+	}
+	else
+	{
+		[self changeImage:self.defaultImage];
+		[self performSelector:@selector(loadFromWeb:) withObject:newURL afterDelay:0.25f];
+	}
+}
+
+- (void)loadFromFile:(NSString *)newURL
+{
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+
+	BeeImageCache * cache = [BeeImageCache sharedInstance];
+	if ( [cache hasCachedForURL:newURL] )
+	{
+		UIImage * image = [cache imageForURL:newURL];
+		if ( image )
+		{
+			[self changeImage:image animated:YES];
+			[self setLoaded:YES];
+			
+			if ( self.enableAllEvents )
 			{
-				UIImage * image = [cache imageForURL:string];
-				if ( image )
-				{
-					[self changeImage:image];
-					self.loaded = YES;
-					
-					[self sendUISignal:BeeUIImageView.LOAD_CACHE];
-					return;
-				}
+				[self sendUISignal:BeeUIImageView.LOAD_CACHE];
 			}
+			return;
 		}
 	}
 
 	[self changeImage:self.defaultImage];
-
-	[self performSelector:@selector(getImageFromURL:) withObject:string afterDelay:0.1f];
+	[self performSelector:@selector(loadFromWeb:) withObject:newURL afterDelay:0.25f];
 }
 
-- (void)getImageFromURL:(NSString *)imageUrl
+- (void)loadFromWeb:(NSString *)newURL
 {
-	[self HTTP_GET:imageUrl].timeOutSeconds = 45.0f;
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+
+	[self HTTP_GET:newURL].timeOutSeconds = 45.0f;
 }
 
 - (void)setUrl:(NSString *)string
@@ -482,7 +485,7 @@ DEF_SIGNAL( LOAD_CACHE )
 	}
 	else
 	{
-		[self changeImage:nil/*self.defaultImage*/];
+		[self changeImage:self.defaultImage];
 	}
 }
 
@@ -495,7 +498,7 @@ DEF_SIGNAL( LOAD_CACHE )
 	}
 	else
 	{
-		[self changeImage:nil/*self.defaultImage*/];
+		[self changeImage:self.defaultImage];
 	}
 }
 
@@ -506,30 +509,33 @@ DEF_SIGNAL( LOAD_CACHE )
 
 - (void)changeImage:(UIImage *)image
 {
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	[self changeImage:image animated:NO];
+}
 
+- (void)changeImage:(UIImage *)image animated:(BOOL)animated
+{
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	
 	if ( nil == image )
 	{
 		[self cancelRequests];
 		
-		self.loadedURL = nil;
-		self.loading = NO;
-		self.loaded = NO;
+//		self.loadedURL = nil;
+//		self.loading = NO;
+//		self.loaded = NO;
 
-		[super setImage:self.defaultImage];
+		[super setImage:nil];
 //		[super setNeedsDisplay];
 		return;
 	}
-	
+
 	if ( image != self.image )
 	{
 	PERF_ENTER
 
-		UIColor * backgroundColor = nil;
-
-//		[self sendUISignal:BeeUIImageView.WILL_CHANGE];
-		
 		[self cancelRequests];
+
+		UIColor * backgroundColor = nil;
 
 		if ( self.round )
 		{
@@ -557,11 +563,15 @@ DEF_SIGNAL( LOAD_CACHE )
 		{
 			backgroundColor = [UIColor colorWithPatternImage:image];
 		}
- 
+
 		if ( backgroundColor )
 		{
+//			[self sendUISignal:BeeUIImageView.WILL_CHANGE];
+
 			[super setBackgroundColor:backgroundColor];
 			[super setImage:nil];
+				
+//			[self sendUISignal:BeeUIImageView.DID_CHANGED];
 		}
 		else
 		{
@@ -589,15 +599,23 @@ DEF_SIGNAL( LOAD_CACHE )
 					break;
 			}
 
-			[super setTransform:transform];
-			[super setImage:image];
-		}
+//			[self sendUISignal:BeeUIImageView.WILL_CHANGE];
 
-//		[self sendUISignal:BeeUIImageView.DID_CHANGED];
-		
+			[super setTransform:transform];
+			
+			if ( animated )
+			{
+				[self transitionFade];
+			}
+
+			[super setImage:image];
+
+//			[self sendUISignal:BeeUIImageView.DID_CHANGED];
+		}
+				
 	PERF_LEAVE
 	}
-	
+
 //	[self setNeedsDisplay];
 }
 
@@ -624,9 +642,12 @@ DEF_SIGNAL( LOAD_CACHE )
 
 - (void)clear
 {
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	
 	[self cancelRequests];
 	[self changeImage:nil];
 
+//	self.defaultImage = nil;
 	self.loadedURL = nil;
 	self.loading = NO;
 }
@@ -641,7 +662,16 @@ DEF_SIGNAL( LOAD_CACHE )
 		_altLabel.numberOfLines = 1;
 		_altLabel.textColor = [UIColor blackColor];
 		_altLabel.textAlignment = UITextAlignmentCenter;
-		_altLabel.font = [UIFont boldSystemFontOfSize:12.0f];
+		
+		if ( IOS7_OR_LATER )
+		{
+			_altLabel.font = [UIFont systemFontOfSize:12.0f];
+		}
+		else
+		{
+			_altLabel.font = [UIFont boldSystemFontOfSize:12.0f];
+		}
+		
 		[self addSubview:_altLabel];
 		[self bringSubviewToFront:_altLabel];
 	}
@@ -705,7 +735,11 @@ DEF_SIGNAL( LOAD_CACHE )
 		[_indicator startAnimating];
 
 		[self setLoading:YES];
-		[self sendUISignal:BeeUIImageView.LOAD_START];
+		
+		if ( self.enableAllEvents )
+		{
+			[self sendUISignal:BeeUIImageView.LOAD_START];
+		}
 	}
 	else if ( request.sendProgressed )
 	{
@@ -731,39 +765,28 @@ DEF_SIGNAL( LOAD_CACHE )
 				NSString * string = [request.url absoluteString];
 				
 				BeeImageCache * cache = [BeeImageCache sharedInstance];
-				if ( [BeeUIConfig sharedInstance].cacheAsyncSave )
-				{
-					FOREGROUND_BEGIN
-					{
-						[cache saveImage:image forURL:string];
-						
-						BACKGROUND_BEGIN
-						{
-							[cache saveData:data forURL:string];					
-						}
-						BACKGROUND_COMMIT
-					}
-					FOREGROUND_COMMIT
-				}
-				else
-				{
-					[cache saveImage:image forURL:string];
-					[cache saveData:data forURL:string];
-				}
+				[cache saveImage:image forURL:string];
+				[cache saveData:data forURL:string];
 				
 				[self setLoading:NO];
-				self.loaded = YES;
+				[self setLoaded:YES];
 				
-				[self changeImage:image];
+				[self changeImage:image animated:YES];
 
-				[self sendUISignal:BeeUIImageView.LOAD_COMPLETED];
+				if ( self.enableAllEvents )
+				{
+					[self sendUISignal:BeeUIImageView.LOAD_COMPLETED];
+				}
 			}
 			else
 			{
 				[self setLoading:NO];
 				self.loaded = NO;
 				
-				[self sendUISignal:BeeUIImageView.LOAD_FAILED];
+				if ( self.enableAllEvents )
+				{
+					[self sendUISignal:BeeUIImageView.LOAD_FAILED];
+				}
 			}
 		}
 		else
@@ -771,7 +794,10 @@ DEF_SIGNAL( LOAD_CACHE )
 			[self setLoading:NO];
 			self.loaded = NO;
 			
-			[self sendUISignal:BeeUIImageView.LOAD_FAILED];
+			if ( self.enableAllEvents )
+			{
+				[self sendUISignal:BeeUIImageView.LOAD_FAILED];
+			}
 		}
 	PERF_LEAVE
 	}
@@ -780,15 +806,23 @@ DEF_SIGNAL( LOAD_CACHE )
 		[_indicator stopAnimating];	
 		
 		[self setLoading:NO];
-		self.loaded = NO;
-		[self sendUISignal:BeeUIImageView.LOAD_FAILED];
+		[self setLoaded:NO];
+
+		if ( self.enableAllEvents )
+		{
+			[self sendUISignal:BeeUIImageView.LOAD_FAILED];
+		}
 	}
 	else if ( request.cancelled )
 	{
 		[_indicator stopAnimating];
 		
 		[self setLoading:NO];
-		[self sendUISignal:BeeUIImageView.LOAD_CANCELLED];
+		
+		if ( self.enableAllEvents )
+		{
+			[self sendUISignal:BeeUIImageView.LOAD_CANCELLED];
+		}
 	}
 }
 

@@ -80,6 +80,10 @@ DEF_SIGNAL( DID_LOAD_CANCELLED )	// 加载取消
 		self.opaque = NO;
 		self.backgroundColor = [UIColor clearColor];
 		self.delegate = self;
+		self.scalesPageToFit = YES;
+		self.allowsInlineMediaPlayback = YES;
+		self.mediaPlaybackAllowsAirPlay = YES;
+		self.mediaPlaybackRequiresUserAction = YES;
 		
 		for ( UIView * subView in self.subviews )
 		{
@@ -252,7 +256,10 @@ DEF_SIGNAL( DID_LOAD_CANCELLED )	// 加载取消
 	{
 		ERROR( @"%@", error );
 
-		[self sendUISignal:BeeUIWebView.DID_LOAD_FAILED withObject:error];
+		if ( error.code != 204 )
+		{
+			[self sendUISignal:BeeUIWebView.DID_LOAD_FAILED withObject:error];
+		}
 	}
 }
 

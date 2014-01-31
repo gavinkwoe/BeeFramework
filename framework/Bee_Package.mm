@@ -114,7 +114,6 @@ DEF_SINGLETON( BeePackage )
 		"BeeActiveRecord",
 		"BeeModel",
 		"BeeController",
-		"BeeService",
 		"BeeLanguageSetting",
 
 	#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
@@ -128,6 +127,8 @@ DEF_SINGLETON( BeePackage )
 
 		"BeeUnitTest",
 		"BeeSingleton",
+		"BeeService",
+
 		NULL
 	};
 	

@@ -102,6 +102,7 @@
 @synthesize className = _className;
 @synthesize childs = _childs;
 @synthesize isRoot = _isRoot;
+@synthesize DOMPath = _DOMPath;
 
 @dynamic ADD;
 @dynamic REMOVE;
@@ -166,7 +167,7 @@
 {
 	[self.childs removeAllObjects];
 	self.childs = nil;
-
+	
 	self.root = nil;
 	self.parent = nil;
 	self.name = nil;
@@ -209,6 +210,18 @@
 #endif	// #if __BEE_DEVELOPMENT__
 }
 
+- (NSString *)DOMPath
+{
+	NSMutableString * result = [NSMutableString string];
+	
+	for ( BeeUILayout * layout = self; nil != layout; layout = layout.parent )
+	{
+		[result appendFormat:@"%@>", layout.name];
+	}
+
+	return result;
+}
+
 - (UIView *)createView
 {
 	if ( nil == self.classType )
@@ -238,6 +251,8 @@
 		view.UILayoutTag = self.name;
 		view.UILayoutClassName = self.className;
 		view.UILayoutElemName = self.elemName;
+
+		view.UIDOMPath = self.DOMPath;
 
 		[view applyStyle];
 
@@ -285,10 +300,19 @@
 
 - (void)layoutFor:(UIView *)canvas inBound:(CGRect)bound
 {
+	if ( bound.size.width <= 0.0f || bound.size.height <= 0.0f )
+	{
+		return;
+	}
+	
+	// TODO: read cache
+	
 	BeeUILayoutBuilder * builder = [BeeUILayoutBuilder builder:self.version];
 	builder.rootCanvas = canvas;
 	builder.rootLayout = self;
 	[builder layoutTree:bound];
+	
+	// TODO: save cache
 }
 
 - (CGRect)estimateFor:(UIView *)canvas inBound:(CGRect)bound

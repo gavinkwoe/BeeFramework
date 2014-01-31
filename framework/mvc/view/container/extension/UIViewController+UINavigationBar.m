@@ -209,7 +209,7 @@
 	else
 	{
 		CGSize barSize = self.navigationController.navigationBar.frame.size;
-		CGSize titleSize = [name sizeWithFont:[UIFont boldSystemFontOfSize:13.0f] byHeight:barSize.height];
+		CGSize titleSize = [name sizeWithFont:[UIFont systemFontOfSize:13.0f] byHeight:barSize.height];
 
 		if ( IOS7_OR_LATER )
 		{
@@ -234,7 +234,7 @@
 	BeeUIButton * button = [[[BeeUIButton alloc] initWithFrame:buttonFrame] autorelease];
 	button.contentMode = UIViewContentModeScaleAspectFit;
 	button.backgroundColor = [UIColor clearColor];
-	button.titleFont = [UIFont boldSystemFontOfSize:13.0f];
+	button.titleFont = [UIFont systemFontOfSize:13.0f];
 	button.titleColor = [UIColor whiteColor];
 	button.titleShadowColor = [UIColor darkGrayColor];
 	button.title = name;
@@ -288,7 +288,7 @@
 	BeeUIButton * button = [[[BeeUIButton alloc] initWithFrame:buttonFrame] autorelease];
 	button.contentMode = UIViewContentModeScaleAspectFit;
 	button.backgroundColor = [UIColor clearColor];
-	button.titleFont = [UIFont boldSystemFontOfSize:13.0f];
+	button.titleFont = [UIFont systemFontOfSize:13.0f];
 	button.titleColor = [UIColor whiteColor];
 	button.titleShadowColor = [UIColor darkGrayColor];
 	button.image = image;
@@ -323,7 +323,7 @@
 	else
 	{
 		CGSize barSize = self.navigationController.navigationBar.frame.size;
-		CGSize titleSize = [title sizeWithFont:[UIFont boldSystemFontOfSize:13.0f] byHeight:barSize.height];
+		CGSize titleSize = [title sizeWithFont:[UIFont systemFontOfSize:13.0f] byHeight:barSize.height];
 
 		if ( IOS7_OR_LATER )
 		{
@@ -350,7 +350,7 @@
 	button.backgroundColor = [UIColor clearColor];
 	button.image = image;
 	button.title = title;
-	button.titleFont = [UIFont boldSystemFontOfSize:13.0f];
+	button.titleFont = [UIFont systemFontOfSize:13.0f];
 	button.titleColor = [UIColor whiteColor];
 	button.titleShadowColor = [UIColor darkGrayColor];
 

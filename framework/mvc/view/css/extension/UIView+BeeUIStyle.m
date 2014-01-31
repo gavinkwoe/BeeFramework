@@ -69,6 +69,9 @@
 #undef	KEY_LAYOUT_ELEM_NAME
 #define KEY_LAYOUT_ELEM_NAME	"UIView.layoutElemName"
 
+#undef	KEY_DOM_PATH
+#define KEY_DOM_PATH			"UIView.DOMPath"
+
 #undef	KEY_ROOT_STYLE
 #define KEY_ROOT_STYLE			"UIView.rootStyle"
 
@@ -89,6 +92,8 @@
 @dynamic UILayoutTag;
 @dynamic UILayoutClassName;
 @dynamic UILayoutElemName;
+
+@dynamic UIDOMPath;
 
 @dynamic GET_ATTRIBUTE;
 @dynamic SET_ATTRIBUTE;
@@ -253,6 +258,20 @@
 	if ( elemName != newElemName )
 	{
 		objc_setAssociatedObject( self, KEY_LAYOUT_ELEM_NAME, newElemName, OBJC_ASSOCIATION_RETAIN_NONATOMIC );
+	}
+}
+
+- (NSString *)UIDOMPath
+{
+	return objc_getAssociatedObject( self, KEY_DOM_PATH );
+}
+
+- (void)setUIDOMPath:(NSString *)path
+{
+	NSString * domPath = objc_getAssociatedObject( self, KEY_DOM_PATH );
+	if ( domPath != path )
+	{
+		objc_setAssociatedObject( self, KEY_DOM_PATH, path, OBJC_ASSOCIATION_RETAIN_NONATOMIC );
 	}
 }
 

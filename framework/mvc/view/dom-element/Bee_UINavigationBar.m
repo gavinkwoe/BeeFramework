@@ -145,6 +145,7 @@ static UIImage *	__backgroundImage = nil;
 		[self setBackgroundColor:__backgroundColor];
 	}
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
 	if ( IOS7_OR_LATER )
 	{
 		if ( __backgroundTintColor )
@@ -153,6 +154,7 @@ static UIImage *	__backgroundImage = nil;
 			[self setBarTintColor:__backgroundTintColor];
 		}
 	}
+#endif	// #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
 
 	if ( IOS6_OR_LATER )
 	{

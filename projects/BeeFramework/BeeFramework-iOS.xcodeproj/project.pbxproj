@@ -1,0 +1,247 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		CB523E6B1899F347004AD8C0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB523E6A1899F347004AD8C0 /* Foundation.framework */; };
+		CB523E701899F347004AD8C0 /* BeeFramework.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = CB523E6F1899F347004AD8C0 /* BeeFramework.h */; };
+		CB523E721899F347004AD8C0 /* BeeFramework.m in Sources */ = {isa = PBXBuildFile; fileRef = CB523E711899F347004AD8C0 /* BeeFramework.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		CB523E651899F347004AD8C0 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/${PRODUCT_NAME}";
+			dstSubfolderSpec = 16;
+			files = (
+				CB523E701899F347004AD8C0 /* BeeFramework.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		CB523E671899F347004AD8C0 /* libBeeFramework.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libBeeFramework.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB523E6A1899F347004AD8C0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		CB523E6E1899F347004AD8C0 /* BeeFramework-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BeeFramework-Prefix.pch"; sourceTree = "<group>"; };
+		CB523E6F1899F347004AD8C0 /* BeeFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BeeFramework.h; sourceTree = "<group>"; };
+		CB523E711899F347004AD8C0 /* BeeFramework.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BeeFramework.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CB523E641899F347004AD8C0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB523E6B1899F347004AD8C0 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CB523E5E1899F347004AD8C0 = {
+			isa = PBXGroup;
+			children = (
+				CB523E6C1899F347004AD8C0 /* BeeFramework */,
+				CB523E691899F347004AD8C0 /* Frameworks */,
+				CB523E681899F347004AD8C0 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CB523E681899F347004AD8C0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CB523E671899F347004AD8C0 /* libBeeFramework.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CB523E691899F347004AD8C0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CB523E6A1899F347004AD8C0 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CB523E6C1899F347004AD8C0 /* BeeFramework */ = {
+			isa = PBXGroup;
+			children = (
+				CB523E6F1899F347004AD8C0 /* BeeFramework.h */,
+				CB523E711899F347004AD8C0 /* BeeFramework.m */,
+				CB523E6D1899F347004AD8C0 /* Supporting Files */,
+			);
+			path = BeeFramework;
+			sourceTree = "<group>";
+		};
+		CB523E6D1899F347004AD8C0 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				CB523E6E1899F347004AD8C0 /* BeeFramework-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CB523E661899F347004AD8C0 /* BeeFramework */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CB523E751899F347004AD8C0 /* Build configuration list for PBXNativeTarget "BeeFramework" */;
+			buildPhases = (
+				CB523E631899F347004AD8C0 /* Sources */,
+				CB523E641899F347004AD8C0 /* Frameworks */,
+				CB523E651899F347004AD8C0 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BeeFramework;
+			productName = BeeFramework;
+			productReference = CB523E671899F347004AD8C0 /* libBeeFramework.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CB523E5F1899F347004AD8C0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = "geek-zoo studio";
+			};
+			buildConfigurationList = CB523E621899F347004AD8C0 /* Build configuration list for PBXProject "BeeFramework" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = CB523E5E1899F347004AD8C0;
+			productRefGroup = CB523E681899F347004AD8C0 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CB523E661899F347004AD8C0 /* BeeFramework */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CB523E631899F347004AD8C0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB523E721899F347004AD8C0 /* BeeFramework.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		CB523E731899F347004AD8C0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		CB523E741899F347004AD8C0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CB523E761899F347004AD8C0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/BeeFramework.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "BeeFramework/BeeFramework-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		CB523E771899F347004AD8C0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/BeeFramework.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "BeeFramework/BeeFramework-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CB523E621899F347004AD8C0 /* Build configuration list for PBXProject "BeeFramework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CB523E731899F347004AD8C0 /* Debug */,
+				CB523E741899F347004AD8C0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CB523E751899F347004AD8C0 /* Build configuration list for PBXNativeTarget "BeeFramework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CB523E761899F347004AD8C0 /* Debug */,
+				CB523E771899F347004AD8C0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CB523E5F1899F347004AD8C0 /* Project object */;
+}

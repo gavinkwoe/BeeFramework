@@ -68,7 +68,7 @@
 		
 		if ( altLabel )
 		{
-			altLabel.font = [properties parseFontWithDefaultValue:[UIFont boldSystemFontOfSize:14.0f]];
+			altLabel.font = [properties parseFontWithDefaultValue:[UIFont systemFontOfSize:14.0f]];
 			altLabel.text = [properties parseTextWithKeys:@[@"alt", @"text", @"content"] defaultValue:altLabel.text];
 			altLabel.textColor = [properties parseColorWithKeys:@[@"color", @"text-color"] defaultValue:[UIColor blackColor]];
 			altLabel.textAlignment = [properties parseTextAlignmentWithKeys:@[@"text-align"] defaultValue:UITextAlignmentCenter];

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui namespace="B2_PublishPhotoBoard_iPhone">
+
+<linear orientation="v" class="wrapper">
+	<BeeUIZoomImageView id="preview" class="fullscreen"/>
+</linear>
+
+<style type="text/css">
+	
+	.wrapper {
+		width: 100%;
+		height: 100%;
+	}
+	
+	.fullscreen {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		mode: fill;
+		background-color: #333;
+		image-loading: white;
+	}
+	
+</style>
+
+</ui>

@@ -74,6 +74,8 @@
 	if ( NO == _inited )
 	{
 		self.backgroundColor = [UIColor clearColor];
+//		self.layer.masksToBounds = YES;
+//		self.layer.opaque = NO; // YES;
 
 		self.font = [UIFont systemFontOfSize:12.0f];
 		self.baselineAdjustment = UIBaselineAdjustmentAlignCenters;

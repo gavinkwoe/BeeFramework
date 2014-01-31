@@ -287,7 +287,16 @@ DEF_SIGNAL( DRAG_EXIT )			// 退出
 
 	_label = [[UILabel alloc] initWithFrame:self.bounds];
 	_label.backgroundColor = [UIColor clearColor];
-	_label.font = [UIFont boldSystemFontOfSize:14.0f];
+	
+	if ( IOS7_OR_LATER )
+	{
+		_label.font = [UIFont systemFontOfSize:14.0f];
+	}
+	else
+	{
+		_label.font = [UIFont boldSystemFontOfSize:14.0f];
+	}
+	
 	_label.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
 	_label.textAlignment = UITextAlignmentCenter;
 	_label.textColor = [UIColor whiteColor];

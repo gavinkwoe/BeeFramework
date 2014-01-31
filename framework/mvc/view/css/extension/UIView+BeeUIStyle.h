@@ -52,6 +52,8 @@
 @property (nonatomic, retain) NSString *				UILayoutClassName;	// .xxx
 @property (nonatomic, retain) NSString *				UILayoutElemName;	// <xxx>
 
+@property (nonatomic, retain) NSString *				UIDOMPath;
+
 @property (nonatomic, readonly)	BeeUIStyleValueBlockS	GET_ATTRIBUTE;
 @property (nonatomic, readonly)	BeeUIStyleValueBlockSS	SET_ATTRIBUTE;
 

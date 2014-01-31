@@ -9,11 +9,59 @@ BeeFramework is a semi-hybrid framework that allows you to create mobile apps us
 3. Drag and drop `/services` folder into your project
 4. Build and run
 
-## Demo app
+## Semi-Hybrid UI
+
+Semi-hybrid offers you a new approach to UI development using XML/CSS, you can reuse these templates in any project based on BeeFramework. See `/projects/dribbble` demo for more information.
 
 ![1](http://blog.whatsbug.com/wp-content/uploads/2014/01/bee_template_code.png)
-![2](http://blog.whatsbug.com/wp-content/uploads/2014/01/bee_ui_1.png)
-![3](http://blog.whatsbug.com/wp-content/uploads/2014/01/bee_service_3d_inspector.png)
+
+## Services
+
+Services extend and expand the functionality of your app automatically, drag and drop the services folder into your project. See `/services` for more information.
+
+![1](http://blog.whatsbug.com/wp-content/uploads/2014/01/bee_services.png)
+
+For example:
+
+<pre>
+bee.services.alipay.config.parnter = @"";
+bee.services.alipay.config.seller = @"";
+bee.services.alipay.config.privateKey = @"";
+bee.services.alipay.config.publicKey = @"";
+bee.services.alipay.config.notifyURL = @"http://";
+
+bee.services.alipay.order.no = @"SN";
+bee.services.alipay.order.name = @"NAME";
+bee.services.alipay.order.desc = @"DESC";
+bee.services.alipay.order.price = @"PRICE";
+
+bee.services.alipay.whenSucceed = ^
+{
+};
+
+bee.services.alipay.PAY();	// or .ON();
+</pre>
+
+## Scaffold
+
+Scaffold helps you to generate Model/Controller code and documents, also provide the local test environment. See `/tools/scaffold` or `/projects/scaffold` for more information.
+
+![1](http://blog.whatsbug.com/wp-content/uploads/2014/01/bee_scaffold_1.png)
+![2](http://blog.whatsbug.com/wp-content/uploads/2014/01/bee_scaffold_2.png)
+
+For example:
+
+<pre>
+> ./scaffold schema build ./example/dribbble.json
+> ./scaffold schema test ./example/dribbble.json
+</pre>
+
+## Demo app
+
+As fast as native, as flexible as web. See `/projects/dribbble` demo for more information.
+
+![1](http://blog.whatsbug.com/wp-content/uploads/2014/01/bee_ui_1.png)
+![2](http://blog.whatsbug.com/wp-content/uploads/2014/01/bee_service_3d_inspector.png)
 
 ## Features
 
