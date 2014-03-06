@@ -100,7 +100,7 @@ static BeeUIApplication * __sharedApp = nil;
 	if ( self )
 	{
 //		[self load];
-		[self performLoad];
+//		[self performLoad];
 	}
 	return self;
 }
