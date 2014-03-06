@@ -202,7 +202,16 @@ DEF_SIGNAL( CONFIRMED )
 	{
 		_actionSheet = [[[UIActionSheet alloc] init] autorelease];
 		_actionSheet.delegate = self;
-		_actionSheet.title = @"\n\n\n\n\n\n\n\n\n\n\n";
+
+		if ( IOS7_OR_LATER )
+		{
+			_actionSheet.title = @"\n\n\n\n\n\n\n\n\n\n\n";
+		}
+		else
+		{
+			_actionSheet.title = @"\n\n\n\n\n\n\n\n\n\n\n";
+		}
+
 		_actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
 		_actionSheet.cancelButtonIndex = [_actionSheet addButtonWithTitle:@"确定"];
 	}

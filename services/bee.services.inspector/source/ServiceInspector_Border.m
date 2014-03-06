@@ -56,6 +56,8 @@
 
 - (void)didMoveToSuperview
 {
+	[super didMoveToSuperview];
+	
 	self.layer.cornerRadius = self.superview.layer.cornerRadius;
 }
 

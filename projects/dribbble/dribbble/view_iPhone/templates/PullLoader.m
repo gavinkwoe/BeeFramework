@@ -35,18 +35,21 @@
 
 @implementation PullLoader
 
-+ (void)load
-{
-	[BeeUIPullLoader setDefaultSize:CGSizeMake(200, 50)];
-	[BeeUIPullLoader setDefaultClass:[PullLoader class]];
-}
+SUPPORT_AUTOMATIC_LAYOUT( YES )
+SUPPORT_RESOURCE_LOADING( YES )
+
+DEF_OUTLET( BeeUILabel,					state )
+DEF_OUTLET( BeeUILabel,					date )
+DEF_OUTLET( BeeUIImageView,				arrow )
+DEF_OUTLET( BeeUIActivityIndicatorView,	indicator )
 
 - (void)load
 {
-	self.FROM_RESOURCE( @"PullLoader.xml" );
-
-	$(@"#state").DATA( @"Pull to refresh" );
-	$(@"#date").DATA( [NSString stringWithFormat:@"Last update：%@", [[NSDate date] stringWithDateFormat:@"MM/dd/yyyy"]] );
+	self.alpha = 0.0f;
+	self.arrow.hidden = NO;
+	self.indicator.hidden = YES;
+	self.status.data = @"Pull to refresh";
+	self.date.data = [NSString stringWithFormat:@"Last update：%@", [[NSDate date] stringWithDateFormat:@"MM/dd/yyyy"]];
 }
 
 - (void)unload
@@ -55,9 +58,6 @@
 
 ON_SIGNAL3( BeeUIPullLoader, STATE_CHANGED, signal )
 {
-	BeeUIImageView *				arrow = (BeeUIImageView *)$(@"#arrow").view;
-	BeeUIActivityIndicatorView *	indicator = (BeeUIActivityIndicatorView *)$(@"#ind").view;
-
 	if ( self.animated )
 	{
 		[UIView beginAnimations:nil context:nil];
@@ -70,34 +70,32 @@ ON_SIGNAL3( BeeUIPullLoader, STATE_CHANGED, signal )
 	{
 		self.alpha = 1.0f;
 
-		arrow.hidden = NO;
-		arrow.transform = CGAffineTransformRotate( CGAffineTransformIdentity, (M_PI / 360.0f) * -359.0f );
-		
-		$(@"#state").DATA( @"Release to refresh" );
-		$(@"#date").DATA( [NSString stringWithFormat:@"Last update：%@", [[NSDate date] stringWithDateFormat:@"MM/dd/yyyy"]] );
+		self.arrow.hidden = NO;
+		self.arrow.transform = CGAffineTransformRotate( CGAffineTransformIdentity, (M_PI / 360.0f) * -359.0f );
+		self.indicator.hidden = YES;
+		self.status.data = @"Release to refresh";
+		self.date.data = [NSString stringWithFormat:@"Last update：%@", [[NSDate date] stringWithDateFormat:@"MM/dd/yyyy"]];
 	}
 	else if ( self.loading )
 	{
 		self.alpha = 1.0f;
-
-		[indicator startAnimating];
-
-		arrow.hidden = YES;
 		
-		$(@"#state").DATA( @"Loading..." );
-		$(@"#date").DATA( [NSString stringWithFormat:@"Last update：%@", [[NSDate date] stringWithDateFormat:@"MM/dd/yyyy"]] );
+		self.indicator.hidden = NO;
+		self.indicator.animating = YES;
+		
+		self.arrow.hidden = YES;
+		self.status.data = @"Loading...";
+		self.date.data = [NSString stringWithFormat:@"Last update：%@", [[NSDate date] stringWithDateFormat:@"MM/dd/yyyy"]];
 	}
 	else
 	{
 		self.alpha = 0.0f;
 
-		arrow.hidden = NO;
-		arrow.transform = CGAffineTransformIdentity;
-		
-		[indicator stopAnimating];
-		
-		$(@"#state").DATA( @"Pull to refresh" );
-		$(@"#date").DATA( [NSString stringWithFormat:@"Last update：%@", [[NSDate date] stringWithDateFormat:@"MM/dd/yyyy"]] );
+		self.arrow.hidden = NO;
+		self.arrow.transform = CGAffineTransformIdentity;
+		self.indicator.hidden = YES;
+		self.status.data = @"Pull to refresh";
+		self.date.data = [NSString stringWithFormat:@"Last update：%@", [[NSDate date] stringWithDateFormat:@"MM/dd/yyyy"]];
 	}
 	
 	if ( self.animated )

@@ -74,14 +74,13 @@ AS_INT( STATE_HIGHLIGHTED )
 
 + (id)cell;
 
+- (BOOL)frameWillChange:(CGRect)newRect;
 - (void)frameWillChange;
 - (void)frameDidChanged;
 
+- (BOOL)dataWillChange:(id)newData;
 - (void)dataWillChange;
 - (void)dataDidChanged;
-
-- (void)dataWillReset;
-- (void)dataDidReset;
 
 - (void)layoutWillBegin;
 - (void)layoutDidFinish;

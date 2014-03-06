@@ -49,7 +49,7 @@ DEF_PACKAGE( BeePackage_HTTP, BeeHTTPRequestQueue, requestQueue );
 #define DEFAULT_GET_TIMEOUT			(30.0f)			// 取图30秒超时
 
 #undef	DEFAULT_POST_TIMEOUT
-#define DEFAULT_POST_TIMEOUT		(30.0f)			// 发协议30秒超时
+#define DEFAULT_POST_TIMEOUT		(120.0f)		// 发协议120秒超时
 
 #undef	DEFAULT_PUT_TIMEOUT
 #define DEFAULT_PUT_TIMEOUT			(30.0f)			// 上传30秒超时
@@ -235,10 +235,10 @@ DEF_SINGLETON( BeeHTTPRequestQueue )
 
 	[request setNumberOfTimesToRetryOnTimeout:2];
 #if TARGET_OS_IPHONE && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_4_0
-	[request setShouldContinueWhenAppEntersBackground:YES];
+	[request setShouldContinueWhenAppEntersBackground:NO];
 #endif	// #if TARGET_OS_IPHONE && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_4_0
 
-	[request setThreadPriority:0.5];
+	[request setThreadPriority:0.2];
 	[request setQueuePriority:NSOperationQueuePriorityLow];
 
 	[_requests addObject:request];
@@ -296,14 +296,14 @@ DEF_SINGLETON( BeeHTTPRequestQueue )
 	[request setDelegate:self];
 	[request setDownloadProgressDelegate:self];
 	[request setUploadProgressDelegate:self];
-	[request setNumberOfTimesToRetryOnTimeout:2];
+	[request setNumberOfTimesToRetryOnTimeout:0];
 	[request setShouldAttemptPersistentConnection:NO];
 	
 #if TARGET_OS_IPHONE && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_4_0
 	[request setShouldContinueWhenAppEntersBackground:YES];
 #endif	// #if TARGET_OS_IPHONE && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_4_0
 
-	[request setThreadPriority:1.0];
+	[request setThreadPriority:0.8];
 	[request setQueuePriority:NSOperationQueuePriorityHigh];
 
 	[_requests addObject:request];	
@@ -625,11 +625,6 @@ DEF_SINGLETON( BeeHTTPRequestQueue )
 
 	BeeHTTPRequest * networkRequest = (BeeHTTPRequest *)request;
 	
-	INFO( @"HTTP %d(%@)\n%@",
-		  request.responseStatusCode,
-		  request.responseStatusMessage,
-		  [request.url absoluteString] );
-
 	if ( [request.requestMethod isEqualToString:@"GET"] )
 	{
 		if ( request.responseStatusCode >= 400 && request.responseStatusCode < 500 )
@@ -644,6 +639,8 @@ DEF_SINGLETON( BeeHTTPRequestQueue )
 	}
 	else
 	{
+		ERROR( @"HTTP %d(%@)\n%@\n", request.responseStatusCode, request.responseStatusMessage, [request.url absoluteString], request.responseString );
+
 		[networkRequest changeState:BeeHTTPRequest.STATE_FAILED];
 	}
 

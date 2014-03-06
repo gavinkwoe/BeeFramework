@@ -37,6 +37,7 @@
 @interface DribbbleBoardCell_iPhone : BeeUICell
 
 AS_OUTLET( BeeUIImageView,	photo )
+AS_OUTLET( BeeUIImageView,	avatar )
 AS_OUTLET( BeeUILabel,		view_num )
 AS_OUTLET( BeeUILabel,		comment_num )
 AS_OUTLET( BeeUILabel,		like_num )

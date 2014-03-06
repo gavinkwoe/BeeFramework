@@ -135,7 +135,8 @@
 - (NSArray *)allURLs
 {
 	NSMutableArray * array = [NSMutableArray array];
-	
+	NSCharacterSet * charSet = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$-_.+!*'():/"] invertedSet];
+
 	NSInteger stringIndex = 0;
 	while ( stringIndex < self.length )
 	{
@@ -169,9 +170,10 @@
 				//				NSString * text = [string substringWithRange:beforeRange];
 				//				[array addObject:text];
 			}
-			
+
 			NSRange subSearchRange = NSMakeRange(startRange.location, self.length - startRange.location);
-			NSRange endRange = [self rangeOfString:@" " options:NSCaseInsensitiveSearch range:subSearchRange];
+//			NSRange endRange = [self rangeOfString:@" " options:NSCaseInsensitiveSearch range:subSearchRange];
+			NSRange endRange = [self rangeOfCharacterFromSet:charSet options:NSCaseInsensitiveSearch range:subSearchRange];
 			if ( endRange.location == NSNotFound)
 			{
 				NSString * url = [self substringWithRange:subSearchRange];

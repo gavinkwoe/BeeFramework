@@ -50,7 +50,7 @@
 {
 	BeeHTTPConnection2 *	conn = workflow.connection;
 	BeeHTTPServerRouter2 *	router = [BeeHTTPServerRouter2 sharedInstance];
-	BeeHTTPServerConfig2 *	config = [BeeHTTPServerConfig2 sharedInstance];
+//	BeeHTTPServerConfig2 *	config = [BeeHTTPServerConfig2 sharedInstance];
 
 	conn.response.Server = @"bhttpd";
 	conn.response.Date = [[NSDate date] description];
@@ -69,7 +69,7 @@
 	
 	if ( conn.response.bodyData && conn.response.bodyData.length )
 	{
-		conn.response.ContentLength = [NSString stringWithFormat:@"%lu", conn.response.bodyData.length];
+		conn.response.ContentLength = [NSString stringWithFormat:@"%lu", (unsigned long)(conn.response.bodyData.length)];
 	}
 
 	if ( BeeHTTPMethod_GET == conn.request.method )

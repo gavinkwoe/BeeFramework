@@ -158,7 +158,6 @@
 #import "UIView+TapGesture.h"
 #import "UIView+Traversing.h"
 #import "UIView+Visibility.h"
-#import "UIView+Wireframe.h"
 
 // dom-element-ext
 

@@ -194,6 +194,23 @@
 			return NO;
 		}
 	}
+
+	if ( [mediaType matchAnyOf:@[@"7", @"iOS7"]] )
+	{
+		return IOS7_OR_LATER;
+	}
+	else if ( [mediaType matchAnyOf:@[@"6", @"iOS6"]] )
+	{
+		return IOS6_OR_LATER;
+	}
+	else if ( [mediaType matchAnyOf:@[@"5", @"iOS5"]] )
+	{
+		return IOS5_OR_LATER;
+	}
+	else if ( [mediaType matchAnyOf:@[@"4", @"iOS4"]] )
+	{
+		return IOS4_OR_LATER;
+	}
 	
 	return YES;
 #else

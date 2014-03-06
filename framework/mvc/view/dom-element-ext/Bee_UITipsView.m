@@ -39,8 +39,8 @@
 #import "UIView+BeeUISignal.h"
 #import "UIView+LifeCycle.h"
 
-#define	DEFAULT_TIPS_BUBBLE_WIDTH		(160.0f)
-#define	DEFAULT_TIPS_BUBBLE_HEIGHT		(140.0f)
+#define	DEFAULT_TIPS_BUBBLE_WIDTH		(180.0f)
+#define	DEFAULT_TIPS_BUBBLE_HEIGHT		(120.0f)
 #define DEFAULT_TIMEOUT_SECONDS			(1.0f)
 
 #define ANIMATION_DURATION				(0.3f)
@@ -743,7 +743,16 @@ DEF_SIGNAL( DID_DISAPPEAR );
 		[self addSubview:_iconView];
 
 		_labelView = [[UILabel alloc] initWithFrame:CGRectZero];
-        _labelView.font = [UIFont boldSystemFontOfSize:14.0f];
+		
+		if ( IOS7_OR_LATER )
+		{
+			_labelView.font = [UIFont systemFontOfSize:14.0f];
+		}
+		else
+		{
+			_labelView.font = [UIFont boldSystemFontOfSize:14.0f];
+		}
+			
         _labelView.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
         _labelView.textAlignment = UITextAlignmentCenter;
 		_labelView.textColor = [UIColor whiteColor];
@@ -852,7 +861,16 @@ DEF_SIGNAL( DID_DISAPPEAR );
 		[self addSubview:_indicator];
 
 		_labelView = [[UILabel alloc] initWithFrame:CGRectZero];
-        _labelView.font = [UIFont boldSystemFontOfSize:14.0f];
+		
+		if ( IOS7_OR_LATER )
+		{
+			_labelView.font = [UIFont systemFontOfSize:14.0f];
+		}
+		else
+		{
+			_labelView.font = [UIFont boldSystemFontOfSize:14.0f];
+		}
+		
         _labelView.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
         _labelView.textAlignment = UITextAlignmentCenter;
 		_labelView.textColor = [UIColor whiteColor];
@@ -950,7 +968,16 @@ DEF_SIGNAL( DID_DISAPPEAR );
 		[self addSubview:_indicator];
 
 		_labelView = [[UILabel alloc] initWithFrame:CGRectZero];
-        _labelView.font = [UIFont boldSystemFontOfSize:14.0f];
+		
+		if ( IOS7_OR_LATER )
+		{
+			_labelView.font = [UIFont systemFontOfSize:14.0f];
+		}
+		else
+		{
+			_labelView.font = [UIFont boldSystemFontOfSize:14.0f];
+		}
+		
         _labelView.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
         _labelView.textAlignment = UITextAlignmentCenter;
 		_labelView.textColor = [UIColor whiteColor];

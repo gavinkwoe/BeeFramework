@@ -34,7 +34,7 @@
 #pragma mark -
 
 #undef	PER_PAGE
-#define PER_PAGE	(10)
+#define PER_PAGE	(30)
 
 #pragma mark -
 
@@ -99,14 +99,20 @@
 {
 	[API_SHOTS_LIST cancel];
 
-	__block API_SHOTS_LIST * api = [API_SHOTS_LIST api];
+	API_SHOTS_LIST * api = [API_SHOTS_LIST api];
 	
+	@weakify(api);
+	@weakify(self);
+
 	api.list = self.type;
 	api.req.page = @(page);
 	api.req.per_page = @(PER_PAGE);
 	
 	api.whenUpdate = ^
 	{
+		@normalize(api);
+		@normalize(self);
+
 		if ( api.sending )
 		{
 			[self sendUISignal:self.RELOADING];
@@ -121,11 +127,19 @@
 				}
 				else
 				{
-					[self.shots addObjectsFromArray:api.resp.shots];
-					[self.shots unique:^NSComparisonResult(id left, id right) {
-						return [((SHOT *)left).id compare:((SHOT *)right).id];
-					}];
-					
+					if ( page <= 1 )
+					{
+						[self.shots removeAllObjects];
+						[self.shots addObjectsFromArray:api.resp.shots];
+					}
+					else
+					{
+						[self.shots addObjectsFromArray:api.resp.shots];
+						[self.shots unique:^NSComparisonResult(id left, id right) {
+							return [((SHOT *)left).id compare:((SHOT *)right).id];
+						}];	
+					}
+										
 					self.more = (self.shots.count >= api.resp.total.intValue) ? NO : YES;
 					self.loaded = YES;
 					

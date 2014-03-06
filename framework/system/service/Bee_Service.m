@@ -249,7 +249,7 @@ static NSMutableDictionary * __services = nil;
 
 - (BOOL)running
 {
-	return YES;
+	return _running;
 }
 
 - (void)powerOn

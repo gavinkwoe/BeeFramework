@@ -95,6 +95,7 @@ AS_SIGNAL( LOAD_CACHE )         // 加载缓存
 @property (nonatomic, retain) UIColor *						indicatorColor;
 @property (nonatomic, retain) NSString *					loadedURL;
 @property (nonatomic, retain) UIImage *						defaultImage;
+@property (nonatomic, assign) BOOL							enableAllEvents;
 
 @property (nonatomic, assign) NSString *					url;
 @property (nonatomic, assign) NSString *					file;

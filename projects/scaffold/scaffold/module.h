@@ -38,6 +38,6 @@
 + (NSString *)command;
 
 + (void)usage;
-+ (void)execute;
++ (BOOL)execute;
 
 @end

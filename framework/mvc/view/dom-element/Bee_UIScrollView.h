@@ -133,12 +133,14 @@ AS_SIGNAL( FOOTER_REFRESH )	// 上拉刷新
 @property (nonatomic, readonly) NSInteger			pageCount;
 @property (nonatomic, assign) NSInteger				pageIndex;
 @property (nonatomic, assign) UIEdgeInsets			baseInsets;
+@property (nonatomic, assign) UIEdgeInsets			extInsets;
 
 @property (nonatomic, assign) CGFloat				lineSize;
 @property (nonatomic, assign) NSInteger				lineCount;
 @property (nonatomic, assign) NSInteger				total;
 @property (nonatomic, readonly) NSArray *			items;
 @property (nonatomic, readonly) NSArray *			visibleItems;
+@property (nonatomic, assign) BOOL					enableAllEvents;
 
 @property (nonatomic, readonly) BeeUIPullLoader *	headerLoader;
 @property (nonatomic, readonly) BeeUIFootLoader *	footerLoader;

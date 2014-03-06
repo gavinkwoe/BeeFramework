@@ -101,11 +101,12 @@
 	{
 		for ( NSString * file in generator.results )
 		{
-			bee.cli.GREEN().LINE( @"'%@' generated", file );
+			bee.cli.ECHO( @"%@", file );
+			bee.cli.GREEN().LINE( @"\tDONE" );
 		}
 		
 		bee.cli.GREEN().LINE( nil );
-		bee.cli.GREEN().LINE( @"DONE" );
+		bee.cli.GREEN().LINE( @"Total %d file(s) generated", generator.results.count );
 		bee.cli.GREEN().LINE( nil );
 	}
 }
@@ -150,15 +151,17 @@
 	}
 	else
 	{
-		bee.cli.RED().LINE( nil );
-		bee.cli.GREEN().LINE( @"Running, try http://127.0.0.1:%d", server.port );
-		bee.cli.RED().LINE( nil );
-		
+		bee.cli.GREEN().LINE( nil );
+		bee.cli.GREEN().LINE( @"Running..." );
+		bee.cli.CYAN().LINE( nil );
+		bee.cli.CYAN().LINE( @"Try to access 'http://localhost:%d'", server.port );
+		bee.cli.CYAN().LINE( nil );
+
 		CFRunLoopRun();
 	}
 }
 
-+ (void)execute
++ (BOOL)execute
 {
 	NSString * command1 = [bee.cli.arguments objectAtIndex:0];
 	NSString * command2 = [bee.cli.arguments objectAtIndex:1];
@@ -166,11 +169,17 @@
 	if ( [command2 isEqualToString:@"build"] )
 	{
 		[self schema_build];
+		
+		return YES;
 	}
 	else if ( [command2 isEqualToString:@"test"] )
 	{
 		[self schema_test];
+		
+		return YES;
 	}
+
+	return NO;
 }
 
 @end

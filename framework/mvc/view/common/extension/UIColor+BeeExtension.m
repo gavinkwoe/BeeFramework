@@ -168,10 +168,10 @@
             [__colors setObject:[UIColor brownColor]		forKey:@"brown"];
         }
 
-        color = [__colors objectForKey:color.lowercaseString];
-		if ( color )
+        UIColor * result = [__colors objectForKey:color.lowercaseString];
+		if ( result )
 		{
-			return [color colorWithAlphaComponent:alpha];
+			return [result colorWithAlphaComponent:alpha];
 		}
     }
 

@@ -69,7 +69,7 @@ DEF_SINGLETON( BeeHTTPServerConfig2 )
 	#if (TARGET_OS_MAC)
 
 		char	buff[256] = { 0 };
-		char *	result = getcwd( buff, 256 - 1 );
+//		char *	result = getcwd( buff, 256 - 1 );
 
 		self.documentPath = [NSString stringWithUTF8String:buff];
 		self.temporaryPath = [NSString stringWithUTF8String:buff];

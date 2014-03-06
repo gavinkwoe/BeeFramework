@@ -2,6 +2,7 @@
 
 <ui namespace="DribbbleBoardCell_iPhone">
 	<linear orientation="v" class="wrapper">
+		<button id="mask" class="mask"/>
 		<image class="bg"/>
 		<image id="photo" class="photo"/>
 		<linear orientation="h" class="bottom">
@@ -12,7 +13,7 @@
 			<image class="icon" id="like-icon" src="icon-hearts.png"/>
 			<label class="text" id="like-num">0</label>
 		</linear>
-		<button id="mask" class="mask"/>
+		<image id="avatar" class="avatar"/>
 	</linear>
 
 	<style type="text/css">
@@ -29,28 +30,44 @@
 			position: absolute;
 			left: 0px;
 			top: 0px;
-			background-color: white;
-		}
-
-		.bgc {
-			background-color: #369;
+			background-color: #fafafa;
 		}
 		
 		.photo {
 			width: 100%;
-			height: 88%;
-			padding: 3px;
+			height: 100%;
+			padding-top: 3px;
+			padding-bottom: 22px;
+			padding-left: 3px;
+			padding-right: 3px;
 			background-color: #999;
 			image-mode: fill;
 			image-loading: white;
 		}
-		
+
+		.avatar {
+			position: absolute;
+			bottom: 25px;
+			right: 6px;
+			width: 44px;
+			height: 44px;
+			padding: 2px;
+			background-color: #999;
+			/*	border-radius: 6px; */
+			border-width: 2px;
+			border-color: #fafafa;
+			image-mode: fill;
+			image-loading: white;
+		}
+
 		.bottom {
-			width: auto;
-			height: 12%;
+			position: absolute;
+			left: 0px;
+			bottom: 3px;
+			width: 100%;
+			height: 16px;
 			padding-left: 5px;
 			padding-right: 5px;
-			margin-bottom: 2%;
 		}
 
 		.bottom > .icon {
@@ -58,7 +75,7 @@
 			height: 100%;
 			image-mode: center;
 			margin-left: 4px;
-			margin-right: 2px;
+			margin-right: 1px;
 		}
 		
 		.bottom > .text {
@@ -66,8 +83,8 @@
 			height: 100%;
 			color: #999;
 			font-size: 12px;
-			font-weight: bold;
-			margin-left: 5px;
+			font-weight: lighter;
+			margin-left: 2px;
 		}
 		
 		.mask {

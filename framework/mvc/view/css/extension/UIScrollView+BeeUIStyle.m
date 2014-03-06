@@ -80,7 +80,7 @@
 {
 // scroll-insets: 0 1 2 3
 
-	if ( [self respondsToSelector:@selector(setBaseInsets:)] )
+	if ( [self respondsToSelector:@selector(setExtInsets:)] )
 	{
 		NSString * scrollInsets = [properties parseStringWithKeys:@[@"insets", @"scroll-insets"] defaultValue:nil];
 		if ( scrollInsets )
@@ -88,12 +88,12 @@
 			if ( [scrollInsets matchAnyOf:@[@"auto"]] )
 			{
 				UIEdgeInsets insets = [BeeUIConfig sharedInstance].baseInsets;
-				objc_msgSend( self, @selector(setBaseInsets:), insets );
+				objc_msgSend( self, @selector(setExtInsets:), insets );
 			}
 			else
 			{
 				UIEdgeInsets insets = UIEdgeInsetsFromStringEx( scrollInsets );
-				objc_msgSend( self, @selector(setBaseInsets:), insets);
+				objc_msgSend( self, @selector(setExtInsets:), insets);
 			}
 		}
 	}

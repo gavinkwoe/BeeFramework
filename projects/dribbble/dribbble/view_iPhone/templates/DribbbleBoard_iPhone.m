@@ -33,7 +33,8 @@
 #import "DribbbleBoardCell_iPhone.h"
 #import "DribbbleBoardTab_iPhone.h"
 #import "DribbbleDetailBoard_iPhone.h"
-#import "model.h"
+#import "PullLoader.h"
+#import "FootLoader.h"
 
 #pragma mark -
 
@@ -87,16 +88,22 @@ DEF_OUTLET( DribbbleBoardTab_iPhone,	tabbar );
 
 ON_CREATE_VIEWS( signal )
 {
-	self.view.backgroundColor = SHORT_RGB( 0x333 );
+	self.view.backgroundColor = SHORT_RGB( 0x444 );
 
 	self.navigationBarShown = YES;
 	self.navigationBarTitle = @"Dribbble";
+//	self.navigationBarLeft = [UIImage imageNamed:@"navigation-menu.png"];
 
+	self.list.headerClass = [PullLoader class];
 	self.list.headerShown = YES;
+
+	self.list.footerClass = [FootLoader class];
 	self.list.footerShown = YES;
+	
 	self.list.lineCount = 2;
-	self.list.animationDuration = 0.25f;
+	self.list.animationDuration = 0.2f;
 	self.list.baseInsets = bee.ui.config.baseInsets;
+
 	self.list.whenReloading = ^
 	{
 		self.list.total = [self currentModel].shots.count;
@@ -128,6 +135,14 @@ ON_CREATE_VIEWS( signal )
 			[self.list scrollToIndex:_selectedIndex animated:YES];
 		}
 	};
+	self.list.whenScrolling = ^
+	{
+//		self.navigationBarShown = NO;
+	};
+	self.list.whenStop = ^
+	{
+//		self.navigationBarShown = YES;
+	};
 	self.list.whenHeaderRefresh = ^
 	{
 		[self.currentModel firstPage];
@@ -151,7 +166,11 @@ ON_LAYOUT_VIEWS( signal )
 ON_WILL_APPEAR( signal )
 {
 	[self.list reloadData];
-	[self.currentModel firstPage];
+	
+	if ( NO == self.currentModel.loaded )
+	{
+		[self.currentModel firstPage];
+	}
 
 	[BeeUIRouter sharedInstance].view.pannable = YES;
 }
@@ -179,7 +198,7 @@ ON_SIGNAL3( DribbbleBoardTab_iPhone, popular, signal )
 	_selectedIndex = -1;
 	
 	[self transitionFade];
-	
+
 	[self.list scrollToIndex:0 animated:YES];
 	[self.list reloadData];
 }
@@ -248,7 +267,7 @@ ON_SIGNAL3( ShotListModel, RELOADED, signal )
 	self.list.footerLoading = NO;
 	self.list.footerMore = self.currentModel.more;
 
-	[self transitionFade];
+//	[self transitionFade];
 	
 	[self.list reloadData];
 }

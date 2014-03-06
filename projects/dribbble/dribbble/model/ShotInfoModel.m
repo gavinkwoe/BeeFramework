@@ -54,12 +54,18 @@
 {
 	[API_SHOTS_ID cancel];
 
-	__block API_SHOTS_ID * api = [API_SHOTS_ID api];
+	API_SHOTS_ID * api = [API_SHOTS_ID api];
 	
+	@weakify(api);
+	@weakify(self);
+
 	api.id = [self.shot_id asNSString];
 	
 	api.whenUpdate = ^
 	{
+		@normalize(api);
+		@normalize(self);
+
 		if ( api.sending )
 		{
 			[self sendUISignal:self.RELOADING];

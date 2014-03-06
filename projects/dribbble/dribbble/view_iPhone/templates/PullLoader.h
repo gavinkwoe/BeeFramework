@@ -34,4 +34,10 @@
 #pragma mark -
 
 @interface PullLoader : BeeUIPullLoader
+
+AS_OUTLET( BeeUILabel,					status )
+AS_OUTLET( BeeUILabel,					date )
+AS_OUTLET( BeeUIImageView,				arrow )
+AS_OUTLET( BeeUIActivityIndicatorView,	indicator )
+
 @end

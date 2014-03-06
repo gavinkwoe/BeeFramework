@@ -34,4 +34,8 @@
 #pragma mark -
 
 @interface FootLoader : BeeUIFootLoader
+
+AS_OUTLET( BeeUILabel,					state )
+AS_OUTLET( BeeUIActivityIndicatorView,	indicator )
+
 @end

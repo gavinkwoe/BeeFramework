@@ -47,6 +47,11 @@
 		+ (BOOL)supportForUIAutomaticLayout { return __flag; } \
 		- (BOOL)supportForUIAutomaticLayout { return __flag; }
 
+#undef	SUPPORT_LAYOUT_CACHE
+#define SUPPORT_LAYOUT_CACHE( __flag ) \
+		+ (BOOL)supportForUILayoutCache { return __flag; } \
+		- (BOOL)supportForUILayoutCache { return __flag; }
+
 #undef	SUPPORT_SIZE_ESTIMATING
 #define SUPPORT_SIZE_ESTIMATING( __flag ) \
 		+ (BOOL)supportForUISizeEstimating { return __flag; } \
@@ -104,6 +109,14 @@
 - (CGSize)estimateUISizeByBound:(CGSize)bound;
 - (CGSize)estimateUISizeByWidth:(CGFloat)width;
 - (CGSize)estimateUISizeByHeight:(CGFloat)height;
+
+// layout cache?
+
++ (BOOL)supportForUILayoutCache;
+- (BOOL)supportForUILayoutCache;
+
++ (NSString *)layoutCacheKey;
+- (NSString *)layoutCacheKey;
 
 // styling?
 
