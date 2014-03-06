@@ -4174,11 +4174,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../../framework/system/audio/opencore/lib",
-					"$(SRCROOT)/../../services/bee.services.alipay/vendor/AlipaySDK/openssl/lib",
-					"$(SRCROOT)/../../services/bee.services.share.weixin/vendor/WeixinSDK",
-					/Users/god/Desktop/BeeFramework.github/services/bee.services.alipay/vendor/AlipaySDK/openssl/lib,
-					/Users/god/Desktop/BeeFramework.github/services/bee.services.share.weixin/vendor/WeixinSDK,
+					"$(SRCROOT)/../../services/**",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -4197,11 +4193,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../../framework/system/audio/opencore/lib",
-					"$(SRCROOT)/../../services/bee.services.alipay/vendor/AlipaySDK/openssl/lib",
-					"$(SRCROOT)/../../services/bee.services.share.weixin/vendor/WeixinSDK",
-					/Users/god/Desktop/BeeFramework.github/services/bee.services.alipay/vendor/AlipaySDK/openssl/lib,
-					/Users/god/Desktop/BeeFramework.github/services/bee.services.share.weixin/vendor/WeixinSDK,
+					"$(SRCROOT)/../../services/**",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
