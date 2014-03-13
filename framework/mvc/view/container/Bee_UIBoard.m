@@ -791,6 +791,7 @@ static NSMutableArray *		__allBoards = nil;
 
 - (BOOL)resignFirstResponder
 {
+	[super resignFirstResponder];
 	[self resignFirstResponderWalkThrough:self.view];
 	return YES;
 }
