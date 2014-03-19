@@ -230,7 +230,7 @@ DEF_INT( STATE_REDIRECTED,	6 );
 		[_callstack addObjectsFromArray:[BeeRuntime callstack:16]];
 	#endif	// #if __BEE_DEVELOPMENT__
 
-		self.userAgent = [BeeHTTPClientConfig sharedInstance].userAgent;
+		self.userAgentString = [BeeHTTPClientConfig sharedInstance].userAgent;
 	}
 
 	return self;
