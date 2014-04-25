@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui namespace="PullLoader">
+
+	<linear orientation="horizonal" class="wrapper">
+		<image class="logo"/>
+		<linear orientation="vertical" class="inner-wrapper">
+			<linear orientation="vertical" class="col1">
+				<image id="arrow"/>
+				<indicator id="ind"/>
+			</linear>
+			<linear orientation="vertical" class="col2">
+				<label id="state"/>
+				<label id="date"/>
+			</linear>
+		</linear>
+	</linear>
+
+	<style type="text/css">
+		.wrapper {
+			width: 100%;
+			height: auto;
+		}
+		
+		.logo {
+			width: 137px;
+			height: 40px;
+			position: absolute;
+			top: -44px;
+			left: 92px;
+			image-src: url(splash-logo-small.png);
+			image-mode: fit;
+		}
+
+		.inner-wrapper {
+			width: 260px;
+			height: 30px;
+			margin-top: 10px;
+			margin-bottom: 6px;
+			margin-left: 30px;
+		}
+
+		.col1 {
+			width: 40px;
+			height: 100%;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+		}
+		
+		#arrow {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			image-src:	url(arrow-down.png);
+			image-mode:	fit;
+		}
+
+		#ind {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			indicator-style: white;
+		}
+
+		.col2 {
+			width: 100%;
+			height: 100%;
+		}
+
+		#state {
+			width: 100%;
+			height: 50%;
+			color: #ccc;
+			font-size: 13px;
+			font-weight: bold;
+			text-align: center;
+		}
+
+		#date {
+			width: 100%;
+			height: 50%;
+			color: #ccc;
+			font-size: 13px;
+			font-weight: bold;
+			text-align: center;
+		}
+	</style>
+
+</ui>

@@ -1,0 +1,596 @@
+digraph Protocol
+{
+	graph
+	[
+		rankdir = LR;
+		label = "(null)";
+		ratio = "auto";
+		splines = curved;
+	];
+
+	node
+	[
+		fontname = melon;
+		fontsize = 14;
+		shape = box;
+	];
+
+	subgraph cluster_enums
+	{
+		label = "";
+		style = stroke;
+		color = white;
+
+	//	@enum LIST
+		"LIST"
+		[
+			color = orange;
+			style = stroke;
+			shape = record;
+			label = "<name> 枚举 LIST| <EVERYONE> EVERYONE = \"everyone\"| <POPULAR> POPULAR = \"popular\"| <DEBUTS> DEBUTS = \"debuts\"";
+		];
+
+	};
+
+	subgraph cluster_models
+	{
+		label = "";
+		style = stroke;
+		color = white;
+
+	//	@interface COMMENT
+		"COMMENT"
+		[
+			color = red;
+			style = stroke;
+			shape = record;
+			label = "<name> 数据表 COMMENT | <body> body TEXT| <created_at> created_at TEXT| <likes_count> likes_count INT| <player> player (PLAYER*)| <id> id INT";
+		];
+		"COMMENT":player -> "PLAYER":name
+		[
+			color = "grey25";
+			fontcolor = grey20;
+		];
+
+	//	@interface PLAYER
+		"PLAYER"
+		[
+			color = red;
+			style = stroke;
+			shape = record;
+			label = "<name> 数据表 PLAYER | <avatar_url> avatar_url TEXT| <comments_count> comments_count INT| <comments_received_count> comments_received_count INT| <created_at> created_at TEXT| <drafted_by_player_id> drafted_by_player_id *| <draftees_count> draftees_count INT| <followers_count> followers_count INT| <following_count> following_count INT| <likes_count> likes_count INT| <likes_received_count> likes_received_count INT| <location> location TEXT| <name> name TEXT| <rebounds_count> rebounds_count INT| <rebounds_received_count> rebounds_received_count INT| <shots_count> shots_count INT| <twitter_screen_name> twitter_screen_name TEXT| <url> url TEXT| <username> username TEXT| <id> id INT";
+		];
+
+	//	@interface SHOT
+		"SHOT"
+		[
+			color = red;
+			style = stroke;
+			shape = record;
+			label = "<name> 数据表 SHOT | <comments_count> comments_count INT| <created_at> created_at TEXT| <height> height INT| <image_teaser_url> image_teaser_url TEXT| <image_url> image_url TEXT| <likes_count> likes_count INT| <player> player (PLAYER*)| <rebound_source_id> rebound_source_id INT| <rebounds_count> rebounds_count INT| <short_url> short_url TEXT| <title> title TEXT| <url> url TEXT| <views_count> views_count INT| <width> width INT| <id> id INT";
+		];
+		"SHOT":player -> "PLAYER":name
+		[
+			color = "grey25";
+			fontcolor = grey20;
+		];
+
+	}
+
+	subgraph cluster_controllers
+	{
+		label = "";
+		style = stroke;
+		color = white;
+
+	//	/players/:id<__NSMallocBlock__: 0x7fb5b259d8d0>
+		subgraph cluster_API_PLAYERS_ID
+		{
+			color = grey;
+			style = stroke;
+			label = "GET /players/:id\n";
+
+			"API_PLAYERS_ID"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> API_PLAYERS_ID| <resp> resp| <id> :id";
+			];
+
+			"REQ_PLAYERS_ID"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> 请求包体 Request| <empty> 空";
+			];
+			"API_PLAYERS_ID":resp -> "PLAYER":name
+			[
+				color = grey20
+				fontcolor = grey20
+			];
+			"RESP_PLAYERS_ID"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> 回应包体 Response| <RESP_PLAYERS_ID> RESP_PLAYERS_ID (PLAYER*)";
+			];
+
+		};
+
+		"RESP_PLAYERS_ID":RESP_PLAYERS_ID -> "PLAYER":name
+		[
+			color = "grey25";
+			fontcolor = grey20;
+		];
+
+	//	/players/:id/draftees<__NSMallocBlock__: 0x7fb5b259ead0>
+		subgraph cluster_API_PLAYERS_ID_DRAFTEES
+		{
+			color = grey;
+			style = stroke;
+			label = "GET /players/:id/draftees\n";
+
+			"API_PLAYERS_ID_DRAFTEES"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> API_PLAYERS_ID_DRAFTEES| <resp> resp| <id> :id";
+			];
+
+			"REQ_PLAYERS_ID_DRAFTEES"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> 请求包体 Request| <empty> 空";
+			];
+			"API_PLAYERS_ID_DRAFTEES":resp -> "RESP_PLAYERS_ID_DRAFTEES":name
+			[
+				color = grey20
+				fontcolor = grey20
+			];
+			"RESP_PLAYERS_ID_DRAFTEES"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> 回应包体 Response| <page> page INT| <pages> pages INT| <per_page> per_page INT| <players> players \[PLAYER*\]| <total> total INT";
+			];
+
+		};
+
+		"RESP_PLAYERS_ID_DRAFTEES":players -> "PLAYER":name
+		[
+			color = "grey25";
+			fontcolor = grey20;
+		];
+
+	//	/players/:id/followers<__NSMallocBlock__: 0x7fb5b25a0240>
+		subgraph cluster_API_PLAYERS_ID_FOLLOWERS
+		{
+			color = grey;
+			style = stroke;
+			label = "GET /players/:id/followers\n";
+
+			"API_PLAYERS_ID_FOLLOWERS"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> API_PLAYERS_ID_FOLLOWERS| <resp> resp| <id> :id";
+			];
+
+			"REQ_PLAYERS_ID_FOLLOWERS"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> 请求包体 Request| <empty> 空";
+			];
+			"API_PLAYERS_ID_FOLLOWERS":resp -> "RESP_PLAYERS_ID_FOLLOWERS":name
+			[
+				color = grey20
+				fontcolor = grey20
+			];
+			"RESP_PLAYERS_ID_FOLLOWERS"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> 回应包体 Response| <page> page INT| <pages> pages INT| <per_page> per_page INT| <players> players \[PLAYER*\]| <total> total INT";
+			];
+
+		};
+
+		"RESP_PLAYERS_ID_FOLLOWERS":players -> "PLAYER":name
+		[
+			color = "grey25";
+			fontcolor = grey20;
+		];
+
+	//	/players/:id/following<__NSMallocBlock__: 0x7fb5b25a18c0>
+		subgraph cluster_API_PLAYERS_ID_FOLLOWING
+		{
+			color = grey;
+			style = stroke;
+			label = "GET /players/:id/following\n";
+
+			"API_PLAYERS_ID_FOLLOWING"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> API_PLAYERS_ID_FOLLOWING| <resp> resp| <id> :id";
+			];
+
+			"REQ_PLAYERS_ID_FOLLOWING"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> 请求包体 Request| <empty> 空";
+			];
+			"API_PLAYERS_ID_FOLLOWING":resp -> "RESP_PLAYERS_ID_FOLLOWING":name
+			[
+				color = grey20
+				fontcolor = grey20
+			];
+			"RESP_PLAYERS_ID_FOLLOWING"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> 回应包体 Response| <page> page INT| <pages> pages INT| <per_page> per_page INT| <players> players \[PLAYER*\]| <total> total INT";
+			];
+
+		};
+
+		"RESP_PLAYERS_ID_FOLLOWING":players -> "PLAYER":name
+		[
+			color = "grey25";
+			fontcolor = grey20;
+		];
+
+	//	/players/:id/shots<__NSMallocBlock__: 0x7fb5b25a2f00>
+		subgraph cluster_API_PLAYERS_ID_SHOTS
+		{
+			color = grey;
+			style = stroke;
+			label = "GET /players/:id/shots\n";
+
+			"API_PLAYERS_ID_SHOTS"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> API_PLAYERS_ID_SHOTS| <req> req| <resp> resp| <id> :id";
+			];
+
+			"API_PLAYERS_ID_SHOTS":req -> "REQ_PLAYERS_ID_SHOTS":name
+			[
+				color = grey20
+				fontcolor = grey20
+			];
+			"REQ_PLAYERS_ID_SHOTS"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> 请求包体 Request| <page> page INT| <per_page> per_page INT";
+			];
+
+			"API_PLAYERS_ID_SHOTS":resp -> "RESP_PLAYERS_ID_SHOTS":name
+			[
+				color = grey20
+				fontcolor = grey20
+			];
+			"RESP_PLAYERS_ID_SHOTS"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> 回应包体 Response| <page> page INT| <pages> pages INT| <per_page> per_page INT| <shots> shots \[SHOT*\]| <total> total INT";
+			];
+
+		};
+
+
+		"RESP_PLAYERS_ID_SHOTS":shots -> "SHOT":name
+		[
+			color = "grey25";
+			fontcolor = grey20;
+		];
+
+	//	/players/:id/shots/following<__NSMallocBlock__: 0x7fb5b25a4aa0>
+		subgraph cluster_API_PLAYERS_ID_SHOTS_FOLLOWING
+		{
+			color = grey;
+			style = stroke;
+			label = "GET /players/:id/shots/following\n";
+
+			"API_PLAYERS_ID_SHOTS_FOLLOWING"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> API_PLAYERS_ID_SHOTS_FOLLOWING| <req> req| <resp> resp| <id> :id";
+			];
+
+			"API_PLAYERS_ID_SHOTS_FOLLOWING":req -> "REQ_PLAYERS_ID_SHOTS_FOLLOWING":name
+			[
+				color = grey20
+				fontcolor = grey20
+			];
+			"REQ_PLAYERS_ID_SHOTS_FOLLOWING"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> 请求包体 Request| <page> page INT| <per_page> per_page INT";
+			];
+
+			"API_PLAYERS_ID_SHOTS_FOLLOWING":resp -> "RESP_PLAYERS_ID_SHOTS_FOLLOWING":name
+			[
+				color = grey20
+				fontcolor = grey20
+			];
+			"RESP_PLAYERS_ID_SHOTS_FOLLOWING"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> 回应包体 Response| <page> page INT| <pages> pages INT| <per_page> per_page INT| <shots> shots \[SHOT*\]| <total> total INT";
+			];
+
+		};
+
+
+		"RESP_PLAYERS_ID_SHOTS_FOLLOWING":shots -> "SHOT":name
+		[
+			color = "grey25";
+			fontcolor = grey20;
+		];
+
+	//	/players/:id/shots/likes<__NSMallocBlock__: 0x7fb5b25a6790>
+		subgraph cluster_API_PLAYERS_ID_SHOTS_LIKES
+		{
+			color = grey;
+			style = stroke;
+			label = "GET /players/:id/shots/likes\n";
+
+			"API_PLAYERS_ID_SHOTS_LIKES"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> API_PLAYERS_ID_SHOTS_LIKES| <req> req| <resp> resp| <id> :id";
+			];
+
+			"API_PLAYERS_ID_SHOTS_LIKES":req -> "REQ_PLAYERS_ID_SHOTS_LIKES":name
+			[
+				color = grey20
+				fontcolor = grey20
+			];
+			"REQ_PLAYERS_ID_SHOTS_LIKES"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> 请求包体 Request| <page> page INT| <per_page> per_page INT";
+			];
+
+			"API_PLAYERS_ID_SHOTS_LIKES":resp -> "RESP_PLAYERS_ID_SHOTS_LIKES":name
+			[
+				color = grey20
+				fontcolor = grey20
+			];
+			"RESP_PLAYERS_ID_SHOTS_LIKES"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> 回应包体 Response| <page> page INT| <pages> pages INT| <per_page> per_page INT| <shots> shots \[SHOT*\]| <total> total INT";
+			];
+
+		};
+
+
+		"RESP_PLAYERS_ID_SHOTS_LIKES":shots -> "SHOT":name
+		[
+			color = "grey25";
+			fontcolor = grey20;
+		];
+
+	//	/shots/:id<__NSMallocBlock__: 0x7fb5b25a7eb0>
+		subgraph cluster_API_SHOTS_ID
+		{
+			color = grey;
+			style = stroke;
+			label = "GET /shots/:id\n";
+
+			"API_SHOTS_ID"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> API_SHOTS_ID| <resp> resp| <id> :id";
+			];
+
+			"REQ_SHOTS_ID"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> 请求包体 Request| <empty> 空";
+			];
+			"API_SHOTS_ID":resp -> "SHOT":name
+			[
+				color = grey20
+				fontcolor = grey20
+			];
+			"RESP_SHOTS_ID"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> 回应包体 Response| <RESP_SHOTS_ID> RESP_SHOTS_ID (SHOT*)";
+			];
+
+		};
+
+		"RESP_SHOTS_ID":RESP_SHOTS_ID -> "SHOT":name
+		[
+			color = "grey25";
+			fontcolor = grey20;
+		];
+
+	//	/shots/:id/comments<__NSMallocBlock__: 0x7fb5b25a9620>
+		subgraph cluster_API_SHOTS_ID_COMMENTS
+		{
+			color = grey;
+			style = stroke;
+			label = "GET /shots/:id/comments\n";
+
+			"API_SHOTS_ID_COMMENTS"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> API_SHOTS_ID_COMMENTS| <req> req| <resp> resp| <id> :id";
+			];
+
+			"API_SHOTS_ID_COMMENTS":req -> "REQ_SHOTS_ID_COMMENTS":name
+			[
+				color = grey20
+				fontcolor = grey20
+			];
+			"REQ_SHOTS_ID_COMMENTS"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> 请求包体 Request| <page> page INT| <per_page> per_page INT";
+			];
+
+			"API_SHOTS_ID_COMMENTS":resp -> "RESP_SHOTS_ID_COMMENTS":name
+			[
+				color = grey20
+				fontcolor = grey20
+			];
+			"RESP_SHOTS_ID_COMMENTS"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> 回应包体 Response| <comments> comments \[COMMENT*\]| <page> page INT| <pages> pages INT| <per_page> per_page INT| <total> total INT";
+			];
+
+		};
+
+
+		"RESP_SHOTS_ID_COMMENTS":comments -> "COMMENT":name
+		[
+			color = "grey25";
+			fontcolor = grey20;
+		];
+
+	//	/shots/:id/rebounds<__NSMallocBlock__: 0x7fb5b25ab2d0>
+		subgraph cluster_API_SHOTS_ID_REBOUNDS
+		{
+			color = grey;
+			style = stroke;
+			label = "GET /shots/:id/rebounds\n";
+
+			"API_SHOTS_ID_REBOUNDS"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> API_SHOTS_ID_REBOUNDS| <resp> resp| <id> :id";
+			];
+
+			"REQ_SHOTS_ID_REBOUNDS"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> 请求包体 Request| <empty> 空";
+			];
+			"API_SHOTS_ID_REBOUNDS":resp -> "RESP_SHOTS_ID_REBOUNDS":name
+			[
+				color = grey20
+				fontcolor = grey20
+			];
+			"RESP_SHOTS_ID_REBOUNDS"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> 回应包体 Response| <page> page INT| <pages> pages INT| <per_page> per_page INT| <shots> shots \[SHOT*\]| <total> total INT";
+			];
+
+		};
+
+		"RESP_SHOTS_ID_REBOUNDS":shots -> "SHOT":name
+		[
+			color = "grey25";
+			fontcolor = grey20;
+		];
+
+	//	/shots/:list<__NSMallocBlock__: 0x7fb5b25ac100>
+		subgraph cluster_API_SHOTS_LIST
+		{
+			color = grey;
+			style = stroke;
+			label = "GET /shots/:list\n";
+
+			"API_SHOTS_LIST"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> API_SHOTS_LIST| <req> req| <resp> resp| <list> :list";
+			];
+
+			"API_SHOTS_LIST":req -> "REQ_SHOTS_LIST":name
+			[
+				color = grey20
+				fontcolor = grey20
+			];
+			"REQ_SHOTS_LIST"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> 请求包体 Request| <page> page INT| <per_page> per_page INT";
+			];
+
+			"API_SHOTS_LIST":resp -> "RESP_SHOTS_LIST":name
+			[
+				color = grey20
+				fontcolor = grey20
+			];
+			"RESP_SHOTS_LIST"
+			[
+				color = blue;
+				style = stroke;
+				shape = record;
+				label = "<name> 回应包体 Response| <page> page INT| <pages> pages INT| <per_page> per_page INT| <shots> shots \[SHOT*\]| <total> total INT";
+			];
+
+		};
+
+
+		"RESP_SHOTS_LIST":shots -> "SHOT":name
+		[
+			color = "grey25";
+			fontcolor = grey20;
+		];
+
+	}
+
+}

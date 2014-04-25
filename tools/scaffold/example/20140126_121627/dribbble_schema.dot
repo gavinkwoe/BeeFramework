@@ -1,0 +1,80 @@
+digraph Protocol
+{
+	graph
+	[
+		rankdir = LR;
+		label = "(null)";
+		ratio = "auto";
+		splines = curved;
+	];
+
+	node
+	[
+		fontname = melon;
+		fontsize = 14;
+		shape = box;
+	];
+
+	subgraph cluster_enums
+	{
+		label = "";
+		style = stroke;
+		color = white;
+
+	//	@enum LIST
+		"LIST"
+		[
+			color = orange;
+			style = stroke;
+			shape = record;
+			label = "<name> 枚举 LIST| <EVERYONE> EVERYONE = \"everyone\"| <POPULAR> POPULAR = \"popular\"| <DEBUTS> DEBUTS = \"debuts\"";
+		];
+
+	};
+
+	subgraph cluster_models
+	{
+		label = "";
+		style = stroke;
+		color = white;
+
+	//	@interface COMMENT
+		"COMMENT"
+		[
+			color = red;
+			style = stroke;
+			shape = record;
+			label = "<name> 数据表 COMMENT | <body> body TEXT| <created_at> created_at TEXT| <likes_count> likes_count INT| <player> player (PLAYER*)| <id> id INT";
+		];
+		"COMMENT":player -> "PLAYER":name
+		[
+			color = "grey25";
+			fontcolor = grey20;
+		];
+
+	//	@interface PLAYER
+		"PLAYER"
+		[
+			color = red;
+			style = stroke;
+			shape = record;
+			label = "<name> 数据表 PLAYER | <avatar_url> avatar_url TEXT| <comments_count> comments_count INT| <comments_received_count> comments_received_count INT| <created_at> created_at TEXT| <drafted_by_player_id> drafted_by_player_id *| <draftees_count> draftees_count INT| <followers_count> followers_count INT| <following_count> following_count INT| <likes_count> likes_count INT| <likes_received_count> likes_received_count INT| <location> location TEXT| <name> name TEXT| <rebounds_count> rebounds_count INT| <rebounds_received_count> rebounds_received_count INT| <shots_count> shots_count INT| <twitter_screen_name> twitter_screen_name TEXT| <url> url TEXT| <username> username TEXT| <id> id INT";
+		];
+
+	//	@interface SHOT
+		"SHOT"
+		[
+			color = red;
+			style = stroke;
+			shape = record;
+			label = "<name> 数据表 SHOT | <comments_count> comments_count INT| <created_at> created_at TEXT| <height> height INT| <image_teaser_url> image_teaser_url TEXT| <image_url> image_url TEXT| <likes_count> likes_count INT| <player> player (PLAYER*)| <rebound_source_id> rebound_source_id INT| <rebounds_count> rebounds_count INT| <short_url> short_url TEXT| <title> title TEXT| <url> url TEXT| <views_count> views_count INT| <width> width INT| <id> id INT";
+		];
+		"SHOT":player -> "PLAYER":name
+		[
+			color = "grey25";
+			fontcolor = grey20;
+		];
+
+	}
+
+}

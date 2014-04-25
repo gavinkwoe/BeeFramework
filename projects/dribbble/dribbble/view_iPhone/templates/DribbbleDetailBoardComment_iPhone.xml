@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<template namespace="DribbbleDetailBoardComment_iPhone" version="1">
+	
+	<linear orientation="h" class="wrapper">
+		<button id="mask"/>
+		<image id="avatar" class="avatar"/>
+		<linear orientation="v" class="right-wrapper">
+			<label id="name" class="name"/>
+			<label id="text" class="text"></label>
+			<!-- <label id="time" class="time"></label> -->
+		</linear>
+	</linear>
+	
+    <style type="text/css">
+		
+		.wrapper {
+			width: 100%;
+			height: auto;
+			margin-top: 2px;
+			margin-bottom: 3px;
+		}
+
+		.avatar {
+			width: 44px;
+			height: 44px;
+			padding: 2px;
+			margin-left: 4px;
+			background-color: #999;
+		/*	border-radius: 6px; */
+			border-width: 2px;
+			border-color: white;
+			image-mode: fill;
+			image-loading: white;
+		}
+
+		.right-wrapper {
+			width: 256px;
+			height: auto;
+			margin-left: 4px;
+		}
+
+		.name {
+			width: 100%;
+			height: auto;
+			font-size: 13px;
+			font-weight: lighter;
+			text-align: left;
+			color: gray;
+			margin-top: 0px;
+		}
+
+		.text {
+			width: 100%;
+			height: auto;
+			font-size: 13px;
+			font-weight: lighter;
+			text-align: left;
+			color: white;
+			margin-top: 1px;
+			line-break: word-wrap;
+			line-num: 999;
+		}
+		
+		.time {
+			width: 100%;
+			height: auto;
+			font-size: 13px;
+			font-weight: lighter;
+			text-align: left;
+			color: #999;
+			margin-top: 4px;
+			margin-bottom: 4px;
+		}
+
+		#mask {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+		}
+
+	</style>
+	
+</template>

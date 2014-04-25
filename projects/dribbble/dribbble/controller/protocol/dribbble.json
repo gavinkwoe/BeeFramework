@@ -1,0 +1,281 @@
+//  
+//	 ______    ______    ______
+//	/\  __ \  /\  ___\  /\  ___\
+//	\ \  __<  \ \  __\_ \ \  __\_
+//	 \ \_____\ \ \_____\ \ \_____\
+//	  \/_____/  \/_____/  \/_____/
+//
+//
+//	Copyright (c) 2013-2014, {Bee} open source community
+//	http://www.bee-framework.com
+//
+//
+//	Permission is hereby granted, free of charge, to any person obtaining a
+//	copy of this software and associated documentation files (the "Software"),
+//	to deal in the Software without restriction, including without limitation
+//	the rights to use, copy, modify, merge, publish, distribute, sublicense,
+//	and/or sell copies of the Software, and to permit persons to whom the
+//	Software is furnished to do so, subject to the following conditions:
+//
+//	The above copyright notice and this permission notice shall be included in
+//	all copies or substantial portions of the Software.
+//
+//	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+//	FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+//	IN THE SOFTWARE.
+//
+
+{
+    "title"  : "Dribbble",
+    "author" : "http://dribbble.com/api",
+
+    "server" :
+    {
+        "development"	: "api.dribbble.com",
+        "test"			: "api.dribbble.com",
+        "production"	: "api.dribbble.com"
+    },
+
+	"enum" :
+	{
+		"LIST" :
+		{
+			"DEBUTS"	: "debuts",
+			"EVERYONE"	: "everyone",
+			"POPULAR"	: "popular"
+		}
+	},
+
+    "model" :
+    {
+		"PLAYER" :
+		{
+			"! id"						: 1,
+			"name"						: "Dan Cederholm",
+			"username"					: "simplebits",
+			"url"						: "http://dribbble.com/simplebits",
+			"avatar_url"				: "http://dribbble.com/system/users/1/avatars/original/dancederholm-peek.jpg",
+			"location"					: "Salem, MA",
+			"twitter_screen_name"		: "simplebits",
+			"drafted_by_player_id"		: null,
+			"shots_count"				: 147,
+			"draftees_count"			: 103,
+			"followers_count"			: 2027,
+			"following_count"			: 354,
+			"comments_count"			: 2001,
+			"comments_received_count"	: 1509,
+			"likes_count"				: 7289,
+			"likes_received_count"		: 2624,
+			"rebounds_count"			: 15,
+			"rebounds_received_count"	: 279,
+			"created_at"				: "2009/07/07 21:51:22 -0400"
+		},
+
+		"SHOT" :
+		{
+			"! id"					: 21603,
+			"title"					: "Moon",
+			"url"					: "http://dribbble.com/shots/21603-Moon",
+			"short_url"				: "http://drbl.in/21603",
+			"image_url"				: "http://dribbble.com/system/users/1/screenshots/21603/shot_1274474082.png",
+			"image_teaser_url"		: "http://dribbble.com/system/users/1/screenshots/21603/shot_1274474082_teaser.png",
+			"width"					: 400,
+			"height"				: 300,
+			"views_count"			: 1693,
+			"likes_count"			: 15,
+			"comments_count"		: 4,
+			"rebounds_count"		: 0,
+			"rebound_source_id"		: 21595,
+			"created_at"			: "2010/05/21 16:34:42 -0400",
+			"player"				: "{PLAYER}"
+		},
+
+		"COMMENT" :
+		{
+			"! id"					: 54065,
+      		"body"					: "My response to Mr. Henry's Friday 20 minute \"moon\" design challenge.\n\nFun. Random. Rough. No clue.",
+      		"likes_count"			: 0,
+      		"created_at"			: "2010/05/21 16:36:22 -0400",
+      		"player"				: "{PLAYER}"
+		}
+	},
+	
+    "controller" :
+    {
+    	// Returns the specified list of shots where :list has one of the following values: debuts, everyone, popular
+		"GET /shots/:list" :
+		{
+			"request"	:
+			{
+				"page"		: 1,
+				"per_page"	: 10
+			},
+			"response"	:
+			{
+				"page"		: 1,
+				"pages"		: 50,
+				"per_page"	: 15,
+				"total"		: 750,
+				"shots"		: ["{SHOT}"]
+			}
+		},
+
+    	// Returns details for a shot specified by :id.
+		"GET /shots/:id" :
+		{
+			"request" :
+			{
+			},
+			"response" : "{SHOT}"
+		},
+
+    	// Returns the set of rebounds (shots in response to a shot) for the shot specified by :id.
+		"GET /shots/:id/rebounds" :
+		{
+			"request"	:
+			{
+			},
+			"response"	:
+			{
+				"page"		: 1,
+				"pages"		: 50,
+				"per_page"	: 15,
+				"total"		: 750,
+				"shots"		: ["{SHOT}"]
+			}
+		},
+
+    	// Returns the set of comments for the shot specified by :id.
+		"GET /shots/:id/comments" :
+		{
+			"request"	:
+			{
+				"page"		: 1,
+				"per_page"	: 10
+			},
+			"response"	:
+			{
+				"page"		: 1,
+				"pages"		: 50,
+				"per_page"	: 15,
+				"total"		: 750,
+				"comments"	: ["{COMMENT}"]
+			}
+		},
+
+    	// Returns the most recent shots for the player specified by :id.
+		"GET /players/:id/shots" :
+		{
+			"request"	:
+			{
+				"page"		: 1,
+				"per_page"	: 10
+			},
+			"response"	:
+			{
+				"page"		: 1,
+				"pages"		: 50,
+				"per_page"	: 15,
+				"total"		: 750,
+				"shots"		: ["{SHOT}"]
+			}
+		},
+
+    	// Returns the most recent shots published by those the player specified by :id is following.
+		"GET /players/:id/shots/following" :
+		{
+			"request"	:
+			{
+				"page"		: 1,
+				"per_page"	: 10
+			},
+			"response"	:
+			{
+				"page"		: 1,
+				"pages"		: 50,
+				"per_page"	: 15,
+				"total"		: 750,
+				"shots"		: ["{SHOT}"]
+			}
+		},
+
+    	// Returns shots liked by the player specified by :id.
+		"GET /players/:id/shots/likes" :
+		{
+			"request"	:
+			{
+				"page"		: 1,
+				"per_page"	: 10
+			},
+			"response"	:
+			{
+				"page"		: 1,
+				"pages"		: 50,
+				"per_page"	: 15,
+				"total"		: 750,
+				"shots"		: ["{SHOT}"]
+			}
+		},
+
+    	// Returns profile details for a player specified by :id.
+		"GET /players/:id" :
+		{
+			"request"	:
+			{
+			},
+			"response"	: "{PLAYER}"
+		},
+
+    	// Returns the list of followers for a player specified by :id.
+		"GET /players/:id/followers" :
+		{
+			"request"	:
+			{
+			},
+			"response"	:
+			{
+				"page"		: 1,
+				"pages"		: 50,
+				"per_page"	: 15,
+				"total"		: 750,
+				"players"	: ["{PLAYER}"]
+			}
+		},
+
+    	// Returns the list of players followed by the player specified by :id.
+		"GET /players/:id/following" :
+		{
+			"request"	:
+			{
+			},
+			"response"	:
+			{
+				"page"		: 1,
+				"pages"		: 50,
+				"per_page"	: 15,
+				"total"		: 750,
+				"players"	: ["{PLAYER}"]
+			}
+		},
+
+    	// Returns the list of players drafted by the player specified by :id.
+		"GET /players/:id/draftees" :
+		{
+			"request"	:
+			{
+			},
+			"response"	:
+			{
+				"page"		: 1,
+				"pages"		: 50,
+				"per_page"	: 15,
+				"total"		: 750,
+				"players"	: ["{PLAYER}"]
+			}
+		}
+	}
+}

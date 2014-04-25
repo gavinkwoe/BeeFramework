@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui namespace="ServiceDebugger_DashMemoryCell">
+
+	<linear orientation="v" class="wrapper">
+		<linear orientation="h" class="line1">
+			<label id="title">Memory</label>
+			<label id="used" class="subtitle">0</label>
+			<label id="free" class="subtitle">0</label>
+			<!-- <button id="more">MORE ></button> -->
+		</linear>
+		<linear orientation="h" class="line2">
+			<plots id="plots"/>
+		</linear>
+		<linear orientation="h" class="line3">
+			<button id="warning" class="button large">WARN(OFF)</button>
+			<button id="alloc-50m" class="button small">+50M</button>
+			<button id="free-50m" class="button small">-50M</button>
+			<button id="alloc-all" class="button small">+ALL</button>
+			<button id="free-all" class="button small">-ALL</button>
+		</linear>
+		<view class="bottom-line"/>
+	</linear>
+	
+	<style type="text/css">
+		
+		.wrapper {
+			width: 100%;
+			height: auto;
+		}
+		
+		.line1 {
+			width: 100%;
+			height: 30px;
+		}
+		
+		#title {
+			margin-left: 10px;
+			width: 60px;
+			height: 100%;
+			color: orange;
+			text-align: left;
+			font-size: 12px;
+			font-weight: bold;
+		}
+
+		.subtitle {
+			margin-left: 10px;
+			width: auto;
+			height: 100%;
+			color: gray;
+			text-align: left;
+			font-size: 12px;
+			font-weight: bold;
+		}
+		
+		#more {
+			float: right;
+			width: 70px;
+			height: 100%;
+			color: orange;
+			text-align: center;
+			font-size: 12px;
+			font-weight: bold;
+		}
+
+		.line2 {
+			width: 100%;
+			height: 60px;
+		}
+		
+		.plots {
+			width: 100%;
+			height: 100%;
+		}
+		
+		.line3 {
+			margin-top: 2px;
+			width: 98%;
+			height: 30px;
+			float: center;
+		}
+
+		.button {
+			height: 100%;
+			color: #aaa;
+			font-size: 10px;
+			border-color: gray 0.3;
+			border-width: 0.5px;
+			background-color: gray 0.2;
+		}
+		
+		.small {
+			width: 18%;
+			padding-left: 2px;
+			padding-right: 2px;
+		}
+		
+		.large {
+			width: 32%;
+			padding-left: 2px;
+			padding-right: 2px;
+		}
+		
+		.bottom-line {
+			margin-top: 5px;
+			width: 100%;
+			height: 1px;
+			background-color: #333 0.8;
+		}
+		
+	</style>
+	
+</ui>
