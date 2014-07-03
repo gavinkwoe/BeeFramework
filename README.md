@@ -28,7 +28,7 @@ A demo app for dribbble.com, as fast as native, as flexible as web. See `/projec
 
 Semi-hybrid offers you a new approach to UI development using XML/CSS, you can reuse these templates in any project based on BeeFramework. See `/projects/dribbble` demo for more information.
 
-![1](http://www.0xbee.com/img/screenshots/bee_template_code.png)
+![1](http://www.0xbee.com/img/screenshots/bee_template.png)
 
 ## Services
 
