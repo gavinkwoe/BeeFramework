@@ -13,28 +13,28 @@ BeeFramework is a semi-hybrid framework that allows you to create mobile apps us
 
 A demo app for dribbble.com, as fast as native, as flexible as web. See `/projects/dribbble` demo for more information.
 
-![1](http://blog.whatsbug.com/wp-content/uploads/2014/01/dribbble-1.png)
-![2](http://blog.whatsbug.com/wp-content/uploads/2014/01/dribbble-2.png)
+![1](http://www.0xbee.com/img/screenshots/dribbble-1.png)
+![2](http://www.0xbee.com/img/screenshots/dribbble-2.png)
 
 ## Demo app - Wireframe mode
 
-![1](http://blog.whatsbug.com/wp-content/uploads/2014/01/dribbble-3.png)
+![1](http://www.0xbee.com/img/screenshots/dribbble-3.png)
 
 ## Demo app - Inspector mode
 
-![1](http://blog.whatsbug.com/wp-content/uploads/2014/01/dribbble-4.png)
+![1](http://www.0xbee.com/img/screenshots/dribbble-4.png)
 
 ## Semi-Hybrid UI
 
 Semi-hybrid offers you a new approach to UI development using XML/CSS, you can reuse these templates in any project based on BeeFramework. See `/projects/dribbble` demo for more information.
 
-![1](http://blog.whatsbug.com/wp-content/uploads/2014/01/bee_template_code.png)
+![1](http://www.0xbee.com/img/screenshots/bee_template_code.png)
 
 ## Services
 
 Services extend and expand the functionality of your app automatically, drag and drop the services folder into your project. See `/services` for more information.
 
-![1](http://blog.whatsbug.com/wp-content/uploads/2014/01/bee_services.png)
+![1](http://www.0xbee.com/img/screenshots/bee_services.png)
 
 For example:
 
@@ -61,8 +61,8 @@ bee.services.alipay.PAY();	// or .ON();
 
 Scaffold helps you to generate Model/Controller code and documents, also provide the local test environment. See `/tools/scaffold` or `/projects/scaffold` for more information.
 
-![1](http://blog.whatsbug.com/wp-content/uploads/2014/01/bee_scaffold_1.png)
-![2](http://blog.whatsbug.com/wp-content/uploads/2014/01/bee_scaffold_2.png)
+![1](http://www.0xbee.com/img/screenshots/bee_scaffold_1.png)
+![2](http://www.0xbee.com/img/screenshots/bee_scaffold_2.png)
 
 For example:
 
@@ -173,9 +173,7 @@ For example:
 
 ## License
 
-[![Geek-Zoo](http://geek-zoo.com/images/logo-01.png)](http://www.geek-zoo.com)
-
-Copyright (c) 2014-2015, [Geek Zoo Studio](http://www.geek-zoo.com)
+[![Geek-Zoo](http://geek-zoo.com/img/images/logo_2.png)](http://www.geek-zoo.com)
 
 	 ______    ______    ______
 	/\  __ \  /\  ___\  /\  ___\
