@@ -367,7 +367,7 @@ DEF_SIGNAL( LOAD_CACHE )
 		return;
 	}
 
-	if ( NO == [newURL hasPrefix:@"http://"] )
+	if ( NO == [newURL hasPrefix:@"http://"] && NO == [newURL hasPrefix:@"https://"])
 	{
 		newURL = [NSString stringWithFormat:@"http://%@", newURL];
 	}
