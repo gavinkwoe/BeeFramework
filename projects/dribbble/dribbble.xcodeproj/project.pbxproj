@@ -440,13 +440,13 @@
 		E90449FD19A0BC7000A71ED8 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = E90448A819A0BC7000A71ED8 /* unzip.c */; };
 		E90449FE19A0BC7000A71ED8 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = E90448AA19A0BC7000A71ED8 /* zip.c */; };
 		E90449FF19A0BC7000A71ED8 /* ZipArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = E90448AD19A0BC7000A71ED8 /* ZipArchive.mm */; };
-		E9044A0D19A0C26900A71ED8 /* bee.services.liveload.m in Sources */ = {isa = PBXBuildFile; fileRef = E9044A0219A0C26900A71ED8 /* bee.services.liveload.m */; };
-		E9044A0E19A0C26900A71ED8 /* bee.services.liveload.md in Resources */ = {isa = PBXBuildFile; fileRef = E9044A0319A0C26900A71ED8 /* bee.services.liveload.md */; };
-		E9044A0F19A0C26900A71ED8 /* ServiceLiveload.m in Sources */ = {isa = PBXBuildFile; fileRef = E9044A0619A0C26900A71ED8 /* ServiceLiveload.m */; };
-		E9044A1019A0C26900A71ED8 /* ServiceLiveload_Category.m in Sources */ = {isa = PBXBuildFile; fileRef = E9044A0819A0C26900A71ED8 /* ServiceLiveload_Category.m */; };
-		E9044A1119A0C26900A71ED8 /* ServiceLiveload_Hook.m in Sources */ = {isa = PBXBuildFile; fileRef = E9044A0A19A0C26900A71ED8 /* ServiceLiveload_Hook.m */; };
-		E9044A1219A0C26900A71ED8 /* ServiceLiveload_Watcher.m in Sources */ = {isa = PBXBuildFile; fileRef = E9044A0C19A0C26900A71ED8 /* ServiceLiveload_Watcher.m */; };
-		E9044A1519A0D62B00A71ED8 /* ServiceLiveload_Border.m in Sources */ = {isa = PBXBuildFile; fileRef = E9044A1419A0D62B00A71ED8 /* ServiceLiveload_Border.m */; };
+		E965346E19A2121C00B9F6B6 /* bee.services.liveload.m in Sources */ = {isa = PBXBuildFile; fileRef = E965346119A2121C00B9F6B6 /* bee.services.liveload.m */; };
+		E965346F19A2121C00B9F6B6 /* bee.services.liveload.md in Sources */ = {isa = PBXBuildFile; fileRef = E965346219A2121C00B9F6B6 /* bee.services.liveload.md */; };
+		E965347019A2121C00B9F6B6 /* ServiceLiveload.m in Sources */ = {isa = PBXBuildFile; fileRef = E965346519A2121C00B9F6B6 /* ServiceLiveload.m */; };
+		E965347119A2121C00B9F6B6 /* ServiceLiveload_Border.m in Sources */ = {isa = PBXBuildFile; fileRef = E965346719A2121C00B9F6B6 /* ServiceLiveload_Border.m */; };
+		E965347219A2121C00B9F6B6 /* ServiceLiveload_Category.m in Sources */ = {isa = PBXBuildFile; fileRef = E965346919A2121C00B9F6B6 /* ServiceLiveload_Category.m */; };
+		E965347319A2121C00B9F6B6 /* ServiceLiveload_Hook.m in Sources */ = {isa = PBXBuildFile; fileRef = E965346B19A2121C00B9F6B6 /* ServiceLiveload_Hook.m */; };
+		E965347419A2121C00B9F6B6 /* ServiceLiveload_Watcher.m in Sources */ = {isa = PBXBuildFile; fileRef = E965346D19A2121C00B9F6B6 /* ServiceLiveload_Watcher.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1262,19 +1262,19 @@
 		E90448AB19A0BC7000A71ED8 /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
 		E90448AC19A0BC7000A71ED8 /* ZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipArchive.h; sourceTree = "<group>"; };
 		E90448AD19A0BC7000A71ED8 /* ZipArchive.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZipArchive.mm; sourceTree = "<group>"; };
-		E9044A0119A0C26900A71ED8 /* bee.services.liveload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bee.services.liveload.h; sourceTree = "<group>"; };
-		E9044A0219A0C26900A71ED8 /* bee.services.liveload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = bee.services.liveload.m; sourceTree = "<group>"; };
-		E9044A0319A0C26900A71ED8 /* bee.services.liveload.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bee.services.liveload.md; sourceTree = "<group>"; };
-		E9044A0519A0C26900A71ED8 /* ServiceLiveload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceLiveload.h; sourceTree = "<group>"; };
-		E9044A0619A0C26900A71ED8 /* ServiceLiveload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceLiveload.m; sourceTree = "<group>"; };
-		E9044A0719A0C26900A71ED8 /* ServiceLiveload_Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceLiveload_Category.h; sourceTree = "<group>"; };
-		E9044A0819A0C26900A71ED8 /* ServiceLiveload_Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceLiveload_Category.m; sourceTree = "<group>"; };
-		E9044A0919A0C26900A71ED8 /* ServiceLiveload_Hook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceLiveload_Hook.h; sourceTree = "<group>"; };
-		E9044A0A19A0C26900A71ED8 /* ServiceLiveload_Hook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceLiveload_Hook.m; sourceTree = "<group>"; };
-		E9044A0B19A0C26900A71ED8 /* ServiceLiveload_Watcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceLiveload_Watcher.h; sourceTree = "<group>"; };
-		E9044A0C19A0C26900A71ED8 /* ServiceLiveload_Watcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceLiveload_Watcher.m; sourceTree = "<group>"; };
-		E9044A1319A0D62B00A71ED8 /* ServiceLiveload_Border.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceLiveload_Border.h; sourceTree = "<group>"; };
-		E9044A1419A0D62B00A71ED8 /* ServiceLiveload_Border.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceLiveload_Border.m; sourceTree = "<group>"; };
+		E965346019A2121C00B9F6B6 /* bee.services.liveload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bee.services.liveload.h; sourceTree = "<group>"; };
+		E965346119A2121C00B9F6B6 /* bee.services.liveload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = bee.services.liveload.m; sourceTree = "<group>"; };
+		E965346219A2121C00B9F6B6 /* bee.services.liveload.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = bee.services.liveload.md; sourceTree = "<group>"; };
+		E965346419A2121C00B9F6B6 /* ServiceLiveload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceLiveload.h; sourceTree = "<group>"; };
+		E965346519A2121C00B9F6B6 /* ServiceLiveload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceLiveload.m; sourceTree = "<group>"; };
+		E965346619A2121C00B9F6B6 /* ServiceLiveload_Border.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceLiveload_Border.h; sourceTree = "<group>"; };
+		E965346719A2121C00B9F6B6 /* ServiceLiveload_Border.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceLiveload_Border.m; sourceTree = "<group>"; };
+		E965346819A2121C00B9F6B6 /* ServiceLiveload_Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceLiveload_Category.h; sourceTree = "<group>"; };
+		E965346919A2121C00B9F6B6 /* ServiceLiveload_Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceLiveload_Category.m; sourceTree = "<group>"; };
+		E965346A19A2121C00B9F6B6 /* ServiceLiveload_Hook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceLiveload_Hook.h; sourceTree = "<group>"; };
+		E965346B19A2121C00B9F6B6 /* ServiceLiveload_Hook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceLiveload_Hook.m; sourceTree = "<group>"; };
+		E965346C19A2121C00B9F6B6 /* ServiceLiveload_Watcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceLiveload_Watcher.h; sourceTree = "<group>"; };
+		E965346D19A2121C00B9F6B6 /* ServiceLiveload_Watcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceLiveload_Watcher.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1310,7 +1310,7 @@
 		CB26F272189BD89E008A6C36 /* services */ = {
 			isa = PBXGroup;
 			children = (
-				E9044A0019A0C26900A71ED8 /* bee.services.liveload */,
+				E965345F19A2121C00B9F6B6 /* bee.services.liveload */,
 				CB26F492189BD929008A6C36 /* bee.services.inspector */,
 			);
 			name = services;
@@ -2932,31 +2932,30 @@
 			path = minizip;
 			sourceTree = "<group>";
 		};
-		E9044A0019A0C26900A71ED8 /* bee.services.liveload */ = {
+		E965345F19A2121C00B9F6B6 /* bee.services.liveload */ = {
 			isa = PBXGroup;
 			children = (
-				E9044A0119A0C26900A71ED8 /* bee.services.liveload.h */,
-				E9044A0219A0C26900A71ED8 /* bee.services.liveload.m */,
-				E9044A0319A0C26900A71ED8 /* bee.services.liveload.md */,
-				E9044A0419A0C26900A71ED8 /* source */,
+				E965346019A2121C00B9F6B6 /* bee.services.liveload.h */,
+				E965346119A2121C00B9F6B6 /* bee.services.liveload.m */,
+				E965346219A2121C00B9F6B6 /* bee.services.liveload.md */,
+				E965346319A2121C00B9F6B6 /* source */,
 			);
-			name = bee.services.liveload;
-			path = ../../../../GeekZoo/liujialing/client/iOS/liujialing/services/bee.services.liveload;
+			path = bee.services.liveload;
 			sourceTree = "<group>";
 		};
-		E9044A0419A0C26900A71ED8 /* source */ = {
+		E965346319A2121C00B9F6B6 /* source */ = {
 			isa = PBXGroup;
 			children = (
-				E9044A0519A0C26900A71ED8 /* ServiceLiveload.h */,
-				E9044A0619A0C26900A71ED8 /* ServiceLiveload.m */,
-				E9044A1319A0D62B00A71ED8 /* ServiceLiveload_Border.h */,
-				E9044A1419A0D62B00A71ED8 /* ServiceLiveload_Border.m */,
-				E9044A0719A0C26900A71ED8 /* ServiceLiveload_Category.h */,
-				E9044A0819A0C26900A71ED8 /* ServiceLiveload_Category.m */,
-				E9044A0919A0C26900A71ED8 /* ServiceLiveload_Hook.h */,
-				E9044A0A19A0C26900A71ED8 /* ServiceLiveload_Hook.m */,
-				E9044A0B19A0C26900A71ED8 /* ServiceLiveload_Watcher.h */,
-				E9044A0C19A0C26900A71ED8 /* ServiceLiveload_Watcher.m */,
+				E965346419A2121C00B9F6B6 /* ServiceLiveload.h */,
+				E965346519A2121C00B9F6B6 /* ServiceLiveload.m */,
+				E965346619A2121C00B9F6B6 /* ServiceLiveload_Border.h */,
+				E965346719A2121C00B9F6B6 /* ServiceLiveload_Border.m */,
+				E965346819A2121C00B9F6B6 /* ServiceLiveload_Category.h */,
+				E965346919A2121C00B9F6B6 /* ServiceLiveload_Category.m */,
+				E965346A19A2121C00B9F6B6 /* ServiceLiveload_Hook.h */,
+				E965346B19A2121C00B9F6B6 /* ServiceLiveload_Hook.m */,
+				E965346C19A2121C00B9F6B6 /* ServiceLiveload_Watcher.h */,
+				E965346D19A2121C00B9F6B6 /* ServiceLiveload_Watcher.m */,
 			);
 			path = source;
 			sourceTree = "<group>";
@@ -3030,7 +3029,6 @@
 				CBE8E4A817BA95A100A78C4C /* Default-568h@2x.png in Resources */,
 				CB26EE72189BD61D008A6C36 /* navigation-menu@2x.png in Resources */,
 				CBE8E4AA17BA95A100A78C4C /* Icon.png in Resources */,
-				E9044A0E19A0C26900A71ED8 /* bee.services.liveload.md in Resources */,
 				CBCD0C6E1827B4BD00490BF8 /* page-last@2x.png in Resources */,
 				CB92F138188A3C04007C8D49 /* DribbblePreviewBoard_iPhone.xml in Resources */,
 				CBE8E4AC17BA95A100A78C4C /* Icon@2x.png in Resources */,
@@ -3109,7 +3107,6 @@
 				E904493C19A0BC7000A71ED8 /* BeeUISignal+BeeUICell.m in Sources */,
 				E904495419A0BC7000A71ED8 /* UIViewController+BeeUILayout.m in Sources */,
 				E904498919A0BC7000A71ED8 /* Bee_System.mm in Sources */,
-				E9044A0F19A0C26900A71ED8 /* ServiceLiveload.m in Sources */,
 				E904491019A0BC7000A71ED8 /* Bee_UIImageView.m in Sources */,
 				E90448EA19A0BC7000A71ED8 /* UIView+BeeUIStyle.m in Sources */,
 				E90449D519A0BC7000A71ED8 /* ProcessingRequest.m in Sources */,
@@ -3126,14 +3123,14 @@
 				CB92F149188A4437007C8D49 /* DribbbleDetailBoardPhoto_iPhone.m in Sources */,
 				E90449F519A0BC7000A71ED8 /* CXMLElement_ElementTreeExtensions.m in Sources */,
 				E904497D19A0BC7000A71ED8 /* UIViewController+BeeUITemplate.m in Sources */,
+				E965346F19A2121C00B9F6B6 /* bee.services.liveload.md in Sources */,
 				E904493E19A0BC7000A71ED8 /* BeeUIZoomImageView+UIDataBinding.m in Sources */,
 				E904498419A0BC7000A71ED8 /* UILabel+XMLParser.m in Sources */,
-				E9044A1119A0C26900A71ED8 /* ServiceLiveload_Hook.m in Sources */,
 				E904498C19A0BC7000A71ED8 /* Bee_Cache.mm in Sources */,
 				E90449CE19A0BC7000A71ED8 /* Bee_HTTPServer2.m in Sources */,
 				E904495219A0BC7000A71ED8 /* UITextView+BeeUILayout.m in Sources */,
 				E90449CA19A0BC7000A71ED8 /* Bee_HTTPProtocol2.m in Sources */,
-				E9044A0D19A0C26900A71ED8 /* bee.services.liveload.m in Sources */,
+				E965346E19A2121C00B9F6B6 /* bee.services.liveload.m in Sources */,
 				E904496E19A0BC7000A71ED8 /* UIView+Transition.m in Sources */,
 				E90449A219A0BC7000A71ED8 /* Bee_Log.mm in Sources */,
 				E904494819A0BC7000A71ED8 /* Bee_UILayoutBuilder_v2.m in Sources */,
@@ -3178,7 +3175,6 @@
 				E904499519A0BC7000A71ED8 /* Bee_ActiveObject.m in Sources */,
 				E90449DB19A0BC7000A71ED8 /* Bee_Resource.mm in Sources */,
 				E90448D019A0BC7000A71ED8 /* BeeUIBoard+Popover.m in Sources */,
-				E9044A1219A0C26900A71ED8 /* ServiceLiveload_Watcher.m in Sources */,
 				E90449DD19A0BC7000A71ED8 /* Bee_Service.m in Sources */,
 				E904492F19A0BC7000A71ED8 /* UIView+Tag.m in Sources */,
 				E904499319A0BC7000A71ED8 /* NSObject+BeeUserDefaults.mm in Sources */,
@@ -3238,6 +3234,7 @@
 				E904492E19A0BC7000A71ED8 /* UIView+SwipeGesture.m in Sources */,
 				E90449D019A0BC7000A71ED8 /* Bee_HTTPServerRouter2.m in Sources */,
 				E904490019A0BC7000A71ED8 /* UITextView+UIDataBinding.m in Sources */,
+				E965347219A2121C00B9F6B6 /* ServiceLiveload_Category.m in Sources */,
 				CBA37BCD17BCB54E00F0D727 /* DribbbleBoard_iPhone.m in Sources */,
 				E904494719A0BC7000A71ED8 /* Bee_UILayoutBuilder_v1.m in Sources */,
 				E904492A19A0BC7000A71ED8 /* UIView+Metrics.m in Sources */,
@@ -3252,6 +3249,7 @@
 				E90448D819A0BC7000A71ED8 /* UIViewController+Title.m in Sources */,
 				E904496419A0BC7000A71ED8 /* BeeUIQuery+Miscellaneous.m in Sources */,
 				E904498819A0BC7000A71ED8 /* UIView+XMLParser.m in Sources */,
+				E965347419A2121C00B9F6B6 /* ServiceLiveload_Watcher.m in Sources */,
 				E90449EE19A0BC7000A71ED8 /* CTidy.m in Sources */,
 				E90449D719A0BC7000A71ED8 /* ProcessingRoutes.m in Sources */,
 				E904492119A0BC7000A71ED8 /* Bee_UITextView.m in Sources */,
@@ -3309,10 +3307,10 @@
 				E90449C219A0BC7000A71ED8 /* Bee_HTTPClient.m in Sources */,
 				E90448C019A0BC7000A71ED8 /* Bee_View.mm in Sources */,
 				E904499719A0BC7000A71ED8 /* Bee_ActiveRecord.m in Sources */,
+				E965347019A2121C00B9F6B6 /* ServiceLiveload.m in Sources */,
 				E90449AE19A0BC7000A71ED8 /* NSDate+BeeExtension.mm in Sources */,
 				E904491E19A0BC7000A71ED8 /* Bee_UITabBar.m in Sources */,
 				E90448F419A0BC7000A71ED8 /* Bee_UIAnimationAlpha.m in Sources */,
-				E9044A1019A0C26900A71ED8 /* ServiceLiveload_Category.m in Sources */,
 				E904496F19A0BC7000A71ED8 /* UIViewController+Transition.m in Sources */,
 				E90449E919A0BC7000A71ED8 /* FMDatabaseQueue.m in Sources */,
 				E90448F319A0BC7000A71ED8 /* Bee_UIAnimation.m in Sources */,
@@ -3333,6 +3331,7 @@
 				E904491819A0BC7000A71ED8 /* Bee_UIProgressView.m in Sources */,
 				E904498F19A0BC7000A71ED8 /* Bee_Keychain.mm in Sources */,
 				E904494019A0BC7000A71ED8 /* Bee_UISignal.m in Sources */,
+				E965347119A2121C00B9F6B6 /* ServiceLiveload_Border.m in Sources */,
 				CB762B111815439F00656B25 /* DribbbleBoardCell_iPhone.m in Sources */,
 				E904493019A0BC7000A71ED8 /* UIView+TapGesture.m in Sources */,
 				E90448DC19A0BC7000A71ED8 /* Bee_UIStyle.m in Sources */,
@@ -3407,7 +3406,6 @@
 				E90449AC19A0BC7000A71ED8 /* NSBundle+BeeExtension.m in Sources */,
 				E904493B19A0BC7000A71ED8 /* Bee_UIZoomView.m in Sources */,
 				CB26F4A7189BD929008A6C36 /* ServiceInspector.m in Sources */,
-				E9044A1519A0D62B00A71ED8 /* ServiceLiveload_Border.m in Sources */,
 				E90449E619A0BC7000A71ED8 /* FMDatabase.m in Sources */,
 				E904495B19A0BC7000A71ED8 /* UIView+LayoutParser.m in Sources */,
 				E90448C219A0BC7000A71ED8 /* Bee_UICollection.m in Sources */,
@@ -3419,6 +3417,7 @@
 				CB26F4AB189BD929008A6C36 /* ServiceInspector_Window.m in Sources */,
 				E904499619A0BC7000A71ED8 /* Bee_ActiveProtocol.m in Sources */,
 				E90449E119A0BC7000A71ED8 /* ASIDownloadCache.m in Sources */,
+				E965347319A2121C00B9F6B6 /* ServiceLiveload_Hook.m in Sources */,
 				E904493919A0BC7000A71ED8 /* Bee_UITipsView.m in Sources */,
 				E904499419A0BC7000A71ED8 /* Bee_ActiveBuilder.m in Sources */,
 				E904490219A0BC7000A71ED8 /* NSObject+UIPropertyMapping.m in Sources */,
