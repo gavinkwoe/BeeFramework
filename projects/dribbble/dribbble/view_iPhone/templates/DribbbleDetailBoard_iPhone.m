@@ -50,6 +50,9 @@ AS_SIGNAL( VIEW_URL )
 
 @implementation DribbbleDetailBoard_iPhone
 
+SUPPORT_AUTOMATIC_LAYOUT( YES );
+SUPPORT_RESOURCE_LOADING( YES );
+
 DEF_SIGNAL( VIEW_PROFILE )
 DEF_SIGNAL( VIEW_URL )
 
@@ -57,9 +60,6 @@ DEF_MODEL( ShotInfoModel,		info );
 DEF_MODEL( ShotCommentsModel,	comments );
 
 DEF_OUTLET( BeeUIScrollView,	list );
-
-SUPPORT_AUTOMATIC_LAYOUT( YES );
-SUPPORT_RESOURCE_LOADING( YES );
 
 - (void)load
 {

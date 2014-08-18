@@ -50,43 +50,16 @@
 	return YES;
 }
 
-#pragma mark -
-
-- (void)applyImageAlt:(NSMutableDictionary *)properties
-{
-// alt text
-
-	NSString * text = [properties parseTextWithKeys:@[@"alt", @"text", @"content"]];
-	if ( text && text.length )
-	{
-		UILabel * altLabel = nil;
-		
-		if ( [self respondsToSelector:@selector(altLabel)] )
-		{
-			altLabel = [self performSelector:@selector(altLabel)];
-		}
-		
-		if ( altLabel )
-		{
-			altLabel.font = [properties parseFontWithDefaultValue:[UIFont systemFontOfSize:14.0f]];
-			altLabel.text = [properties parseTextWithKeys:@[@"alt", @"text", @"content"] defaultValue:altLabel.text];
-			altLabel.textColor = [properties parseColorWithKeys:@[@"color", @"text-color"] defaultValue:[UIColor blackColor]];
-			altLabel.textAlignment = [properties parseTextAlignmentWithKeys:@[@"text-align"] defaultValue:UITextAlignmentCenter];
-			altLabel.baselineAdjustment = [properties parseBaselineAdjustmentWithKeys:@[@"text-valign", @"text-v-align"] defaultValue:UIBaselineAdjustmentAlignCenters];
-			altLabel.lineBreakMode = [properties parseLineBreakModeWithKeys:@[@"line-break"] defaultValue:UILineBreakModeClip];
-			altLabel.numberOfLines = [properties parseLineNumberWithKeys:@[@"line-num"] defaultValue:1];
-		}
-	}
-}
-
 - (void)applyImageContent:(NSMutableDictionary *)properties
 {
 	BOOL				stretched = NO;
 	BOOL				rounded = NO;
 	BOOL				pattern = NO;
 	BOOL				grayed = NO;
+    BOOL                croped = NO;
 
 	UIEdgeInsets		contentInsets = UIEdgeInsetsZero;
+	CGSize              cropSize = CGSizeZero;
 	UIViewContentMode	contentMode = UIViewContentModeCenter;
 	NSString *			relativePath = [properties objectForKey:@"package"];
 
@@ -176,6 +149,13 @@
 //			stretched = (BOOL)[self performSelector:@selector(strech)];
 //		}
 //	}
+    
+    NSString * imageCropped = [properties parseStringWithKeys:@[@"crop"]];
+    if ( imageCropped )
+    {
+        croped = YES;
+        cropSize = CGSizeFromStringEx(imageCropped);
+    }
 
 	NSString * imageRounded = [properties parseStringWithKeys:@[@"round", @"rounded"]];
 	if ( imageRounded )
@@ -247,6 +227,16 @@
 	{
 		objc_msgSend( self, @selector(setStrechInsets:), contentInsets );
 	}
+    
+    if ( [self respondsToSelector:@selector(setCrop:)] )
+	{
+		objc_msgSend( self, @selector(setCrop:), croped );
+	}
+    
+    if ( [self respondsToSelector:@selector(setCropSize:)] )
+    {
+		objc_msgSend( self, @selector(setCropSize:), cropSize );
+    }
 
 	self.contentMode = contentMode;
 
@@ -351,7 +341,6 @@
 {
 	NSMutableDictionary * propertiesCopy = [NSMutableDictionary dictionaryWithDictionary:properties];
 
-	[self applyImageAlt:propertiesCopy];
 	[self applyImageContent:propertiesCopy];
 	[self applyImageIndicator:propertiesCopy];
 

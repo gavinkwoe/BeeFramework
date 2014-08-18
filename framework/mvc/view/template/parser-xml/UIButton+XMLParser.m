@@ -31,22 +31,12 @@
 
 #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 
-#import "Bee_UITemplateParser.h"
+#import "UIButton+XMLParser.h"
+#import "Bee_UITemplateParserXML.h"
 
 #pragma mark -
 
-@interface BeeUITemplateParserXML : BeeUITemplateParser
-
-AS_SINGLETON( BeeUITemplateParserXML );
-
-@property (nonatomic, readonly) NSMutableDictionary *	classMapping;
-
-+ (void)map:(NSString *)tag toClass:(Class)clazz;
-- (void)map:(NSString *)tag toClass:(Class)clazz;
-
-- (id)objectForKeyedSubscript:(id)key;
-- (void)setObject:(id)obj forKeyedSubscript:(id)key;
-
+@implementation UIButton(XMLParser)
 @end
 
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

@@ -36,4 +36,39 @@
 
 #pragma mark -
 
+@implementation BeeUIView
+
+- (id)init
+{
+	self = [super initWithFrame:CGRectZero];
+	if ( self )
+	{
+		self.backgroundColor = [UIColor clearColor];
+		
+		[self performLoad];
+	}
+	return self;
+}
+
+- (id)initWithFrame:(CGRect)frame
+{
+	self = [super initWithFrame:frame];
+	if ( self )
+	{
+		self.backgroundColor = [UIColor clearColor];
+		
+		[self performLoad];
+	}
+	return self;
+}
+
+- (void)dealloc
+{
+	[self performUnload];
+	
+	[super dealloc];
+}
+
+@end
+
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

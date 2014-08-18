@@ -34,13 +34,11 @@
 #import "Bee_Precompile.h"
 #import "Bee_Foundation.h"
 #import "Bee_UILayoutConfig.h"
+#import "Bee_UIButton.h"
 
 #pragma mark -
 
-@interface BeeUILayoutWrapper : UIView
-@end
-
-@interface BeeUILayoutContainer : BeeUILayoutWrapper
+@interface BeeUILayoutContainer : BeeUIButton
 @end
 
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

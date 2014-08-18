@@ -108,15 +108,18 @@
 	if ( nil == string || 0 == string.length )
 		return nil;
 
+	NSError * error = nil;
+	
 //	NSObject * obj = [string objectFromJSONString];
-	NSObject * obj = [string objectFromJSONStringWithParseOptions:JKParseOptionValidFlags error:nil];
-	if ( obj )
+	NSObject * obj = [string objectFromJSONStringWithParseOptions:JKParseOptionValidFlags error:&error];
+	if ( nil == obj )
 	{
-//		[self setCachedResponseJSON:obj];
-		return obj;
+		ERROR( @"%@\n\n%@", [error description], string );
+		return nil;
 	}
-
-	return nil;
+	
+//	[self setCachedResponseJSON:obj];
+	return obj;
 }
 
 - (NSDictionary *)responseJSONDictionary

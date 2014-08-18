@@ -84,13 +84,13 @@
 {
 	if ( nil == _strings )
 	{
-		return name;
+		return nil; // name;
 	}
 
 	NSString * result = [_strings objectForKey:name];
 	if ( nil == result )
 	{
-		return name;
+		return nil; // name;
 	}
 	
 	return result;

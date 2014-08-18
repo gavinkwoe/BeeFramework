@@ -74,7 +74,7 @@
             return element.classes && [element.classes containsObject:selector.value];
         
         if ( selector.match == MatchId )
-            return element.hash && [element.hash isEqualToString:selector.value];
+            return [element hash] && [[element hash] isEqualToString:selector.value];
         
         // TODO: attribute check
     }
@@ -84,12 +84,35 @@
     {
         // any ":pseudo" is true.
         // TODO: should check if element has PseudoClass
-        return true;
+        BOOL matched = false;
+        
+        switch ( selector.pseudoType )
+        {
+            case PseudoFirstChild:
+                matched = [element isFirstChild];
+                break;
+            case PseudoLastChild:
+                matched = [element isLastChild];
+                break;
+            case PseudoNthChild:
+                matched = [element isNthChild:[selector.data.argument integerValue]];
+                break;
+//            case PseudoNthOfType:
+            case PseudoCustom:
+            case PseudoUnknown:
+                matched = true;
+                break;
+            default:
+                matched = false;
+                break;
+        }
+        
+        return matched;
     }
     
     // TODO: PseudoElement check
     
-    return NO;
+    return false;
 }
 
 // Recursive check of selectors and combinators
@@ -222,7 +245,7 @@ DEF_SINGLETON( CSSStyleSelector );
 //        NSUInteger match = selector.match;
         switch ( pseudoType )
         {
-            case PseudoOther: // selector:pseudo => selector-pseudo
+            case PseudoCustom: // selector:pseudo => selector-pseudo
             {
                 NSString * pseudo = selector.value;
                 
@@ -236,6 +259,7 @@ DEF_SINGLETON( CSSStyleSelector );
                 break;
             }
             case PseudoUnknown: // class group: .class.class.class...
+            default:
             {
                 for ( CSSProperty * p in array )
                 {
@@ -243,8 +267,6 @@ DEF_SINGLETON( CSSStyleSelector );
                 }
                 break;
             }
-            default:
-                break;
         }
     }
     
@@ -277,9 +299,9 @@ DEF_SINGLETON( CSSStyleSelector );
 - (void)matchRules:(CSSRuleSet *)ruleSet
 {
     // #id
-    if ( self.element.hash )
+    if ( [self.element hash] )
     {
-        [self matchRulesForList:[ruleSet getIDRules:self.element.hash]];
+        [self matchRulesForList:[ruleSet getIDRules:[self.element hash]]];
     }
     // .class
     for ( NSString * className in self.element.classes )

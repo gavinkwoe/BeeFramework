@@ -76,6 +76,7 @@ AS_SINGLETON( BeeHTTPRequestQueue )
 + (BeeHTTPRequest *)GET:(NSString *)url;
 + (BeeHTTPRequest *)POST:(NSString *)url;
 + (BeeHTTPRequest *)PUT:(NSString *)url;
++ (BeeHTTPRequest *)DELETE:(NSString *)url;
 
 + (BOOL)requesting:(NSString *)url;
 + (BOOL)requesting:(NSString *)url byResponder:(id)responder;

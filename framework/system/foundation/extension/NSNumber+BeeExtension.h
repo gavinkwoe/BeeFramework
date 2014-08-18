@@ -56,4 +56,8 @@
 
 - (NSString *)stringWithDateFormat:(NSString *)format;
 
+- (NSString *)decimalStyleString;
+
+- (NSString *)currencyStyleString;
+
 @end

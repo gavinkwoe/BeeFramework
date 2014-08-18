@@ -390,6 +390,37 @@
     return image;
 }
 
+- (UIImage *)crop2:(CGRect)rect
+{
+    if ( !CGRectIsEmpty(rect) )
+    {
+        float scaleX = self.size.width / rect.size.width;
+        float scaleY = self.size.height / rect.size.height;
+        
+        if ( scaleX > scaleY )
+        {
+            CGFloat width = self.size.height * rect.size.width / rect.size.height;
+            CGFloat height = self.size.height;
+            // move to center
+            CGRect croppedFrame = CGRectMake( 0, 0, width, height );
+            croppedFrame.origin.x = fabsf( (self.size.width - width) / 2.f );
+            
+            return [self crop:croppedFrame];
+        }
+        else
+        {
+            CGFloat width = self.size.width;
+            CGFloat height = self.size.width * rect.size.height / rect.size.width;
+            // just top
+            CGRect croppedFrame = CGRectMake( 0, 0, width, height );
+            
+            return [self crop:croppedFrame];
+        }
+    }
+    
+    return self;
+}
+
 - (UIImage *)imageInRect:(CGRect)rect
 {
 	return [self crop:rect];
@@ -487,7 +518,7 @@
 				image = [[[UIImage alloc] initWithContentsOfFile:fullPath] autorelease];
 			}
 		}
-		
+
 		if ( nil == image )
 		{
 			image = [UIImage imageNamed:imageName];
@@ -561,15 +592,22 @@
 
 + (UIImage *)imageFromVideo:(NSURL *)videoURL atTime:(CMTime)time scale:(CGFloat)scale
 {
-	AVURLAsset * asset = [[AVURLAsset alloc] initWithURL:videoURL options:nil];
-    AVAssetImageGenerator * generater = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+	AVURLAsset * asset = [[[AVURLAsset alloc] initWithURL:videoURL options:nil] autorelease];
+    AVAssetImageGenerator * generater = [[[AVAssetImageGenerator alloc] initWithAsset:asset] autorelease];
     generater.appliesPreferredTrackTransform = YES;
 	generater.apertureMode = AVAssetImageGeneratorApertureModeEncodedPixels;
 	generater.maximumSize = [UIScreen mainScreen].bounds.size;
+
     NSError * error = nil;
+	UIImage * thumb = nil;
+	
     CGImageRef image = [generater copyCGImageAtTime:time actualTime:NULL error:&error];
-    UIImage * thumb = [[UIImage alloc] initWithCGImage:image scale:scale orientation:UIImageOrientationUp];
-    CGImageRelease(image);
+	if ( image )
+	{
+		thumb = [[[UIImage alloc] initWithCGImage:image scale:scale orientation:UIImageOrientationUp] autorelease];
+		CGImageRelease(image);
+	}
+	
     return thumb;
 }
 

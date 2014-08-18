@@ -166,6 +166,11 @@ DEF_SIGNAL( DID_LOAD_CANCELLED )	// 加载取消
 	if ( nil == path )
 		return;
 	
+	if ( NO == [path hasPrefix:@"http://"] && NO == [path hasPrefix:@"https://"] )
+	{
+		path = [NSString stringWithFormat:@"http://%@", path];
+	}
+	
 	NSArray * cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies];
 
 	for ( NSHTTPCookie * cookie in cookies )

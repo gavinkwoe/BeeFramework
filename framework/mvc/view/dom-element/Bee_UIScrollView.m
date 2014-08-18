@@ -43,32 +43,42 @@
 
 #pragma mark -
 
+#undef	MIN_ORDER
+#define MIN_ORDER			(0)
+
+#undef	MAX_ORDER
+#define MAX_ORDER			(1000)
+
 #undef	MAX_LINES
-#define MAX_LINES					(128)
+#define MAX_LINES			(128)
 
 #undef	MAX_QUEUED_ITEMS
-#define	MAX_QUEUED_ITEMS			(32)
+#define	MAX_QUEUED_ITEMS	(32)
 
-#undef	LOADING_ANIMATION_DURATION
-#define	LOADING_ANIMATION_DURATION	(0.3f)
+#undef	ANIMATION_DURATION
+#define	ANIMATION_DURATION	(0.3f)
 
 #pragma mark -
 
 @interface BeeUIScrollItem()
 {
 	BOOL					_visible;
-	UIEdgeInsets			_insets;
-	NSInteger				_index;
 	NSInteger				_line;
-	NSInteger				_order;
-	NSInteger				_columns;
 	CGFloat					_scale;
-	CGSize					_size;
+	NSInteger				_columns;
 	CGRect					_rect;
-	Class					_clazz;
-	id						_data;
-	UIView *				_view;
+    
 	BeeUIScrollLayoutRule	_rule;
+	NSInteger				_order;
+	NSInteger				_section;
+	NSInteger				_index;
+	
+	NSString *				_name;
+	UIView *				_view;
+	id						_data;
+	Class					_clazz;
+	UIEdgeInsets			_insets;
+	CGSize					_size;
 }
 
 @property (nonatomic, assign) BOOL					visible;
@@ -83,38 +93,44 @@
 
 @implementation BeeUIScrollItem
 
-@synthesize section = _section;
-@synthesize visible = _visible;
-@synthesize insets = _insets;
-@synthesize	index = _index;
-@synthesize line = _line;
-@synthesize order = _order;
-@synthesize columns = _columns;
-@synthesize scale = _scale;
-@synthesize	size = _size;
-@synthesize rect = _rect;
-@synthesize clazz = _clazz;
-@synthesize data = _data;
-@synthesize	view = _view;
 @synthesize rule = _rule;
+@synthesize order = _order;
+@synthesize section = _section;
+@synthesize index = _index;
+@synthesize name = _name;
+
+@synthesize view = _view;
+@synthesize data = _data;
+@synthesize clazz = _clazz;
+@synthesize insets = _insets;
+@synthesize size = _size;
+
+@dynamic viewData;
+@dynamic viewClass;
+@dynamic viewInsets;
+@dynamic viewSize;
 
 - (id)init
 {
 	self = [super init];
 	if ( self )
 	{
-		_section = 0;
 		_visible = NO;
-		_insets = UIEdgeInsetsZero;
-		_index = 0;
 		_line = 0;
-		_order = 0;
-		_columns = 1;
 		_scale = 1.0f;
-		_size = CGSizeAuto;
+		_columns = 1;
 		_rect = CGRectAuto;
+		
+		_rule = BeeUIScrollLayoutRuleVertical;
+		_order = MIN_ORDER;
+		_section = 0;
+		_index = 0;
+        
 		_view = nil;
-		_rule = BeeUIScrollLayoutRule_Tile;
+		_data = nil;
+		_clazz = nil;
+		_insets = UIEdgeInsetsZero;
+		_size = CGSizeAuto;
 	}
 	return self;
 }
@@ -123,7 +139,68 @@
 {
 	[_view removeFromSuperview];
 	[_view release];
+	
+	[_name release];
+    
+	[super dealloc];
+}
 
+- (id)viewData
+{
+	return self.data;
+}
+
+- (void)setViewData:(id)d
+{
+	self.data = d;
+}
+
+- (Class)viewClass
+{
+	return self.clazz;
+}
+
+- (void)setViewClass:(Class)c
+{
+	self.clazz = c;
+}
+
+- (UIEdgeInsets)viewInsets
+{
+	return self.insets;
+}
+
+- (void)setViewInsets:(UIEdgeInsets)i
+{
+	self.insets = i;
+}
+
+- (CGSize)viewSize
+{
+	return self.size;
+}
+
+- (void)setViewSize:(CGSize)s
+{
+	self.size = s;
+}
+
+@end
+
+#pragma mark -
+
+@implementation BeeUIScrollSection
+
+@synthesize viewClass = _viewClass;
+@synthesize viewInsets = _viewInsets;
+@synthesize name = _name;
+@synthesize rule = _rule;
+
+- (void)dealloc
+{
+	self.viewClass = nil;
+	self.name = nil;
+	
 	[super dealloc];
 }
 
@@ -134,20 +211,23 @@
 @interface BeeUIScrollView()
 {
 	BOOL						_inited;
-
+    
 	id							_dataSource;
 	NSInteger					_direction;
 	CGFloat						_animationDuration;
-
+    
 	NSInteger					_visibleStart;
 	NSInteger					_visibleEnd;
-
+    
 	NSInteger					_lineCount;
 	CGFloat						_lineHeights[MAX_LINES];
 	
+	NSInteger					_index;
 	NSInteger					_total;
 	NSMutableArray *			_items;
-
+	NSMutableArray *			_sections;
+	NSMutableDictionary *		_sectionDatas;
+    
 	BOOL						_autoReload;
 	BOOL						_shouldNotify;
 	BOOL						_reloaded;
@@ -163,10 +243,10 @@
 	CGPoint						_scrollSpeed;
 	CGPoint						_lastScrollOffset;
 	NSTimeInterval				_lastScrollTime;
-
+    
 	Class						_headerClass;
 	Class						_footerClass;
-
+    
 	BeeUIPullLoader *			_headerLoader;
 	BeeUIFootLoader *			_footerLoader;
 	
@@ -178,6 +258,7 @@
 	BeeUIScrollViewBlock		_whenAnimated;
 	BeeUIScrollViewBlockI		_whenDequeue;
 	BeeUIScrollViewBlock		_whenScrolling;
+	BeeUIScrollViewBlock		_whenDragged;
 	BeeUIScrollViewBlock		_whenStop;
 	BeeUIScrollViewBlock		_whenReachTop;
 	BeeUIScrollViewBlock		_whenReachBottom;
@@ -189,6 +270,7 @@
 
 - (void)recalcItems:(BOOL)force;
 - (void)reloadItems:(BOOL)force;
+- (void)reloadSections;
 - (BOOL)recalcRange;
 
 - (UIEdgeInsets)calcInsets;
@@ -206,7 +288,7 @@
 - (void)internalReloadData;
 
 - (void)enqueueItem:(BeeUIScrollItem *)item;
-- (BOOL)dequeueItem:(BeeUIScrollItem *)item;
+- (void)dequeueItem:(BeeUIScrollItem *)item;
 
 - (void)notifyReloading;
 - (void)notifyReloaded;
@@ -282,8 +364,13 @@ DEF_SIGNAL( FOOTER_REFRESH )
 
 @dynamic lineSize;
 @synthesize lineCount = _lineCount;
+
 @dynamic total;
+@dynamic datas;
 @dynamic items;
+@dynamic firstItem;
+@dynamic nextItem;
+@dynamic lastItem;
 @dynamic visibleItems;
 @synthesize enableAllEvents = _enableAllEvents;
 
@@ -304,6 +391,7 @@ DEF_SIGNAL( FOOTER_REFRESH )
 @synthesize whenAnimating = _whenAnimating;
 @synthesize whenAnimated = _whenAnimated;
 @synthesize whenScrolling = _whenScrolling;
+@synthesize whenDragged = _whenDragged;
 @synthesize whenStop = _whenStop;
 @synthesize whenReachTop = _whenReachTop;
 @synthesize whenReachBottom = _whenReachBottom;
@@ -345,9 +433,9 @@ DEF_SIGNAL( FOOTER_REFRESH )
 {
 	if ( NO == _inited )
 	{
-		_animationDuration = 0.45f;
-
-		_direction = self.DIRECTION_VERTICAL;		
+		_animationDuration = ANIMATION_DURATION;
+        
+		_direction = self.DIRECTION_VERTICAL;
 		_shouldNotify = YES;
 		_reloaded = NO;
 		
@@ -355,10 +443,12 @@ DEF_SIGNAL( FOOTER_REFRESH )
 		
 		_total = 0;
 		_items = [[NSMutableArray alloc] init];
-
+		_sections = [[NSMutableArray alloc] init];
+		_sectionDatas = [[NSMutableDictionary alloc] init];
+        
 		_reuseEnable = YES;
 		_reuseQueue = [[NSMutableArray nonRetainingArray] retain];
-
+        
 		_visibleStart = 0;
 		_visibleEnd = 0;
 		
@@ -367,11 +457,11 @@ DEF_SIGNAL( FOOTER_REFRESH )
 		_baseInsets = UIEdgeInsetsZero;
 		_extInsets = UIEdgeInsetsZero;
 		
-//		self.headerClass = [BeeUIPullLoader class];
-//		self.footerClass = [BeeUIFootLoader class];
-
+        //		self.headerClass = [BeeUIPullLoader class];
+        //		self.footerClass = [BeeUIFootLoader class];
+        
 		self.backgroundColor = [UIColor clearColor];
-		self.contentSize = self.bounds.size;
+		self.contentSize = self.frame.size;
 		self.contentInset = _baseInsets;
 		self.alwaysBounceVertical = YES;
 		self.alwaysBounceHorizontal = NO;
@@ -380,6 +470,7 @@ DEF_SIGNAL( FOOTER_REFRESH )
 		self.scrollEnabled = YES;
 		self.showsVerticalScrollIndicator = NO;
 		self.showsHorizontalScrollIndicator = NO;
+		self.indicatorStyle = UIScrollViewIndicatorStyleDefault;
 		self.alpha = 1.0f;
 		self.delegate = self;
 		self.layer.masksToBounds = YES;
@@ -389,23 +480,23 @@ DEF_SIGNAL( FOOTER_REFRESH )
 			self.decelerationRate = self.decelerationRate * 0.995f;
 		}
 		
-	#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
 		if ( IOS7_OR_LATER )
 		{
-			self.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
+            //			self.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
 		}
-	#endif	// #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
-
-//		[self load];
+#endif	// #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
+        
+        //		[self load];
 		[self performLoad];
 	}
 }
 
 - (void)dealloc
 {
-//	[self unload];
+    //	[self unload];
 	[self performUnload];
-
+    
 	for ( BeeUIScrollItem * item in _items )
 	{
 		if ( item.view )
@@ -414,10 +505,10 @@ DEF_SIGNAL( FOOTER_REFRESH )
 			item.view = nil;
 		}
 	}
-
+    
 	self.headerClass = nil;
 	self.footerClass = nil;
-
+    
 	self.whenReloading = nil;
 	self.whenReloaded = nil;
 	self.whenLayouting = nil;
@@ -426,21 +517,29 @@ DEF_SIGNAL( FOOTER_REFRESH )
 	self.whenAnimated = nil;
 	self.whenScrolling = nil;
 	self.whenStop = nil;
-
+    
 	SAFE_RELEASE_SUBVIEW( _headerLoader );
 	SAFE_RELEASE_SUBVIEW( _footerLoader );
-
+    
 	[_reuseQueue removeAllObjects];
 	[_reuseQueue release];
 	_reuseQueue = nil;
-
+    
+	[_sectionDatas removeAllObjects];
+	[_sectionDatas release];
+	_sectionDatas = nil;
+	
+	[_sections removeAllObjects];
+	[_sections release];
+	_sections = nil;
+    
 	[_items removeAllObjects];
 	[_items release];
 	_items = nil;
-
-	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(operateReloadData) object:nil];	
+    
+	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(operateReloadData) object:nil];
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-
+    
 	[super dealloc];
 }
 
@@ -449,7 +548,7 @@ DEF_SIGNAL( FOOTER_REFRESH )
 	_dataSource = nil;
 	
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-
+    
 	[super removeFromSuperview];
 }
 
@@ -465,10 +564,10 @@ DEF_SIGNAL( FOOTER_REFRESH )
 		_direction = self.DIRECTION_HORIZONTAL;
 		
 		self.alwaysBounceHorizontal = YES;
-		self.showsHorizontalScrollIndicator = NO;
-		
 		self.alwaysBounceVertical = NO;
-		self.showsVerticalScrollIndicator = NO;
+		
+        //		self.showsHorizontalScrollIndicator = NO;
+        //		self.showsVerticalScrollIndicator = NO;
 	}
 }
 
@@ -484,10 +583,10 @@ DEF_SIGNAL( FOOTER_REFRESH )
 		_direction = self.DIRECTION_VERTICAL;
 		
 		self.alwaysBounceVertical = YES;
-		self.showsVerticalScrollIndicator = NO;
-
 		self.alwaysBounceHorizontal = NO;
-		self.showsHorizontalScrollIndicator = NO;		
+		
+        //		self.showsVerticalScrollIndicator = NO;
+        //		self.showsHorizontalScrollIndicator = NO;
 	}
 }
 
@@ -512,11 +611,11 @@ DEF_SIGNAL( FOOTER_REFRESH )
 	
 	if ( self.DIRECTION_HORIZONTAL == _direction )
 	{
-		return (NSUInteger)floorf( _total - ((self.contentSize.width - self.contentOffset.x) / self.bounds.size.width) + 0.5f );
+		return (NSUInteger)floorf( _total - ((self.contentSize.width - self.contentOffset.x) / self.frame.size.width) + 0.5f );
 	}
 	else
 	{
-		return (NSUInteger)floorf( _total - ((self.contentSize.height - self.contentOffset.y) / self.bounds.size.height) + 0.5f );
+		return (NSUInteger)floorf( _total - ((self.contentSize.height - self.contentOffset.y) / self.frame.size.height) + 0.5f );
 	}
 }
 
@@ -531,9 +630,8 @@ DEF_SIGNAL( FOOTER_REFRESH )
 	else
 	{
 		percent = self.contentOffset.y / self.contentSize.height;
-	}	
-
-//	INFO( @"percent = %0.2f", percent );
+	}
+    
 	return percent;
 }
 
@@ -541,11 +639,11 @@ DEF_SIGNAL( FOOTER_REFRESH )
 {
 	if ( self.DIRECTION_HORIZONTAL == _direction )
 	{
-		return (self.contentSize.width + self.bounds.size.width - 1) / self.bounds.size.width;
+		return (self.contentSize.width + self.frame.size.width - 1) / self.frame.size.width;
 	}
 	else
 	{
-		return (self.contentSize.height + self.bounds.size.height - 1) / self.bounds.size.height;
+		return (self.contentSize.height + self.frame.size.height - 1) / self.frame.size.height;
 	}
 }
 
@@ -553,11 +651,11 @@ DEF_SIGNAL( FOOTER_REFRESH )
 {
 	if ( self.DIRECTION_HORIZONTAL == _direction )
 	{
-		return self.contentOffset.x / self.bounds.size.width;
+		return self.contentOffset.x / self.frame.size.width;
 	}
 	else
 	{
-		return self.contentOffset.y / self.bounds.size.height;
+		return self.contentOffset.y / self.frame.size.height;
 	}
 }
 
@@ -565,11 +663,11 @@ DEF_SIGNAL( FOOTER_REFRESH )
 {
 	if ( self.DIRECTION_HORIZONTAL == _direction )
 	{
-		self.contentOffset = CGPointMake( self.bounds.size.width * index, self.contentOffset.y );
+		self.contentOffset = CGPointMake( self.frame.size.width * index, self.contentOffset.y );
 	}
 	else
 	{
-		self.contentOffset = CGPointMake( self.contentOffset.x, self.bounds.size.height * index );
+		self.contentOffset = CGPointMake( self.contentOffset.x, self.frame.size.height * index );
 	}
 }
 
@@ -605,7 +703,7 @@ DEF_SIGNAL( FOOTER_REFRESH )
 	insets.left = _baseInsets.left + _extInsets.left;
 	insets.right = _baseInsets.right + _extInsets.right;
 	insets.bottom = _baseInsets.bottom + _extInsets.bottom;
-
+    
 	return insets;
 }
 
@@ -628,7 +726,7 @@ DEF_SIGNAL( FOOTER_REFRESH )
 	{
 		if ( _items.count >= tot )
 			break;
-
+        
 		BeeUIScrollItem * item = [[BeeUIScrollItem alloc] init];
 		if ( item  )
 		{
@@ -641,18 +739,53 @@ DEF_SIGNAL( FOOTER_REFRESH )
 	_total = tot;
 }
 
+- (NSDictionary *)datas
+{
+	return _sectionDatas;
+}
+
+- (void)setDatas:(NSDictionary *)d
+{
+	[_sectionDatas setDictionary:d];
+	
+	[self reloadSections];
+}
+
 - (NSArray *)items
 {
 	return _items;
 }
 
+- (BeeUIScrollItem *)firstItem
+{
+	_index = 0;
+	
+	[self setTotal:1];
+
+	return [_items firstObject];
+}
+
+- (BeeUIScrollItem *)nextItem
+{
+	_index += 1;
+	
+	[self setTotal:(_index + 1)];
+
+	return [_items objectAtIndex:_index];
+}
+
+- (BeeUIScrollItem *)lastItem
+{
+	return [_items lastObject];
+}
+
 - (NSArray *)visibleItems
 {
 	NSMutableArray * array = [NSMutableArray nonRetainingArray];
-
+    
 	if ( _items.count > 0 )
 	{
-		for ( NSInteger l = _visibleStart; l <= _visibleEnd; ++l )
+		for ( NSInteger l = _visibleStart; l < _visibleEnd; ++l )
 		{
 			if ( l >= _items.count )
 				break;
@@ -667,7 +800,7 @@ DEF_SIGNAL( FOOTER_REFRESH )
 
 - (void)notifyLayouting
 {
-PERF_ENTER
+    PERF_ENTER
 	
 	if ( _shouldNotify )
 	{
@@ -675,19 +808,19 @@ PERF_ENTER
 		{
 			[self sendUISignal:BeeUIScrollView.LAYOUTING];
 		}
-	
+        
 		if ( self.whenLayouting )
 		{
 			self.whenLayouting();
 		}
 	}
 	
-PERF_LEAVE
+    PERF_LEAVE
 }
 
 - (void)notifyLayouted
 {
-PERF_ENTER
+    PERF_ENTER
 	
 	if ( _shouldNotify )
 	{
@@ -702,12 +835,12 @@ PERF_ENTER
 		}
 	}
 	
-PERF_LEAVE
+    PERF_LEAVE
 }
 
 - (void)notifyReloading
 {
-PERF_ENTER
+    PERF_ENTER
 	
 	if ( _shouldNotify )
 	{
@@ -722,12 +855,12 @@ PERF_ENTER
 		}
 	}
 	
-PERF_LEAVE
+    PERF_LEAVE
 }
 
 - (void)notifyReloaded
 {
-PERF_ENTER
+    PERF_ENTER
 	
 	if ( _shouldNotify )
 	{
@@ -742,12 +875,12 @@ PERF_ENTER
 		}
 	}
 	
-PERF_LEAVE
+    PERF_LEAVE
 }
 
 - (void)notifyAnimating
 {
-PERF_ENTER
+    PERF_ENTER
 	
 	if ( _shouldNotify )
 	{
@@ -762,12 +895,12 @@ PERF_ENTER
 		}
 	}
 	
-PERF_LEAVE
+    PERF_LEAVE
 }
 
 - (void)notifyAnimated
 {
-PERF_ENTER
+    PERF_ENTER
 	
 	if ( _shouldNotify )
 	{
@@ -782,12 +915,12 @@ PERF_ENTER
 		}
 	}
 	
-PERF_LEAVE
+    PERF_LEAVE
 }
 
 - (void)notifyReachTop
 {
-PERF_ENTER
+    PERF_ENTER
 	
 	if ( _shouldNotify )
 	{
@@ -795,19 +928,19 @@ PERF_ENTER
 		{
 			[self sendUISignal:BeeUIScrollView.REACH_TOP];
 		}
-
+        
 		if ( self.whenReachTop )
 		{
 			self.whenReachTop();
 		}
 	}
 	
-PERF_LEAVE
+    PERF_LEAVE
 }
 
 - (void)notifyReachBottom
 {
-PERF_ENTER
+    PERF_ENTER
 	
 	if ( _shouldNotify )
 	{
@@ -822,13 +955,13 @@ PERF_ENTER
 		}
 	}
 	
-PERF_LEAVE
+    PERF_LEAVE
 }
 
 - (void)notifyHeaderRefresh
 {
-PERF_ENTER
-
+    PERF_ENTER
+    
 	if ( _shouldNotify )
 	{
 		if ( self.enableAllEvents )
@@ -842,12 +975,12 @@ PERF_ENTER
 		}
 	}
 	
-PERF_LEAVE
+    PERF_LEAVE
 }
 
 - (void)notifyFooterRefresh
 {
-PERF_ENTER
+    PERF_ENTER
 	
 	if ( _shouldNotify )
 	{
@@ -861,8 +994,8 @@ PERF_ENTER
 			self.whenFooterRefresh();
 		}
 	}
-
-PERF_LEAVE
+    
+    PERF_LEAVE
 }
 
 - (void)recalcFrames
@@ -873,9 +1006,9 @@ PERF_LEAVE
 - (void)recalcFramesAnimated:(BOOL)animated
 {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(operateReloadData) object:nil];
-
+    
 	[self notifyReloading];
-
+    
 	if ( _dataSource && [_dataSource respondsToSelector:@selector(numberOfLinesInScrollView:)] )
 	{
 		_lineCount = [_dataSource numberOfLinesInScrollView:self];
@@ -885,40 +1018,40 @@ PERF_LEAVE
 	{
 		_total = [_dataSource numberOfViewsInScrollView:self];
 	}
-
+    
+    //	[self reloadItems:NO];
 	[self reloadItems:NO];
-	[self reloadItems:NO];
-//	[self recalcRange];
+    //	[self recalcRange];
 	
 	[self notifyLayouting];
 	
 	_reloaded = YES;
-
+    
 	if ( animated )
 	{
 		[self notifyAnimating];
-
+        
 		[UIView beginAnimations:nil context:nil];
-//		[UIView setAnimationBeginsFromCurrentState:YES];
+        //		[UIView setAnimationBeginsFromCurrentState:YES];
 		[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
 		[UIView setAnimationDuration:self.animationDuration];
 		[UIView setAnimationDelegate:self];
 		[UIView setAnimationDidStopSelector:@selector(didAnimationStop)];
 	}
-
+    
 	[self syncCellPositions];
 	[self syncPullPositions];
 	[self syncPullInsets];
-
+    
 	if ( animated )
 	{
 		[UIView commitAnimations];
 	}
-
+    
 	[self notifyLayouted];
 	[self notifyReloaded];
 	
-	[self setNeedsDisplay];
+    //	[self setNeedsDisplay];
 }
 
 - (void)reloadData
@@ -928,21 +1061,25 @@ PERF_LEAVE
 
 - (void)syncReloadData
 {
+	PERF( @"UIScrollView %p, reloadData", self );
+	
 	self.userInteractionEnabled = NO;
 	
 	[self cancelReloadData];
 	_reloading = YES;
 	[self operateReloadData];
 	
-	self.userInteractionEnabled = YES;		
+	self.userInteractionEnabled = YES;
 }
 
 - (void)asyncReloadData
 {
+	PERF( @"UIScrollView %p, reloadData", self );
+	
 	if ( NO == _reloading )
 	{
 		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(operateReloadData) object:nil];
-		[self performSelector:@selector(operateReloadData) withObject:nil afterDelay:0.2f];
+		[self performSelector:@selector(operateReloadData) withObject:nil afterDelay:0.1f];
 		_reloading = YES;
 	}
 }
@@ -951,8 +1088,8 @@ PERF_LEAVE
 {
 	if ( YES == _reloading )
 	{
-		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(operateReloadData) object:nil];	
-		_reloading = NO;		
+		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(operateReloadData) object:nil];
+		_reloading = NO;
 	}
 }
 
@@ -962,39 +1099,39 @@ PERF_LEAVE
 	{
 		_reloading = NO;
 		
-		[self internalReloadData];		
+		[self internalReloadData];
 	}
 }
 
 - (void)internalReloadData
 {
 	[self notifyReloading];
-
+    
 	if ( _dataSource && [_dataSource respondsToSelector:@selector(numberOfLinesInScrollView:)] )
 	{
 		_lineCount = [_dataSource numberOfLinesInScrollView:self];
 	}
-
+    
 	if ( _dataSource && [_dataSource respondsToSelector:@selector(numberOfViewsInScrollView:)] )
 	{
 		_total = [_dataSource numberOfViewsInScrollView:self];
 	}
-
+    
 	_visibleStart = 0;
 	_visibleEnd = 0;
-
+    
 	[self reloadItems:YES];
 	[self recalcRange];
 	[self recalcItems:YES];
-
+    
 	[self notifyLayouting];
-
+    
 	[self syncCellPositions];
 	[self syncPullPositions];
 	[self syncPullInsets];
-
+	
 	[self notifyLayouted];
-
+    
 	_reloaded = YES;
 	
 	[self notifyReloaded];
@@ -1007,7 +1144,10 @@ PERF_LEAVE
 	_shouldNotify = NO;
 	
 	[super setFrame:frame];
-
+    
+    if ( CGRectEqualToRect(frame, CGRectZero) )
+        return;
+    
 	if ( CGSizeEqualToSize(self.contentSize, CGSizeZero) )
 	{
 		self.contentSize = frame.size;
@@ -1016,36 +1156,39 @@ PERF_LEAVE
 	
 	_shouldNotify = YES;
 	
-	if ( NO == _reloaded )
+    //	if ( NO == _reloaded )
+    //	{
+    //		[self syncReloadData];
+    //	}
+    //	else
 	{
-		[self syncReloadData];
+		[self asyncReloadData];
 	}
-	else
-	{
-		[self asyncReloadData];	
-	}
-
+    
 	[self syncPullPositions];
 	[self syncPullInsets];
 }
 
 - (void)setHidden:(BOOL)flag
 {
+    if ( self.hidden == flag )
+        return;
+        
 	_shouldNotify = NO;
-
+    
 	[super setHidden:flag];
-	
-	_shouldNotify = YES;
 
-	if ( NO == _reloaded )
-	{
-		[self syncReloadData];
-	}
-	else
+	_shouldNotify = YES;
+    
+    //	if ( NO == _reloaded )
+    //	{
+    //		[self syncReloadData];
+    //	}
+    //	else
 	{
 		[self asyncReloadData];
 	}
-
+    
 	[self syncPullPositions];
 	[self syncPullInsets];
 }
@@ -1053,7 +1196,7 @@ PERF_LEAVE
 - (void)scrollToFirstPage:(BOOL)animated
 {
 	CGPoint offset;
-
+    
 	if ( self.DIRECTION_HORIZONTAL == _direction )
 	{
 		offset.x = -1.0f * [self calcInsets].left;
@@ -1064,8 +1207,20 @@ PERF_LEAVE
 		offset.x = self.contentOffset.x;
 		offset.y = -1.0f * [self calcInsets].top;
 	}
-
-	[self setContentOffset:offset animated:animated];	
+    
+    //	if ( animated )
+    //	{
+    //		[UIView beginAnimations:nil context:NULL];
+    //		[UIView setAnimationBeginsFromCurrentState:YES];
+    //		[UIView setAnimationDuration:self.animationDuration];
+    //	}
+	
+	[self setContentOffset:offset animated:animated];
+	
+    //	if ( animated )
+    //	{
+    //		[UIView commitAnimations];
+    //	}
 }
 
 - (void)scrollToLastPage:(BOOL)animated
@@ -1082,8 +1237,20 @@ PERF_LEAVE
 		offset.x = self.contentOffset.x;
 		offset.y = self.contentOffset.y + self.contentSize.height + 1.0f * [self calcInsets].bottom;
 	}
-
-	[self setContentOffset:offset animated:animated];		
+    
+    //	if ( animated )
+    //	{
+    //		[UIView beginAnimations:nil context:NULL];
+    //		[UIView setAnimationBeginsFromCurrentState:YES];
+    //		[UIView setAnimationDuration:self.animationDuration];
+    //	}
+	
+	[self setContentOffset:offset animated:animated];
+	
+    //	if ( animated )
+    //	{
+    //		[UIView commitAnimations];
+    //	}
 }
 
 - (void)scrollToPrevPage:(BOOL)animated
@@ -1093,10 +1260,10 @@ PERF_LEAVE
 	
 	if ( self.DIRECTION_HORIZONTAL == _direction )
 	{
-		if ( self.contentSize.width < self.bounds.size.width )
+		if ( self.contentSize.width < self.frame.size.width )
 			return;
 		
-		offset.x = self.contentOffset.x - self.bounds.size.width;
+		offset.x = self.contentOffset.x - self.frame.size.width;
 		offset.y = self.contentOffset.y;
 		
 		if ( offset.x < -1.0f * insets.left )
@@ -1106,69 +1273,93 @@ PERF_LEAVE
 	}
 	else
 	{
-		if ( self.contentSize.height < self.bounds.size.height )
+		if ( self.contentSize.height < self.frame.size.height )
 			return;
 		
 		offset.x = self.contentOffset.x;
-		offset.y = self.contentOffset.y - self.bounds.size.height;
+		offset.y = self.contentOffset.y - self.frame.size.height;
 		
 		if ( offset.x < -1.0f * insets.top )
 		{
 			offset.x = -1.0f * insets.top;
 		}
 	}
-
+    
+    //	if ( animated )
+    //	{
+    //		[UIView beginAnimations:nil context:NULL];
+    //		[UIView setAnimationBeginsFromCurrentState:YES];
+    //		[UIView setAnimationDuration:self.animationDuration];
+    //	}
+    
 	[self setContentOffset:offset animated:animated];
+	
+    //	if ( animated )
+    //	{
+    //		[UIView commitAnimations];
+    //	}
 }
 
 - (void)scrollToNextPage:(BOOL)animated
-{	
+{
 	CGPoint offset;
 	UIEdgeInsets insets = [self calcInsets];
 	
 	if ( self.DIRECTION_HORIZONTAL == _direction )
 	{
-		if ( self.contentSize.width < self.bounds.size.width )
+		if ( self.contentSize.width < self.frame.size.width )
 			return;
 		
-		offset.x = self.contentOffset.x + self.bounds.size.width;
+		offset.x = self.contentOffset.x + self.frame.size.width;
 		offset.y = self.contentOffset.y;
 		
 		CGFloat rightBound = self.contentOffset.x + self.contentSize.width + 1.0f * insets.right;
 		
-		if ( self.contentSize.width > self.bounds.size.width )
+		if ( self.contentSize.width > self.frame.size.width )
 		{
-			if (self.contentOffset.x < (self.contentSize.width - self.bounds.size.width)  )
+			if (self.contentOffset.x < (self.contentSize.width - self.frame.size.width)  )
 			{
-				offset.x = rightBound - self.bounds.size.width;
+				offset.x = rightBound - self.frame.size.width;
 			}
 			else
 			{
-				offset.x =  (self.contentSize.width - self.bounds.size.width + 1.0f * insets.right);
+				offset.x =  (self.contentSize.width - self.frame.size.width + 1.0f * insets.right);
 			}
 		}
 		else
 		{
-			offset.x =  (self.contentSize.width - self.bounds.size.width + 1.0f * insets.right);
+			offset.x =  (self.contentSize.width - self.frame.size.width + 1.0f * insets.right);
 		}
 	}
 	else
 	{
-		if ( self.contentSize.height < self.bounds.size.height )
+		if ( self.contentSize.height < self.frame.size.height )
 			return;
 		
 		offset.x = self.contentOffset.x;
-		offset.y = self.contentOffset.y + self.bounds.size.height;
-
+		offset.y = self.contentOffset.y + self.frame.size.height;
+        
 		CGFloat bottomBound = self.contentOffset.y + self.contentSize.height + 1.0f * insets.bottom;
 		
 		if ( offset.y > bottomBound )
 		{
-			offset.y = bottomBound - self.bounds.size.height;
+			offset.y = bottomBound - self.frame.size.height;
 		}
 	}
 	
+    //	if ( animated )
+    //	{
+    //		[UIView beginAnimations:nil context:NULL];
+    //		[UIView setAnimationBeginsFromCurrentState:YES];
+    //		[UIView setAnimationDuration:self.animationDuration];
+    //	}
+	
 	[self setContentOffset:offset animated:animated];
+	
+    //	if ( animated )
+    //	{
+    //		[UIView commitAnimations];
+    //	}
 }
 
 - (void)scrollToIndex:(NSUInteger)index animated:(BOOL)animated
@@ -1177,12 +1368,12 @@ PERF_LEAVE
 		return;
 	
 	UIEdgeInsets insets = [self calcInsets];
-
+    
 	if ( self.DIRECTION_VERTICAL == _direction )
 	{
 		CGFloat contentHeight = self.contentSize.height + insets.top + insets.bottom;
 		
-		if ( contentHeight <= self.bounds.size.height )
+		if ( contentHeight <= self.frame.size.height )
 		{
 			return;
 		}
@@ -1191,38 +1382,38 @@ PERF_LEAVE
 	{
 		CGFloat contentWidth = self.contentSize.width + insets.left + insets.right;
 		
-		if ( contentWidth <= self.bounds.size.width )
+		if ( contentWidth <= self.frame.size.width )
 		{
 			return;
 		}
 	}
-
+    
 	CGRect frame = ((BeeUIScrollItem *)[_items objectAtIndex:index]).rect;
-
+    
 	if ( CGRectEqualToRect(frame, CGRectZero) )
 	{
 		return;
 	}
-
+    
 	CGFloat	margin = 0.0f;
 	CGPoint	offset = CGPointZero;
-
+    
 	if ( self.DIRECTION_VERTICAL == _direction )
 	{
 		if ( [BeeUIConfig sharedInstance].iOS7Mode && IOS7_OR_LATER )
 		{
 			if ( NO == [UIApplication sharedApplication].statusBarHidden )
 			{
-				margin = (self.bounds.size.height - 44.0f - 20.0f - frame.size.height) / 2.0f;
+				margin = (self.frame.size.height - 44.0f - 20.0f - frame.size.height) / 2.0f;
 			}
 			else
 			{
-				margin = (self.bounds.size.height - 44.0f - frame.size.height) / 2.0f;
+				margin = (self.frame.size.height - 44.0f - frame.size.height) / 2.0f;
 			}
 		}
 		else
 		{
-			margin = (self.bounds.size.height - frame.size.height) / 2.0f;
+			margin = (self.frame.size.height - frame.size.height) / 2.0f;
 		}
 		
 		offset.x = self.contentOffset.x;
@@ -1232,9 +1423,9 @@ PERF_LEAVE
 		{
 			offset.y = 0.0f;
 		}
-		else if ( offset.y + self.bounds.size.height > self.contentSize.height )
+		else if ( offset.y + self.frame.size.height > self.contentSize.height )
 		{
-			offset.y = self.contentSize.height - self.bounds.size.height;
+			offset.y = self.contentSize.height - self.frame.size.height;
 		}
 		
 		offset.y -= insets.top;
@@ -1245,18 +1436,18 @@ PERF_LEAVE
 		{
 			if ( NO == [UIApplication sharedApplication].statusBarHidden )
 			{
-				margin = (self.bounds.size.width - 44.0f - 20.0f - frame.size.width) / 2.0f;
+				margin = (self.frame.size.width - 44.0f - 20.0f - frame.size.width) / 2.0f;
 			}
 			else
 			{
-				margin = (self.bounds.size.width - 44.0f - frame.size.width) / 2.0f;
+				margin = (self.frame.size.width - 44.0f - frame.size.width) / 2.0f;
 			}
 		}
 		else
 		{
-			margin = (self.bounds.size.width - frame.size.width) / 2.0f;
+			margin = (self.frame.size.width - frame.size.width) / 2.0f;
 		}
-
+        
 		offset.x = frame.origin.x - margin;
 		offset.y = self.contentOffset.y;
 		
@@ -1264,21 +1455,27 @@ PERF_LEAVE
 		{
 			offset.x = 0.0f;
 		}
-		else if ( offset.x + self.bounds.size.width > self.contentSize.width )
+		else if ( offset.x + self.frame.size.width > self.contentSize.width )
 		{
-			offset.x = self.contentSize.width - self.bounds.size.width;
+			offset.x = self.contentSize.width - self.frame.size.width;
 		}
 		
 		offset.x -= insets.left;
 	}
-
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:self.animationDuration];
-	[UIView setAnimationBeginsFromCurrentState:YES];
-
-	[self setContentOffset:offset animated:NO];
 	
-	[UIView commitAnimations];
+    //	if ( animated )
+    //	{
+    //		[UIView beginAnimations:nil context:NULL];
+    //		[UIView setAnimationBeginsFromCurrentState:YES];
+    //		[UIView setAnimationDuration:self.animationDuration];
+    //	}
+	
+	[self setContentOffset:offset animated:animated];
+	
+    //	if ( animated )
+    //	{
+    //		[UIView commitAnimations];
+    //	}
 }
 
 - (void)scrollToView:(UIView *)view animated:(BOOL)animated
@@ -1295,7 +1492,9 @@ PERF_LEAVE
 
 - (id)dequeueWithContentClass:(Class)clazz
 {
-PERF_ENTER
+    PERF_ENTER
+    
+    PERF_ENTER_( _______reuse )
 	
 	if ( _reuseEnable )
 	{
@@ -1303,77 +1502,136 @@ PERF_ENTER
 		{
 			if ( [reuseView isKindOfClass:clazz] )
 			{
-	//			INFO( @"[-] UIScrollView, dequeue '%@' %p", [[reuseView class] description], reuseView );
-
+				PERF( @"UIScrollView %p, dequeue '%@' %p", self, [[reuseView class] description], reuseView );
+                
 				[_reuseQueue removeObject:reuseView];
 				return reuseView;
 			}
 		}
 	}
 	
+    PERF_LEAVE_( _______reuse )
+    PERF_ENTER_( _______alloc )
+	
+    PERF_ENTER_( _______alloc1 )
 	UIView * newView = (UIView *)[BeeRuntime allocByClass:clazz];
+    PERF_LEAVE_( _______alloc1 )
+	
 	if ( newView )
 	{
+        PERF_ENTER_( _______alloc2 )
 		newView = [[newView initWithFrame:CGRectZero] autorelease];
+        PERF_LEAVE_( _______alloc2 )
+		
+		PERF( @"UIScrollView %p, create '%@' %p", self, [clazz description], newView );
 	}
-
-PERF_LEAVE
+    
+    PERF_LEAVE_( _______alloc )
+    
+    PERF_LEAVE
 	
 	return newView;
 }
 
 - (void)enqueueItem:(BeeUIScrollItem *)item
 {
-	UIView * reuseView = item.view;
-	if ( nil == reuseView )
+	if ( nil == item.view )
 		return;
-
-PERF_ENTER
-
+	
+	PERF( @"UIScrollView %p, enqueueItem %d => '%@'", self, item.index, [item.clazz description] );
+	
+	BOOL shouldRemove = YES;
+    
+    PERF_ENTER
+    
 	if ( _reuseEnable )
 	{
-		reuseView.hidden = YES;
-
-		[self bringSubviewToFront:reuseView];
-		
 		if ( _reuseQueue.count < MAX_QUEUED_ITEMS )
 		{
-	//		INFO( @"[+] UIScrollView, enqueue '%@' %p", [[reuseView class] description], reuseView );
-			
-			[_reuseQueue insertObject:reuseView atIndex:0];
-		}
-		else
-		{
-			[reuseView removeFromSuperview];
+			[_reuseQueue insertObject:item.view atIndex:0];
+            
+			shouldRemove = NO;
 		}
 	}
-	else
+	
+	if ( item.view && [item.view respondsToSelector:@selector(unbindData)] )
 	{
-		[reuseView removeFromSuperview];
+		[item.view performSelector:@selector(unbindData) withObject:nil];
 	}
 	
+	if ( item.visible )
+	{
+		if ( [item.view respondsToSelector:@selector(viewWillDisappear)] )
+		{
+			[item.view performSelector:@selector(viewWillDisappear) withObject:nil];
+		}
+        
+		item.visible = NO;
+		item.view.hidden = YES;
+        
+		if ( [item.view respondsToSelector:@selector(viewDidDisappear)] )
+		{
+			[item.view performSelector:@selector(viewDidDisappear) withObject:nil];
+		}
+	}
+    
+	if ( shouldRemove )
+	{
+		[item.view removeFromSuperview];
+	}
+    
+	item.view.hidden = YES;
 	item.view = nil;
-	item.visible = NO;
 	
-PERF_LEAVE
+    PERF_LEAVE
 }
 
-- (BOOL)dequeueItem:(BeeUIScrollItem *)item
+- (void)dequeueItem:(BeeUIScrollItem *)item
 {
-	BOOL dequeued = NO;
+	PERF( @"UIScrollView %p, dequeueItem %d => '%@'", self, item.index, [item.clazz description] );
 	
-PERF_ENTER
-		
-	if ( item.view && item.clazz && NO == [item.view isKindOfClass:item.clazz] )
+	PERF_ENTER
+    PERF_ENTER_( _______dequeueItem1 )
+	
+	if ( item.view )
 	{
-		[self enqueueItem:item];
+		if ( item.clazz && NO == [item.view isKindOfClass:item.clazz] )
+		{
+			BOOL shouldRemove = YES;
+			
+			if ( _reuseEnable )
+			{
+				if ( _reuseQueue.count < MAX_QUEUED_ITEMS )
+				{
+					[_reuseQueue insertObject:item.view atIndex:0];
+					
+					shouldRemove = NO;
+				}
+			}
+			
+			if ( item.view && [item.view respondsToSelector:@selector(unbindData)] )
+			{
+				[item.view performSelector:@selector(unbindData) withObject:nil];
+			}
+			
+			if ( shouldRemove )
+			{
+				[item.view removeFromSuperview];
+			}
+			
+			item.view.hidden = YES;
+			item.view = nil;
+		}
 	}
-		
+	
+    PERF_LEAVE_( _______dequeueItem1 )
+    PERF_ENTER_( _______dequeueItem2 )
+    
 	if ( nil == item.view )
 	{
 		if ( _dataSource )
 		{
-		PERF_ENTER_( step1 )
+            PERF_ENTER_( step1 )
 			
 			if ( [_dataSource respondsToSelector:@selector(scrollView:viewForIndex:scale:)] )
 			{
@@ -1384,38 +1642,38 @@ PERF_ENTER
 				item.view = [_dataSource scrollView:self viewForIndex:item.index];
 			}
 			
-		PERF_LEAVE_( step1 )
+            PERF_LEAVE_( step1 )
 		}
 		
 		if ( nil == item.view )
 		{
-		PERF_ENTER_( step2 )
+            PERF_ENTER_( step2 )
 			
 			if ( item.clazz )
 			{
-			PERF_ENTER_( step2_1 )
-
+                PERF_ENTER_( step2_1 )
+                
 				item.view = [self dequeueWithContentClass:item.clazz];
 				
-			PERF_LEAVE_( step2_1 )
+                PERF_LEAVE_( step2_1 )
 				
 				if ( nil == item.view )
 				{
-				PERF_ENTER_( step2_2 )
+                    PERF_ENTER_( step2_2 )
 					
 					item.view = [[[item.clazz alloc] init] autorelease];
 					
-				PERF_LEAVE_( step2_2 )
+                    PERF_LEAVE_( step2_2 )
 				}
 			}
 			
-		PERF_LEAVE_( step2 )
+            PERF_LEAVE_( step2 )
 		}
-
+        
 		if ( item.view )
 		{
-		PERF_ENTER_( step3 )
-
+            PERF_ENTER_( step3 )
+            
 			if ( nil == item.view.superview )
 			{
 				[self addSubview:item.view];
@@ -1428,104 +1686,150 @@ PERF_ENTER
 				[item.view release];
 			}
 			
-		PERF_LEAVE_( step3 )
+            PERF_LEAVE_( step3 )
+		}
+	}
+	
+    PERF_LEAVE_( _______dequeueItem2 )
+    PERF_ENTER_( _______dequeueItem3 )
+    
+	if ( item.view )
+	{
+		if ( item.data )
+		{
+			if ( [item.view respondsToSelector:@selector(bindData:)] )
+			{
+				[item.view performSelector:@selector(bindData:) withObject:item.data];
+			}
+		}
+		else
+		{
+			if ( [item.view respondsToSelector:@selector(unbindData)] )
+			{
+				[item.view performSelector:@selector(unbindData) withObject:nil];
+			}
+		}
+        
+		if ( NO == item.visible )
+		{
+			if ( [item.view respondsToSelector:@selector(viewWillAppear)] )
+			{
+				[item.view performSelector:@selector(viewWillAppear) withObject:nil];
+			}
+			
+			item.visible = YES;
+			item.view.hidden = NO;
+			
+			if ( [item.view respondsToSelector:@selector(viewDidAppear)] )
+			{
+				[item.view performSelector:@selector(viewDidAppear) withObject:nil];
+			}
 		}
 		
-		dequeued = YES;
+        //		[item.view setNeedsDisplay];
 	}
-
-	item.visible = YES;
-	item.view.hidden = NO;
 	
-PERF_LEAVE
-	
-	return dequeued;
+    PERF_LEAVE_( _______dequeueItem3 )
+    PERF_LEAVE
 }
 
 - (void)syncPositionsIfNeeded
 {
-	if ( _visibleStart >= _total || _visibleEnd >= _total )
-		return;
-
-//	BOOL		needed = NO;
-//	CGPoint		offset = self.contentOffset;
-//	CGSize		size = self.bounds.size;
-//
-//	offset.x += self.contentInset.left;
-//	offset.y += self.contentInset.top;
-//
-//	NSInteger	shortestLine = [self getShortestLine];
-//	CGFloat		shortestLineHeight = _lineHeights[shortestLine];
-//
-//	CGRect visibleStartRect = ((BeeUIScrollItem *)_items[_visibleStart]).rect;
-//	CGRect visibleEndRect = ((BeeUIScrollItem *)_items[_visibleEnd]).rect;
-//	
-//	if ( self.DIRECTION_VERTICAL == _direction )
-//	{
-//		if ( offset.y < CGRectGetMinY(visibleStartRect) )
-//		{
-//			needed = YES;
-//		}
-//		else if ( offset.y + size.height > fminf( CGRectGetMaxY(visibleEndRect), shortestLineHeight ) )
-//		{
-//			needed = YES;
-//		}
-//	}
-//	else if ( self.DIRECTION_HORIZONTAL == _direction )
-//	{
-//		if ( offset.x < CGRectGetMinX(visibleStartRect) )
-//		{
-//			needed = YES;
-//		}
-//		else if ( offset.x + size.width > fminf( CGRectGetMaxX(visibleEndRect), shortestLineHeight ) )
-//		{
-//			needed = YES;
-//		}
-//	}
-//
-//	if ( needed )
+    //	BOOL		needed = NO;
+    //	CGPoint		offset = self.contentOffset;
+    //	CGSize		size = self.frame.size;
+    //
+    //	offset.x += self.contentInset.left;
+    //	offset.y += self.contentInset.top;
+    //
+    //	NSInteger	shortestLine = [self getShortestLine];
+    //	CGFloat		shortestLineHeight = _lineHeights[shortestLine];
+    //
+    //	CGRect visibleStartRect = ((BeeUIScrollItem *)_items[_visibleStart]).rect;
+    //	CGRect visibleEndRect = ((BeeUIScrollItem *)_items[_visibleEnd]).rect;
+    //
+    //	if ( self.DIRECTION_VERTICAL == _direction )
+    //	{
+    //		if ( offset.y < CGRectGetMinY(visibleStartRect) )
+    //		{
+    //			needed = YES;
+    //		}
+    //		else if ( offset.y + size.height > fminf( CGRectGetMaxY(visibleEndRect), shortestLineHeight ) )
+    //		{
+    //			needed = YES;
+    //		}
+    //	}
+    //	else if ( self.DIRECTION_HORIZONTAL == _direction )
+    //	{
+    //		if ( offset.x < CGRectGetMinX(visibleStartRect) )
+    //		{
+    //			needed = YES;
+    //		}
+    //		else if ( offset.x + size.width > fminf( CGRectGetMaxX(visibleEndRect), shortestLineHeight ) )
+    //		{
+    //			needed = YES;
+    //		}
+    //	}
+    //
+    //	if ( needed )
 	{
+        PERF_ENTER_( ______________syncPositionsIfNeeded )
+		
 		BOOL changed = [self recalcRange];
 		if ( changed )
 		{
+            PERF_ENTER_( ______________syncPositionsIfNeeded2 )
+            PERF_ENTER_( ______________recalcItems )
+			
 			[self recalcItems:NO];
 			
-//			[self notifyLayouting];
-		
+            PERF_LEAVE_( ______________recalcItems )
+			
+            //			[self notifyLayouting];
+            
+            PERF_ENTER_( ______________syncCellPositions )
+			
 			[self syncCellPositions];
+			
+            PERF_LEAVE_( ______________syncCellPositions )
+            PERF_ENTER_( ______________syncPullPositions )
+			
 			[self syncPullPositions];
-
-//			[self notifyLayouted];
+			
+            PERF_LEAVE_( ______________syncPullPositions )
+            PERF_LEAVE_( ______________syncPositionsIfNeeded2 )
+			
+            //			[self notifyLayouted];
 		}
+		
+        PERF_LEAVE_( ______________syncPositionsIfNeeded )
 	}
 }
 
 - (BOOL)recalcRange
 {
-//	INFO( @"UIScrollView, subviews = %d", [self.subviews count] );
-	
 	if ( 0 == _total || 0 == _lineCount )
 	{
 		return NO;
 	}
-
-	NSUInteger	oldVisibleStart = _visibleStart;
-	NSUInteger	oldVisibleEnd = _visibleEnd;
-
-PERF_ENTER
+    
+	NSUInteger	oldVisibleStart	= _visibleStart;
+	NSUInteger	oldVisibleEnd	= _visibleEnd;
+    
+    PERF_ENTER
 	
 	NSInteger	lineFits = 0;
 	CGFloat		linePixels[MAX_LINES] = { 0.0f };
-
+    
 	_visibleStart = 0;
 	_visibleEnd = 0;
-
-PERF_ENTER_( a )
+    
+    PERF_ENTER_( a )
 	
 	for ( NSInteger i = 0; i < _total; ++i )
 	{
 		BeeUIScrollItem * item = [_items objectAtIndex:i];
-
+        
 		// 先找起始INDEX
 		if ( self.DIRECTION_HORIZONTAL == _direction )
 		{
@@ -1533,7 +1837,7 @@ PERF_ENTER_( a )
 			{
 				_visibleStart = i;
 				break;
-			}			
+			}
 		}
 		else
 		{
@@ -1545,88 +1849,101 @@ PERF_ENTER_( a )
 		}
 	}
 	
-PERF_LEAVE_( a )
-
-//	CGFloat rightEdge = self.contentOffset.x + (self.contentInset.left + self.contentInset.right) + self.bounds.size.width;
-//	CGFloat bottomEdge = self.contentOffset.y + (self.contentInset.top + self.contentInset.bottom) + self.bounds.size.height;
+    PERF_LEAVE_( a )
+    
+    //	CGFloat rightEdge = self.contentOffset.x + (self.contentInset.left + self.contentInset.right) + self.frame.size.width;
+    //	CGFloat bottomEdge = self.contentOffset.y + (self.contentInset.top + self.contentInset.bottom) + self.frame.size.height;
 	
-PERF_ENTER_( b )
+    PERF_ENTER_( b )
 	
 	for ( NSInteger j = _visibleStart; j < _total; ++j )
 	{
-		BOOL itemVisible = NO;
-
+        //		BOOL itemVisible = NO;
+        
 		BeeUIScrollItem * item = [_items objectAtIndex:j];
-				
+        
 		if ( self.DIRECTION_HORIZONTAL == _direction )
 		{
-			if ( linePixels[item.line] <= self.bounds.size.width )
+			if ( linePixels[item.line] <= self.frame.size.width )
 			{
-				itemVisible = YES;
+                //				itemVisible = YES;
 				
 				if ( item.rect.origin.x < self.contentOffset.x )
 				{
 					linePixels[item.line] += item.rect.origin.x + item.rect.size.width - self.contentOffset.x;
 				}
-//				else if ( item.rect.origin.x > rightEdge )
-//				{
-//					linePixels[item.line] += 0.0f;
-//				}
+                //				else if ( item.rect.origin.x > rightEdge )
+                //				{
+                //					linePixels[item.line] += 0.0f;
+                //				}
 				else
 				{
 					linePixels[item.line] += item.rect.size.width;
 				}
-
-				if ( linePixels[item.line] > self.bounds.size.width )
+                
+				if ( linePixels[item.line] >= self.frame.size.width )
 				{
 					lineFits += 1;
 				}
 			}
+			
+			if ( CGRectGetMinX(item.rect) < (self.contentOffset.x + self.frame.size.width) )
+			{
+				_visibleEnd = j + 1;
+			}
 		}
 		else
 		{
-			if ( linePixels[item.line] <= self.bounds.size.height )
+			if ( linePixels[item.line] <= self.frame.size.height )
 			{
-				itemVisible = YES;
+                //				itemVisible = YES;
 				
 				if ( item.rect.origin.y < self.contentOffset.y )
 				{
 					linePixels[item.line] += item.rect.origin.y + item.rect.size.height - self.contentOffset.y;
 				}
-//				else if ( item.rect.origin.y > bottomEdge )
-//				{
-//					linePixels[item.line] += 0.0f;
-//				}
+                //				else if ( item.rect.origin.y > bottomEdge )
+                //				{
+                //					linePixels[item.line] += 0.0f;
+                //				}
 				else
 				{
 					linePixels[item.line] += item.rect.size.height;
 				}
-
-				if ( linePixels[item.line] > self.bounds.size.height )
+                
+				if ( linePixels[item.line] >= self.frame.size.height )
 				{
 					lineFits += 1;
-				}		
+				}
+			}
+            
+			if ( CGRectGetMinY(item.rect) < (self.contentOffset.y + self.frame.size.height) )
+			{
+				_visibleEnd = j + 1;
 			}
 		}
 		
 		if ( lineFits >= _lineCount )
 		{
-			_visibleEnd = j;
+			_visibleEnd = j + 1;
 			break;
 		}
 	}
 	
-PERF_LEAVE_( b )
-
+    PERF_LEAVE_( b )
+    
 	if ( 0 == _visibleEnd )
 	{
-		_visibleEnd = (_total > 0) ? (_total - 1) : 0;
+		_visibleEnd = _total;
 	}
-
-PERF_LEAVE
+    
+    PERF_LEAVE
 	
 	if (  oldVisibleStart != _visibleStart || oldVisibleEnd != _visibleEnd )
 	{
+		PERF( @"visibleStart %d => %d", oldVisibleStart, _visibleStart );
+		PERF( @"visibleEnd %d => %d", oldVisibleEnd, _visibleEnd );
+		
 		return YES;
 	}
 	
@@ -1635,47 +1952,37 @@ PERF_LEAVE
 
 - (void)recalcItems:(BOOL)force
 {
-	if ( 0 == _total || 0 == _lineCount )
-	{
-		return;
-	}
-
 	for ( NSInteger i = 0; i < _total; ++i )
 	{
 		BeeUIScrollItem * item = [_items objectAtIndex:i];
-
-		if ( i >= _visibleStart && i <= _visibleEnd )
+        
+		if ( i >= _visibleStart && i < _visibleEnd )
 		{
-			BOOL dequeued = [self dequeueItem:item];
-			if ( dequeued )
+			if ( force )
 			{
-				if ( item.data )
-				{
-					if ( [item.view respondsToSelector:@selector(bindData:)] )
-					{
-						[item.view performSelector:@selector(bindData:) withObject:item.data];
-					}
-				}
-				else
-				{
-					if ( [item.view respondsToSelector:@selector(unbindData)] )
-					{
-						[item.view performSelector:@selector(unbindData) withObject:nil];
-					}
-				}
+				[self enqueueItem:item];
 			}
+			
+			[self dequeueItem:item];
 		}
 		else
 		{
 			[self enqueueItem:item];
 		}
 	}
+	
+	for ( NSInteger j = _total; j < _items.count; ++j )
+	{
+		BeeUIScrollItem * item = [_items objectAtIndex:j];
+        
+		[self enqueueItem:item];
+	}
 }
 
 - (void)didAnimationStop
 {
 	[self reloadData];
-
+    
 	[self notifyAnimated];
 }
 
@@ -1684,9 +1991,11 @@ PERF_LEAVE
 	if ( 0 == _total )
 		return;
 	
-PERF_ENTER
+    PERF_ENTER
 	
 	BOOL reachTop = (0 == _visibleStart) ? YES : NO;
+	BOOL reachEnd = NO;
+    
 	if ( reachTop )
 	{
 		if ( NO == _reachTop )
@@ -1694,24 +2003,23 @@ PERF_ENTER
 			[self notifyReachTop];
 			
 			_reachTop = YES;
-		}			
+		}
 	}
 	else
 	{
 		_reachTop = NO;
 	}
-	
-	BOOL				reachEnd = NO;
-	BeeUIScrollItem *	endItem = [_items objectAtIndex:_visibleEnd];
+    
 	UIEdgeInsets		insets = [self calcInsets];
+	BeeUIScrollItem *	endItem = (_visibleEnd ? [_items objectAtIndex:(_visibleEnd - 1)] : nil);
 	
 	if ( endItem )
 	{
 		if ( self.DIRECTION_HORIZONTAL == _direction )
 		{
-			CGFloat endEdge1 = self.contentOffset.x + self.bounds.size.width + 1.0f * insets.right;
+			CGFloat endEdge1 = self.contentOffset.x + self.frame.size.width + 1.0f * insets.right;
 			CGFloat endEdge2 = self.contentSize.width + 1.0f * insets.right;
-
+            
 			if ( CGRectGetMaxX(endItem.rect) >= fmaxf(endEdge1, endEdge2) )
 			{
 				reachEnd = YES;
@@ -1719,27 +2027,27 @@ PERF_ENTER
 		}
 		else
 		{
-			CGFloat endEdge1 = self.contentOffset.y + self.bounds.size.height + 1.0f * insets.bottom;
+			CGFloat endEdge1 = self.contentOffset.y + self.frame.size.height + 1.0f * insets.bottom;
 			CGFloat endEdge2 = self.contentSize.height + 1.0f * insets.bottom;
-
+            
 			if ( CGRectGetMaxY(endItem.rect) >= fmaxf(endEdge1, endEdge2) )
 			{
 				reachEnd = YES;
 			}
 		}
 	}
-
+    
 	if ( NO == reachEnd )
 	{
-		reachEnd = (_visibleEnd + _lineCount >= _total) ? YES : NO;
+		reachEnd = ((_visibleEnd + _lineCount) > _total) ? YES : NO;
 	}
-
+    
 	if ( reachEnd )
 	{
 		if ( NO == _reachEnd )
 		{
 			[self notifyReachBottom];
-
+            
 			if ( _footerLoader && NO == _footerLoader.hidden )
 			{
 				if ( NO == _footerLoader.loading && _footerLoader.more )
@@ -1752,17 +2060,17 @@ PERF_ENTER
 				{
 					_footerLoader.loading = NO;
 				}
-
-//				[UIView beginAnimations:nil context:NULL];
-//				[UIView setAnimationDuration:0.3f];
-//				[UIView setAnimationBeginsFromCurrentState:YES];
-//					
-//				[self syncPullPositions];
-//				[self syncPullInsets];
-//					
-//				[UIView commitAnimations];
+                
+                //				[UIView beginAnimations:nil context:NULL];
+                //				[UIView setAnimationDuration:0.3f];
+                //				[UIView setAnimationBeginsFromCurrentState:YES];
+                //
+                //				[self syncPullPositions];
+                //				[self syncPullInsets];
+                //
+                //				[UIView commitAnimations];
 			}
-
+            
 			_reachEnd = YES;
 		}
 	}
@@ -1770,7 +2078,7 @@ PERF_ENTER
 	{
 		_reachEnd = NO;
 	}
-
+    
 	NSMutableArray * orderedItems = [NSMutableArray nonRetainingArray];
 	[orderedItems addObjectsFromArray:_items];
 	[orderedItems sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
@@ -1784,8 +2092,8 @@ PERF_ENTER
 	{
 		[self bringSubviewToFront:orderedItem.view];
 	}
-
-	for ( NSInteger i = _visibleStart; i <= _visibleEnd; ++i )
+    
+	for ( NSInteger i = _visibleStart; i < _visibleEnd; ++i )
 	{
 		BeeUIScrollItem * item = [_items objectAtIndex:i];
 		if ( item.view )
@@ -1795,7 +2103,7 @@ PERF_ENTER
 			itemFrame.origin.y += item.insets.top;
 			itemFrame.size.width -= (item.insets.left + item.insets.right);
 			itemFrame.size.height -= (item.insets.top + item.insets.bottom);
-
+            
 			item.view.frame = itemFrame;
 		}
 	}
@@ -1808,14 +2116,55 @@ PERF_ENTER
 	{
 		_scrollSpeed.x = -((currentOffset.x - _lastScrollOffset.x) / 1000.0f);
 		_scrollSpeed.y = -((currentOffset.y - _lastScrollOffset.y) / 1000.0f);
-
+        
         _lastScrollOffset = currentOffset;
         _lastScrollTime = currentTime;
     }
+    
+    PERF_LEAVE
+}
 
-//	INFO( @"scrollSpeed = (%f, %f)", _scrollSpeed.x, _scrollSpeed.y );
+- (void)reloadSections
+{
+	NSInteger total = 0;
 	
-PERF_LEAVE
+	for ( BeeUIScrollSection * section in _sections )
+	{
+		id data = [_sectionDatas objectForKey:section.name];
+		if ( nil == data )
+			continue;
+		
+		if ( [data isKindOfClass:[NSArray class]] )
+		{
+			NSArray * array = data;
+			for ( id elem in array )
+			{
+				total += 1;
+				
+				self.total = total;
+				
+				BeeUIScrollItem * lastItem = self.lastItem;
+				lastItem.data = elem;
+				lastItem.name = section.name;
+				lastItem.rule = section.rule;
+				lastItem.clazz = section.viewClass;
+				lastItem.insets = section.viewInsets;
+			}
+		}
+		else
+		{
+			total += 1;
+			
+			self.total = total;
+			
+			BeeUIScrollItem * lastItem = self.lastItem;
+			lastItem.data = data;
+			lastItem.name = section.name;
+			lastItem.rule = section.rule;
+			lastItem.clazz = section.viewClass;
+			lastItem.insets = section.viewInsets;
+		}
+	}
 }
 
 - (void)reloadItems:(BOOL)force
@@ -1827,30 +2176,28 @@ PERF_LEAVE
 			[self enqueueItem:item];
 		}
 	}
-
-	if ( 0 == _total )
-		return;
-
+    
 	if ( 0 == _lineCount )
 		return;
-	
-PERF_ENTER
+    
+    PERF_ENTER
 	
 	CGFloat itemPixels = 0.0f;
 	
 	if ( self.DIRECTION_HORIZONTAL == _direction )
 	{
-		itemPixels = self.bounds.size.height / _lineCount;
+		
+		itemPixels = self.frame.size.height / _lineCount;
 	}
 	else
 	{
-		itemPixels = self.bounds.size.width / _lineCount;
+		itemPixels = self.frame.size.width / _lineCount;
 	}
 	
 	for ( NSInteger i = 0; i < _total; ++i )
 	{
 		BeeUIScrollItem * item = [_items safeObjectAtIndex:i];
-
+        
 		if ( nil == item )
 		{
 			item = [[BeeUIScrollItem alloc] init];
@@ -1858,17 +2205,17 @@ PERF_ENTER
 			[_items addObject:item];
 			[item release];
 		}
-
-//		item.line = 0;
-//		item.rect = CGRectAuto;
-//		item.insets = UIEdgeInsetsZero;
-//		item.scale = 1.0f;
-
+        
+        //		item.line = 0;
+        //		item.rect = CGRectAuto;
+        //		item.insets = UIEdgeInsetsZero;
+        //		item.scale = 1.0f;
+        
 		if ( _dataSource && [_dataSource respondsToSelector:@selector(scrollView:orderForIndex:)] )
 		{
 			item.order = [_dataSource scrollView:self orderForIndex:i];
 		}
-			
+        
 		if ( _dataSource && [_dataSource respondsToSelector:@selector(scrollView:sizeForIndex:)] )
 		{
 			item.size = [_dataSource scrollView:self sizeForIndex:i];
@@ -1879,23 +2226,37 @@ PERF_ENTER
 			{
 				if ( [item.clazz supportForUISizeEstimating] )
 				{
-					if ( self.DIRECTION_HORIZONTAL == _direction )
+					if ( BeeUIScrollLayoutRuleHorizontal == item.rule )
 					{
-						item.size = [item.clazz estimateUISizeByHeight:self.bounds.size.height forData:item.data];
+						if ( self.DIRECTION_HORIZONTAL == _direction )
+						{
+							item.size = [item.clazz estimateUISizeByHeight:self.frame.size.height forData:item.data];
+						}
+						else
+						{
+							item.size = [item.clazz estimateUISizeByWidth:self.frame.size.width forData:item.data];
+						}
 					}
 					else
 					{
-						item.size = [item.clazz estimateUISizeByWidth:self.bounds.size.width forData:item.data];						
+						if ( self.DIRECTION_HORIZONTAL == _direction )
+						{
+							item.size = [item.clazz estimateUISizeByHeight:self.lineSize forData:item.data];
+						}
+						else
+						{
+							item.size = [item.clazz estimateUISizeByWidth:self.lineSize forData:item.data];
+						}
 					}
 				}
 			}
 		}
-
+        
 		if ( _dataSource && [_dataSource respondsToSelector:@selector(scrollView:ruleForIndex:)] )
 		{
 			item.rule = [_dataSource scrollView:self ruleForIndex:i];
 		}
-
+        
 		if ( self.DIRECTION_HORIZONTAL == _direction )
 		{
 			item.columns = floorf( (item.size.height + itemPixels - 1) / itemPixels );
@@ -1904,7 +2265,7 @@ PERF_ENTER
 		{
 			item.columns = floorf( (item.size.width + itemPixels - 1) / itemPixels );
 		}
-
+        
 		if ( item.columns > _lineCount )
 		{
 			item.columns = _lineCount;
@@ -1915,88 +2276,35 @@ PERF_ENTER
 			item.columns = 1;
 		}
 	}
-
+    
 	for ( NSInteger i = 0; i < MAX_LINES; ++i )
 	{
 		_lineHeights[i] = 0.0f;
 	}
-
-	NSMutableArray * gaps = [NSMutableArray array];
-
+    
 	BeeUIScrollItem *		prevItem = nil;
 	BeeUIScrollItem *		currItem = nil;
-	BeeUIScrollLayoutRule	currRule;
 	NSInteger				baseIndex = 0;
-
+    
 	for ( NSInteger i = 0; i < _total; ++i )
 	{
 		prevItem = currItem;
 		currItem = [_items objectAtIndex:i];
-		currRule = currItem.rule;
-
+        
 		if ( prevItem && prevItem.section != currItem.section )
 		{
 			baseIndex = currItem.index;
 		}
-
-		do
+        
+		NSUInteger	shortestLine = [self getShortestLine];
+		NSInteger	longestLine = [self getLongestLine];
+        
+		if ( BeeUIScrollLayoutRuleVertical == currItem.rule )
 		{
-		// Tile
-			
-			if ( BeeUIScrollLayoutRule_Tile == currRule )
-			{
-				currItem.line = [self getShortestLine];
-
-				if ( self.DIRECTION_HORIZONTAL == _direction )
-				{
-					CGRect itemRect;
-					itemRect.origin.x = _lineHeights[currItem.line];
-					itemRect.origin.y = currItem.line * itemPixels;
-					itemRect.size.width = currItem.size.width;
-					itemRect.size.height = itemPixels * currItem.columns;
-
-					currItem.rect = itemRect;
-					currItem.scale = 1.0f;
-
-					for ( NSInteger k = 0; k < currItem.columns; ++k )
-					{
-						NSInteger itemLine = currItem.line + k;
-						if ( itemLine >= _lineCount )
-							break;
-						
-						_lineHeights[itemLine] = CGRectGetMaxX(itemRect);
-					}
-				}
-				else
-				{
-					CGRect itemRect;
-					itemRect.origin.x = currItem.line * itemPixels;
-					itemRect.origin.y = _lineHeights[currItem.line];
-					itemRect.size.width = itemPixels * currItem.columns;
-					itemRect.size.height = currItem.size.height;
-
-					currItem.rect = itemRect;
-					currItem.scale = 1.0f;
-
-					for ( NSInteger k = 0; k < currItem.columns; ++k )
-					{
-						NSInteger itemLine = currItem.line + k;
-						if ( itemLine >= _lineCount )
-							break;
-						
-						_lineHeights[itemLine] = CGRectGetMaxY(itemRect);
-					}
-				}
-
-				break;
-			}
-
-		// Fall
-			
-			if ( BeeUIScrollLayoutRule_Fall == currRule )
+			if ( currItem.columns <= 1 )
 			{
 				currItem.line = (currItem.index - baseIndex) % _lineCount;
-
+				
 				if ( self.DIRECTION_HORIZONTAL == _direction )
 				{
 					CGRect itemRect;
@@ -2004,16 +2312,16 @@ PERF_ENTER
 					itemRect.origin.y = currItem.line * itemPixels;
 					itemRect.size.width = currItem.size.width;
 					itemRect.size.height = itemPixels * currItem.columns;
-
+					
 					currItem.rect = itemRect;
 					currItem.scale = 1.0f;
-
+					
 					for ( NSInteger k = 0; k < currItem.columns; ++k )
 					{
 						NSInteger itemLine = currItem.line + k;
 						if ( itemLine >= _lineCount )
 							break;
-
+						
 						_lineHeights[itemLine] = CGRectGetMaxX(itemRect);
 					}
 				}
@@ -2024,10 +2332,10 @@ PERF_ENTER
 					itemRect.origin.y = _lineHeights[currItem.line];
 					itemRect.size.width = itemPixels * currItem.columns;
 					itemRect.size.height = currItem.size.height;
-
+					
 					currItem.rect = itemRect;
 					currItem.scale = 1.0f;
-
+					
 					for ( NSInteger k = 0; k < currItem.columns; ++k )
 					{
 						NSInteger itemLine = currItem.line + k;
@@ -2037,161 +2345,9 @@ PERF_ENTER
 						_lineHeights[itemLine] = CGRectGetMaxY(itemRect);
 					}
 				}
-
-				break;
 			}
-
-		// Fill
-
-			if ( BeeUIScrollLayoutRule_Fill == currRule )
+			else
 			{
-				BOOL		gapFound = NO;
-				NSUInteger	gapLine = 0;
-				CGRect		gapRect = CGRectZero;
-				
-				for ( NSDictionary * gap in gaps )
-				{
-					NSValue *	rect = [gap objectForKey:@"rect"];
-					NSNumber *	line = [gap objectForKey:@"line"];
-					
-					gapLine = [line unsignedIntValue];
-					gapRect = [rect CGRectValue];
-					
-					if ( self.DIRECTION_HORIZONTAL == _direction )
-					{
-						if ( gapRect.size.width >= currItem.size.width )
-						{
-							gapFound = YES;
-							
-							[gaps removeObject:gap];
-							break;
-						}
-					}
-					else
-					{
-						if ( gapRect.size.height >= currItem.size.height )
-						{
-							gapFound = YES;
-							
-							[gaps removeObject:gap];
-							break;
-						}
-					}
-				}
-				
-				if ( NO == gapFound )
-				{
-					currRule = BeeUIScrollLayoutRule_Tile;
-					continue;
-				}
-				
-				currItem.line = gapLine;
-				currItem.rect = gapRect;
-				break;
-			}
-
-		// Line
-
-			if ( BeeUIScrollLayoutRule_Line == currRule )
-			{
-				NSInteger longestLine = [self getLongestLine];
-				
-				currItem.line = 0;
-				currItem.columns = _lineCount;
-				
-				if ( self.DIRECTION_HORIZONTAL == _direction )
-				{
-					CGRect itemRect;
-					itemRect.origin.x = _lineHeights[longestLine];
-					itemRect.origin.y = currItem.line * itemPixels;
-					itemRect.size.width = currItem.size.width;
-					itemRect.size.height = itemPixels * currItem.columns;
-
-					currItem.rect = itemRect;
-					currItem.scale = 1.0f;
-				}
-				else
-				{
-					CGRect itemRect;
-					itemRect.origin.x = currItem.line * itemPixels;
-					itemRect.origin.y = _lineHeights[longestLine];
-					itemRect.size.width = itemPixels * currItem.columns;
-					itemRect.size.height = currItem.size.height;
-
-					currItem.rect = itemRect;
-					currItem.scale = 1.0f;
-				}
-
-				for ( NSUInteger m = 0; m < _lineCount; ++m )
-				{
-					if ( self.DIRECTION_HORIZONTAL == _direction )
-					{
-						CGFloat minX = CGRectGetMinX( currItem.rect );
-						CGFloat diff = minX - _lineHeights[m];
-						
-						if ( diff > 0 )
-						{
-							CGRect gap;
-							gap.origin.x = _lineHeights[m];
-							gap.origin.y = m * itemPixels;
-							gap.size.width = diff;
-							gap.size.height = itemPixels;
-
-							NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
-												   [NSNumber numberWithUnsignedInt:m],	@"line",
-												   [NSValue valueWithCGRect:gap],		@"rect",
-												   nil];
-							
-							[gaps addObject:dict];
-						}
-
-						_lineHeights[m] = CGRectGetMaxX( currItem.rect );
-					}
-					else
-					{
-						CGFloat minY = CGRectGetMinY( currItem.rect );
-						CGFloat diff = minY - _lineHeights[m];
-						
-						if ( diff > 0 )
-						{
-							CGRect gap;
-							gap.origin.x = m * itemPixels;
-							gap.origin.y = _lineHeights[m];
-							gap.size.width = itemPixels;
-							gap.size.height = diff;
-							
-							NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
-												   [NSNumber numberWithUnsignedInt:m],	@"line",
-												   [NSValue valueWithCGRect:gap],		@"rect",
-												   nil];
-							
-							[gaps addObject:dict];
-						}
-
-						_lineHeights[m] = CGRectGetMaxY( currItem.rect );
-					}
-				}
-				
-				break;
-			}
-
-		// Inject
-
-			if ( BeeUIScrollLayoutRule_Inject == currRule )
-			{
-//				if ( 1 == currItem.columns )
-//				{
-//					currRule = BeeUIScrollLayoutRule_Tile;
-//					continue;
-//				}
-
-				NSUInteger shortestLine = [self getShortestLine];
-//				if ( shortestLine + currItem.columns <= _lineCount )
-//				{
-//					currRule = BeeUIScrollLayoutRule_Tile;
-//					continue;
-//				}
-
 				if ( shortestLine + currItem.columns >= _lineCount )
 				{
 					currItem.line = _lineCount - currItem.columns;
@@ -2213,10 +2369,10 @@ PERF_ENTER
 					itemRect.origin.y = currItem.line * itemPixels;
 					itemRect.size.width = currItem.size.width;
 					itemRect.size.height = itemPixels * currItem.columns;
-
+					
 					currItem.rect = itemRect;
 					currItem.scale = 1.0f;
-
+					
 					for ( NSInteger k = 0; k < currItem.columns; ++k )
 					{
 						NSInteger itemLine = currItem.line + k;
@@ -2233,12 +2389,12 @@ PERF_ENTER
 					itemRect.origin.y = _lineHeights[shortestLine];
 					itemRect.size.width = itemPixels * currItem.columns;
 					itemRect.size.height = currItem.size.height;
-
+					
 					itemRect.origin.x += currItem.insets.left;
 					itemRect.origin.y += currItem.insets.top;
 					itemRect.size.width -= (currItem.insets.left + currItem.insets.right);
 					itemRect.size.height -= (currItem.insets.top + currItem.insets.bottom);
-
+					
 					currItem.rect = itemRect;
 					currItem.scale = 1.0f;
 					
@@ -2247,11 +2403,11 @@ PERF_ENTER
 						NSInteger itemLine = currItem.line + k;
 						if ( itemLine >= _lineCount )
 							break;
-
+						
 						_lineHeights[itemLine] = CGRectGetMaxY(currItem.rect);
 					}
 				}
-
+				
 				for ( NSInteger j = 0; j < i; ++j )
 				{
 					BeeUIScrollItem * item2 = [_items objectAtIndex:j];
@@ -2266,7 +2422,7 @@ PERF_ENTER
 								itemRect.origin.x = CGRectGetMaxX( currItem.rect );
 								item2.rect = itemRect;
 							}
-
+							
 							if ( CGRectGetMaxX(item2.rect) > _lineHeights[item2.line] )
 							{
 								_lineHeights[item2.line] = CGRectGetMaxX(item2.rect);
@@ -2280,7 +2436,7 @@ PERF_ENTER
 								itemRect.origin.y = CGRectGetMaxY( currItem.rect );
 								item2.rect = itemRect;
 							}
-
+							
 							if ( CGRectGetMaxY(item2.rect) > _lineHeights[item2.line] )
 							{
 								_lineHeights[item2.line] = CGRectGetMaxY(item2.rect);
@@ -2288,39 +2444,76 @@ PERF_ENTER
 						}
 					}
 				}
-
-				break;
 			}
 		}
-		while ( 0 );
+		else if ( BeeUIScrollLayoutRuleHorizontal == currItem.rule )
+		{
+			currItem.line = 0;
+			currItem.columns = _lineCount;
+			
+			if ( self.DIRECTION_HORIZONTAL == _direction )
+			{
+				CGRect itemRect;
+				itemRect.origin.x = _lineHeights[longestLine];
+				itemRect.origin.y = currItem.line * itemPixels;
+				itemRect.size.width = currItem.size.width;
+				itemRect.size.height = itemPixels * currItem.columns;
+                
+				currItem.rect = itemRect;
+				currItem.scale = 1.0f;
+			}
+			else
+			{
+				CGRect itemRect;
+				itemRect.origin.x = currItem.line * itemPixels;
+				itemRect.origin.y = _lineHeights[longestLine];
+				itemRect.size.width = itemPixels * currItem.columns;
+				itemRect.size.height = currItem.size.height;
+                
+				currItem.rect = itemRect;
+				currItem.scale = 1.0f;
+			}
+            
+			for ( NSUInteger m = 0; m < _lineCount; ++m )
+			{
+				if ( self.DIRECTION_HORIZONTAL == _direction )
+				{
+					_lineHeights[m] = CGRectGetMaxX( currItem.rect );
+				}
+				else
+				{
+					_lineHeights[m] = CGRectGetMaxY( currItem.rect );
+				}
+			}
+		}
 	}
-
+    
 	NSInteger bottomLine = [self getLongestLine];
-
+    
 	if ( bottomLine < _lineCount )
 	{
 		if ( self.DIRECTION_HORIZONTAL == _direction )
 		{
-			self.contentSize = CGSizeMake( _lineHeights[bottomLine], self.bounds.size.height );
+			self.contentSize = CGSizeMake( _lineHeights[bottomLine], self.frame.size.height );
 		}
 		else
 		{
-			self.contentSize = CGSizeMake( self.bounds.size.width, _lineHeights[bottomLine] );
+			self.contentSize = CGSizeMake( self.frame.size.width, _lineHeights[bottomLine] );
 		}
 	}
 	else
 	{
 		if ( self.DIRECTION_HORIZONTAL == _direction )
 		{
-			self.contentSize = CGSizeMake( 0.0f, self.bounds.size.height );
+			self.contentSize = CGSizeMake( 0.0f, self.frame.size.height );
 		}
 		else
 		{
-			self.contentSize = CGSizeMake( self.bounds.size.width, 0.0f );
+			self.contentSize = CGSizeMake( self.frame.size.width, 0.0f );
 		}
 	}
 	
-PERF_LEAVE
+    PERF_LEAVE
 }
 
 - (CGFloat)lineSize
@@ -2329,14 +2522,14 @@ PERF_LEAVE
 	{
 		return 0.0f;
 	}
-
+    
 	if ( self.DIRECTION_HORIZONTAL == _direction )
 	{
-		return self.bounds.size.height / self.lineCount;
+		return self.frame.size.height / self.lineCount;
 	}
 	else
 	{
-		return self.bounds.size.width / self.lineCount;
+		return self.frame.size.width / self.lineCount;
 	}
 }
 
@@ -2348,7 +2541,7 @@ PERF_LEAVE
 	}
 	
 	NSInteger longest = 0;
-
+    
 	for ( NSInteger i = 0; i < _lineCount; ++i )
 	{
 		if ( _lineHeights[i] > _lineHeights[longest] )
@@ -2357,7 +2550,7 @@ PERF_LEAVE
 		}
 	}
 	
-	return longest;	
+	return longest;
 }
 
 - (NSInteger)getShortestLine
@@ -2368,7 +2561,7 @@ PERF_LEAVE
 	}
 	
 	NSInteger shortest = 0;
-
+    
 	for ( NSInteger i = 0; i < _lineCount; ++i )
 	{
 		if ( _lineHeights[i] < _lineHeights[shortest] )
@@ -2423,10 +2616,10 @@ PERF_LEAVE
 		{
 			_headerLoader = [[BeeUIPullLoader spawn] retain];
 		}
-
+        
 		_headerLoader.hidden = YES;
-//		_headerLoader.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
-
+        //		_headerLoader.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
+        
 		if ( _direction == self.DIRECTION_HORIZONTAL )
 		{
 			_headerLoader.transform = CGAffineTransformMakeRotation( M_PI / 2.0f * 3.0f );
@@ -2435,7 +2628,7 @@ PERF_LEAVE
 		{
 			_headerLoader.transform = CGAffineTransformIdentity;
 		}
-
+        
 		[self addSubview:_headerLoader];
 		[self bringSubviewToFront:_headerLoader];
 	}
@@ -2468,14 +2661,14 @@ PERF_LEAVE
 			_footerLoader = [[BeeUIFootLoader spawn] retain];
 			_footerLoader.hidden = YES;
 		}
-
-//		_footerLoader.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
-
+        
+        //		_footerLoader.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
+        
 		[self addSubview:_footerLoader];
 		[self bringSubviewToFront:_footerLoader];
 	}
-
-	if ( flag )
+    
+	if ( flag ) // TODO: ( flag && _total )
 	{
 		_footerLoader.hidden = NO;
 	}
@@ -2490,6 +2683,9 @@ PERF_LEAVE
 
 - (void)setHeaderLoading:(BOOL)en
 {
+	if ( en == _headerLoader.loading )
+		return;
+	
 	if ( _headerLoader )
 	{
 		if ( en )
@@ -2497,27 +2693,21 @@ PERF_LEAVE
 			if ( NO == _headerLoader.loading )
 			{
 				_headerLoader.loading = YES;
-
-				[UIView beginAnimations:nil context:NULL];
-				[UIView setAnimationBeginsFromCurrentState:YES];
-				[UIView setAnimationDuration:LOADING_ANIMATION_DURATION];
 				
 				[self syncPullInsets];
-				
-				[UIView commitAnimations];
 				
 				if ( _direction == self.DIRECTION_HORIZONTAL )
 				{
 					if ( self.contentOffset.x <= 0.0f )
 					{
-						[self setContentOffset:CGPointMake(-self.contentInset.left, 0) animated:YES];
+						[self setContentOffset:CGPointMake(-self.contentInset.left, 0) animated:NO];
 					}
 				}
 				else
 				{
 					if ( self.contentOffset.y <= 0.0f )
 					{
-						[self setContentOffset:CGPointMake(0, -self.contentInset.top) animated:YES];
+						[self setContentOffset:CGPointMake(0, -self.contentInset.top) animated:NO];
 					}
 				}
 			}
@@ -2527,26 +2717,14 @@ PERF_LEAVE
 			if ( _headerLoader.loading )
 			{
 				_headerLoader.loading = NO;
-
-				[UIView beginAnimations:nil context:NULL];
-				[UIView setAnimationBeginsFromCurrentState:YES];
-				[UIView setAnimationDuration:LOADING_ANIMATION_DURATION];
-				
+                
 				[self syncPullInsets];
-				
-				[UIView commitAnimations];
 			}
 			else if ( _headerLoader.pulling )
 			{
 				_headerLoader.pulling = NO;
 				
-				[UIView beginAnimations:nil context:NULL];
-				[UIView setAnimationBeginsFromCurrentState:YES];
-				[UIView setAnimationDuration:LOADING_ANIMATION_DURATION];
-				
 				[self syncPullInsets];
-				
-				[UIView commitAnimations];				
 			}
 		}
 	}
@@ -2554,17 +2732,14 @@ PERF_LEAVE
 
 - (void)setFooterLoading:(BOOL)en
 {
+	if ( en == _footerLoader.loading )
+		return;
+    
 	if ( _footerLoader && NO == _footerLoader.hidden )
 	{
 		_footerLoader.loading = en;
-
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationBeginsFromCurrentState:YES];
-		[UIView setAnimationDuration:LOADING_ANIMATION_DURATION];
-		
+        
 		[self syncPullInsets];
-		
-		[UIView commitAnimations];
 	}
 	else
 	{
@@ -2577,15 +2752,9 @@ PERF_LEAVE
 	if ( _footerLoader && NO == _footerLoader.hidden )
 	{
 		_footerLoader.more = en;
-
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationBeginsFromCurrentState:YES];
-		[UIView setAnimationDuration:LOADING_ANIMATION_DURATION];
-		
+        
 		[self syncPullInsets];
-		
-		[UIView commitAnimations];
-	}	
+	}
 	else
 	{
 		_footerLoader.more = en;
@@ -2594,13 +2763,13 @@ PERF_LEAVE
 
 - (void)syncPullPositions
 {
-PERF_ENTER
+    PERF_ENTER
 	
 	if ( _headerLoader )
 	{
 		CGRect pullFrame;
 		UIEdgeInsets insets = [self calcInsets];
-
+        
 		if ( _direction == self.DIRECTION_HORIZONTAL )
 		{
 			if ( [BeeUIConfig sharedInstance].iOS6Mode )
@@ -2611,10 +2780,10 @@ PERF_ENTER
 			{
 				pullFrame.origin.x = - _headerLoader.bounds.size.width;
 			}
-
+            
 			pullFrame.origin.y = 0.0f;
 			pullFrame.size.width = _headerLoader.bounds.size.width;
-			pullFrame.size.height = self.bounds.size.height;
+			pullFrame.size.height = self.frame.size.height;
 		}
 		else
 		{
@@ -2628,56 +2797,56 @@ PERF_ENTER
 			{
 				pullFrame.origin.y = - _headerLoader.bounds.size.height;
 			}
-
-			pullFrame.size.width = self.bounds.size.width;
+            
+			pullFrame.size.width = self.frame.size.width;
 			pullFrame.size.height = _headerLoader.bounds.size.height;
 		}
-
+        
 		_headerLoader.frame = pullFrame;
-
-//		INFO( @"headerLoader, frame = (%f,%f,%f,%f), insets = (%f,%f,%f,%f)",
-//		   _headerLoader.frame.origin.x, _headerLoader.frame.origin.y,
-//		   _headerLoader.frame.size.width, _headerLoader.frame.size.height,
-//		   self.contentInset.top, self.contentInset.left,
-//		   self.contentInset.bottom, self.contentInset.right
-//		   );
+        
+        //		PERF( @"headerLoader, frame = (%f,%f,%f,%f), insets = (%f,%f,%f,%f)",
+        //		   _headerLoader.frame.origin.x, _headerLoader.frame.origin.y,
+        //		   _headerLoader.frame.size.width, _headerLoader.frame.size.height,
+        //		   self.contentInset.top, self.contentInset.left,
+        //		   self.contentInset.bottom, self.contentInset.right
+        //		   );
 	}
-
+    
 	if ( _footerLoader && NO == _footerLoader.hidden )
 	{
 		CGRect footFrame;
-
+        
 		if ( _direction == self.DIRECTION_HORIZONTAL )
 		{
 			footFrame.origin.x = self.contentSize.width;
 			footFrame.origin.y = 0.0f;
 			footFrame.size.width = _footerLoader.bounds.size.width;
-			footFrame.size.height = self.bounds.size.height;
+			footFrame.size.height = self.frame.size.height;
 		}
 		else
 		{
 			footFrame.origin.x = 0.0f;
 			footFrame.origin.y = self.contentSize.height;
-			footFrame.size.width = self.bounds.size.width;
+			footFrame.size.width = self.frame.size.width;
 			footFrame.size.height = _footerLoader.bounds.size.height;
 		}
-
+        
 		_footerLoader.frame = footFrame;
-
-//		INFO( @"footerLoader, frame = (%f,%f,%f,%f), insets = (%f,%f,%f,%f)",
-//		   _footerLoader.frame.origin.x, _footerLoader.frame.origin.y,
-//		   _footerLoader.frame.size.width, _footerLoader.frame.size.height,
-//		   self.contentInset.top, self.contentInset.left,
-//		   self.contentInset.bottom, self.contentInset.right
-//		   );
+        
+        //		PERF( @"footerLoader, frame = (%f,%f,%f,%f), insets = (%f,%f,%f,%f)",
+        //		   _footerLoader.frame.origin.x, _footerLoader.frame.origin.y,
+        //		   _footerLoader.frame.size.width, _footerLoader.frame.size.height,
+        //		   self.contentInset.top, self.contentInset.left,
+        //		   self.contentInset.bottom, self.contentInset.right
+        //		   );
 	}
 	
-PERF_LEAVE
+    PERF_LEAVE
 }
 
 - (void)syncPullInsets
 {
-PERF_ENTER
+    PERF_ENTER
 	
 	UIEdgeInsets insets = [self calcInsets];
 	
@@ -2694,13 +2863,6 @@ PERF_ENTER
 				insets.top += _headerLoader.bounds.size.height;
 			}
 		}
-		
-//		INFO( @"headerLoader, frame = (%f,%f,%f,%f), insets = (%f,%f,%f,%f)",
-//		   _headerLoader.frame.origin.x, _headerLoader.frame.origin.y,
-//		   _headerLoader.frame.size.width, _headerLoader.frame.size.height,
-//		   self.contentInset.top, self.contentInset.left,
-//		   self.contentInset.bottom, self.contentInset.right
-//		   );
 	}
 	
 	if ( _footerLoader && NO == _footerLoader.hidden )
@@ -2717,10 +2879,73 @@ PERF_ENTER
 			}
 		}
 	}
-
-	self.contentInset = insets;
+    
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationBeginsFromCurrentState:YES];
+	[UIView setAnimationDuration:self.animationDuration];
 	
-PERF_LEAVE
+	self.contentInset = insets;
+    
+	[UIView commitAnimations];
+	
+    PERF_LEAVE
+}
+
+#pragma mark -
+
+- (void)appendSection:(BeeUIScrollSection *)section
+{
+	[_sections addObject:section];
+}
+
+- (void)removeSection:(NSString *)name
+{
+	NSArray * copiedSections = [[_sections copy] autorelease];
+	
+	for ( BeeUIScrollSection * section in copiedSections )
+	{
+		if ( [section.name isEqualToString:name] )
+		{
+			[_sections removeAllObjects];
+		}
+	}
+}
+
+- (void)removeAllSections
+{
+	[_sections removeAllObjects];
+}
+
+- (id)objectAtIndexedSubscript:(NSUInteger)index
+{
+	BeeUIScrollItem * item = [_items safeObjectAtIndex:index];
+	if ( item )
+	{
+		return item.data;
+	}
+	
+	return nil;
+}
+
+- (void)setObject:(id)obj atIndexedSubscript:(NSUInteger)index
+{
+	BeeUIScrollItem * item = [_items safeObjectAtIndex:index];
+	if ( item )
+	{
+		item.data = obj;
+	}
+}
+
+- (id)objectForKeyedSubscript:(id)key
+{
+	return [_sectionDatas objectForKey:key];
+}
+
+- (void)setObject:(id)obj forKeyedSubscript:(id)key
+{
+	[_sectionDatas setObject:obj forKey:key];
+	
+	[self reloadSections];
 }
 
 #pragma mark -
@@ -2758,7 +2983,7 @@ PERF_LEAVE
 
 - (BeeUIScrollLayoutRule)scrollView:(BeeUIScrollView *)scrollView ruleForIndex:(NSInteger)index
 {
-	return BeeUIScrollLayoutRule_Tile;
+	return BeeUIScrollLayoutRuleVertical;
 }
 
 #pragma mark -
@@ -2766,10 +2991,10 @@ PERF_LEAVE
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-//	if ( [BeeUIConfig sharedInstance].highPerformance )
-//	{
-//		self.layer.shouldRasterize = YES;
-//	}
+    //	if ( [BeeUIConfig sharedInstance].highPerformance )
+    //	{
+    //		self.layer.shouldRasterize = YES;
+    //	}
 	
 	if ( scrollView.dragging )
 	{
@@ -2783,7 +3008,7 @@ PERF_LEAVE
 			{
 				CGFloat offset = scrollView.contentOffset.x;
 				CGFloat boundX = -(insets.left + _headerLoader.bounds.size.width);
-
+                
 				if ( offset < boundX )
 				{
 					if ( NO == _headerLoader.pulling )
@@ -2807,7 +3032,7 @@ PERF_LEAVE
 			{
 				CGFloat offset = scrollView.contentOffset.y;
 				CGFloat boundY = -(insets.top + _headerLoader.bounds.size.height);
-
+                
 				if ( offset < boundY )
 				{
 					if ( NO == _headerLoader.pulling )
@@ -2829,14 +3054,14 @@ PERF_LEAVE
 			}
 		}
 	}
-
+    
 	if ( _shouldNotify )
 	{
 		if ( self.enableAllEvents )
 		{
 			[self sendUISignal:BeeUIScrollView.DID_SCROLL];
 		}
-
+        
 		if ( self.whenScrolling )
 		{
 			self.whenScrolling();
@@ -2848,21 +3073,21 @@ PERF_LEAVE
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-//	if ( [BeeUIConfig sharedInstance].highPerformance )
-//	{
-//		self.layer.shouldRasterize = NO;
-//	}
-
+    //	if ( [BeeUIConfig sharedInstance].highPerformance )
+    //	{
+    //		self.layer.shouldRasterize = NO;
+    //	}
+    
 	[self syncPositionsIfNeeded];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-//	if ( [BeeUIConfig sharedInstance].highPerformance )
-//	{
-//		self.layer.shouldRasterize = NO;
-//	}
-
+    //	if ( [BeeUIConfig sharedInstance].highPerformance )
+    //	{
+    //		self.layer.shouldRasterize = NO;
+    //	}
+    
 	if ( decelerate )
 	{
 		// header loader
@@ -2881,7 +3106,7 @@ PERF_LEAVE
 					if ( NO == _headerLoader.loading )
 					{
 						_headerLoader.loading = YES;
-	
+                        
 						[self notifyHeaderRefresh];
 					}
 				}
@@ -2923,29 +3148,28 @@ PERF_LEAVE
 					}
 				}
 			}
-			
-			[UIView beginAnimations:nil context:NULL];
-//			[UIView setAnimationBeginsFromCurrentState:YES];
-			[UIView setAnimationDuration:LOADING_ANIMATION_DURATION];
-			
+            
 			[self syncPullPositions];
 			[self syncPullInsets];
-			
-			[UIView commitAnimations];
 		}
 	}
-
+    
 	if ( _shouldNotify )
 	{
 		if ( self.enableAllEvents )
 		{
 			[self sendUISignal:BeeUIScrollView.DID_DRAG];
-//			[self sendUISignal:BeeUIScrollView.DID_STOP];
+            //			[self sendUISignal:BeeUIScrollView.DID_STOP];
 		}
-	
+        
 		if ( self.whenScrolling )
 		{
 			self.whenScrolling();
+		}
+		
+		if ( self.whenDragged )
+		{
+			self.whenDragged();
 		}
 	}
 	
@@ -2954,44 +3178,44 @@ PERF_LEAVE
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
 {
-//	if ( [BeeUIConfig sharedInstance].highPerformance )
-//	{
-//		self.layer.shouldRasterize = YES;
-//	}
-
+    //	if ( [BeeUIConfig sharedInstance].highPerformance )
+    //	{
+    //		self.layer.shouldRasterize = YES;
+    //	}
+    
 	[self syncPositionsIfNeeded];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-//	if ( [BeeUIConfig sharedInstance].highPerformance )
-//	{
-//		self.layer.shouldRasterize = NO;
-//	}
-
+    //	if ( [BeeUIConfig sharedInstance].highPerformance )
+    //	{
+    //		self.layer.shouldRasterize = NO;
+    //	}
+    
 	if ( _shouldNotify )
 	{
 		if ( self.enableAllEvents )
 		{
 			[self sendUISignal:BeeUIScrollView.DID_STOP];
 		}
-
+        
 		if ( self.whenStop )
 		{
 			self.whenStop();
 		}
 	}
-
+    
 	[self syncPositionsIfNeeded];
 }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
-//	if ( [BeeUIConfig sharedInstance].highPerformance )
-//	{
-//		self.layer.shouldRasterize = NO;
-//	}
-
+    //	if ( [BeeUIConfig sharedInstance].highPerformance )
+    //	{
+    //		self.layer.shouldRasterize = NO;
+    //	}
+    
 	[self syncPositionsIfNeeded];
 }
 

@@ -41,7 +41,22 @@
 #pragma mark -
 
 #undef	RESOURCE_NAME
-#define RESOURCE_NAME	@"xml-tag.json"
+#define	RESOURCE_NAME	@"xml-tag.json"
+
+#pragma mark -
+
+@implementation NSObject(XMLParser)
+
++ (void)parseXMLElement:(CXMLElement *)elem forLayout:(BeeUILayout *)layout
+{
+}
+
+- (void)parseXMLElement:(CXMLElement *)elem forLayout:(BeeUILayout *)layout
+{
+	[[self class] parseXMLElement:elem forLayout:layout];
+}
+
+@end
 
 #pragma mark -
 
@@ -83,6 +98,7 @@ DEF_SINGLETON( BeeUITemplateParserXML );
 	[self map:@"zoom"		toClass:NSClassFromString(@"BeeUIZoomView")];
 	[self map:@"pager"		toClass:NSClassFromString(@"BeeUIPageControl")];
 	[self map:@"web"		toClass:NSClassFromString(@"BeeUIWebView")];
+	[self map:@"progress"	toClass:NSClassFromString(@"BeeUIProgressView")];
 
 	[self loadResource:RESOURCE_NAME];
 }

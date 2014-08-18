@@ -46,21 +46,26 @@
 @property (nonatomic, readonly) BeeHTTPRequestBlockSN	GET;
 @property (nonatomic, readonly) BeeHTTPRequestBlockSN	PUT;
 @property (nonatomic, readonly) BeeHTTPRequestBlockSN	POST;
+@property (nonatomic, readonly) BeeHTTPRequestBlockSN	DELETE;
 
 @property (nonatomic, readonly) BeeHTTPRequestBlockSN	HTTP_GET;
 @property (nonatomic, readonly) BeeHTTPRequestBlockSN	HTTP_PUT;
 @property (nonatomic, readonly) BeeHTTPRequestBlockSN	HTTP_POST;
+@property (nonatomic, readonly) BeeHTTPRequestBlockSN	HTTP_DELETE;
 
 - (BeeHTTPRequest *)GET:(NSString *)url;
 - (BeeHTTPRequest *)PUT:(NSString *)url;
 - (BeeHTTPRequest *)POST:(NSString *)url;
+- (BeeHTTPRequest *)DELETE:(NSString *)url;
 
 - (BeeHTTPRequest *)HTTP_GET:(NSString *)url;
 - (BeeHTTPRequest *)HTTP_PUT:(NSString *)url;
 - (BeeHTTPRequest *)HTTP_POST:(NSString *)url;
+- (BeeHTTPRequest *)HTTP_DELETE:(NSString *)url;
 
 - (BOOL)requestingURL;
 - (BOOL)requestingURL:(NSString *)url;
+- (BeeHTTPRequest *)request;
 - (NSArray *)requests;
 - (NSArray *)requests:(NSString *)url;
 - (void)cancelRequests;

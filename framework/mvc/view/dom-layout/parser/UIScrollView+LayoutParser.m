@@ -31,83 +31,15 @@
 
 #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 
-#import "Bee_UITemplateParserXMLImpl.h"
-#import "Bee_UITemplateParserXMLImpl_v1.h"
-#import "Bee_UITemplateParserXMLImpl_v2.h"
-#import "Bee_UIStyleParser.h"
-
-#import "Bee_UILayout.h"
-#import "Bee_UIStyle.h"
+#import "UIScrollView+LayoutParser.h"
 
 #pragma mark -
 
-#undef	RESOURCE_NAME
-#define RESOURCE_NAME	@"template-parser-xml.json"
+@implementation UIScrollView(LayoutParser)
 
-#pragma mark -
-
-@implementation BeeUITemplateParserXMLImpl
-
-@synthesize document = _document;
-@synthesize packagePath = _packagePath;
-@synthesize classMapping = _classMapping;
-
-+ (BeeUITemplateParserXMLImpl *)impl
+- (void)parseLayout:(BeeUILayout *)layout
 {
-	return [self impl:0];
-}
-
-+ (BeeUITemplateParserXMLImpl *)impl:(NSUInteger)version
-{
-	BeeUITemplateParserXMLImpl * impl = nil;
-	
-	if ( version <= 1 )
-	{
-		impl = [[[BeeUITemplateParserXMLImpl_v1 alloc] init] autorelease];
-	}
-	else if ( version == 2 )
-	{
-		impl = [[[BeeUITemplateParserXMLImpl_v2 alloc] init] autorelease];
-	}
-	
-	if ( nil == impl )
-	{
-		impl = [[[BeeUITemplateParserXMLImpl_v1 alloc] init] autorelease];
-	}
-
-	return impl;
-}
-
-- (id)init
-{
-	self = [super init];
-	if ( self )
-	{
-//		[self load];
-		[self performLoad];
-	}
-	return self;
-}
-
-- (void)dealloc
-{
-//	[self unload];
-	[self performUnload];
-
-	[super dealloc];
-}
-
-- (void)load
-{	
-}
-
-- (void)unload
-{
-}
-
-- (BeeUITemplate *)parse
-{
-	return nil;
+	// TODO:
 }
 
 @end

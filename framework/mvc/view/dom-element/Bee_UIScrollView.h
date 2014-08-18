@@ -51,25 +51,50 @@ typedef	void (^BeeUIScrollViewBlockI)( BeeUIScrollItem * item );
 
 typedef enum
 {
-	BeeUIScrollLayoutRule_Tile = 0,
-	BeeUIScrollLayoutRule_Fall,
-	BeeUIScrollLayoutRule_Fill,
-	BeeUIScrollLayoutRule_Line,
-	BeeUIScrollLayoutRule_Inject
+	BeeUIScrollLayoutRuleVertical = 0,
+	BeeUIScrollLayoutRuleHorizontal,
+	
+	// Backward compatible
+	BeeUIScrollLayoutRule_Tile = BeeUIScrollLayoutRuleVertical,
+	BeeUIScrollLayoutRule_Fall = BeeUIScrollLayoutRuleVertical,
+	BeeUIScrollLayoutRule_Fill = BeeUIScrollLayoutRuleVertical,
+	BeeUIScrollLayoutRule_Line = BeeUIScrollLayoutRuleHorizontal,
+	BeeUIScrollLayoutRule_Inject = BeeUIScrollLayoutRuleVertical
 } BeeUIScrollLayoutRule;
 
 #pragma mark -
 
 @interface BeeUIScrollItem : NSObject
+
+@property (nonatomic, assign) BeeUIScrollLayoutRule	rule;
+@property (nonatomic, assign) NSInteger				order;
 @property (nonatomic, assign) NSInteger				section;
 @property (nonatomic, assign) NSInteger				index;
-@property (nonatomic, assign) UIEdgeInsets			insets;
-@property (nonatomic, assign) BeeUIScrollLayoutRule	rule;
-@property (nonatomic, assign) CGSize				size;
-@property (nonatomic, assign) NSInteger				order;
-@property (nonatomic, retain) Class					clazz;
-@property (nonatomic, retain) id					data;
+
+@property (nonatomic, retain) NSString *			name;
 @property (nonatomic, assign) UIView *				view;
+
+@property (nonatomic, retain) id					data;
+@property (nonatomic, retain) Class					clazz;
+@property (nonatomic, assign) UIEdgeInsets			insets;
+@property (nonatomic, assign) CGSize				size;
+
+@property (nonatomic, retain) id					viewData;	// equals to 'data'
+@property (nonatomic, retain) Class					viewClass;	// equals to 'clazz'
+@property (nonatomic, assign) UIEdgeInsets			viewInsets;	// equals to 'insets'
+@property (nonatomic, assign) CGSize				viewSize;	// equals to 'size'
+
+@end
+
+#pragma mark -
+
+@interface BeeUIScrollSection : NSObject
+
+@property (nonatomic, retain) Class					viewClass;
+@property (nonatomic, assign) UIEdgeInsets			viewInsets;
+@property (nonatomic, retain) NSString *			name;
+@property (nonatomic, assign) BeeUIScrollLayoutRule	rule;
+
 @end
 
 #pragma mark -
@@ -137,8 +162,13 @@ AS_SIGNAL( FOOTER_REFRESH )	// 上拉刷新
 
 @property (nonatomic, assign) CGFloat				lineSize;
 @property (nonatomic, assign) NSInteger				lineCount;
+
 @property (nonatomic, assign) NSInteger				total;
+@property (nonatomic, retain) NSDictionary *		datas;
 @property (nonatomic, readonly) NSArray *			items;
+@property (nonatomic, readonly) BeeUIScrollItem *	firstItem;
+@property (nonatomic, readonly) BeeUIScrollItem *	nextItem;
+@property (nonatomic, readonly) BeeUIScrollItem *	lastItem;
 @property (nonatomic, readonly) NSArray *			visibleItems;
 @property (nonatomic, assign) BOOL					enableAllEvents;
 
@@ -159,6 +189,7 @@ AS_SIGNAL( FOOTER_REFRESH )	// 上拉刷新
 @property (nonatomic, copy) BeeUIScrollViewBlock	whenAnimating;
 @property (nonatomic, copy) BeeUIScrollViewBlock	whenAnimated;
 @property (nonatomic, copy) BeeUIScrollViewBlock	whenScrolling;
+@property (nonatomic, copy) BeeUIScrollViewBlock	whenDragged;
 @property (nonatomic, copy) BeeUIScrollViewBlock	whenStop;
 @property (nonatomic, copy) BeeUIScrollViewBlock	whenReachTop;
 @property (nonatomic, copy) BeeUIScrollViewBlock	whenReachBottom;
@@ -187,6 +218,18 @@ AS_SIGNAL( FOOTER_REFRESH )	// 上拉刷新
 - (void)setHeaderLoading:(BOOL)en;
 - (void)setFooterLoading:(BOOL)en;
 - (void)setFooterMore:(BOOL)en;
+
+#pragma mark - section
+
+- (void)appendSection:(BeeUIScrollSection *)section;
+- (void)removeSection:(NSString *)name;
+- (void)removeAllSections;
+
+- (id)objectAtIndexedSubscript:(NSUInteger)index;
+- (void)setObject:(id)obj atIndexedSubscript:(NSUInteger)index;
+
+- (id)objectForKeyedSubscript:(id)key;
+- (void)setObject:(id)obj forKeyedSubscript:(id)key;
 
 @end
 

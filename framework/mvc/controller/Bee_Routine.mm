@@ -118,7 +118,7 @@
 
 + (BOOL)cancel
 {
-	NSMutableArray * msgs = [NSMutableArray nonRetainingArray];
+	NSMutableArray * msgs = [NSMutableArray nonRetainingArray];// TODO:
 	
 	for ( BeeMessage * msg in [BeeMessageQueue sharedInstance].allMessages )
 	{
@@ -138,7 +138,8 @@
 
 + (BOOL)cancel:(id)target
 {
-	NSMutableArray * msgs = [NSMutableArray nonRetainingArray];
+//	NSMutableArray * msgs = [NSMutableArray nonRetainingArray];
+	NSMutableArray * msgs = [NSMutableArray array];
 	
 	for ( BeeMessage * msg in [BeeMessageQueue sharedInstance].allMessages )
 	{
@@ -152,7 +153,7 @@
 	{
 		[msg cancel];
 	}
-	
+
 	return msgs.count ? YES : NO;
 }
 

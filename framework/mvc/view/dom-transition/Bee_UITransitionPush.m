@@ -48,7 +48,7 @@ DEF_SINGLETON( BeeUITransitionPush )
 	CATransition * animation = [CATransition animation];
 	if ( animation )
 	{
-		[animation setDuration:0.45f];
+		[animation setDuration:0.25f];
 		[animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
 		[animation setType:kCATransitionPush];
 		[animation setSubtype:[BeeUITransition CATransitionFrom:direction]];

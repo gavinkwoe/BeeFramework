@@ -119,18 +119,27 @@ DEF_SINGLETON( BeeMemoryCache );
 	if ( nil == object )
 		return;
 	
+	id cachedObj = [_cacheObjs objectForKey:key];
+	if ( cachedObj == object )
+		return;
+	
 	_cachedCount += 1;
 
-	while ( _cachedCount >= _maxCacheCount )
+	if ( _maxCacheCount > 0 )
 	{
-		NSString * tempKey = [_cacheKeys objectAtIndex:0];
+		while ( _cachedCount >= _maxCacheCount )
+		{
+			NSString * tempKey = [_cacheKeys safeObjectAtIndex:0];
+			if ( tempKey )
+			{
+				[_cacheObjs removeObjectForKey:tempKey];
+				[_cacheKeys removeObjectAtIndex:0];
+			}
 
-		[_cacheObjs removeObjectForKey:tempKey];
-		[_cacheKeys removeObjectAtIndex:0];
-
-		_cachedCount -= 1;
+			_cachedCount -= 1;
+		}
 	}
-
+	
 	[_cacheKeys addObject:key];
 	[_cacheObjs setObject:object forKey:key];
 }

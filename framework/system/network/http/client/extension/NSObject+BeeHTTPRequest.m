@@ -46,10 +46,14 @@
 @dynamic GET;
 @dynamic PUT;
 @dynamic POST;
+@dynamic DELETE;
 
 @dynamic HTTP_GET;
 @dynamic HTTP_PUT;
 @dynamic HTTP_POST;
+@dynamic HTTP_DELETE;
+
+#pragma mark -
 
 - (BeeHTTPRequest *)GET:(NSString *)url
 {
@@ -64,6 +68,11 @@
 - (BeeHTTPRequest *)POST:(NSString *)url
 {
 	return [self HTTP_POST:url];
+}
+
+- (BeeHTTPRequest *)DELETE:(NSString *)url
+{
+	return [self HTTP_DELETE:url];
 }
 
 - (BeeHTTPRequest *)HTTP_GET:(NSString *)url
@@ -86,6 +95,15 @@
 	[req addResponder:self];
 	return req;
 }
+
+- (BeeHTTPRequest *)HTTP_DELETE:(NSString *)url
+{
+	BeeHTTPRequest * req = [BeeHTTPRequestQueue DELETE:url];
+	[req addResponder:self];
+	return req;
+}
+
+#pragma mark -
 
 - (BeeHTTPBoolBlockV)REQUESTING
 {
@@ -175,7 +193,7 @@
 	return [[block copy] autorelease];
 }
 
-- (BeeHTTPRequestBlockSN)HTTP_GET
+- (BeeHTTPRequestBlockSN)DELETE
 {
 	BeeHTTPRequestBlockSN block = ^ BeeHTTPRequest * ( NSString * url, ... )
 	{
@@ -186,26 +204,7 @@
 		
 		va_end( args );
 
-		BeeHTTPRequest * req = [BeeHTTPRequestQueue GET:url];
-		[req addResponder:self];
-		return req;
-	};
-
-	return [[block copy] autorelease];
-}
-
-- (BeeHTTPRequestBlockSN)HTTP_PUT
-{
-	BeeHTTPRequestBlockSN block = ^ BeeHTTPRequest * ( NSString * url, ... )
-	{
-		va_list args;
-		va_start( args, url );
-		
-		url = [[[NSString alloc] initWithFormat:url arguments:args] autorelease];
-		
-		va_end( args );
-
-		BeeHTTPRequest * req = [BeeHTTPRequestQueue PUT:url];
+		BeeHTTPRequest * req = [BeeHTTPRequestQueue DELETE:url];
 		[req addResponder:self];
 		return req;
 	};
@@ -213,23 +212,24 @@
 	return [[block copy] autorelease];
 }
 
+- (BeeHTTPRequestBlockSN)HTTP_GET
+{
+	return [self GET];
+}
+
+- (BeeHTTPRequestBlockSN)HTTP_PUT
+{
+	return [self PUT];
+}
+
 - (BeeHTTPRequestBlockSN)HTTP_POST
 {
-	BeeHTTPRequestBlockSN block = ^ BeeHTTPRequest * ( NSString * url, ... )
-	{
-		va_list args;
-		va_start( args, url );
-		
-		url = [[[NSString alloc] initWithFormat:url arguments:args] autorelease];
-		
-		va_end( args );
+	return [self POST];
+}
 
-		BeeHTTPRequest * req = [BeeHTTPRequestQueue POST:url];
-		[req addResponder:self];
-		return req;
-	};
-
-	return [[block copy] autorelease];
+- (BeeHTTPRequestBlockSN)HTTP_DELETE
+{
+	return [self DELETE];
 }
 
 - (BOOL)requestingURL
@@ -254,6 +254,12 @@
 	{
 		return NO;
 	}			
+}
+
+- (BeeHTTPRequest *)request
+{
+	NSArray * array = [BeeHTTPRequestQueue requests:nil byResponder:self];
+	return [array safeObjectAtIndex:0];
 }
 
 - (NSArray *)requests

@@ -68,7 +68,7 @@
 	self.placeholder = [properties parseTextWithKeys:@[@"placeholder", @"input-placeholder"] defaultValue:self.placeholder];
 	self.enabled = [properties parseBoolWithKeys:@[@"disabled"] defaultValue:NO] ? NO : YES;
 	self.userInteractionEnabled = [properties parseBoolWithKeys:@[@"readonly"] defaultValue:NO] ? NO : YES;
-
+    
 	NSInteger maxLength = [properties parseIntegerWithKeys:@[@"maxlength", @"input-max-length"] defaultValue:0];
 
 	if ( [self respondsToSelector:@selector(setMaxLength:)] )

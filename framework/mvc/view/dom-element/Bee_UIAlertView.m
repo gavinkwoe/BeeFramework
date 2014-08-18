@@ -68,8 +68,8 @@ DEF_SIGNAL( DID_DISMISS )
 
 - (id)init
 {
-//	self = [super init];
-	self = [super initWithTitle:nil message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:nil];
+	self = [super init];
+//	self = [super initWithTitle:nil message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:nil];
 	if ( self )
 	{
 		self.delegate = self;
@@ -137,7 +137,7 @@ DEF_SIGNAL( DID_DISMISS )
 	[self addCancelTitle:title signal:signal object:nil];
 }
 
-- (void)addCancelTitle:(NSString *)title signal:(NSString *)signal object:(NSDictionary *)object
+- (void)addCancelTitle:(NSString *)title signal:(NSString *)signal object:(id)object
 {
 	if ( nil == signal )
 	{
@@ -153,7 +153,7 @@ DEF_SIGNAL( DID_DISMISS )
 	[self addButtonTitle:title signal:signal object:nil];
 }
 
-- (void)addButtonTitle:(NSString *)title signal:(NSString *)signal object:(NSDictionary *)object
+- (void)addButtonTitle:(NSString *)title signal:(NSString *)signal object:(id)object
 {
 	if ( nil == signal )
 	{

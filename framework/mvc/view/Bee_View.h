@@ -101,6 +101,7 @@
 // dom-binding
 
 #import "Bee_UIDataBinding.h"
+#import "UISwitch+UIDataBinding.h"
 #import "UIButton+UIDataBinding.h"
 #import "UIImageView+UIDataBinding.h"
 #import "UILabel+UIDataBinding.h"
@@ -189,6 +190,16 @@
 #import "UITextView+BeeUILayout.h"
 #import "UIView+BeeUILayout.h"
 #import "UIViewController+BeeUILayout.h"
+
+#import "UIButton+LayoutParser.h"
+#import "UIImageView+LayoutParser.h"
+#import "UILabel+LayoutParser.h"
+#import "UIScrollView+LayoutParser.h"
+#import "UITextField+LayoutParser.h"
+#import "UITextView+LayoutParser.h"
+#import "UIView+LayoutParser.h"
+
+#import "BeeUIScrollView+LayoutParser.h"
 
 // dom-event
 

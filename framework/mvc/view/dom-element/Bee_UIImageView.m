@@ -96,6 +96,9 @@ DEF_SINGLETON( BeeImageCache );
 
 - (BOOL)hasCachedForURL:(NSString *)string
 {
+	if ( nil == string || 0 == string.length )
+		return NO;
+
 	NSString * cacheKey = [string MD5];
 	
 	BOOL flag = [self.memoryCache hasObjectForKey:cacheKey];
@@ -109,6 +112,9 @@ DEF_SINGLETON( BeeImageCache );
 
 - (BOOL)hasFileCachedForURL:(NSString *)url
 {
+	if ( nil == url || 0 == url.length )
+		return NO;
+	
 	NSString * cacheKey = [url MD5];
 	
 	return [self.fileCache hasObjectForKey:cacheKey];
@@ -116,6 +122,9 @@ DEF_SINGLETON( BeeImageCache );
 
 - (BOOL)hasMemoryCachedForURL:(NSString *)url
 {
+	if ( nil == url || 0 == url.length )
+		return NO;
+
 	NSString * cacheKey = [url MD5];
 	
 	return [self.memoryCache hasObjectForKey:cacheKey];
@@ -123,6 +132,9 @@ DEF_SINGLETON( BeeImageCache );
 
 - (UIImage *)fileImageForURL:(NSString *)url
 {
+	if ( nil == url || 0 == url.length )
+		return nil;
+
 PERF_ENTER
 	
 	NSString *	cacheKey = [url MD5];
@@ -141,12 +153,15 @@ PERF_ENTER
 	}
 
 PERF_LEAVE
-	
+
 	return image;
 }
 
 - (UIImage *)memoryImageForURL:(NSString *)url
 {
+	if ( nil == url || 0 == url.length )
+		return nil;
+	
 PERF_ENTER
 	
 	NSString *	cacheKey = [url MD5];
@@ -165,11 +180,16 @@ PERF_LEAVE
 
 - (UIImage *)imageForURL:(NSString *)string
 {
+	if ( nil == string || 0 == string.length )
+		return nil;
+	
 	UIImage * image = [self memoryImageForURL:string];
+	
 	if ( nil == image )
 	{
 		image = [self fileImageForURL:string];
 	}
+	
 	return image;
 }
 
@@ -338,6 +358,7 @@ DEF_SIGNAL( LOAD_CACHE )
 	[self cancelRequests];
 	
 	self.loadedURL = nil;
+	self.loadedCroppedURL = nil;
 	self.loading = NO;
 	self.defaultImage = nil;
 
@@ -367,10 +388,10 @@ DEF_SIGNAL( LOAD_CACHE )
 		return;
 	}
 
-	if ( NO == [newURL hasPrefix:@"http://"] && NO == [newURL hasPrefix:@"https://"])
-	{
-		newURL = [NSString stringWithFormat:@"http://%@", newURL];
-	}
+//	if ( NO == [newURL hasPrefix:@"http://"] )
+//	{
+//		newURL = [NSString stringWithFormat:@"http://%@", newURL];
+//	}
 
 	if ( [self requestingURL:newURL] )
 	{
@@ -386,23 +407,49 @@ DEF_SIGNAL( LOAD_CACHE )
 
 	self.defaultImage = defaultImage;
 	self.loadedURL = newURL;
+
+    if ( self.crop )
+    {
+        self.loadedCroppedURL = [newURL stringByAppendingFormat:@"-w%.f-h%.f",
+                                 self.cropSize.width,
+                                 self.cropSize.height];
+    }
+    
 	self.loading = NO;
 	self.loaded = NO;
 
 	[self cancelRequests];
 
 	BeeImageCache * cache = [BeeImageCache sharedInstance];
-	if ( [cache hasCachedForURL:newURL] )
-	{
-//		[self changeImage:nil];
-//		[self performSelector:@selector(loadFromCache:) withObject:newURL afterDelay:0.25f];
-		[self loadFromCache:newURL];
-	}
-	else
-	{
-		[self changeImage:self.defaultImage];
-		[self performSelector:@selector(loadFromWeb:) withObject:newURL afterDelay:0.25f];
-	}
+    
+    if ( self.crop )
+    {
+        if ( [cache hasCachedForURL:self.loadedCroppedURL] )
+        {
+            //		[self changeImage:nil];
+            //		[self performSelector:@selector(loadFromCache:) withObject:newURL afterDelay:0.25f];
+            [self loadFromCache:self.loadedCroppedURL];
+        }
+        else
+        {
+            [self changeImage:self.defaultImage];
+            [self performSelector:@selector(loadFromWeb:) withObject:newURL afterDelay:0.25f];
+        }
+    }
+    else
+    {
+        if ( [cache hasCachedForURL:newURL] )
+        {
+            //		[self changeImage:nil];
+            //		[self performSelector:@selector(loadFromCache:) withObject:newURL afterDelay:0.25f];
+            [self loadFromCache:newURL];
+        }
+        else
+        {
+            [self changeImage:self.defaultImage];
+            [self performSelector:@selector(loadFromWeb:) withObject:newURL afterDelay:0.25f];
+        }
+    }
 }
 
 - (void)loadFromCache:(NSString *)newURL
@@ -426,13 +473,13 @@ DEF_SIGNAL( LOAD_CACHE )
 		else
 		{
 			[self changeImage:self.defaultImage];
-			[self performSelector:@selector(loadFromFile:) withObject:newURL afterDelay:0.25f];
+			[self performSelector:@selector(loadFromFile:) withObject:newURL afterDelay:0.1f];
 		}
 	}
 	else
 	{
 		[self changeImage:self.defaultImage];
-		[self performSelector:@selector(loadFromWeb:) withObject:newURL afterDelay:0.25f];
+		[self performSelector:@selector(loadFromWeb:) withObject:newURL afterDelay:0.1f];
 	}
 }
 
@@ -443,22 +490,31 @@ DEF_SIGNAL( LOAD_CACHE )
 	BeeImageCache * cache = [BeeImageCache sharedInstance];
 	if ( [cache hasCachedForURL:newURL] )
 	{
-		UIImage * image = [cache imageForURL:newURL];
-		if ( image )
+		NSString * camparedURL = self.crop ? self.loadedCroppedURL : self.loadedURL;
+		
+		if ( [newURL isEqualToString:camparedURL] )
 		{
-			[self changeImage:image animated:YES];
-			[self setLoaded:YES];
-			
-			if ( self.enableAllEvents )
+			UIImage * image = [cache imageForURL:newURL];
+			if ( image )
 			{
-				[self sendUISignal:BeeUIImageView.LOAD_CACHE];
+				if ( [newURL isEqualToString:camparedURL] )
+				{
+					[self changeImage:image animated:YES];
+					[self setLoaded:YES];
+					
+					if ( self.enableAllEvents )
+					{
+						[self sendUISignal:BeeUIImageView.LOAD_CACHE];
+					}
+				}
+				return;
 			}
-			return;
 		}
+		return;
 	}
 
 	[self changeImage:self.defaultImage];
-	[self performSelector:@selector(loadFromWeb:) withObject:newURL afterDelay:0.25f];
+	[self performSelector:@selector(loadFromWeb:) withObject:newURL afterDelay:0.1f];
 }
 
 - (void)loadFromWeb:(NSString *)newURL
@@ -515,7 +571,7 @@ DEF_SIGNAL( LOAD_CACHE )
 - (void)changeImage:(UIImage *)image animated:(BOOL)animated
 {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-	
+		
 	if ( nil == image )
 	{
 		[self cancelRequests];
@@ -619,6 +675,8 @@ DEF_SIGNAL( LOAD_CACHE )
 //	[self setNeedsDisplay];
 }
 
+#pragma mark -
+
 - (void)setFrame:(CGRect)frame
 {
 	[super setFrame:frame];
@@ -639,6 +697,13 @@ DEF_SIGNAL( LOAD_CACHE )
 		_altLabel.frame = CGRectMake( 0, 0, frame.size.width, frame.size.height );
 	}
 }
+
+- (void)setHidden:(BOOL)flag
+{
+	[super setHidden:flag];
+}
+
+#pragma mark -
 
 - (void)clear
 {
@@ -763,20 +828,53 @@ DEF_SIGNAL( LOAD_CACHE )
 			if ( image )
 			{
 				NSString * string = [request.url absoluteString];
-				
-				BeeImageCache * cache = [BeeImageCache sharedInstance];
-				[cache saveImage:image forURL:string];
-				[cache saveData:data forURL:string];
-				
-				[self setLoading:NO];
-				[self setLoaded:YES];
-				
-				[self changeImage:image animated:YES];
 
-				if ( self.enableAllEvents )
-				{
-					[self sendUISignal:BeeUIImageView.LOAD_COMPLETED];
-				}
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+
+                    BeeImageCache * cache = [BeeImageCache sharedInstance];
+                    
+                    UIImage * cacheImage = nil;
+                    
+                    if ( self.crop )
+                    {
+                        cacheImage = [image crop2:CGRectMakeBound(self.cropSize.width, self.cropSize.height)];
+                        
+                        [cache saveImage:cacheImage forURL:self.loadedCroppedURL];
+                        
+                        NSData * croppedData = UIImagePNGRepresentation(cacheImage);
+                        
+                        if ( nil == croppedData )
+                        {
+                            croppedData = UIImageJPEGRepresentation(cacheImage, 0.6);
+                        }
+                        
+                        if ( croppedData )
+                        {
+                            [cache saveData:croppedData forURL:self.loadedCroppedURL];
+                        }
+                    }
+
+					if ( nil == cacheImage )
+					{
+						cacheImage = image;
+					}
+					
+					[cache saveImage:image forURL:string];
+					[cache saveData:data forURL:string];
+
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        
+                        [self setLoading:NO];
+                        [self setLoaded:YES];
+                        
+                        if ( self.enableAllEvents )
+                        {
+                            [self sendUISignal:BeeUIImageView.LOAD_COMPLETED];
+                        }
+                        
+                        [self changeImage:cacheImage animated:YES];
+                    });
+                });
 			}
 			else
 			{

@@ -85,6 +85,7 @@ extern CGRect	CGRectFromString( NSString * str );
 extern CGPoint	CGPointZeroNan( CGPoint point );
 extern CGSize	CGSizeZeroNan( CGSize size );
 extern CGRect	CGRectZeroNan( CGRect rect );
+extern CGRect	CGRectNormalize( CGRect rect );
 
 extern CGRect	CGRectAlignX( CGRect rect1, CGRect rect2 );				// rect1向rect2的X轴中心点对齐
 extern CGRect	CGRectAlignY( CGRect rect1, CGRect rect2 );				// rect1向rect2的Y轴中心点对齐
@@ -118,6 +119,7 @@ extern CGSize	CGRectGetDistance( CGRect rect1, CGRect rect2 );		// 获取rect1�
 
 #pragma mark -
 
+extern CGSize               CGSizeFromStringEx( NSString * text );
 extern UIEdgeInsets			UIEdgeInsetsFromStringEx( NSString * text );
 extern UIViewContentMode	UIViewContentModeFromString( NSString * text );
 extern UITextAlignment		UITextAlignmentFromString( NSString * text );

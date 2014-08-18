@@ -35,6 +35,9 @@
 
 @implementation DribbbleBoardTab_iPhone
 
+SUPPORT_RESOURCE_LOADING(YES)
+SUPPORT_AUTOMATIC_LAYOUT(YES)
+
 DEF_OUTLET( BeeUIButton, popular );
 DEF_OUTLET( BeeUIButton, everyone );
 DEF_OUTLET( BeeUIButton, debuts );

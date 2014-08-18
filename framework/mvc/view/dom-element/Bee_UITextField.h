@@ -43,6 +43,7 @@
 @property (nonatomic, assign) BOOL			active;
 @property (nonatomic, assign) NSUInteger	maxLength;
 @property (nonatomic, assign) NSObject *	nextChain;
+@property (nonatomic, assign) BOOL	isNumber;
 
 AS_SIGNAL( WILL_ACTIVE )		// 将要获取焦点
 AS_SIGNAL( DID_ACTIVED )		// 已经获取焦点
@@ -52,6 +53,8 @@ AS_SIGNAL( TEXT_CHANGED )		// 文字变了
 AS_SIGNAL( TEXT_OVERFLOW )		// 文字超长
 AS_SIGNAL( CLEAR )				// 清空
 AS_SIGNAL( RETURN )				// 换行
+
+- (BOOL)validateNumber:(NSString*)number;
 
 @end
 

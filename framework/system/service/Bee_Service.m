@@ -41,7 +41,7 @@
 
 #pragma mark -
 
-DEF_PACKAGE_INSTANCE( BeePackage, BeePackage_Service, services );
+DEF_PACKAGE_( BeePackage, BeePackage_Service, services );
 
 #pragma mark -
 
@@ -99,7 +99,7 @@ static NSMutableDictionary * __services = nil;
 			if ( service )
 			{
 //				[[BeeLogger sharedInstance] enable];
-				INFO( @"%@ loaded", [classType description] );
+				INFO( @"Service '%@' loaded", [classType description] );
 //				[[BeeLogger sharedInstance] disable];
 			}
 		}
@@ -197,9 +197,8 @@ static NSMutableDictionary * __services = nil;
 	[__services setObject:self forKey:[[self class] description]];
 	
 #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
-	[self observeNotification:UIApplicationDidEnterBackgroundNotification];
-	[self observeNotification:UIApplicationWillEnterForegroundNotification];
 	[self observeNotification:BeeUIApplication.LAUNCHED];
+	[self observeNotification:BeeUIApplication.STATE_CHANGED];
 	[self observeNotification:BeeUIApplication.TERMINATED];
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 }
@@ -308,22 +307,34 @@ static NSMutableDictionary * __services = nil;
 
 #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 
-ON_NOTIFICATION2( UIApplicationDidEnterBackgroundNotification, notification )
+ON_NOTIFICATION3( BeeUIApplication, STATE_CHANGED, notification )
 {
-	[self serviceWillDeactive];
-
-	_activating = NO;
-	
-	[self serviceDidDeactived];
-}
-
-ON_NOTIFICATION2( UIApplicationWillEnterForegroundNotification, notification )
-{
-	[self serviceWillActive];
-
-	_activating = YES;
-
-	[self serviceDidActived];
+	if ( [BeeUIApplication sharedInstance].inBackground )
+	{
+		INFO( @"Service '%@' deactivating", [[self class] description] );
+		
+		if ( _activating )
+		{
+			[self serviceWillDeactive];
+			
+			_activating = NO;
+			
+			[self serviceDidDeactived];
+		}
+	}
+	else
+	{
+		INFO( @"Service '%@' activating", [[self class] description] );
+		
+		if ( NO == _activating )
+		{
+			[self serviceWillActive];
+			
+			_activating = YES;
+			
+			[self serviceDidActived];
+		}
+	}
 }
 
 ON_NOTIFICATION3( BeeUIApplication, LAUNCHED, notification )

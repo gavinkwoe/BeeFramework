@@ -59,6 +59,16 @@ DEF_INT( NSARRAY,		4 )
 DEF_INT( NSDICTIONARY,	5 )
 DEF_INT( NSDATE,		6 )
 
++ (BOOL)isReadOnly:(const char *)attr
+{
+	if ( strstr(attr, "_ro") || strstr(attr, ",R") )
+	{
+		return YES;
+	}
+	
+	return NO;
+}
+
 + (NSUInteger)typeOf:(const char *)attr
 {
 	if ( attr[0] != 'T' )

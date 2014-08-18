@@ -38,12 +38,6 @@
 
 @interface UIViewController(Title)
 
-@property (nonatomic, retain) NSString *			titleString;
-@property (nonatomic, retain) UIImage *				titleImage;
-@property (nonatomic, retain) UIView *				titleView;
-@property (nonatomic, retain) UIViewController *	titleViewController;
-
-@property (nonatomic, retain) id					navigationBarTitle;
 
 @end
 

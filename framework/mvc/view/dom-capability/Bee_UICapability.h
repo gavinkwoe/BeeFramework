@@ -47,11 +47,6 @@
 		+ (BOOL)supportForUIAutomaticLayout { return __flag; } \
 		- (BOOL)supportForUIAutomaticLayout { return __flag; }
 
-#undef	SUPPORT_LAYOUT_CACHE
-#define SUPPORT_LAYOUT_CACHE( __flag ) \
-		+ (BOOL)supportForUILayoutCache { return __flag; } \
-		- (BOOL)supportForUILayoutCache { return __flag; }
-
 #undef	SUPPORT_SIZE_ESTIMATING
 #define SUPPORT_SIZE_ESTIMATING( __flag ) \
 		+ (BOOL)supportForUISizeEstimating { return __flag; } \
@@ -67,7 +62,9 @@
 		+ (BOOL)supportForUIResourceLoading { return __flag; } \
 		- (BOOL)supportForUIResourceLoading { return __flag; } \
 		+ (NSString *)UIResourceName { return [self description]; } \
-		- (NSString *)UIResourceName { return [[self class] description]; }
+		- (NSString *)UIResourceName { return [[self class] UIResourceName]; } \
+		+ (NSString *)UIResourcePath { return [[NSString stringWithUTF8String:__FILE__] stringByDeletingLastPathComponent]; } \
+		- (NSString *)UIResourcePath { return [[self class] UIResourcePath]; }
 
 #undef	SUPPORT_PROPERTY_MAPPING
 #define SUPPORT_PROPERTY_MAPPING( __flag ) \
@@ -110,14 +107,6 @@
 - (CGSize)estimateUISizeByWidth:(CGFloat)width;
 - (CGSize)estimateUISizeByHeight:(CGFloat)height;
 
-// layout cache?
-
-+ (BOOL)supportForUILayoutCache;
-- (BOOL)supportForUILayoutCache;
-
-+ (NSString *)layoutCacheKey;
-- (NSString *)layoutCacheKey;
-
 // styling?
 
 + (BOOL)supportForUIStyling;
@@ -132,6 +121,8 @@
 
 + (NSString *)UIResourceName;
 - (NSString *)UIResourceName;
++ (NSString *)UIResourcePath;
+- (NSString *)UIResourcePath;
 
 // property mapping?
 

@@ -36,6 +36,9 @@
 
 @implementation DribbbleDetailBoardPlayer_iPhone
 
+SUPPORT_RESOURCE_LOADING(YES)
+SUPPORT_AUTOMATIC_LAYOUT(YES)
+
 - (void)dataDidChanged
 {
 	SHOT * shot = self.data;

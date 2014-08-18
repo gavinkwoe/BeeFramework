@@ -35,6 +35,10 @@
 #import "Bee_Foundation.h"
 #import "Bee_UIStyle.h"
 
+#ifdef	OVERFLOW
+#undef	OVERFLOW
+#endif	// #ifdef OVERFLOW
+
 #pragma mark -
 
 @interface BeeUIStyle(Property)
@@ -54,6 +58,15 @@ AS_STRING( ALIGN_RIGHT )
 
 AS_STRING( ORIENTATION_HORIZONAL )
 AS_STRING( ORIENTATION_VERTICAL )	// default
+
+AS_STRING( DISPLAY_NONE )
+AS_STRING( DISPLAY_BLOCK )
+
+AS_STRING( OVERFLOW_VISIBLE )
+AS_STRING( OVERFLOW_HIDDEN )
+AS_STRING( OVERFLOW_SCROLL )
+AS_STRING( OVERFLOW_AUTO )
+AS_STRING( OVERFLOW_INHERIT )
 
 @property (nonatomic, readonly) BeeUIStyleBlockN		X;
 @property (nonatomic, readonly) BeeUIStyleBlockN		Y;
@@ -86,6 +99,8 @@ AS_STRING( ORIENTATION_VERTICAL )	// default
 @property (nonatomic, readonly) BeeUIStyleBlockN		ORIENTATION;
 @property (nonatomic, readonly) BeeUIStyleBlockN		TEXT;
 @property (nonatomic, readonly) BeeUIStyleBlockN		PACKAGE;
+@property (nonatomic, readonly) BeeUIStyleBlockN		DISPLAY;
+@property (nonatomic, readonly) BeeUIStyleBlockN		OVERFLOW;
 
 @property (nonatomic, readonly) BeeUIMetrics *			x;
 @property (nonatomic, readonly) BeeUIMetrics *			y;
@@ -116,6 +131,8 @@ AS_STRING( ORIENTATION_VERTICAL )	// default
 @property (nonatomic, readonly) NSString *				orientation;
 @property (nonatomic, readonly) NSString *				text;
 @property (nonatomic, readonly) NSString *				package;
+@property (nonatomic, readonly) NSString *				display;
+@property (nonatomic, readonly) NSString *				overflow;
 
 - (BOOL)isRelativePosition;
 - (BOOL)isAbsolutePosition;
@@ -151,6 +168,13 @@ AS_STRING( ORIENTATION_VERTICAL )	// default
 - (BOOL)isHorizontal;
 - (BOOL)isVertical;
 
+- (BOOL)isHidden;
+
+- (BOOL)hasMinW;
+- (BOOL)hasMaxW;
+- (BOOL)hasMinH;
+- (BOOL)hasMaxH;
+
 - (CGFloat)estimateXBy:(CGRect)parentFrame;
 - (CGFloat)estimateYBy:(CGRect)parentFrame;
 - (CGPoint)estimateOriginBy:(CGRect)parentFrame;
@@ -162,6 +186,10 @@ AS_STRING( ORIENTATION_VERTICAL )	// default
 
 - (CGFloat)estimateWBy:(CGRect)parentFrame;
 - (CGFloat)estimateHBy:(CGRect)parentFrame;
+- (CGFloat)estimateMinWBy:(CGRect)parentFrame;
+- (CGFloat)estimateMaxWBy:(CGRect)parentFrame;
+- (CGFloat)estimateMinHBy:(CGRect)parentFrame;
+- (CGFloat)estimateMaxHBy:(CGRect)parentFrame;
 - (CGSize)estimateSizeBy:(CGRect)parentFrame;
 
 - (UIEdgeInsets)estimateMarginBy:(CGRect)parentFrame;

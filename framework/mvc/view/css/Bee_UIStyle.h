@@ -71,11 +71,17 @@ typedef UIView *		(^BeeUIStyleValueBlockSS)( NSString * tag, NSString * value );
 + (BeeUIStyle *)style;
 + (BeeUIStyle *)style:(NSUInteger)version;
 + (BeeUIStyle *)styleWithDictionary:(NSDictionary *)dict;
++ (BeeUIStyle *)styleWithStylesheet:(CSSStyleSheet *)sheet;
 
 - (void)applyTo:(id)object;
 - (void)mergeTo:(BeeUIStyle *)style;
 
 - (BeeUIStyle *)combine:(BeeUIStyle *)style;
+
+- (NSString *)propertyForKey:(NSString *)key;
+- (NSString *)propertyForKeyArray:(NSArray *)array;
+
+- (void)setProperty:(NSString *)value forKey:(NSString *)key;
 
 @end
 

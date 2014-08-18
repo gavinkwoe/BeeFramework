@@ -36,7 +36,7 @@
 #pragma mark -
 
 #undef	MIN_TEXT_LEN
-#define	MIN_TEXT_LEN	(10)
+#define	MIN_TEXT_LEN	(32)
 
 #undef	MAX_SIZE_CACHE
 #define MAX_SIZE_CACHE	(256)
@@ -111,7 +111,7 @@ static NSMutableDictionary * __UILabelSizeCache = nil;
 
 				[__UILabelSizeCache setObject:value forKey:key];
 				
-				INFO( @"__UILabelSizeCache.count = %d", __UILabelSizeCache.count )
+				PERF( @"__UILabelSizeCache.count = %d", __UILabelSizeCache.count )
 			}
 		}
 	}

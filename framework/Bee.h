@@ -45,7 +45,7 @@ extern BeePackage *	bee;
 
 #pragma mark -
 
-AS_PACKAGE_INSTANCE( BeePackage, BeePackage_External, ext );
+AS_PACKAGE_( BeePackage, BeePackage_External, ext );
 
 #undef	AS_EXTERNAL
 #define	AS_EXTERNAL( __class, __name ) \
@@ -57,7 +57,7 @@ AS_PACKAGE_INSTANCE( BeePackage, BeePackage_External, ext );
 
 #pragma mark -
 
-AS_PACKAGE_INSTANCE( BeePackage, BeePackage_Library, lib );
+AS_PACKAGE_( BeePackage, BeePackage_Library, lib );
 
 #undef	AS_LIBRARY
 #define	AS_LIBRARY( __class, __name ) \

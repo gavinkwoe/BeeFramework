@@ -152,7 +152,7 @@ DEF_SIGNAL( DID_DISMISS )
 	[self addButtonTitle:title signal:signal object:nil];
 }
 
-- (void)addButtonTitle:(NSString *)title signal:(NSString *)signal object:(NSObject *)object
+- (void)addButtonTitle:(NSString *)title signal:(NSString *)signal object:(id)object
 {
 	if ( nil == signal )
 	{
@@ -173,7 +173,7 @@ DEF_SIGNAL( DID_DISMISS )
 	self.cancelButtonIndex = [self addButtonWithTitle:title];	
 }
 
-- (void)addCancelTitle:(NSString *)title signal:(NSString *)signal object:(NSObject *)object
+- (void)addCancelTitle:(NSString *)title signal:(NSString *)signal object:(id)object
 {
 	if ( nil == signal )
 	{
@@ -194,7 +194,7 @@ DEF_SIGNAL( DID_DISMISS )
 	[self addDestructiveTitle:title signal:signal object:nil];
 }
 
-- (void)addDestructiveTitle:(NSString *)title signal:(NSString *)signal object:(NSObject *)object
+- (void)addDestructiveTitle:(NSString *)title signal:(NSString *)signal object:(id)object
 {
 	if ( nil == signal )
 	{

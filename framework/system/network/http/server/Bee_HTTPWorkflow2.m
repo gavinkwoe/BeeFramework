@@ -138,7 +138,7 @@ static NSMutableArray * __stack = nil;
 		}
 		else
 		{
-			INFO( @"	-> '%@', FAILED", worklet.name );
+			ERROR( @"	-> '%@', FAILED", worklet.name );
 		}
 	}
 

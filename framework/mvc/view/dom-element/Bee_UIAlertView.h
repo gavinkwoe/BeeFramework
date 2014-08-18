@@ -45,8 +45,8 @@ AS_SIGNAL( DID_PRESENT )	// 已经显示
 AS_SIGNAL( WILL_DISMISS )	// 将要隐藏
 AS_SIGNAL( DID_DISMISS )	// 已经隐藏
 
-@property (nonatomic, retain) UIView *				parentView;
-@property (nonatomic, retain) NSObject *			userData;
+@property (nonatomic, retain) UIView *	parentView;
+@property (nonatomic, retain) id		userData;
 
 + (BeeUIAlertView *)showMessage:(NSString *)message cancelTitle:(NSString *)title;
 
@@ -58,10 +58,10 @@ AS_SIGNAL( DID_DISMISS )	// 已经隐藏
 
 - (void)addCancelTitle:(NSString *)title;
 - (void)addCancelTitle:(NSString *)title signal:(NSString *)signal;
-- (void)addCancelTitle:(NSString *)title signal:(NSString *)signal object:(NSDictionary *)object;
+- (void)addCancelTitle:(NSString *)title signal:(NSString *)signal object:(id)object;
 
 - (void)addButtonTitle:(NSString *)title signal:(NSString *)signal;
-- (void)addButtonTitle:(NSString *)title signal:(NSString *)signal object:(NSDictionary *)object;
+- (void)addButtonTitle:(NSString *)title signal:(NSString *)signal object:(id)object;
 
 @end
 

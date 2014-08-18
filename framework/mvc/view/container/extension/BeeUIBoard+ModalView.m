@@ -129,7 +129,7 @@ DEF_SIGNAL( MODALVIEW_DID_HIDDEN )	// ModalView已经隐藏
 	if ( self.modalView || view.superview == self.view )
 		return;
 
-	[self sendUISignal:self.MODALVIEW_WILL_SHOW];
+	[self sendUISignal:BeeUIBoard.MODALVIEW_WILL_SHOW];
 	
 	if ( nil == self.modalMask )
 	{
@@ -159,11 +159,11 @@ DEF_SIGNAL( MODALVIEW_DID_HIDDEN )	// ModalView已经隐藏
 	}
 
 	self.modalMask.alpha = 1.0f;
-	self.modalMask.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.6f];
+	self.modalMask.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.3f];
 	self.modalMask.hidden = NO;
 	self.modalView.hidden = NO;
 	
-	[self sendUISignal:self.MODALVIEW_DID_SHOWN];
+	[self sendUISignal:BeeUIBoard.MODALVIEW_DID_SHOWN];
 }
 
 - (void)dismissModalViewAnimated:(BOOL)animated
@@ -183,7 +183,7 @@ DEF_SIGNAL( MODALVIEW_DID_HIDDEN )	// ModalView已经隐藏
 	if ( nil == self.modalView )
 		return;
 
-	[self sendUISignal:self.MODALVIEW_WILL_HIDE];
+	[self sendUISignal:BeeUIBoard.MODALVIEW_WILL_HIDE];
 
 	if ( animated && trans )
 	{
@@ -197,7 +197,7 @@ DEF_SIGNAL( MODALVIEW_DID_HIDDEN )	// ModalView已经隐藏
 	self.modalView.hidden = YES;
 	self.modalView = nil;
 
-	[self sendUISignal:self.MODALVIEW_DID_HIDDEN];
+	[self sendUISignal:BeeUIBoard.MODALVIEW_DID_HIDDEN];
 }
 
 @end

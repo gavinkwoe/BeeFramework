@@ -45,6 +45,10 @@
 
 	<style type="text/css">
 
+		#url-text {
+			fit-width: true;
+		}
+
 		.wrapper {
 			width: 100%;
 			height: auto;

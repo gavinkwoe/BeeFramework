@@ -172,6 +172,10 @@ DEF_SINGLETON( BeeLogger );
 - (void)printLogo
 {
 #if TARGET_OS_IPHONE
+	NSString * homePath;
+	homePath = [NSBundle mainBundle].bundlePath;
+	homePath = [homePath stringByReplacingOccurrencesOfString:@" " withString:@"\\ "];
+
 	fprintf( stderr, "    												\n" );
 	fprintf( stderr, "    												\n" );
 	fprintf( stderr, "    	 ______    ______    ______					\n" );
@@ -187,8 +191,7 @@ DEF_SINGLETON( BeeLogger );
 	fprintf( stderr, "%s	\n", [BeeSystemInfo deviceModel].UTF8String );
 	fprintf( stderr, "    												\n" );
 	fprintf( stderr, "UUID: %s	\n", [BeeSystemInfo deviceUUID].UTF8String );
-	fprintf( stderr, "Home: %s	\n", [NSBundle mainBundle].bundlePath.UTF8String );
-	fprintf( stderr, "    												\n" );
+	fprintf( stderr, "Home: %s	\n", homePath.UTF8String );
 	fprintf( stderr, "    												\n" );
 #endif	// #if TARGET_OS_IPHONE
 }
@@ -273,7 +276,7 @@ DEF_SINGLETON( BeeLogger );
 	
 	if ( NO == _enabled )
 		return;
-	
+
 // formatting
 
 	NSMutableString * text = [NSMutableString string];
@@ -342,6 +345,13 @@ DEF_SINGLETON( BeeLogger );
 	{
 		[text appendString:tabs];
 	}
+	
+//#if __BEE_DEVELOPMENT__
+//	if ( file )
+//	{
+//		[text appendFormat:@"%@(#%d) ", [file lastPathComponent], line];
+//	}
+//#endif	// #if __BEE_DEVELOPMENT__
 
 	NSString * content = [[[NSString alloc] initWithFormat:(NSString *)format arguments:args] autorelease];
 	if ( content && content.length )
@@ -356,7 +366,15 @@ DEF_SINGLETON( BeeLogger );
 								 options:NSCaseInsensitiveSearch
 								   range:NSMakeRange( 0, text.length )];
 	}
-	
+
+	if ( [text rangeOfString:@"%"].length )
+	{
+		[text replaceOccurrencesOfString:@"%"
+							  withString:@"%%"
+								 options:NSCaseInsensitiveSearch
+								   range:NSMakeRange( 0, text.length )];
+	}
+
 	// print to console
 	
 	fprintf( stderr, [text UTF8String], NULL );

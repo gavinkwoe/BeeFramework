@@ -32,10 +32,16 @@
 #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 
 #undef  FLOORF
-#define FLOORF(v) (v)
-//#define FLOORF(v) floorf(v)
+#define FLOORF(v)	(v)	// floorf(v)
 
 #import "BeeUIStyle+Property.h"
+
+#pragma mark -
+
+@interface BeeUIStyle(PropertyPrivate)
+- (CGFloat)__estimateWidth:(BeeUIMetrics *)m byFrame:(CGRect)parentFrame;
+- (CGFloat)__estimateHeight:(BeeUIMetrics *)m byFrame:(CGRect)parentFrame;
+@end
 
 #pragma mark -
 
@@ -57,6 +63,15 @@ DEF_STRING( POSITION_LINEAR,		@"linear" )
 DEF_STRING( COMPOSITION_ABSOLUTE,	@"absolute" )
 DEF_STRING( COMPOSITION_RELATIVE,	@"relative" )
 DEF_STRING( COMPOSITION_LINEAR,		@"linear" )
+
+DEF_STRING( DISPLAY_NONE,           @"none" )
+DEF_STRING( DISPLAY_BLOCK,          @"block" )
+
+DEF_STRING( OVERFLOW_VISIBLE,		@"visible" )
+DEF_STRING( OVERFLOW_HIDDEN,		@"hidden" )
+DEF_STRING( OVERFLOW_SCROLL,		@"scroll" )
+DEF_STRING( OVERFLOW_AUTO,			@"auto" )
+DEF_STRING( OVERFLOW_INHERIT,		@"inherit" )
 
 @dynamic x;
 @dynamic y;
@@ -87,6 +102,8 @@ DEF_STRING( COMPOSITION_LINEAR,		@"linear" )
 @dynamic orientation;
 @dynamic text;
 @dynamic package;
+@dynamic display;
+@dynamic overflow;
 
 @dynamic X;
 @dynamic Y;
@@ -119,6 +136,8 @@ DEF_STRING( COMPOSITION_LINEAR,		@"linear" )
 @dynamic ORIENTATION;
 @dynamic TEXT;
 @dynamic PACKAGE;
+@dynamic DISPLAY;
+@dynamic OVERFLOW;
 
 - (BeeUIMetrics *)x
 {
@@ -309,6 +328,16 @@ DEF_STRING( COMPOSITION_LINEAR,		@"linear" )
 - (NSString *)package
 {
 	return [self.properties objectForKey:@"package"];
+}
+
+- (NSString *)display
+{
+    return [self.properties objectForKey:@"display"];
+}
+
+- (NSString *)overflow
+{
+    return [self.properties objectForKey:@"overflow"];
 }
 
 #pragma mark -
@@ -550,6 +579,70 @@ DEF_STRING( COMPOSITION_LINEAR,		@"linear" )
 	return [[block copy] autorelease];
 }
 
+- (BeeUIStyleBlockN)MIN_WIDTH
+{
+	BeeUIStyleBlockN block = ^ BeeUIStyle * ( id first, ... )
+	{
+		if ( first )
+		{
+			BeeUIMetrics * value = [BeeUIMetrics fromString:(NSString *)first];
+			[self.properties setObject:value forKey:@"min_width"];
+		}
+		
+		return self;
+	};
+	
+	return [[block copy] autorelease];
+}
+
+- (BeeUIStyleBlockN)MAX_WIDTH
+{
+	BeeUIStyleBlockN block = ^ BeeUIStyle * ( id first, ... )
+	{
+		if ( first )
+		{
+			BeeUIMetrics * value = [BeeUIMetrics fromString:(NSString *)first];
+			[self.properties setObject:value forKey:@"max_width"];
+		}
+		
+		return self;
+	};
+	
+	return [[block copy] autorelease];
+}
+
+- (BeeUIStyleBlockN)MIN_HEIGHT
+{
+	BeeUIStyleBlockN block = ^ BeeUIStyle * ( id first, ... )
+	{
+		if ( first )
+		{
+			BeeUIMetrics * value = [BeeUIMetrics fromString:(NSString *)first];
+			[self.properties setObject:value forKey:@"min_height"];
+		}
+		
+		return self;
+	};
+	
+	return [[block copy] autorelease];
+}
+
+- (BeeUIStyleBlockN)MAX_HEIGHT
+{
+	BeeUIStyleBlockN block = ^ BeeUIStyle * ( id first, ... )
+	{
+		if ( first )
+		{
+			BeeUIMetrics * value = [BeeUIMetrics fromString:(NSString *)first];
+			[self.properties setObject:value forKey:@"max_height"];
+		}
+		
+		return self;
+	};
+	
+	return [[block copy] autorelease];
+}
+
 - (BeeUIStyleBlockN)PADDING
 {
 	BeeUIStyleBlockN block = ^ BeeUIStyle * ( id first, ... )
@@ -738,8 +831,37 @@ DEF_STRING( COMPOSITION_LINEAR,		@"linear" )
 	return [[block copy] autorelease];
 }
 
-#pragma mark -
+- (BeeUIStyleBlockN)DISPLAY
+{
+	BeeUIStyleBlockN block = ^ BeeUIStyle * ( id first, ... )
+	{
+		if ( first )
+		{
+			[self.properties setObject:first forKey:@"display"];
+		}
+		
+		return self;
+	};
+	
+	return [[block copy] autorelease];
+}
 
+- (BeeUIStyleBlockN)OVERFLOW
+{
+	BeeUIStyleBlockN block = ^ BeeUIStyle * ( id first, ... )
+	{
+		if ( first )
+		{
+			[self.properties setObject:first forKey:@"overflow"];
+		}
+		
+		return self;
+	};
+	
+	return [[block copy] autorelease];
+}
+
+#pragma mark -
 
 - (BOOL)isRelativePosition
 {
@@ -936,78 +1058,136 @@ DEF_STRING( COMPOSITION_LINEAR,		@"linear" )
 	return [self.orientation isEqualToString:BeeUIStyle.ORIENTATION_VERTICAL] ? YES : NO;
 }
 
+- (BOOL)isHidden
+{
+    if ( nil == self.display )
+	{
+		return NO;
+	}
+	
+	return [self.display isEqualToString:BeeUIStyle.DISPLAY_NONE] ? YES : NO;
+}
+
+- (BOOL)hasMinW
+{
+    return nil != self.min_width;
+}
+
+- (BOOL)hasMaxW
+{
+    return nil != self.max_width;
+}
+
+- (BOOL)hasMinH
+{
+    return nil != self.min_height;
+}
+
+- (BOOL)hasMaxH
+{
+    return nil != self.max_height;
+}
+
+- (CGFloat)__estimateWidth:(BeeUIMetrics *)m byFrame:(CGRect)parentFrame
+{
+    CGSize  size = parentFrame.size;
+    CGFloat mPixels = 0.0f;
+    
+    if ( m )
+    {
+        if ( BeeUIMetrics.PIXEL == m.type )
+        {
+            mPixels = m.value;
+        }
+        else if ( BeeUIMetrics.PERCENT == m.type )
+        {
+            mPixels = FLOORF( size.width * m.value / 100.0f );
+        }
+        else if ( BeeUIMetrics.FILL_PARENT == m.type )
+        {
+            mPixels = size.width;
+        }
+        else if ( BeeUIMetrics.WRAP_CONTENT == m.type )
+        {
+            mPixels = -1.0f;
+        }
+        else
+        {
+            mPixels = size.width;
+        }
+    }
+    else
+    {
+        mPixels = size.width;
+    }
+    
+    return mPixels;
+}
+
+- (CGFloat)__estimateHeight:(BeeUIMetrics *)m byFrame:(CGRect)parentFrame
+{
+    CGSize  size = parentFrame.size;
+    CGFloat mPixels = 0.0f;
+    
+    if ( m )
+    {
+        if ( BeeUIMetrics.PIXEL == m.type )
+        {
+            mPixels = m.value;
+        }
+        else if ( BeeUIMetrics.PERCENT == m.type )
+        {
+            mPixels = FLOORF( size.height * m.value / 100.0f );
+        }
+        else if ( BeeUIMetrics.FILL_PARENT == m.type )
+        {
+            mPixels = size.height;
+        }
+        else if ( BeeUIMetrics.WRAP_CONTENT == m.type )
+        {
+            mPixels = -1.0f;
+        }
+        else
+        {
+            mPixels = size.height;
+        }
+    }
+    else
+    {
+        mPixels = size.height;
+    }
+    
+    return mPixels;
+}
+
 - (CGFloat)estimateWBy:(CGRect)parentFrame
 {
-	CGSize	size = parentFrame.size;
-	CGFloat	wPixels = 0.0f;
-	
-	BeeUIMetrics * w = self.w;
-	if ( w )
-	{
-		if ( BeeUIMetrics.PIXEL == w.type )
-		{
-			wPixels = w.value;
-		}
-		else if ( BeeUIMetrics.PERCENT == w.type )
-		{
-			wPixels = FLOORF( size.width * w.value / 100.0f );
-		}
-		else if ( BeeUIMetrics.FILL_PARENT == w.type )
-		{
-			wPixels = size.width;
-		}
-		else if ( BeeUIMetrics.WRAP_CONTENT == w.type )
-		{
-			wPixels = -1.0f;
-		}
-		else
-		{
-			wPixels = size.width;
-		}
-	}
-	else
-	{
-		wPixels = size.width;
-	}
-	
-	return wPixels;
+    return [self __estimateWidth:self.w byFrame:parentFrame];
 }
 
 - (CGFloat)estimateHBy:(CGRect)parentFrame
 {
-	CGSize	size = parentFrame.size;
-	CGFloat	hPixels = 0.0f;
-	
-	BeeUIMetrics * h = self.h;
-	if ( h )
-	{
-		if ( BeeUIMetrics.PIXEL == h.type )
-		{
-			hPixels = h.value;
-		}
-		else if ( BeeUIMetrics.PERCENT == h.type )
-		{
-			hPixels = FLOORF( size.height * h.value / 100.0f );
-		}
-		else if ( BeeUIMetrics.FILL_PARENT == h.type )
-		{
-			hPixels = size.height;
-		}
-		else if ( BeeUIMetrics.WRAP_CONTENT == h.type )
-		{
-			hPixels = -1.0f;
-		}
-		else
-		{
-			hPixels = size.height;
-		}
-	}
-	else
-	{
-		hPixels = size.height;
-	}
-	
-	return hPixels;
+    return [self __estimateHeight:self.h byFrame:parentFrame];
+}
+
+- (CGFloat)estimateMinWBy:(CGRect)parentFrame
+{
+    return [self __estimateWidth:self.min_width byFrame:parentFrame];
+}
+
+- (CGFloat)estimateMaxWBy:(CGRect)parentFrame
+{
+    return [self __estimateWidth:self.max_width byFrame:parentFrame];
+}
+
+- (CGFloat)estimateMinHBy:(CGRect)parentFrame
+{
+    return [self __estimateHeight:self.min_height byFrame:parentFrame];
+}
+
+- (CGFloat)estimateMaxHBy:(CGRect)parentFrame
+{
+    return [self __estimateHeight:self.max_height byFrame:parentFrame];
 }
 
 - (CGSize)estimateSizeBy:(CGRect)parentFrame

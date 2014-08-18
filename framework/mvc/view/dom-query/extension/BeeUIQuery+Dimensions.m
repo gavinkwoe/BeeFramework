@@ -79,6 +79,8 @@
 	{
 		for ( UIView * v in self.views )
 		{
+            [v addStyleProperties:@{ @"width": @(value) }];
+            [v mergeStyle];
 			v.width = value;
 		}
 		return self;
@@ -93,6 +95,8 @@
 	{
 		for ( UIView * v in self.views )
 		{
+            [v addStyleProperties:@{ @"height": @(value) }];
+            [v mergeStyle];
 			v.height = value;
 		}
 		return self;

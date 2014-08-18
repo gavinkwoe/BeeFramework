@@ -35,6 +35,9 @@
 
 @implementation DribbbleWebBoardTab_iPhone
 
+SUPPORT_RESOURCE_LOADING(YES)
+SUPPORT_AUTOMATIC_LAYOUT(YES)
+
 DEF_OUTLET( BeeUIButton, go_backward );
 DEF_OUTLET( BeeUIButton, go_forward );
 DEF_OUTLET( BeeUIButton, refresh );

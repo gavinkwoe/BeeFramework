@@ -97,26 +97,6 @@
 	return CGSizeMake( 0.0f, height );
 }
 
-+ (BOOL)supportForUILayoutCache
-{
-	return NO;
-}
-
-- (BOOL)supportForUILayoutCache
-{
-	return NO;
-}
-
-+ (NSString *)layoutCacheKey
-{
-	return [self description];
-}
-
-- (NSString *)layoutCacheKey
-{
-	return [[self class] layoutCacheKey];
-}
-
 + (BOOL)supportForUIStyling
 {
 	return NO;
@@ -150,6 +130,16 @@
 - (NSString *)UIResourceName
 {
 	return [[self class] description];
+}
+
++ (NSString *)UIResourcePath
+{
+	return nil;
+}
+
+- (NSString *)UIResourcePath
+{
+	return nil;
 }
 
 + (BOOL)supportForUIPropertyMapping

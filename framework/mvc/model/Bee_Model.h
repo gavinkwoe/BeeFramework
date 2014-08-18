@@ -53,6 +53,13 @@
 #define	DEF_MODEL( __class, __tag ) \
 		@synthesize __tag = _##__tag;
 
+#undef	SAFE_RELEASE_MODEL
+#define SAFE_RELEASE_MODEL( __x ) \
+		[__x removeObserver:self]; \
+		[__x cancelMessages]; \
+		[__x cancelRequests]; \
+		__x = nil;
+
 #pragma mark -
 
 @class BeeModel;

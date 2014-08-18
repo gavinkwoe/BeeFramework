@@ -3,15 +3,15 @@
 <template namespace="DribbbleBoardTab_iPhone" version="1">
 
     <linear class="wrapper" orientation="h">
-		<image id="bg"/>
-		<button id="popular" class="item active">Popular</button>
-		<button id="everyone" class="item">Everyone</button>
-		<button id="debuts" class="item">Debuts</button>
+			<image id="bg"/>
+			<button id="popular" class="item active">Most Popular</button>
+			<button id="everyone" class="item">Everyone</button>
+			<button id="debuts" class="item">Debuts</button>
     </linear>
 
     <style type="text/css">
 		#bg {
-			background-color: #333;
+			/*background-color: #F00;*/
 			image-src: url(tab-bar.png) !important;
 			image-mode: fit;
 			position: absolute;

@@ -31,11 +31,9 @@
 
 #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 
-#import "Bee_UITemplateParserXMLImpl.h"
+#import "Bee_UILayout.h"
 
-#pragma mark -
-
-@interface BeeUITemplateParserXMLImpl_v2 : BeeUITemplateParserXMLImpl
+@interface UITextView(LayoutParser)
 @end
 
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

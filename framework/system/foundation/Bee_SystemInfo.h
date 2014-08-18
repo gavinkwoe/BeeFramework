@@ -77,6 +77,7 @@ AS_SINGLETON( BeeSystemInfo )
 
 + (NSString *)OSVersion;
 + (NSString *)appVersion;
++ (NSString *)appShortVersion;
 + (NSString *)appIdentifier;
 + (NSString *)appSchema;
 + (NSString *)appSchema:(NSString *)name;

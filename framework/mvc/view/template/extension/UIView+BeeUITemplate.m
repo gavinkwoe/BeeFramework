@@ -54,12 +54,7 @@
 
 - (void)load
 {
-	if ( nil == self.layout )
-	{
-		self.FROM_NAME( [self UIResourceName] );
-	}
-	
-	if ( nil == self.layout )
+	if (  [self supportForUIResourceLoading] && nil == self.layout )
 	{
 		Class viewClass = [self class];
 		for ( ;; )

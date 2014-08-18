@@ -88,6 +88,12 @@ AS_INT( STATE_HIGHLIGHTED )
 - (void)stateWillChange;
 - (void)stateDidChanged;
 
+- (void)viewWillAppear;
+- (void)viewDidAppear;
+
+- (void)viewWillDisappear;
+- (void)viewDidDisappear;
+
 @end
 
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

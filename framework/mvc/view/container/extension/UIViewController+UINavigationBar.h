@@ -38,12 +38,18 @@
 
 @interface UIViewController(UINavigationBar)
 
-@property (nonatomic, readonly) UIView *				leftBarButton;
-@property (nonatomic, readonly) UIView *				rightBarButton;
+@property (nonatomic, retain) NSString *				titleString			BEE_DEPRECATED;
+@property (nonatomic, retain) UIImage *					titleImage			BEE_DEPRECATED;
+@property (nonatomic, retain) UIView *					titleView			BEE_DEPRECATED;
+@property (nonatomic, retain) UIViewController *		titleViewController	BEE_DEPRECATED;
+
+@property (nonatomic, readonly) UIView *				leftBarButton		BEE_DEPRECATED;
+@property (nonatomic, readonly) UIView *				rightBarButton		BEE_DEPRECATED;
 
 @property (nonatomic, assign) BOOL						navigationBarShown;
 @property (nonatomic, retain) id						navigationBarLeft;
 @property (nonatomic, retain) id						navigationBarRight;
+@property (nonatomic, retain) id						navigationBarTitle;
 
 - (void)showNavigationBarAnimated:(BOOL)animated;
 - (void)hideNavigationBarAnimated:(BOOL)animated;

@@ -169,7 +169,8 @@
 	if ( NO == _inited )
 	{
 		// TODO:
-
+		self.view.backgroundColor = [UIColor clearColor];
+		
 		_inited = YES;
 	}
 }
@@ -238,7 +239,11 @@
 			[trans transiteFor:self.view direction:BeeUITransitionDirectionRight];
 		}
 
+	PERF_ENTER
+		
 		[super pushViewController:board animated:animated];
+		
+	PERF_LEAVE
 	}
 }
 

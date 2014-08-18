@@ -78,7 +78,7 @@
 
 - (void)applyScrollInsets:(NSMutableDictionary *)properties
 {
-// scroll-insets: 0 1 2 3
+// scroll-insets: top right bottom left
 
 	if ( [self respondsToSelector:@selector(setExtInsets:)] )
 	{
@@ -119,6 +119,50 @@
 	}
 }
 
+- (void)applyScrollOverflow:(NSMutableDictionary *)properties
+{
+    NSString * overflow = [properties parseStringWithKeys:@[@"overflow"]];
+    if ( overflow && overflow.length )
+    {
+		if ( [overflow matchAnyOf:@[@"visible"]] )
+		{
+			self.layer.masksToBounds = NO;
+			self.showsHorizontalScrollIndicator = YES;
+			self.showsVerticalScrollIndicator = YES;
+		}
+		else if ( [overflow matchAnyOf:@[@"hidden"]] )
+		{
+			self.layer.masksToBounds = YES;
+			self.showsHorizontalScrollIndicator = NO;
+			self.showsVerticalScrollIndicator = NO;
+		}
+		else if ( [overflow matchAnyOf:@[@"scroll"]] )
+		{
+			self.layer.masksToBounds = YES;
+			self.showsHorizontalScrollIndicator = YES;
+			self.showsVerticalScrollIndicator = YES;
+		}
+		else if ( [overflow matchAnyOf:@[@"auto"]] )
+		{
+			self.layer.masksToBounds = YES;
+			self.showsHorizontalScrollIndicator = YES;
+			self.showsVerticalScrollIndicator = YES;
+		}
+		else
+		{
+			self.layer.masksToBounds = YES;
+//			self.showsHorizontalScrollIndicator = NO;
+//			self.showsVerticalScrollIndicator = NO;
+		}
+    }
+	else
+	{
+		self.layer.masksToBounds = YES;
+//		self.showsHorizontalScrollIndicator = NO;
+//		self.showsVerticalScrollIndicator = NO;
+	}
+}
+
 - (void)applyScrollMode:(NSMutableDictionary *)properties
 {
 // scroll-mode: paging | continue
@@ -146,6 +190,7 @@
 	NSMutableDictionary * propertiesCopy = [NSMutableDictionary dictionaryWithDictionary:properties];
 
 	[self applyScrollDirection:propertiesCopy];
+	[self applyScrollOverflow:propertiesCopy];
 	[self applyScrollInsets:propertiesCopy];
 	[self applyScrollLines:propertiesCopy];
 	[self applyScrollMode:propertiesCopy];

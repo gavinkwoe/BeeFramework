@@ -59,10 +59,16 @@ DEF_SINGLETON( BeeSystemInfo );
 {
 #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR || TARGET_OS_MAC)
 	NSString * value = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
-	if ( nil == value || 0 == value.length )
-	{
-		value = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersion"];
-	}
+	return value;
+#else	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+	return nil;
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+}
+
++ (NSString *)appShortVersion
+{
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR || TARGET_OS_MAC)
+	NSString * value = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
 	return value;
 #else	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 	return nil;

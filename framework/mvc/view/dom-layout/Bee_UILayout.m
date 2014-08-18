@@ -52,6 +52,22 @@
 
 #pragma mark -
 
+@implementation NSObject(LayoutParser)
+
++ (void)parseLayout:(BeeUILayout *)layout forView:(id)view
+{
+	
+}
+
+- (void)parseLayout:(BeeUILayout *)layout
+{
+	[[self class] parseLayout:layout forView:self];
+}
+
+@end
+
+#pragma mark -
+
 @interface BeeUILayout()
 {
 	NSMutableArray *		_stack;
@@ -71,8 +87,10 @@
 	NSMutableArray *		_childs;
 
 	BOOL					_containable;
+	BOOL					_instance;
 	BOOL					_visible;
 	BOOL					_isRoot;
+	BOOL					_isWrapper;
 }
 
 - (BeeUILayout *)topLayout;
@@ -86,6 +104,7 @@
 @implementation BeeUILayout
 
 @synthesize containable = _containable;
+@synthesize constructable = _constructable;
 @synthesize visible = _visible;
 @synthesize root = _root;
 @synthesize parent = _parent;
@@ -102,7 +121,9 @@
 @synthesize className = _className;
 @synthesize childs = _childs;
 @synthesize isRoot = _isRoot;
+@synthesize isWrapper = _isWrapper;
 @synthesize DOMPath = _DOMPath;
+@dynamic DOMDepth;
 
 @dynamic ADD;
 @dynamic REMOVE;
@@ -111,12 +132,32 @@
 @dynamic CONTAINER_BEGIN;
 @dynamic CONTAINER_END;
 @dynamic VIEW;
-
 @dynamic DUMP;
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"%@ '%@'", [[self class] description], self.name];
+	NSMutableString * string = [NSMutableString string];
+	
+	[string appendString:@"\n"];
+	[string appendFormat:@"%@ '%@'", [[self class] description], self.name];
+	
+	if ( self.childs.count )
+	{
+		[string appendString:@"\n"];
+		
+		for ( BeeUILayout * layout in self.childs )
+		{
+			[string appendString:[@"  " repeat:layout.DOMDepth]];
+			[string appendString:[layout description]];
+			
+			if ( self.childs.lastObject != layout )
+			{
+				[string appendString:@"\n"];
+			}
+		}
+	}
+	
+	return string;
 }
 
 + (NSString *)generateName
@@ -143,7 +184,7 @@
 	if ( self )
 	{
 		self.version = 1;
-		self.containable = YES;
+		self.containable = NO;
 		self.visible = YES;
 		self.root = self;
 		self.parent = nil;
@@ -222,12 +263,33 @@
 	return result;
 }
 
+- (NSUInteger)DOMDepth
+{
+	NSUInteger depth = 0;
+	
+	for ( BeeUILayout * parent = self.parent; nil != parent; parent = parent.parent )
+	{
+		depth += 1;
+	}
+	
+	return depth;
+}
+
 - (UIView *)createView
 {
-	if ( nil == self.classType )
+	if ( NO == self.constructable )
 		return nil;
 
 	Class classType = self.classType;
+	if ( nil == classType )
+	{
+		classType = NSClassFromString( self.className );
+		if ( nil == classType )
+		{
+			return nil;
+		}
+	}
+	
 	if ( classType != [UIView class] && NO == [classType isSubclassOfClass:[UIView class]] )
 		return nil;
 
@@ -255,6 +317,7 @@
 		view.UIDOMPath = self.DOMPath;
 
 		[view applyStyle];
+		[view parseLayout:self];
 
 //		INFO( @"CreateView %p '%@', tag = '%@'", view, [self.classType description], self.name );
 	}
@@ -304,23 +367,29 @@
 	{
 		return;
 	}
-	
-	// TODO: read cache
-	
+
 	BeeUILayoutBuilder * builder = [BeeUILayoutBuilder builder:self.version];
 	builder.rootCanvas = canvas;
 	builder.rootLayout = self;
 	[builder layoutTree:bound];
-	
-	// TODO: save cache
 }
 
 - (CGRect)estimateFor:(UIView *)canvas inBound:(CGRect)bound
 {
+PERF_ENTER_( ______estimate1 )
+	
 	BeeUILayoutBuilder * builder = [BeeUILayoutBuilder builder:self.version];
 	builder.rootCanvas = canvas;
 	builder.rootLayout = self;
-	return [builder estimateRect:bound];
+	
+PERF_LEAVE_( ______estimate1 )
+PERF_ENTER_( ______estimate2 )
+	
+	CGRect result = [builder estimateRect:bound];
+	
+PERF_LEAVE_( ______estimate2 )
+	
+	return result;
 }
 
 - (void)mergeRootStyle:(BeeUIStyle *)style
@@ -348,18 +417,15 @@
 	// single style
 		
 		BeeUIStyle * style1 = self.styleInline;
+		BeeUIStyle * style2 = [self.styleRoot childStyleWithElement:self];
+		BeeUIStyle * style3 = [[BeeUIStyleManager sharedInstance].defaultStyle childStyleWithElement:self];
 
-        BeeUIStyle * style2 = [self.styleRoot childStyleWithElement:self];
-		
-		BeeUIStyle * globalStyle = [BeeUIStyleManager sharedInstance].defaultStyle;
-        
-		if ( globalStyle )
+		if ( style3 )
 		{
-			BeeUIStyle * style3 = [globalStyle childStyleWithElement:self];
-            [style3 mergeTo:merged];
+			[style3 mergeTo:merged];
 		}
 		
-        if ( style2 && style2.properties.count )
+		if ( style2 && style2.properties.count )
 		{
 			[style2 mergeTo:merged];
 		}
@@ -416,6 +482,7 @@
 		if ( layout )
 		{
 			layout.containable = YES;
+			layout.constructable = NO;
 			layout.root = self.root;
 			layout.parent = self.containable ? self : self.parent;
 			layout.visible = layout.parent.visible;
@@ -465,6 +532,7 @@
 		if ( layout )
 		{
 			layout.containable = NO;
+			layout.constructable = YES;
 			layout.root = self.root;
 			layout.parent = self.containable ? self : self.parent;			
 			layout.visible = layout.parent.visible;

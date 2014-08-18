@@ -37,7 +37,7 @@
 
 #pragma mark -
 
-AS_PACKAGE_INSTANCE( BeePackage, BeePackage_Service, services );
+AS_PACKAGE_( BeePackage, BeePackage_Service, services );
 
 #pragma mark -
 

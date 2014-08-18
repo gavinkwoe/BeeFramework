@@ -37,6 +37,24 @@
 
 #pragma mark -
 
-AS_PACKAGE_INSTANCE( BeePackage, BeePackage_UI, ui );
+AS_PACKAGE_( BeePackage, BeePackage_UI, ui );
+
+#pragma mark -
+
+#undef	AS_UI
+#define	AS_UI( __class, __name ) \
+		AS_PACKAGE( BeePackage_UI, __class, __name )
+
+#undef	DEF_UI
+#define	DEF_UI( __class, __name ) \
+		DEF_PACKAGE( BeePackage_UI, __class, __name )
+
+#undef	AS_SUB_UI
+#define	AS_SUB_UI( __parent, __class, __name ) \
+		AS_PACKAGE( __parent, __class, __name )
+
+#undef	DEF_SUB_UI
+#define	DEF_SUB_UI( __parent, __class, __name ) \
+		DEF_PACKAGE( __parent, __class, __name )
 
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

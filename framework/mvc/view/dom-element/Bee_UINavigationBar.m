@@ -67,8 +67,12 @@ DEF_SIGNAL( RIGHT_TOUCHED )
 @dynamic backgroundImage;
 @synthesize navigationController = _navigationController;
 
+static UIColor *	__titleShadowColor = nil;
 static UIColor *	__titleColor = nil;
-static CGSize		__buttonSize = { 0 };
+static UIFont *		__titleFont = nil;
+static CGSize		__buttonSize = { 44.0f, 44.0f };
+static UIColor *	__buttonColor = nil;
+static UIFont *		__buttonFont = nil;
 static UIColor *	__backgroundTintColor = nil;
 static UIColor *	__backgroundColor = nil;
 static UIImage *	__backgroundImage = nil;
@@ -97,6 +101,12 @@ static UIImage *	__backgroundImage = nil;
 {
 	if ( NO == _inited )
 	{
+		if ( IOS7_OR_LATER )
+		{
+			self.translucent = NO;
+			self.shadowImage = [[UIImage new] autorelease];
+		}
+		
 		[self observeNotification:self.STYLE_CHANGED];
 		[self applyBarStyle];
 		
@@ -148,6 +158,17 @@ static UIImage *	__backgroundImage = nil;
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
 	if ( IOS7_OR_LATER )
 	{
+//        for ( id subview in self.subviews )
+//		{
+//            if ( [subview isKindOfClass:[UIImageView class]] )
+//			{
+//				UIImageView * imageView = subview;
+//				imageView.layer.shadowColor = [UIColor clearColor].CGColor;
+//				imageView.layer.shadowOffset = CGSizeZero;
+//				imageView.layer.shadowOpacity = 0.0f;
+//            }
+//        }
+
 		if ( __backgroundTintColor )
 		{
 			[self setTintColor:__backgroundTintColor];
@@ -158,15 +179,26 @@ static UIImage *	__backgroundImage = nil;
 
 	if ( IOS6_OR_LATER )
 	{
+		NSMutableDictionary * attributes = [NSMutableDictionary dictionary];
+
+		if ( __titleShadowColor )
+		{
+			[attributes setObject:__titleShadowColor forKey:UITextAttributeTextShadowColor];
+		}
+        
 		if ( __titleColor )
 		{
-			NSDictionary * attrs = [NSDictionary dictionaryWithObjectsAndKeys:__titleColor, NSForegroundColorAttributeName, nil];
-			[self setTitleTextAttributes:attrs];
+			[attributes setObject:__titleColor forKey:UITextAttributeTextColor];
 		}
-		else
+
+		if ( __titleFont )
 		{
-			NSDictionary * attrs = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor blackColor], NSForegroundColorAttributeName, nil];
-			[self setTitleTextAttributes:attrs];
+			[attributes setObject:__titleFont forKey:UITextAttributeFont];
+		}
+        
+		if ( attributes.count )
+		{
+			[self setTitleTextAttributes:attributes];
 		}
 	}
 
@@ -227,15 +259,15 @@ static UIImage *	__backgroundImage = nil;
 
 - (void)handleUISignal:(BeeUISignal *)signal
 {
-	if ( _navigationController )
-	{
-		UIViewController * vc = _navigationController.topViewController;
-		if ( vc )
-		{
-			[signal forward:vc];
-		}
-	}
-	else
+//	if ( _navigationController )
+//	{
+//		UIViewController * vc = _navigationController.topViewController;
+//		if ( vc )
+//		{
+//			[signal forward:vc];
+//		}
+//	}
+//	else
 	{
 		SIGNAL_FORWARD( signal );
 	}
@@ -262,25 +294,79 @@ static UIImage *	__backgroundImage = nil;
 
 #pragma mark -
 
-+ (CGSize)buttonSize
-{
-	return __buttonSize;
-}
-
 + (void)setTitleColor:(UIColor *)color
 {
 	if ( color != __titleColor )
 	{
 		[__titleColor release];
 		__titleColor = [color retain];
-
+		
 		[[NSNotificationCenter defaultCenter] postNotificationName:self.STYLE_CHANGED object:nil];
 	}
+}
+
++ (void)setTitleFont:(UIFont *)font
+{
+	if ( font != __titleFont )
+	{
+		[__titleFont release];
+		__titleFont = [font retain];
+		
+		[[NSNotificationCenter defaultCenter] postNotificationName:self.STYLE_CHANGED object:nil];
+	}
+}
+
++ (void)setTitleShadowColor:(UIColor *)color
+{
+    if ( color != __titleShadowColor )
+    {
+        [__titleShadowColor release];
+        __titleShadowColor = [color retain];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:self.STYLE_CHANGED object:nil];
+    }
+}
+
++ (CGSize)buttonSize
+{
+	return __buttonSize;
 }
 
 + (void)setButtonSize:(CGSize)size
 {
 	__buttonSize = size;
+}
+
++ (UIColor *)buttonColor
+{
+	return __buttonColor;
+}
+
++ (void)setButtonColor:(UIColor *)color
+{
+	if ( color != __buttonColor )
+	{
+		[__buttonColor release];
+		__buttonColor = [color retain];
+		
+		[[NSNotificationCenter defaultCenter] postNotificationName:self.STYLE_CHANGED object:nil];
+	}
+}
+
++ (UIFont *)buttonFont
+{
+	return __buttonFont;
+}
+
++ (void)setButtonFont:(UIFont *)font
+{
+	if ( font != __buttonFont )
+	{
+		[__buttonFont release];
+		__buttonFont = [font retain];
+
+		[[NSNotificationCenter defaultCenter] postNotificationName:self.STYLE_CHANGED object:nil];
+	}
 }
 
 + (void)setBackgroundColor:(UIColor *)color

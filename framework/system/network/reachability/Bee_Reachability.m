@@ -33,6 +33,8 @@
 #import "Bee_HTTPRequestQueue.h"
 #import "Reachability.h"
 
+#import "NSObject+BeeNotification.h"
+
 // ----------------------------------
 // Source code
 // ----------------------------------

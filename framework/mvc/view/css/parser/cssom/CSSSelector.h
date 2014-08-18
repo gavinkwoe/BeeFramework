@@ -102,6 +102,7 @@ enum PseudoType {
     PseudoAfter,
     PseudoLang,
     PseudoNot,
+    PseudoCustom,
 } PseudoType;
 
 @interface RareData : NSObject

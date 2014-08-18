@@ -33,6 +33,8 @@
 #import "Bee_HTTPRequestQueue.h"
 #import "Bee_Reachability.h"
 
+#import "NSObject+BeeNotification.h"
+
 // ----------------------------------
 // Source code
 // ----------------------------------
@@ -44,10 +46,10 @@ DEF_PACKAGE( BeeHTTPClient, BeeHTTPClientConfig, config );
 #pragma mark -
 
 #undef	CONCURRENT_FOR_WIFI
-#define	CONCURRENT_FOR_WIFI	(10)
+#define	CONCURRENT_FOR_WIFI	(8)
 
 #undef	CONCURRENT_FOR_WLAN
-#define	CONCURRENT_FOR_WLAN	(5)
+#define	CONCURRENT_FOR_WLAN	(4)
 
 #pragma mark -
 

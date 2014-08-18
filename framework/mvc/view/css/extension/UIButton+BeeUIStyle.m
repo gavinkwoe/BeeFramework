@@ -83,9 +83,9 @@
 	NSString * relativePath = [properties objectForKey:@"package"];
 
 	UIImage * imageNormal = [[properties parseImageWithKeys:@[@"image", @"image-src", @"button-image", @"button-image-normal"] relativePath:relativePath] stretched];
-	UIImage * imageHighlighted = [properties parseImageWithKeys:@[@"image-highlighted", @"button-image-highlighted"] relativePath:relativePath defaultValue:imageNormal];
-	UIImage * imageDisabled = [properties parseImageWithKeys:@[@"image-disabled", @"button-image-disabled"] relativePath:relativePath defaultValue:imageNormal];
-	UIImage * imageSelected = [properties parseImageWithKeys:@[@"image-selected", @"button-image-selected"] relativePath:relativePath defaultValue:imageNormal];
+	UIImage * imageHighlighted = [properties parseImageWithKeys:@[@"image-highlighted", @"image-src-highlighted", @"button-image-highlighted"] relativePath:relativePath defaultValue:imageNormal];
+	UIImage * imageDisabled = [properties parseImageWithKeys:@[@"image-disabled", @"image-src-disabled", @"button-image-disabled"] relativePath:relativePath defaultValue:imageNormal];
+	UIImage * imageSelected = [properties parseImageWithKeys:@[@"image-selected", @"image-src-selected", @"button-image-selected"] relativePath:relativePath defaultValue:imageNormal];
 
 //	if ( imageNormal )
 	{
@@ -126,7 +126,7 @@
 		currentTitle = [self titleForState:UIControlStateNormal];
 	}
 
-    NSString * titleNormal = [properties parseTextWithKeys:@[@"content", @"text", @"button-title"] defaultValue:currentTitle];
+    NSString * titleNormal = [properties parseTextWithKeys:@[@"text", @"button-title"] defaultValue:currentTitle];
     NSString * titleHighlighted = [properties parseTextWithKeys:@[@"text-highlighted", @"button-title-highlighted"] defaultValue:titleNormal];
     NSString * titleDisabled = [properties parseTextWithKeys:@[@"text-disabled", @"button-title-disabled"] defaultValue:titleNormal];
     NSString * titleSelected = [properties parseTextWithKeys:@[@"text-selected", @"button-title-selected"] defaultValue:titleNormal];
@@ -176,7 +176,7 @@
 
 - (void)applyButtonColor:(NSMutableDictionary *)properties
 {
-	UIColor * currentColor = [UIColor blackColor];
+	UIColor * currentColor = nil; // [UIColor blackColor];
 	
 	if ( [self respondsToSelector:@selector(titleColor)] )
 	{
@@ -185,6 +185,11 @@
 	else
 	{
 		currentColor = [self titleColorForState:UIControlStateNormal];
+	}
+
+	if ( nil == currentColor )
+	{
+		currentColor = [UIColor blackColor];
 	}
 
 	UIColor * colorNormal = [properties parseColorWithKeys:@[@"color", @"button-title-color"] defaultValue:currentColor];
@@ -240,13 +245,13 @@
 	UIFont * font = [properties parseFontWithDefaultValue:[UIFont systemFontOfSize:12.0f]];
 	if ( font )
 	{
-		if ( [self respondsToSelector:@selector(setFont:)] )
-		{
-			[self performSelector:@selector(setFont:) withObject:font];
-		}
-		else if ( [self respondsToSelector:@selector(setTitleFont:)] )
+        if ( [self respondsToSelector:@selector(setTitleFont:)] )
 		{
 			[self performSelector:@selector(setTitleFont:) withObject:font];
+		}
+		else if ( [self respondsToSelector:@selector(setFont:)] )
+		{
+			[self performSelector:@selector(setFont:) withObject:font];
 		}
 	}
 	
@@ -274,6 +279,7 @@
 	[self applyButtonTitle:propertiesCopy];
 	[self applyButtonColor:propertiesCopy];
 	[self applyButtonInsets:propertiesCopy];
+	[self applyButtonContent:propertiesCopy];
 	
 	[super applyUIStyling:propertiesCopy];
 }

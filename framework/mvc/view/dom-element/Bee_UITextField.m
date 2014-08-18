@@ -92,25 +92,32 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-	if ( 1 == range.length )
-	{
-		[NSObject cancelPreviousPerformRequestsWithTarget:self];
-		[self performSelector:@selector(notifyTextChanged) withObject:nil afterDelay:0.1f];
-		return YES;
-	}
-	else
-	{
-		NSString * text = [_target.text stringByReplacingCharactersInRange:range withString:string];
-		if ( _target.maxLength > 0 && text.length > _target.maxLength )
-		{
-			[_target sendUISignal:BeeUITextField.TEXT_OVERFLOW];
-			return NO;
-		}
-
-		[NSObject cancelPreviousPerformRequestsWithTarget:self];
-		[self performSelector:@selector(notifyTextChanged) withObject:nil afterDelay:0.1f];
-		return YES;
-	}
+    if ( 1 == range.length )
+    {
+        [NSObject cancelPreviousPerformRequestsWithTarget:self];
+        [self performSelector:@selector(notifyTextChanged) withObject:nil afterDelay:0.1f];
+        return YES;
+    }
+    else
+    {
+        NSString * text = [_target.text stringByReplacingCharactersInRange:range withString:string];
+        if ( _target.maxLength > 0 && text.length > _target.maxLength )
+        {
+            [_target sendUISignal:BeeUITextField.TEXT_OVERFLOW];
+            return NO;
+        }
+        else
+        {
+            if ( _target.isNumber )
+            {
+                return [_target validateNumber:string];
+            }
+        }
+        
+        [NSObject cancelPreviousPerformRequestsWithTarget:self];
+        [self performSelector:@selector(notifyTextChanged) withObject:nil afterDelay:0.1f];
+        return YES;
+    }
 }
 
 - (BOOL)textFieldShouldClear:(UITextField *)textField
@@ -260,9 +267,33 @@ DEF_SIGNAL( RETURN )
 			[_nextChain becomeFirstResponder];
 			return;
 		}
+		else if ( nil == _nextChain )
+		{
+			[self resignFirstResponder];
+			return;
+		}
 	}
 
 	SIGNAL_FORWARD( signal );
+}
+
+#pragma mark -
+
+- (BOOL)validateNumber:(NSString*)number
+{
+    BOOL res = YES;
+    NSCharacterSet* tmpSet = [NSCharacterSet characterSetWithCharactersInString:@"0123456789."];
+    int i = 0;
+    while (i < number.length) {
+        NSString * string = [number substringWithRange:NSMakeRange(i, 1)];
+        NSRange range = [string rangeOfCharacterFromSet:tmpSet];
+        if (range.length == 0) {
+            res = NO;
+            break;
+        }
+        i++;
+    }
+    return res;
 }
 
 @end

@@ -326,6 +326,16 @@ CGRect CGRectZeroNan( CGRect rect )
 	return rect;
 }
 
+CGRect CGRectNormalize( CGRect rect )
+{
+	CGRect newRect;
+	newRect.origin.x = ceilf(rect.origin.x);
+	newRect.origin.y = ceilf(rect.origin.y);
+	newRect.size.width = ceilf(rect.size.width);
+	newRect.size.height = ceilf(rect.size.height);
+	return newRect;
+}
+
 CGRect CGRectMakeBound( CGFloat w, CGFloat h )
 {
 	CGRect rect;
@@ -476,6 +486,29 @@ CGSize CGRectGetDistance( CGRect rect1, CGRect rect2 )
 }
 
 #pragma mark -
+
+CGSize CGSizeFromStringEx( NSString * text )
+{
+    NSArray * segments = [text componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+	if ( segments.count == 2 )
+	{
+		CGFloat w = [[segments objectAtIndex:0] floatValue];
+		CGFloat h = [[segments objectAtIndex:1] floatValue];
+		
+		return CGSizeMake( w, h );
+	}
+	else if ( segments.count == 1 )
+	{
+		CGFloat w = [[segments objectAtIndex:0] floatValue];
+		CGFloat h = w;
+		
+		return CGSizeMake( w, h );
+	}
+	else
+	{
+		return CGSizeMake( 0, 0 );
+	}
+}
 
 UIEdgeInsets UIEdgeInsetsFromStringEx( NSString * text )
 {

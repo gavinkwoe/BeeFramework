@@ -33,6 +33,7 @@
 
 #import "Bee_UILayoutBuilder_v1.h"
 #import "Bee_UILayout.h"
+#import "Bee_UIMetrics.h"
 
 #import "Bee_UIStyle.h"
 #import "Bee_UIStyleParser.h"
@@ -100,6 +101,11 @@
 		UIView * view = [layout createView];
 		if ( view )
 		{
+			if ( nil == view.nameSpace )
+			{
+				view.nameSpace = [[self.rootCanvas class] description]; // self.root.name;
+			}
+			
 			[self.rootCanvas addSubview:view];
 			[self.rootCanvas bringSubviewToFront:view];
 		}
@@ -173,13 +179,17 @@
 		}
 	}
 
+	frame = CGRectNormalize( frame );
+	
 	[_viewFrames setObject:[NSValue valueWithCGRect:frame] forKey:thisLayout.name];
 	return YES;
 }
 
 - (BOOL)offsetFrame:(CGSize)size forLayout:(BeeUILayout *)layout
 {
-	CGRect viewFrame = CGRectOffset( [self getFrameForLayout:layout], size.width, size.height );
+	CGRect viewFrame;
+	viewFrame = [self getFrameForLayout:layout];
+	viewFrame = CGRectOffset( viewFrame, size.width, size.height );
 	
 	return [self setFrame:viewFrame forLayout:layout];
 }
@@ -295,7 +305,7 @@
 	}
 }
 
-- (void)floatForLayout:(BeeUILayout *)thisLayout inBound:(CGRect)parentFrame margin:(UIEdgeInsets)margin padding:(UIEdgeInsets)padding
+- (void)floatForLayout:(BeeUILayout *)thisLayout inBound:(CGRect)parentFrame margin:(UIEdgeInsets)parentMargin padding:(UIEdgeInsets)parentPadding
 {
 	if ( CGSizeEqualToSize(parentFrame.size, CGSizeZero) )
 		return;
@@ -317,7 +327,7 @@
         
 		if ( NO == [childStyle isRelativePosition] )
 		{
-            //			childOffset = CGSizeMake( childFrame.origin.x, childFrame.origin.y );
+//			childOffset = CGSizeMake( childFrame.origin.x, childFrame.origin.y );
 			
 			if ( [childStyle needAdjustW] )
 			{
@@ -329,14 +339,15 @@
 				childFrame.size.height = [childStyle estimateHBy:parentFrame];
 			}
             
-            //			childFrame.origin.x += childPadding.left;
-            //			childFrame.origin.y += childPadding.top;
+//			childFrame.origin.x += childPadding.left;
+//			childFrame.origin.y += childPadding.top;
 			childFrame.size.width -= (childPadding.left + childPadding.right);
 			childFrame.size.height -= (childPadding.top + childPadding.bottom);
 			
 			if ( childStyle.right )
 			{
 				childFrame.origin.x = [childStyle estimateRightBy:parentFrame] - childFrame.size.width;
+//				childFrame.origin.x += parentMargin.left;
 				childFrame.origin.x -= childMargin.right;
 				
 				CGSize distance = CGRectGetDistance( parentFrame, childFrame );
@@ -346,6 +357,7 @@
 			if ( childStyle.bottom )
 			{
 				childFrame.origin.y = [childStyle estimateBottomBy:parentFrame] - childFrame.size.height;
+//				childFrame.origin.y += parentMargin.top;
 				childFrame.origin.y -= childMargin.bottom;
 				
 				CGSize distance = CGRectGetDistance( parentFrame, childFrame );
@@ -354,7 +366,8 @@
             
 			childFrameChanged = [self setFrame:childFrame forLayout:child];
 		}
-		else if ( [childStyle isFloating] || [childStyle isVFloating] )
+		
+        if ( [childStyle isFloating] || [childStyle isVFloating] )
 		{
 			if ( [childStyle isRelativePosition] )
 			{
@@ -439,10 +452,17 @@
 - (CGRect)estimateForLayout:(BeeUILayout *)thisLayout inBound:(CGRect)bound
 {
 	BeeUIStyle * thisStyle = [self styleForLayout:thisLayout];
-	if ( nil == thisStyle )
+	if ( nil == thisStyle || [thisStyle isHidden] )
 	{
-		ERROR( @"'%@', style not found", thisLayout.name );
-		return CGRectZero;
+		if ( nil == thisStyle )
+		{
+			ERROR( @"'%@', style not found", thisLayout.name );
+		}
+		
+		CGRect emptyFrame;
+		emptyFrame.origin = bound.origin;
+		emptyFrame.size = bound.size;
+		return emptyFrame;
 	}
 
 // Step1, calculate this frame
@@ -479,9 +499,9 @@
 
 		for ( BeeUILayout * child in thisLayout.childs )
 		{
-			UIView * childView = [self.rootCanvas viewWithTagString:child.name];
-			if ( childView && childView.hidden )
-				continue;
+//			UIView * childView = [self.rootCanvas viewWithTagString:child.name];
+//			if ( childView && childView.hidden )
+//				continue;
 
 			BeeUIStyle * childStyle = [self styleForLayout:child];
 			if ( nil == childStyle )
@@ -493,13 +513,13 @@
 			CGSize relativeSize;
 			relativeSize.width = [childStyle isFlexiableW] ? layoutBound.size.width : lineWindow.size.width;
 			relativeSize.height = [childStyle isFlexiableH] ? layoutBound.size.height : lineWindow.size.height;
-
+			
 			CGRect relativeBound;
 			relativeBound.origin = [childStyle isRelativePosition] ? lineWindow.origin : layoutBound.origin;
 			relativeBound.size = relativeSize;
 
 			CGRect childFrame = [self estimateForLayout:child inBound:relativeBound];
-
+            
 			// no need calculate child's position by lineWindow if the position equals "absolute"
 			if ( [childStyle isRelativePosition] )
 			{
@@ -658,27 +678,78 @@
 	{
 // Step2.2, calc thisFrame by contentSize
 
-		UIView * thisView = [self.rootCanvas viewWithTagString:thisLayout.name];
+		CGRect relativeBound = layoutBound;
+		relativeBound.size.width -= (padding.left + padding.right);
+		relativeBound.size.height -= (padding.top + padding.bottom);
 
+		UIView * thisView = nil;
+		
+		if ( self.rootCanvas)
+		{
+			thisView = [self.rootCanvas viewWithTagString:thisLayout.name];
+		}
+		
 		if ( thisView && [[thisView class] supportForUISizeEstimating] )
 		{
 			if ( wWrapping && hWrapping )
 			{
-				thisFrame.size = [thisView estimateUISizeByBound:layoutBound.size];
+				thisFrame.size = [thisView estimateUISizeByBound:relativeBound.size];
 			}
 			else
 			{
 				if ( wWrapping )
 				{
-					thisFrame.size.width = [thisView estimateUISizeByHeight:layoutBound.size.height].width;
+					thisFrame.size.width = [thisView estimateUISizeByHeight:relativeBound.size.height].width;
 				}
 				if ( hWrapping )
 				{
-					thisFrame.size.height = [thisView estimateUISizeByWidth:layoutBound.size.width].height;
+					thisFrame.size.height = [thisView estimateUISizeByWidth:relativeBound.size.width].height;
 				}
 			}
 		}
 	}
+    
+// max/min
+    
+    if ( [thisStyle hasMaxW] )
+    {
+        CGFloat maxWidth = [thisStyle estimateMaxWBy:bound];
+        
+        if ( thisFrame.size.width > maxWidth )
+        {
+            thisFrame.size.width = maxWidth;
+        }
+    }
+    
+    if ( [thisStyle hasMinW] )
+    {
+        CGFloat minWidth = [thisStyle estimateMinWBy:bound];
+        
+        if ( thisFrame.size.width < minWidth )
+        {
+            thisFrame.size.width = minWidth;
+        }
+    }
+    
+    if ( [thisStyle hasMaxH] )
+    {
+        CGFloat maxHeight = [thisStyle estimateMaxHBy:bound];
+        
+        if ( thisFrame.size.height > maxHeight )
+        {
+            thisFrame.size.height = maxHeight;
+        }
+    }
+    
+    if ( [thisStyle hasMinH] )
+    {
+        CGFloat minHeight = [thisStyle estimateMinHBy:bound];
+        
+        if ( thisFrame.size.height < minHeight )
+        {
+            thisFrame.size.height = minHeight;
+        }
+    }
 
 // float
 
@@ -711,7 +782,7 @@
 	viewFrame.size.height -= (padding.top + padding.bottom);
 //	viewFrame.size.width -= padding.right;
 //	viewFrame.size.height -= padding.bottom;
-	
+		
 	[self setFrame:viewFrame forLayout:thisLayout];
 	
 	[self offsetChildsFrame:CGSizeMake(margin.left, margin.top) forLayout:thisLayout];
@@ -749,7 +820,10 @@
 			NSString * name = view.tagString;
 			if ( name && name.length )
 			{
-				CGRect viewFrame = [self getFrameForKey:name];
+				CGRect viewFrame;
+				
+				viewFrame = [self getFrameForKey:name];
+				viewFrame = CGRectNormalize( viewFrame );
 
 //				INFO( @"%@ '%@', frame = (%.0f, %.0f, %.0f, %.0f)",
 //					 [[view class] description], name,

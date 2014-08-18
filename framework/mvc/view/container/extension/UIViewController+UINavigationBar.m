@@ -49,6 +49,75 @@
 #undef	BUTTON_MIN_HEIGHT
 #define	BUTTON_MIN_HEIGHT	(34.0f)
 
+#undef	BUTTON_INSETS
+#define BUTTON_INSETS		(6.0f)
+
+#pragma mark -
+
+@interface BeeNavigationBarButton : BeeUIButton
+@property (nonatomic, assign) UIView *		innerView;
+@property (nonatomic, assign) UIEdgeInsets	navigationInsets;
+@end
+
+#pragma mark -
+
+@implementation BeeNavigationBarButton
+
+@synthesize innerView = _innerView;
+@synthesize navigationInsets = _navigationInsets;
+
+- (CGSize)estimateUISizeByBound:(CGSize)bound
+{
+	if ( CGSizeEqualToSize(bound, CGSizeZero) )
+		return CGSizeZero;
+	
+	CGSize size = [self.innerView estimateUISizeByBound:bound];
+	
+	if ( CGSizeEqualToSize(size, CGSizeZero) )
+	{
+		size = CGSizeMake( BUTTON_MIN_WIDTH, BUTTON_MIN_HEIGHT );
+	}
+	
+	return size;
+}
+
+- (CGSize)estimateUISizeByHeight:(CGFloat)height
+{
+	if ( 0 == height )
+		return CGSizeZero;
+
+	CGSize size = [self.innerView estimateUISizeByHeight:height];
+	
+	if ( CGSizeEqualToSize(size, CGSizeZero) )
+	{
+		size = CGSizeMake( BUTTON_MIN_WIDTH, BUTTON_MIN_HEIGHT );
+	}
+
+	return size;
+}
+
+- (CGSize)estimateUISizeByWidth:(CGFloat)width
+{
+	if ( 0 == width )
+		return CGSizeZero;
+
+	CGSize size = [self.innerView estimateUISizeByWidth:width];
+	
+	if ( CGSizeEqualToSize(size, CGSizeZero) )
+	{
+		size = CGSizeMake( BUTTON_MIN_WIDTH, BUTTON_MIN_HEIGHT );
+	}
+	
+	return size;
+}
+
+- (UIEdgeInsets)alignmentRectInsets
+{
+	return _navigationInsets;
+}
+
+@end
+
 #pragma mark -
 
 @interface UIViewController(UINavigationBarPrivate)
@@ -62,12 +131,20 @@
 
 @implementation UIViewController(UINavigationBar)
 
+@dynamic titleString;
+@dynamic titleImage;
+@dynamic titleView;
+@dynamic titleViewController;
+
 @dynamic leftBarButton;
 @dynamic rightBarButton;
 
 @dynamic navigationBarShown;
 @dynamic navigationBarLeft;
 @dynamic navigationBarRight;
+@dynamic navigationBarTitle;
+
+#pragma mark -
 
 - (void)showNavigationBarAnimated:(BOOL)animated
 {
@@ -110,9 +187,19 @@
 	}
 }
 
+- (id)navigationBarLeft
+{
+    return self.navigationItem.leftBarButtonItem;
+}
+
 - (void)setNavigationBarLeft:(id)content
 {
 	[self setBarButton:content position:BeeUINavigationBar.LEFT];
+}
+
+- (id)navigationBarRight
+{
+    return self.navigationItem.rightBarButtonItem;
 }
 
 - (void)setNavigationBarRight:(id)content
@@ -231,23 +318,47 @@
 		}
 	}
 	
-	BeeUIButton * button = [[[BeeUIButton alloc] initWithFrame:buttonFrame] autorelease];
+	BeeNavigationBarButton * button = [[[BeeNavigationBarButton alloc] initWithFrame:buttonFrame] autorelease];
 	button.contentMode = UIViewContentModeScaleAspectFit;
 	button.backgroundColor = [UIColor clearColor];
-	button.titleFont = [UIFont systemFontOfSize:13.0f];
-	button.titleColor = [UIColor whiteColor];
-	button.titleShadowColor = [UIColor darkGrayColor];
 	button.title = name;
+	
+	UIFont *	titleFont = [BeeUINavigationBar buttonFont];
+	UIColor *	titleColor = [BeeUINavigationBar buttonColor];
+	
+	if ( IOS6_OR_EARLIER )
+	{
+		button.titleFont = titleFont ? titleFont : [UIFont systemFontOfSize:13.0f];
+		button.titleColor = titleColor ? titleColor : [UIColor whiteColor];
+		button.titleShadowColor = [UIColor darkGrayColor];
+	}
+	else
+	{
+		button.titleFont = titleFont ? titleFont : [UIFont systemFontOfSize:14.0f];
+		button.titleColor = titleColor ? titleColor : [UIColor whiteColor];
+	}
 	
 	if ( BeeUINavigationBar.LEFT == position )
 	{
+		if ( IOS7_OR_LATER )
+		{
+			[button setNavigationInsets:UIEdgeInsetsMake(0, BUTTON_INSETS, 0, 0)];
+		}
+		
 		[button addTarget:self action:@selector(didLeftBarButtonTouched) forControlEvents:UIControlEventTouchUpInside];
+		
 		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:button] autorelease];
 		self.navigationItem.leftBarButtonItem.width = buttonFrame.size.width;
 	}
 	else if ( BeeUINavigationBar.RIGHT == position )
 	{
+		if ( IOS7_OR_LATER )
+		{
+			[button setNavigationInsets:UIEdgeInsetsMake(0, 0, 0, BUTTON_INSETS + 4.0f)];
+		}
+		
 		[button addTarget:self action:@selector(didRightBarButtonTouched) forControlEvents:UIControlEventTouchUpInside];
+		
 		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:button] autorelease];
 		self.navigationItem.rightBarButtonItem.width = buttonFrame.size.width;
 	}
@@ -285,23 +396,32 @@
 		}
 	}
 	
-	BeeUIButton * button = [[[BeeUIButton alloc] initWithFrame:buttonFrame] autorelease];
+	BeeNavigationBarButton * button = [[[BeeNavigationBarButton alloc] initWithFrame:buttonFrame] autorelease];
 	button.contentMode = UIViewContentModeScaleAspectFit;
 	button.backgroundColor = [UIColor clearColor];
-	button.titleFont = [UIFont systemFontOfSize:13.0f];
-	button.titleColor = [UIColor whiteColor];
-	button.titleShadowColor = [UIColor darkGrayColor];
 	button.image = image;
 
 	if ( BeeUINavigationBar.LEFT == position )
 	{
+		if ( IOS7_OR_LATER )
+		{
+			[button setNavigationInsets:UIEdgeInsetsMake(0, BUTTON_INSETS, 0, 0)];
+		}
+		
 		[button addTarget:self action:@selector(didLeftBarButtonTouched) forControlEvents:UIControlEventTouchUpInside];
+		
 		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:button] autorelease];
 		self.navigationItem.leftBarButtonItem.width = buttonFrame.size.width;
 	}
 	else if ( BeeUINavigationBar.RIGHT == position )
 	{
+		if ( IOS7_OR_LATER )
+		{
+			[button setNavigationInsets:UIEdgeInsetsMake(0, 0, 0, BUTTON_INSETS + 4.0f)];
+		}
+		
 		[button addTarget:self action:@selector(didRightBarButtonTouched) forControlEvents:UIControlEventTouchUpInside];
+		
 		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:button] autorelease];
 		self.navigationItem.rightBarButtonItem.width = buttonFrame.size.width;
 	}
@@ -345,24 +465,48 @@
 		}
 	}
 
-	BeeUIButton * button = [[[BeeUIButton alloc] initWithFrame:buttonFrame] autorelease];
+	BeeNavigationBarButton * button = [[[BeeNavigationBarButton alloc] initWithFrame:buttonFrame] autorelease];
 	button.contentMode = UIViewContentModeScaleAspectFit;
 	button.backgroundColor = [UIColor clearColor];
 	button.image = image;
 	button.title = title;
-	button.titleFont = [UIFont systemFontOfSize:13.0f];
-	button.titleColor = [UIColor whiteColor];
-	button.titleShadowColor = [UIColor darkGrayColor];
+
+	UIFont *	titleFont = [BeeUINavigationBar buttonFont];
+	UIColor *	titleColor = [BeeUINavigationBar buttonColor];
+
+	if ( IOS6_OR_EARLIER )
+	{
+		button.titleFont = titleFont ? titleFont : [UIFont systemFontOfSize:13.0f];
+		button.titleColor = titleColor ? titleColor : [UIColor whiteColor];
+		button.titleShadowColor = [UIColor darkGrayColor];
+	}
+	else
+	{
+		button.titleFont = titleFont ? titleFont : [UIFont systemFontOfSize:14.0f];
+		button.titleColor = titleColor ? titleColor : [UIColor whiteColor];
+	}
 
 	if ( BeeUINavigationBar.LEFT == position )
 	{
+		if ( IOS7_OR_LATER )
+		{
+			[button setNavigationInsets:UIEdgeInsetsMake(0, BUTTON_INSETS, 0, 0)];
+		}
+		
 		[button addTarget:self action:@selector(didLeftBarButtonTouched) forControlEvents:UIControlEventTouchUpInside];
+		
 		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:button] autorelease];
 		self.navigationItem.leftBarButtonItem.width = buttonFrame.size.width;
 	}
 	else if ( BeeUINavigationBar.RIGHT == position )
 	{
+		if ( IOS7_OR_LATER )
+		{
+			[button setNavigationInsets:UIEdgeInsetsMake(0, 0, 0, BUTTON_INSETS + 4.0f)];
+		}
+		
 		[button addTarget:self action:@selector(didRightBarButtonTouched) forControlEvents:UIControlEventTouchUpInside];
+		
 		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:button] autorelease];
 		self.navigationItem.rightBarButtonItem.width = buttonFrame.size.width;
 	}
@@ -419,16 +563,39 @@
 			}
 		}
 
-		view.frame = buttonFrame;
+		BeeNavigationBarButton * button = [[[BeeNavigationBarButton alloc] initWithFrame:buttonFrame] autorelease];
+		button.contentMode = UIViewContentModeScaleAspectFit;
+		button.backgroundColor = [UIColor clearColor];
+		button.innerView = view;
+		[button addSubview:view];
+
+		CGRect viewFrame = buttonFrame;
+		viewFrame.origin = CGPointZero;
+		view.frame = viewFrame;
+		view.userInteractionEnabled = NO;
 
 		if ( BeeUINavigationBar.LEFT == position )
 		{
-			self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:view] autorelease];
+			if ( IOS7_OR_LATER )
+			{
+				[button setNavigationInsets:UIEdgeInsetsMake(0, BUTTON_INSETS, 0, 0)];
+			}
+
+			[button addTarget:self action:@selector(didLeftBarButtonTouched) forControlEvents:UIControlEventTouchUpInside];
+
+			self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:button] autorelease];
 			self.navigationItem.leftBarButtonItem.width = buttonFrame.size.width;
 		}
 		else if ( BeeUINavigationBar.RIGHT == position )
 		{
-			self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:view] autorelease];
+			if ( IOS7_OR_LATER )
+			{
+				[button setNavigationInsets:UIEdgeInsetsMake(0, 0, 0, BUTTON_INSETS + 4.0f)];
+			}
+			
+			[button addTarget:self action:@selector(didRightBarButtonTouched) forControlEvents:UIControlEventTouchUpInside];
+
+			self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:button] autorelease];
 			self.navigationItem.rightBarButtonItem.width = buttonFrame.size.width;
 		}
 	}
@@ -457,6 +624,8 @@
 	}
 }
 
+#pragma mark -
+
 - (UIView *)leftBarButton
 {
 	return self.navigationItem.leftBarButtonItem.customView;
@@ -465,6 +634,91 @@
 - (UIView *)rightBarButton
 {
 	return self.navigationItem.rightBarButtonItem.customView;
+}
+
+#pragma mark -
+
+- (NSString *)titleString
+{
+	return self.navigationItem.title ? self.navigationItem.title : self.title;
+}
+
+- (void)setTitleString:(NSString *)text
+{
+	self.navigationItem.title = text;
+}
+
+- (UIImage *)titleImage
+{
+	UIImageView * imageView = (UIImageView *)self.navigationItem.titleView;
+	
+	if ( imageView && [imageView isKindOfClass:[UIImageView class]] )
+	{
+		return imageView.image;
+	}
+	
+	return nil;
+}
+
+- (void)setTitleImage:(UIImage *)image
+{
+	[self setNavigationBarTitle:image];
+}
+
+- (UIView *)titleView
+{
+	return self.navigationItem.titleView;
+}
+
+- (void)setTitleView:(UIView *)view
+{
+	[self setNavigationBarTitle:view];
+}
+
+- (UIViewController *)titleViewController
+{
+	if ( nil == self.navigationItem.titleView )
+		return nil;
+	
+	return [self.navigationItem.titleView viewController];
+}
+
+- (void)setTitleViewController:(UIViewController *)vc
+{
+	[self setNavigationBarTitle:vc];
+}
+
+- (id)navigationBarTitle
+{
+    return self.navigationItem.titleView;
+}
+
+- (void)setNavigationBarTitle:(id)content
+{
+	if ( content )
+	{
+		if ( [content isKindOfClass:[NSString class]] )
+		{
+			self.navigationItem.titleView = nil;
+			self.navigationItem.title = content;
+		}
+		else if ( [content isKindOfClass:[UIImage class]] )
+		{
+			UIImageView * imageView = [[[UIImageView alloc] initWithImage:content] autorelease];
+			imageView.contentMode = UIViewContentModeScaleAspectFit;
+			imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+			
+			self.navigationItem.titleView = imageView;
+		}
+		else if ( [content isKindOfClass:[UIView class]] )
+		{
+			self.navigationItem.titleView = content;
+		}
+		else if ( [content isKindOfClass:[UIViewController class]] )
+		{
+			self.navigationItem.titleView = ((UIViewController *)content).view;
+		}
+	}
 }
 
 @end

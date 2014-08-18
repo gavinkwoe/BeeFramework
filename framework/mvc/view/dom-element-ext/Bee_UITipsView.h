@@ -97,7 +97,8 @@ AS_SIGNAL( DID_DISAPPEAR );		// 已经隐藏
 
 @interface BeeUIProgressTipsView : BeeUITipsView
 @property (nonatomic, retain) UIImageView *				bubbleView;
-@property (nonatomic, retain) UIProgressView *			indicator;
+@property (nonatomic, retain) UIProgressView *			progressView;
+@property (nonatomic, retain) UIActivityIndicatorView *	indicator;
 @property (nonatomic, retain) UILabel *					labelView;
 @property (nonatomic, assign) CGFloat					percent;
 @end

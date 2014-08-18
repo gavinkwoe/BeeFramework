@@ -35,9 +35,6 @@
 
 #pragma mark -
 
-@implementation BeeUILayoutWrapper
-@end
-
 @implementation BeeUILayoutContainer
 @end
 

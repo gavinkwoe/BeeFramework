@@ -33,5 +33,5 @@
 
 #pragma mark -
 
-DEF_PACKAGE_INSTANCE( BeePackage, BeePackage_External, ext );
-DEF_PACKAGE_INSTANCE( BeePackage, BeePackage_Library, lib );
+DEF_PACKAGE_( BeePackage, BeePackage_External, ext );
+DEF_PACKAGE_( BeePackage, BeePackage_Library, lib );

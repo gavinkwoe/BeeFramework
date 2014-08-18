@@ -353,7 +353,7 @@
 
 	if ( [clazz respondsToSelector:@selector(fromDictionary:)] )
 	{
-        return [clazz performSelector:@selector(fFromDictionary:) withObject:self];
+        return [clazz performSelector:@selector(fromDictionary:) withObject:self];
     }
 
     id object = [[[clazz alloc] init] autorelease];
@@ -371,6 +371,10 @@
 			NSString *		propertyName = [NSString stringWithCString:name encoding:NSUTF8StringEncoding];
 			const char *	attr = property_getAttributes(properties[i]);
 			NSUInteger		type = [BeeTypeEncoding typeOf:attr];
+			
+			BOOL readonly = [BeeTypeEncoding isReadOnly:attr];
+			if ( readonly )
+				continue;
 
 			NSObject *	tempValue = [self objectForKey:propertyName];
 			NSObject *	value = nil;
@@ -580,7 +584,10 @@ static void			__TTReleaseNoOp( CFAllocatorRef allocator, const void * value ) {}
 		upperDict = (NSMutableDictionary *)dict;
 	}
 
-	[upperDict setObject:obj forKey:subPath];
+	if ( subPath && obj )
+	{
+		[upperDict setObject:obj forKey:subPath];
+	}
 	return YES;
 }
 

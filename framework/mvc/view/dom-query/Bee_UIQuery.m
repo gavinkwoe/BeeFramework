@@ -119,7 +119,7 @@
 				}
 				else
 				{
-					WARN( @"unformal format selector '%@', should add #??", tag );
+				//	WARN( @"unformal format selector '%@', should add #??", tag );
 					
 					UIView * subview = [rootView viewWithTagString:subTag];
 					if ( subview )

@@ -105,6 +105,7 @@ DEF_SINGLETON( BeeCLI );
 			self.workingDirectory = [NSString stringWithUTF8String:buff];
 		}
 		
+		self.arguments = [NSMutableArray array];
 		self.autoChangeBack = YES;
 	}
 	return self;

@@ -99,6 +99,16 @@
 	[super dealloc];
 }
 
+- (void)setText:(NSString *)newText
+{
+	if ( [newText isEqualToString:self.text] )
+	{
+		return;
+	}
+	
+	[super setText:newText];
+}
+
 @end
 
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

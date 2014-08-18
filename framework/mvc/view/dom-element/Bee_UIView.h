@@ -38,4 +38,7 @@
 
 #pragma mark -
 
+@interface BeeUIView : UIView
+@end
+
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

@@ -36,6 +36,9 @@
 
 @implementation DribbbleDetailBoardComment_iPhone
 
+SUPPORT_AUTOMATIC_LAYOUT( YES );
+SUPPORT_RESOURCE_LOADING( YES );
+
 - (void)dataDidChanged
 {
 	COMMENT * comment = self.data;

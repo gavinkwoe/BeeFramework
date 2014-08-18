@@ -115,6 +115,29 @@
 	}
 }
 
+- (void)copyPropertiesFrom:(id)obj
+{
+	for ( Class clazzType = [obj class]; clazzType != [NSObject class]; )
+	{
+		unsigned int		propertyCount = 0;
+		objc_property_t *	properties = class_copyPropertyList( clazzType, &propertyCount );
+
+		for ( NSUInteger i = 0; i < propertyCount; i++ )
+		{
+			const char *	name = property_getName(properties[i]);
+			NSString *		propertyName = [NSString stringWithCString:name encoding:NSUTF8StringEncoding];
+			
+			[self setValue:[obj valueForKey:propertyName] forKey:propertyName];
+		}
+		
+		free( properties );
+
+		clazzType = class_getSuperclass( clazzType );
+		if ( nil == clazzType )
+			break;
+	}
+}
+
 @end
 
 // ----------------------------------

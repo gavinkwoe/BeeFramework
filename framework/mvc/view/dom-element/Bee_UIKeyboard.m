@@ -250,19 +250,10 @@ DEF_NOTIFICATION( HEIGHT_CHANGED );
 
 	if ( animated )
 	{
-		if ( IOS7_OR_LATER )
-		{
-			[UIView beginAnimations:nil context:NULL];
-			[UIView setAnimationDuration:0.23f];
-			[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-//			[UIView setAnimationBeginsFromCurrentState:YES];
-		}
-		else
-		{
-			[UIView beginAnimations:nil context:NULL];
-			[UIView setAnimationDuration:0.25f];
-//			[UIView setAnimationBeginsFromCurrentState:YES];
-		}
+		[UIView beginAnimations:nil context:NULL];
+		[UIView setAnimationDuration:_animationDuration];
+		[UIView setAnimationCurve:_animationCurve];
+		[UIView setAnimationBeginsFromCurrentState:YES];
 	}
 	
 	if ( _shown )

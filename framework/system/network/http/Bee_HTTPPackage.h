@@ -35,4 +35,4 @@
 
 #pragma mark -
 
-AS_PACKAGE_INSTANCE( BeePackage, BeePackage_HTTP, http );
+AS_PACKAGE_( BeePackage, BeePackage_HTTP, http );

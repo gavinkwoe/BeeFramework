@@ -41,6 +41,11 @@ typedef NSMutableString *	(^NSMutableStringReplaceBlock)( NSString * string, NSS
 
 #pragma mark -
 
+#undef	FORMAT
+#define	FORMAT( __fmt, ... )	[NSString stringWithFormat:__fmt, __VA_ARGS__]
+
+#pragma mark -
+
 @interface NSString(BeeExtension)
 
 @property (nonatomic, readonly) NSStringAppendBlock		APPEND;
@@ -94,13 +99,18 @@ typedef NSMutableString *	(^NSMutableStringReplaceBlock)( NSString * string, NSS
 - (BOOL)isValueOf:(NSArray *)array caseInsens:(BOOL)caseInsens;
 
 - (BOOL)isNormal;		// thanks to @uxyheaven
-- (BOOL)isTelephone;
-- (BOOL)isUserName;
-- (BOOL)isChineseUserName;
+- (BOOL)isTelephone;    // match telephone
+- (BOOL)isMobilephone;  // match mobilephone, 11 numberic
+- (BOOL)isUserName;     // match alphabet 3-20
+- (BOOL)isChineseUserName;  // match alphabet and chinese characters, 3-20
+- (BOOL)isChineseName;      // match just chinese characters 2-16
 - (BOOL)isPassword;
 - (BOOL)isEmail;
 - (BOOL)isUrl;
 - (BOOL)isIPAddress;
+
+- (NSString *)substringFromIndex:(NSUInteger)from untilString:(NSString *)string;
+- (NSString *)substringFromIndex:(NSUInteger)from untilString:(NSString *)string endOffset:(NSUInteger *)endOffset;
 
 - (NSString *)substringFromIndex:(NSUInteger)from untilCharset:(NSCharacterSet *)charset;
 - (NSString *)substringFromIndex:(NSUInteger)from untilCharset:(NSCharacterSet *)charset endOffset:(NSUInteger *)endOffset;

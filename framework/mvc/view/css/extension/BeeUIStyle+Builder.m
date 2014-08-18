@@ -72,9 +72,9 @@
 	return nil;
 }
 
-- (BeeUIStyle *)childStyleWithElement:(id<CSSElementProtocol>)element
+- (BeeUIStyle *)childStyleWithString:(id)element
 {
-    NSDictionary * properties = [self.styleSheet styleForElement:element];
+    NSDictionary * properties = [self.styleSheet styleForString:element];
     
     if ( properties )
     {
@@ -85,6 +85,45 @@
     
     return nil;
 }
+
+- (BeeUIStyle *)childStyleWithClasses:(id)element
+{
+	NSMutableDictionary * mergedProperties = [NSMutableDictionary dictionary];
+	
+	for ( NSString * clazz in element )
+	{
+		NSDictionary * properties = [self.styleSheet styleForString:clazz];
+		if ( properties )
+		{
+			[mergedProperties addEntriesFromDictionary:properties];
+		}
+	}
+	
+	if ( mergedProperties.count )
+	{
+		BeeUIStyle * style = [BeeUIStyle style];
+        [style.properties addEntriesFromDictionary:mergedProperties];
+        return style;
+	}
+	
+	return nil;
+}
+
+- (BeeUIStyle *)childStyleWithElement:(id)element
+{
+    NSDictionary * properties = [self.styleSheet styleForElement:element];
+    
+    if ( properties && properties.count )
+    {
+        BeeUIStyle * style = [BeeUIStyle style];
+        [style.properties addEntriesFromDictionary:properties];
+        return style;
+    }
+    
+    return nil;
+}
+
+#pragma mark -
 
 - (void)addChild:(BeeUIStyle *)style
 {
@@ -184,25 +223,25 @@
 	NSString * max_w = [dict stringOfAny:@[@"max-w", @"max-width"] removeAll:YES];
 	if ( max_w )
 	{
-//		self.MAX_WIDTH( max_w );
+		self.MAX_WIDTH( max_w );
 	}
 	
 	NSString * max_h = [dict stringOfAny:@[@"max-h", @"max-height"] removeAll:YES];
 	if ( max_h )
 	{
-//		self.MAX_HEIGHT( max_h );
+		self.MAX_HEIGHT( max_h );
 	}
 	
 	NSString * min_w = [dict stringOfAny:@[@"min-w", @"min-width"] removeAll:YES];
 	if ( min_w )
 	{
-//		self.MIN_WIDTH( min_w );
+		self.MIN_WIDTH( min_w );
 	}
 	
 	NSString * min_h = [dict stringOfAny:@[@"min-h", @"min-height"] removeAll:YES];
 	if ( min_h )
 	{
-//		self.MIN_HEIGHT( max_h );
+		self.MIN_HEIGHT( max_h );
 	}
 	
 	NSString * pos = [dict stringOfAny:@[@"position"] removeAll:YES];
@@ -238,11 +277,11 @@
 	NSString * orientation = [dict stringOfAny:@[@"orient", @"orientation"] removeAll:YES];
 	if ( orientation )
 	{
-		if ( [orientation matchAnyOf:@[@"h", @"horizonal"]] )
+		if ( [orientation matchAnyOf:@[@"h", @"hori", @"horizonal"]] )
 		{
 			self.ORIENTATION( BeeUIStyle.ORIENTATION_HORIZONAL );
 		}
-		else if ( [orientation matchAnyOf:@[@"v", @"vertical"]] )
+		else if ( [orientation matchAnyOf:@[@"v", @"vert", @"vertical"]] )
 		{
 			self.ORIENTATION( BeeUIStyle.ORIENTATION_VERTICAL );
 		}
@@ -366,10 +405,7 @@
 	{
 		if ( [cssArray isKindOfClass:[NSString class]] )
 		{
-//			dict = [BeeUIStyleParser parse:cssArray];
-            CSSStyleSheet * sheet = [BeeUIStyleParser parseStyleSheet:cssArray];
-            [self.styleSheet mergeStyleSheet:sheet];
-            return;
+			dict = [BeeUIStyleParser parse:cssArray];
 		}
 		else if ( [cssArray isKindOfClass:[NSDictionary class]] )
 		{
@@ -391,6 +427,12 @@
 			
 			[self addChild:style];
 		}
+	}
+	
+	CSSStyleSheet * sheet = [BeeUIStyleParser parseStyleSheet:cssArray];
+	if ( sheet )
+	{
+		[self.styleSheet mergeStyleSheet:sheet];
 	}
 }
 

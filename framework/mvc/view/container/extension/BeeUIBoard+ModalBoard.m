@@ -71,7 +71,7 @@
 	if ( self.modalBoard )
 		return;
 	
-	[self sendUISignal:self.MODALVIEW_WILL_SHOW];
+	[self sendUISignal:BeeUIBoard.MODALVIEW_WILL_SHOW];
 	
 	if ( animated )
 	{
@@ -90,7 +90,7 @@
 
 	board.parentBoard = (BeeUIBoard *)self;
 
-	[self sendUISignal:self.MODALVIEW_DID_SHOWN];
+	[self sendUISignal:BeeUIBoard.MODALVIEW_DID_SHOWN];
 }
 
 - (void)dismissModalBoardAnimated:(BOOL)animated
@@ -98,7 +98,7 @@
 	if ( nil == self.modalBoard )
 		return;
 	
-	[self sendUISignal:self.MODALVIEW_WILL_HIDE];
+	[self sendUISignal:BeeUIBoard.MODALVIEW_WILL_HIDE];
 	
 	if ( animated )
 	{
@@ -115,7 +115,7 @@
 	self.modalBoard.parentBoard = nil;
 	self.modalBoard = nil;
 
-	[self sendUISignal:self.MODALVIEW_DID_HIDDEN];
+	[self sendUISignal:BeeUIBoard.MODALVIEW_DID_HIDDEN];
 }
 
 @end

@@ -57,6 +57,7 @@ DEF_SIGNAL( DID_START )
 DEF_SIGNAL( WILL_STOP )
 DEF_SIGNAL( DID_STOP )
 
+@synthesize enableAllEvents;
 @dynamic animating;
 
 #pragma mark -
@@ -149,14 +150,20 @@ DEF_SIGNAL( DID_STOP )
 	if ( self.isAnimating )
 		return;
 	
-	[self sendUISignal:BeeUIActivityIndicatorView.WILL_START];
+	if ( self.enableAllEvents )
+	{
+		[self sendUISignal:BeeUIActivityIndicatorView.WILL_START];
+	}
 	
 	self.hidden = NO;
 	self.alpha = 1.0f;
 	
 	[super startAnimating];
 
-	[self sendUISignal:BeeUIActivityIndicatorView.DID_START];
+	if ( self.enableAllEvents )
+	{
+		[self sendUISignal:BeeUIActivityIndicatorView.DID_START];
+	}
 }
 
 - (void)stopAnimating
@@ -164,14 +171,20 @@ DEF_SIGNAL( DID_STOP )
 	if ( NO == self.isAnimating )
 		return;
 
-	[self sendUISignal:BeeUIActivityIndicatorView.WILL_STOP];
+	if ( self.enableAllEvents )
+	{
+		[self sendUISignal:BeeUIActivityIndicatorView.WILL_STOP];
+	}
 
 	self.hidden = YES;		
 	self.alpha = 0.0f;
 
 	[super stopAnimating];
 
-	[self sendUISignal:BeeUIActivityIndicatorView.DID_STOP];
+	if ( self.enableAllEvents )
+	{
+		[self sendUISignal:BeeUIActivityIndicatorView.DID_STOP];
+	}
 }
 
 @end

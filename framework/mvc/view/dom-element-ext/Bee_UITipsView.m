@@ -39,11 +39,11 @@
 #import "UIView+BeeUISignal.h"
 #import "UIView+LifeCycle.h"
 
-#define	DEFAULT_TIPS_BUBBLE_WIDTH		(180.0f)
+#define	DEFAULT_TIPS_BUBBLE_WIDTH		(160.0f)
 #define	DEFAULT_TIPS_BUBBLE_HEIGHT		(120.0f)
 #define DEFAULT_TIMEOUT_SECONDS			(1.0f)
 
-#define ANIMATION_DURATION				(0.3f)
+#define ANIMATION_DURATION				(0.20f)
 
 #pragma mark -
 
@@ -532,6 +532,7 @@ DEF_SINGLETON( BeeUITipsCenter )
 	BeeUIProgressTipsView * tips = [[BeeUIProgressTipsView alloc] init];
 	tips.labelView.text = message;
 	tips.percent = 0.0f;
+	tips.useMask = YES;
 	[tips presentInView:view];
 	return [tips autorelease];
 }
@@ -731,7 +732,7 @@ DEF_SIGNAL( DID_DISAPPEAR );
 		}
 		else
 		{
-			_bubbleView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.6f];
+			_bubbleView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5f];
 			_bubbleView.layer.masksToBounds = YES;
 			_bubbleView.layer.cornerRadius = 4.0f;
 		}
@@ -746,11 +747,11 @@ DEF_SIGNAL( DID_DISAPPEAR );
 		
 		if ( IOS7_OR_LATER )
 		{
-			_labelView.font = [UIFont systemFontOfSize:14.0f];
+			_labelView.font = [UIFont systemFontOfSize:13.0f];
 		}
 		else
 		{
-			_labelView.font = [UIFont boldSystemFontOfSize:14.0f];
+			_labelView.font = [UIFont boldSystemFontOfSize:13.0f];
 		}
 			
         _labelView.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
@@ -788,14 +789,15 @@ DEF_SIGNAL( DID_DISAPPEAR );
 	if ( _iconView.image )
 	{
 		CGRect iconFrame = self.bounds;
-		iconFrame.size.height -= 20.0f;
+		iconFrame.origin.y += 3.0f;
+		iconFrame.size.height -= 30.0f;
 		_iconView.frame = iconFrame;
 
 		CGRect labelFrame;
 		labelFrame.size.width = self.bounds.size.width;
 		labelFrame.size.height = 60.0f;
 		labelFrame.origin.x = 0.0f;
-		labelFrame.origin.y = self.bounds.size.height - labelFrame.size.height;
+		labelFrame.origin.y = self.bounds.size.height - labelFrame.size.height + 6.0f;
 		_labelView.frame = CGRectInset(labelFrame, 5.0f, 0.0f);
 	}
 	else
@@ -850,7 +852,7 @@ DEF_SIGNAL( DID_DISAPPEAR );
 		}
 		else
 		{
-			_bubbleView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.6f];
+			_bubbleView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5f];
 			_bubbleView.layer.masksToBounds = YES;
 			_bubbleView.layer.cornerRadius = 4.0f;
 		}
@@ -864,11 +866,11 @@ DEF_SIGNAL( DID_DISAPPEAR );
 		
 		if ( IOS7_OR_LATER )
 		{
-			_labelView.font = [UIFont systemFontOfSize:14.0f];
+			_labelView.font = [UIFont systemFontOfSize:13.0f];
 		}
 		else
 		{
-			_labelView.font = [UIFont boldSystemFontOfSize:14.0f];
+			_labelView.font = [UIFont boldSystemFontOfSize:13.0f];
 		}
 		
         _labelView.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
@@ -907,7 +909,7 @@ DEF_SIGNAL( DID_DISAPPEAR );
 	indicatorFrame.size.width = 14.0f;
 	indicatorFrame.size.height = 14.0f;
 	indicatorFrame.origin.x = (self.bounds.size.width - indicatorFrame.size.width) / 2.0f;
-	indicatorFrame.origin.y = (self.bounds.size.height - indicatorFrame.size.height) / 2.0f;
+	indicatorFrame.origin.y = (self.bounds.size.height - indicatorFrame.size.height) / 2.0f - 10.0f;
 	_indicator.frame = indicatorFrame;
 
 	CGRect labelFrame;
@@ -922,21 +924,7 @@ DEF_SIGNAL( DID_DISAPPEAR );
 
 #pragma mark -
 
-@interface BeeUIProgressTipsView()
-{
-	UIImageView *		_bubbleView;
-	UIProgressView *	_indicator;
-	UILabel *			_labelView;
-}
-@end
-
-#pragma mark -
-
 @implementation BeeUIProgressTipsView
-
-@synthesize bubbleView = _bubbleView;
-@synthesize indicator = _indicator;
-@synthesize labelView = _labelView;
 
 - (id)init
 {
@@ -944,49 +932,55 @@ DEF_SIGNAL( DID_DISAPPEAR );
 	if ( self )
 	{
 		self.useMask = YES;
-//		self.interrupt = NO;
-		self.exclusive = YES;
-		self.timeLimit = NO;
-
-		_bubbleView = [[UIImageView alloc] initWithFrame:CGRectZero];
-		_bubbleView.backgroundColor = [UIColor clearColor];
-		_bubbleView.contentMode = UIViewContentModeCenter;
-		if ( [BeeUITipsCenter sharedInstance].bubble )
-		{
-			_bubbleView.image = [BeeUITipsCenter sharedInstance].bubble.stretched;
-		}
-		else
-		{
-			_bubbleView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.6f];
-			_bubbleView.layer.masksToBounds = YES;
-			_bubbleView.layer.cornerRadius = 4.0f;
-		}
-		[self addSubview:_bubbleView];
-		
-		_indicator = [[UIProgressView alloc] initWithFrame:CGRectZero];
-		_indicator.backgroundColor = [UIColor clearColor];
-		[self addSubview:_indicator];
-
-		_labelView = [[UILabel alloc] initWithFrame:CGRectZero];
-		
-		if ( IOS7_OR_LATER )
-		{
-			_labelView.font = [UIFont systemFontOfSize:14.0f];
-		}
-		else
-		{
-			_labelView.font = [UIFont boldSystemFontOfSize:14.0f];
-		}
-		
+        //		self.interrupt = NO;
+        self.exclusive = YES;
+        self.timeLimit = NO;
+        
+        _bubbleView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        _bubbleView.backgroundColor = [UIColor clearColor];
+        _bubbleView.contentMode = UIViewContentModeCenter;
+        if ( [BeeUITipsCenter sharedInstance].bubble )
+        {
+            _bubbleView.image = [BeeUITipsCenter sharedInstance].bubble.stretched;
+        }
+        else
+        {
+            _bubbleView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5f];
+            _bubbleView.layer.masksToBounds = YES;
+            _bubbleView.layer.cornerRadius = 4.0f;
+        }
+        [self addSubview:_bubbleView];
+        
+        _indicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectZero];
+        _indicator.backgroundColor = [UIColor clearColor];
+        [self addSubview:_indicator];
+        
+        _indicator.hidden = YES;
+        
+        _progressView = [[UIProgressView alloc] initWithFrame:CGRectZero];
+        _progressView.backgroundColor = [UIColor clearColor];
+        [self addSubview:_progressView];
+        
+        _labelView = [[UILabel alloc] initWithFrame:CGRectZero];
+        if ( IOS7_OR_LATER )
+        {
+            _labelView.font = [UIFont systemFontOfSize:13.0f];
+        }
+        else
+        {
+            _labelView.font = [UIFont boldSystemFontOfSize:13.0f];
+        }
+        
         _labelView.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
         _labelView.textAlignment = UITextAlignmentCenter;
-		_labelView.textColor = [UIColor whiteColor];
+        _labelView.textColor = [UIColor whiteColor];
         _labelView.backgroundColor = [UIColor clearColor];
         _labelView.lineBreakMode = UILineBreakModeClip;
         _labelView.numberOfLines = 2;
+        
         [self addSubview:_labelView];
-	}
-	
+    }
+    
 	return self;
 }
 
@@ -998,50 +992,70 @@ DEF_SIGNAL( DID_DISAPPEAR );
 	[_indicator removeFromSuperview];
 	[_indicator release];
 	
+	[_progressView removeFromSuperview];
+	[_progressView release];
+	
 	[_labelView removeFromSuperview];
 	[_labelView release];
-
+    
 	[super dealloc];
 }
 
 - (CGFloat)percent
 {
-	return _indicator.progress;
+	return _progressView.progress;
 }
 
 - (void)setPercent:(CGFloat)p
 {
-	if ( p <= 0.0f )
+	if ( p >= 0.f && p < 1.f )
 	{
-		_indicator.hidden = YES;
+		if ( !_indicator.hidden )
+		{
+			_indicator.hidden = YES;
+			[_indicator stopAnimating];
+		}
+        
+		_progressView.hidden = NO;
 	}
 	else
 	{
+		_progressView.hidden = YES;
+		_progressView.progress = 0;
+		
 		_indicator.hidden = NO;
+		[_indicator startAnimating];
 	}
-	
-	_indicator.progress = p;
+
+	_progressView.progress = p;
 }
 
 - (void)internalRelayout:(UIView *)parentView
 {
 	[super internalRelayout:parentView];
-
+    
 	_bubbleView.frame = self.bounds;
-	
-	CGRect indicatorRect;
-	indicatorRect.size.width = self.bounds.size.width - 40.0f;
-	indicatorRect.size.height = 20.0f;
-	indicatorRect.origin.x = (self.bounds.size.width - indicatorRect.size.width) / 2.0f;
-	indicatorRect.origin.y = (self.bounds.size.height - 20.0f - 20.0f) / 2.0f;
-	_indicator.frame = indicatorRect;
-
+    
+	CGRect progressRect;
+	progressRect.size.width = self.bounds.size.width - 40.0f;
+	progressRect.size.height = 20.0f;
+	progressRect.origin.x = (self.bounds.size.width - progressRect.size.width) / 2.0f;
+	progressRect.origin.y = (self.bounds.size.height - 20.0f - 20.0f) / 2.0f;
+	_progressView.frame = progressRect;
+    
 	CGRect labelFrame;
 	labelFrame.size.width = self.bounds.size.width;
 	labelFrame.size.height = 60.0f;
 	labelFrame.origin.x = 0.0f;
 	labelFrame.origin.y = self.bounds.size.height - labelFrame.size.height;
-	_labelView.frame = CGRectInset(labelFrame, 5.0f, 0.0f);	
+	_labelView.frame = CGRectInset(labelFrame, 5.0f, 0.0f);
+    
+	CGRect indicatorFrame;
+	indicatorFrame.size.width = 14.0f;
+	indicatorFrame.size.height = 14.0f;
+	indicatorFrame.origin.x = (self.bounds.size.width - indicatorFrame.size.width) / 2.0f;
+	indicatorFrame.origin.y = (self.bounds.size.height - indicatorFrame.size.height - 20.f) / 2.0f;
+	_indicator.frame = indicatorFrame;
 }
 
 @end

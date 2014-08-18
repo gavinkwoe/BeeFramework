@@ -33,4 +33,4 @@
 
 #pragma mark -
 
-DEF_PACKAGE_INSTANCE( BeePackage, BeePackage_System, system );
+DEF_PACKAGE_( BeePackage, BeePackage_System, system );
