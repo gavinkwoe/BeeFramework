@@ -7,7 +7,7 @@
 //
 
 #if (TARGET_IPHONE_SIMULATOR)
-#if (__ON__ == __BEE_DEVELOPMENT__)
+#if (__ON__ == __BEE_DEVELOPMENT__ && __ON__ == __BEE_LIVELOAD__)
 
 #import "ServiceLiveload_Watcher.h"
 #import "ServiceLiveload.h"
