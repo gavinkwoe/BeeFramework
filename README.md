@@ -2,6 +2,10 @@
 
 BeeFramework is a semi-hybrid framework that allows you to create mobile apps using Objective-C and XML/CSS for the iPhone and iPad and more, created and maintained by [Gavin.Kwoe](http://www.weibo.com/gavinkwoe) and [QFish](http://github.com/qfish).
 
+## Join us
+
+QQ Group: 314365063
+
 ## 0.6.0 New Feature - Liveload
 
 ### Have a better life with liveload
