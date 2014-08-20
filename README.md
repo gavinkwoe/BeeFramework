@@ -6,6 +6,12 @@ BeeFramework is a semi-hybrid framework that allows you to create mobile apps us
 
 QQ Group: 314365063
 
+## Follow us on GitHub
+
+[@Gavin.Kwoe](http://www.weibo.com/gavinkwoe)   
+[@QFish](http://github.com/qfish)
+
+
 ## 0.6.0 New Feature - Liveload
 
 ### Have a better life with liveload
