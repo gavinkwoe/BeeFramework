@@ -6,7 +6,7 @@ BeeFramework is a semi-hybrid framework that allows you to create mobile apps us
 
 ### Have a better life with liveload
 
-1. Edit the xml file with any editor (Xcode, Sublime Text, even TextEdit etc.).
+1. Edit the <b style="color:red">XML</b> file with any editor (Xcode, Sublime Text, even TextEdit etc.).
 2. After editing, just save the file by shortcut (`Command+S`) or clicking the menu item `Save`.
 3. Then the corresponding view in smulator will update according to the changes without rebuilding app.
 4. You can get More info from `/serivces/bee.service.liveload/`.

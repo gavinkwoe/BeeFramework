@@ -38,7 +38,7 @@
 // ----------------------------------
 
 #undef	BEE_VERSION
-#define BEE_VERSION		@"0.5.0"
+#define BEE_VERSION		@"0.6.0"
 
 // ----------------------------------
 // Global include headers
