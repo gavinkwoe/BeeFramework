@@ -14,6 +14,7 @@ BeeFramework is a semi-hybrid framework that allows you to create mobile apps us
 ### Here is a video about the new feature
  
  📺 &nbsp;[BeeFramework 0.6.0 New Feature - Liveload](http://v.youku.com/v_show/id_XNzU3NzAyOTQ4.html)
+ 
  <a href="http://v.youku.com/v_show/id_XNzU3NzAyOTQ4.html" target="_blank">![liveload-snopshot](https://cloud.githubusercontent.com/assets/679824/3977216/bc197f36-2834-11e4-95ff-838a39556c08.png)</a>
 
 ## How to install
