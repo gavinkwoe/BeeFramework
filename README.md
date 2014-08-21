@@ -6,12 +6,6 @@ BeeFramework is a semi-hybrid framework that allows you to create mobile apps us
 
 QQ Group: 314365063
 
-## Follow us on GitHub
-
-[@Gavin.Kwoe](http://www.weibo.com/gavinkwoe)   
-[@QFish](http://github.com/qfish)
-
-
 ## 0.6.0 New Feature - Liveload
 
 ### Have a better life with liveload
@@ -23,9 +17,9 @@ QQ Group: 314365063
 
 ### Here is a video about the new feature
  
- 📺 &nbsp;[BeeFramework 0.6.0 New Feature - Liveload](http://v.youku.com/v_show/id_XNzU3NzAyOTQ4.html)
+📺 &nbsp;BeeFramework 0.6.0 New Feature - Liveload &nbsp; <a href="http://youtu.be/zs85Bo82Mww" target="_blank">[YouTube]</a> &nbsp; <a href="http://v.youku.com/v_show/id_XNzU3NzAyOTQ4.html">[Youku]</a>
  
- <a href="http://v.youku.com/v_show/id_XNzU3NzAyOTQ4.html" target="_blank">![liveload-snopshot](https://cloud.githubusercontent.com/assets/679824/3977216/bc197f36-2834-11e4-95ff-838a39556c08.png)</a>
+ <a href="http://youtu.be/zs85Bo82Mww" target="_blank">![liveload-snopshot](https://cloud.githubusercontent.com/assets/679824/3977216/bc197f36-2834-11e4-95ff-838a39556c08.png)</a>
 
 ## How to install
 
@@ -322,6 +316,4 @@ Name|Type
 
 You may want to see more great open source projects brought you by Chinese developers. See more in the [Projects repo](https://github.com/OpenSourceChina/Projects) of [OpenSourceChina](https://github.com/OpenSourceChina).
 
-Join us, please contact [gavinkwoe](https://github.com/gavinkwoe) or
- [onevcat](https://github.com/onevcat)
-
+Join us, please contact [gavinkwoe](https://github.com/gavinkwoe) or [onevcat](https://github.com/onevcat).
