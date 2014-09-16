@@ -4,7 +4,7 @@
 
 	<linear orientation="v" class="outter-wrapper">
 		
-		<label class="title">Thanks to</label>
+		<label class="title">Team</label>
 
 		<linear orientation="v" class="wrapper">
 			<view class="inner-bg"/>
@@ -22,14 +22,12 @@
 			</linear>
 		</linear>
 
-		<label class="title">Developers</label>
-
 		<linear orientation="v" class="wrapper">
 			<view class="inner-bg"/>
 			<linear orientation="h" class="profile-wrapper">
 				<image class="profile-avatar" src="avatar-laoguo.png"/>
 				<linear orientation="v" class="profile-right-wrapper">
-					<label class="profile-name">Guo</label>
+					<label class="profile-name">Gavin.Kwoe</label>
 					<label class="profile-title">iOS Developer</label>
 					<button id="guo" class="profile-contact">github.com</button>
 				</linear>
@@ -46,12 +44,12 @@
 				<linear orientation="v" class="profile-right-wrapper">
 					<label class="profile-name">QFish</label>
 					<label class="profile-title">iOS Developer</label>
-					<button id="qfish" class="profile-contact">github.com</button>
+					<button id="qfish" class="profile-contact">http://QFi.sh</button>
 				</linear>
 			</linear>
 			<label class="profile-intro">
-				Love coding and hand-drawing, while he is also skilled in HTML and CSS and JS.
-				What he always saying is "Fight, a way of surviving ~".
+				QFish is Not a Fish Named Q.
+Love coding, also skilled in HTML, CSS and JS.
 			</label>
 		</linear>
 
@@ -217,7 +215,7 @@
 		}
 
 		.wrapper {
-			margin-top: 10px;
+			margin-top: 5px;
 			width: 100%;
 			height: auto;
 		}
@@ -242,7 +240,7 @@
 			left: 0px;
 			top: 0px;
 			background-color: #fff;
-			padding: 0px 8px;
+			padding: 0px 4px;
 			border-radius: 8px;
 		}
 		
@@ -286,6 +284,7 @@
 			width: 130px;
 			height: 44px;
 			margin-left: 6px;
+			color: white;
 			button-image: url(contact-them.png);
 		}
 
@@ -308,47 +307,48 @@
 		.profile-right-wrapper {
 			width: 180px;
 			height: auto;
+			margin-top: 14px;
 		}
 		
 		.profile-name {
 			width: 100%;
-			height: auto;
-			margin-top: 14px;
+			height: 20px;
 			color: #333;
 			font-size: 18px;
 			font-weight: bold;
 			text-align: left;
-			line-num: 1;
-			line-break: tail-trunc;
 		}
 		
 		.profile-title {
 			width: 100%;
-			height: auto;
+			height: 14px;
 			margin-top: 4px;
-			margin-bottom: 10px;
 			color: #ea7a23;
 			font-size: 14px;
 			font-weight: bold;
 			text-align: left;
-			line-num: 2;
-			line-break: tail-trunc;
 		}
 		
 		.profile-contact {
-			width: 80px;
+			width: 96px;
 			height: 24px;
+			margin-top: 4px;
 			font-size: 12px;
 			font-weight: bold;
+			color: white;
+			text-align: center;
 			background-color: #1ea756;
-			border-radius: 8px;
+			border-radius: 5px;
 		}
 		
 		.profile-contact2 {
 			width: 96px;
 			height: 24px;
+			margin-top: 4px;
 			font-size: 12px;
 			font-weight: bold;
+			color: white;
+			text-align: center;
 			background-color: #f233a4;
 			border-radius: 8px;
 		}

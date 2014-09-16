@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -55,5 +55,9 @@
 @property (nonatomic, readonly) NSDate *	dateValue;
 
 - (NSString *)stringWithDateFormat:(NSString *)format;
+
+- (NSString *)decimalStyleString;
+
+- (NSString *)currencyStyleString;
 
 @end

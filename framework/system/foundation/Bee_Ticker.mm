@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -34,16 +34,23 @@
 #import "NSArray+BeeExtension.h"
 #import "NSObject+BeeTicker.h"
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 // ----------------------------------
 // Source code
 // ----------------------------------
 
 #pragma mark -
 
+DEF_PACKAGE( BeePackage, BeeTicker, ticker );
+
+#pragma mark -
+
 @interface BeeTicker()
 {
-	NSTimer *			_timer;
-	NSTimeInterval		_lastTick;
+	CADisplayLink *		_timer;
+	NSTimeInterval		_interval;
+	NSTimeInterval		_timestamp;
 	NSMutableArray *	_receivers;
 }
 
@@ -56,7 +63,8 @@
 @implementation BeeTicker
 
 @synthesize timer = _timer;
-@synthesize lastTick = _lastTick;
+@synthesize interval = _interval;
+@synthesize timestamp = _timestamp;
 
 DEF_SINGLETON( BeeTicker )
 
@@ -65,6 +73,7 @@ DEF_SINGLETON( BeeTicker )
 	self = [super init];
 	if ( self )
 	{
+		_interval = (1.0f / 3.0f);
 		_receivers = [[NSMutableArray nonRetainingArray] retain];
 	}
 	
@@ -79,13 +88,10 @@ DEF_SINGLETON( BeeTicker )
 		
 		if ( nil == _timer )
 		{
-			_timer = [NSTimer scheduledTimerWithTimeInterval:(1.0f)
-													  target:self 
-													selector:@selector(performTick) 
-													userInfo:nil
-													 repeats:YES];
+			_timer = [CADisplayLink displayLinkWithTarget:self selector:@selector(performTick)];
+			[_timer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
 			
-			_lastTick = [NSDate timeIntervalSinceReferenceDate];
+			_timestamp = [NSDate timeIntervalSinceReferenceDate];
 		}
 	}
 }
@@ -104,17 +110,22 @@ DEF_SINGLETON( BeeTicker )
 - (void)performTick
 {
 	NSTimeInterval tick = [NSDate timeIntervalSinceReferenceDate];
-	NSTimeInterval elapsed = tick - _lastTick;
-	
-	for ( NSObject * obj in _receivers )
-	{
-		if ( [obj respondsToSelector:@selector(handleTick:)] )
-		{
-			[obj handleTick:elapsed];
-		}
-	}
+	NSTimeInterval elapsed = tick - _timestamp;
 
-	_lastTick = tick;
+	if ( elapsed >= _interval )
+	{
+		NSArray * array = [NSArray arrayWithArray:_receivers];
+
+		for ( NSObject * obj in array )
+		{
+			if ( [obj respondsToSelector:@selector(handleTick:)] )
+			{
+				[obj handleTick:elapsed];
+			}
+		}
+
+		_timestamp = tick;
+	}
 }
 
 - (void)dealloc
@@ -144,3 +155,5 @@ TEST_CASE( BeeTicker )
 TEST_CASE_END
 
 #endif	// #if defined(__BEE_UNITTEST__) && __BEE_UNITTEST__
+
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

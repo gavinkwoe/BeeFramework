@@ -95,7 +95,7 @@ static NSLock *bandwidthThrottlingLock = nil;
 static unsigned long maxBandwidthPerSecond = 0;
 
 // A default figure for throttling bandwidth on mobile devices
-unsigned long const ASIWWANBandwidthThrottleAmount = 14800;
+unsigned long const ASIWWANBandwidthThrottleAmount = 14800 * 5;
 
 #if TARGET_OS_IPHONE
 // YES when bandwidth throttling is active
@@ -283,7 +283,7 @@ static NSOperationQueue *sharedQueue = nil;
 	[self setRequestMethod:@"GET"];
 
 	[self setRunLoopMode:NSDefaultRunLoopMode];
-	[self setShouldAttemptPersistentConnection:YES];
+	[self setShouldAttemptPersistentConnection:NO];
 	[self setPersistentConnectionTimeoutSeconds:60.0];
 	[self setShouldPresentCredentialsBeforeChallenge:YES];
 	[self setShouldRedirect:YES];
@@ -1352,7 +1352,8 @@ static NSOperationQueue *sharedQueue = nil;
 		}
 		[[self connectionInfo] setObject:[self requestID] forKey:@"request"];		
 		[[self connectionInfo] setObject:[self readStream] forKey:@"stream"];
-		CFReadStreamSetProperty((CFReadStreamRef)[self readStream],  kCFStreamPropertyHTTPAttemptPersistentConnection, kCFBooleanTrue);
+//		CFReadStreamSetProperty((CFReadStreamRef)[self readStream],  kCFStreamPropertyHTTPAttemptPersistentConnection, kCFBooleanTrue);
+		CFReadStreamSetProperty((CFReadStreamRef)[self readStream],  kCFStreamPropertyHTTPAttemptPersistentConnection, kCFBooleanFalse);
 		
 		#if DEBUG_PERSISTENT_CONNECTIONS
 		NSLog(@"[CONNECTION] Request #%@ will use connection #%i",[self requestID],[[[self connectionInfo] objectForKey:@"id"] intValue]);
@@ -1390,8 +1391,8 @@ static NSOperationQueue *sharedQueue = nil;
 
 	if ( NO == streamSuccessfullyOpened )
 	{
-		CFErrorRef error = CFReadStreamCopyError( (CFReadStreamRef)[self readStream] );
-		NSLog( @"error = %@", error );
+	//	CFErrorRef error = CFReadStreamCopyError( (CFReadStreamRef)[self readStream] );
+	//	NSLog( @"error = %@", error );
 	}
 	
 	// Here, we'll close the stream that was previously using this connection, if there was one

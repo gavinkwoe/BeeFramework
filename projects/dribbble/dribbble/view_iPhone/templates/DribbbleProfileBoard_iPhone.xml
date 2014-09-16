@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<template>
+
+	<list id="list"/>
+
+	<style type="text/css">
+	
+		#list {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 100%;
+			height: 100%;
+		}
+
+	</style>
+
+</template>

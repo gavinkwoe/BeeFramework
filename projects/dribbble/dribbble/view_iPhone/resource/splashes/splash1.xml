@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<template>
+
+	<label>Welcome</label>
+	<style type="text/css">
+		
+		label {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 100%;
+			height: 100%;
+			color: white;
+			font-size: 32px;
+			font-weight: bold;
+			text-align: center;
+		}
+
+	</style>
+	
+</template>

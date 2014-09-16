@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -59,7 +59,7 @@ void BeeAssertDisable( void )
 
 void BeeAssert( BOOL flag, const char * expr, const char * function, const char * file, int line )
 {
-#if defined(__BEE_ASSERT__) && __BEE_ASSERT__
+#if __BEE_DEVELOPMENT__
 	if ( NO == flag )
 	{
 		if ( __enabled )
@@ -68,7 +68,7 @@ void BeeAssert( BOOL flag, const char * expr, const char * function, const char 
 			abort();
 		}
 	}
-#endif	// #if defined(__BEE_ASSERT__) && __BEE_ASSERT__
+#endif	// #if __BEE_DEVELOPMENT__
 }
 
 // ----------------------------------

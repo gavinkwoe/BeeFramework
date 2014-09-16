@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -40,49 +40,79 @@ SUPPORT_RESOURCE_LOADING( YES );
 
 DEF_NOTIFICATION( PLAY_DONE )
 
-ON_SIGNAL2( BeeUIBoard, signal )
+#pragma mark -
+
+- (void)load
 {
-	[super handleUISignal:signal];
-	
-	if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
-	{
-		[self hideNavigationBarAnimated:NO];
-	}
-	else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
-	{
-	}
-	else if ( [signal is:BeeUIBoard.WILL_APPEAR] )
-	{
-		$(@"#slogan, #logo").ALPHA( 0.0f );
-	}
-	else if ( [signal is:BeeUIBoard.DID_APPEAR] )
-	{
-		$(@"#logo, #slogan")
-		.FADE_IN()
-		.DURATION( 0.5f )
-		.DELAY( 1.0f );
+}
+
+- (void)unload
+{
+}
+
+#pragma mark -
+
+ON_CREATE_VIEWS( signal )
+{
+	self.navigationBarShown = NO;
+}
+
+ON_DELETE_VIEWS( signal )
+{
+}
+
+ON_LAYOUT_VIEWS( signal )
+{
+}
+
+ON_WILL_APPEAR( signal )
+{
+	$(@"#slogan, #logo").ALPHA( 0.0f );
+}
+
+ON_DID_APPEAR( signal )
+{
+	[self performSelector:@selector(playAnimation) withObject:nil afterDelay:0.5f];
+}
+
+ON_WILL_DISAPPEAR( signal )
+{
+}
+
+ON_DID_DISAPPEAR( signal )
+{
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+}
+
+- (void)playAnimation
+{
+	$(@"#logo, #slogan")
+	.FADE_IN()
+	.DURATION( 0.5f )
+	.DELAY( 1.0f )
+	.ON_COMPLETE( ^{
 
 		$(@"#logo")
 		.BOUNCE()
 		.DURATION( 0.5f )
 		.DELAY( 1.0f )
 		.ON_COMPLETE( ^{
-
+			
 			$(self)
 			.FADE_OUT()
 			.DURATION( 0.5f )
 			.DELAY( 0.25f );
-			
+
 			$(self)
 			.ZOOM_IN( $(@"#zoom-in-here").frame )
 			.DURATION( 0.75f )
 			.ON_COMPLETE( ^{
 				
 				[self postNotification:self.PLAY_DONE];
-
+				
 			});
 		});
-	}
+	});
 }
 
 @end

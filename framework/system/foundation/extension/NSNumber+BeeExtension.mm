@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -65,6 +65,24 @@
 	return [[NSDate dateWithTimeIntervalSince1970:[self doubleValue]] stringWithDateFormat:format];
 	
 #endif
+}
+
+- (NSString *)decimalStyleString
+{
+    NSNumberFormatter * formatter = [[NSNumberFormatter alloc] init];
+    formatter.numberStyle = NSNumberFormatterDecimalStyle;
+    NSString * result = [formatter stringFromNumber:self];
+    [formatter release];
+    return result;
+}
+
+- (NSString *)currencyStyleString
+{
+    NSNumberFormatter * formatter = [[NSNumberFormatter alloc] init];
+    formatter.numberStyle = NSNumberFormatterCurrencyStyle;
+    NSString * result = [formatter stringFromNumber:self];
+    [formatter release];
+    return result;
 }
 
 @end

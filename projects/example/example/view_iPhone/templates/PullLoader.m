@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -35,33 +35,22 @@
 
 @implementation PullLoader
 
-+ (void)load
-{
-	[BeeUIPullLoader setDefaultSize:CGSizeMake(200, 50)];
-	[BeeUIPullLoader setDefaultClass:[PullLoader class]];
-}
-
 - (void)load
 {
-	[super load];
-	
 	self.FROM_RESOURCE( @"PullLoader.xml" );
 
-	$(@"state").DATA( @"Pull to refresh" );
-	$(@"date").DATA( [NSString stringWithFormat:@"Last update：%@", [[NSDate date] stringWithDateFormat:@"MM/dd/yyyy"]] );
+	$(@"#state").DATA( @"Pull to refresh" );
+	$(@"#date").DATA( [NSString stringWithFormat:@"Last update：%@", [[NSDate date] stringWithDateFormat:@"MM/dd/yyyy"]] );
 }
 
 - (void)unload
 {
-	[super unload];
 }
 
 - (void)handleUISignal:(BeeUISignal *)signal
 {
-	[super handleUISignal:signal];
-
-	BeeUIImageView *				arrow = (BeeUIImageView *)$(@"arrow").view;
-	BeeUIActivityIndicatorView *	indicator = (BeeUIActivityIndicatorView *)$(@"ind").view;
+	BeeUIImageView *				arrow = (BeeUIImageView *)$(@"#arrow").view;
+	BeeUIActivityIndicatorView *	indicator = (BeeUIActivityIndicatorView *)$(@"#ind").view;
 
 	if ( [signal is:BeeUIPullLoader.STATE_CHANGED] )
 	{
@@ -72,32 +61,32 @@
 			[UIView setAnimationDuration:0.3f];
 		}
 		
-		if ( BeeUIPullLoader.STATE_NORMAL == self.state )
+		if ( self.pulling )
+		{
+			arrow.hidden = NO;
+			arrow.transform = CGAffineTransformRotate( CGAffineTransformIdentity, (M_PI / 360.0f) * -359.0f );
+			
+			$(@"#state").DATA( @"Release to refresh" );
+			$(@"#date").DATA( [NSString stringWithFormat:@"Last update：%@", [[NSDate date] stringWithDateFormat:@"MM/dd/yyyy"]] );
+		}
+		else if ( self.loading )
+		{
+			[indicator startAnimating];
+
+			arrow.hidden = YES;
+			
+			$(@"#state").DATA( @"Loading..." );
+			$(@"#date").DATA( [NSString stringWithFormat:@"Last update：%@", [[NSDate date] stringWithDateFormat:@"MM/dd/yyyy"]] );
+		}
+		else
 		{
 			arrow.hidden = NO;
 			arrow.transform = CGAffineTransformIdentity;
 			
 			[indicator stopAnimating];
 			
-			$(@"state").DATA( @"Pull to refresh" );
-			$(@"date").DATA( [NSString stringWithFormat:@"Last update：%@", [[NSDate date] stringWithDateFormat:@"MM/dd/yyyy"]] );
-		}
-		else if ( BeeUIPullLoader.STATE_PULLING == self.state )
-		{
-			arrow.hidden = NO;
-			arrow.transform = CGAffineTransformRotate( CGAffineTransformIdentity, (M_PI / 360.0f) * -359.0f );
-			
-			$(@"state").DATA( @"Release to refresh" );
-			$(@"date").DATA( [NSString stringWithFormat:@"Last update：%@", [[NSDate date] stringWithDateFormat:@"MM/dd/yyyy"]] );
-		}
-		else if ( BeeUIPullLoader.STATE_LOADING == self.state )
-		{
-			[indicator startAnimating];
-
-			arrow.hidden = YES;
-			
-			$(@"state").DATA( @"Loading..." );
-			$(@"date").DATA( [NSString stringWithFormat:@"Last update：%@", [[NSDate date] stringWithDateFormat:@"MM/dd/yyyy"]] );
+			$(@"#state").DATA( @"Pull to refresh" );
+			$(@"#date").DATA( [NSString stringWithFormat:@"Last update：%@", [[NSDate date] stringWithDateFormat:@"MM/dd/yyyy"]] );
 		}
 		
 		if ( self.animated )

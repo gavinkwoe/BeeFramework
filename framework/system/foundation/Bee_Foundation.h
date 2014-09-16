@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -49,11 +49,15 @@
 #import "NSDate+BeeExtension.h"
 #import "NSDictionary+BeeExtension.h"
 #import "NSNumber+BeeExtension.h"
+#import "NSObject+BeeMacros.h"
 #import "NSObject+BeeJSON.h"
 #import "NSObject+BeeNotification.h"
 #import "NSObject+BeeProperty.h"
 #import "NSObject+BeeTicker.h"
 #import "NSObject+BeeTimer.h"
 #import "NSObject+BeeTypeConversion.h"
+#import "NSObject+BeeExtension.h"
+#import "NSSet+BeeExtension.h"
+#import "NSString+BeeEmoji.h"
 #import "NSString+BeeExtension.h"
 #import "NSTimer+BeeExtension.h"

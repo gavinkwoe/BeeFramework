@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui namespace="DribbbleProfileBoardCell_iPhone">
+	
+	<linear orientation="v" class="wrapper">
+
+		<col class="section1">
+			<image id="bg"/>
+			<col class="profile-wrapper">
+				<image id="bg2"/>
+				<image id="bg3"/>
+				<row class="number-wrapper">
+					<col class="number">
+						<label id="follower" class="number-normal">0</label>
+						<label class="number-small">followers</label>
+					</col>
+					<col class="number">
+						<label id="following" class="number-normal">0</label>
+						<label class="number-small">followings</label>
+					</col>
+					<col class="number">
+						<label id="shots" class="number-normal">0</label>
+						<label class="number-small">shots</label>
+					</col>
+				</row>
+				<col class="name-wrapper">
+					<label id="name"></label>
+					<row class="line">
+						<image id="location-icon" class="line-icon"/>
+						<label id="location-text" class="line-text"></label>
+					</row>
+					<row class="line">
+						<image id="url-icon" class="line-icon"/>
+						<label id="url-text" class="line-text"></label>
+					</row>
+				</col>
+				<image id="avatar"/>
+			</col>
+		</col>
+
+		<col class="section2">
+		</col>
+
+	</linear>
+
+	<style type="text/css">
+
+		#url-text {
+			fit-width: true;
+		}
+
+		.wrapper {
+			width: 100%;
+			height: auto;
+		}
+	
+		.section1 {
+			width: 100%;
+			height: 280px;
+		}
+	
+		#bg {
+			background-color: #333; /* #ea4c89;*/
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 100%;
+			height: 280px;
+			image-loading: white;
+			image-mode: fill;
+		}
+
+		.profile-wrapper {
+			position: absolute;
+			left: 0px;
+			bottom: 0px;
+			width: 100%;
+			height: 120px;
+		}
+
+		#bg2 {
+			background-color: black 0.3;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 100%;
+			height: 48px;
+		}
+	
+		#bg3 {
+			background-color: white;
+			position: absolute;
+			left: 0px;
+			bottom: 0px;
+			width: 100%;
+			height: 72px;
+		}
+
+		.number-wrapper {
+			width: 100%;
+			height: 40%;
+			padding-left: 120px;
+		}
+	
+		.number {
+			width: 33.3333%;
+			height: 100%;
+		}
+	
+		.number-normal {
+			padding-top: 4px;
+			width: 100%;
+			height: 60%;
+			font-size: 20px;
+			font-weight: lighter;
+			text-align: center;
+			color: #eee;
+		}
+
+		.number-small {
+			width: 100%;
+			height: 40%;
+			font-size: 12px;
+			font-weight: lighter;
+			text-align: center;
+			padding-bottom: 3px;
+			color: #eee;
+		}
+
+		.name-wrapper {
+			width: 100%;
+			height: 60%;
+			padding-left: 127px;
+			padding-right: 4px;
+		}
+
+		#name {
+			width: 100%;
+			height: 44%;
+			font-size: 20px;
+			font-weight: lighter;
+			color: #333;
+		}
+	
+		.line {
+			width: 100%;
+			height: 20%;
+		}
+
+		.line-icon {
+			width: 0px;
+			height: 100%;
+			image-loading: white;
+			image-mode: center;
+		}
+	
+		.line-text {
+			width: 96%;
+			height: 100%;
+			font-size: 13px;
+			font-weight: lighter;
+			color: #666;
+		}
+	
+		#avatar {
+			position: absolute;
+			width: 100px;
+			height: 100px;
+			left: 10px;
+			top: 10px;
+			background-color: #999;
+		/*	border-radius: 6px; */
+			border-width: 3px;
+			border-color: #fafafa;
+			image-mode: fill;
+			image-loading: white;
+		}
+
+		.section2 {
+			width: 100%;
+			height: 0px;
+		}
+
+	</style>
+	
+</ui>

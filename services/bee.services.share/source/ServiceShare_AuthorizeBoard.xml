@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui namespace="ServiceShare_AuthorizeBoard">
+
+	<linear orientation="v" class="wrapper">
+		<linear orientation="v" class="inner-wrapper">
+			<web id="web"/>
+		</linear>
+		<button id="close"/>
+	</linear>
+	
+	<style type="text/css">
+		ui {
+			background-color: #333 0.6;
+		}
+
+		.wrapper {
+			width: 100%;
+			height: 100%;
+			padding-top: 20px;
+			padding-bottom: 20px;
+		}
+
+		.inner-wrapper {
+			width: 100%;
+			height: 100%;
+			padding: 10px;
+		}
+
+		#web {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 100%;
+			height: 100%;
+			background-color: white;
+			border-radius: 6px;
+		}
+
+		#close {
+			position: absolute;
+			right: -7px;
+			top: -2px;
+			width: 44px;
+			height: 44px;
+		}
+	</style>
+	
+</ui>

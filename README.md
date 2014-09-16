@@ -1,20 +1,258 @@
-# [{Bee} Framework v0.4.0](http://www.bee-framework.com)
+![logo](https://cloud.githubusercontent.com/assets/679824/3976127/d495a6a4-2819-11e4-81cf-b27832e27e90.png)
 
-{Bee} is a modern mobile application framework for faster and easier app development, created and maintained by [Gavin Kwoe](http://www.weibo.com/gavinkwoe) and [QFish](http://qfish.net).
+BeeFramework is a semi-hybrid framework that allows you to create mobile apps using Objective-C and XML/CSS for the iPhone and iPad and more, created and maintained by [Gavin.Kwoe](http://www.weibo.com/gavinkwoe) and [QFish](http://github.com/qfish).
 
-* To get started, checkout [{Bee} developer manual](https://github.com/gavinkwoe/BeeFramework/blob/master/document)
+## Join us
 
-## [{Bee} interface builder >>>](http://ib.bee-framework.com/)
+QQ Group: 314365063
 
-![Interface builder](http://blog.whatsbug.com/wp-content/uploads/2013/07/interface-builder.png)
+## 0.6.0 New Feature - Liveload
+
+### Have a better life with liveload
+
+1. Edit the <b style="color:red">XML</b> file with any editor (Xcode, Sublime Text, even TextEdit etc.).
+2. After editing, just save the file by shortcut (`Command+S`) or clicking the menu item `Save`.
+3. Then the corresponding view in smulator will update according to the changes without rebuilding app.
+4. You can get More info from `/serivces/bee.service.liveload/`.
+
+### Here is a video about the new feature
+ 
+📺 &nbsp;BeeFramework 0.6.0 New Feature - Liveload &nbsp; <a href="http://youtu.be/zs85Bo82Mww" target="_blank">[YouTube]</a> &nbsp; <a href="http://v.youku.com/v_show/id_XNzU3NzAyOTQ4.html">[Youku]</a>
+ 
+ <a href="http://youtu.be/zs85Bo82Mww" target="_blank">![liveload-snopshot](https://cloud.githubusercontent.com/assets/679824/3977216/bc197f36-2834-11e4-95ff-838a39556c08.png)</a>
+
+## How to install
+
+1. Download the source code
+2. Drag and drop `/framework` folder into your project
+3. Drag and drop `/services` folder into your project
+4. Build and run
+
+## Demo app
+
+A demo app for dribbble.com, as fast as native, as flexible as web. See `/projects/dribbble` demo for more information.
+
+![dribbble-1](https://cloud.githubusercontent.com/assets/679824/3976218/fe45e93a-281b-11e4-9cae-50fc2266b2a0.png)
+![dribbble-2](https://cloud.githubusercontent.com/assets/679824/3976221/08565f9a-281c-11e4-88ea-23724a2008cf.png)
+
+## Demo app - Wireframe mode
+
+![dribbble-3](https://cloud.githubusercontent.com/assets/679824/3976224/18fce0bc-281c-11e4-865c-3cedac069fbf.png)
+
+## Demo app - Inspector mode
+
+![dribbble-4](https://cloud.githubusercontent.com/assets/679824/3976226/26716650-281c-11e4-99f0-c8d12e9b9624.png)
+
+## Semi-Hybrid UI
+
+Semi-hybrid offers you a new approach to UI development using XML/CSS, you can reuse these templates in any project based on BeeFramework. See `/projects/dribbble` demo for more information.
+
+![bee_template](https://cloud.githubusercontent.com/assets/679824/3976231/32682b56-281c-11e4-8824-9ae7aaa0d21f.png)
+
+## Services
+
+Services extend and expand the functionality of your app automatically, drag and drop the services folder into your project. See `/services` for more information.
+
+![bee_services](https://cloud.githubusercontent.com/assets/679824/3976233/32dbf874-281c-11e4-8baf-271edac46312.png)
+
+For example:
+
+<pre>
+bee.services.alipay.config.parnter = @"";
+bee.services.alipay.config.seller = @"";
+bee.services.alipay.config.privateKey = @"";
+bee.services.alipay.config.publicKey = @"";
+bee.services.alipay.config.notifyURL = @"http://";
+
+bee.services.alipay.order.no = @"SN";
+bee.services.alipay.order.name = @"NAME";
+bee.services.alipay.order.desc = @"DESC";
+bee.services.alipay.order.price = @"PRICE";
+
+bee.services.alipay.whenSucceed = ^
+{
+};
+
+bee.services.alipay.PAY();	// or .ON();
+</pre>
+
+## Scaffold
+
+Scaffold helps you to generate Model/Controller code and documents, also provide the local test environment. See `/tools/scaffold` or `/projects/scaffold` for more information.
+
+![bee_scaffold_1](https://cloud.githubusercontent.com/assets/679824/3976230/32287a1a-281c-11e4-9999-968fb3c9c93e.png)
+![bee_scaffold_2](https://cloud.githubusercontent.com/assets/679824/3976232/326d4e88-281c-11e4-837c-bb8756aec6ca.png)
+
+For example:
+
+<pre>
+> ./scaffold schema build ./example/dribbble.json
+> ./scaffold schema test ./example/dribbble.json
+</pre>
+
+## Features
+
+- CLI
+- MVC
+	- View
+		- Liveload
+		- Application
+		- Config
+		- Container
+			- Board
+			- Stack
+			- Router
+			- Window
+		- CSS style sheet
+		- XML template
+		- DOM
+			- Animation/Transition
+			- Data binding
+			- Capability
+			- Elements
+			- Elements ext
+			- Signaling
+			- Auto layout
+			- Query (jQuery-like syntax)
+		- View-Model
+			- Once
+			- Paging
+			- Stream
+		- Other
+			- Color
+			- Font
+			- Image
+			- Metrics
+	- Model
+	- Controller
+		- Message
+		- MessageController
+		- Queue
+		- Routine
+		- Extensions
+			- Message + JSON
+			- Message + HTTP
+			- Message + XML
+			- Message + ActiveRecord
+- System
+	- Cache
+		- File
+		- Memory
+		- Keychain
+		- UserDefaults
+	- Database
+		- SQLite wrapper
+		- ActiveRecord
+		- Driver
+	- Foundation
+		- Assertion
+		- Log
+		- Performance
+		- Runtime
+		- Sandbox
+		- Singleton
+		- System information
+		- Thread
+		- Ticker
+		- UnitTest
+	- Localization
+	- Network
+		- HTTP client
+		- HTTP server
+		- Reachability
+		- Socket
+	- Resource
+	- Service
+
+## Lastest version
+
+* [Download the lastest release](https://github.com/gavinkwoe/BeeFramework/archive/master.zip)
+
+		https://github.com/gavinkwoe/BeeFramework/archive/master.zip
+
+* Clone the repo (CLI)
+
+		git clone git@github.com:gavinkwoe/BeeFramework.git
+
+* Clone the repo (HTTP)
+
+		https://github.com/gavinkwoe/BeeFramework.git
+
+* Import from CocoaPods ( thanks to [stcui](https://github.com/stcui) )
+
+	Add below to `Podfile` and run `pod install`
+
+		platform :ios
+		pod 'BeeFramework', :head
+
+## Bug tracker
+
+* Have a bug or a feature request? [Please open a new issue](https://github.com/gavinkwoe/BeeFramework/issues).
+* Before opening any issue, please read the [Issue Guidelines](https://github.com/necolas/issue-guidelines), written by [Nicolas Gallagher](https://github.com/necolas/).
 
 
-## [{Bee} Code generater >>>](https://github.com/gavinkwoe/BeeFramework/blob/master/tools)
+## License
 
-![Scaffold](http://blog.whatsbug.com/wp-content/uploads/2013/07/scaffold.png)
+![geek-zoo](https://cloud.githubusercontent.com/assets/679824/3976260/f51498ba-281c-11e4-9569-6b60cfb1d90a.png)
+
+	 ______    ______    ______
+	/\  __ \  /\  ___\  /\  ___\
+	\ \  __<  \ \  __\_ \ \  __\_
+	 \ \_____\ \ \_____\ \ \_____\
+	  \/_____/  \/_____/  \/_____/
+
+
+	Copyright (c) 2014-2015, Geek Zoo Studio
+	http://www.bee-framework.com
+
+
+	Permission is hereby granted, free of charge, to any person obtaining a
+	copy of this software and associated documentation files (the "Software"),
+	to deal in the Software without restriction, including without limitation
+	the rights to use, copy, modify, merge, publish, distribute, sublicense,
+	and/or sell copies of the Software, and to permit persons to whom the
+	Software is furnished to do so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in
+	all copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+	FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+	IN THE SOFTWARE.
 
 ## Change log
-#### 0.4.0 (Lastest version)
+
+#### 0.6.0
+
+1. Liveload
+
+#### 0.5.0
+
+1. New MVVM architecture
+2. New Package technology
+3. New Signal routing technology
+4. New HTTP server technology
+5. New CSS parser, support more CSS syntax
+6. New ScrollView, support complex layout
+7. More jQuery-like syntax
+8. Refactory directory structure
+9. Refactory animation system
+10. Support multi-language
+11. Support manifest.json
+12. New 3D UI inspector plugin
+13. New grid system plugin
+14. New alipay plugin
+15. New location plugin
+16. New push notification plugin
+17. New social share plugin
+18. New splash plugin
+19. Bug fix
+
+#### 0.4.0
 
 1. Refactory the directory structure, divided into four parts, applicaton, service, system and vendor.
 2. New XML template technology, perfect support for CSS
@@ -56,138 +294,26 @@
 #### 0.1.0
 
 1. Draft version
-2. Toturial
+2. Tutorial
 3. In-app debugger
-
-## Feature list
-
-![Bee vs other](http://blog.whatsbug.com/wp-content/uploads/2013/07/bee_vs_other1.png)
-
-## Lastest version
-
-* [Download the lastest release](https://github.com/gavinkwoe/BeeFramework/archive/master.zip)
-* Clone the repo (CLI), `git clone git@github.com:gavinkwoe/BeeFramework.git`.
-* Clone the repo (HTTP), `https://github.com/gavinkwoe/BeeFramework.git`.
-
-## Bug tracker
-
-* Have a bug or a feature request? [Please open a new issue](https://github.com/gavinkwoe/BeeFramework/issues).
-* Before opening any issue, please read the [Issue Guidelines](https://github.com/necolas/issue-guidelines), written by [Nicolas Gallagher](https://github.com/necolas/).
-
-## Community
-
-* Follow [@老郭为人民服务 on Weibo](http://www.weibo.com/gavinkwoe).
-* QQ Group: 79054681
-
-## Build and run
-
-1. Open `/projects/BeeFramework.xcworkspace`
-2. Choose target, 'lib' or 'example'
-3. Build and run
-
-## CocoaPods (by [stcui](https://github.com/stcui))
-<br/>
-
-Add below to `Podfile` and run `pod install`
-
-	platform :ios
-	pod 'BeeFramework', :head
 
 ## Contributors
 
-**STCui**
+Name|Type
+----|----
+**Gavin.Kwoe**|[https://github.com/gavinkwoe](https://github.com/gavinkwoe)
+**QFish**|[https://github.com/qfish](https://github.com/qfish)
+**STCui**|[https://github.com/stcui](https://github.com/stcui)
+**ilikeido**|[https://github.com/ilikeido](https://github.com/ilikeido)
+**gelosie**|[https://github.com/gelosie](https://github.com/gelosie)
+**lancy**|[https://github.com/lancy](https://github.com/lancy)
+**uxyheaven**|[https://github.com/uxyheaven](https://github.com/uxyheaven)
+**Yulong**|[https://github.com/Yulong](https://github.com/Yulong)
+**esseak**|[https://github.com/esseak](https://github.com/esseak)
+**inonomori**|[https://github.com/inonomori](https://github.com/inonomori)
 
-+ [https://github.com/stcui](https://github.com/stcui)
+## More Incredible Projects from OpenSourceChina
 
-**ilikeido**
+You may want to see more great open source projects brought you by Chinese developers. See more in the [Projects repo](https://github.com/OpenSourceChina/Projects) of [OpenSourceChina](https://github.com/OpenSourceChina).
 
-+ [https://github.com/ilikeido](https://github.com/ilikeido)
-
-**gelosie**
-
-+ [https://github.com/gelosie](https://github.com/gelosie)
-
-**lancy**
-
-+ [https://github.com/lancy](https://github.com/lancy)
-
-**uxyheaven**
-
-+ [https://github.com/uxyheaven](https://github.com/uxyheaven)
-
-**Yulong**
-
-+ [https://github.com/Yulong](https://github.com/Yulong)
-
-**esseak**
-
-+ [https://github.com/esseak](https://github.com/esseak)
-
-**inonomori**
-
-+ [https://github.com/inonomori](https://github.com/inonomori)
-
-## Copyright and license
-<br/>
-
-Copyright 2013 ~ 2014, [Geek-Zoo Studio, Inc.](http://www.geek-zoo.com) and [INSTHUB Beijing HQ](http://www.insthub.com)
-
-
-	 ______    ______    ______
-	/\  __ \  /\  ___\  /\  ___\
-	\ \  __<  \ \  __\_ \ \  __\_
-	 \ \_____\ \ \_____\ \ \_____\
-	  \/_____/  \/_____/  \/_____/
-
-
-	Copyright (c) 2013-2014, {Bee} open source community
-	http://www.bee-framework.com
-
-
-	Permission is hereby granted, free of charge, to any person obtaining a
-	copy of this software and associated documentation files (the "Software"),
-	to deal in the Software without restriction, including without limitation
-	the rights to use, copy, modify, merge, publish, distribute, sublicense,
-	and/or sell copies of the Software, and to permit persons to whom the
-	Software is furnished to do so, subject to the following conditions:
-
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-	FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
-	IN THE SOFTWARE.
-
-## Who use {bee}
-
-* [China Mobile](http://www.chinamobileltd.com/en/global/home.php)
-* [China Unicom](http://www.chinaunicom.com.cn/)
-* [China Telecom](http://www.chinatelecom.com.cn/)
-* [Tencent](http://www.qq.com/)
-* [Baidu](http://www.baidu.com/)
-* [Sina](http://www.sina.com.cn/)
-* [iFeng](http://www.ifeng.com/)
-* [Novagin](http://www.novagin.com/cn/index.htm)
-* [IGRS Lab](http://www.tivic.com/)
-* [Front network](http://www.frontnetwork.com/)
-* [Middling industries](http://www.middlingindustries.com/)
-* [iLouShi](http://www.iloushi.cn/)
-* [Duopeng](http://www.duopeng.com/)
-* [VoiceFrom](http://voicefrom.me/)
-* [Distance Education Group](http://www.sdeg.cn/sdegPortal/)
-* [MesonTech](http://www.mesontech.com.cn/home/mesontech.jsp)
-
-## Apps
-
-* [Sina Finance](https://itunes.apple.com/us/app/xin-lang-cai-jing/id430165157?mt=8)
-* [Mengtu](https://itunes.apple.com/us/app/meng-tu/id531292307?mt=8)
-* [iLoushi](http://itunes.apple.com/cn/app/id464232572?mt=8)
-* [Duopeng](http://www.duopeng.com/)
-* [Yiban](https://itunes.apple.com/app/yi-ban/id549775029?mt=8)
-* [Golden carp](https://itunes.apple.com/cn/app/id584687764)
-* [Tivic](http://mobile.91.com/Soft/Detail.aspx?Platform=iPhone&f_id=1373668)
-* [Middling](https://itunes.apple.com/us/app/middling/id531625104?mt=8)
+Join us, please contact [gavinkwoe](https://github.com/gavinkwoe) or [onevcat](https://github.com/onevcat).

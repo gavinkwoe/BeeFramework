@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -48,12 +48,7 @@
 			} \
 			+ (NSString *)__name \
 			{ \
-				static NSString * __local = nil; \
-				if ( nil == __local ) \
-				{ \
-					__local = [NSString stringWithFormat:@"%s", #__name]; \
-				} \
-				return __local; \
+				return [NSString stringWithFormat:@"%s", #__name]; \
 			}
 
 #else
@@ -66,12 +61,7 @@
 			} \
 			+ (NSString *)__name \
 			{ \
-				static NSString * __local = nil; \
-				if ( nil == __local ) \
-				{ \
-					__local = [[NSString stringWithFormat:@"%s", #__name] retain]; \
-				} \
-				return __local; \
+				return [NSString stringWithFormat:@"%s", #__name]; \
 			}
 
 #endif
@@ -86,12 +76,7 @@
 			} \
 			+ (NSString *)__name \
 			{ \
-				static NSString * __local = nil; \
-				if ( nil == __local ) \
-				{ \
-					__local = [NSString stringWithFormat:@"%@.%s", __prefix, #__name]; \
-				} \
-				return __local; \
+				return [NSString stringWithFormat:@"%@.%s", __prefix, #__name]; \
 			}
 
 #else
@@ -104,12 +89,7 @@
 			} \
 			+ (NSString *)__name \
 			{ \
-				static NSString * __local = nil; \
-				if ( nil == __local ) \
-				{ \
-					__local = [[NSString stringWithFormat:@"%@.%s", __prefix, #__name] retain]; \
-				} \
-				return __local; \
+				return [NSString stringWithFormat:@"%@.%s", __prefix, #__name]; \
 			}
 
 #endif
@@ -124,12 +104,7 @@
 			} \
 			+ (NSString *)__name \
 			{ \
-				static NSString * __local = nil; \
-				if ( nil == __local ) \
-				{ \
-					__local = [NSString stringWithFormat:@"%@.%@.%s", __prefix, __prefix2, #__name]; \
-				} \
-				return __local; \
+				return [NSString stringWithFormat:@"%@.%@.%s", __prefix, __prefix2, #__name]; \
 			}
 
 #else
@@ -142,12 +117,7 @@
 			} \
 			+ (NSString *)__name \
 			{ \
-				static NSString * __local = nil; \
-				if ( nil == __local ) \
-				{ \
-					__local = [[NSString stringWithFormat:@"%@.%@.%s", __prefix, __prefix2, #__name] retain]; \
-				} \
-				return __local; \
+				return [NSString stringWithFormat:@"%@.%@.%s", __prefix, __prefix2, #__name]; \
 			}
 
 #endif
@@ -162,12 +132,7 @@
 			} \
 			+ (NSString *)__name \
 			{ \
-				static NSString * __local = nil; \
-				if ( nil == __local ) \
-				{ \
-					__local = [NSString stringWithFormat:@"%@.%@.%s", __prefix, __prefix2, #__value]; \
-				} \
-				return __local; \
+				return [NSString stringWithFormat:@"%@.%@.%s", __prefix, __prefix2, #__value]; \
 			}
 
 #else
@@ -180,12 +145,7 @@
 			} \
 			+ (NSString *)__name \
 			{ \
-				static NSString * __local = nil; \
-				if ( nil == __local ) \
-				{ \
-					__local = [[NSString stringWithFormat:@"%@.%@.%s", __prefix, __prefix2, #__value] retain]; \
-				} \
-				return __local; \
+				return [NSString stringWithFormat:@"%@.%@.%s", __prefix, __prefix2, #__value]; \
 			}
 
 #endif

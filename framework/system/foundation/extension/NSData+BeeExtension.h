@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -37,5 +37,7 @@
 
 @property (nonatomic, readonly) NSData *	MD5;
 @property (nonatomic, readonly) NSString *	MD5String;
+
++ (NSString *)fromResource:(NSString *)resName;
 
 @end

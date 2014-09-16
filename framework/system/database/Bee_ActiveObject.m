@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -65,6 +65,40 @@
 #pragma mark -
 
 @implementation BeeActiveObject : NSObject
+
+- (NSString *)description
+{
+	NSMutableString * desc = [NSMutableString string];
+	
+	Class rootClass = [BeeActiveObject class];
+
+	for ( Class clazzType = [self class];; )
+	{
+		if ( clazzType == rootClass )
+			break;
+		
+		unsigned int		propertyCount = 0;
+		objc_property_t *	properties = class_copyPropertyList( clazzType, &propertyCount );
+		
+		for ( NSUInteger i = 0; i < propertyCount; i++ )
+		{
+			const char *	name = property_getName(properties[i]);
+			NSString *		propertyName = [NSString stringWithCString:name encoding:NSUTF8StringEncoding];
+			NSObject *		propertyValue = [self valueForKey:propertyName];
+
+			[desc appendString:[propertyValue description]];
+			[desc appendString:@"\n"];
+		}
+
+		free( properties );
+		
+		clazzType = class_getSuperclass( clazzType );
+		if ( nil == clazzType )
+			break;
+	}
+	
+	return [super description];
+}
 
 - (BOOL)validate
 {

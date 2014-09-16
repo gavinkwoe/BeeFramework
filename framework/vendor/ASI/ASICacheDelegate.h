@@ -6,7 +6,12 @@
 //  Copyright 2010 All-Seeing Interactive. All rights reserved.
 //
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 #import <Foundation/Foundation.h>
+#else	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+#import <CoreFoundation/CoreFoundation.h>
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
 @class ASIHTTPRequest;
 
 // Cache policies control the behaviour of a cache and how requests use the cache

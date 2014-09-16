@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -41,19 +41,26 @@ DEF_SINGLETON( MenuBoard_iPhone )
 SUPPORT_AUTOMATIC_LAYOUT( YES );
 SUPPORT_RESOURCE_LOADING( YES );
 
-ON_SIGNAL2( BeeUIBoard, signal )
+- (void)load
 {
-	[super handleUISignal:signal];
-	
-	if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
-	{
-		self.view.backgroundColor = RGB(15, 15, 15);
-		[self hideNavigationBarAnimated:NO];		
-	}
-	else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
-	{
-	}
 }
+
+- (void)unload
+{
+}
+
+#pragma mark -
+
+ON_CREATE_VIEWS( signal )
+{
+	self.navigationBarShown = NO;
+}
+
+ON_DELETE_VIEWS( signal )
+{
+}
+
+#pragma mark -
 
 - (void)selectItem:(NSString *)item animated:(BOOL)animated
 {

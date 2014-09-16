@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -30,7 +30,14 @@
 //
 
 #import "Bee_Precompile.h"
+#import "Bee_Package.h"
+#import "Bee_SystemConfig.h"
+#import "Bee_SystemPackage.h"
 #import "NSObject+BeeProperty.h"
+
+#pragma mark -
+
+AS_PACKAGE( BeePackage_System, BeeRuntime, runtime );
 
 #pragma mark -
 
@@ -42,6 +49,36 @@
 
 #undef	BREAK_POINT_IF
 #define BREAK_POINT_IF( __x )	if ( __x ) { [BeeRuntime breakPoint]; }
+
+#undef	BB
+#define BB						[BeeRuntime breakPoint];
+
+#pragma mark -
+
+@interface BeeTypeEncoding : NSObject
+
+AS_INT( UNKNOWN )
+AS_INT( OBJECT )
+AS_INT( NSNUMBER )
+AS_INT( NSSTRING )
+AS_INT( NSARRAY )
+AS_INT( NSDICTIONARY )
+AS_INT( NSDATE )
+
++ (BOOL)isReadOnly:(const char *)attr;
+
++ (NSUInteger)typeOf:(const char *)attr;
++ (NSUInteger)typeOfAttribute:(const char *)attr;
++ (NSUInteger)typeOfObject:(id)obj;
+
++ (NSString *)classNameOf:(const char *)attr;
++ (NSString *)classNameOfAttribute:(const char *)attr;
+
++ (Class)classOfAttribute:(const char *)attr;
+
++ (BOOL)isAtomClass:(Class)clazz;
+
+@end
 
 #pragma mark -
 
@@ -65,38 +102,22 @@ AS_INT( TYPE_NATIVEC )
 
 #pragma mark -
 
-@interface BeeTypeEncoding : NSObject
-
-AS_INT( UNKNOWN )
-AS_INT( OBJECT )
-AS_INT( NSNUMBER )
-AS_INT( NSSTRING )
-AS_INT( NSARRAY )
-AS_INT( NSDICTIONARY )
-AS_INT( NSDATE )
-
-+ (NSUInteger)typeOf:(const char *)attr;
-+ (NSUInteger)typeOfAttribute:(const char *)attr;
-+ (NSUInteger)typeOfObject:(id)obj;
-
-+ (NSString *)classNameOf:(const char *)attr;
-+ (NSString *)classNameOfAttribute:(const char *)attr;
-
-+ (Class)classOfAttribute:(const char *)attr;
-
-+ (BOOL)isAtomClass:(Class)clazz;
-
-@end
-
-#pragma mark -
-
 @interface BeeRuntime : NSObject
+
+@property (nonatomic, readonly) NSArray *	allClasses;
+@property (nonatomic, readonly) NSArray *	callstack;
+@property (nonatomic, readonly) NSArray *	callframes;
+
+AS_SINGLETON( BeeRuntime )
 
 + (id)allocByClass:(Class)clazz;
 + (id)allocByClassName:(NSString *)clazzName;
 
 + (NSArray *)allClasses;
 + (NSArray *)allSubClassesOf:(Class)clazz;
+
++ (NSArray *)allInstanceMethodsOf:(Class)clazz;
++ (NSArray *)allInstanceMethodsOf:(Class)clazz withPrefix:(NSString *)prefix;
 
 + (NSArray *)callstack:(NSUInteger)depth;
 + (NSArray *)callframes:(NSUInteger)depth;

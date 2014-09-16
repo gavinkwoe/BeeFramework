@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -33,28 +33,45 @@
 
 #pragma mark -
 
-//#if __has_feature(objc_instancetype)
-//
-//	#undef	AS_SINGLETON
-//	#define AS_SINGLETON( ... ) \
-//			- (instancetype)sharedInstance; \
-//			+ (instancetype)sharedInstance;
-//
-//	#undef	DEF_SINGLETON
-//	#define DEF_SINGLETON( ... ) \
-//			- (instancetype)sharedInstance \
-//			{ \
-//				return [[self class] sharedInstance]; \
-//			} \
-//			+ (instancetype)sharedInstance \
-//			{ \
-//				static dispatch_once_t once; \
-//				static __class * __singleton__; \
-//				dispatch_once( &once, ^{ __singleton__ = [[self alloc] init]; } ); \
-//				return __singleton__; \
-//			}
-//
-//#endif	// __has_feature(objc_instancetype)
+#if __has_feature(objc_instancetype)
+
+	#undef	AS_SINGLETON
+	#define AS_SINGLETON
+
+	#undef	AS_SINGLETON
+	#define AS_SINGLETON( ... ) \
+			- (instancetype)sharedInstance; \
+			+ (instancetype)sharedInstance;
+
+	#undef	DEF_SINGLETON
+	#define DEF_SINGLETON \
+			- (instancetype)sharedInstance \
+			{ \
+				return [[self class] sharedInstance]; \
+			} \
+			+ (instancetype)sharedInstance \
+			{ \
+				static dispatch_once_t once; \
+				static id __singleton__; \
+				dispatch_once( &once, ^{ __singleton__ = [[self alloc] init]; } ); \
+				return __singleton__; \
+			}
+
+	#undef	DEF_SINGLETON
+	#define DEF_SINGLETON( ... ) \
+			- (instancetype)sharedInstance \
+			{ \
+				return [[self class] sharedInstance]; \
+			} \
+			+ (instancetype)sharedInstance \
+			{ \
+				static dispatch_once_t once; \
+				static id __singleton__; \
+				dispatch_once( &once, ^{ __singleton__ = [[self alloc] init]; } ); \
+				return __singleton__; \
+			}
+
+#else	// #if __has_feature(objc_instancetype)
 
 	#undef	AS_SINGLETON
 	#define AS_SINGLETON( __class ) \
@@ -75,25 +92,17 @@
 				return __singleton__; \
 			}
 
-	#undef	DEF_SINGLETON_AUTOLOAD
-	#define DEF_SINGLETON_AUTOLOAD( __class ) \
-			- (__class *)sharedInstance \
-			{ \
-				return [__class sharedInstance]; \
-			} \
-			+ (__class *)sharedInstance \
-			{ \
-				static dispatch_once_t once; \
-				static __class * __singleton__; \
-				dispatch_once( &once, ^{ __singleton__ = [[[self class] alloc] init]; } ); \
-				return __singleton__; \
-			} \
-			+ (void)load \
-			{ \
-				[self sharedInstance]; \
-			}
+#endif	// #if __has_feature(objc_instancetype)
 
-//#pragma mark -
+#undef	DEF_SINGLETON_AUTOLOAD
+#define DEF_SINGLETON_AUTOLOAD( __class ) \
+		DEF_SINGLETON( __class ) \
+		+ (void)load \
+		{ \
+			[self sharedInstance]; \
+		}
+
+#pragma mark -
 
 @interface BeeSingleton : NSObject
 @end

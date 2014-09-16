@@ -1,0 +1,236 @@
+# !/bin/sh
+
+# 目标：
+# 1. 把 framework 文件夹下的所有文件名按行输出到 temp 文件
+# 2. 按行遍历 temp 文件，同时做以下处理
+#   1. 在 project.pbxproj 文件里找到匹配文件名的 `compile flags` 行
+#   2. 在 `compile flags` 里加上  `settings = {COMPILER_FLAGS = "-fno-objc-arc"; };`
+#   3. 效果如下:
+#        E95B5B3118B59E64009491EE /* Bee_Package.m in Sources */ = {isa = PBXBuildFile; fileRef = E95B585918B59E63009491EE /* Bee_Package.m */; };
+#        =》
+#        E95B5C0D18B59E64009491EE /* Bee_Package.m in Sources */ = {isa = PBXBuildFile; fileRef = E95B5A4118B59E64009491EE /* Bee_Package.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+
+# 匹配模式
+# TARGET_PATTERN='/* '.'${name}'.' in Sources */ = '
+# TARGET_PATTERN="(fileRef = \w+ /* "${name}" \*/;)"
+
+# 定义常量
+CONST_SUCCESS=0
+CONST_ERROR=1
+CONST_ARC_FLAGS="\"-fobjc-arc\""
+CONST_NOARC_FLAGS="\"-fno-objc-arc\""
+
+# 声明变量
+SOURCE_PATH=""
+TARGET_PATH=""
+TEMPFILE_PATH="temp.txt"
+FILE_BLACKLIST='\.h$|\.DS_Store|\.sh$|\.png$|\.svn$'
+FILE_WHITELIST='\.m$|\.mm$'
+
+XCODEPROJ_PATH=""
+
+BUILD_SETTING_ENABLE=true
+BUILD_SETTING_TARGET=""
+BUILD_SETTING_REPLACE=""
+
+ARC_FLAGS=$CONST_NOARC_FLAGS
+
+# 帮助信息
+ehelp()
+{
+# echo "
+# USAGE:     
+#      xproj [-n] [-s \\033[4mdir\\033[0m] [-t \\033[4mxcodeproj\\033[0m] [-f framework [framework ...]]
+echo "
+\\033[34mUSAGE\\033[0m:     
+      xproj -s \\033[4mdir\\033[0m [-t \\033[4mxcodeproj\\033[0m] [-n] [-e]
+
+\\033[34mEXAPMLE\\033[0m:
+      xproj -s ./framework -t ./xxx.xcodeproj
+
+\\033[34mDESCRIPTION\\033[0m:
+      A shell script can batch adding compile flags like \`\\033[31m-fno-objc-arc\\033[0m\` 
+      or \`\\033[31m-fobjc-arc\\033[0m\` for all the files under the same dir by processing 
+      the project file.
+
+      The following options are available:
+
+      -----------------------------------------------------------------
+      -n               | Used to specify the compile flag to be 
+                       | \`\\033[31m-fobjc-arc\\033[0m\`. Default is \`\\033[31m-fno-objc-arc\\033[0m\`.
+      -----------------------------------------------------------------
+      -e               | Used to disable from modifying some extented
+                       | \`\\033[31mbuild settings\\033[0m\`: 
+                       | 1. Direct usage of 'isa' to 'NO'
+                       | 2. Enable Module(C and Objective-C) to 'NO'
+      -----------------------------------------------------------------
+      -s \\033[4mdir\\033[0m           | Specify the dir contains source files
+      -----------------------------------------------------------------
+      -t \\033[4mxcodeproj\\033[0m     | Specify the target xcodeproj file, dafault is 
+                       | the first of *.xcodeproj under the same dir.
+      -----------------------------------------------------------------
+"
+}
+
+# 设置默认参数
+setup()
+{
+  if [[ ! -f "$TARGET_PATH" ]]; then 
+    XCODEPROJ_PATH=$(find . -type d -name \*.xcodeproj | head -1)
+    if [[ $XCODEPROJ_PATH != "" ]]; then
+      if [[ -f "$XCODEPROJ_PATH/project.pbxproj" ]]; then 
+        TARGET_PATH="$XCODEPROJ_PATH/project.pbxproj"
+      else
+        echo "There is no project.pbxproj under current dir."
+        exit $CONST_ERROR
+      fi
+    else
+      echo "There is no project.pbxproj under current dir."
+        exit $CONST_ERROR
+    fi
+  fi
+}
+
+cleanup()
+{
+  rm -f $TEMPFILE_PATH
+}
+
+# 开始处理
+process()
+{
+  # # STEP 1
+  > $TEMPFILE_PATH # 清空临时文件
+
+  # # STEP 2
+  find $SOURCE_PATH -type f -print | # 获取所有文件名
+  grep -E $FILE_WHITELIST > $TEMPFILE_PATH # 根据白名单过滤文件名并写入文件
+  # grep -E -v $FILE_BLACKLIST > $TEMPFILE_PATH # 根据黑名单过滤文件名并写入文件
+
+  # # STEP 3
+  # ## STEP 3.1
+  # 获取需要处理的总行数，供进度条用
+  local totals=$(cat < $TEMPFILE_PATH | wc -l|tr -d " ")
+  # 保存处理过的数量
+  local counts=0
+
+  # ## STEP 3.2
+  # 备份
+  # cp $TARGET_PATH $TARGET_PATH.bak
+  cp -rf "$XCODEPROJ_PATH" "$XCODEPROJ_PATH.bak"
+  echo "Progressing: $TARGET_PATH"
+  # 遍历每一行，获取文件名
+  local i=0
+  while read line; do
+    # 取文件名
+    local name=$(basename "$line")
+    # 当文件名不为空时处理
+    if [ "$name" != "" ]; then
+      local excepts="-fno-objc-arc"
+      local pattern="fileRef = [A-Z0-9]\{1,\} /\* "$name" \*/;"
+      local target="\("$pattern"\)"
+      local result="\1 settings = {COMPILER_FLAGS = $ARC_FLAGS; };"
+      # 替换并打印，但不写入文件
+      # sedcmd="s:"$target":"$result":g" # g 全局替换
+      # sedcmd="s:"$target":"$result":p" # p 打印编辑行
+      # 带排除的
+      local sedcmd="/"$excepts"/!s:"$target":"$result":g"
+      # sedcmd="/""$name""/"$excepts"/!s:"$target":"$result":g"
+      # -n 不打印 -e 后接脚本 -i 直接替换, 后接备份文件名
+      # sed -i.bak -n -e "$sedcmd" $TARGET_PATH
+      sed -i "" -e "$sedcmd" $TARGET_PATH
+      
+      # 进度计数
+      i=$(expr $i + 1)
+      # 计算进度
+      local percent=$(echo "($i/$totals*100)" | bc -l) # 获取当前百分比
+      # 打印进度
+      # printf "Progressing:[%-50s] %.f%%\r" $name $percent
+      printf "Progressing: %.f%%\r" $percent
+      # 统计处理过的总数
+      counts=$(expr $counts + 1)
+    fi
+  done < $TEMPFILE_PATH # 输入文件
+  printf "\r\n" # 清行
+
+  # STEP 4
+  # 修改 `build setting` 的 `Direct usage of 'isa'` 项为YES // keyword: isa
+  BUILD_SETTING_TARGET='CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES[EOR_]\{0,6\}'
+  BUILD_SETTING_REPLACE='CLANG_WARN_DIRECT_OBJC_ISA_USAGE = NO'
+  # grep 测试记录结果
+  res=$(grep -c "$BUILD_SETTING_TARGET" $TARGET_PATH)
+  if [[ $res -gt 0 ]]; then
+      counts=$(expr $counts + 1)
+      printf "Progressing: changed Direct usage of \'isa\' to \'NO\'\n"
+      # 替换
+      sed -i "" 's:'"$BUILD_SETTING_TARGET"':'"$BUILD_SETTING_REPLACE"':g' $TARGET_PATH
+  fi
+  
+  # STEP 5
+  # 修改 `Enable Module(C and Objective-C)` 项为 NO // keyword: semantic
+  BUILD_SETTING_TARGET='CLANG_ENABLE_MODULES = YES[EOR_]\{0,6\}'
+  BUILD_SETTING_REPLACE='CLANG_ENABLE_MODULES = NO'
+  # grep 测试记录结果
+  res=$(grep -c "$BUILD_SETTING_TARGET" $TARGET_PATH)
+  if [[ $res -gt 0 ]]; then
+      counts=$(expr $counts + 1)
+      printf "Progressing: changed Enable Module(C and Objective-C) to \'NO\'\n"
+      # 替换
+      sed -i "" 's:'"$BUILD_SETTING_TARGET"':'"$BUILD_SETTING_REPLACE"':g' $TARGET_PATH
+  fi
+
+  # 打印结果
+  # clear
+  printf "Progressed %d lines.\n" $counts
+}
+
+# ========================
+#         程序入口
+# ========================
+
+# 如果输入为空，则打印帮助
+if [ "$1" == "" ]; then
+  ehelp
+  exit $CONST_ERROR
+fi
+
+# 处理参数
+while getopts "e:ns:t:" arg; do
+  case $arg in
+    e)
+      BUILD_SETTING_ENABLE=false
+      ;;
+    n)
+      ARC_FLAGS=$CONST_ARC_FLAGS
+      ;;
+    s)
+      if [[ ! -d "$OPTARG" ]]; then 
+        echo "<$OPTARG> does not exist. Please check and try again."
+        exit $CONST_ERROR
+      else
+        SOURCE_PATH="$OPTARG"
+      fi
+      ;;
+    t)
+      if [[ -f "$OPTARG" ]]; then
+        TARGET_PATH="$OPTARG"
+      else
+        if [[ -f "$OPTARG/project.pbxproj" ]]; then
+          TARGET_PATH="$OPTARG/project.pbxproj"
+        else
+          echo "<$OPTARG/project.pbxproj> does not exist. Please check and try again."
+          exit $CONST_ERROR
+        fi
+      fi
+      ;;
+    ?) #当有不认识的选项的时候arg为?
+      echo "unkonw argument"
+      ehelp
+      exit $CONST_ERROR
+      ;;
+  esac
+done
+
+setup
+process
+cleanup

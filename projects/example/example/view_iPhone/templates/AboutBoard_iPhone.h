@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -30,13 +30,12 @@
 //
 
 #import "Bee.h"
-
-#pragma mark -
-
-@interface AboutBoardCell_iPhone : BeeUICell
-@end
+#import "AboutBoardCell_iPhone.h"
 
 #pragma mark -
 
 @interface AboutBoard_iPhone : BeeUIBoard
+
+AS_OUTLET( BeeUIScrollView, list );
+
 @end

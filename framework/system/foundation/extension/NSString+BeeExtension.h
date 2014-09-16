@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -41,6 +41,11 @@ typedef NSMutableString *	(^NSMutableStringReplaceBlock)( NSString * string, NSS
 
 #pragma mark -
 
+#undef	FORMAT
+#define	FORMAT( __fmt, ... )	[NSString stringWithFormat:__fmt, __VA_ARGS__]
+
+#pragma mark -
+
 @interface NSString(BeeExtension)
 
 @property (nonatomic, readonly) NSStringAppendBlock		APPEND;
@@ -59,11 +64,15 @@ typedef NSMutableString *	(^NSMutableStringReplaceBlock)( NSString * string, NSS
 - (NSArray *)allURLs;
 
 - (NSString *)urlByAppendingDict:(NSDictionary *)params;
+- (NSString *)urlByAppendingDict:(NSDictionary *)params encoding:(BOOL)encoding;
 - (NSString *)urlByAppendingArray:(NSArray *)params;
+- (NSString *)urlByAppendingArray:(NSArray *)params encoding:(BOOL)encoding;
 - (NSString *)urlByAppendingKeyValues:(id)first, ...;
 
 + (NSString *)queryStringFromDictionary:(NSDictionary *)dict;
++ (NSString *)queryStringFromDictionary:(NSDictionary *)dict encoding:(BOOL)encoding;;
 + (NSString *)queryStringFromArray:(NSArray *)array;
++ (NSString *)queryStringFromArray:(NSArray *)array encoding:(BOOL)encoding;;
 + (NSString *)queryStringFromKeyValues:(id)first, ...;
 
 - (NSString *)URLEncoding;
@@ -71,6 +80,8 @@ typedef NSMutableString *	(^NSMutableStringReplaceBlock)( NSString * string, NSS
 
 - (NSString *)trim;
 - (NSString *)unwrap;
+- (NSString *)repeat:(NSUInteger)count;
+- (NSString *)normalize;
 
 - (BOOL)match:(NSString *)expression;
 - (BOOL)matchAnyOf:(NSArray *)array;
@@ -78,22 +89,40 @@ typedef NSMutableString *	(^NSMutableStringReplaceBlock)( NSString * string, NSS
 - (BOOL)empty;
 - (BOOL)notEmpty;
 
+- (BOOL)eq:(NSString *)other;
+- (BOOL)equal:(NSString *)other;
+
 - (BOOL)is:(NSString *)other;
 - (BOOL)isNot:(NSString *)other;
 
 - (BOOL)isValueOf:(NSArray *)array;
 - (BOOL)isValueOf:(NSArray *)array caseInsens:(BOOL)caseInsens;
 
-- (BOOL)isTelephone;
-- (BOOL)isUserName;
+- (BOOL)isNormal;		// thanks to @uxyheaven
+- (BOOL)isTelephone;    // match telephone
+- (BOOL)isMobilephone;  // match mobilephone, 11 numberic
+- (BOOL)isUserName;     // match alphabet 3-20
+- (BOOL)isChineseUserName;  // match alphabet and chinese characters, 3-20
+- (BOOL)isChineseName;      // match just chinese characters 2-16
 - (BOOL)isPassword;
 - (BOOL)isEmail;
 - (BOOL)isUrl;
+- (BOOL)isIPAddress;
+
+- (NSString *)substringFromIndex:(NSUInteger)from untilString:(NSString *)string;
+- (NSString *)substringFromIndex:(NSUInteger)from untilString:(NSString *)string endOffset:(NSUInteger *)endOffset;
+
+- (NSString *)substringFromIndex:(NSUInteger)from untilCharset:(NSCharacterSet *)charset;
+- (NSString *)substringFromIndex:(NSUInteger)from untilCharset:(NSCharacterSet *)charset endOffset:(NSUInteger *)endOffset;
+
+- (NSUInteger)countFromIndex:(NSUInteger)from inCharset:(NSCharacterSet *)charset;
 
 #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 - (CGSize)sizeWithFont:(UIFont *)font byWidth:(CGFloat)width;
 - (CGSize)sizeWithFont:(UIFont *)font byHeight:(CGFloat)height;
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
++ (NSString *)fromResource:(NSString *)resName;
 
 @end
 

@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -37,10 +37,15 @@
 
 #pragma mark -
 
+DEF_PACKAGE( BeePackage_System, BeeFileCache, fileCache );
+
+#pragma mark -
+
 @interface BeeFileCache()
 {
-	NSString *	_cachePath;
-	NSString *	_cacheUser;
+	NSString *		_cachePath;
+	NSString *		_cacheUser;
+	NSFileManager *	_fileManager;
 }
 @end
 
@@ -60,6 +65,8 @@ DEF_SINGLETON( BeeFileCache );
 	{
 		self.cacheUser = @"";
 		self.cachePath = [NSString stringWithFormat:@"%@/%@/Cache/", [BeeSandbox libCachePath], [BeeSystemInfo appVersion]];
+		
+		_fileManager = [[NSFileManager alloc] init];
 	}
 	return self;
 }
@@ -68,6 +75,9 @@ DEF_SINGLETON( BeeFileCache );
 {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 
+	[_fileManager release];
+	_fileManager = nil;
+	
 	self.cachePath = nil;
 	self.cacheUser = nil;
 	
@@ -77,6 +87,7 @@ DEF_SINGLETON( BeeFileCache );
 - (NSString *)fileNameForKey:(NSString *)key
 {
 	NSString * pathName = nil;
+
 	if ( self.cacheUser && [self.cacheUser length] )
 	{
 		pathName = [self.cachePath stringByAppendingFormat:@"%@/", self.cacheUser];
@@ -86,12 +97,12 @@ DEF_SINGLETON( BeeFileCache );
 		pathName = self.cachePath;
 	}
 	
-	if ( NO == [[NSFileManager defaultManager] fileExistsAtPath:pathName] )
+	if ( NO == [_fileManager fileExistsAtPath:pathName] )
 	{
-		[[NSFileManager defaultManager] createDirectoryAtPath:pathName
-								  withIntermediateDirectories:YES
-												   attributes:nil
-														error:NULL];
+		[_fileManager createDirectoryAtPath:pathName
+				withIntermediateDirectories:YES
+								 attributes:nil
+									  error:NULL];
 	}
 
 	return [pathName stringByAppendingString:key];
@@ -99,18 +110,12 @@ DEF_SINGLETON( BeeFileCache );
 
 - (BOOL)hasObjectForKey:(id)key
 {
-	return [[NSFileManager defaultManager] fileExistsAtPath:[self fileNameForKey:key]];
+	return [_fileManager fileExistsAtPath:[self fileNameForKey:key]];
 }
 
 - (id)objectForKey:(id)key
 {
-	NSData * data = [NSData dataWithContentsOfFile:[self fileNameForKey:key]];
-	if ( data )
-	{
-		return [self unserialize:data];
-	}
-	
-	return nil;
+	return [NSData dataWithContentsOfFile:[self fileNameForKey:key]];
 }
 
 - (void)setObject:(id)object forKey:(id)key
@@ -121,51 +126,38 @@ DEF_SINGLETON( BeeFileCache );
 	}
 	else
 	{
-		NSData * data = nil;
-		
-		if ( [object isKindOfClass:[NSData class]] )
+		NSData * data = [object asNSData];
+		if ( data )
 		{
-			data = (NSData *)object;
+			[data writeToFile:[self fileNameForKey:key]
+					  options:NSDataWritingAtomic
+						error:NULL];
 		}
-		else
-		{
-			data = [self serialize:object];
-		}
-		
-		[data writeToFile:[self fileNameForKey:key]
-				  options:NSDataWritingAtomic
-					error:NULL];
 	}
 }
 
 - (void)removeObjectForKey:(NSString *)key
 {
-	[[NSFileManager defaultManager] removeItemAtPath:[self fileNameForKey:key] error:nil];
+	[_fileManager removeItemAtPath:[self fileNameForKey:key] error:nil];
 }
 
 - (void)removeAllObjects
 {
-	[[NSFileManager defaultManager] removeItemAtPath:_cachePath error:NULL];
-	[[NSFileManager defaultManager] createDirectoryAtPath:_cachePath
-							  withIntermediateDirectories:YES
-											   attributes:nil
-													error:NULL];
+	[_fileManager removeItemAtPath:_cachePath error:NULL];
+	[_fileManager createDirectoryAtPath:_cachePath
+			withIntermediateDirectories:YES
+							 attributes:nil
+								  error:NULL];
 }
 
-- (NSData *)serialize:(id)obj
+- (id)objectForKeyedSubscript:(id)key
 {
-	if ( [obj isKindOfClass:[NSData class]] )
-		return obj;
-	
-	if ( [obj respondsToSelector:@selector(JSONData)] )
-		return [obj JSONData];
-	
-	return nil;
+	return [self objectForKey:key];
 }
 
-- (id)unserialize:(NSData *)data
+- (void)setObject:(id)obj forKeyedSubscript:(id)key
 {
-	return [data objectFromJSONData];
+	[self setObject:obj forKey:key];
 }
 
 @end

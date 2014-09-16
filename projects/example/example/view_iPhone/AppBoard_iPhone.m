@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -34,11 +34,7 @@
 
 #import "MenuBoard_iPhone.h"
 #import "AboutBoard_iPhone.h"
-#import "DribbbleBoard_iPhone.h"
 #import "TeamBoard_iPhone.h"
-#import "TutorialBoard_iPhone.h"
-
-#import "dribbble.h"
 
 #pragma mark -
 
@@ -52,85 +48,75 @@
 	MenuBoard_iPhone *	_menu;
 	BeeUIRouter *		_router;
 	BeeUIButton *		_mask;
+
 	UIWindow *			_splash;
 	CGRect				_origFrame;
 }
 
 DEF_SINGLETON( AppBoard_iPhone )
 
-ON_SIGNAL2( BeeUIBoard, signal )
+ON_CREATE_VIEWS( signal )
+{	
+	self.view.backgroundColor = [UIColor blackColor];
+
+	_menu = [MenuBoard_iPhone sharedInstance];
+	_menu.parentBoard = self;
+	_menu.view.backgroundColor = RGB(15, 15, 15);
+	_menu.view.hidden = YES;
+	[self.view addSubview:_menu.view];
+
+	_router = [BeeUIRouter sharedInstance];
+	_router.parentBoard = self;
+	_router.view.alpha = 0.0f;
+	[_router map:@"team" toClass:[TeamBoard_iPhone class]];
+	[_router map:@"about" toClass:[AboutBoard_iPhone class]];
+	[self.view addSubview:_router.view];
+
+	_mask = [BeeUIButton new];
+	_mask.hidden = YES;
+	_mask.signal = @"mask";
+	[self.view addSubview:_mask];
+
+	_splash = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+	_splash.rootViewController = [SplashBoard_iPhone board];
+	_splash.windowLevel = UIWindowLevelStatusBar + 1;
+	[_splash makeKeyAndVisible];
+
+	[self observeNotification:SplashBoard_iPhone.PLAY_DONE];
+
+	[_router open:@"team" animated:NO];
+}
+
+ON_DELETE_VIEWS( signal )
 {
-	[super handleUISignal:signal];
-	
-	if ( [signal is:BeeUIBoard.CREATE_VIEWS] )
-	{
-		[BeeUITipsCenter setDefaultContainerView:self.view];
-		[BeeUITipsCenter setDefaultBubble:[UIImage imageNamed:@"alertBox.png"]];
-		[BeeUITipsCenter setDefaultMessageIcon:[UIImage imageNamed:@"index-new-league-icon.png"]];
-		[BeeUITipsCenter setDefaultSuccessIcon:[UIImage imageNamed:@"index-new-league-icon.png"]];
-		[BeeUITipsCenter setDefaultFailureIcon:[UIImage imageNamed:@"index-new-league-icon.png"]];
-		
-		[BeeUINavigationBar setBackgroundImage:[UIImage imageNamed:@"navigation-bar.png"]];
-		
-		self.view.backgroundColor = [UIColor blackColor];
+	_menu = nil;
+	_router = nil;
+	_mask = nil;
+	_splash = nil;
 
-		_menu = [MenuBoard_iPhone sharedInstance];
-		_menu.parentBoard = self;
-		_menu.view.backgroundColor = RGB(15, 15, 15);
-		_menu.view.hidden = YES;
-		[self.view addSubview:_menu.view];
+	[self unobserveAllNotifications];
+}
 
-		_router = [BeeUIRouter sharedInstance];
-		_router.parentBoard = self;
-		_router.view.alpha = 0.0f;
-		[_router map:@"demo" toClass:[DribbbleBoard_iPhone class]];
-		[_router map:@"tutor" toClass:[TutorialBoard_iPhone class]];
-		[_router map:@"team" toClass:[TeamBoard_iPhone class]];
-		[_router map:@"about" toClass:[AboutBoard_iPhone class]];
-		[self.view addSubview:_router.view];
+ON_LAYOUT_VIEWS( signal )
+{
+}
 
-		_mask = [BeeUIButton new];
-		_mask.hidden = YES;
-		_mask.signal = @"mask";
-		[self.view addSubview:_mask];
+ON_WILL_APPEAR( signal )
+{
+}
 
-		_splash = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-		_splash.rootViewController = [SplashBoard_iPhone board];
-		_splash.windowLevel = UIWindowLevelStatusBar + 1;
-		[_splash makeKeyAndVisible];
+ON_DID_APPEAR( signal )
+{
+	_router.view.pannable = YES;
+}
 
-		[self observeNotification:SplashBoard_iPhone.PLAY_DONE];
-		[self observeNotification:BeeUIRouter.STACK_WILL_CHANGE];
-		[self observeNotification:BeeUIRouter.STACK_DID_CHANGED];
-		
-		[_router open:@"demo" animated:NO];
-	}
-	else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
-	{
-		_menu = nil;
-		_router = nil;
-		_mask = nil;
-		_splash = nil;
+ON_WILL_DISAPPEAR( signal )
+{
+	_router.view.pannable = NO;
+}
 
-		[self unobserveAllNotifications];
-	}
-	else if ( [signal is:BeeUIBoard.LAYOUT_VIEWS] )
-	{
-	}
-	else if ( [signal is:BeeUIBoard.WILL_APPEAR] )
-	{
-	}
-	else if ( [signal is:BeeUIBoard.DID_APPEAR] )
-	{
-		_router.view.pannable = YES;
-	}
-	else if ( [signal is:BeeUIBoard.WILL_DISAPPEAR] )
-	{
-		_router.view.pannable = NO;
-	}
-	else if ( [signal is:BeeUIBoard.DID_DISAPPEAR] )
-	{
-	}
+ON_DID_DISAPPEAR( signal )
+{
 }
 
 ON_SIGNAL2( UIView, signal )
@@ -190,16 +176,9 @@ ON_SIGNAL3( BeeUIRouter, DID_CHANGED, signal )
 	[_menu selectItem:_router.currentStack.name animated:YES];
 }
 
-ON_SIGNAL3( MenuBoard_iPhone, tutor, signal )
+ON_SIGNAL3( MenuBoard_iPhone, team, signal )
 {
-	[_router open:@"tutor" animated:YES];
-	
-	[self hideMenu];
-}
-
-ON_SIGNAL3( MenuBoard_iPhone, demo, signal )
-{
-	[_router open:@"demo" animated:YES];
+	[_router open:@"team" animated:YES];
 	
 	[self hideMenu];
 }
@@ -207,13 +186,6 @@ ON_SIGNAL3( MenuBoard_iPhone, demo, signal )
 ON_SIGNAL3( MenuBoard_iPhone, about, signal )
 {
 	[_router open:@"about" animated:YES];
-	
-	[self hideMenu];
-}
-
-ON_SIGNAL3( MenuBoard_iPhone, team, signal )
-{
-	[_router open:@"team" animated:YES];
 	
 	[self hideMenu];
 }

@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -38,33 +38,81 @@
 
 #pragma mark -
 
+DEF_PACKAGE( BeePackage_System, BeeKeychain, keychain );
+
+#pragma mark -
+
 #undef	DEFAULT_DOMAIN
 #define DEFAULT_DOMAIN	@"BeeKeychain"
 
+#pragma mark -
+
+@interface BeeKeychain()
+{
+	NSString *	_defaultDomain;
+}
+
+- (NSString *)readValueForKey:(NSString *)key andDomain:(NSString *)domain;
+- (void)writeValue:(NSString *)value forKey:(NSString *)key andDomain:(NSString *)domain;
+
+@end
+
+#pragma mark -
+
 @implementation BeeKeychain
 
-static NSString * __defaultDomain = nil;
+DEF_SINGLETON( BeeKeychain )
+
+@synthesize defaultDomain = _defaultDomain;
+
+- (id)init
+{
+	self = [super init];
+	if ( self )
+	{
+		self.defaultDomain = DEFAULT_DOMAIN;
+	}
+	return self;
+}
+
+- (void)dealloc
+{
+	self.defaultDomain = nil;
+	
+	[super dealloc];
+}
 
 + (void)setDefaultDomain:(NSString *)domain
 {
-	[domain retain];
-	[__defaultDomain release];
-	__defaultDomain = domain;
+	[[BeeKeychain sharedInstance] setDefaultDomain:domain];
 }
 
 + (NSString *)readValueForKey:(NSString *)key
 {
-	return [BeeKeychain readValueForKey:key andDomain:__defaultDomain];
+	return [[BeeKeychain sharedInstance] readValueForKey:key andDomain:nil];
 }
 
 + (NSString *)readValueForKey:(NSString *)key andDomain:(NSString *)domain
 {
+	return [[BeeKeychain sharedInstance] readValueForKey:key andDomain:domain];
+}
+
+- (NSString *)readValueForKey:(NSString *)key andDomain:(NSString *)domain
+{
 	if ( nil == key )
 		return nil;
-	
+
+	if ( NSNotFound != [key rangeOfString:@"/" options:NSCaseInsensitiveSearch].location )
+	{
+		NSUInteger	offset = 0;
+		
+		domain	= [key substringFromIndex:0 untilCharset:[NSCharacterSet characterSetWithCharactersInString:@"/"] endOffset:&offset];
+		key		= [key substringFromIndex:offset];
+	}
+
 	if ( nil == domain )
 	{
-		domain = __defaultDomain;
+		domain = self.defaultDomain;
 		if ( nil == domain )
 		{
 			domain = DEFAULT_DOMAIN;
@@ -110,14 +158,27 @@ static NSString * __defaultDomain = nil;
 
 + (void)writeValue:(NSString *)value forKey:(NSString *)key
 {
-	[BeeKeychain writeValue:value forKey:key andDomain:__defaultDomain];
+	[[BeeKeychain sharedInstance] writeValue:value forKey:key andDomain:nil];
 }
 
 + (void)writeValue:(NSString *)value forKey:(NSString *)key andDomain:(NSString *)domain
 {
+	[[BeeKeychain sharedInstance] writeValue:value forKey:key andDomain:domain];
+}
+
+- (void)writeValue:(NSString *)value forKey:(NSString *)key andDomain:(NSString *)domain
+{
 	if ( nil == key )
 		return;
 	
+	if ( NSNotFound != [key rangeOfString:@"/" options:NSCaseInsensitiveSearch].location )
+	{
+		NSUInteger	offset = 0;
+		
+		domain	= [key substringFromIndex:0 untilCharset:[NSCharacterSet characterSetWithCharactersInString:@"/"] endOffset:&offset];
+		key		= [key substringFromIndex:offset];
+	}
+
 	if ( nil == value )
 	{
 		value = @"";
@@ -125,7 +186,7 @@ static NSString * __defaultDomain = nil;
 
 	if ( nil == domain )
 	{
-		domain = __defaultDomain;
+		domain = self.defaultDomain;
 		if ( nil == domain )
 		{
 			domain = DEFAULT_DOMAIN;
@@ -165,17 +226,30 @@ static NSString * __defaultDomain = nil;
 
 + (void)deleteValueForKey:(NSString *)key
 {
-	[BeeKeychain deleteValueForKey:key andDomain:__defaultDomain];
+	[[BeeKeychain sharedInstance] deleteValueForKey:key andDomain:nil];
 }
 
 + (void)deleteValueForKey:(NSString *)key andDomain:(NSString *)domain
 {
+	[[BeeKeychain sharedInstance] deleteValueForKey:key andDomain:domain];
+}
+
+- (void)deleteValueForKey:(NSString *)key andDomain:(NSString *)domain
+{
 	if ( nil == key )
 		return;
 	
+	if ( NSNotFound != [key rangeOfString:@"/" options:NSCaseInsensitiveSearch].location )
+	{
+		NSUInteger	offset = 0;
+		
+		domain	= [key substringFromIndex:0 untilCharset:[NSCharacterSet characterSetWithCharactersInString:@"/"] endOffset:&offset];
+		key		= [key substringFromIndex:offset];
+	}
+
 	if ( nil == domain )
 	{
-		domain = __defaultDomain;
+		domain = self.defaultDomain;
 		if ( nil == domain )
 		{
 			domain = DEFAULT_DOMAIN;
@@ -189,6 +263,55 @@ static NSString * __defaultDomain = nil;
 	
 	NSDictionary * query = [[[NSDictionary alloc] initWithObjects:objects forKeys:keys] autorelease];	
 	SecItemDelete( (CFDictionaryRef)query );
+}
+
+- (BOOL)hasObjectForKey:(id)key
+{
+	id obj = [self readValueForKey:key andDomain:nil];
+	return obj ? YES : NO;
+}
+
+- (id)objectForKey:(id)key
+{
+	return [self readValueForKey:key andDomain:nil];
+}
+
+- (void)setObject:(id)object forKey:(id)key
+{
+	[self writeValue:object forKey:key andDomain:nil];
+}
+
+- (void)removeObjectForKey:(id)key
+{
+	[self deleteValueForKey:key andDomain:nil];
+}
+
+- (void)removeAllObjects
+{
+	// TODO:
+}
+
+- (id)objectForKeyedSubscript:(id)key
+{
+	if ( nil == key || NO == [key isKindOfClass:[NSString class]] )
+		return nil;
+
+	return [self readValueForKey:key andDomain:nil];
+}
+
+- (void)setObject:(id)obj forKeyedSubscript:(id)key
+{
+	if ( nil == key || NO == [key isKindOfClass:[NSString class]] )
+		return;
+	
+	if ( nil == obj )
+	{
+		[self deleteValueForKey:key andDomain:nil];
+	}
+	else
+	{
+		[self writeValue:obj forKey:key andDomain:nil];
+	}
 }
 
 @end

@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -42,6 +42,21 @@
 
 @implementation NSObject(BeeTypeConversion)
 
+- (NSInteger)asInteger
+{
+	return [[self asNSNumber] integerValue];
+}
+
+- (float)asFloat
+{
+	return [[self asNSNumber] floatValue];
+}
+
+- (BOOL)asBool
+{
+	return [[self asNSNumber] boolValue];
+}
+
 - (NSNumber *)asNSNumber
 {
 	if ( [self isKindOfClass:[NSNumber class]] )
@@ -50,7 +65,7 @@
 	}
 	else if ( [self isKindOfClass:[NSString class]] )
 	{
-		return [NSNumber numberWithInteger:[(NSString *)self integerValue]];
+		return [NSNumber numberWithFloat:[(NSString *)self floatValue]];
 	}
 	else if ( [self isKindOfClass:[NSDate class]] )
 	{
@@ -76,7 +91,17 @@
 	else if ( [self isKindOfClass:[NSData class]] )
 	{
 		NSData * data = (NSData *)self;
-		return [[[NSString alloc] initWithBytes:data.bytes length:data.length encoding:NSUTF8StringEncoding] autorelease];
+		
+		NSString * text = [[[NSString alloc] initWithBytes:data.bytes length:data.length encoding:NSUTF8StringEncoding] autorelease];
+		if ( nil == text )
+		{
+			text = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+			if ( nil == text )
+			{
+				text = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+			}
+		}
+		return text;
 	}
 	else
 	{
@@ -93,44 +118,60 @@
 	else if ( [self isKindOfClass:[NSString class]] )
 	{
 		NSDate * date = nil;
-				
+			
 		if ( nil == date )
 		{
-			NSString * format = @"yyyy-MM-dd HH:mm:ss z";
-			NSDateFormatter * formatter = [[[NSDateFormatter alloc] init] autorelease];
-			[formatter setDateFormat:format];
-			[formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-
+			static NSDateFormatter * formatter = nil;
+			
+			if ( nil == formatter )
+			{
+				formatter = [[NSDateFormatter alloc] init];
+				[formatter setDateFormat:@"yyyy/MM/dd HH:mm:ss z"];
+				[formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+			}
+			
 			date = [formatter dateFromString:(NSString *)self];
 		}
 
 		if ( nil == date )
 		{
-			NSString * format = @"yyyy/MM/dd HH:mm:ss z";
-			NSDateFormatter * formatter = [[[NSDateFormatter alloc] init] autorelease];
-			[formatter setDateFormat:format];
-			[formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+			static NSDateFormatter * formatter = nil;
 			
+			if ( nil == formatter )
+			{
+				formatter = [[NSDateFormatter alloc] init];
+				[formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss z"];
+				[formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+			}
+
 			date = [formatter dateFromString:(NSString *)self];
 		}
         
 		if ( nil == date )
 		{
-			NSString * format = @"yyyy-MM-dd HH:mm:ss";
-			NSDateFormatter * formatter = [[[NSDateFormatter alloc] init] autorelease];
-			[formatter setDateFormat:format];
-			[formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+			static NSDateFormatter * formatter = nil;
+
+			if ( nil == formatter )
+			{
+				formatter = [[NSDateFormatter alloc] init];
+				[formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+				[formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+			}
 			
 			date = [formatter dateFromString:(NSString *)self];
 		}
 
 		if ( nil == date )
 		{
-			NSString * format = @"yyyy/MM/dd HH:mm:ss";
-			NSDateFormatter * formatter = [[[NSDateFormatter alloc] init] autorelease];
-			[formatter setDateFormat:format];
-			[formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+			static NSDateFormatter * formatter = nil;
 			
+			if ( nil == formatter )
+			{
+				formatter = [[NSDateFormatter alloc] init];
+				[formatter setDateFormat:@"yyyy/MM/dd HH:mm:ss"];
+				[formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+			}
+
 			date = [formatter dateFromString:(NSString *)self];
 		}
 
@@ -150,6 +191,15 @@
 
 - (NSData *)asNSData
 {
+	if ( [self isKindOfClass:[NSString class]] )
+	{
+		return [(NSString *)self dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+	}
+	else if ( [self isKindOfClass:[NSData class]] )
+	{
+		return (NSData *)self;
+	}
+
 	return nil;
 }
 

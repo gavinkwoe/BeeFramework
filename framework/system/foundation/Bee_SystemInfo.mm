@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -30,7 +30,6 @@
 //
 
 #import "Bee_SystemInfo.h"
-
 #import "Bee_UnitTest.h"
 
 // ----------------------------------
@@ -39,7 +38,13 @@
 
 #pragma mark -
 
+DEF_PACKAGE( BeePackage_System, BeeSystemInfo, info );
+
+#pragma mark -
+
 @implementation BeeSystemInfo
+
+DEF_SINGLETON( BeeSystemInfo );
 
 + (NSString *)OSVersion
 {
@@ -54,10 +59,16 @@
 {
 #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR || TARGET_OS_MAC)
 	NSString * value = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
-	if ( nil == value || 0 == value.length )
-	{
-		value = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersion"];
-	}
+	return value;
+#else	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+	return nil;
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+}
+
++ (NSString *)appShortVersion
+{
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR || TARGET_OS_MAC)
+	NSString * value = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
 	return value;
 #else	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 	return nil;
@@ -78,6 +89,50 @@
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 }
 
++ (NSString *)appSchema
+{
+	return [self appSchema:nil];
+}
+
++ (NSString *)appSchema:(NSString *)name
+{
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+	NSArray * array = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleURLTypes"];
+	for ( NSDictionary * dict in array )
+	{
+		if ( name )
+		{
+			NSString * URLName = [dict objectForKey:@"CFBundleURLName"];
+			if ( nil == URLName )
+			{
+				continue;
+			}
+
+			if ( NO == [URLName isEqualToString:name] )
+			{
+				continue;
+			}
+		}
+
+		NSArray * URLSchemes = [dict objectForKey:@"CFBundleURLSchemes"];
+		if ( nil == URLSchemes || 0 == URLSchemes.count )
+		{
+			continue;
+		}
+
+		NSString * schema = [URLSchemes objectAtIndex:0];
+		if ( schema && schema.length )
+		{
+			return schema;
+		}
+	}
+
+	return nil;
+#else	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+	return nil;
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+}
+
 + (NSString *)deviceModel
 {
 #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
@@ -95,13 +150,9 @@
 	{
 		return [openUDID value];
 	}
-	else
-	{
-		return nil; // [UIDevice currentDevice].uniqueIdentifier;
-	}
-#else	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
-	return nil;
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+
+	return nil;
 }
 
 #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
@@ -192,10 +243,41 @@ static const char * __jb_app = NULL;
 	return NO;
 }
 
++ (BOOL)requiresPhoneOS
+{
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+	return [[[NSBundle mainBundle].infoDictionary objectForKey:@"LSRequiresIPhoneOS"] boolValue];
+#else	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+	return NO;
+#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+}
+
++ (BOOL)isPhone
+{
+	if ( [self isPhone35] || [self isPhoneRetina35] || [self isPhoneRetina4] )
+	{
+		return YES;
+	}
+	
+	return NO;
+}
+
 + (BOOL)isPhone35
 {
 #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
-	return [BeeSystemInfo isScreenSize:CGSizeMake(320, 480)];
+	if ( [self isDevicePad] )
+	{
+		if ( [self requiresPhoneOS] && [self isPad] )
+		{
+			return YES;
+		}
+
+		return NO;
+	}
+	else
+	{
+		return [BeeSystemInfo isScreenSize:CGSizeMake(320, 480)];
+	}
 #else	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 	return NO;
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
@@ -204,7 +286,19 @@ static const char * __jb_app = NULL;
 + (BOOL)isPhoneRetina35
 {
 #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
-	return [BeeSystemInfo isScreenSize:CGSizeMake(640, 960)];
+	if ( [self isDevicePad] )
+	{
+		if ( [self requiresPhoneOS] && [self isPadRetina] )
+		{
+			return YES;
+		}
+
+		return NO;
+	}
+	else
+	{
+		return [BeeSystemInfo isScreenSize:CGSizeMake(640, 960)];
+	}
 #else	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 	return NO;
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
@@ -213,7 +307,14 @@ static const char * __jb_app = NULL;
 + (BOOL)isPhoneRetina4
 {
 #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
-	return [BeeSystemInfo isScreenSize:CGSizeMake(640, 1136)];
+	if ( [self isDevicePad] )
+	{
+		return NO;
+	}
+	else
+	{
+		return [BeeSystemInfo isScreenSize:CGSizeMake(640, 1136)];
+	}
 #else	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 	return NO;
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
@@ -242,15 +343,15 @@ static const char * __jb_app = NULL;
 #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 	if ( [UIScreen instancesRespondToSelector:@selector(currentMode)] )
 	{
-		CGSize screenSize = [UIScreen mainScreen].currentMode.size;
 		CGSize size2 = CGSizeMake( size.height, size.width );
-
+		CGSize screenSize = [UIScreen mainScreen].currentMode.size;
+		
 		if ( CGSizeEqualToSize(size, screenSize) || CGSizeEqualToSize(size2, screenSize) )
 		{
 			return YES;
 		}
 	}
-	
+
 	return NO;
 #else	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 	return NO;

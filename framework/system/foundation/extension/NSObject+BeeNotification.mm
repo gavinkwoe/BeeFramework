@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -31,6 +31,7 @@
 
 #import "Bee_UnitTest.h"
 #import "Bee_Log.h"
+#import "Bee_Runtime.h"
 
 #import "NSObject+BeeNotification.h"
 #import "NSObject+BeeProperty.h"
@@ -75,6 +76,10 @@
 
 - (void)observeNotification:(NSString *)notificationName
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self
+													name:notificationName
+												  object:nil];
+	
 	NSArray * array = [notificationName componentsSeparatedByString:@"."];
 	if ( array && array.count > 1 )
 	{
@@ -82,7 +87,6 @@
 		NSString * clazz = (NSString *)[array objectAtIndex:1];
 		NSString * name = (NSString *)[array objectAtIndex:2];
 
-	#if defined(__BEE_SELECTOR_STYLE2__) && __BEE_SELECTOR_STYLE2__
 		{
 			NSString * selectorName;
 			SEL selector;
@@ -111,19 +115,34 @@
 				return;
 			}
 		}
-	#endif	// #if defined(__BEE_SMART_SELECTOR2__) && __BEE_SMART_SELECTOR2__
-		
-	#if defined(__BEE_SELECTOR_STYLE1__) && __BEE_SELECTOR_STYLE1__
-		{
-			// TODO:
-		}
-	#endif	// #if defined(__BEE_SMART_SELECTOR1__) && __BEE_SMART_SELECTOR1__
 	}
 
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(handleNotification:)
 												 name:notificationName
 											   object:nil];
+}
+
+- (void)observeAllNotifications
+{
+	NSArray * methods = [BeeRuntime allInstanceMethodsOf:[self class] withPrefix:@"handleNotification_"];
+	if ( nil == methods || 0 == methods.count )
+	{
+		return;
+	}
+
+	for ( NSString * selectorName in methods )
+	{
+		SEL sel = NSSelectorFromString( selectorName );
+		if ( NULL == sel )
+			continue;
+
+		NSMutableString * notificationName = [self performSelector:sel];
+		if ( nil == notificationName  )
+			continue;
+
+		[self observeNotification:notificationName];
+	}
 }
 
 - (void)unobserveNotification:(NSString *)name
@@ -140,7 +159,7 @@
 
 + (BOOL)postNotification:(NSString *)name
 {
-	INFO( @"notification, %@", name );
+	INFO( @"Notification '%@'", [name stringByReplacingOccurrencesOfString:@"notify." withString:@""] );
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:name object:nil];
 	return YES;

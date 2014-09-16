@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template namespace="FootLoader">
+	<linear orientation="horizonal" class="wrapper">
+		<indicator id="indicator" class="indicator"/>
+		<label id="state" class="state"/>
+	</linear>
+
+	<style type="text/css">
+		.wrapper {
+			width: 100%;
+			height: 44px;
+		}
+		.indicator {
+			position: absolute;
+			left: 40px;
+			top: 10px;
+			width: 24px;
+			height: 24px;
+			color: white;
+		}
+		.state {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 100%;
+			height: 100%;
+			font: 13, lighter;
+			text-color: #fff;
+			text-align: center;
+		}
+	</style>
+</template>

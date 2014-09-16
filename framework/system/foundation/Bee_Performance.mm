@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -30,7 +30,7 @@
 //
 
 #import "Bee_Performance.h"
-
+#import "Bee_Log.h"
 #import "Bee_UnitTest.h"
 
 // ----------------------------------
@@ -39,10 +39,30 @@
 
 #pragma mark -
 
+#undef	DEFAULT_PERFORMANCE_VALVE
+#define DEFAULT_PERFORMANCE_VALVE	(300.0f)
+
+#undef	MAX_RECORDS
+#define MAX_RECORDS		(50)
+
+#pragma mark -
+
+DEF_PACKAGE( BeePackage_System, BeePerformance, performance );
+
+#pragma mark -
+
+@implementation BeePerformanceRecord
+@synthesize name = _name;
+@synthesize time = _time;
+@end
+
+#pragma mark -
+
 @interface BeePerformance()
 {
-	NSMutableDictionary *	_records;
+	NSMutableArray *		_records;
 	NSMutableDictionary *	_tags;
+	NSTimeInterval			_valve;
 }
 @end
 
@@ -53,15 +73,16 @@
 DEF_SINGLETON( BeePerformance );
 
 @synthesize records = _records;
-@synthesize tags = _tags;
+@synthesize valve = _valve;
 
 - (id)init
 {
 	self = [super init];
 	if ( self )
 	{
-		_records = [[NSMutableDictionary alloc] init];
+		_records = [[NSMutableArray alloc] init];
 		_tags = [[NSMutableDictionary alloc] init];
+		_valve = DEFAULT_PERFORMANCE_VALVE;
 	}
 	return self;
 }
@@ -77,30 +98,32 @@ DEF_SINGLETON( BeePerformance );
 	[super dealloc];
 }
 
-+ (double)timestamp
+- (double)timestamp
 {
 	return CACurrentMediaTime();
 }
 
-+ (double)markTag:(NSString *)tag
+- (double)markTag:(NSString *)tag
 {
 	double curr = CACurrentMediaTime();
 	
 	NSNumber * time = [NSNumber numberWithDouble:curr];
-	[[BeePerformance sharedInstance].tags setObject:time forKey:tag];
+	[_tags setObject:time forKey:tag];
+	
+	PERF( @"\t%@", tag );
 	
 	return curr;
 }
 
-+ (double)betweenTag:(NSString *)tag1 andTag:(NSString *)tag2
+- (double)betweenTag:(NSString *)tag1 andTag:(NSString *)tag2
 {
 	return [self betweenTag:tag1 andTag:tag2 shouldRemove:YES];
 }
 
-+ (double)betweenTag:(NSString *)tag1 andTag:(NSString *)tag2 shouldRemove:(BOOL)remove
+- (double)betweenTag:(NSString *)tag1 andTag:(NSString *)tag2 shouldRemove:(BOOL)remove
 {
-	NSNumber * time1 = [[BeePerformance sharedInstance].tags objectForKey:tag1];
-	NSNumber * time2 = [[BeePerformance sharedInstance].tags objectForKey:tag2];
+	NSNumber * time1 = [_tags objectForKey:tag1];
+	NSNumber * time2 = [_tags objectForKey:tag2];
 	
 	if ( nil == time1 || nil == time2 )
 		return 0.0;
@@ -109,26 +132,41 @@ DEF_SINGLETON( BeePerformance );
 	
 	if ( remove )
 	{
-		[[BeePerformance sharedInstance].tags removeObjectForKey:tag1];
-		[[BeePerformance sharedInstance].tags removeObjectForKey:tag2];
+		[_tags removeObjectForKey:tag1];
+		[_tags removeObjectForKey:tag2];
 	}
 	
 	return time;
 }
 
-+ (void)watchClass:(Class)clazz
+- (void)watchClass:(Class)clazz
 {
 	[self watchClass:clazz andSelector:nil];
 }
 
-+ (void)watchClass:(Class)clazz andSelector:(SEL)selector
+- (void)watchClass:(Class)clazz andSelector:(SEL)selector
 {
-	// TODO:
+	// TODO: 0.6.0
 }
 
-+ (void)recordName:(NSString *)name andTime:(NSTimeInterval)time
+- (void)recordName:(NSString *)name andTime:(NSTimeInterval)time
 {
-	INFO( @"'%@' = %.4f(s)", name, time );
+	time = time * 1000.0f;
+	
+	if ( time >= _valve )
+	{
+		BeePerformanceRecord * record = [[[BeePerformanceRecord alloc] init] autorelease];
+		record.name = name;
+		record.time = time;
+		[_records pushTail:record];
+		[_records keepTail:MAX_RECORDS];
+		
+		ERROR( @"Time '%@' = %.0f(ms)", name, time );
+	}
+	else
+	{
+		PERF( @"Time '%@' = %.0f(ms)", name, time );
+	}
 }
 
 @end

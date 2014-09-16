@@ -2,7 +2,10 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:lib/lib.xcodeproj">
+      location = "group:scaffold/scaffold.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:dribbble/dribbble.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:example/example.xcodeproj">

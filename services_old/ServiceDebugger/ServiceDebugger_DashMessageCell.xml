@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui namespace="ServiceDebugger_DashMessageCell">
+
+	<linear orientation="v" class="wrapper">
+		<linear orientation="h" class="line1">
+			<label id="title">Message</label>
+			<label class="subtitle-prefix">concurrent:</label>
+			<label id="concurrent" class="subtitle">0</label>
+			<label class="subtitle-prefix">total:</label>
+			<label id="total" class="subtitle">0</label>
+			<button id="more">MORE ></button>
+		</linear>
+		<linear orientation="h" class="line2">
+			<plots id="plots1" class="plots"/>
+			<plots id="plots2" class="plots"/>
+			<plots id="plots3" class="plots"/>
+		</linear>
+		<!--
+		<linear orientation="h" class="line3">
+			<button id="cancel" class="button small">CANCEL</button>
+			<button id="freeze" class="button large">FREEZE</button>
+		</linear>
+		 -->
+		<view class="bottom-line"/>
+	</linear>
+	
+	<style type="text/css">
+		
+		.wrapper {
+			width: 100%;
+			height: auto;
+		}
+
+		.line1 {
+			width: 100%;
+			height: 30px;
+		}
+		
+		#title {
+			margin-left: 10px;
+			width: 60px;
+			height: 100%;
+			color: orange;
+			text-align: left;
+			font-size: 12px;
+			font-weight: bold;
+		}
+		
+		.subtitle-prefix {
+			margin-left: 10px;
+			width: auto;
+			height: 100%;
+			color: gray;
+			text-align: left;
+			font-size: 12px;
+			font-weight: bold;
+		}
+		
+		.subtitle {
+			margin-left: 4px;
+			width: auto;
+			height: 100%;
+			color: gray;
+			text-align: left;
+			font-size: 12px;
+			font-weight: bold;
+		}
+		
+		#more {
+			float: right;
+			width: 70px;
+			height: 100%;
+			color: orange;
+			text-align: center;
+			font-size: 12px;
+			font-weight: bold;
+		}
+		
+		.line2 {
+			width: 100%;
+			height: 70px;
+		}
+		
+		.plots {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+		}
+		
+		.line3 {
+			width: 96%;
+			height: 30px;
+			float: center;
+		}
+		
+		.button {
+			height: 100%;
+			color: white;
+			font-size: 12px;
+			font-weight: bold;
+			border-color: gray;
+			border-width: 2px;
+			background-color: darkgray;
+		}
+		
+		.small {
+			width: 25%;
+		}
+		
+		.large {
+			width: 35%;
+		}
+		
+		.bottom-line {
+			margin-top: 8px;
+			width: 100%;
+			height: 1px;
+			background-color: #666;
+		}
+		
+	</style>
+	
+</ui>

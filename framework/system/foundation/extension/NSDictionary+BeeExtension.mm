@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -353,10 +353,10 @@
 
 	if ( [clazz respondsToSelector:@selector(fromDictionary:)] )
 	{
-        return [clazz performSelector:@selector(fFromDictionary:) withObject:self];
+        return [clazz performSelector:@selector(fromDictionary:) withObject:self];
     }
 
-    id object = [[clazz alloc] init];
+    id object = [[[clazz alloc] init] autorelease];
 	if ( nil == object )
 		return nil;
     
@@ -372,6 +372,10 @@
 			const char *	attr = property_getAttributes(properties[i]);
 			NSUInteger		type = [BeeTypeEncoding typeOf:attr];
 			
+			BOOL readonly = [BeeTypeEncoding isReadOnly:attr];
+			if ( readonly )
+				continue;
+
 			NSObject *	tempValue = [self objectForKey:propertyName];
 			NSObject *	value = nil;
 			
@@ -459,7 +463,10 @@
 				}
 			}
             
-			[object setValue:value forKey:propertyName];
+            if ( nil != value )
+            {
+                [object setValue:value forKey:propertyName];
+            }
 		}
 		
 		free( properties );
@@ -468,8 +475,8 @@
 		if ( nil == clazzType )
 			break;
 	}
-		
-    return [object autorelease];
+
+    return object;
 }
 
 @end
@@ -507,6 +514,18 @@ static void			__TTReleaseNoOp( CFAllocatorRef allocator, const void * value ) {}
 	callbacks.retain = __TTRetainNoOp;
 	callbacks.release = __TTReleaseNoOp;
 	return [(NSMutableDictionary *)CFDictionaryCreateMutable( NULL, 0, &kCFTypeDictionaryKeyCallBacks, &callbacks ) autorelease];
+}
+
+- (NSString *)stringOfAny:(NSArray *)array removeAll:(BOOL)flag
+{
+	NSString * result = [self stringOfAny:array];
+	
+	if ( flag )
+	{
+		[self removeObjectsForKeys:array];
+	}
+	
+	return result;
 }
 
 - (BOOL)setObject:(NSObject *)obj atPath:(NSString *)path
@@ -565,7 +584,10 @@ static void			__TTReleaseNoOp( CFAllocatorRef allocator, const void * value ) {}
 		upperDict = (NSMutableDictionary *)dict;
 	}
 
-	[upperDict setObject:obj forKey:subPath];
+	if ( subPath && obj )
+	{
+		[upperDict setObject:obj forKey:subPath];
+	}
 	return YES;
 }
 

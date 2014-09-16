@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -30,19 +30,39 @@
 //
 
 #import "Bee_Precompile.h"
-#import "Bee_Application.h"
-#import "Bee_Service.h"
-#import "Bee_System.h"
+#import "Bee_Package.h"
+#import "Bee_Version.h"
 #import "Bee_Vendor.h"
 
-#pragma mark -
-
-@interface NSObject(AutoLoading)
-+ (BOOL)autoLoad;
-@end
+#import "Bee_CLI.h"
+#import "Bee_MVC.h"
+#import "Bee_System.h"
 
 #pragma mark -
 
-@interface BeeAutoLoader : NSObject
-+ (NSArray *)loadedClasses;
-@end
+@class BeePackage;
+extern BeePackage *	bee;
+
+#pragma mark -
+
+AS_PACKAGE_( BeePackage, BeePackage_External, ext );
+
+#undef	AS_EXTERNAL
+#define	AS_EXTERNAL( __class, __name ) \
+		AS_PACKAGE( BeePackage_External, __class, __name )
+
+#undef	DEF_EXTERNAL
+#define	DEF_EXTERNAL( __class, __name ) \
+		DEF_PACKAGE( BeePackage_External, __class, __name )
+
+#pragma mark -
+
+AS_PACKAGE_( BeePackage, BeePackage_Library, lib );
+
+#undef	AS_LIBRARY
+#define	AS_LIBRARY( __class, __name ) \
+		AS_PACKAGE( BeePackage_Library, __class, __name )
+
+#undef	DEF_LIBRARY
+#define	DEF_LIBRARY( __class, __name ) \
+		DEF_PACKAGE( BeePackage_Library, __class, __name )

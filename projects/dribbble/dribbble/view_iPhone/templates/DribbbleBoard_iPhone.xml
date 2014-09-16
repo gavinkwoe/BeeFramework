@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<template namespace="DribbbleBoard_iPhone">
+	
+	<list id="list"/>
+	<DribbbleBoardTab_iPhone id="tabbar"/>
+	
+	<style type="text/css">
+
+		#list {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 100%;
+			height: 100%;
+			padding-bottom: 44px;
+		}
+		
+		#tabbar {
+			position: absolute;
+			left: 0px;
+			bottom: 0px;
+			width: 100%;
+			height: 44px;
+		}
+
+		@media(device:iOS7)
+		{
+			#list {
+				padding-bottom: 0px;
+				insets: 0 0 44 0;
+			}			
+		}
+
+	</style>
+
+	<!--
+	<list>
+		<section id="section1">
+			<item id="header" type="DribbbleBoardHeader_iPhone"/>
+			<item id="item" type="DribbbleBoardCell_iPhone"/>
+			<item id="footer" type="DribbbleBoardFooter_iPhone"/>
+		</section>
+		<section id="section2">
+			<item id="header" type="DribbbleBoardHeader_iPhone"/>
+			<item id="item" type="DribbbleBoardCell_iPhone"/>
+			<item id="footer" type="DribbbleBoardFooter_iPhone"/>
+		</section>
+	</list>
+	-->
+</template>

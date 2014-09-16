@@ -6,6 +6,8 @@
 //  Copyright 2009 All-Seeing Interactive. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
 #if TARGET_OS_IPHONE
 
 #import "ASIAuthenticationDialog.h"

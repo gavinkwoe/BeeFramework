@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<template namespace="DribbbleBoardTab_iPhone" version="1">
+
+    <linear class="wrapper" orientation="h">
+			<image id="bg"/>
+			<button id="popular" class="item active">Most Popular</button>
+			<button id="everyone" class="item">Everyone</button>
+			<button id="debuts" class="item">Debuts</button>
+    </linear>
+
+    <style type="text/css">
+		#bg {
+			/*background-color: #F00;*/
+			image-src: url(tab-bar.png) !important;
+			image-mode: fit;
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
+			
+        .wrapper {
+			width: 100%;
+			height: 100%;
+			float: center;
+        }
+
+		.item {
+			width: 33.3%;
+			height: 100%;
+			color: #666;
+			font-size: 13px;
+			font-weight: lighter;
+		}
+
+		.active {
+			color: #fff;
+			background-image: url(tab-item.png);
+		}
+		
+		@media(device:iOS7)
+		{
+			#bg {
+				alpha: 0.7;
+			}
+
+			.item {
+				color: #ccc;
+				alpha: 0.7;
+			}
+		
+			.active {
+				color: #fff;
+				alpha: 0.85;
+			}
+		}
+
+    </style>
+</template>

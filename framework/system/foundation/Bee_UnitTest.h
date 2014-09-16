@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -43,7 +43,6 @@
 		+ (const char *)file { return __FILE__; } \
 		+ (unsigned int)line { return __LINE__; } \
 		+ (BOOL)runTests { \
-			[[BeeLogger sharedInstance] disable]; \
 			NSAutoreleasePool * __testReleasePool = [[NSAutoreleasePool alloc] init]; \
 			BOOL __testCasePassed = YES; \
 			@try {
@@ -52,12 +51,10 @@
 #define	TEST_CASE_END \
 			} \
 			@catch ( NSException * e ) { \
-				[[BeeLogger sharedInstance] enable]; \
 				ERROR( [NSString stringWithFormat:@"%@\n%@", e.reason, e.callStackSymbols] ); \
 				__testCasePassed = NO; \
 			} \
 			@finally { \
-				[[BeeLogger sharedInstance] enable]; \
 			} \
 			[__testReleasePool release]; \
 			return __testCasePassed; \

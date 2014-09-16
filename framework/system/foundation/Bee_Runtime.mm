@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -30,7 +30,6 @@
 //
 
 #import "Bee_Runtime.h"
-
 #import "Bee_Log.h"
 #import "Bee_UnitTest.h"
 #import "NSArray+BeeExtension.h"
@@ -41,142 +40,12 @@
 
 #pragma mark -
 
+DEF_PACKAGE( BeePackage_System, BeeRuntime, runtime );
+
+#pragma mark -
+
 #undef	MAX_CALLSTACK_DEPTH
 #define MAX_CALLSTACK_DEPTH	(64)
-
-#pragma mark -
-
-@interface BeeCallFrame()
-{
-	NSUInteger			_type;
-	NSString *			_process;
-	NSUInteger			_entry;
-	NSUInteger			_offset;
-	NSString *			_clazz;
-	NSString *			_method;
-}
-
-+ (NSUInteger)hex:(NSString *)text;
-+ (id)parseFormat1:(NSString *)line;
-+ (id)parseFormat2:(NSString *)line;
-
-@end
-
-#pragma mark -
-
-@implementation BeeCallFrame
-
-DEF_INT( TYPE_UNKNOWN,	0 )
-DEF_INT( TYPE_OBJC,		1 )
-DEF_INT( TYPE_NATIVEC,	2 )
-
-@synthesize type = _type;
-@synthesize process = _process;
-@synthesize entry = _entry;
-@synthesize offset = _offset;
-@synthesize clazz = _clazz;
-@synthesize method = _method;
-
-- (NSString *)description
-{
-	if ( BeeCallFrame.TYPE_OBJC == _type )
-	{
-		return [NSString stringWithFormat:@"[O] %@(0x%08x + %llu) -> [%@ %@]", _process, (unsigned int)_entry, (unsigned long long)_offset, _clazz, _method];
-	}
-	else if ( BeeCallFrame.TYPE_NATIVEC == _type )
-	{
-		return [NSString stringWithFormat:@"[C] %@(0x%08x + %llu) -> %@", _process, (unsigned int)_entry, (unsigned long long)_offset, _method];
-	}
-	else
-	{
-		return [NSString stringWithFormat:@"[X] <unknown>(0x%08x + %llu)", (unsigned int)_entry, (unsigned long long)_offset];
-	}	
-}
-
-+ (NSUInteger)hex:(NSString *)text
-{
-	unsigned int number = 0;
-	[[NSScanner scannerWithString:text] scanHexInt:&number];
-	return (NSUInteger)number;
-}
-
-+ (id)parseFormat1:(NSString *)line
-{
-//	example: peeper  0x00001eca -[PPAppDelegate application:didFinishLaunchingWithOptions:] + 106
-	NSError * error = NULL;
-	NSString * expr = @"^[0-9]*\\s*([a-z0-9_]+)\\s+(0x[0-9a-f]+)\\s+-\\[([a-z0-9_]+)\\s+([a-z0-9_:]+)]\\s+\\+\\s+([0-9]+)$";	
-	NSRegularExpression * regex = [NSRegularExpression regularExpressionWithPattern:expr options:NSRegularExpressionCaseInsensitive error:&error];
-	NSTextCheckingResult * result = [regex firstMatchInString:line options:0 range:NSMakeRange(0, [line length])];
-	if ( result && (regex.numberOfCaptureGroups + 1) == result.numberOfRanges )
-	{
-		BeeCallFrame * frame = [[BeeCallFrame alloc] init];
-		frame.type = BeeCallFrame.TYPE_OBJC;
-		frame.process = [line substringWithRange:[result rangeAtIndex:1]];
-		frame.entry = [BeeCallFrame hex:[line substringWithRange:[result rangeAtIndex:2]]];
-		frame.clazz = [line substringWithRange:[result rangeAtIndex:3]];
-		frame.method = [line substringWithRange:[result rangeAtIndex:4]];
-		frame.offset = [[line substringWithRange:[result rangeAtIndex:5]] intValue];
-		return [frame autorelease];
-	}
-	
-	return nil;
-}
-
-+ (id)parseFormat2:(NSString *)line
-{
-//	example: UIKit 0x0105f42e UIApplicationMain + 1160
-	NSError * error = NULL;
-	NSString * expr = @"^[0-9]*\\s*([a-z0-9_]+)\\s+(0x[0-9a-f]+)\\s+([a-z0-9_]+)\\s+\\+\\s+([0-9]+)$";
-	NSRegularExpression * regex = [NSRegularExpression regularExpressionWithPattern:expr options:NSRegularExpressionCaseInsensitive error:&error];
-	NSTextCheckingResult * result = [regex firstMatchInString:line options:0 range:NSMakeRange(0, [line length])];
-	if ( result && (regex.numberOfCaptureGroups + 1) == result.numberOfRanges )
-	{
-		BeeCallFrame * frame = [[BeeCallFrame alloc] init];
-		frame.type = BeeCallFrame.TYPE_NATIVEC;
-		frame.process = [line substringWithRange:[result rangeAtIndex:1]];
-		frame.entry = [self hex:[line substringWithRange:[result rangeAtIndex:2]]];
-		frame.clazz = nil;
-		frame.method = [line substringWithRange:[result rangeAtIndex:3]];
-		frame.offset = [[line substringWithRange:[result rangeAtIndex:4]] intValue];
-		return [frame autorelease];
-	}
-	
-	return nil;
-}
-
-+ (id)unknown
-{
-	BeeCallFrame * frame = [[BeeCallFrame alloc] init];
-	frame.type = BeeCallFrame.TYPE_UNKNOWN;
-	return [frame autorelease];
-}
-
-+ (id)parse:(NSString *)line
-{
-	if ( 0 == [line length] )
-		return nil;
-
-	id frame1 = [BeeCallFrame parseFormat1:line];
-	if ( frame1 )
-		return frame1;
-	
-	id frame2 = [BeeCallFrame parseFormat2:line];
-	if ( frame2 )
-		return frame2;
-
-	return [BeeCallFrame unknown];
-}
-
-- (void)dealloc
-{
-	[_process release];
-	[_clazz release];
-	[_method release];
-
-	[super dealloc];
-}
-
-@end
 
 #pragma mark -
 
@@ -189,6 +58,16 @@ DEF_INT( NSSTRING,		3 )
 DEF_INT( NSARRAY,		4 )
 DEF_INT( NSDICTIONARY,	5 )
 DEF_INT( NSDATE,		6 )
+
++ (BOOL)isReadOnly:(const char *)attr
+{
+	if ( strstr(attr, "_ro") || strstr(attr, ",R") )
+	{
+		return YES;
+	}
+	
+	return NO;
+}
 
 + (NSUInteger)typeOf:(const char *)attr
 {
@@ -414,6 +293,140 @@ DEF_INT( NSDATE,		6 )
 
 #pragma mark -
 
+@interface BeeCallFrame()
+{
+	NSUInteger			_type;
+	NSString *			_process;
+	NSUInteger			_entry;
+	NSUInteger			_offset;
+	NSString *			_clazz;
+	NSString *			_method;
+}
+
++ (NSUInteger)hex:(NSString *)text;
++ (id)parseFormat1:(NSString *)line;
++ (id)parseFormat2:(NSString *)line;
+
+@end
+
+#pragma mark -
+
+@implementation BeeCallFrame
+
+DEF_INT( TYPE_UNKNOWN,	0 )
+DEF_INT( TYPE_OBJC,		1 )
+DEF_INT( TYPE_NATIVEC,	2 )
+
+@synthesize type = _type;
+@synthesize process = _process;
+@synthesize entry = _entry;
+@synthesize offset = _offset;
+@synthesize clazz = _clazz;
+@synthesize method = _method;
+
+- (NSString *)description
+{
+	if ( BeeCallFrame.TYPE_OBJC == _type )
+	{
+		return [NSString stringWithFormat:@"[O] %@(0x%08x + %llu) -> [%@ %@]", _process, (unsigned int)_entry, (unsigned long long)_offset, _clazz, _method];
+	}
+	else if ( BeeCallFrame.TYPE_NATIVEC == _type )
+	{
+		return [NSString stringWithFormat:@"[C] %@(0x%08x + %llu) -> %@", _process, (unsigned int)_entry, (unsigned long long)_offset, _method];
+	}
+	else
+	{
+		return [NSString stringWithFormat:@"[X] <unknown>(0x%08x + %llu)", (unsigned int)_entry, (unsigned long long)_offset];
+	}	
+}
+
++ (NSUInteger)hex:(NSString *)text
+{
+	unsigned int number = 0;
+	[[NSScanner scannerWithString:text] scanHexInt:&number];
+	return (NSUInteger)number;
+}
+
++ (id)parseFormat1:(NSString *)line
+{
+//	example: peeper  0x00001eca -[PPAppDelegate application:didFinishLaunchingWithOptions:] + 106
+	NSError * error = NULL;
+	NSString * expr = @"^[0-9]*\\s*([a-z0-9_]+)\\s+(0x[0-9a-f]+)\\s+-\\[([a-z0-9_]+)\\s+([a-z0-9_:]+)]\\s+\\+\\s+([0-9]+)$";	
+	NSRegularExpression * regex = [NSRegularExpression regularExpressionWithPattern:expr options:NSRegularExpressionCaseInsensitive error:&error];
+	NSTextCheckingResult * result = [regex firstMatchInString:line options:0 range:NSMakeRange(0, [line length])];
+	if ( result && (regex.numberOfCaptureGroups + 1) == result.numberOfRanges )
+	{
+		BeeCallFrame * frame = [[BeeCallFrame alloc] init];
+		frame.type = BeeCallFrame.TYPE_OBJC;
+		frame.process = [line substringWithRange:[result rangeAtIndex:1]];
+		frame.entry = [BeeCallFrame hex:[line substringWithRange:[result rangeAtIndex:2]]];
+		frame.clazz = [line substringWithRange:[result rangeAtIndex:3]];
+		frame.method = [line substringWithRange:[result rangeAtIndex:4]];
+		frame.offset = [[line substringWithRange:[result rangeAtIndex:5]] intValue];
+		return [frame autorelease];
+	}
+	
+	return nil;
+}
+
++ (id)parseFormat2:(NSString *)line
+{
+//	example: UIKit 0x0105f42e UIApplicationMain + 1160
+	NSError * error = NULL;
+	NSString * expr = @"^[0-9]*\\s*([a-z0-9_]+)\\s+(0x[0-9a-f]+)\\s+([a-z0-9_]+)\\s+\\+\\s+([0-9]+)$";
+	NSRegularExpression * regex = [NSRegularExpression regularExpressionWithPattern:expr options:NSRegularExpressionCaseInsensitive error:&error];
+	NSTextCheckingResult * result = [regex firstMatchInString:line options:0 range:NSMakeRange(0, [line length])];
+	if ( result && (regex.numberOfCaptureGroups + 1) == result.numberOfRanges )
+	{
+		BeeCallFrame * frame = [[BeeCallFrame alloc] init];
+		frame.type = BeeCallFrame.TYPE_NATIVEC;
+		frame.process = [line substringWithRange:[result rangeAtIndex:1]];
+		frame.entry = [self hex:[line substringWithRange:[result rangeAtIndex:2]]];
+		frame.clazz = nil;
+		frame.method = [line substringWithRange:[result rangeAtIndex:3]];
+		frame.offset = [[line substringWithRange:[result rangeAtIndex:4]] intValue];
+		return [frame autorelease];
+	}
+	
+	return nil;
+}
+
++ (id)unknown
+{
+	BeeCallFrame * frame = [[BeeCallFrame alloc] init];
+	frame.type = BeeCallFrame.TYPE_UNKNOWN;
+	return [frame autorelease];
+}
+
++ (id)parse:(NSString *)line
+{
+	if ( 0 == [line length] )
+		return nil;
+
+	id frame1 = [BeeCallFrame parseFormat1:line];
+	if ( frame1 )
+		return frame1;
+	
+	id frame2 = [BeeCallFrame parseFormat2:line];
+	if ( frame2 )
+		return frame2;
+
+	return [BeeCallFrame unknown];
+}
+
+- (void)dealloc
+{
+	[_process release];
+	[_clazz release];
+	[_method release];
+
+	[super dealloc];
+}
+
+@end
+
+#pragma mark -
+
 static void __uncaughtExceptionHandler( NSException * exception )
 {
 	ERROR( @"uncaught exception: %@\n%@", exception, [exception callStackSymbols] );
@@ -422,6 +435,12 @@ static void __uncaughtExceptionHandler( NSException * exception )
 #pragma mark -
 
 @implementation BeeRuntime
+
+@dynamic allClasses;
+@dynamic callstack;
+@dynamic callframes;
+
+DEF_SINGLETON( BeeRuntime )
 
 + (void)load
 {
@@ -454,26 +473,64 @@ static void __uncaughtExceptionHandler( NSException * exception )
 	
 	if ( nil == __allClasses )
 	{
-		__allClasses = [[NSMutableArray alloc] init];
+		__allClasses = [[NSMutableArray nonRetainingArray] retain];
 	}
 	
 	if ( 0 == __allClasses.count )
 	{
+		static const char * __blackList[] =
+		{
+			"AGActionSheet",
+			"AGShareActionSheet",
+			"AGAlertView",
+			"AGSharePublishContentView",
+			"AG_SKJDictionary",
+			"AG_SKJSerializer",
+			"AG_SKJSONDecoder",
+			"AG_SKJDictionaryEnumerator",
+			"AG_SKJArray",
+			"AGCommon",
+			"AGShareItemView",
+			"AGSharePageContentView",
+			"AGBackground"
+		};
+				
 		unsigned int	classesCount = 0;
 		Class *			classes = objc_copyClassList( &classesCount );
 		
 		for ( unsigned int i = 0; i < classesCount; ++i )
 		{
 			Class classType = classes[i];
-
+			Class superClass = class_getSuperclass( classType );
+			
+			if ( nil == superClass )
+				continue;
 //			if ( NO == class_conformsToProtocol( classType, @protocol(NSObject)) )
 //				continue;
 			if ( NO == class_respondsToSelector( classType, @selector(doesNotRecognizeSelector:) ) )
 				continue;
 			if ( NO == class_respondsToSelector( classType, @selector(methodSignatureForSelector:) ) )
 				continue;
+//			if ( class_respondsToSelector( classType, @selector(initialize) ) )
+//				continue;
 //			if ( NO == [classType isSubclassOfClass:[NSObject class]] )
 //				continue;
+
+			BOOL			isBlack = NO;
+			const char *	className = class_getName( classType );
+			NSInteger		listSize = sizeof( __blackList ) / sizeof( __blackList[0] );
+
+			for ( int i = 0; i < listSize; ++i )
+			{
+				if ( 0 == strcmp( className, __blackList[i] ) )
+				{
+					isBlack = YES;
+					break;
+				}				
+			}
+			
+			if ( isBlack )
+				continue;
 
 			[__allClasses addObject:classType];
 		}
@@ -500,6 +557,85 @@ static void __uncaughtExceptionHandler( NSException * exception )
 	}
 	
 	return results;
+}
+
++ (NSArray *)allInstanceMethodsOf:(Class)clazz
+{
+	static NSMutableDictionary * __cache = nil;
+	
+	if ( nil == __cache )
+	{
+		__cache = [[NSMutableDictionary alloc] init];
+	}
+	
+	NSMutableArray * methodNames = [__cache objectForKey:[clazz description]];
+	if ( nil == methodNames )
+	{
+		methodNames = [NSMutableArray array];
+		
+		Class thisClass = clazz;
+		
+		while ( NULL != thisClass )
+		{
+			unsigned int	methodCount = 0;
+			Method *		methods = class_copyMethodList( thisClass, &methodCount );
+
+			for ( unsigned int i = 0; i < methodCount; ++i )
+			{
+				SEL selector = method_getName( methods[i] );
+				if ( selector )
+				{
+					const char * cstrName = sel_getName(selector);
+					if ( NULL == cstrName )
+						continue;
+					
+					NSString * selectorName = [NSString stringWithUTF8String:cstrName];
+					if ( NULL == selectorName )
+						continue;
+
+					[methodNames addObject:selectorName];
+				}
+			}
+
+			thisClass = class_getSuperclass( thisClass );
+			if ( thisClass == [NSObject class] )
+			{
+				break;
+			}
+		}
+		
+		[__cache setObject:methodNames forKey:[clazz description]];
+	}
+	
+	return methodNames;
+}
+
++ (NSArray *)allInstanceMethodsOf:(Class)clazz withPrefix:(NSString *)prefix
+{
+	NSArray * methods = [self allInstanceMethodsOf:clazz];
+	if ( nil == methods || 0 == methods.count )
+	{
+		return nil;
+	}
+	
+	if ( nil == prefix )
+	{
+		return methods;
+	}
+	
+	NSMutableArray * result = [NSMutableArray array];
+	
+	for ( NSString * selectorName in methods )
+	{
+		if ( NO == [selectorName hasPrefix:prefix] )
+		{
+			continue;
+		}
+		
+		[result addObject:selectorName];
+	}
+	
+	return result;
 }
 
 + (NSArray *)callstack:(NSUInteger)depth
@@ -586,13 +722,28 @@ static void __uncaughtExceptionHandler( NSException * exception )
 
 + (void)breakPoint
 {
-#if defined(__BEE_DEVELOPMENT__) && (__ON__ == __BEE_DEVELOPMENT__)
+#if __BEE_DEVELOPMENT__
 #if defined(__ppc__)
 	asm("trap");
 #elif defined(__i386__)
 	asm("int3");
 #endif	// #elif defined(__i386__)
-#endif	// #if defined(__BEE_DEVELOPMENT__) && (__ON__ == __BEE_DEVELOPMENT__)
+#endif	// #if __BEE_DEVELOPMENT__
+}
+
+- (NSArray *)allClasses
+{
+	return [BeeRuntime allClasses];
+}
+
+- (NSArray *)callstack
+{
+	return [BeeRuntime callstack:MAX_CALLSTACK_DEPTH];
+}
+
+- (NSArray *)callframes
+{
+	return [BeeRuntime callframes:MAX_CALLSTACK_DEPTH];
 }
 
 @end

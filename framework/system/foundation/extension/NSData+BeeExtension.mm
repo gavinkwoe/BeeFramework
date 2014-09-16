@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -86,6 +86,15 @@
 	{
 		return nil;
 	}
+}
+
++ (NSString *)fromResource:(NSString *)resName
+{
+	NSString *	extension = [resName pathExtension];
+	NSString *	fullName = [resName substringToIndex:(resName.length - extension.length - 1)];
+	
+	NSString * path = [[NSBundle mainBundle] pathForResource:fullName ofType:extension];
+	return [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL];
 }
 
 @end

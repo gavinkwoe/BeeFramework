@@ -6,7 +6,7 @@
 //	  \/_____/  \/_____/  \/_____/
 //
 //
-//	Copyright (c) 2013-2014, {Bee} open source community
+//	Copyright (c) 2014-2015, Geek Zoo Studio
 //	http://www.bee-framework.com
 //
 //
@@ -127,11 +127,11 @@
 	NSTimer * timer = [agent timerForName:name];
 	if ( nil == timer )
 	{
-		timer = [NSTimer timerWithTimeInterval:interval
-										target:self
-									  selector:@selector(handleTimer:)
-									  userInfo:nil
-									   repeats:repeat];
+		timer = [NSTimer scheduledTimerWithTimeInterval:interval
+												 target:self
+											   selector:@selector(handleTimer:)
+											   userInfo:nil
+												repeats:repeat];
 		timer.name = name;
 		[agent.timers addObject:timer];
 	}
