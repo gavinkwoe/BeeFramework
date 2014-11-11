@@ -29,15 +29,11 @@
 //	IN THE SOFTWARE.
 //
 
-#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
-
 #import "Bee_Precompile.h"
 #import "Bee_UISignal.h"
-#import "Bee_UIBoard.h"
+#import "Bee_UIStack.h"
 
-#pragma mark -
-
-@interface BeeUIBoard(Popover)
+@interface BeeUIStack (Popover)
 
 AS_SIGNAL( POPOVER_WILL_PRESENT )	// Popover将要显示
 AS_SIGNAL( POPOVER_DID_PRESENT )	// Popover已经显示
@@ -47,12 +43,10 @@ AS_SIGNAL( POPOVER_DID_DISMISSED )	// Popover已经隐藏
 @property (nonatomic, retain) UIPopoverController *	popover;
 
 - (void)presentPopoverForView:(UIView *)view
-				  contentSize:(CGSize)size
-					direction:(UIPopoverArrowDirection)direction
-					 animated:(BOOL)animated;
+                  contentSize:(CGSize)size
+                    direction:(UIPopoverArrowDirection)direction
+                     animated:(BOOL)animated;
 
 - (void)dismissPopoverAnimated:(BOOL)animated;
 
 @end
-
-#endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
