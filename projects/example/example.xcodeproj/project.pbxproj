@@ -31,6 +31,7 @@
 		63CE8C2E173F79A30047A716 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63CE8C2D173F79A30047A716 /* Default-568h@2x.png */; };
 		CB40352D1832237E0071D57D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB40352C1832237E0071D57D /* CoreLocation.framework */; };
 		CB4D84AC178E9525000FBA10 /* AppBoard_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CB4D84A6178E9525000FBA10 /* AppBoard_iPhone.m */; };
+		CB5F01B31A1247250055CF23 /* BeeUIStack+Popover.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5F01B21A1247250055CF23 /* BeeUIStack+Popover.m */; };
 		CB7A8D991830CF79001658EE /* AboutBoardCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CB7A8D981830CF79001658EE /* AboutBoardCell_iPhone.m */; };
 		CB7A8D9D1830EA20001658EE /* FootLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = CB7A8D9B1830EA20001658EE /* FootLoader.m */; };
 		CB7A8D9E1830EA20001658EE /* FootLoader.xml in Resources */ = {isa = PBXBuildFile; fileRef = CB7A8D9C1830EA20001658EE /* FootLoader.xml */; };
@@ -506,6 +507,8 @@
 		CB40352C1832237E0071D57D /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		CB4D84A5178E9525000FBA10 /* AppBoard_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppBoard_iPhone.h; sourceTree = "<group>"; };
 		CB4D84A6178E9525000FBA10 /* AppBoard_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppBoard_iPhone.m; sourceTree = "<group>"; };
+		CB5F01B11A1247250055CF23 /* BeeUIStack+Popover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BeeUIStack+Popover.h"; sourceTree = "<group>"; };
+		CB5F01B21A1247250055CF23 /* BeeUIStack+Popover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "BeeUIStack+Popover.m"; sourceTree = "<group>"; };
 		CB7A8D971830CF79001658EE /* AboutBoardCell_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutBoardCell_iPhone.h; sourceTree = "<group>"; };
 		CB7A8D981830CF79001658EE /* AboutBoardCell_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutBoardCell_iPhone.m; sourceTree = "<group>"; };
 		CB7A8D9A1830EA20001658EE /* FootLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FootLoader.h; sourceTree = "<group>"; };
@@ -1756,6 +1759,8 @@
 				E96D791819A48C5D005D467C /* BeeUIStack+BackwardCompatible.m */,
 				E96D791919A48C5D005D467C /* BeeUIStack+BeeUIRouter.h */,
 				E96D791A19A48C5D005D467C /* BeeUIStack+BeeUIRouter.m */,
+				CB5F01B11A1247250055CF23 /* BeeUIStack+Popover.h */,
+				CB5F01B21A1247250055CF23 /* BeeUIStack+Popover.m */,
 				E96D791B19A48C5D005D467C /* UIView+UINavigationController.h */,
 				E96D791C19A48C5D005D467C /* UIView+UINavigationController.m */,
 				E96D791D19A48C5D005D467C /* UIView+UIViewController.h */,
@@ -3550,6 +3555,7 @@
 				E96D7C8519A48C5E005D467C /* Bee_StreamViewModel.mm in Sources */,
 				E96D7CE119A48C5E005D467C /* Bee_HTTPWorkflow2.m in Sources */,
 				E96D7C0119A48C5E005D467C /* CSSTokenizer.m in Sources */,
+				CB5F01B31A1247250055CF23 /* BeeUIStack+Popover.m in Sources */,
 				E96D7CBC19A48C5E005D467C /* NSData+BeeExtension.mm in Sources */,
 				E96D7BED19A48C5E005D467C /* Bee_UIStyleParser.m in Sources */,
 				E96D7C1119A48C5E005D467C /* NSObject+UIPropertyMapping.m in Sources */,
