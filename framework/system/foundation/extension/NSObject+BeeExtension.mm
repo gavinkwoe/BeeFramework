@@ -80,6 +80,16 @@
 
 	for ( Class thisClass in classStack )
 	{
+#if __has_feature(objc_arc)
+		
+		NSMethodSignature* sig = [thisClass instanceMethodSignatureForSelector:sel];
+		NSAssert(nil != sig, @"%@ does not respond to selector: '%@'", self, NSStringFromSelector(sel));
+		NSInvocation* invocation = [NSInvocation invocationWithMethodSignature:sig];
+		[invocation setTarget:self];
+		[invocation setSelector:sel];
+		//		[self setArgumentsFromValues:values forInvocation:invocation];
+		[invocation invoke];
+#else
 		Method method = class_getInstanceMethod( thisClass, sel );
 		if ( method )
 		{
@@ -89,6 +99,7 @@
 				imp( self, sel, nil );
 			}
 		}
+#endif
 	}
 }
 
@@ -103,6 +114,16 @@
 	
 	for ( Class thisClass in classStack )
 	{
+#if __has_feature(objc_arc)
+		
+		NSMethodSignature* sig = [thisClass instanceMethodSignatureForSelector:sel];
+		NSAssert(nil != sig, @"%@ does not respond to selector: '%@'", self, NSStringFromSelector(sel));
+		NSInvocation* invocation = [NSInvocation invocationWithMethodSignature:sig];
+		[invocation setTarget:self];
+		[invocation setSelector:sel];
+		//		[self setArgumentsFromValues:values forInvocation:invocation];
+		[invocation invoke];
+#else
 		Method method = class_getInstanceMethod( thisClass, sel );
 		if ( method )
 		{
@@ -112,6 +133,7 @@
 				imp( self, sel, nil );
 			}
 		}
+#endif
 	}
 }
 
