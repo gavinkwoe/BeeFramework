@@ -21,6 +21,7 @@
 		CB26F4AA189BD929008A6C36 /* ServiceInspector_Indicator.m in Sources */ = {isa = PBXBuildFile; fileRef = CB26F49F189BD929008A6C36 /* ServiceInspector_Indicator.m */; };
 		CB26F4AB189BD929008A6C36 /* ServiceInspector_Window.m in Sources */ = {isa = PBXBuildFile; fileRef = CB26F4A1189BD929008A6C36 /* ServiceInspector_Window.m */; };
 		CB26F4AC189BD929008A6C36 /* ServiceInspector_WindowHook.m in Sources */ = {isa = PBXBuildFile; fileRef = CB26F4A3189BD929008A6C36 /* ServiceInspector_WindowHook.m */; };
+		CB5F01B01A1246820055CF23 /* BeeUIStack+Popover.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5F01AF1A1246820055CF23 /* BeeUIStack+Popover.m */; };
 		CB762B111815439F00656B25 /* DribbbleBoardCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CB762B101815439F00656B25 /* DribbbleBoardCell_iPhone.m */; };
 		CB762B14181543E200656B25 /* DribbbleBoardTab_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CB762B13181543E200656B25 /* DribbbleBoardTab_iPhone.m */; };
 		CB762B76181799EA00656B25 /* DribbbleDetailBoardComment_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CB762B75181799E800656B25 /* DribbbleDetailBoardComment_iPhone.m */; };
@@ -473,6 +474,8 @@
 		CB26F4A3189BD929008A6C36 /* ServiceInspector_WindowHook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceInspector_WindowHook.m; sourceTree = "<group>"; };
 		CB418329182BF46000996902 /* DribbbleBoard_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DribbbleBoard_iPhone.h; sourceTree = "<group>"; };
 		CB41832A182BF46000996902 /* DribbbleBoardCell_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DribbbleBoardCell_iPhone.h; sourceTree = "<group>"; };
+		CB5F01AE1A1246820055CF23 /* BeeUIStack+Popover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BeeUIStack+Popover.h"; sourceTree = "<group>"; };
+		CB5F01AF1A1246820055CF23 /* BeeUIStack+Popover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "BeeUIStack+Popover.m"; sourceTree = "<group>"; };
 		CB762B101815439F00656B25 /* DribbbleBoardCell_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DribbbleBoardCell_iPhone.m; sourceTree = "<group>"; };
 		CB762B12181543E200656B25 /* DribbbleBoardTab_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DribbbleBoardTab_iPhone.h; sourceTree = "<group>"; };
 		CB762B13181543E200656B25 /* DribbbleBoardTab_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DribbbleBoardTab_iPhone.m; sourceTree = "<group>"; };
@@ -1798,6 +1801,8 @@
 				E904460819A0BC6F00A71ED8 /* BeeUIStack+BackwardCompatible.m */,
 				E904460919A0BC6F00A71ED8 /* BeeUIStack+BeeUIRouter.h */,
 				E904460A19A0BC6F00A71ED8 /* BeeUIStack+BeeUIRouter.m */,
+				CB5F01AE1A1246820055CF23 /* BeeUIStack+Popover.h */,
+				CB5F01AF1A1246820055CF23 /* BeeUIStack+Popover.m */,
 				E904460B19A0BC6F00A71ED8 /* UIView+UINavigationController.h */,
 				E904460C19A0BC6F00A71ED8 /* UIView+UINavigationController.m */,
 				E904460D19A0BC6F00A71ED8 /* UIView+UIViewController.h */,
@@ -3125,6 +3130,7 @@
 				E904497D19A0BC7000A71ED8 /* UIViewController+BeeUITemplate.m in Sources */,
 				E965346F19A2121C00B9F6B6 /* bee.services.liveload.md in Sources */,
 				E904493E19A0BC7000A71ED8 /* BeeUIZoomImageView+UIDataBinding.m in Sources */,
+				CB5F01B01A1246820055CF23 /* BeeUIStack+Popover.m in Sources */,
 				E904498419A0BC7000A71ED8 /* UILabel+XMLParser.m in Sources */,
 				E904498C19A0BC7000A71ED8 /* Bee_Cache.mm in Sources */,
 				E90449CE19A0BC7000A71ED8 /* Bee_HTTPServer2.m in Sources */,

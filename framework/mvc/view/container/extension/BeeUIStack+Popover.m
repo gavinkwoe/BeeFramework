@@ -31,7 +31,7 @@
 
 #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 
-#import "BeeUIBoard+Popover.h"
+#import "BeeUIStack+Popover.h"
 
 #import "UIView+BeeUISignal.h"
 #import "UIViewController+BeeUISignal.h"
@@ -39,11 +39,11 @@
 #pragma mark -
 
 #undef	KEY_POPOVER
-#define KEY_POPOVER	"BeeUIBoard.popover"
+#define KEY_POPOVER	"BeeUIStack.popover"
 
 #pragma mark -
 
-@implementation BeeUIBoard(Popover)
+@implementation BeeUIStack (Popover)
 
 @dynamic popover;
 
@@ -56,60 +56,74 @@ DEF_SIGNAL( POPOVER_DID_DISMISSED )	// Popover已经隐藏
 
 - (UIPopoverController *)popover
 {
-	return objc_getAssociatedObject( self, KEY_POPOVER );
+    return objc_getAssociatedObject( self, KEY_POPOVER );
 }
 
 - (void)setPopover:(UIPopoverController *)popover
 {
-	objc_setAssociatedObject( self, KEY_POPOVER, popover, OBJC_ASSOCIATION_RETAIN );
+    objc_setAssociatedObject( self, KEY_POPOVER, popover, OBJC_ASSOCIATION_RETAIN );
 }
 
 #pragma mark -
 
 - (void)presentPopoverForView:(UIView *)view
-				  contentSize:(CGSize)size
-					direction:(UIPopoverArrowDirection)direction
-					 animated:(BOOL)animated
+                  contentSize:(CGSize)size
+                    direction:(UIPopoverArrowDirection)direction
+                     animated:(BOOL)animated
 {
-	if ( nil == self.popover )
-	{
-		[self sendUISignal:BeeUIBoard.POPOVER_WILL_PRESENT];
-
-		self.view.frame = CGRectMake( 0.0f, 0.0f, size.width, size.height );
-		self.contentSizeForViewInPopover = size;
-
-		UIPopoverController * controller = [[[UIPopoverController alloc] initWithContentViewController:self] autorelease];
-		[controller setDelegate:(id<UIPopoverControllerDelegate>)self];
-		[controller setPopoverContentSize:size];
-		[controller presentPopoverFromRect:view.frame
-									inView:view.superview
-				  permittedArrowDirections:direction
-								  animated:animated];
-
-		self.popover = controller;
-
-		[self sendUISignal:BeeUIBoard.POPOVER_DID_PRESENT];
-	}
+    if ( nil == self.popover )
+    {
+        [self sendUISignal:BeeUIBoard.POPOVER_WILL_PRESENT];
+        
+        self.view.frame = CGRectMake( 0.0f, 0.0f, size.width, size.height );
+        
+        if (IOS6_OR_EARLIER)
+        {
+            self.contentSizeForViewInPopover = size;
+        }
+        else
+        {
+            self.preferredContentSize = size;
+        }
+        
+        UIPopoverController * controller = [[[UIPopoverController alloc] initWithContentViewController:self] autorelease];
+        [controller setDelegate:(id<UIPopoverControllerDelegate>)self];
+        [controller setPopoverContentSize:size];
+        [controller presentPopoverFromRect:view.frame
+                                    inView:view
+                  permittedArrowDirections:0
+                                  animated:animated];
+        
+        self.popover = controller;
+        
+        [self sendUISignal:BeeUIBoard.POPOVER_DID_PRESENT];
+    }
 }
 
 - (void)dismissPopoverAnimated:(BOOL)animated
 {
-	[self.popover dismissPopoverAnimated:animated];
-	self.popover = nil;
+    [self.popover dismissPopoverAnimated:animated];
+    self.popover = nil;
 }
 
 #pragma mark -
 
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController
 {
-	[self sendUISignal:BeeUIBoard.POPOVER_WILL_DISMISS];
-	return YES;
+    if ([[self topBoard] isEqual:[[self boards] safeObjectAtIndex:0]])
+    {
+        return YES;
+    }
+    else
+    {
+        return NO;
+    }
 }
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
 {
-	[self sendUISignal:BeeUIBoard.POPOVER_DID_DISMISSED];
-	self.popover = nil;
+    [self sendUISignal:BeeUIBoard.POPOVER_DID_DISMISSED];
+    self.popover = nil;
 }
 
 @end
