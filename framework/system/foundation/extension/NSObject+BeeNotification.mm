@@ -159,7 +159,7 @@
 
 + (BOOL)postNotification:(NSString *)name
 {
-	INFO( @"'%@'", [name stringByReplacingOccurrencesOfString:@"notify." withString:@""] );
+	INFO( @"Notification '%@'", [name stringByReplacingOccurrencesOfString:@"notify." withString:@""] );
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:name object:nil];
 	return YES;

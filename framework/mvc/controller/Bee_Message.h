@@ -223,6 +223,7 @@ AS_INT( STATE_CANCELLED )		// 消息被取消了
 - (void)internalStartTimer;
 - (void)internalStopTimer;
 - (void)internalNotifySending;
+- (void)internalNotifyWaiting;
 - (void)internalNotifySucceed;
 - (void)internalNotifyFailed;
 - (void)internalNotifyCancelled;

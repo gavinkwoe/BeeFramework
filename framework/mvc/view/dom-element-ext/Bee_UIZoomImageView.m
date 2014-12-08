@@ -60,6 +60,8 @@
 		
 		_imageView = [[[BeeUIImageView alloc] init] autorelease];
 		_imageView.contentMode = UIViewContentModeScaleAspectFit;
+		_imageView.indicatorStyle = UIActivityIndicatorViewStyleWhite;
+		_imageView.indicatorColor = [UIColor whiteColor];
 
 		[self setContent:_imageView animated:NO];
 	}

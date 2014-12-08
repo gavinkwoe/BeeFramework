@@ -100,14 +100,24 @@ DEF_NUMBER( TYPE_STACK,		3 )	// stack
 		if ( [self.type isEqualToNumber:self.TYPE_CLASS] )
 		{
 			Class clazz = NSClassFromString( (NSString *)self.value );
+			id instance = nil;
+
+			if ( [clazz respondsToSelector:@selector(sharedInstance)] )
+			{
+				instance = [clazz sharedInstance];
+			}
+			else
+			{
+				instance = [[[clazz alloc] init] autorelease];
+			}
 
 			if ( [clazz isSubclassOfClass:[UINavigationController class]] )
 			{
-				self.stack = [[[clazz alloc] init] autorelease];
+				self.stack = instance;
 			}
 			else if ( [clazz isSubclassOfClass:[BeeUIBoard class]] )
 			{
-				self.stack = [BeeUIStack stackWithFirstBoardClass:clazz];
+				self.stack = [BeeUIStack stackWithFirstBoard:instance];
 			}
 		}
 		else if ( [self.type isEqualToNumber:self.TYPE_BOARD] )
@@ -174,8 +184,6 @@ DEF_SINGLETON( BeeUIRouter )
 
 - (void)load
 {
-//	[super load];
-
 	_seed = 0;
 	_effect = BeeUIRouterEffectNone;
 	_mapping = [[NSMutableDictionary alloc] init];
@@ -195,8 +203,6 @@ DEF_SINGLETON( BeeUIRouter )
 	
 	[_url release];
 	_url = nil;
-
-//	[super unload];
 }
 
 - (void)map:(NSString *)rule toClass:(Class)clazz
@@ -254,7 +260,7 @@ DEF_SINGLETON( BeeUIRouter )
 		{
 			item.order = self.seed++;
 			item.rule = rule;
-			item.type = BeeUIRouterItem.TYPE_BOARD;
+			item.type = BeeUIRouterItem.TYPE_STACK;
 			item.value = stack;
 			
 			[_mapping setObject:item forKey:rule];
@@ -322,8 +328,8 @@ DEF_SINGLETON( BeeUIRouter )
 		}
 	}
 
-	[self postNotification:self.STACK_WILL_CHANGE];
-	[self sendUISignal:self.WILL_CHANGE];
+	[self postNotification:BeeUIRouter.STACK_WILL_CHANGE];
+	[self sendUISignal:BeeUIRouter.WILL_CHANGE];
 
 	for ( BeeUIRouterItem * item in _mapping.allValues )
 	{

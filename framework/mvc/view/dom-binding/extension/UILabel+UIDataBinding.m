@@ -37,7 +37,7 @@
 
 - (id)bindedData
 {
-	return self.text;
+    return self.text ? self.text : self.attributedText;
 }
 
 - (void)bindData:(id)data
@@ -60,11 +60,16 @@
 	{
 		self.text = [data description];
 	}
+    else if ( [data isKindOfClass:[NSAttributedString class]] )
+    {
+        self.attributedText = data;
+    }
 }
 
 - (void)unbindData
 {
 	self.text = nil;
+    self.attributedText = nil;
 }
 
 @end

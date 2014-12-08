@@ -118,13 +118,20 @@ DEF_NOTIFICATION( CHANGED )
 
 - (void)applyLanguage:(BeeLanguage *)lang
 {
-	if ( _current == lang )
-		return;
+	BOOL shouldNotify = _current ? YES : NO;
+
+	BeeLanguage * lang2 = [self findLanguage:lang.name];
+	if ( nil == lang2 )
+	{
+		[_languages addObject:lang];
+	}
 	
 	_current = lang;
-	[_languages addObject:lang];
-	
-	[self postNotification:self.CHANGED];
+
+	if ( shouldNotify )
+	{
+		[self postNotification:self.CHANGED];
+	}
 }
 
 + (BeeLanguage *)currentLanguage

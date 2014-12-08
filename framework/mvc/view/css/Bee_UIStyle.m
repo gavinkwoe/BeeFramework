@@ -125,6 +125,14 @@
 	return style;
 }
 
++ (BeeUIStyle *)styleWithStylesheet:(CSSStyleSheet *)sheet
+{
+    BeeUIStyle * style = [[[BeeUIStyle alloc] init] autorelease];
+    style.styleSheet = [CSSStyleSheet styleSheet];
+    [style.styleSheet mergeStyleSheet:sheet];
+    return style;
+}
+
 #pragma mark -
 
 - (void)applyTo:(id)object
@@ -181,7 +189,10 @@
 	if ( nil == style )
 		return;
 
-	[style appendCSS:self.properties];
+	if ( self.properties.count )
+	{
+		[style appendCSS:self.properties];
+	}
 }
 
 - (BeeUIStyle *)combine:(BeeUIStyle *)style
@@ -190,6 +201,30 @@
 	[newStyle appendCSS:self];
 	[newStyle appendCSS:style];
 	return newStyle;
+}
+
+- (NSString *)propertyForKey:(NSString *)key
+{
+	return [self.properties objectForKey:key];
+}
+
+- (NSString *)propertyForKeyArray:(NSArray *)array
+{
+	for ( NSString * key in array )
+	{
+		NSString * value = [self.properties objectForKey:key];
+		if ( value )
+		{
+			return value;
+		}
+	}
+	
+	return nil;
+}
+
+- (void)setProperty:(NSString *)value forKey:(NSString *)key
+{
+	[self.properties setObject:value forKey:key];
 }
 
 @end

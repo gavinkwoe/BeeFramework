@@ -66,7 +66,7 @@
 - (void)setTitle:(NSString *)text
 {
 	[_button setTitle:text forState:_state];
-	[_button setNeedsDisplay];
+//	[_button setNeedsDisplay];
 }
 
 - (UIColor *)titleColor
@@ -77,7 +77,7 @@
 - (void)setTitleColor:(UIColor *)color
 {
 	[_button setTitleColor:color forState:_state];
-	[_button setNeedsDisplay];
+//	[_button setNeedsDisplay];
 }
 
 - (UIColor *)titleShadowColor
@@ -88,7 +88,7 @@
 - (void)setTitleShadowColor:(UIColor *)color
 {
 	[_button setTitleShadowColor:color forState:_state];
-	[_button setNeedsDisplay];
+//	[_button setNeedsDisplay];
 }
 
 - (UIImage *)image
@@ -99,7 +99,7 @@
 - (void)setImage:(UIImage *)img
 {
 	[_button setImage:img forState:_state];
-	[_button setNeedsDisplay];
+//	[_button setNeedsDisplay];
 }
 
 - (UIImage *)backgroundImage
@@ -110,7 +110,7 @@
 - (void)setBackgroundImage:(UIImage *)img
 {
 	[_button setBackgroundImage:img forState:_state];
-	[_button setNeedsDisplay];
+//	[_button setNeedsDisplay];
 }
 
 @end
@@ -225,6 +225,9 @@ DEF_SIGNAL( DRAG_EXIT )			// 退出
 		
 		self.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
 		self.contentVerticalAlignment = UIControlContentHorizontalAlignmentCenter;
+
+		self.multipleTouchEnabled = NO;
+		self.exclusiveTouch = NO;
 		
 		self.enableAllEvents = NO;
 
@@ -249,8 +252,11 @@ DEF_SIGNAL( DRAG_EXIT )			// 退出
 - (void)setFrame:(CGRect)frame
 {
 	[super setFrame:frame];
-	
-	_label.frame = CGRectMake( 0.0f, 0.0f, frame.size.width, frame.size.height );
+
+	if ( _label )
+	{
+		_label.frame = CGRectMake( 0.0f, 0.0f, frame.size.width, frame.size.height );
+	}
 }
 
 - (void)dealloc
@@ -290,11 +296,11 @@ DEF_SIGNAL( DRAG_EXIT )			// 退出
 	
 	if ( IOS7_OR_LATER )
 	{
-		_label.font = [UIFont systemFontOfSize:14.0f];
+		_label.font = [UIFont systemFontOfSize:15.0f];
 	}
 	else
 	{
-		_label.font = [UIFont boldSystemFontOfSize:14.0f];
+		_label.font = [UIFont boldSystemFontOfSize:15.0f];
 	}
 	
 	_label.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
@@ -339,7 +345,7 @@ DEF_SIGNAL( DRAG_EXIT )			// 退出
 	[self initLabel];
 	
 	_label.shadowColor = color;
-	_label.shadowOffset = CGSizeMake( 0.0f, -1.0f );
+	_label.shadowOffset = CGSizeMake( 0.0f, -0.5f );
 }
 
 - (UIFont *)titleFont
@@ -393,8 +399,13 @@ DEF_SIGNAL( DRAG_EXIT )			// 退出
 
 - (void)setImage:(UIImage *)img
 {
-	[self setImage:img forState:self.state];
+	[self setImage:img forState:UIControlStateNormal];
+	[self setImage:img forState:UIControlStateHighlighted];
+	[self setImage:img forState:UIControlStateDisabled];
+	[self setImage:img forState:UIControlStateSelected];
+
 	[self setNeedsLayout];
+//	[self setNeedsDisplay];
 }
 
 - (BeeUIButtonState *)stateNormal

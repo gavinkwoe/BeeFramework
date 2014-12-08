@@ -115,23 +115,23 @@ IS_CONTAINABLE( YES )
 - (void)layoutSubviews
 {
 	[super layoutSubviews];
-
+    
 	BeeUIBoard * receiver = self.signalReceiver;
 	if ( receiver )
 	{
 		if ( NO == _layouting )
 		{
 			BOOL changed = NO;
-
+            
 			if ( NO == CGSizeEqualToSize( self.frame.size, CGSizeZero ) )
 			{
 				changed = YES;
 			}
-
+            
 			if ( changed )
 			{
 				_layouting = YES;
-
+                
 				[receiver sendUISignal:BeeUIBoard.LAYOUT_VIEWS];
 				
 				_layouting = NO;
@@ -179,6 +179,8 @@ IS_CONTAINABLE( YES )
 	BOOL						_allowedLandscape;
 	BOOL						_allowedSwipeToBack;
 	BOOL						_disableLayout;
+	
+	UISwipeGestureRecognizer *	_swipeGesture;
 	
 #if __BEE_DEVELOPMENT__
 	NSUInteger					_createSeq;
@@ -320,6 +322,7 @@ static NSMutableArray *		__allBoards = nil;
 		
 		_allowedPortrait = YES;
 		_allowedLandscape = YES;
+		_allowedSwipeToBack = YES;
 		
 #if __BEE_DEVELOPMENT__
 		_createSeq = __createSeed++;
@@ -403,8 +406,37 @@ static NSMutableArray *		__allBoards = nil;
 {
 	_allowedSwipeToBack = flag;
 
-	self.view.swipeble = flag;
-	self.view.swipeDirection = UISwipeGestureRecognizerDirectionRight;
+	if ( _allowedSwipeToBack )
+	{
+		if ( nil == _swipeGesture )
+		{
+			_swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipedRight:)];
+			_swipeGesture.direction = UISwipeGestureRecognizerDirectionRight;
+			[self.view addGestureRecognizer:_swipeGesture];
+		}
+	}
+	else
+	{
+		if ( _swipeGesture )
+		{
+			[self.view removeGestureRecognizer:_swipeGesture];
+		
+			[_swipeGesture setDelegate:nil];
+			[_swipeGesture release];
+			_swipeGesture = nil;
+		}
+	}
+}
+
+- (void)didSwipedRight:(UISwipeGestureRecognizer *)swipeGesture
+{
+	if ( UIGestureRecognizerStateEnded == swipeGesture.state )
+	{
+		if ( _allowedSwipeToBack )
+		{
+			[self.stack popBoardAnimated:YES];
+		}
+	}
 }
 
 #pragma mark -
@@ -551,6 +583,8 @@ static NSMutableArray *		__allBoards = nil;
 	
 	_presenting = YES;
 	
+//	self.view.layer.shouldRasterize = YES;
+
 	[super viewWillAppear:animated];
 	
 	[self createViews];
@@ -568,12 +602,16 @@ static NSMutableArray *		__allBoards = nil;
 	if ( NO == _viewBuilt )
 		return;
 	
+//	self.view.layer.shouldRasterize = NO;
+	
 	[super viewDidAppear:animated];
 	
 	[self enableUserInteraction];
 	[self changeStateActivated];
 	
-	_firstEnter = NO;	
+	_firstEnter = NO;
+	
+	[self setAllowedSwipeToBack:_allowedSwipeToBack];
 }
 
 // Called when the view is dismissed, covered or otherwise hidden. Default does nothing
@@ -582,6 +620,8 @@ static NSMutableArray *		__allBoards = nil;
 	if ( NO == _viewBuilt )
 		return;
 	
+//	self.view.layer.shouldRasterize = YES;
+
 	[super viewWillDisappear:animated];
 	
 	[self disableUserInteraction];
@@ -595,6 +635,8 @@ static NSMutableArray *		__allBoards = nil;
 		return;
 	
 	[super viewDidDisappear:animated];
+	
+//	self.view.layer.shouldRasterize = NO;
 	
 	_presenting = NO;
 	
@@ -713,13 +755,19 @@ static NSMutableArray *		__allBoards = nil;
 }
 
 - (void)deleteViews
-{	
+{
 	if ( YES == _viewBuilt )
 	{
+		[self.view removeGestureRecognizer:_swipeGesture];
+
 		[self sendUISignal:BeeUIBoard.DELETE_VIEWS];
 
 		_viewBuilt = NO;
 	}
+	
+	[_swipeGesture setDelegate:nil];
+	[_swipeGesture release];
+	_swipeGesture = nil;
 }
 
 - (void)loadDatas
@@ -828,6 +876,15 @@ static NSMutableArray *		__allBoards = nil;
 
 #pragma mark -
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesBegan:touches withEvent:event];
+    
+    [self.view endEditing:YES];
+}
+
+#pragma mark -
+
 - (void)handleUISignal:(BeeUISignal *)signal
 {
 #if __BEE_DEVELOPMENT__
@@ -886,7 +943,7 @@ static NSMutableArray *		__allBoards = nil;
 
 			self.view.autoresizesSubviews = YES;
 			self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-
+			
 			// TODO:
 		}
 		else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
@@ -920,71 +977,68 @@ static NSMutableArray *		__allBoards = nil;
 
 			if ( titleView )
 			{
-				if ( CGSizeEqualToSize( CGSizeZero, titleView.frame.size ) )
+				CGRect	titleFrame;
+				CGSize	boundSize = titleView.superview.frame.size;
+
+				titleFrame.size = [titleView estimateUISizeByBound:boundSize];
+
+				if ( 0 == titleFrame.size.width )
 				{
-					CGRect titleFrame;
-					titleFrame.origin = titleView.frame.origin;
-					titleFrame.size.width = 200.0f;
-					titleFrame.size.height = 34.0f;
-					
-					titleView.frame = titleFrame;
+					titleFrame.size.width = boundSize.width * 0.625f;
 				}
-				else
+
+				if ( 0 == titleFrame.size.height )
 				{
-					titleView.RELAYOUT();
+					titleFrame.size.height = boundSize.height;
 				}
+
+				titleFrame.origin.y = (boundSize.height - titleFrame.size.height) / 2.0f;
+				titleFrame.origin.x = (boundSize.width - titleFrame.size.width) / 2.0f;
+				
+				titleView.frame = titleFrame;
 			}
-			
+
 			if ( leftView )
 			{
-				if ( CGSizeEqualToSize( CGSizeZero, leftView.frame.size ) )
-				{
-					CGRect leftFrame;
-					leftFrame.origin = leftView.frame.origin;
-					leftFrame.size = [BeeUINavigationBar buttonSize];
-					
-					if ( CGSizeEqualToSize(leftFrame.size, CGSizeZero) )
-					{
-						leftFrame.size = CGSizeMake( 48.0f, 34.0f );
-					}
+				CGRect	leftFrame;
+				CGSize	boundSize = [BeeUINavigationBar buttonSize];
 
-					leftView.frame = leftFrame;
-				}
-				else
+				leftFrame.origin = leftView.frame.origin;
+				leftFrame.size = [leftView estimateUISizeByBound:[BeeUINavigationBar buttonSize]];
+
+				if ( 0 == leftFrame.size.width )
 				{
-					leftView.RELAYOUT();
+					leftFrame.size.width = boundSize.width;
 				}
+				
+				if ( 0 == leftFrame.size.height )
+				{
+					leftFrame.size.height = boundSize.height;
+				}
+
+				leftView.frame = leftFrame;
 			}
 
 			if ( rightView )
 			{
-				if ( CGSizeEqualToSize( CGSizeZero, rightView.frame.size ) )
-				{
-					CGRect rightFrame;
-					rightFrame.origin = rightView.frame.origin;
-					rightFrame.size = [BeeUINavigationBar buttonSize];
-					
-					if ( CGSizeEqualToSize(rightFrame.size, CGSizeZero) )
-					{
-						rightFrame.size = CGSizeMake( 48.0f, 34.0f );
-					}
-					
-					rightView.frame = rightFrame;
-				}
-				else
-				{
-					rightView.RELAYOUT();
-				}
-			}
+				CGRect	rightFrame;
+				CGSize	boundSize = [BeeUINavigationBar buttonSize];
 
-//			INFO( @"'%@'.frame = ( %.1f, %.1f, %.1f, %.1f )",
-//				 [[self class] description],
-//				 self.view.frame.origin.x,
-//				 self.view.frame.origin.y,
-//				 self.view.frame.size.width,
-//				 self.view.frame.size.height );
-			
-			// TODO:
+				rightFrame.origin = rightView.frame.origin;
+				rightFrame.size = [rightView estimateUISizeByBound:[BeeUINavigationBar buttonSize]];
+
+				if ( 0 == rightFrame.size.width )
+				{
+					rightFrame.size.width = boundSize.width;
+				}
+
+				if ( 0 == rightFrame.size.height )
+				{
+					rightFrame.size.height = boundSize.height;
+				}
+
+				rightView.frame = rightFrame;
+			}
 		}
 		else if ( [signal is:BeeUIBoard.WILL_APPEAR] )
 		{
@@ -1005,18 +1059,6 @@ static NSMutableArray *		__allBoards = nil;
 	}
 	else
 	{
-		if ( [signal is:UIView.SWIPE_RIGHT] )
-		{
-			if ( _allowedSwipeToBack )
-			{
-				[self.stack popBoardAnimated:YES];
-			}
-		}
-//		else if ( [signal is:BeeUINavigationBar.LEFT_TOUCHED] )
-//		{
-//			[self.stack popBoardAnimated:YES];
-//		}
-	
 		if ( self.parentBoard )
 		{
 			[signal forward:self.parentBoard.view];
@@ -1030,21 +1072,23 @@ static NSMutableArray *		__allBoards = nil;
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-	if ( IOS7_OR_LATER )
-	{
-		if ( [BeeUIConfig sharedInstance].iOS6Mode )
-		{
-			return UIStatusBarStyleBlackTranslucent;
-		}
-		else
-		{
-			return UIStatusBarStyleLightContent;
-		}
-	}
-	else
-	{
-		return UIStatusBarStyleDefault;
-	}
+	return UIStatusBarStyleDefault;
+
+//	if ( IOS7_OR_LATER )
+//	{
+//		if ( [BeeUIConfig sharedInstance].iOS6Mode )
+//		{
+//			return UIStatusBarStyleBlackTranslucent;
+//		}
+//		else
+//		{
+//			return UIStatusBarStyleLightContent;
+//		}
+//	}
+//	else
+//	{
+//		return UIStatusBarStyleDefault;
+//	}
 }
 
 #endif	// #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000

@@ -32,11 +32,12 @@
 #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 
 #import "Bee_UIStyleManager.h"
+#import "CSSStyleSheet.h"
 
 #pragma mark -
 
 #undef	__PRELOAD_ALL__
-#define __PRELOAD_ALL__		(__ON__)
+#define __PRELOAD_ALL__		(__OFF__)
 
 #pragma mark -
 
@@ -63,9 +64,7 @@ DEF_SINGLETON( BeeUIStyleManager )
 #if __PRELOAD_ALL__
 	[[BeeUIStyleManager sharedInstance] preloadAll];
 #endif	//	#if __PRELOAD_ALL__
-
-	[BeeUIStyleManager loadDefaultStyleResource:@"default.css"];
-	return YES;
+	return NO;
 }
 
 + (void)loadDefaultStyleFile:(NSString *)fileName
@@ -162,13 +161,13 @@ DEF_SINGLETON( BeeUIStyleManager )
 		{
 			resPath = [[NSBundle mainBundle] pathForResource:fullName ofType:extension];
 		}
-		else
-		{
-			resPath = resDefaultPath;
-		}
+		
+        if ( !resPath ) {
+            resPath = resDefaultPath;
+        }
 	}
 	
-	INFO( @"'%@' loaded", resName );
+//	INFO( @"'%@' loaded", resName );
 	
 	NSData * data = [NSData dataWithContentsOfFile:resPath];
 	if ( nil == data || 0 == data.length )
@@ -192,15 +191,32 @@ DEF_SINGLETON( BeeUIStyleManager )
 		ERROR( @"Unknown resource type '%@'", resName );
 		return nil;
 	}
-	
-	BeeUIStyle * style = [BeeUIStyle styleWithDictionary:dict];
+    
+    BeeUIStyle * style = [BeeUIStyle styleWithDictionary:dict];
 	if ( nil == style )
 	{
 		ERROR( @"'%@' not found", resName );
 		return nil;
 	}
+    
+	NSString * cssString = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+	if ( nil == cssString )
+	{
+		ERROR( @"Unknown resource type '%@'", resName );
+		return nil;
+	}
+
+	CSSStyleSheet *	sheet = [BeeUIStyleParser parseStyleSheet:cssString];
+	if ( nil == sheet )
+	{
+		ERROR( @"Unknown resource type '%@'", resName );
+		return nil;
+	}
 	
-	INFO( @"'%@' loaded", resName );
+    [sheet ensureRuleSet];
+	style.styleSheet = sheet;
+
+	INFO( @"Stylesheet '%@' loaded", resName );
 	
 	if ( flag )
 	{
@@ -233,7 +249,7 @@ DEF_SINGLETON( BeeUIStyleManager )
 		return nil;
 	}
 	
-	INFO( @"'%@' loaded", fileName );
+//	INFO( @"'%@' loaded", fileName );
 	
 	NSData * data = [NSData dataWithContentsOfFile:fileName];
 	if ( nil == data || 0 == data.length )
@@ -242,18 +258,35 @@ DEF_SINGLETON( BeeUIStyleManager )
 	NSDictionary * dict = [BeeUIStyleParser parse:data];
 	if ( nil == dict )
 	{
-		ERROR( @"unknown resource type '%@'", fileName );
+		ERROR( @"Unknown resource type '%@'", fileName );
 		return nil;
 	}
-	
-	BeeUIStyle * style = [BeeUIStyle styleWithDictionary:dict];
+    
+    BeeUIStyle * style = [BeeUIStyle styleWithDictionary:dict];
 	if ( nil == style )
 	{
-		ERROR( @"Failed to load '%@'", fileName );
+		ERROR( @"'%@' not found", fileName );
+		return nil;
+	}
+    
+	NSString * cssString = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+	if ( nil == cssString )
+	{
+		ERROR( @"Unknown resource type '%@'", fileName );
 		return nil;
 	}
 	
-	INFO( @"'%@' loaded", fileName );
+	CSSStyleSheet *	sheet = [BeeUIStyleParser parseStyleSheet:cssString];
+	if ( nil == sheet )
+	{
+		ERROR( @"Unknown resource type '%@'", fileName );
+		return nil;
+	}
+	
+    [sheet ensureRuleSet];
+	style.styleSheet = sheet;
+	
+	INFO( @"Stylesheet '%@' loaded", fileName );
 	
 	if ( flag )
 	{

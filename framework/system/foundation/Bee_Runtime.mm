@@ -59,6 +59,16 @@ DEF_INT( NSARRAY,		4 )
 DEF_INT( NSDICTIONARY,	5 )
 DEF_INT( NSDATE,		6 )
 
++ (BOOL)isReadOnly:(const char *)attr
+{
+	if ( strstr(attr, "_ro") || strstr(attr, ",R") )
+	{
+		return YES;
+	}
+	
+	return NO;
+}
+
 + (NSUInteger)typeOf:(const char *)attr
 {
 	if ( attr[0] != 'T' )
@@ -715,7 +725,7 @@ DEF_SINGLETON( BeeRuntime )
 #if __BEE_DEVELOPMENT__
 #if defined(__ppc__)
 	asm("trap");
-#elif defined(__i386__)
+#elif defined(__i386__) ||  defined(__amd64__)
 	asm("int3");
 #endif	// #elif defined(__i386__)
 #endif	// #if __BEE_DEVELOPMENT__

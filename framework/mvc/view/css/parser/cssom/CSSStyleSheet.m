@@ -36,9 +36,99 @@
 #import "CSSRuleSet.h"
 #import "CSSStyleSheet.h"
 
+#pragma mark -
+
+@interface CSSElement : NSObject<CSSElementProtocol>
+@property (nonatomic, retain) NSString *	hash;
+@property (nonatomic, retain) NSString *	localName;
+@property (nonatomic, retain) NSArray *		classes;
+@property (nonatomic, retain) NSArray *		pseudos;
+@property (nonatomic, retain) NSArray *		attributes;
+@end
+
+#pragma mark -
+
+@implementation CSSElement
+
+@synthesize hash;
+@synthesize localName;
+@synthesize classes;
+@synthesize pseudos;
+@synthesize attributes;
+
+- (void)dealloc
+{
+    self.classes = nil;
+    self.pseudos = nil;
+    self.attributes = nil;
+    
+    [super dealloc];
+}
+
+- (BOOL)isElementNode
+{
+	return YES;
+}
+
+- (BOOL)isFirstChild
+{
+	return YES;
+}
+
+- (BOOL)isLastChild
+{
+	return YES;
+}
+
+- (BOOL)isNthChild:(NSUInteger)index
+{
+	return index == [self index];
+}
+
+- (NSUInteger)index
+{
+	return 0;
+}
+
+- (NSArray *)childs
+{
+	return nil;
+}
+
+- (NSArray *)siblings
+{
+	return nil;
+}
+
+- (NSArray *)previousSiblings
+{
+	return nil;
+}
+
+- (NSArray *)followingSiblings
+{
+	return nil;
+}
+
+- (id<CSSElementProtocol>)parent
+{
+	return nil;
+}
+
+- (id<CSSElementProtocol>)siblingAtIndex:(NSInteger)index
+{
+	return nil;
+}
+
+@end
+
+#pragma mark -
+
 @interface CSSStyleSheet()
 @property (nonatomic, assign) CSSParser * parser;
 @end
+
+#pragma mark -
 
 @implementation CSSStyleSheet
 
@@ -83,9 +173,21 @@
     [self.parser parseString:string style:self];
 }
 
+- (void)ensureRuleSet
+{
+    [self.ruleSet addRulesFromSheet:self];
+}
+
 - (void)mergeStyleSheet:(CSSStyleSheet *)sheet
 {
     [self.ruleSet addRulesFromSheet:sheet];
+}
+
+- (NSDictionary *)styleForString:(NSString *)string
+{
+	CSSElement * elem = [[[CSSElement alloc] init] autorelease];
+	elem.classes = [NSArray arrayWithObject:string];
+	return [[CSSStyleSelector sharedInstance] styleForElement:elem inStyleSheet:self];
 }
 
 - (NSDictionary *)styleForElement:(id<CSSElementProtocol>)element

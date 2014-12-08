@@ -107,7 +107,7 @@ static NSMutableArray * __subControllers = nil;
     
     if ( [rtti respondsToSelector:@selector(sharedInstance)] )
     {
-        controller = [rtti sharedInstance];
+        controller = (BeeMessageController *)[rtti sharedInstance];
     }
     else
     {

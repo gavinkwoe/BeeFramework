@@ -44,7 +44,7 @@
 	NSMutableDictionary * _selectorCache;
 }
 
-- (BOOL)perform:(BeeUISignal *)signal target:(id)target selector:(SEL)sel class:(Class)clazz;
+- (BOOL)perform:(BeeUISignal *)signal target:(id)target selector:(SEL)sel class:(Class)clazz history:(NSMutableDictionary *)history;
 - (void)forward:(BeeUISignal *)signal toClass:(Class)superClass;
 - (void)forward:(BeeUISignal *)signal toClassStack:(NSArray *)classArray;
 
@@ -164,22 +164,22 @@ DEF_SINGLETON( BeeUISignalBus )
 	{
 		if ( signal.sourceView.tagString )
 		{
-			PERF( @"'%@' > '%@ #%@' > %@ > Done", signal.prettyName, signal.sourceView.nameSpace, signal.sourceView.tagString, [signal.jumpPath join:@" > "] );
+			PERF( @"Signal '%@' > '%@ #%@' > %@ > Done", signal.prettyName, signal.sourceView.nameSpace, signal.sourceView.tagString, [signal.jumpPath join:@" > "] );
 		}
 		else
 		{
-			PERF( @"'%@' > %@ > Done", signal.prettyName, [signal.jumpPath join:@" > "] );
+			PERF( @"Signal '%@' > %@ > Done", signal.prettyName, [signal.jumpPath join:@" > "] );
 		}
 	}
 	else if ( signal.dead )
 	{
 		if ( signal.sourceView.tagString )
 		{
-			PERF( @"'%@' > '#%@' > %@ > Kill", signal.prettyName, signal.sourceView.tagString, [signal.jumpPath join:@" > "] );
+			PERF( @"Signal '%@' > '#%@' > %@ > Kill", signal.prettyName, signal.sourceView.tagString, [signal.jumpPath join:@" > "] );
 		}
 		else
 		{
-			PERF( @"'%@' (%@) > %@ > Kill", signal.prettyName, [signal.jumpPath join:@" > "] );
+			PERF( @"Signal '%@' (%@) > %@ > Kill", signal.prettyName, [signal.jumpPath join:@" > "] );
 		}
 	}
 
@@ -285,7 +285,7 @@ DEF_SINGLETON( BeeUISignalBus )
 }
 
 
-- (BOOL)perform:(BeeUISignal *)signal target:(id)target selector:(SEL)sel class:(Class)clazz
+- (BOOL)perform:(BeeUISignal *)signal target:(id)target selector:(SEL)sel class:(Class)clazz history:(NSMutableDictionary *)history
 {
 	ASSERT( signal );
 	ASSERT( target );
@@ -302,9 +302,14 @@ DEF_SINGLETON( BeeUISignalBus )
 			IMP imp = method_getImplementation( method );
 			if ( imp )
 			{
-				imp( target, sel, signal );
+				if ( nil == [history objectForKey:@((unsigned int)imp)] )
+				{
+					imp( target, sel, signal );
 				
-				performed = YES;
+					[history setObject:@(YES) forKey:@((unsigned int)imp)];
+
+					performed = YES;
+				}
 			}
 		}
 	}
@@ -318,7 +323,7 @@ DEF_SINGLETON( BeeUISignalBus )
 		}
 	}
 	
-	PERF( @"'%@' on '%@' selector '%s', %@", signal.name, [clazz description], sel_getName(sel), performed ? @"HIT" : @"SKIP" );
+//	PERF( @"'%@' on '%@' selector '%s', %@", signal.name, [clazz description], sel_getName(sel), performed ? @"HIT" : @"SKIP" );
 	
 	return performed;
 }
@@ -363,7 +368,12 @@ DEF_SINGLETON( BeeUISignalBus )
 	if ( signal.source )
 	{
 		nameSpace = [signal.source signalNamespace];
+		nameSpace = [nameSpace stringByReplacingOccurrencesOfString:@"-" withString:@"_"];
+		nameSpace = [nameSpace stringByReplacingOccurrencesOfString:@":" withString:@"_"];
+		
 		tagString = [signal.source signalTag];
+		tagString = [tagString stringByReplacingOccurrencesOfString:@"-" withString:@"_"];
+		tagString = [tagString stringByReplacingOccurrencesOfString:@":" withString:@"_"];
 		
 		if ( nameSpace || tagString )
 		{
@@ -379,13 +389,11 @@ DEF_SINGLETON( BeeUISignalBus )
 			{
 				prioSelector = tagString;
 			}
-			
-			prioSelector = [prioSelector stringByReplacingOccurrencesOfString:@"-" withString:@"_"];
-			prioSelector = [prioSelector stringByReplacingOccurrencesOfString:@":" withString:@"_"];
 		}
 	}
 	
-	id signalTarget = [signal.target signalTarget];
+	id						signalTarget = [signal.target signalTarget];
+	NSMutableDictionary *	history = [NSMutableDictionary dictionary];
 	
 	for ( Class signalTargetClass in classStack )
 	{
@@ -406,7 +414,7 @@ DEF_SINGLETON( BeeUISignalBus )
 			SEL cachedSelector = NSSelectorFromString( cachedSelectorName );
 			if ( cachedSelector )
 			{
-				BOOL hit = [self perform:signal target:signalTarget selector:cachedSelector class:signalTargetClass];
+				BOOL hit = [self perform:signal target:signalTarget selector:cachedSelector class:signalTargetClass history:history];
 				if ( hit )
 				{
 					continue;
@@ -427,7 +435,7 @@ DEF_SINGLETON( BeeUISignalBus )
 				selectorName = [NSString stringWithFormat:@"handleUISignal_%@:", prioSelector];
 				selector = NSSelectorFromString( selectorName );
 				
-				performed = [self perform:signal target:signalTarget selector:selector class:signalTargetClass];
+				performed = [self perform:signal target:signalTarget selector:selector class:signalTargetClass history:history];
 				if ( performed )
 				{
 					[_selectorCache setObject:selectorName forKey:cacheName];
@@ -442,7 +450,7 @@ DEF_SINGLETON( BeeUISignalBus )
 				selectorName = [NSString stringWithFormat:@"handleUISignal_%@_%@:", signalClass, signalMethod];
 				selector = NSSelectorFromString( selectorName );
 				
-				performed = [self perform:signal target:signalTarget selector:selector class:signalTargetClass];
+				performed = [self perform:signal target:signalTarget selector:selector class:signalTargetClass history:history];
 				if ( performed )
 				{
 					[_selectorCache setObject:selectorName forKey:cacheName];
@@ -457,7 +465,7 @@ DEF_SINGLETON( BeeUISignalBus )
 				selectorName = [NSString stringWithFormat:@"handleUISignal_%@:", signalClass];
 				selector = NSSelectorFromString( selectorName );
 				
-				performed = [self perform:signal target:signalTarget selector:selector class:signalTargetClass];
+				performed = [self perform:signal target:signalTarget selector:selector class:signalTargetClass history:history];
 				if ( performed )
 				{
 					[_selectorCache setObject:selectorName forKey:cacheName];
@@ -473,7 +481,7 @@ DEF_SINGLETON( BeeUISignalBus )
 			selectorName = [selectorName stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
 			selector = NSSelectorFromString( selectorName );
 			
-			performed = [self perform:signal target:signalTarget selector:selector class:signalTargetClass];
+			performed = [self perform:signal target:signalTarget selector:selector class:signalTargetClass history:history];
 			if ( performed )
 			{
 				[_selectorCache setObject:selectorName forKey:cacheName];
@@ -489,7 +497,7 @@ DEF_SINGLETON( BeeUISignalBus )
 					selectorName = [NSString stringWithFormat:@"handleUISignal_%@_%@:", [rtti description], signalMethod];
 					selector = NSSelectorFromString( selectorName );
 					
-					performed = [self perform:signal target:signalTarget selector:selector class:signalTargetClass];
+					performed = [self perform:signal target:signalTarget selector:selector class:signalTargetClass history:history];
 					if ( performed )
 					{
 						[_selectorCache setObject:selectorName forKey:cacheName];
@@ -504,7 +512,17 @@ DEF_SINGLETON( BeeUISignalBus )
 					selectorName = [NSString stringWithFormat:@"handleUISignal_%@_%@:", [rtti description], tagString];
 					selector = NSSelectorFromString( selectorName );
 					
-					performed = [self perform:signal target:signalTarget selector:selector class:signalTargetClass];
+					performed = [self perform:signal target:signalTarget selector:selector class:signalTargetClass history:history];
+					if ( performed )
+					{
+						[_selectorCache setObject:selectorName forKey:cacheName];
+						break;
+					}
+
+					selectorName = [NSString stringWithFormat:@"handleUISignal_%@:", tagString];
+					selector = NSSelectorFromString( selectorName );
+					
+					performed = [self perform:signal target:signalTarget selector:selector class:signalTargetClass history:history];
 					if ( performed )
 					{
 						[_selectorCache setObject:selectorName forKey:cacheName];
@@ -517,7 +535,7 @@ DEF_SINGLETON( BeeUISignalBus )
 				selectorName = [NSString stringWithFormat:@"handleUISignal_%@:", [rtti description]];
 				selector = NSSelectorFromString( selectorName );
 				
-				performed = [self perform:signal target:signalTarget selector:selector class:signalTargetClass];
+				performed = [self perform:signal target:signalTarget selector:selector class:signalTargetClass history:history];
 				if ( performed )
 				{
 					[_selectorCache setObject:selectorName forKey:cacheName];
@@ -529,12 +547,12 @@ DEF_SINGLETON( BeeUISignalBus )
 			{
 				// default case
 				
-				//				ERROR( @"unhandled signal '%@' to '%@'", signal.name, [[signalTarget class] description] );
+//				ERROR( @"unhandled signal '%@' to '%@'", signal.name, [[signalTarget class] description] );
 				
 				selectorName = @"handleUISignal:";
 				selector = NSSelectorFromString( selectorName );
 				
-				performed = [self perform:signal target:signalTarget selector:selector class:signalTargetClass];
+				performed = [self perform:signal target:signalTarget selector:selector class:signalTargetClass history:history];
 				if ( performed )
 				{
 					[_selectorCache setObject:selectorName forKey:cacheName];

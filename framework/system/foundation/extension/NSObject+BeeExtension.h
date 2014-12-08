@@ -53,4 +53,6 @@
 - (void)performSelectorAlongChain:(SEL)sel;
 - (void)performSelectorAlongChainReversed:(SEL)sel;
 
+- (void)copyPropertiesFrom:(id)obj;
+
 @end

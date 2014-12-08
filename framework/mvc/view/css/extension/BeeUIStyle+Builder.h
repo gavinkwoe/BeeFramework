@@ -45,6 +45,8 @@
 - (BeeUIStyle *)childStyleWithName:(NSString *)name;
 - (BeeUIStyle *)childStyleWithOneOfNames:(NSArray *)names;
 
+- (BeeUIStyle *)childStyleWithString:(id)element;
+- (BeeUIStyle *)childStyleWithClasses:(id)element;
 - (BeeUIStyle *)childStyleWithElement:(id)element;
 
 - (void)addChild:(BeeUIStyle *)style;

@@ -154,16 +154,12 @@ DEF_SIGNAL( TAPPED );
 	__SingleTapGestureRecognizer * singleTapGesture = (__SingleTapGestureRecognizer *)self.tapGesture;
 	if ( singleTapGesture )
 	{
-		if ( flag )
-		{
-			self.userInteractionEnabled = YES;
-		}
-		else
-		{
-			self.userInteractionEnabled = NO;
-		}
-		
 		singleTapGesture.enabled = flag;
+	}
+	
+	if ( flag )
+	{
+		self.userInteractionEnabled = YES;
 	}
 }
 
@@ -242,7 +238,7 @@ DEF_SIGNAL( TAPPED );
 			}
 			else
 			{
-				[self sendUISignal:self.TAPPED];
+				[self sendUISignal:UIView.TAPPED];
 			}
 		}
 	}

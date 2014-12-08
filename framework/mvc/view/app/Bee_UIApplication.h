@@ -69,6 +69,7 @@ AS_INT( DEVICE_PHONE_4_INCH )
 
 @property (nonatomic, retain) UIWindow *	window;
 @property (nonatomic, assign) NSUInteger	device;
+
 @property (nonatomic, readonly) BOOL		inForeground;
 @property (nonatomic, readonly) BOOL		inBackground;
 

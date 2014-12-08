@@ -53,11 +53,11 @@ AS_SIGNAL( DID_DISMISS )	// 已经隐藏
 - (void)dismissAnimated:(BOOL)animated;
 
 - (void)addCancelTitle:(NSString *)title;
-- (void)addCancelTitle:(NSString *)title signal:(NSString *)signal object:(NSObject *)object;
+- (void)addCancelTitle:(NSString *)title signal:(NSString *)signal object:(id)object;
 - (void)addButtonTitle:(NSString *)title signal:(NSString *)signal;
-- (void)addButtonTitle:(NSString *)title signal:(NSString *)signal object:(NSObject *)object;
+- (void)addButtonTitle:(NSString *)title signal:(NSString *)signal object:(id)object;
 - (void)addDestructiveTitle:(NSString *)title signal:(NSString *)signal;
-- (void)addDestructiveTitle:(NSString *)title signal:(NSString *)signal object:(NSObject *)object;
+- (void)addDestructiveTitle:(NSString *)title signal:(NSString *)signal object:(id)object;
 
 @end
 

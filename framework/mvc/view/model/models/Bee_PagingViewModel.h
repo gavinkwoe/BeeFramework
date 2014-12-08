@@ -41,6 +41,8 @@
 
 @property (nonatomic, assign) NSUInteger	total;
 @property (nonatomic, assign) NSUInteger	index;
+@property (nonatomic, assign) BOOL			loaded;
+@property (nonatomic, assign) BOOL			more;
 
 AS_SIGNAL( RELOADING )
 AS_SIGNAL( RELOADED )

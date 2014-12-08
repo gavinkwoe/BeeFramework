@@ -45,7 +45,7 @@ AS_PACKAGE( BeePackage_System, BeePerformance, performance );
 #define PERF_TAG1( __X )			[NSString stringWithFormat:@"enter - %s %s", __PRETTY_FUNCTION__, __X]
 #define PERF_TAG2( __X )			[NSString stringWithFormat:@"leave - %s %s", __PRETTY_FUNCTION__, __X]
 
-#if __BEE_DEVELOPMENT__
+#if __BEE_PERFORMANCE__
 
 #define	PERF_MARK( __X )			[[BeePerformance sharedInstance] markTag:PERF_TAG(#__X)];
 #define	PERF_TIME( __X1, __X2 )		[[BeePerformance sharedInstance] betweenTag:PERF_TAG(#__X1) andTag:PERF_TAG(#__X2)]
@@ -62,7 +62,7 @@ AS_PACKAGE( BeePackage_System, BeePerformance, performance );
 		[[BeePerformance sharedInstance] recordName:PERF_TAG(#__X) \
 											andTime:[[BeePerformance sharedInstance] betweenTag:PERF_TAG1(#__X) andTag:PERF_TAG2(#__X)]];
 
-#else	// #if __BEE_DEVELOPMENT__
+#else	// #if __BEE_PERFORMANCE__
 
 #define	PERF_MARK( __TAG )
 #define	PERF_TIME( __TAG1, __TAG2 )	(0.0f)
@@ -73,7 +73,7 @@ AS_PACKAGE( BeePackage_System, BeePerformance, performance );
 #define PERF_ENTER_( __X )
 #define PERF_LEAVE_( __X )
 
-#endif	// #if __BEE_DEVELOPMENT__
+#endif	// #if __BEE_PERFORMANCE__
 
 #pragma mark -
 

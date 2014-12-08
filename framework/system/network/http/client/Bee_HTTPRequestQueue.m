@@ -46,16 +46,19 @@ DEF_PACKAGE( BeePackage_HTTP, BeeHTTPRequestQueue, requestQueue );
 #define DEFAULT_BLACKLIST_TIMEOUT	(60.0f * 5.0f)	// 黑名单超时5分钟
 
 #undef	DEFAULT_GET_TIMEOUT
-#define DEFAULT_GET_TIMEOUT			(30.0f)			// 取图30秒超时
+#define DEFAULT_GET_TIMEOUT			(120.0f)		// 取图60秒超时
 
 #undef	DEFAULT_POST_TIMEOUT
 #define DEFAULT_POST_TIMEOUT		(120.0f)		// 发协议120秒超时
 
 #undef	DEFAULT_PUT_TIMEOUT
-#define DEFAULT_PUT_TIMEOUT			(30.0f)			// 上传30秒超时
+#define DEFAULT_PUT_TIMEOUT			(120.0f)		// 上传30秒超时
 
 #undef	DEFAULT_UPLOAD_TIMEOUT
-#define DEFAULT_UPLOAD_TIMEOUT		(120.0f)		// 上传图片120秒超时
+#define DEFAULT_UPLOAD_TIMEOUT		(300.0f)		// 上传图片300秒超时
+
+#undef	DEFAULT_DELETE_TIMEOUT
+#define DEFAULT_DELETE_TIMEOUT		(120.0f)		// 上传图片120秒超时
 
 #pragma mark -
 
@@ -83,6 +86,7 @@ DEF_PACKAGE( BeePackage_HTTP, BeeHTTPRequestQueue, requestQueue );
 - (BeeHTTPRequest *)GET:(NSString *)url sync:(BOOL)sync;
 - (BeeHTTPRequest *)POST:(NSString *)url sync:(BOOL)sync;
 - (BeeHTTPRequest *)PUT:(NSString *)url sync:(BOOL)sync;
+- (BeeHTTPRequest *)DELETE:(NSString *)url sync:(BOOL)sync;
 
 - (void)cancelRequest:(BeeHTTPRequest *)request;
 - (void)cancelRequestByResponder:(id)responder;
@@ -185,7 +189,7 @@ DEF_SINGLETON( BeeHTTPRequestQueue )
 		date = [_blackList objectForKey:url];
 		if ( date && ([date timeIntervalSince1970] - [now timeIntervalSince1970]) < _blackListTimeout )
 		{
-			ERROR( @"resource broken: %@", url );
+			ERROR( @"HTTP resource broken: %@", url );
 			return YES;
 		}
 	}
@@ -214,7 +218,6 @@ DEF_SINGLETON( BeeHTTPRequestQueue )
 	}
 
 	NSURL * absoluteURL = [NSURL URLWithString:url];
-	INFO( @"GET %@", absoluteURL );
 
 	if ( NO == _online || [self checkResourceBroken:url] )
 	{
@@ -238,7 +241,7 @@ DEF_SINGLETON( BeeHTTPRequestQueue )
 	[request setShouldContinueWhenAppEntersBackground:NO];
 #endif	// #if TARGET_OS_IPHONE && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_4_0
 
-	[request setThreadPriority:0.2];
+	[request setThreadPriority:0.1];
 	[request setQueuePriority:NSOperationQueuePriorityLow];
 
 	[_requests addObject:request];
@@ -258,7 +261,7 @@ DEF_SINGLETON( BeeHTTPRequestQueue )
 		{
 			[request performSelector:@selector(startAsynchronous)
 						  withObject:nil
-						  afterDelay:_delay];		
+						  afterDelay:_delay];
 		}
 		else
 		{
@@ -279,7 +282,6 @@ DEF_SINGLETON( BeeHTTPRequestQueue )
 	BeeHTTPRequest * request = nil;
 	
 	NSURL * absoluteURL = [NSURL URLWithString:url];
-	INFO( @"POST %@", absoluteURL );
 	
 	if ( NO == _online )
 	{
@@ -292,7 +294,7 @@ DEF_SINGLETON( BeeHTTPRequestQueue )
 	
 	request.timeOutSeconds = DEFAULT_POST_TIMEOUT;
 	request.requestMethod = @"POST";
-	request.postFormat = ASIMultipartFormDataPostFormat; // ASIRawPostFormat;
+//	request.postFormat = ASIMultipartFormDataPostFormat; // ASIRawPostFormat;
 	[request setDelegate:self];
 	[request setDownloadProgressDelegate:self];
 	[request setUploadProgressDelegate:self];
@@ -303,8 +305,8 @@ DEF_SINGLETON( BeeHTTPRequestQueue )
 	[request setShouldContinueWhenAppEntersBackground:YES];
 #endif	// #if TARGET_OS_IPHONE && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_4_0
 
-	[request setThreadPriority:0.8];
-	[request setQueuePriority:NSOperationQueuePriorityHigh];
+	[request setThreadPriority:1.0];
+	[request setQueuePriority:NSOperationQueuePriorityVeryHigh];
 
 	[_requests addObject:request];	
 	
@@ -344,7 +346,6 @@ DEF_SINGLETON( BeeHTTPRequestQueue )
 	BeeHTTPRequest * request = nil;
 	
 	NSURL * absoluteURL = [NSURL URLWithString:url];
-	INFO( @"PUT %@", absoluteURL );
 
 	if ( NO == _online )
 	{
@@ -357,13 +358,77 @@ DEF_SINGLETON( BeeHTTPRequestQueue )
 
 	request.timeOutSeconds = DEFAULT_PUT_TIMEOUT;
 	request.requestMethod = @"PUT";
-	request.postFormat = ASIURLEncodedPostFormat; // ASIRawPostFormat;
+//	request.postFormat = ASIURLEncodedPostFormat; // ASIRawPostFormat;
 	[request setDelegate:self];
 	[request setDownloadProgressDelegate:self];
 	[request setUploadProgressDelegate:self];
 	[request setNumberOfTimesToRetryOnTimeout:2];
 	[request setShouldAttemptPersistentConnection:NO];
 	
+#if TARGET_OS_IPHONE && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_4_0
+	[request setShouldContinueWhenAppEntersBackground:YES];
+#endif	// #if TARGET_OS_IPHONE && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_4_0
+	
+	[request setThreadPriority:1.0];
+	[request setQueuePriority:NSOperationQueuePriorityHigh];
+	
+	[_requests addObject:request];
+	
+	if ( self.whenCreate )
+	{
+		self.whenCreate( request );
+	}
+	
+	if ( sync )
+	{
+		[request startSynchronous];
+	}
+	else
+	{
+		if ( _delay )
+		{
+			[request performSelector:@selector(startAsynchronous)
+						  withObject:nil
+						  afterDelay:_delay];
+		}
+		else
+		{
+			[request startAsynchronous];
+		}
+	}
+	
+	return [request autorelease];
+}
+
++ (BeeHTTPRequest *)DELETE:(NSString *)url
+{
+	return [[BeeHTTPRequestQueue sharedInstance] DELETE:url sync:NO];
+}
+
+- (BeeHTTPRequest *)DELETE:(NSString *)url sync:(BOOL)sync
+{
+	BeeHTTPRequest * request = nil;
+	
+	NSURL * absoluteURL = [NSURL URLWithString:url];
+	
+	if ( NO == _online )
+	{
+		request = [[[BeeEmptyRequest alloc] initWithURL:absoluteURL] autorelease];
+	}
+	else
+	{
+		request = [[BeeHTTPRequest alloc] initWithURL:absoluteURL];
+	}
+
+	request.timeOutSeconds = DEFAULT_DELETE_TIMEOUT;
+	request.requestMethod = @"DELETE";
+//	request.postFormat = ASIURLEncodedPostFormat; // ASIRawPostFormat;
+	[request setDelegate:self];
+	[request setDownloadProgressDelegate:self];
+	[request setUploadProgressDelegate:self];
+	[request setNumberOfTimesToRetryOnTimeout:2];
+	[request setShouldAttemptPersistentConnection:NO];
+
 #if TARGET_OS_IPHONE && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_4_0
 	[request setShouldContinueWhenAppEntersBackground:YES];
 #endif	// #if TARGET_OS_IPHONE && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_4_0
@@ -595,11 +660,8 @@ DEF_SINGLETON( BeeHTTPRequestQueue )
 	{
 		self.whenUpdate( networkRequest );
 	}
-	
-	INFO( @"%@ %@\n%@",
-		 [request requestMethod],
-		 [request.url absoluteString],
-		 [request.postBody asNSString]);
+
+	INFO( @"\t\tHTTP %@ %@\n%@", [request requestMethod], [request.url absoluteString], [[request postBody] asNSString] );
 }
 
 - (void)request:(ASIHTTPRequest *)request didReceiveResponseHeaders:(NSDictionary *)responseHeaders
@@ -635,6 +697,8 @@ DEF_SINGLETON( BeeHTTPRequestQueue )
 
 	if ( 200 == request.responseStatusCode )
 	{
+		INFO( @"HTTP %d(%@)\n%@\n", request.responseStatusCode, request.responseStatusMessage, [request.url absoluteString], request.responseString );
+
 		[networkRequest changeState:BeeHTTPRequest.STATE_SUCCEED];
 	}
 	else

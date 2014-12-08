@@ -53,6 +53,8 @@
 @property (nonatomic, readonly) BeeUIQueryObjectBlockFF	OFFSET;
 @property (nonatomic, readonly) BeeUIQueryObjectBlockFF	POSITION;
 
+@property (nonatomic, readonly) BeeUIQueryObjectBlock	RELAYOUT;
+
 @end
 
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

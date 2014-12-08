@@ -58,7 +58,8 @@
 	self.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
 	self.contentMode = [properties parseContentModeWithKeys:@[@"text-valign", @"text-v-align", @"text-vertical-align"] defaultValue:UIViewContentModeCenter];
 	self.lineBreakMode = [properties parseLineBreakModeWithKeys:@[@"line-break"] defaultValue:UILineBreakModeTailTruncation];
-	self.numberOfLines = [properties parseIntegerWithKeys:@[@"line-num"] defaultValue:1];
+	self.numberOfLines = [properties parseIntegerWithKeys:@[@"line-num"] defaultValue:self.numberOfLines];
+    self.adjustsFontSizeToFitWidth = [properties parseBoolWithKeys:@[@"fit-width"] defaultValue:NO];
 
 	NSString * textShadow = [properties parseStringWithKeys:@[@"text-shadow"]];
 	if ( textShadow )
@@ -81,10 +82,12 @@
 	{
 		if ( [wordWrap matchAnyOf:@[@"normal"]] )
 		{
+			self.numberOfLines = 999999;
 			self.lineBreakMode = UILineBreakModeClip;
 		}
 		else if ( [wordWrap matchAnyOf:@[@"break-word"]] )
 		{
+			self.numberOfLines = 999999;
 			self.lineBreakMode = UILineBreakModeWordWrap;
 		}
 	}

@@ -188,7 +188,7 @@
 - (NSData *)HTTPResponseData
 {
 	NSArray * array = self.requests;
-
+    
 	for ( BeeHTTPRequest * req in array )
 	{
 		if ( req.succeed || req.failed )
@@ -203,7 +203,7 @@
 - (NSString *)HTTPResponseString
 {
 	NSArray * array = self.requests;
-
+    
 	for ( BeeHTTPRequest * req in array )
 	{
 		if ( req.succeed || req.failed )
@@ -219,21 +219,33 @@
 
 - (void)handleRequest:(BeeHTTPRequest *)request
 {
-	if ( request.sending )
+	if ( request.sendProgressed )
+	{
+		if ( self.toldProgress )
+		{
+			[self internalNotifyProgressUpdated];
+		}
+	}
+	else if ( request.sending )
 	{
 		// TODO:
 		request.timeOutSeconds = self.seconds;
-	}
-	else if ( request.sendProgressed )
-	{
-		[self internalNotifyProgressUpdated];
-	}
-	else if ( request.recving )
-	{
+		
+		[self changeState:BeeMessage.STATE_SENDING];
 	}
 	else if ( request.recvProgressed )
 	{
-		[self internalNotifyProgressUpdated];
+		if ( self.toldProgress )
+		{
+			[self internalNotifyProgressUpdated];
+		}
+	}
+	else if ( request.recving )
+	{
+		if ( self.toldProgress )
+		{
+			[self changeState:BeeMessage.STATE_WAITING];
+		}
 	}
 	else if ( request.succeed )
 	{
@@ -253,7 +265,7 @@
 			self.errorCode = request.errorCode;
 			self.errorDesc = nil;
 		}
-
+        
 		[self changeState:BeeMessage.STATE_FAILED];
 	}
 	else if ( request.cancelled )

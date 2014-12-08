@@ -184,7 +184,9 @@ SUPPORT_SIZE_ESTIMATING( YES )
 	BeeUILayout * layout = self.layout;
 	if ( layout )
 	{
-		return [layout estimateUISizeByBound:bound];
+		CGRect cellBound = CGRectMake( 0, 0, bound.width, bound.height );
+		CGRect cellFrame = [layout estimateFor:self inBound:cellBound];
+		return cellFrame.size;
 	}
 	else
 	{
@@ -197,7 +199,9 @@ SUPPORT_SIZE_ESTIMATING( YES )
 	BeeUILayout * layout = self.layout;
 	if ( layout )
 	{
-		return [layout estimateUISizeByWidth:width];
+		CGRect cellBound = CGRectMake( 0.0f, 0.0f, width, -1.0f );
+		CGRect cellFrame = [layout estimateFor:self inBound:cellBound];
+		return cellFrame.size;
 	}
 	else
 	{
@@ -210,7 +214,9 @@ SUPPORT_SIZE_ESTIMATING( YES )
 	BeeUILayout * layout = self.layout;
 	if ( layout )
 	{
-		return [layout estimateUISizeByHeight:height];
+		CGRect cellBound = CGRectMake( 0.0f, 0.0f, -1.0f, height );
+		CGRect cellFrame = [layout estimateFor:self inBound:cellBound];
+		return cellFrame.size;
 	}
 	else
 	{
@@ -280,7 +286,7 @@ SUPPORT_SIZE_ESTIMATING( YES )
 			CGRect bound = CGRectMake( 0, 0, rc.size.width, rc.size.height );
 			
 			[self relayoutSubviews:bound];
-			[self setNeedsDisplay];
+		//	[self setNeedsDisplay];
 		}
 		
 		[self frameDidChanged];
@@ -296,7 +302,7 @@ SUPPORT_SIZE_ESTIMATING( YES )
 		CGRect bound = CGRectMake( 0, 0, self.frame.size.width, self.frame.size.height );
 		
 		[self relayoutSubviews:bound];
-		[self setNeedsDisplay];
+	//	[self setNeedsDisplay];
 	}
 }
 
@@ -312,9 +318,14 @@ SUPPORT_SIZE_ESTIMATING( YES )
 	{
 		return;
 	}
-	
+
+PERF_ENTER_( ______layout1 )
+
 	[self layoutWillBegin];
 
+PERF_LEAVE_( ______layout1 )
+PERF_ENTER_( ______layout2 )
+	
 	BeeUILayout * viewLayout = [self layout];
 	if ( viewLayout )
 	{
@@ -323,8 +334,11 @@ SUPPORT_SIZE_ESTIMATING( YES )
 	else
 	{
 		[self layoutSubviews];
-	}			
+	}
 
+PERF_LEAVE_( ______layout2 )
+PERF_ENTER_( ______layout3 )
+	
 	for ( UIView * subview in self.subviews )
 	{
 		if ( [subview isKindOfClass:[BeeUICell class]] )
@@ -333,12 +347,17 @@ SUPPORT_SIZE_ESTIMATING( YES )
 			[(BeeUICell *)subview relayoutSubviews:subviewBound];
 		}
 	}
-
+	
+PERF_LEAVE_( ______layout3 )
+PERF_ENTER_( ______layout4 )
+	
 	[self layoutDidFinish];
+	
+PERF_LEAVE_( ______layout4 )
 	
 	self.layouted = YES;
 	
-	[self setNeedsDisplay];
+//	[self setNeedsDisplay];
 }
 
 - (BeeUICellBlock)RELAYOUT
@@ -363,34 +382,63 @@ SUPPORT_SIZE_ESTIMATING( YES )
 
 - (void)bindData:(id)newData
 {
+PERF_ENTER_( ______bindData1 )
+
 	BOOL shouldChange = [self dataWillChange:newData];
+	
+PERF_LEAVE_( ______bindData1 )
+PERF_ENTER_( ______bindData2 )
+	
 	if ( shouldChange )
 	{
+	PERF_ENTER_( ______bindData3 )
 		[self dataWillChange];
+	PERF_LEAVE_( ______bindData3 )
 
 		[newData retain];
 		[_data release];
 		_data = newData;
 		
+	PERF_ENTER_( ______bindData4 )
 		[self dataDidChanged];
+	PERF_LEAVE_( ______bindData4 )
 		
+	PERF_ENTER_( ______bindData5 )
 		[self relayoutSubviews:self.bounds];
+	PERF_LEAVE_( ______bindData5 )
 	}
+	
+PERF_LEAVE_( ______bindData2 )
 }
 
 - (void)unbindData
 {
+PERF_ENTER_( ______unbindData1 )
+	
 	BOOL shouldChange = [self dataWillChange:nil];
+	
+PERF_LEAVE_( ______unbindData1 )
+PERF_ENTER_( ______unbindData2 )
+	
 	if ( shouldChange )
 	{
+	PERF_ENTER_( ______unbindData3 )
 		[self dataWillChange];
-		
+	PERF_LEAVE_( ______unbindData3 )
+				
 		[_data release];
 		_data = nil;
 		
+	PERF_ENTER_( ______unbindData4 )
 		[self dataDidChanged];
+	PERF_LEAVE_( ______unbindData4 )
+
+	PERF_ENTER_( ______unbindData5 )
 		[self relayoutSubviews:self.bounds];
+	PERF_LEAVE_( ______unbindData5 )
 	}
+	
+PERF_LEAVE_( ______unbindData2 )
 }
 
 #pragma mark -
@@ -423,7 +471,7 @@ SUPPORT_SIZE_ESTIMATING( YES )
 		CGRect bound = CGRectMake( 0, 0, self.frame.size.width, self.frame.size.height );
 		
 		[self relayoutSubviews:bound];
-		[self setNeedsDisplay];
+	//	[self setNeedsDisplay];
 	}
 }
 
@@ -482,7 +530,7 @@ SUPPORT_SIZE_ESTIMATING( YES )
 
 - (BOOL)frameWillChange:(CGRect)newRect
 {
-	return YES;
+	return CGRectEqualToRect(newRect, self.frame) ? NO : YES;
 }
 
 - (void)frameWillChange
@@ -520,6 +568,26 @@ SUPPORT_SIZE_ESTIMATING( YES )
 
 - (void)stateDidChanged
 {
+}
+
+- (void)viewWillAppear
+{
+	
+}
+
+- (void)viewDidAppear
+{
+	
+}
+
+- (void)viewWillDisappear
+{
+	
+}
+
+- (void)viewDidDisappear
+{
+	
 }
 
 @end

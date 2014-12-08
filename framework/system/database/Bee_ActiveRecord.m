@@ -44,7 +44,7 @@
 #pragma mark -
 
 #undef	__PRECREATE_TABLES__
-#define __PRECREATE_TABLES__	(__ON__)
+#define __PRECREATE_TABLES__	(__OFF__)
 
 #undef	__JSON_SERIALIZATION__
 #define	__JSON_SERIALIZATION__	(__OFF__)

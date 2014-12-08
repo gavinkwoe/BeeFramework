@@ -1,6 +1,25 @@
-![Bee logo](http://www.0xbee.com/img/logo.png)
+![logo](https://cloud.githubusercontent.com/assets/679824/3976127/d495a6a4-2819-11e4-81cf-b27832e27e90.png)
 
-BeeFramework is a semi-hybrid framework that allows you to create mobile apps using Objective-C and XML/CSS for the iPhone and iPad and more, created and maintained by [Gavin.Kwoe](http://www.weibo.com/gavinkwoe) and [QFish](http://weibo.com/u/2987815507).
+BeeFramework is a semi-hybrid framework that allows you to create mobile apps using Objective-C and XML/CSS for the iPhone and iPad and more, created and maintained by [Gavin.Kwoe](http://www.weibo.com/gavinkwoe) and [QFish](http://github.com/qfish).
+
+## Join us
+
+QQ Group: 314365063
+
+## 0.6.0 New Feature - Liveload
+
+### Have a better life with liveload
+
+1. Edit the <b style="color:red">XML</b> file with any editor (Xcode, Sublime Text, even TextEdit etc.).
+2. After editing, just save the file by shortcut (`Command+S`) or clicking the menu item `Save`.
+3. Then the corresponding view in smulator will update according to the changes without rebuilding app.
+4. You can get More info from `/serivces/bee.service.liveload/`.
+
+### Here is a video about the new feature
+ 
+📺 &nbsp;BeeFramework 0.6.0 New Feature - Liveload &nbsp; <a href="http://youtu.be/zs85Bo82Mww" target="_blank">[YouTube]</a> &nbsp; <a href="http://v.youku.com/v_show/id_XNzU3NzAyOTQ4.html">[Youku]</a>
+ 
+ <a href="http://youtu.be/zs85Bo82Mww" target="_blank">![liveload-snopshot](https://cloud.githubusercontent.com/assets/679824/3977216/bc197f36-2834-11e4-95ff-838a39556c08.png)</a>
 
 ## How to install
 
@@ -13,28 +32,28 @@ BeeFramework is a semi-hybrid framework that allows you to create mobile apps us
 
 A demo app for dribbble.com, as fast as native, as flexible as web. See `/projects/dribbble` demo for more information.
 
-![1](http://blog.whatsbug.com/wp-content/uploads/2014/01/dribbble-1.png)
-![2](http://blog.whatsbug.com/wp-content/uploads/2014/01/dribbble-2.png)
+![dribbble-1](https://cloud.githubusercontent.com/assets/679824/3976218/fe45e93a-281b-11e4-9cae-50fc2266b2a0.png)
+![dribbble-2](https://cloud.githubusercontent.com/assets/679824/3976221/08565f9a-281c-11e4-88ea-23724a2008cf.png)
 
 ## Demo app - Wireframe mode
 
-![1](http://blog.whatsbug.com/wp-content/uploads/2014/01/dribbble-3.png)
+![dribbble-3](https://cloud.githubusercontent.com/assets/679824/3976224/18fce0bc-281c-11e4-865c-3cedac069fbf.png)
 
 ## Demo app - Inspector mode
 
-![1](http://blog.whatsbug.com/wp-content/uploads/2014/01/dribbble-4.png)
+![dribbble-4](https://cloud.githubusercontent.com/assets/679824/3976226/26716650-281c-11e4-99f0-c8d12e9b9624.png)
 
 ## Semi-Hybrid UI
 
 Semi-hybrid offers you a new approach to UI development using XML/CSS, you can reuse these templates in any project based on BeeFramework. See `/projects/dribbble` demo for more information.
 
-![1](http://blog.whatsbug.com/wp-content/uploads/2014/01/bee_template_code.png)
+![bee_template](https://cloud.githubusercontent.com/assets/679824/3976231/32682b56-281c-11e4-8824-9ae7aaa0d21f.png)
 
 ## Services
 
 Services extend and expand the functionality of your app automatically, drag and drop the services folder into your project. See `/services` for more information.
 
-![1](http://blog.whatsbug.com/wp-content/uploads/2014/01/bee_services.png)
+![bee_services](https://cloud.githubusercontent.com/assets/679824/3976233/32dbf874-281c-11e4-8baf-271edac46312.png)
 
 For example:
 
@@ -61,8 +80,8 @@ bee.services.alipay.PAY();	// or .ON();
 
 Scaffold helps you to generate Model/Controller code and documents, also provide the local test environment. See `/tools/scaffold` or `/projects/scaffold` for more information.
 
-![1](http://blog.whatsbug.com/wp-content/uploads/2014/01/bee_scaffold_1.png)
-![2](http://blog.whatsbug.com/wp-content/uploads/2014/01/bee_scaffold_2.png)
+![bee_scaffold_1](https://cloud.githubusercontent.com/assets/679824/3976230/32287a1a-281c-11e4-9999-968fb3c9c93e.png)
+![bee_scaffold_2](https://cloud.githubusercontent.com/assets/679824/3976232/326d4e88-281c-11e4-837c-bb8756aec6ca.png)
 
 For example:
 
@@ -76,6 +95,7 @@ For example:
 - CLI
 - MVC
 	- View
+		- Liveload
 		- Application
 		- Config
 		- Container
@@ -173,9 +193,7 @@ For example:
 
 ## License
 
-[![Geek-Zoo](http://geek-zoo.com/images/logo-01.png)](http://www.geek-zoo.com)
-
-Copyright (c) 2014-2015, [Geek Zoo Studio](http://www.geek-zoo.com)
+![geek-zoo](https://cloud.githubusercontent.com/assets/679824/3976260/f51498ba-281c-11e4-9569-6b60cfb1d90a.png)
 
 	 ______    ______    ______
 	/\  __ \  /\  ___\  /\  ___\
@@ -207,6 +225,10 @@ Copyright (c) 2014-2015, [Geek Zoo Studio](http://www.geek-zoo.com)
 	IN THE SOFTWARE.
 
 ## Change log
+
+#### 0.6.0
+
+1. Liveload
 
 #### 0.5.0
 
@@ -278,7 +300,7 @@ Copyright (c) 2014-2015, [Geek Zoo Studio](http://www.geek-zoo.com)
 ## Contributors
 
 Name|Type
--|-
+----|----
 **Gavin.Kwoe**|[https://github.com/gavinkwoe](https://github.com/gavinkwoe)
 **QFish**|[https://github.com/qfish](https://github.com/qfish)
 **STCui**|[https://github.com/stcui](https://github.com/stcui)
@@ -294,6 +316,4 @@ Name|Type
 
 You may want to see more great open source projects brought you by Chinese developers. See more in the [Projects repo](https://github.com/OpenSourceChina/Projects) of [OpenSourceChina](https://github.com/OpenSourceChina).
 
-* Join us, please contact [gavinkwoe](https://github.com/gavinkwoe) or
- [onevcat](https://github.com/onevcat)
-
+Join us, please contact [gavinkwoe](https://github.com/gavinkwoe) or [onevcat](https://github.com/onevcat).

@@ -61,14 +61,29 @@
     return nil;
 }
 
-- (NSArray *)attributes
-{
-    return nil;
-}
+//- (NSArray *)attributes
+//{
+//    return nil;
+//}
 
 - (BOOL)isElementNode
 {
     return YES;
+}
+
+- (BOOL)isFirstChild
+{
+    return [self index] == 1;
+}
+
+- (BOOL)isLastChild
+{
+    return [self index] == self.parent.childs.count;
+}
+
+- (BOOL)isNthChild:(NSUInteger)index
+{
+    return [self index] == index;
 }
 
 - (NSArray *)siblings

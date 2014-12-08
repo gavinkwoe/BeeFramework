@@ -37,6 +37,9 @@
 
 @synthesize url = _url;
 
+SUPPORT_RESOURCE_LOADING(YES)
+SUPPORT_AUTOMATIC_LAYOUT(YES)
+
 DEF_OUTLET( BeeUIWebView,				web )
 DEF_OUTLET( DribbbleWebBoardTab_iPhone,	tabbar )
 

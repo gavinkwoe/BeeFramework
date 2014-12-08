@@ -605,6 +605,57 @@
             [regextestcm evaluateWithObject:self];
 }
 
+- (BOOL)isMobilephone
+{
+    NSString * MOBILE = @"^[1-9]\\d{10}$";
+    NSPredicate *regextestMobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", MOBILE];
+    return  [regextestMobile evaluateWithObject:self];
+}
+
+- (BOOL)isChineseName
+{
+	NSString *		regex = @"(^[\u4e00-\u9fa5]{2,16}$)";
+	NSPredicate *	pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+	
+	return [pred evaluateWithObject:self];
+}
+
+- (NSString *)substringFromIndex:(NSUInteger)from untilString:(NSString *)string
+{
+	return [self substringFromIndex:from untilString:string endOffset:NULL];
+}
+
+- (NSString *)substringFromIndex:(NSUInteger)from untilString:(NSString *)string endOffset:(NSUInteger *)endOffset
+{
+	if ( 0 == self.length )
+		return nil;
+	
+	if ( from >= self.length )
+		return nil;
+	
+	NSRange range = NSMakeRange( from, self.length - from );
+	NSRange range2 = [self rangeOfString:string options:NSCaseInsensitiveSearch range:range];
+	
+	if ( NSNotFound == range2.location )
+	{
+		if ( endOffset )
+		{
+			*endOffset = range.location + range.length;
+		}
+		
+		return [self substringWithRange:range];
+	}
+	else
+	{
+		if ( endOffset )
+		{
+			*endOffset = range2.location + range2.length;
+		}
+		
+		return [self substringWithRange:NSMakeRange(from, range2.location - from)];
+	}
+}
+
 - (NSString *)substringFromIndex:(NSUInteger)from untilCharset:(NSCharacterSet *)charset
 {
 	return [self substringFromIndex:from untilCharset:charset endOffset:NULL];
@@ -644,10 +695,10 @@
 - (NSUInteger)countFromIndex:(NSUInteger)from inCharset:(NSCharacterSet *)charset
 {
 	if ( 0 == self.length )
-		return nil;
+		return 0;
 	
 	if ( from >= self.length )
-		return nil;
+		return 0;
 	
 	NSCharacterSet * reversedCharset = [charset invertedSet];
 
@@ -737,12 +788,24 @@
 		va_start( args, first );
 		
 		NSString * append = [[NSString alloc] initWithFormat:first arguments:args];
-		[self appendString:append];
-		[append release];
-		
+
 		va_end( args );
 
-		return self;
+		if ( NO == [self isKindOfClass:[NSMutableString class]] )
+		{
+			NSMutableString * copy = [self mutableCopy];
+			[copy appendString:append];
+			[append release];
+			
+			return copy;
+		}
+		else
+		{
+			[self appendString:append];
+			[append release];
+			
+			return self;
+		}
 	};
 	
 	return [[block copy] autorelease];
@@ -752,19 +815,44 @@
 {
 	NSMutableStringAppendBlock block = ^ NSMutableString * ( id first, ... )
 	{
+		NSString * append = nil;
+		
 		if ( first )
 		{
 			va_list args;
 			va_start( args, first );
 			
-			NSString * append = [[NSString alloc] initWithFormat:first arguments:args];
-			[(NSMutableString *)self appendString:append];
-			[append release];
-			
+			append = [[NSString alloc] initWithFormat:first arguments:args];
+
 			va_end( args );
 		}
-		
-		[(NSMutableString *)self appendString:@"\n"];
+
+		if ( NO == [self isKindOfClass:[NSMutableString class]] )
+		{
+			NSMutableString * copy = [self mutableCopy];
+			
+			if ( append )
+			{
+				[copy appendString:append];
+			}
+			
+			[copy appendString:@"\n"];
+			[append release];
+			
+			return copy;
+		}
+		else
+		{
+			if ( append )
+			{
+				[self appendString:append];
+			}
+			
+			[self appendString:@"\n"];
+			[append release];
+			
+			return self;
+		}
 
 		return self;
 	};
@@ -780,7 +868,7 @@
 							  withString:string2
 								 options:NSCaseInsensitiveSearch
 								   range:NSMakeRange(0, self.length)];
-		
+
 		return self;
 	};
 	

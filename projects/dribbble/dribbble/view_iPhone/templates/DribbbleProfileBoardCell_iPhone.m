@@ -35,6 +35,9 @@
 
 @implementation DribbbleProfileBoardCell_iPhone
 
+SUPPORT_RESOURCE_LOADING(YES)
+SUPPORT_AUTOMATIC_LAYOUT(YES)
+
 DEF_OUTLET( BeeUIImageView,	bg )
 DEF_OUTLET( BeeUILabel,		follower )
 DEF_OUTLET( BeeUILabel,		following )

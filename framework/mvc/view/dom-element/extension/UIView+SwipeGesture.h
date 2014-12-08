@@ -46,7 +46,6 @@ AS_SIGNAL( SWIPE_RIGHT )	// 瞬间向右滑动
 @property (nonatomic, assign) BOOL								swipeble;	// same as swipeEnabled
 @property (nonatomic, assign) BOOL								swipeEnabled;
 @property (nonatomic, assign) UISwipeGestureRecognizerDirection	swipeDirection;
-@property (nonatomic, readonly) UISwipeGestureRecognizer *		swipeGesture;
 
 @end
 

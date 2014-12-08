@@ -60,6 +60,9 @@
 + (void)removeObjectForKey:(NSString *)key;
 
 + (id)readFromUserDefaults:(NSString *)key;
+- (id)readFromUserDefaults:(NSString *)key;
+
 - (void)saveToUserDefaults:(NSString *)key;
+- (void)removeFromUserDefaults:(NSString *)key;
 
 @end

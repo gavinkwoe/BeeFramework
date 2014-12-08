@@ -41,6 +41,8 @@
 
 @synthesize total = _total;
 @synthesize index = _index;
+@synthesize loaded = _loaded;
+@synthesize more = _more;
 
 DEF_SIGNAL( RELOADING )
 DEF_SIGNAL( RELOADED )

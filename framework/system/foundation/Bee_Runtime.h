@@ -65,6 +65,8 @@ AS_INT( NSARRAY )
 AS_INT( NSDICTIONARY )
 AS_INT( NSDATE )
 
++ (BOOL)isReadOnly:(const char *)attr;
+
 + (NSUInteger)typeOf:(const char *)attr;
 + (NSUInteger)typeOfAttribute:(const char *)attr;
 + (NSUInteger)typeOfObject:(id)obj;

@@ -74,7 +74,7 @@ static NSMutableArray *	__models = nil;
 	INFO( @"Loading models ..." );
 	
 	[[BeeLogger sharedInstance] indent];
-	[[BeeLogger sharedInstance] disable];
+//	[[BeeLogger sharedInstance] disable];
 	
 	NSArray * availableClasses = [BeeRuntime allSubClassesOf:[BeeModel class]];
 	
@@ -83,11 +83,15 @@ static NSMutableArray *	__models = nil;
 		if ( [classType instancesRespondToSelector:@selector(sharedInstance)] )
 		{
 			[classType sharedInstance];
+			
+	//		[[BeeLogger sharedInstance] enable];
+			INFO( @"%@ loaded", [classType description] );
+	//		[[BeeLogger sharedInstance] disable];
 		}
 	}
 	
 	[[BeeLogger sharedInstance] unindent];
-	[[BeeLogger sharedInstance] enable];
+//	[[BeeLogger sharedInstance] enable];
 	
 #endif	// #if defined(__PRELOAD_MODELS__) && __PRELOAD_MODELS__
 	
@@ -101,11 +105,23 @@ static NSMutableArray *	__models = nil;
 
 + (id)modelWithObserver:(id)observer
 {
-	BeeModel * model = [[[[self class] alloc] init] autorelease];
+	BeeModel * model = nil;
+	
+	if ( [self respondsToSelector:@selector(sharedInstance)] )
+	{
+		model = (BeeModel *)[[self class] sharedInstance];
+	}
+	
+	if ( nil == model || NO == [model isKindOfClass:[BeeModel class]] )
+	{
+		model = [[[[self class] alloc] init] autorelease];
+	}
+
 	if ( model )
 	{
 		[model addObserver:observer];
 	}
+	
 	return model;
 }
 

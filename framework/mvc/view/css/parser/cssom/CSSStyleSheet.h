@@ -53,7 +53,9 @@
 - (void)parseString:(NSString *)string;
 
 - (void)mergeStyleSheet:(CSSStyleSheet *)sheet;
+- (void)ensureRuleSet;
 
+- (NSDictionary *)styleForString:(NSString *)string;
 - (NSDictionary *)styleForElement:(id<CSSElementProtocol>)element;
 
 @end

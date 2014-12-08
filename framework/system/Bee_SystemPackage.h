@@ -35,4 +35,4 @@
 
 #pragma mark -
 
-AS_PACKAGE_INSTANCE( BeePackage, BeePackage_System, system );
+AS_PACKAGE_( BeePackage, BeePackage_System, system );

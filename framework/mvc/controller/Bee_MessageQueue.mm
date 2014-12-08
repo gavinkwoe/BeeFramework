@@ -228,6 +228,7 @@ DEF_SINGLETON( BeeMessageQueue );
 	[msg setSending:YES];
 
 	[__sharedQueue addObject:msg];
+	
 	return YES;
 }
 

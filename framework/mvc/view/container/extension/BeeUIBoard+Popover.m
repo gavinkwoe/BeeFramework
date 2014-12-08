@@ -61,7 +61,7 @@ DEF_SIGNAL( POPOVER_DID_DISMISSED )	// Popover已经隐藏
 
 - (void)setPopover:(UIPopoverController *)popover
 {
-	objc_setAssociatedObject( self, KEY_POPOVER, popover, OBJC_ASSOCIATION_ASSIGN );
+	objc_setAssociatedObject( self, KEY_POPOVER, popover, OBJC_ASSOCIATION_RETAIN );
 }
 
 #pragma mark -
@@ -73,7 +73,7 @@ DEF_SIGNAL( POPOVER_DID_DISMISSED )	// Popover已经隐藏
 {
 	if ( nil == self.popover )
 	{
-		[self sendUISignal:self.POPOVER_WILL_PRESENT];
+		[self sendUISignal:BeeUIBoard.POPOVER_WILL_PRESENT];
 
 		self.view.frame = CGRectMake( 0.0f, 0.0f, size.width, size.height );
 		self.contentSizeForViewInPopover = size;
@@ -88,7 +88,7 @@ DEF_SIGNAL( POPOVER_DID_DISMISSED )	// Popover已经隐藏
 
 		self.popover = controller;
 
-		[self sendUISignal:self.POPOVER_DID_PRESENT];
+		[self sendUISignal:BeeUIBoard.POPOVER_DID_PRESENT];
 	}
 }
 
@@ -102,13 +102,13 @@ DEF_SIGNAL( POPOVER_DID_DISMISSED )	// Popover已经隐藏
 
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController
 {
-	[self sendUISignal:self.POPOVER_WILL_DISMISS];
+	[self sendUISignal:BeeUIBoard.POPOVER_WILL_DISMISS];
 	return YES;
 }
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
 {
-	[self sendUISignal:self.POPOVER_DID_DISMISSED];
+	[self sendUISignal:BeeUIBoard.POPOVER_DID_DISMISSED];
 	self.popover = nil;
 }
 

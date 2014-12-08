@@ -223,19 +223,27 @@ const static int kBasePseudoLevel       = 0;
     if ( nil == __pseudoMap )
     {
         __pseudoMap = [[NSMutableDictionary alloc] init];
-        __pseudoMap[@"not("] = @(PseudoNot);
-        __pseudoMap[@"any("] = @(PseudoAny);
-        __pseudoMap[@"lang("] = @(PseudoLang);
+        // custom
+        __pseudoMap[@"selected"] = @(PseudoCustom);
+        __pseudoMap[@"normal"] = @(PseudoCustom);
+        __pseudoMap[@"highlighted"] = @(PseudoCustom);
+        __pseudoMap[@"disabled"] = @(PseudoCustom);
+        // css3 standard
+//        __pseudoMap[@"not("] = @(PseudoNot);
+//        __pseudoMap[@"any("] = @(PseudoAny);
+//        __pseudoMap[@"lang("] = @(PseudoLang);
+        __pseudoMap[@"first-child"] = @(PseudoFirstChild);
+        __pseudoMap[@"last-child"] = @(PseudoLastChild);
         __pseudoMap[@"nth-child("] = @(PseudoNthChild);
-        __pseudoMap[@"nth-of-type("] = @(PseudoNthOfType);
-        __pseudoMap[@"nth-last-child("] = @(PseudoNthLastChild);
-        __pseudoMap[@"nth-last-of-type("] = @(PseudoNthLastOfType);
+//        __pseudoMap[@"nth-of-type("] = @(PseudoNthOfType);
+//        __pseudoMap[@"nth-last-child("] = @(PseudoNthLastChild);
+//        __pseudoMap[@"nth-last-of-type("] = @(PseudoNthLastOfType);
         
     }
     
     NSNumber * type = __pseudoMap[value];
     
-    return nil == type ? PseudoOther : type.integerValue;
+    return nil == type ? PseudoOther : type.unsignedIntValue;
 }
 
 - (void)extractPseudoType

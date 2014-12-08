@@ -105,8 +105,14 @@ DEF_SINGLETON( BeeUITemplateManager )
 + (BOOL)autoLoad
 {
 #if __PRELOAD_RESOURCES__
+
+	INFO( @"Loading templates ..." );
+	
 	[[BeeUITemplateManager sharedInstance] preloadResources];
 	[[BeeUITemplateManager sharedInstance] preloadPackages];
+	
+	INFO( @"" );
+	
 #endif	//	#if __PRELOAD_RESOURCES__
 
 	return YES;
@@ -281,7 +287,7 @@ DEF_SINGLETON( BeeUITemplateManager )
 		return nil;
 	}
 	
-	INFO( @"'%@' loaded", fileName );
+	INFO( @"Template '%@' loaded", fileName );
 
 	BeeUITemplateParser * parser = [BeeUITemplateParser parserForType:mediaExtension];
 	if ( nil == parser )
@@ -337,7 +343,7 @@ DEF_SINGLETON( BeeUITemplateManager )
 		return nil;
 	}
 	
-	INFO( @"'%@' loaded", fileName );
+	INFO( @"Template '%@' loaded", fileName );
 	
 	BeeUITemplateParser * parser = [BeeUITemplateParser parserForType:mediaExtension];
 	if ( nil == parser )
@@ -443,9 +449,14 @@ DEF_SINGLETON( BeeUITemplateManager )
 
 - (void)preloadResources
 {
+	if ( nil == self.defaultResourcePath )
+		return;
+	
 	NSError * error = nil;
 	NSArray * files = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:self.defaultResourcePath error:&error];
 
+	[[BeeLogger sharedInstance] indent];
+	
 	for ( NSString * filePath in files )
 	{
 		NSString * fileName = [filePath lastPathComponent];
@@ -456,23 +467,33 @@ DEF_SINGLETON( BeeUITemplateManager )
 			[self fromResource:fileName];
 		}
 	}
+	
+	[[BeeLogger sharedInstance] unindent];
 }
 
 - (void)preloadPackages
 {
 	NSMutableArray * allFiles = [NSMutableArray array];
 
-	NSArray * files = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:self.defaultTemplatePath error:NULL];
-	if ( files )
+	if ( self.defaultTemplatePath )
 	{
-		[allFiles addObjectsFromArray:files];
+		NSArray * files = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:self.defaultTemplatePath error:NULL];
+		if ( files )
+		{
+			[allFiles addObjectsFromArray:files];
+		}
 	}
-
-	NSArray * files2 = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:self.defaultResourcePath error:NULL];
-	if ( files2 )
+	
+	if ( self.defaultResourcePath )
 	{
-		[allFiles addObjectsFromArray:files2];
+		NSArray * files2 = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:self.defaultResourcePath error:NULL];
+		if ( files2 )
+		{
+			[allFiles addObjectsFromArray:files2];
+		}
 	}
+	
+	[[BeeLogger sharedInstance] indent];
 
 	for ( NSString * filePath in allFiles )
 	{
@@ -487,6 +508,8 @@ DEF_SINGLETON( BeeUITemplateManager )
 			}
 		}
 	}
+	
+	[[BeeLogger sharedInstance] unindent];
 }
 
 - (void)clearCache
@@ -640,7 +663,6 @@ DEF_SINGLETON( BeeUITemplateManager )
 			BOOL succeed = [self unzipArchive:fullPath password:password];
 			if ( succeed )
 			{
-				INFO( @"'%@' unziped to '%@'", fullPath, self.defaultTemplatePath );
 
 				[self postNotification:self.SYNC_FINISHED];
 			}

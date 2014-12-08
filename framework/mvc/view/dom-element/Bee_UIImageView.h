@@ -64,6 +64,7 @@ AS_SINGLETON( BeeImageCache )
 
 - (void)saveImage:(UIImage *)image forURL:(NSString *)url;
 - (void)saveData:(NSData *)data forURL:(NSString *)url;
+
 - (void)deleteImageForURL:(NSString *)url;
 - (void)deleteAllImages;
 
@@ -84,6 +85,8 @@ AS_SIGNAL( LOAD_CACHE )         // 加载缓存
 
 @property (nonatomic, assign) BOOL							gray;			// 是否变为灰色
 @property (nonatomic, assign) BOOL							round;			// 是否裁剪为圆型
+@property (nonatomic, assign) BOOL							crop;			// 是否裁剪
+@property (nonatomic, assign) CGSize                        cropSize;       // 裁剪大小
 @property (nonatomic, assign) BOOL							pattern;		// 是否平铺
 @property (nonatomic, assign) BOOL							strech;			// 是否裁剪为圆型
 @property (nonatomic, assign) UIEdgeInsets					strechInsets;	// 是否裁剪为圆型
@@ -94,6 +97,7 @@ AS_SIGNAL( LOAD_CACHE )         // 加载缓存
 @property (nonatomic, assign) UIActivityIndicatorViewStyle	indicatorStyle;
 @property (nonatomic, retain) UIColor *						indicatorColor;
 @property (nonatomic, retain) NSString *					loadedURL;
+@property (nonatomic, retain) NSString *					loadedCroppedURL;
 @property (nonatomic, retain) UIImage *						defaultImage;
 @property (nonatomic, assign) BOOL							enableAllEvents;
 

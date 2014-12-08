@@ -33,4 +33,4 @@
 
 #pragma mark -
 
-DEF_PACKAGE_INSTANCE( BeePackage, BeePackage_HTTP, http );
+DEF_PACKAGE_( BeePackage, BeePackage_HTTP, http );

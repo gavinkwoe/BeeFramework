@@ -118,7 +118,7 @@
 		package.packagePath = [fileName stringByDeletingLastPathComponent];
 		package.packageContent = dict;
 		
-		INFO( @"'%@' loaded\n%@", fileName, package.packageContent );
+		INFO( @"Package '%@' loaded\n%@", fileName, package.packageContent );
 	}
 	return package;
 }

@@ -60,9 +60,17 @@ AS_NOTIFICATION( STYLE_CHANGED )
 @property (nonatomic, assign) UINavigationController *	navigationController;
 
 + (CGSize)buttonSize;
++ (UIFont *)buttonFont;
++ (UIColor *)buttonColor;
 
++ (void)setTitleShadowColor:(UIColor *)color;
 + (void)setTitleColor:(UIColor *)color;
++ (void)setTitleFont:(UIFont *)font;
+
 + (void)setButtonSize:(CGSize)size;
++ (void)setButtonFont:(UIFont *)font;
++ (void)setButtonColor:(UIColor *)color;
+
 + (void)setBackgroundTintColor:(UIColor *)color;
 + (void)setBackgroundColor:(UIColor *)color;
 + (void)setBackgroundImage:(UIImage *)image;

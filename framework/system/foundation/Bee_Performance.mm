@@ -110,7 +110,7 @@ DEF_SINGLETON( BeePerformance )
 	NSNumber * time = [NSNumber numberWithDouble:curr];
 	[_tags setObject:time forKey:tag];
 	
-//	PERF( @"\t%@", tag );
+	PERF( @"\t%@", tag );
 	
 	return curr;
 }
@@ -161,11 +161,11 @@ DEF_SINGLETON( BeePerformance )
 		[_records pushTail:record];
 		[_records keepTail:MAX_RECORDS];
 		
-		ERROR( @"'%@' = %.0f(ms)", name, time );
+		ERROR( @"Time '%@' = %.0f(ms)", name, time );
 	}
 	else
 	{
-		PERF( @"'%@' = %.0f(ms)", name, time );
+		PERF( @"Time '%@' = %.0f(ms)", name, time );
 	}
 }
 

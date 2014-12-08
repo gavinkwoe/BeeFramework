@@ -54,6 +54,8 @@
 @dynamic OFFSET;
 @dynamic POSITION;
 
+@dynamic RELAYOUT;
+
 - (CGFloat)left
 {
 	UIView * view = self.view;
@@ -185,6 +187,20 @@
 		for ( UIView * v in self.views )
 		{
 			v.position = CGPointMake( value1, value2 );
+		}
+		return self;
+	};
+	
+	return [[block copy] autorelease];
+}
+
+- (BeeUIQueryObjectBlock)RELAYOUT
+{
+	BeeUIQueryObjectBlock block = ^ BeeUIQuery * ( void )
+	{
+		for ( UIView * v in self.views )
+		{
+			v.superview.RELAYOUT();
 		}
 		return self;
 	};

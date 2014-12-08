@@ -918,7 +918,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 {
 	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
 	
-    CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer); 
+    CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     CVPixelBufferLockBaseAddress(imageBuffer,0); 
 
     uint8_t * baseAddress = (uint8_t *)CVPixelBufferGetBaseAddress(imageBuffer); 

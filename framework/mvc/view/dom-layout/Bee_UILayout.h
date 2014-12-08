@@ -58,15 +58,26 @@ typedef BeeUILayout *	(^BeeUILayoutBlockCS)( Class clazz, NSString * tag );
 
 #pragma mark -
 
+@interface NSObject(LayoutParser)
+
++ (void)parseLayout:(BeeUILayout *)layout forView:(id)view;
+- (void)parseLayout:(BeeUILayout *)layout;
+
+@end
+
+#pragma mark -
+
 @interface BeeUILayout : NSObject
 
 @property (nonatomic, assign) NSUInteger				version;
 @property (nonatomic, assign) BOOL						visible;
+@property (nonatomic, assign) BOOL						constructable;
 @property (nonatomic, assign) BOOL						containable;
 @property (nonatomic, assign) BeeUILayout *				root;
 @property (nonatomic, assign) BeeUILayout *				parent;
 @property (nonatomic, retain) NSString *				name;
 @property (nonatomic, retain) NSString *				value;
+@property (nonatomic, retain) NSMutableString *			attributes;
 
 @property (nonatomic, retain) BeeUIStyle *				styleRoot;
 @property (nonatomic, retain) NSMutableArray *			styleClasses;
@@ -80,7 +91,9 @@ typedef BeeUILayout *	(^BeeUILayoutBlockCS)( Class clazz, NSString * tag );
 
 @property (nonatomic, assign) BOOL						enabled;
 @property (nonatomic, assign) BOOL						isRoot;
+@property (nonatomic, assign) BOOL						isWrapper;
 @property (nonatomic, readonly) NSString *				DOMPath;
+@property (nonatomic, readonly) NSUInteger				DOMDepth;
 
 @property (nonatomic, readonly) BeeUILayoutBlockN		ADD;
 @property (nonatomic, readonly) BeeUILayoutBlockN		REMOVE;

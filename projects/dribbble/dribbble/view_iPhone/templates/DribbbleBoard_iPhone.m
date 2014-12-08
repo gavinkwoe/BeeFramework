@@ -43,6 +43,9 @@
 	NSInteger	_selectedIndex;
 }
 
+SUPPORT_RESOURCE_LOADING(YES)
+SUPPORT_AUTOMATIC_LAYOUT(YES)
+
 DEF_MODEL( ShotEveryoneListModel,		everyone );
 DEF_MODEL( ShotPopularListModel,		popular );
 DEF_MODEL( ShotDebutsListModel,			debuts );

@@ -3,7 +3,16 @@
 <ui namespace="AboutBoardCell_iPhone">
 	
 	<linear orientation="v" class="wrapper">
-		
+        <linear orientation="v" class="inner-wrapper">
+            <view class="inner-bg"/>
+            <label class="sub-title">
+                0.6.0
+            </label>
+            <label class="sub-content">
+                1. Liveload
+2. Bug fix
+            </label>
+        </linear>
 		<linear orientation="v" class="inner-wrapper">
 			<view class="inner-bg"/>
 			<label class="sub-title">
@@ -11,44 +20,44 @@
 			</label>
 			<label class="sub-content">
 				1. 全新的MVVM技术架构
-				2. 全新的Package封装技术
-				3. 全新的Signal自动路由技术
-				4. 全新的HTTPServer技术
-				5. 全新的CSS解析器，支持更丰富的语法
-				6. 全新的ScrollView，支持更多复杂布局
-				7. 更多类jQuery的DOM操作方法
-				8. 重构 目录结构，优化模块依赖关系
-				9. 重构 Transition动画系统
-				10. 新增 多国语言切换
-				11. 新增 Manifest.json支持
-				12. 新增 三维视图 插件
-				13. 新增 网络系统 插件
-				14. 新增 网络支付 插件
-				15. 新增 地理位置 插件
-				16. 新增 推送通知 插件
-				17. 新增 社交分享 插件
-				18. 新增 闪屏动画 插件
-				19. 修改BUG
-				-------------------------------------------------
-				1. New MVVM architecture
-				2. New Package technology
-				3. New Signal routing technology
-				4. New HTTP server technology
-				5. New CSS parser, support more CSS syntax
-				6. New ScrollView, support complex layout
-				7. More jQuery-like syntax
-				8. Refactory directory structure
-				9. Refactory animation system
-				10. Support multi-language
-				11. Support manifest.json
-				12. New 3D UI inspector plugin
-				13. New grid system plugin
-				14. New alipay plugin
-				15. New location plugin
-				16. New push notification plugin
-				17. New social share plugin
-				18. New splash plugin
-				19. Bug fix
+2. 全新的Package封装技术
+3. 全新的Signal自动路由技术
+4. 全新的HTTPServer技术
+5. 全新的CSS解析器，支持更丰富的语法
+6. 全新的ScrollView，支持更多复杂布局
+7. 更多类jQuery的DOM操作方法
+8. 重构 目录结构，优化模块依赖关系
+9. 重构 Transition动画系统
+10. 新增 多国语言切换
+11. 新增 Manifest.json支持
+12. 新增 三维视图 插件
+13. 新增 网络系统 插件
+14. 新增 网络支付 插件
+15. 新增 地理位置 插件
+16. 新增 推送通知 插件
+17. 新增 社交分享 插件
+18. 新增 闪屏动画 插件
+19. 修改BUG
+-------------------------------------------------
+1. New MVVM architecture
+2. New Package technology
+3. New Signal routing technology
+4. New HTTP server technology
+5. New CSS parser, support more CSS syntax
+6. New ScrollView, support complex layout
+7. More jQuery-like syntax
+8. Refactory directory structure
+9. Refactory animation system
+10. Support multi-language
+11. Support manifest.json
+12. New 3D UI inspector plugin
+13. New grid system plugin
+14. New alipay plugin
+15. New location plugin
+16. New push notification plugin
+17. New social share plugin
+18. New splash plugin
+19. Bug fix
 			</label>
 		</linear>
 
@@ -58,32 +67,32 @@
 				0.4.0
 			</label>
 			<label class="sub-content">
-				1. 重新梳理目录结构，分为applicaton、service、system、vendor四部分
-				2. 全新的XML模版技术，完美支持CSS
-				3. 全新的QUERY技术，与jQUERY语法兼容
-				4. 全新的自动布局算法，开发复杂界面游刃有余
-				5. 全新的Service技术，即插即用
-				6. 基于JSON Schema的代码生成技术，不再需要手写服务器对接代码
-				7. 全新的Mock server技术，支持本地模拟网络接口调用
-				8. 全新的In-app debugger，简化无用功能
-				9. 全新的ActiveObject技术，支持任何对象的序列化与反序列化
-				10. 增加AppSkeleton
-				11. 增加异步自执行Routine
-				12. 修改BUG
-				-------------------------------------------------
-				1. Refactory the directory structure, divided into four parts, applicaton, service, system and vendor.
-				2. New XML template technology, perfect support for CSS
-				3. New QUERY technology, compatible with the jQUERY grammar
-				4. New automatic layout algorithm, easy to handle complex UI development task
-				5. New Service technology, plug-and-play
-				6. New mocking server technology, simulate network requests.
-				7. New ActiveObject technology, support any object serialization and deserialization
-				8. New In-app debugger, simplify the useless function
-				9. Code generator for JSON schema, no longer need to handwritten server docking code
-				10. Add BeeUISkeleton, an simple and powerful application entry
-				11. Add BeeRoutine, an BeeMessage which can asynchronous and by-self executing
-				12. Bug fix
-			</label>
+1. 重新梳理目录结构，分为applicaton、service、system、vendor四部分
+2. 全新的XML模版技术，完美支持CSS
+3. 全新的QUERY技术，与jQUERY语法兼容
+4. 全新的自动布局算法，开发复杂界面游刃有余
+5. 全新的Service技术，即插即用
+6. 基于JSON Schema的代码生成技术，不再需要手写服务器对接代码
+7. 全新的Mock server技术，支持本地模拟网络接口调用
+8. 全新的In-app debugger，简化无用功能
+9. 全新的ActiveObject技术，支持任何对象的序列化与反序列化
+10. 增加AppSkeleton
+11. 增加异步自执行Routine
+12. 修改BUG
+-------------------------------------------------
+1. Refactory the directory structure, divided into four parts, applicaton, service, system and vendor.
+2. New XML template technology, perfect support for CSS
+3. New QUERY technology, compatible with the jQUERY grammar
+4. New automatic layout algorithm, easy to handle complex UI development task
+5. New Service technology, plug-and-play
+6. New mocking server technology, simulate network requests.
+7. New ActiveObject technology, support any object serialization and deserialization
+8. New In-app debugger, simplify the useless function
+9. Code generator for JSON schema, no longer need to handwritten server docking code
+10. Add BeeUISkeleton, an simple and powerful application entry
+11. Add BeeRoutine, an BeeMessage which can asynchronous and by-self executing
+12. Bug fix
+            </label>
 		</linear>
 		
 		<linear orientation="v" class="inner-wrapper">
@@ -93,16 +102,16 @@
 			</label>
 			<label class="sub-content">
 				1. 支持Mac OS
-				2. 支持XML模版
-				3. 支持jQUERY语法
-				4. 支持Signal桥接
-				5. 修改BUG
-				-------------------------------------------------
-				1. Fully support for MacOS
-				2. Fully support for UI template (xml)
-				3. Fully support for UI query syntax, like jQUERY
-				4. Fully support for template/viewController signal bridging by ID
-				5. Bug fix
+2. 支持XML模版
+3. 支持jQUERY语法
+4. 支持Signal桥接
+5. 修改BUG
+-------------------------------------------------
+1. Fully support for MacOS
+2. Fully support for UI template (xml)
+3. Fully support for UI query syntax, like jQUERY
+4. Fully support for template/viewController signal bridging by ID
+5. Bug fix
 			</label>
 		</linear>
 		
@@ -113,16 +122,16 @@
 			</label>
 			<label class="sub-content">
 				1. 重构MVC
-				2. 支持XML模版
-				3. 支持jQUERY语法
-				4. 支持Signal桥接
-				5. 修改BUG
-				-------------------------------------------------
-				1. Refactoring the directory structure, Core and MVC completely separated, and the source files and the extensions completely separated
-				2. Refactoring the code structure of BeeDatabase and BeeActiveRecord, more clearly
-				3. Support the ActiveRecord inherition and nesting, support HAS/BELONG_TO operations
-				4. Support dot(.) opertions for BeeRequest and BeeMessage
-				5. Bug fix
+2. 支持XML模版
+3. 支持jQUERY语法
+4. 支持Signal桥接
+5. 修改BUG
+-------------------------------------------------
+1. Refactoring the directory structure, Core and MVC completely separated, and the source files and the extensions completely separated
+2. Refactoring the code structure of BeeDatabase and BeeActiveRecord, more clearly
+3. Support the ActiveRecord inherition and nesting, support HAS/BELONG_TO operations
+4. Support dot(.) opertions for BeeRequest and BeeMessage
+5. Bug fix
 			</label>
 		</linear>
 		
@@ -133,16 +142,16 @@
 			</label>
 			<label class="sub-content">
 				1. 增加BeeDatabase
-				2. 增加BeeActiveRecord
-				3. 增加负载图
-				4. 修改BUG
-				5. 将编译选项移到Bee_Precompile.h
-				-------------------------------------------------
-				1. Add BeeDatabase
-				2. Add BeeActiveRecord
-				3. Overload graph
-				4. Bug fix
-				5. Move precompile options to 'Bee_Precompile.h'
+2. 增加BeeActiveRecord
+3. 增加负载图
+4. 修改BUG
+5. 将编译选项移到Bee_Precompile.h
+-------------------------------------------------
+1. Add BeeDatabase
+2. Add BeeActiveRecord
+3. Overload graph
+4. Bug fix
+5. Move precompile options to 'Bee_Precompile.h'
 			</label>
 		</linear>
 		
@@ -153,12 +162,12 @@
 			</label>
 			<label class="sub-content">
 				1. 初始版本
-				2. 基础教程
-				3. In-app调试器
-				-------------------------------------------------
-				1. Draft version
-				2. Toturial
-				3. In-app debugger
+2. 基础教程
+3. In-app调试器
+-------------------------------------------------
+1. Draft version
+2. Toturial
+3. In-app debugger
 			</label>
 		</linear>
 		

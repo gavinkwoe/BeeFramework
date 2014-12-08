@@ -94,7 +94,7 @@
 	NSString *	fullName = [resName substringToIndex:(resName.length - extension.length - 1)];
 	
 	NSString * path = [[NSBundle mainBundle] pathForResource:fullName ofType:extension];
-	return [NSData dataWithContentsOfFile:path];
+	return [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL];
 }
 
 @end

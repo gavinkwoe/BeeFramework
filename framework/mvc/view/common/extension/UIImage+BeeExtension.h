@@ -61,6 +61,7 @@
 - (UIColor *)patternColor;
 
 - (UIImage *)crop:(CGRect)rect;
+- (UIImage *)crop2:(CGRect)rect;
 - (UIImage *)imageInRect:(CGRect)rect;
 
 + (UIImage *)imageFromString:(NSString *)name;
@@ -71,6 +72,7 @@
 + (UIImage *)merge:(NSArray *)images;
 - (UIImage *)merge:(UIImage *)image;
 - (UIImage *)resize:(CGSize)newSize;
+- (UIImage*)scaleToSize:(CGSize)size;
 
 - (NSData *)dataWithExt:(NSString *)ext;
 

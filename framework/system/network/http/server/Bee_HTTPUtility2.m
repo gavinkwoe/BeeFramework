@@ -43,7 +43,8 @@ BEE_EXTERN void http_echo( NSString * text, ... )
 		va_start( args, text );
 		
 		NSString * content = [[NSString alloc] initWithFormat:(NSString *)text arguments:args];
-		if ( content && content.length )
+		
+		if ( content )
 		{
 			[workflow.connection.response.bodyData appendData:[content asNSData]];
 
@@ -63,7 +64,8 @@ BEE_EXTERN void line( NSString * text, ... )
 		va_start( args, text );
 		
 		NSString * content = [[NSString alloc] initWithFormat:(NSString *)text arguments:args];
-		if ( content && content.length )
+		
+		if ( content )
 		{
 			[workflow.connection.response.bodyData appendData:[content asNSData]];
 			[workflow.connection.response.bodyData appendData:[@"\n" asNSData]];
@@ -84,7 +86,7 @@ BEE_EXTERN void file( NSString * filePath )
 	if ( workflow )
 	{
 		NSData * fileData = [[NSData alloc] initWithContentsOfFile:filePath];
-		if ( fileData && fileData.length )
+		if ( fileData )
 		{
 			[workflow.connection.response.bodyData appendData:fileData];
 			

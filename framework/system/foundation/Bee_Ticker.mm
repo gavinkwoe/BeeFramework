@@ -73,7 +73,7 @@ DEF_SINGLETON( BeeTicker )
 	self = [super init];
 	if ( self )
 	{
-		_interval = (1.0f / 8.0f);
+		_interval = (1.0f / 3.0f);
 		_receivers = [[NSMutableArray nonRetainingArray] retain];
 	}
 	

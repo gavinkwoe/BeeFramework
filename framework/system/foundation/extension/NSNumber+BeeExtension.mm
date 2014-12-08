@@ -67,6 +67,24 @@
 #endif
 }
 
+- (NSString *)decimalStyleString
+{
+    NSNumberFormatter * formatter = [[NSNumberFormatter alloc] init];
+    formatter.numberStyle = NSNumberFormatterDecimalStyle;
+    NSString * result = [formatter stringFromNumber:self];
+    [formatter release];
+    return result;
+}
+
+- (NSString *)currencyStyleString
+{
+    NSNumberFormatter * formatter = [[NSNumberFormatter alloc] init];
+    formatter.numberStyle = NSNumberFormatterCurrencyStyle;
+    NSString * result = [formatter stringFromNumber:self];
+    [formatter release];
+    return result;
+}
+
 @end
 
 // ----------------------------------

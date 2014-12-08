@@ -609,9 +609,17 @@ local int unzlocal_GetCurrentFileInfoInternal (file,
     /* we check the magic */
     if (err==UNZ_OK)
         if (unzlocal_getLong(&s->z_filefunc, s->filestream,&uMagic) != UNZ_OK)
+		{
             err=UNZ_ERRNO;
+		}
         else if (uMagic!=0x02014b50)
+		{
             err=UNZ_BADZIPFILE;
+		}
+		else
+		{
+			err=UNZ_OK;
+		}
 
     if (unzlocal_getShort(&s->z_filefunc, s->filestream,&file_info.version) != UNZ_OK)
         err=UNZ_ERRNO;
@@ -1534,7 +1542,8 @@ extern int ZEXPORT unzGetGlobalComment (file, szComment, uSizeBuf)
     char *szComment;
     uLong uSizeBuf;
 {
-    int err=UNZ_OK;
+//    int err=UNZ_OK;
+	
     unz_s* s;
     uLong uReadThis ;
     if (file==NULL)

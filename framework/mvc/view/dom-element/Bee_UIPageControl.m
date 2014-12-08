@@ -151,95 +151,79 @@
 {
     NSUInteger index = 0;
 	
-	if ( IOS7_OR_LATER )
+	for ( UIView * subView in self.subviews )
 	{
-		for ( UIView * subView in self.subviews )
+		if ( IOS6_OR_EARLIER )
 		{
-			if ( self.currentPage == index )
+			if ( NO == [subView isKindOfClass:[UIImageView class]] )
 			{
-				if ( self.dotImageHilite )
-				{
-					subView.layer.contents = (id)self.dotImageHilite.CGImage;
-				}
+				continue;
+			}
+		}
+
+		if ( self.currentPage == index )
+		{
+			if ( self.dotImageHilite )
+			{
+				subView.backgroundColor = [UIColor clearColor];
+				subView.layer.backgroundColor = [UIColor clearColor].CGColor;
+				subView.layer.contents = (id)self.dotImageHilite.CGImage;
 			}
 			else
 			{
-				if ( self.dotImageNormal )
-				{
-					subView.layer.contents = (id)self.dotImageNormal.CGImage;
-				}
+				subView.layer.borderColor = [UIColor blackColor].CGColor;
+				subView.layer.cornerRadius = subView.frame.size.height / 2.0f;
+				subView.layer.masksToBounds = YES;
 			}
-			
-			if ( NO == CGSizeEqualToSize( self.dotSize, CGSizeZero ) )
-			{
-				CGRect imageFrame = subView.frame;
-				imageFrame.size.width = self.dotSize.width;
-				imageFrame.size.height = self.dotSize.height;
-				imageFrame.origin.x = subView.center.x - imageFrame.size.width / 2.0f;
-				imageFrame.origin.y = subView.center.y - imageFrame.size.height / 2.0f;
-				subView.frame = imageFrame;
-			}
-			
-			index += 1;
 		}
-	}
-	else
-	{
-		for ( UIView * subView in self.subviews )
+		else if ( (index + 1) >= self.numberOfPages )
 		{
-			if ( [subView isKindOfClass:[UIImageView class]] )
+			if ( self.dotImageLast )
 			{
-				UIImageView * imageView = (UIImageView *)subView;
-				
-				if ( index >= self.numberOfPages )
-				{
-					if ( self.dotImageLast )
-					{
-						imageView.image = self.dotImageLast;
-					}
-					else
-					{
-						imageView.image = self.dotImageNormal;
-					}
-				}
-				else
-				{
-					if ( self.dotImageLast && ((index + 1) >= self.numberOfPages) )
-					{
-						imageView.image = self.dotImageLast;
-					}
-					else
-					{
-						if ( self.currentPage == index )
-						{
-							if ( self.dotImageHilite )
-							{
-								imageView.image = self.dotImageHilite;
-							}
-						}
-						else
-						{
-							if ( self.dotImageNormal )
-							{
-								imageView.image = self.dotImageNormal;
-							}
-						}
-					}
-				}
-
-				if ( NO == CGSizeEqualToSize( self.dotSize, CGSizeZero ) )
-				{
-					CGRect imageFrame = imageView.frame;
-					imageFrame.size.width = self.dotSize.width;
-					imageFrame.size.height = self.dotSize.height;
-					imageFrame.origin.x = imageView.center.x - imageFrame.size.width / 2.0f;
-					imageFrame.origin.y = imageView.center.y - imageFrame.size.height / 2.0f;
-					imageView.frame = imageFrame;
-				}
-
-				index += 1;
+				subView.backgroundColor = [UIColor clearColor];
+				subView.layer.backgroundColor = [UIColor clearColor].CGColor;
+				subView.layer.contents = (id)self.dotImageLast.CGImage;
+			}
+            else if ( self.dotImageNormal )
+			{
+				subView.backgroundColor = [UIColor clearColor];
+				subView.layer.backgroundColor = [UIColor clearColor].CGColor;
+				subView.layer.contents = (id)self.dotImageNormal.CGImage;
+			}
+			else
+			{
+				subView.layer.borderColor = [UIColor blackColor].CGColor;
+				subView.layer.cornerRadius = subView.frame.size.height / 2.0f;
+				subView.layer.masksToBounds = YES;
 			}
 		}
+		else
+		{
+			if ( self.dotImageNormal )
+			{
+				subView.backgroundColor = [UIColor clearColor];
+				subView.layer.backgroundColor = [UIColor clearColor].CGColor;
+				subView.layer.contents = (id)self.dotImageNormal.CGImage;
+			}
+			else
+			{
+				subView.layer.borderColor = [UIColor blackColor].CGColor;
+				subView.layer.cornerRadius = subView.frame.size.height / 2.0f;
+				subView.layer.masksToBounds = YES;
+			}
+		}
+		
+		if ( NO == CGSizeEqualToSize( self.dotSize, CGSizeZero ) )
+		{
+			CGRect imageFrame = subView.frame;
+			imageFrame.size.width = self.dotSize.width;
+			imageFrame.size.height = self.dotSize.height;
+			imageFrame.origin.x = subView.center.x - imageFrame.size.width / 2.0f;
+			imageFrame.origin.y = subView.center.y - imageFrame.size.height / 2.0f;
+			subView.frame = imageFrame;
+		}
+		
+		index += 1;
 	}
 
 	[self setNeedsDisplay];

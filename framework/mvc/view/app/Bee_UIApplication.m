@@ -100,7 +100,7 @@ static BeeUIApplication * __sharedApp = nil;
 	if ( self )
 	{
 //		[self load];
-		[self performLoad];
+//		[self performLoad];
 	}
 	return self;
 }
@@ -239,6 +239,9 @@ static BeeUIApplication * __sharedApp = nil;
 		{
 			[self postNotification:BeeUIApplication.LAUNCHED];
 		}
+		
+		[self.window.rootViewController viewWillAppear:NO];
+		[self.window.rootViewController viewDidAppear:NO];
 
 		UILocalNotification * localNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
 		if ( localNotification )
@@ -257,6 +260,9 @@ static BeeUIApplication * __sharedApp = nil;
 	else
 	{
 		[self postNotification:BeeUIApplication.LAUNCHED];
+		
+		[self.window.rootViewController viewWillAppear:NO];
+		[self.window.rootViewController viewDidAppear:NO];
 	}
 	
 	_ready = YES;
@@ -290,17 +296,11 @@ static BeeUIApplication * __sharedApp = nil;
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-	[self.window.rootViewController viewWillAppear:NO];
-	[self.window.rootViewController viewDidAppear:NO];
-
 	[self postNotification:BeeUIApplication.STATE_CHANGED];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-	[self.window.rootViewController viewWillDisappear:NO];
-	[self.window.rootViewController viewDidDisappear:NO];
-
 	[self postNotification:BeeUIApplication.STATE_CHANGED];
 }
 
@@ -386,11 +386,17 @@ static BeeUIApplication * __sharedApp = nil;
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
+	[self.window.rootViewController viewWillDisappear:NO];
+	[self.window.rootViewController viewDidDisappear:NO];
+	
 	[self postNotification:BeeUIApplication.STATE_CHANGED];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
+	[self.window.rootViewController viewWillAppear:NO];
+	[self.window.rootViewController viewDidAppear:NO];
+
 	[self postNotification:BeeUIApplication.STATE_CHANGED];
 }
 

@@ -51,6 +51,7 @@ DEF_PACKAGE( BeePackage_System, BeeSandbox, sandbox );
 	NSString *	_tmpPath;
 }
 
+- (BOOL)remove:(NSString *)path;
 - (BOOL)touch:(NSString *)path;
 - (BOOL)touchFile:(NSString *)path;
 
@@ -77,17 +78,10 @@ DEF_SINGLETON( BeeSandbox )
 {
 	if ( nil == _appPath )
 	{
-		NSError * error = nil;
-		NSArray * paths = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:NSHomeDirectory() error:&error];
-
-		for ( NSString * path in paths )
-		{
-			if ( [path hasSuffix:@".app"] )
-			{
-				_appPath = [[NSString stringWithFormat:@"%@/%@", NSHomeDirectory(), path] retain];
-				break;
-			}
-		}
+		NSString * exeName = [[NSBundle mainBundle] infoDictionary][@"CFBundleExecutable"];
+		NSString * appPath = [[NSHomeDirectory() stringByAppendingPathComponent:exeName] stringByAppendingPathExtension:@"app"];
+		
+		_appPath = [appPath retain];
 	}
 
 	return _appPath;
@@ -167,6 +161,16 @@ DEF_SINGLETON( BeeSandbox )
 	}
 
 	return _tmpPath;
+}
+
++ (BOOL)remove:(NSString *)path
+{
+	return [[BeeSandbox sharedInstance] remove:path];
+}
+
+- (BOOL)remove:(NSString *)path
+{
+	return [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];
 }
 
 + (BOOL)touch:(NSString *)path

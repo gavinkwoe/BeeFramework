@@ -47,6 +47,9 @@ typedef enum SelectorMatch {
 @protocol CSSElementProtocol <NSObject>
 
 - (BOOL)isElementNode;
+- (BOOL)isFirstChild;
+- (BOOL)isLastChild;
+- (BOOL)isNthChild:(NSUInteger)index;
 
 - (NSString *)hash;
 - (NSString *)localName;

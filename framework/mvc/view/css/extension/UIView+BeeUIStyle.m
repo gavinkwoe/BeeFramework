@@ -380,22 +380,25 @@
 
 - (void)mergeStyle
 {
-    BeeUILayout * layout = self.layout;
-    layout.styleClasses = self.UIStyleClasses;
-    
 	BeeUIStyle * style1 = self.UIStyleInline;
     BeeUIStyle * style2 = self.UIStyleCustom;
-	BeeUIStyle * style3 = [self.UIStyleRoot childStyleWithElement:layout];
+	BeeUIStyle * style3 = [self.UIStyleRoot childStyleWithClasses:self.UIStyleClasses];
+	BeeUIStyle * style4 = [self.UIStyleRoot childStyleWithElement:self.layout];
 
 	if ( style2 || style3 || self.UIStyleClasses.count )
 	{
 		BeeUIStyle * merged = [BeeUIStyle style];
 
+		if ( style4 && style4.properties.count )
+		{
+			[style4 mergeTo:merged];
+		}
+		
 		if ( style3 && style3.properties.count )
 		{
 			[style3 mergeTo:merged];
 		}
-				
+		
 		if ( style2 && style2.properties.count )
 		{
 			[style2 mergeTo:merged];
@@ -655,18 +658,36 @@
 
 - (void)applyViewContent:(NSMutableDictionary *)properties
 {
+	self.tag = [properties parseIntegerWithKeys:@[@"tag"] defaultValue:self.tag];
 	self.contentMode = [properties parseContentModeWithKeys:@[@"mode", @"content-mode"] defaultValue:self.contentMode];
+}
+
+- (void)applyViewOverflow:(NSMutableDictionary *)properties
+{
+    NSString * overflow = [properties parseStringWithKeys:@[@"overflow"]];
+    if ( overflow && overflow.length )
+    {
+		if ( [overflow matchAnyOf:@[@"visible"]] )
+		{
+			self.layer.masksToBounds = NO;
+		}
+		else if ( [overflow matchAnyOf:@[@"hidden"]] )
+		{
+			self.layer.masksToBounds = YES;
+		}
+    }
 }
 
 - (void)applyViewVisibility:(NSMutableDictionary *)properties
 {
 // opaque
 	
-	self.alpha = [properties parseFloatWithKeys:@[@"alpha", @"opaque"] defaultValue:1.0f];
+	self.alpha = [properties parseFloatWithKeys:@[@"alpha", @"opaque", @"opacity"] defaultValue:self.alpha];
 
 // display
 	
     NSString * display = [properties parseStringWithKeys:@[@"display"]];
+
     if ( display && display.length )
     {
 		if ( [display matchAnyOf:@[@"none"]] )
@@ -684,7 +705,7 @@
     }
 	else
 	{
-		[self setHidden:NO];
+//		[self setHidden:NO];
 	}
 }
 
@@ -706,6 +727,7 @@
 	[self applyViewBackgroundImage:propertiesCopy];
 	[self applyViewContent:propertiesCopy];
 	[self applyViewShadow:propertiesCopy];
+	[self applyViewOverflow:propertiesCopy];
 	[self applyViewVisibility:propertiesCopy];
 	
 	[super applyUIStyling:propertiesCopy];

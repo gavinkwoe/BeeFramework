@@ -138,7 +138,7 @@ DEF_SIGNAL( PINCH_CANCELLED )
 	{
 		if ( [BeeUIConfig sharedInstance].highPerformance )
 		{
-			self.layer.shouldRasterize = YES;
+//			self.layer.shouldRasterize = YES;
 		}
 
 		[self sendUISignal:UIView.PINCH_START];
@@ -151,7 +151,7 @@ DEF_SIGNAL( PINCH_CANCELLED )
 	{
 		if ( [BeeUIConfig sharedInstance].highPerformance )
 		{
-			self.layer.shouldRasterize = NO;
+//			self.layer.shouldRasterize = NO;
 		}
 
 		[self sendUISignal:UIView.PINCH_STOP];
@@ -160,7 +160,7 @@ DEF_SIGNAL( PINCH_CANCELLED )
 	{
 		if ( [BeeUIConfig sharedInstance].highPerformance )
 		{
-			self.layer.shouldRasterize = NO;
+//			self.layer.shouldRasterize = NO;
 		}
 
 		[self sendUISignal:UIView.PINCH_CANCELLED];

@@ -173,6 +173,57 @@
 	return [self objectFromAny:decodedObject];
 }
 
+- (id)readFromUserDefaults:(NSString *)key
+{
+	id object = [[self class] readFromUserDefaults:key];
+	if ( nil == object )
+	{
+		return self;
+	}
+	
+	if ( [self isKindOfClass:[NSNumber class]] )
+	{
+		return object;
+	}
+	else if ( [self isKindOfClass:[NSString class]] )
+	{
+		return object;
+	}
+	else if ( [self isKindOfClass:[NSArray class]] )
+	{
+		return object;
+	}
+	else if ( [self isKindOfClass:[NSDictionary class]] )
+	{
+		return object;
+	}
+	else if ( [self isKindOfClass:[NSDate class]] )
+	{
+		return object;
+	}
+	else if ( [self isKindOfClass:[NSObject class]] )
+	{
+		return object;
+	}
+	else if ( [self isKindOfClass:[NSMutableArray class]] )
+	{
+		NSMutableArray * mutableArray = (NSMutableArray *)self;
+		[mutableArray addObjectsFromArray:object];
+		return self;
+	}
+	else if ( [self isKindOfClass:[NSMutableDictionary class]] )
+	{
+		NSMutableDictionary * mutableDict = (NSMutableDictionary *)self;
+		[mutableDict addEntriesFromDictionary:object];
+		return self;
+	}
+	else
+	{
+		[self copyPropertiesFrom:object];
+		return self;
+	}
+}
+
 - (void)saveToUserDefaults:(NSString *)key
 {
 	if ( nil == key )
@@ -183,6 +234,11 @@
 		return;
 
 	[self userDefaultsWrite:jsonString forKey:key];
+}
+
+- (void)removeFromUserDefaults:(NSString *)key
+{
+	[[self class] userDefaultsRemove:key];
 }
 
 @end

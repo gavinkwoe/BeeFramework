@@ -198,6 +198,20 @@ IS_CONTAINABLE( YES )
 	}
 }
 
+- (void)setFrame:(CGRect)frame
+{
+	[super setFrame:frame];
+	
+	self.RELAYOUT();
+}
+
+- (void)layoutSubviews
+{
+	[super layoutSubviews];
+	
+	self.RELAYOUT();
+}
+
 - (void)load
 {
 }

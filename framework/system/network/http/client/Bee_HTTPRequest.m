@@ -402,7 +402,7 @@ DEF_INT( STATE_REDIRECTED,	6 );
 		}
 		else if ( BeeHTTPRequest.STATE_FAILED == _state )
 		{
-			INFO( @"%@ '%@', failed", self.requestMethod, self.url.absoluteString );
+			ERROR( @"\t\tHTTP %@ '%@', failed", self.requestMethod, self.url.absoluteString );
 			
 			if ( self.whenFailed )
 			{
@@ -411,7 +411,7 @@ DEF_INT( STATE_REDIRECTED,	6 );
 		}
 		else if ( BeeHTTPRequest.STATE_SUCCEED == _state )
 		{
-			INFO( @"%@ '%@', succeed", self.requestMethod, self.url.absoluteString );
+			INFO( @"\t\tHTTP %@ '%@', succeed", self.requestMethod, self.url.absoluteString );
 			
 			if ( self.whenSucceed )
 			{
@@ -420,7 +420,7 @@ DEF_INT( STATE_REDIRECTED,	6 );
 		}
 		else if ( BeeHTTPRequest.STATE_CANCELLED == _state )
 		{
-			INFO( @"%@ '%@', cancelled", self.requestMethod, self.url.absoluteString );
+			INFO( @"\t\tHTTP %@ '%@', cancelled", self.requestMethod, self.url.absoluteString );
 
 			if ( self.whenCancelled )
 			{
@@ -451,7 +451,7 @@ DEF_INT( STATE_REDIRECTED,	6 );
 		self.whenUpdate();
 	}
 	
-	INFO( @"%@ '%@', upload %d/%d", self.requestMethod, self.url.absoluteString, self.uploadBytes, self.uploadTotalBytes );
+	INFO( @"\t\tHTTP %@ '%@', upload %d/%d", self.requestMethod, self.url.absoluteString, self.uploadBytes, self.uploadTotalBytes );
 	
 	_sendProgressed = NO;
 }
@@ -478,7 +478,7 @@ DEF_INT( STATE_REDIRECTED,	6 );
 		self.whenUpdate();
 	}
 	
-//	INFO( @"%@ '%@', download %d/%d", self.requestMethod, self.url.absoluteString, self.downloadBytes, self.downloadTotalBytes );
+	INFO( @"\t\tHTTP %@ '%@', download %d/%d", self.requestMethod, self.url.absoluteString, self.downloadBytes, self.downloadTotalBytes );
 	
 	_recvProgressed = NO;
 }

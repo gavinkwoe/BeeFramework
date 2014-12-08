@@ -33,7 +33,6 @@
 #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 
 //#line 3 "lex.yy.c"
-#line 3 "lex.yy.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -3478,7 +3477,8 @@ void yyfree (void * ptr )
 #if __BEE_DEVELOPMENT__
 void yyerror(CSSParser * parser, char const * s)
 {
-    fprintf(stderr, "!!!!!!!!!!%s!!!!!!!!!!\n", s);
+    fprintf(stderr, "[CSSError] %s. error near:\n-----\n%s\n-----\n",
+            s, (*yy_buffer_stack[0]).yy_ch_buf);
 }
 #else  // #if __BEE_DEVELOPMENT__
 void yyerror(CSSParser * parser, char const * s) {}

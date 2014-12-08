@@ -65,7 +65,7 @@
 	}
 	else if ( [self isKindOfClass:[NSString class]] )
 	{
-		return [NSNumber numberWithInteger:[(NSString *)self integerValue]];
+		return [NSNumber numberWithFloat:[(NSString *)self floatValue]];
 	}
 	else if ( [self isKindOfClass:[NSDate class]] )
 	{
@@ -118,44 +118,60 @@
 	else if ( [self isKindOfClass:[NSString class]] )
 	{
 		NSDate * date = nil;
-				
+			
 		if ( nil == date )
 		{
-			NSString * format = @"yyyy-MM-dd HH:mm:ss z";
-			NSDateFormatter * formatter = [[[NSDateFormatter alloc] init] autorelease];
-			[formatter setDateFormat:format];
-			[formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-
+			static NSDateFormatter * formatter = nil;
+			
+			if ( nil == formatter )
+			{
+				formatter = [[NSDateFormatter alloc] init];
+				[formatter setDateFormat:@"yyyy/MM/dd HH:mm:ss z"];
+				[formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+			}
+			
 			date = [formatter dateFromString:(NSString *)self];
 		}
 
 		if ( nil == date )
 		{
-			NSString * format = @"yyyy/MM/dd HH:mm:ss z";
-			NSDateFormatter * formatter = [[[NSDateFormatter alloc] init] autorelease];
-			[formatter setDateFormat:format];
-			[formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+			static NSDateFormatter * formatter = nil;
 			
+			if ( nil == formatter )
+			{
+				formatter = [[NSDateFormatter alloc] init];
+				[formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss z"];
+				[formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+			}
+
 			date = [formatter dateFromString:(NSString *)self];
 		}
         
 		if ( nil == date )
 		{
-			NSString * format = @"yyyy-MM-dd HH:mm:ss";
-			NSDateFormatter * formatter = [[[NSDateFormatter alloc] init] autorelease];
-			[formatter setDateFormat:format];
-			[formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+			static NSDateFormatter * formatter = nil;
+
+			if ( nil == formatter )
+			{
+				formatter = [[NSDateFormatter alloc] init];
+				[formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+				[formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+			}
 			
 			date = [formatter dateFromString:(NSString *)self];
 		}
 
 		if ( nil == date )
 		{
-			NSString * format = @"yyyy/MM/dd HH:mm:ss";
-			NSDateFormatter * formatter = [[[NSDateFormatter alloc] init] autorelease];
-			[formatter setDateFormat:format];
-			[formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+			static NSDateFormatter * formatter = nil;
 			
+			if ( nil == formatter )
+			{
+				formatter = [[NSDateFormatter alloc] init];
+				[formatter setDateFormat:@"yyyy/MM/dd HH:mm:ss"];
+				[formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+			}
+
 			date = [formatter dateFromString:(NSString *)self];
 		}
 

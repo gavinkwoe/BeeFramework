@@ -98,9 +98,11 @@
 	}
 	
 	NSString * text = [_target.text stringByReplacingCharactersInRange:range withString:string];
+
 	if ( _target.maxLength > 0 && text.length > _target.maxLength )
 	{
 		[_target sendUISignal:BeeUITextView.TEXT_OVERFLOW];
+		_target.text = [text substringWithRange:NSMakeRange(0, _target.maxLength)];
 		return NO;
 	}
 	
@@ -196,6 +198,8 @@ DEF_SIGNAL( RETURN )
 		self.opaque = NO;
 		self.backgroundColor = [UIColor clearColor];
 		self.font = [UIFont systemFontOfSize:14.0f];
+		self.userInteractionEnabled = YES;
+		self.editable = YES;
 
 		self.placeholder = @"";
 		self.placeHolderColor = [UIColor grayColor];
@@ -233,49 +237,52 @@ DEF_SIGNAL( RETURN )
 }
 
 - (void)updatePlaceHolder
-{	
-	if ( [_placeholder length] > 0 )
+{
+    if ( self.frame.size.width )
     {
-        if ( nil == _placeHolderLabel )
+        if ( [_placeholder length] > 0 )
         {
-			CGRect labelFrame = CGRectMake( 9.0f, 8.0f, self.frame.size.width, 0.0f );
-
-			_placeHolderLabel = [[UILabel alloc] initWithFrame:labelFrame];
-			_placeHolderLabel.lineBreakMode = UILineBreakModeCharacterWrap;
-			_placeHolderLabel.numberOfLines = 1;
-			_placeHolderLabel.font =  self.font;
-			_placeHolderLabel.backgroundColor = [UIColor clearColor];
-			_placeHolderLabel.textColor = _placeHolderColor;
-			_placeHolderLabel.alpha = 0.0f;
-			_placeHolderLabel.opaque = NO;
-            [self addSubview:_placeHolderLabel];
+            if ( nil == _placeHolderLabel )
+            {
+                CGRect labelFrame = CGRectMake( 9.0f, 8.0f, self.frame.size.width - 18.0f, 0.0f );
+                
+                _placeHolderLabel = [[UILabel alloc] initWithFrame:labelFrame];
+                _placeHolderLabel.lineBreakMode = UILineBreakModeCharacterWrap;
+                _placeHolderLabel.numberOfLines = 0;
+                _placeHolderLabel.font =  self.font;
+                _placeHolderLabel.backgroundColor = [UIColor clearColor];
+                _placeHolderLabel.textColor = _placeHolderColor;
+                _placeHolderLabel.alpha = 0.0f;
+                _placeHolderLabel.opaque = NO;
+                [self addSubview:_placeHolderLabel];
+            }
+            
+            _placeHolderLabel.frame = CGRectMake(9.0f, 8.0f, self.frame.size.width - 18.0f, 0);
+            _placeHolderLabel.lineBreakMode = UILineBreakModeCharacterWrap;
+            _placeHolderLabel.numberOfLines = 0;
+            _placeHolderLabel.text = self.placeholder;
+            [_placeHolderLabel sizeToFit];
+            [self sendSubviewToBack:_placeHolderLabel];
         }
-		
-		_placeHolderLabel.frame = CGRectMake(_placeHolderLabel.frame.origin.x, _placeHolderLabel.frame.origin.y, self.frame.size.width, 0);
-		_placeHolderLabel.lineBreakMode = UILineBreakModeCharacterWrap;
-		_placeHolderLabel.numberOfLines = 1;
-		_placeHolderLabel.text = self.placeholder;
-		[_placeHolderLabel sizeToFit];
-		[self sendSubviewToBack:_placeHolderLabel];			
+        
+        if ( _placeHolderLabel )
+        {
+            _placeHolderLabel.text = _placeholder;
+            [_placeHolderLabel sizeToFit];
+            
+            if ( [_placeholder length] > 0 )
+            {
+                if ( 0 == [self.text length] )
+                {
+                    [_placeHolderLabel setAlpha:1.0f];
+                }
+                else
+                {
+                    [_placeHolderLabel setAlpha:0.0f];
+                }
+            }
+        }
     }
-	
-	if ( _placeHolderLabel )
-	{
-		_placeHolderLabel.text = _placeholder;
-		[_placeHolderLabel sizeToFit];
-
-		if ( [_placeholder length] > 0 )
-		{
-			if ( 0 == [self.text length] )
-			{
-				[_placeHolderLabel setAlpha:1.0f];
-			}
-			else
-			{
-				[_placeHolderLabel setAlpha:0.0f];
-			}
-		}
-	}
 }
 
 - (BOOL)active
@@ -303,6 +310,10 @@ DEF_SIGNAL( RETURN )
 		{
 			[_nextChain becomeFirstResponder];
 			return;
+		}
+		else
+		{
+			[self resignFirstResponder];
 		}
 	}
 	

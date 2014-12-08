@@ -44,12 +44,12 @@
 				<linear orientation="v" class="profile-right-wrapper">
 					<label class="profile-name">QFish</label>
 					<label class="profile-title">iOS Developer</label>
-					<button id="qfish" class="profile-contact">QFi.sh</button>
+					<button id="qfish" class="profile-contact">http://QFi.sh</button>
 				</linear>
 			</linear>
 			<label class="profile-intro">
-				Love coding and hand-drawing, while he is also skilled in HTML and CSS and JS.
-				What he always saying is "Fight, a way of surviving ~".
+				QFish is Not a Fish Named Q.
+Love coding, also skilled in HTML, CSS and JS.
 			</label>
 		</linear>
 

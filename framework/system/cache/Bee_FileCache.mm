@@ -43,8 +43,9 @@ DEF_PACKAGE( BeePackage_System, BeeFileCache, fileCache );
 
 @interface BeeFileCache()
 {
-	NSString *	_cachePath;
-	NSString *	_cacheUser;
+	NSString *		_cachePath;
+	NSString *		_cacheUser;
+	NSFileManager *	_fileManager;
 }
 @end
 
@@ -64,6 +65,8 @@ DEF_SINGLETON( BeeFileCache );
 	{
 		self.cacheUser = @"";
 		self.cachePath = [NSString stringWithFormat:@"%@/%@/Cache/", [BeeSandbox libCachePath], [BeeSystemInfo appVersion]];
+		
+		_fileManager = [[NSFileManager alloc] init];
 	}
 	return self;
 }
@@ -72,6 +75,9 @@ DEF_SINGLETON( BeeFileCache );
 {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 
+	[_fileManager release];
+	_fileManager = nil;
+	
 	self.cachePath = nil;
 	self.cacheUser = nil;
 	
@@ -81,6 +87,7 @@ DEF_SINGLETON( BeeFileCache );
 - (NSString *)fileNameForKey:(NSString *)key
 {
 	NSString * pathName = nil;
+
 	if ( self.cacheUser && [self.cacheUser length] )
 	{
 		pathName = [self.cachePath stringByAppendingFormat:@"%@/", self.cacheUser];
@@ -90,12 +97,12 @@ DEF_SINGLETON( BeeFileCache );
 		pathName = self.cachePath;
 	}
 	
-	if ( NO == [[NSFileManager defaultManager] fileExistsAtPath:pathName] )
+	if ( NO == [_fileManager fileExistsAtPath:pathName] )
 	{
-		[[NSFileManager defaultManager] createDirectoryAtPath:pathName
-								  withIntermediateDirectories:YES
-												   attributes:nil
-														error:NULL];
+		[_fileManager createDirectoryAtPath:pathName
+				withIntermediateDirectories:YES
+								 attributes:nil
+									  error:NULL];
 	}
 
 	return [pathName stringByAppendingString:key];
@@ -103,7 +110,7 @@ DEF_SINGLETON( BeeFileCache );
 
 - (BOOL)hasObjectForKey:(id)key
 {
-	return [[NSFileManager defaultManager] fileExistsAtPath:[self fileNameForKey:key]];
+	return [_fileManager fileExistsAtPath:[self fileNameForKey:key]];
 }
 
 - (id)objectForKey:(id)key
@@ -131,16 +138,16 @@ DEF_SINGLETON( BeeFileCache );
 
 - (void)removeObjectForKey:(NSString *)key
 {
-	[[NSFileManager defaultManager] removeItemAtPath:[self fileNameForKey:key] error:nil];
+	[_fileManager removeItemAtPath:[self fileNameForKey:key] error:nil];
 }
 
 - (void)removeAllObjects
 {
-	[[NSFileManager defaultManager] removeItemAtPath:_cachePath error:NULL];
-	[[NSFileManager defaultManager] createDirectoryAtPath:_cachePath
-							  withIntermediateDirectories:YES
-											   attributes:nil
-													error:NULL];
+	[_fileManager removeItemAtPath:_cachePath error:NULL];
+	[_fileManager createDirectoryAtPath:_cachePath
+			withIntermediateDirectories:YES
+							 attributes:nil
+								  error:NULL];
 }
 
 - (id)objectForKeyedSubscript:(id)key

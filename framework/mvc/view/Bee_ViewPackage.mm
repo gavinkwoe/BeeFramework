@@ -35,6 +35,6 @@
 
 #pragma mark -
 
-DEF_PACKAGE_INSTANCE( BeePackage, BeePackage_UI, ui );
+DEF_PACKAGE_( BeePackage, BeePackage_UI, ui );
 
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

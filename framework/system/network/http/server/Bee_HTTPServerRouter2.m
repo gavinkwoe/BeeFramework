@@ -132,17 +132,17 @@ DEF_SINGLETON( BeeHTTPServerRouter2 )
 
 - (void)otherAction:(BeeHTTPServerRouter2Block)block url:(NSString *)url;
 {
-	[self.routes setObject:[block copy] forKey:url];
+	[self.routes setObject:[[block copy] autorelease] forKey:url];
 }
 
 - (void)error404Action:(BeeHTTPServerRouter2Block)block
 {
-	[self.routes setObject:[block copy] forKey:@"404"];
+	[self.routes setObject:[[block copy] autorelease] forKey:@"404"];
 }
 
 - (void)error500Action:(BeeHTTPServerRouter2Block)block
 {
-	[self.routes setObject:[block copy] forKey:@"500"];
+	[self.routes setObject:[[block copy] autorelease] forKey:@"500"];
 }
 
 - (BOOL)routes:(NSString *)url

@@ -82,7 +82,7 @@
 {
 	if ( NO == _inited )
 	{
-		self.progressViewStyle = UIProgressViewStyleBar;
+		self.progressViewStyle = UIProgressViewStyleDefault;
 		
 	#if defined(__IPHONE_5_0)
 		if ( IOS5_OR_LATER )

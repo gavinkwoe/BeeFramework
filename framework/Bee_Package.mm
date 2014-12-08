@@ -103,6 +103,7 @@ DEF_SINGLETON( BeePackage )
 {
 	const char * autoLoadClasses[] = {
 		"BeeLogger",
+		"BeeMsc",
 
 	#if (TARGET_OS_MAC)
 		"BeeCLI",

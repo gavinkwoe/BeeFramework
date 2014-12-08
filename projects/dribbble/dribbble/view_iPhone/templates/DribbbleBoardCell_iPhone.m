@@ -35,6 +35,9 @@
 
 @implementation DribbbleBoardCell_iPhone
 
+SUPPORT_RESOURCE_LOADING(YES)
+SUPPORT_AUTOMATIC_LAYOUT(YES)
+
 DEF_OUTLET( BeeUIImageView,	photo )
 DEF_OUTLET( BeeUIImageView,	avatar )
 DEF_OUTLET( BeeUILabel,		view_num )
@@ -49,6 +52,7 @@ DEF_OUTLET( BeeUILabel,		like_num )
 - (void)dataDidChanged
 {
 	SHOT * shot = self.data;
+
 	if ( shot )
 	{
 		self.avatar.data = shot.player.avatar_url;

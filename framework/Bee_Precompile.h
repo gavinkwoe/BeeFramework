@@ -38,7 +38,7 @@
 // ----------------------------------
 
 #undef	BEE_VERSION
-#define BEE_VERSION		@"0.5.0"
+#define BEE_VERSION		@"0.6.0"
 
 // ----------------------------------
 // Global include headers
@@ -75,13 +75,15 @@
 
 #ifdef __OBJC__
 
+#import <Foundation/Foundation.h>
+
 #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 
 #import <UIKit/UIKit.h>
-#import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import <TargetConditionals.h>
+#import <AssetsLibrary/AssetsLibrary.h>
 
 #import <AVFoundation/AVFoundation.h>
 #import <CoreGraphics/CoreGraphics.h>
@@ -92,7 +94,6 @@
 
 #else	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 
-#import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
 #import <AppKit/AppKit.h>
 #import <WebKit/WebKit.h>
@@ -127,9 +128,11 @@
 // Global compile option
 // ----------------------------------
 
-#define __BEE_DEVELOPMENT__				(__AUTO__)
-#define __BEE_LOG__						(__AUTO__)
-#define __BEE_UNITTEST__				(__OFF__)
+#define __BEE_DEVELOPMENT__				(__ON__)
+#define	__BEE_PERFORMANCE__				(__OFF__)
+#define __BEE_LOG__						(__OFF__)
+#define __BEE_UNITTEST__                (__OFF__)
+#define __BEE_LIVELOAD__				    (__ON__)
 
 #pragma mark -
 
@@ -262,6 +265,8 @@
 #endif	// #ifndef	@normalize
 
 #pragma mark -
+
+typedef void ( *ImpFuncType )( id a, SEL b, void * c );
 
 // ----------------------------------
 // Preload headers

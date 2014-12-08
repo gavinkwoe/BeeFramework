@@ -63,6 +63,7 @@
 #pragma mark -
 
 @interface UIView(SwipeGesturePrivate)
+- (UISwipeGestureRecognizer *)swipeGestureForDirection:(UISwipeGestureRecognizerDirection)direction forceCreate:(bool)create;
 - (void)didSwipe:(UISwipeGestureRecognizer *)swipeGesture;
 @end
 
@@ -78,39 +79,109 @@ DEF_SIGNAL( SWIPE_RIGHT )
 @dynamic swipeble;
 @dynamic swipeEnabled;
 @dynamic swipeDirection;
-@dynamic swipeGesture;
 
 - (BOOL)swipeble
 {
-	return self.swipeGesture.enabled;
+	UISwipeGestureRecognizer * gesture1 = [self swipeGestureForDirection:UISwipeGestureRecognizerDirectionUp forceCreate:NO];
+	UISwipeGestureRecognizer * gesture2 = [self swipeGestureForDirection:UISwipeGestureRecognizerDirectionDown forceCreate:NO];
+	UISwipeGestureRecognizer * gesture3 = [self swipeGestureForDirection:UISwipeGestureRecognizerDirectionLeft forceCreate:NO];
+	UISwipeGestureRecognizer * gesture4 = [self swipeGestureForDirection:UISwipeGestureRecognizerDirectionRight forceCreate:NO];
+
+	if ( gesture1 && gesture1.enabled )
+	{
+		return YES;
+	}
+
+	if ( gesture2 && gesture2.enabled )
+	{
+		return YES;
+	}
+
+	if ( gesture3 && gesture3.enabled )
+	{
+		return YES;
+	}
+
+	if ( gesture4 && gesture4.enabled )
+	{
+		return YES;
+	}
+
+	return NO;
 }
 
 - (void)setSwipeble:(BOOL)flag
 {
-	self.swipeGesture.enabled = flag;
+	UISwipeGestureRecognizer * gesture1 = [self swipeGestureForDirection:UISwipeGestureRecognizerDirectionUp forceCreate:NO];
+	UISwipeGestureRecognizer * gesture2 = [self swipeGestureForDirection:UISwipeGestureRecognizerDirectionDown forceCreate:NO];
+	UISwipeGestureRecognizer * gesture3 = [self swipeGestureForDirection:UISwipeGestureRecognizerDirectionLeft forceCreate:NO];
+	UISwipeGestureRecognizer * gesture4 = [self swipeGestureForDirection:UISwipeGestureRecognizerDirectionRight forceCreate:NO];
+
+	if ( gesture1 )
+	{
+		gesture1.enabled = flag;
+	}
+	
+	if ( gesture2 )
+	{
+		gesture2.enabled = flag;
+	}
+	
+	if ( gesture3 )
+	{
+		gesture3.enabled = flag;
+	}
+	
+	if ( gesture4 )
+	{
+		gesture4.enabled = flag;
+	}
 }
 
 - (BOOL)swipeEnabled
 {
-	return self.swipeGesture.enabled;
+	return [self swipeble];
 }
 
 - (void)setSwipeEnabled:(BOOL)flag
 {
-	self.swipeGesture.enabled = flag;
+	[self setSwipeble:flag];
 }
 
 - (UISwipeGestureRecognizerDirection)direction
 {
-	return self.swipeGesture.direction;
+	UISwipeGestureRecognizer * gesture1 = [self swipeGestureForDirection:UISwipeGestureRecognizerDirectionUp forceCreate:NO];
+	UISwipeGestureRecognizer * gesture2 = [self swipeGestureForDirection:UISwipeGestureRecognizerDirectionDown forceCreate:NO];
+	UISwipeGestureRecognizer * gesture3 = [self swipeGestureForDirection:UISwipeGestureRecognizerDirectionLeft forceCreate:NO];
+	UISwipeGestureRecognizer * gesture4 = [self swipeGestureForDirection:UISwipeGestureRecognizerDirectionRight forceCreate:NO];
+
+	return (gesture1.direction|gesture2.direction|gesture3.direction|gesture4.direction);
 }
 
 - (void)setSwipeDirection:(UISwipeGestureRecognizerDirection)direction
 {
-	self.swipeGesture.direction = direction;
+	if ( UISwipeGestureRecognizerDirectionUp & direction )
+	{
+		[self swipeGestureForDirection:UISwipeGestureRecognizerDirectionUp forceCreate:YES];
+	}
+	
+	if ( UISwipeGestureRecognizerDirectionDown & direction )
+	{
+		[self swipeGestureForDirection:UISwipeGestureRecognizerDirectionDown forceCreate:YES];
+	}
+	
+	if ( UISwipeGestureRecognizerDirectionLeft & direction )
+	{
+		[self swipeGestureForDirection:UISwipeGestureRecognizerDirectionLeft forceCreate:YES];
+	}
+	
+	if ( UISwipeGestureRecognizerDirectionRight & direction )
+	{
+		[self swipeGestureForDirection:UISwipeGestureRecognizerDirectionRight forceCreate:YES];
+	}
 }
 
-- (UISwipeGestureRecognizer *)swipeGesture
+- (UISwipeGestureRecognizer *)swipeGestureForDirection:(UISwipeGestureRecognizerDirection)direction forceCreate:(bool)create
 {
 	UISwipeGestureRecognizer * swipeGesture = nil;
 	
@@ -118,13 +189,19 @@ DEF_SIGNAL( SWIPE_RIGHT )
 	{
 		if ( [gesture isKindOfClass:[__SwipeGestureRecognizer class]] )
 		{
-			swipeGesture = (UISwipeGestureRecognizer *)gesture;
+			UISwipeGestureRecognizer * tempGesture = (UISwipeGestureRecognizer *)gesture;
+			if ( tempGesture.direction & direction )
+			{
+				swipeGesture = tempGesture;
+				break;
+			}
 		}
 	}
 
-	if ( nil == swipeGesture )
+	if ( nil == swipeGesture && create )
 	{
 		swipeGesture = [[[__SwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipe:)] autorelease];
+		swipeGesture.direction = direction;
 		[self addGestureRecognizer:swipeGesture];
 	}
 	
