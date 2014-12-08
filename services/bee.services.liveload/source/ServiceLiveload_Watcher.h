@@ -12,8 +12,7 @@
 #import <Foundation/Foundation.h>
 
 @interface ServiceLiveload_Watcher : NSObject
-
-AS_SINGLETON( ServiceLiveload_Watcher );
++ (ServiceLiveload_Watcher *)sharedInstance;
 
 + (void)setWatcher:(id)watcher path:(NSString *)path forKey:(NSString *)key;
 + (void)removeWatcher:(id)watcher forKey:(NSString *)key;

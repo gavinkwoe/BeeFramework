@@ -34,7 +34,7 @@
 #import "Bee_Precompile.h"
 #import "Bee_Foundation.h"
 #import "Bee_Cache.h"
-
+#import "Bee_UIImageView.h"
 #pragma mark -
 
 //@interface BeeImageCache : NSObject<BeeCacheProtocol>

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "BeeFramework"
-  s.version      = "0.5.2"
+  s.version      = "0.6.0"
   s.summary      = "Bee Framework is a rapid developemnt framework for iOS."
   s.description  = <<-DESC
     Bee Framework is a MVC Framework to develop iOS application. 
@@ -8,9 +8,9 @@ Pod::Spec.new do |s|
   DESC
   s.homepage     = "http://bee-framework.com"
   s.license      = 'MIT'
-  s.platform     = :ios
+  s.platform     = :ios, '6.0'
   s.author       = { "gavinkwoe" => "gavinkwoe@gmail.com"}
-  s.source       = { :git => "https://github.com/stcui/BeeFramework.git", :tag => "0.5.2"}
+  s.source       = { :git => "https://github.com/stcui/BeeFramework.git", :tag => "0.6.0"}
   s.frameworks = 'CoreMedia', 'CoreVideo', 'AVFoundation', 'Security', 'SystemConfiguration', 'QuartzCore', 'MobileCoreServices', 'CFNetwork'
   s.vendored_libraries = 'services/**/*.a'
   s.library = 'z', 'xml2', 'sqlite3'

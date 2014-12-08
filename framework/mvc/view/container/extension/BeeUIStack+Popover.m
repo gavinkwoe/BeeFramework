@@ -35,6 +35,7 @@
 
 #import "UIView+BeeUISignal.h"
 #import "UIViewController+BeeUISignal.h"
+#import "BeeUIBoard+Popover.h"
 
 #pragma mark -
 
