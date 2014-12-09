@@ -33,6 +33,7 @@
 
 #import "Bee_CacheProtocol.h"
 #import "Bee_FileCache.h"
+#import "Bee_UIImageCache.h"
 #import "Bee_Keychain.h"
 #import "Bee_MemoryCache.h"
 #import "Bee_UserDefaults.h"

@@ -85,6 +85,12 @@
 + (BOOL)runTests;
 @end
 
+@interface BeeTestCase (GeneratedMethodStub)
++ (NSString *)name;
++ (const char *)file;
++ (unsigned int)line;
+@end
+
 #pragma mark -
 
 @interface BeeUnitTest : NSObject

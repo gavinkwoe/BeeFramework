@@ -5,10 +5,8 @@
 //	 \ \_____\ \ \_____\ \ \_____\
 //	  \/_____/  \/_____/  \/_____/
 //
-//
-//	Copyright (c) 2014-2015, Geek Zoo Studio
-//	http://www.bee-framework.com
-//
+//	Copyright (c) 2013 BEE creators
+//	http://www.whatsbug.com
 //
 //	Permission is hereby granted, free of charge, to any person obtaining a
 //	copy of this software and associated documentation files (the "Software"),
@@ -28,43 +26,14 @@
 //	FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 //	IN THE SOFTWARE.
 //
+//
 
-#import "Bee_Precompile.h"
-#import "Bee_VendorConfig.h"
+// add ForceThrottleBandwidth method to latest ASIHTTPRequest
 
-// HTTP
-#import "ASIAuthenticationDialog.h"
-#import "ASICacheDelegate.h"
-#import "ASIDataCompressor.h"
-#import "ASIDataDecompressor.h"
-#import "ASIDownloadCache.h"
-#import "ASIFormDataRequest.h"
 #import "ASIHTTPRequest.h"
-#import "ASIHTTPRequestConfig.h"
-#import "ASIHTTPRequestDelegate.h"
-#import "ASIInputStream.h"
-#import "ASINetworkQueue.h"
-#import "ASIProgressDelegate.h"
-#import "ASIHTTPRequest+Bee.h"
-// JSON
-#import "JSONKit.h"
 
-// SQLite
-#import "FMDatabase.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabasePool.h"
-#import "FMDatabaseQueue.h"
-#import "FMResultSet.h"
+@interface ASIHTTPRequest (Bee)
+// Set to YES to force turn on throttling
++ (void)setForceThrottleBandwidth:(BOOL)throttle;
 
-// UDID
-#import "OpenUDID.h"
-
-// Network
-#import "Reachability.h"
-
-// XML
-#import "TouchXML.h"
-
-// zip/unzip
-#import "ZipArchive.h"
-
+@end

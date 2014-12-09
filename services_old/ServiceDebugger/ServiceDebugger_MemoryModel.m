@@ -69,7 +69,6 @@
 @synthesize warningMode = _warningMode;
 
 DEF_SINGLETON( ServiceDebugger_MemoryModel )
-
 DEF_NOTIFICATION( UPDATED );
 
 - (void)load

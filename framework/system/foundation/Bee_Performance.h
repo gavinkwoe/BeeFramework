@@ -86,7 +86,7 @@ AS_PACKAGE( BeePackage_System, BeePerformance, performance );
 
 @interface BeePerformance : NSObject
 
-AS_SINGLETON( BeePerformance );
+AS_SINGLETON(BeePerformance)
 
 @property (nonatomic, readonly) NSArray *		records;
 @property (nonatomic, assign) NSTimeInterval	valve;

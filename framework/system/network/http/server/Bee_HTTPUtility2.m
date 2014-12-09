@@ -34,7 +34,7 @@
 
 #pragma mark -
 
-BEE_EXTERN void echo( NSString * text, ... )
+BEE_EXTERN void http_echo( NSString * text, ... )
 {
 	BeeHTTPWorkflow2 * workflow = [BeeHTTPWorkflow2 processingWorkflow];
 	if ( workflow )

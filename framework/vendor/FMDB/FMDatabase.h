@@ -2,8 +2,15 @@
 #import "sqlite3.h"
 #import "FMResultSet.h"
 #import "FMDatabasePool.h"
+/*
+#ifndef MAC_OS_X_VERSION_10_7
+    #define MAC_OS_X_VERSION_10_7 1070
+#endif
 
-
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_7
+    #define FMDB_USE_WEAK_POOL 1
+#endif
+*/
 #if ! __has_feature(objc_arc)
     #define FMDBAutorelease(__v) ([__v autorelease]);
     #define FMDBReturnAutoreleased FMDBAutorelease
@@ -12,8 +19,6 @@
     #define FMDBReturnRetained FMDBRetain
 
     #define FMDBRelease(__v) ([__v release]);
-
-	#define FMDBDispatchQueueRelease(__v) (dispatch_release(__v));
 #else
     // -fobjc-arc
     #define FMDBAutorelease(__v)
@@ -23,26 +28,6 @@
     #define FMDBReturnRetained(__v) (__v)
 
     #define FMDBRelease(__v)
-
-	#if TARGET_OS_IPHONE
-		// Compiling for iOS
-		#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
-			// iOS 6.0 or later
-			#define FMDBDispatchQueueRelease(__v)
-		#else
-			// iOS 5.X or earlier
-			#define FMDBDispatchQueueRelease(__v) (dispatch_release(__v));
-		#endif
-	#else
-		// Compiling for Mac OS X
-		#if MAC_OS_X_VERSION_MIN_REQUIRED >= 1080     
-			// Mac OS X 10.8 or later
-			#define FMDBDispatchQueueRelease(__v)
-		#else
-			// Mac OS X 10.7 or earlier
-			#define FMDBDispatchQueueRelease(__v) (dispatch_release(__v));
-		#endif
-	#endif
 #endif
 
 
@@ -62,16 +47,26 @@
     NSMutableDictionary *_cachedStatements;
     NSMutableSet        *_openResultSets;
     NSMutableSet        *_openFunctions;
-
+    /*
+#ifdef FMDB_USE_WEAK_POOL
+    __weak FMDatabasePool *_poolAccessViaMethodOnly;
+#else
+    FMDatabasePool      *_poolAccessViaMethodOnly;
+#endif
+    
+    NSInteger           _poolPopCount;
+    
+    FMDatabasePool      *pool;
+    */
 }
 
 
-@property (atomic, assign) BOOL traceExecution;
-@property (atomic, assign) BOOL checkedOut;
-@property (atomic, assign) int busyRetryTimeout;
-@property (atomic, assign) BOOL crashOnErrors;
-@property (atomic, assign) BOOL logsErrors;
-@property (atomic, retain) NSMutableDictionary *cachedStatements;
+@property (assign) BOOL traceExecution;
+@property (assign) BOOL checkedOut;
+@property (assign) int busyRetryTimeout;
+@property (assign) BOOL crashOnErrors;
+@property (assign) BOOL logsErrors;
+@property (retain) NSMutableDictionary *cachedStatements;
 
 
 + (id)databaseWithPath:(NSString*)inPath;
@@ -144,9 +139,9 @@
     long _useCount;
 }
 
-@property (atomic, assign) long useCount;
-@property (atomic, retain) NSString *query;
-@property (atomic, assign) sqlite3_stmt *statement;
+@property (assign) long useCount;
+@property (retain) NSString *query;
+@property (assign) sqlite3_stmt *statement;
 
 - (void)close;
 - (void)reset;

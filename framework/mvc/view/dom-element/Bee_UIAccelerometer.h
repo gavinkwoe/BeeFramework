@@ -50,7 +50,7 @@
 AS_NOTIFICATION( ANGLE_CHANGED );		// 设备角度改变
 AS_NOTIFICATION( DIRECTION_CHANGED );	// 设备方向改变
 
-AS_SINGLETON( BeeUIAccelerometer );
+AS_SINGLETON( BeeUIAccelerometer )
 
 @property (nonatomic, assign) UIInterfaceOrientation	orientation;
 @property (nonatomic, assign) BOOL						showIndicator;

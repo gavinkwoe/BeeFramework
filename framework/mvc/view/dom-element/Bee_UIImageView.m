@@ -34,6 +34,7 @@
 #import "Bee_UIImageView.h"
 #import "Bee_UIConfig.h"
 #import "Bee_UISignalBus.h"
+#import "Bee_UIMetrics.h"
 
 #import "Bee_Cache.h"
 #import "Bee_Network.h"
@@ -66,7 +67,7 @@ DEF_PACKAGE( BeePackage_UI, BeeImageCache, imageCache );
 
 @implementation BeeImageCache
 
-DEF_SINGLETON( BeeImageCache );
+DEF_SINGLETON( BeeImageCache )
 
 @synthesize memoryCache = _memoryCache;
 @synthesize fileCache = _fileCache;

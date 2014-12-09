@@ -70,7 +70,7 @@ DEF_PACKAGE( BeePackage_System, BeePerformance, performance );
 
 @implementation BeePerformance
 
-DEF_SINGLETON( BeePerformance );
+DEF_SINGLETON( BeePerformance )
 
 @synthesize records = _records;
 @synthesize valve = _valve;

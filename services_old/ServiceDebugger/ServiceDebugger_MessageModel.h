@@ -56,7 +56,7 @@
 
 @property (nonatomic, readonly) NSMutableArray *	history;
 
-AS_SINGLETON( ServiceDebugger_MessageModel )
+AS_SINGLETON( ServiceDebugger_MessageModel );
 
 @end
 

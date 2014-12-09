@@ -95,12 +95,9 @@
     }
 }
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-implementations"
-
-- (NSDictionary*)resultDict {
+- (NSDictionary *)resultDict {
     
-    NSUInteger num_cols = (NSUInteger)sqlite3_data_count([_statement statement]);
+    int num_cols = sqlite3_data_count([_statement statement]);
     
     if (num_cols > 0) {
         NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:num_cols];
@@ -124,38 +121,6 @@
     
     return nil;
 }
-
-#pragma clang diagnostic pop
-
-- (NSDictionary*)resultDictionary {
-    
-    NSUInteger num_cols = (NSUInteger)sqlite3_data_count([_statement statement]);
-    
-    if (num_cols > 0) {
-        NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:num_cols];
-        
-        int columnCount = sqlite3_column_count([_statement statement]);
-        
-        int columnIdx = 0;
-        for (columnIdx = 0; columnIdx < columnCount; columnIdx++) {
-            
-            NSString *columnName = [NSString stringWithUTF8String:sqlite3_column_name([_statement statement], columnIdx)];
-            id objectValue = [self objectForColumnIndex:columnIdx];
-            [dict setObject:objectValue forKey:columnName];
-        }
-        
-        return dict;
-    }
-    else {
-        NSLog(@"Warning: There seem to be no columns in this set.");
-    }
-    
-    return nil;
-}
-
-
-
-
 
 - (BOOL)next {
     
@@ -263,14 +228,6 @@
     return sqlite3_column_int64([_statement statement], columnIdx);
 }
 
-- (unsigned long long int)unsignedLongLongIntForColumn:(NSString*)columnName {
-    return [self unsignedLongLongIntForColumnIndex:[self columnIndexForName:columnName]];
-}
-
-- (unsigned long long int)unsignedLongLongIntForColumnIndex:(int)columnIdx {
-    return (unsigned long long int)[self longLongIntForColumnIndex:columnIdx];
-}
-
 - (BOOL)boolForColumn:(NSString*)columnName {
     return [self boolForColumnIndex:[self columnIndexForName:columnName]];
 }
@@ -333,7 +290,7 @@
     
     int dataSize = sqlite3_column_bytes([_statement statement], columnIdx);
     
-    NSMutableData *data = [NSMutableData dataWithLength:(NSUInteger)dataSize];
+    NSMutableData *data = [NSMutableData dataWithLength:dataSize];
     
     memcpy([data mutableBytes], sqlite3_column_blob([_statement statement], columnIdx), dataSize);
     
@@ -353,7 +310,7 @@
     
     int dataSize = sqlite3_column_bytes([_statement statement], columnIdx);
     
-    NSData *data = [NSData dataWithBytesNoCopy:(void *)sqlite3_column_blob([_statement statement], columnIdx) length:(NSUInteger)dataSize freeWhenDone:NO];
+    NSData *data = [NSData dataWithBytesNoCopy:(void *)sqlite3_column_blob([_statement statement], columnIdx) length:dataSize freeWhenDone:NO];
     
     return data;
 }
@@ -417,14 +374,6 @@
 
 - (void)setParentDB:(FMDatabase *)newDb {
     _parentDB = newDb;
-}
-
-- (id)objectAtIndexedSubscript:(int)columnIdx {
-    return [self objectForColumnIndex:columnIdx];
-}
-
-- (id)objectForKeyedSubscript:(NSString *)columnName {
-    return [self objectForColumnName:columnName];
 }
 
 

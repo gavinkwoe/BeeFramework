@@ -64,7 +64,7 @@ DEF_PACKAGE( BeePackage_UI, BeeUIKeyboard, keyboard );
 
 @implementation BeeUIKeyboard
 
-DEF_SINGLETON( BeeUIKeyboard )
+DEF_SINGLETON( BeeUIKeyboard );
 
 DEF_NOTIFICATION( SHOWN );
 DEF_NOTIFICATION( HIDDEN );

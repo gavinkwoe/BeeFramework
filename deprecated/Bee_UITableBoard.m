@@ -119,9 +119,12 @@
 - (void)setFrame:(CGRect)rc
 {
 	[super setFrame:CGRectZeroNan(rc)];	
+}
 
-	[_gridCell setFrame:self.bounds];
-//	[_gridCell layoutSubcells];
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    [_gridCell setFrame:self.contentView.bounds];
 }
 
 - (void)setCenter:(CGPoint)pt

@@ -47,7 +47,7 @@
 		return [super estimateUISizeByBound:bound];
 	}
 	
-	CGSize titleSize = [self.currentTitle sizeWithFont:self.font constrainedToSize:bound lineBreakMode:self.lineBreakMode];
+	CGSize titleSize = [self.currentTitle sizeWithFont: self.titleLabel.font constrainedToSize:bound lineBreakMode: self.titleLabel.lineBreakMode];
 	CGSize imageSize = self.currentImage.size;
 	CGSize backgroundSize = self.currentBackgroundImage.size;
 
@@ -64,7 +64,7 @@
 		return [super estimateUISizeByWidth:width];
 	}
 	
-	CGSize titleSize = [self.currentTitle sizeWithFont:self.font constrainedToSize:CGSizeMake(width, 99999) lineBreakMode:self.lineBreakMode];
+	CGSize titleSize = [self.currentTitle sizeWithFont: self.titleLabel.font constrainedToSize:CGSizeMake(width, 99999) lineBreakMode: self.titleLabel.lineBreakMode];
 	CGSize imageSize = self.currentImage.size;
 	CGSize backgroundSize = self.currentBackgroundImage.size;
 	
@@ -87,7 +87,7 @@
 		return [super estimateUISizeByHeight:height];
 	}
 
-	CGSize titleSize = [self.currentTitle sizeWithFont:self.font constrainedToSize:CGSizeMake(99999, height) lineBreakMode:self.lineBreakMode];
+	CGSize titleSize = [self.currentTitle sizeWithFont: self.titleLabel.font constrainedToSize:CGSizeMake(99999, height) lineBreakMode: self.titleLabel.lineBreakMode];
 	CGSize imageSize = self.currentImage.size;
 	CGSize backgroundSize = self.currentBackgroundImage.size;
 	
