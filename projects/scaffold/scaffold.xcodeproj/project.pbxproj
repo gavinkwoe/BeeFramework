@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2271980D1A36E81A00933DCA /* Bee_AutoLock.m in Sources */ = {isa = PBXBuildFile; fileRef = 2271980C1A36E81A00933DCA /* Bee_AutoLock.m */; };
 		CB5F01AD1A12466E0055CF23 /* BeeUIStack+Popover.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5F01AC1A12466E0055CF23 /* BeeUIStack+Popover.m */; };
 		CBA903ED183F578A00CB3FD5 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CBA903EB183F578A00CB3FD5 /* libxml2.dylib */; };
 		CBA903EE183F578A00CB3FD5 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CBA903EC183F578A00CB3FD5 /* libz.dylib */; };
@@ -389,6 +390,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2271980B1A36E81A00933DCA /* Bee_AutoLock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bee_AutoLock.h; sourceTree = "<group>"; };
+		2271980C1A36E81A00933DCA /* Bee_AutoLock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bee_AutoLock.m; sourceTree = "<group>"; };
 		CB5F01AB1A12466E0055CF23 /* BeeUIStack+Popover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BeeUIStack+Popover.h"; sourceTree = "<group>"; };
 		CB5F01AC1A12466E0055CF23 /* BeeUIStack+Popover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "BeeUIStack+Popover.m"; sourceTree = "<group>"; };
 		CBA903EB183F578A00CB3FD5 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = ../../../../../../../usr/lib/libxml2.dylib; sourceTree = "<group>"; };
@@ -2148,6 +2151,8 @@
 		E96D7F2A19A48C89005D467C /* foundation */ = {
 			isa = PBXGroup;
 			children = (
+				2271980B1A36E81A00933DCA /* Bee_AutoLock.h */,
+				2271980C1A36E81A00933DCA /* Bee_AutoLock.m */,
 				E96D7F2B19A48C89005D467C /* Bee_Assertion.h */,
 				E96D7F2C19A48C89005D467C /* Bee_Assertion.mm */,
 				E96D7F2D19A48C89005D467C /* Bee_Foundation.h */,
@@ -2720,6 +2725,7 @@
 				E96D80A819A48C8A005D467C /* Bee_UILayoutContainer.m in Sources */,
 				E96D811119A48C8A005D467C /* NSObject+BeeMacros.mm in Sources */,
 				E96D806219A48C8A005D467C /* UIView+BeeExtension.m in Sources */,
+				2271980D1A36E81A00933DCA /* Bee_AutoLock.m in Sources */,
 				E96D812519A48C8A005D467C /* NSObject+BeeHTTPRequest.m in Sources */,
 				E96D811819A48C8A005D467C /* NSString+BeeEmoji.m in Sources */,
 				E96D804219A48C8A005D467C /* UIImageView+BeeUIStyle.m in Sources */,
