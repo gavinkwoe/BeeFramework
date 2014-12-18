@@ -296,22 +296,46 @@ DEF_SINGLETON( BeeUISignalBus )
 	
 	if ( [BeeUIConfig sharedInstance].ASR )
 	{
+		ImpFuncType prevImp = NULL;
+		
 		Method method = class_getInstanceMethod( clazz, sel );
+		
 		if ( method )
 		{
-			IMP imp = method_getImplementation( method );
+			ImpFuncType imp = (ImpFuncType)method_getImplementation( method );
+			
 			if ( imp )
 			{
 				if ( nil == [history objectForKey:@((unsigned int)imp)] )
 				{
 					imp( target, sel, signal );
-				
+					
 					[history setObject:@(YES) forKey:@((unsigned int)imp)];
 
+					prevImp = imp;
+					
 					performed = YES;
+
 				}
 			}
 		}
+
+//		Method method = class_getInstanceMethod( clazz, sel );
+//		if ( method )
+//		{
+//			IMP imp = method_getImplementation( method );
+//			if ( imp )
+//			{
+//				if ( nil == [history objectForKey:@((unsigned int)imp)] )
+//				{
+//					imp( target, sel, signal );
+//				
+//					[history setObject:@(YES) forKey:@((unsigned int)imp)];
+//
+//					performed = YES;
+//				}
+//			}
+//		}
 	}
 	else
 	{

@@ -205,37 +205,44 @@
 	
 	if ( [self respondsToSelector:@selector(setStrech:)] )
 	{
-		objc_msgSend( self, @selector(setStrech:), stretched );
+		[self performMsgSendWithTarget:self sel:@selector(setStrech:) signal:(void *)&stretched];
+//		objc_msgSend( self, @selector(setStrech:), stretched );
 	}
 	
 	if ( [self respondsToSelector:@selector(setRound:)] )
 	{
-		objc_msgSend( self, @selector(setRound:), rounded );
+		[self performMsgSendWithTarget:self sel:@selector(setRound:) signal:(void *)&rounded];
+//		objc_msgSend( self, @selector(setRound:), rounded );
 	}
 	
 	if ( [self respondsToSelector:@selector(setGray:)] )
 	{
-		objc_msgSend( self, @selector(setGray:), grayed );
+		[self performMsgSendWithTarget:self sel:@selector(setGray:) signal:(void *)&grayed];
+//		objc_msgSend( self, @selector(setGray:), grayed );
 	}
 	
 	if ( [self respondsToSelector:@selector(setPattern:)] )
 	{
-		objc_msgSend( self, @selector(setPattern:), pattern );
+		[self performMsgSendWithTarget:self sel:@selector(setPattern:) signal:(void *)&pattern];
+//		objc_msgSend( self, @selector(setPattern:), pattern );
 	}
 
 	if ( [self respondsToSelector:@selector(setStrechInsets:)] )
 	{
-		objc_msgSend( self, @selector(setStrechInsets:), contentInsets );
+		[self performMsgSendWithTarget:self sel:@selector(setStrechInsets:) signal:(void *)&contentInsets];
+//		objc_msgSend( self, @selector(setStrechInsets:), contentInsets );
 	}
     
     if ( [self respondsToSelector:@selector(setCrop:)] )
 	{
-		objc_msgSend( self, @selector(setCrop:), croped );
+		[self performMsgSendWithTarget:self sel:@selector(setCrop:) signal:(void *)&croped];
+//		objc_msgSend( self, @selector(setCrop:), croped );
 	}
     
     if ( [self respondsToSelector:@selector(setCropSize:)] )
     {
-		objc_msgSend( self, @selector(setCropSize:), cropSize );
+		[self performMsgSendWithTarget:self sel:@selector(setCropSize:) signal:(void *)&cropSize];
+//		objc_msgSend( self, @selector(setCropSize:), cropSize );
     }
 
 	self.contentMode = contentMode;
@@ -307,14 +314,20 @@
 		{
 			if ( [self respondsToSelector:@selector(setIndicatorStyle:)] )
 			{
-				objc_msgSend( self, @selector(setIndicatorStyle:), UIActivityIndicatorViewStyleWhite );
+				UIActivityIndicatorViewStyle indicatorStyle = UIActivityIndicatorViewStyleWhite;
+				
+				[self performMsgSendWithTarget:self sel:@selector(setIndicatorStyle:) signal:(void *)&indicatorStyle];
+//				objc_msgSend( self, @selector(setIndicatorStyle:), UIActivityIndicatorViewStyleWhite );
 			}
 		}
 		else if ( NSOrderedSame == [imageLoading compare:@"gray" options:NSCaseInsensitiveSearch] )
 		{
 			if ( [self respondsToSelector:@selector(setIndicatorStyle:)] )
 			{
-				objc_msgSend( self, @selector(setIndicatorStyle:), UIActivityIndicatorViewStyleGray );
+				UIActivityIndicatorViewStyle indicatorStyle = UIActivityIndicatorViewStyleGray;
+				
+				[self performMsgSendWithTarget:self sel:@selector(setIndicatorStyle:) signal:(void *)&indicatorStyle];
+//				objc_msgSend( self, @selector(setIndicatorStyle:), UIActivityIndicatorViewStyleGray );
 			}
 		}
 		else
@@ -324,7 +337,8 @@
 				UIColor * color = [UIColor colorWithString:imageLoading];
 				if ( color )
 				{
-					objc_msgSend( self, @selector(setIndicatorColor:), color );
+					[self performMsgSendWithTarget:self sel:@selector(setIndicatorStyle:) signal:(void *)&color];
+//					objc_msgSend( self, @selector(setIndicatorColor:), color );
 				}
 			}
 		}

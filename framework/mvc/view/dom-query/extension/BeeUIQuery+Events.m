@@ -87,14 +87,14 @@
 		{
 			if ( [view respondsToSelector:@selector(selected)] )
 			{
-				BOOL flag = (BOOL)objc_msgSend( view, @selector(selected) );
+				BOOL flag =	[self performMsgSendWithTarget:view sel:@selector(selected)];
 				if ( flag )
 					return YES;
 			}
 
 			if ( [view respondsToSelector:@selector(state)] )
 			{
-				UIControlState state = (BOOL)objc_msgSend( view, @selector(state) );
+				UIControlState state =	[self performMsgSendWithTarget:view sel:@selector(state)];
 				if ( state & UIControlStateSelected )
 					return YES;
 			}
@@ -115,7 +115,7 @@
 	{
 		if ( view && [view respondsToSelector:@selector(isFirstResponder)] )
 		{
-			BOOL flag = (BOOL)objc_msgSend( view, @selector(isFirstResponder) );
+			BOOL flag =	[self performMsgSendWithTarget:view sel:@selector(isFirstResponder)];
 			if ( flag )
 				return YES;
 		}
@@ -136,7 +136,8 @@
 			
 			if ( [v respondsToSelector:@selector(setEnabled:)] )
 			{
-				objc_msgSend( v, @selector(setEnabled:), YES );
+				BOOL i = YES;
+				[self performMsgSendWithTarget:v sel:@selector(setEnabled:) signal:(void *)&i];
 			}
 		}
 		return self;
@@ -155,7 +156,8 @@
 			
 			if ( [v respondsToSelector:@selector(setEnabled:)] )
 			{
-				objc_msgSend( v, @selector(setEnabled:), NO );
+				BOOL i = NO;
+				[self performMsgSendWithTarget:v sel:@selector(setEnabled:) signal:(void *)&i];
 			}
 		}
 		return self;
@@ -210,7 +212,8 @@
 		{
 			if ( [v respondsToSelector:@selector(setSelected:)] )
 			{
-				objc_msgSend( v, @selector(setSelected:), YES );
+				BOOL i = YES;
+				[self performMsgSendWithTarget:v sel:@selector(setSelected:) signal:(void *)&i];
 			}
 		}
 		
@@ -228,7 +231,8 @@
 		{
 			if ( [v respondsToSelector:@selector(setSelected:)] )
 			{
-				objc_msgSend( v, @selector(setSelected:), NO );
+				BOOL i = YES;
+				[self performMsgSendWithTarget:v sel:@selector(setSelected:) signal:(void *)&i];
 			}
 		}
 		

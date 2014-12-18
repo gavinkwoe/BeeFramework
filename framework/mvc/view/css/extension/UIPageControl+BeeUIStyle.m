@@ -126,7 +126,8 @@
 
 		if ( NO == CGSizeEqualToSize( dotSize, CGSizeZero ) )
 		{
-			objc_msgSend( self, @selector(setDotSize:), dotSize );
+			[self performMsgSendWithTarget:self sel:@selector(setDotSize:) signal:(void *)&dotSize];
+//			objc_msgSend( self, @selector(setDotSize:), dotSize );
 		}
 	}
 }

@@ -80,15 +80,36 @@
 
 	for ( Class thisClass in classStack )
 	{
+		ImpFuncType prevImp = NULL;
+		
 		Method method = class_getInstanceMethod( thisClass, sel );
+		
 		if ( method )
 		{
-			IMP imp = method_getImplementation( method );
+			ImpFuncType imp = (ImpFuncType)method_getImplementation( method );
+			
 			if ( imp )
 			{
+				if ( imp == prevImp )
+				{
+					continue;
+				}
+				
 				imp( self, sel, nil );
+				
+				prevImp = imp;
 			}
 		}
+
+//		Method method = class_getInstanceMethod( thisClass, sel );
+//		if ( method )
+//		{
+//			IMP imp = method_getImplementation( method );
+//			if ( imp )
+//			{
+//				imp( self, sel, nil );
+//			}
+//		}
 	}
 }
 
@@ -103,16 +124,62 @@
 	
 	for ( Class thisClass in classStack )
 	{
+		ImpFuncType prevImp = NULL;
+		
 		Method method = class_getInstanceMethod( thisClass, sel );
+		
 		if ( method )
 		{
-			IMP imp = method_getImplementation( method );
+			ImpFuncType imp = (ImpFuncType)method_getImplementation( method );
+			
 			if ( imp )
 			{
+				if ( imp == prevImp )
+				{
+					continue;
+				}
+				
 				imp( self, sel, nil );
+				
+				prevImp = imp;
 			}
 		}
+
+//		Method method = class_getInstanceMethod( thisClass, sel );
+//		if ( method )
+//		{
+//			IMP imp = method_getImplementation( method );
+//			if ( imp )
+//			{
+//				imp( self, sel, nil );
+//			}
+//		}
 	}
+}
+
+- (void)performMsgSendWithTarget:(id)target sel:(SEL)sel signal:(id)signal
+{
+	NSMethodSignature * sig = [[target class] instanceMethodSignatureForSelector:sel];
+	
+	if ( sig )
+	{
+		NSInvocation * inv = [NSInvocation invocationWithMethodSignature:sig];
+		[inv setTarget:target];
+		[inv setSelector:sel];
+		[inv setArgument:signal atIndex:2];
+		[inv invoke];
+	}
+}
+- (BOOL)performMsgSendWithTarget:(id)target sel:(SEL)sel
+{
+	NSMethodSignature * sig = [[target class] instanceMethodSignatureForSelector:sel];
+	
+	if ( sig )
+	{
+		return YES;
+	}
+	
+	return NO;
 }
 
 - (void)copyPropertiesFrom:(id)obj
