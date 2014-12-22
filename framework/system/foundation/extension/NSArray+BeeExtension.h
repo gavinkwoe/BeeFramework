@@ -92,4 +92,5 @@ typedef NSComparisonResult	(^NSMutableArrayCompareBlock)( id left, id right );
 
 - (void)removeObject:(NSObject *)obj usingComparator:(NSMutableArrayCompareBlock)cmptr;
 
+- (NSMutableArray *)shuffle;
 @end
