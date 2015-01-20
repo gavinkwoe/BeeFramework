@@ -1575,12 +1575,13 @@ DEF_SIGNAL( FOOTER_REFRESH )
 		}
 	}
     
+    item.view.hidden = YES;
+    
 	if ( shouldRemove )
 	{
 		[item.view removeFromSuperview];
 	}
-    
-	item.view.hidden = YES;
+
 	item.view = nil;
 	
     PERF_LEAVE
