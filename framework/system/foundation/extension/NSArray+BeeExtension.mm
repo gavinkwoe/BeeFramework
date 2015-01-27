@@ -64,39 +64,41 @@
 	}
 	else
 	{
-		NSMutableArray * tempFeeds = [NSMutableArray array];
-		for ( NSObject * elem in self )
-		{
-			[tempFeeds addObject:elem];
-			if ( [tempFeeds count] >= count )
-				break;
-		}
-		return tempFeeds;
+//		NSMutableArray * tempFeeds = [NSMutableArray array];
+//		for ( NSObject * elem in self )
+//		{
+//			[tempFeeds addObject:elem];
+//			if ( [tempFeeds count] >= count )
+//				break;
+//		}
+//        return tempFeeds;
+        NSRange range = NSMakeRange( 0, count );
+        return [self subarrayWithRange:range];
 	}
 }
 
 - (NSArray *)tail:(NSUInteger)count
 {	
-//	if ( [self count] < count )
-//	{
-//		return self;
-//	}
-//	else
-//	{
+    if ( [self count] < count )
+    {
+        return self;
+    }
+    else
+    {
 //        NSMutableArray * tempFeeds = [NSMutableArray array];
-//		
+//        
 //        for ( NSUInteger i = 0; i < count; i++ )
-//		{
+//        {
 //            [tempFeeds insertObject:[self objectAtIndex:[self count] - i] atIndex:0];
 //        }
-//
-//		return tempFeeds;
-//	}
+//        
+//        return tempFeeds;
+        NSRange range = NSMakeRange( self.count - count, count );
+        return [self subarrayWithRange:range];
+    }
 
 // thansk @lancy, changed: NSArray tail: count
 
-	NSRange range = NSMakeRange( self.count - count, count );
-	return [self subarrayWithRange:range];
 }
 
 - (id)safeObjectAtIndex:(NSInteger)index
