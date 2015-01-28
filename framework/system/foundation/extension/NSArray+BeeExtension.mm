@@ -297,9 +297,7 @@ static void			__TTReleaseNoOp( CFAllocatorRef allocator, const void * value ) { 
 
 - (void)unique
 {
-	[self unique:^NSComparisonResult(id left, id right) {
-		return [left compare:right];
-	}];
+	[self unique:nil];
 }
 
 - (void)unique:(NSMutableArrayCompareBlock)compare
@@ -314,8 +312,10 @@ static void			__TTReleaseNoOp( CFAllocatorRef allocator, const void * value ) { 
 	NSMutableArray * dupArray = [NSMutableArray nonRetainingArray];
 	NSMutableArray * delArray = [NSMutableArray nonRetainingArray];
 
-	[dupArray addObjectsFromArray:self];
-	[dupArray sortUsingComparator:compare];
+    [dupArray addObjectsFromArray:self];
+    [dupArray sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        return [obj1 compare:obj2];
+    }];
 	
 	for ( NSUInteger i = 0; i < dupArray.count; ++i )
 	{
@@ -334,7 +334,11 @@ static void			__TTReleaseNoOp( CFAllocatorRef allocator, const void * value ) { 
 	for ( id delElem in delArray )
 	{
 		[self removeObject:delElem];
-	}
+    }
+    
+    if (compare) {
+        [self sortUsingComparator:compare];
+    }
 }
 
 - (void)sort
