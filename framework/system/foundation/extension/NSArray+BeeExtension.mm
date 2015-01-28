@@ -539,9 +539,12 @@ static void			__TTReleaseNoOp( CFAllocatorRef allocator, const void * value ) { 
 		{
 			[objectsWillRemove addObject:obj2];
 		}
-	}
-	
-	[self removeObjectsInArray:objectsWillRemove];
+    }
+    
+    for ( id delElem in objectsWillRemove )
+    {
+        [self removeObjectAtIndex:[self indexOfObject:delElem]];
+    }
 }
 
 - (NSMutableArray *)shuffle
