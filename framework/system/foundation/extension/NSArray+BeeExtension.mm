@@ -323,8 +323,14 @@ static void			__TTReleaseNoOp( CFAllocatorRef allocator, const void * value ) { 
 		id elem2 = [dupArray safeObjectAtIndex:(i + 1)];
 		
 		if ( elem1 && elem2 )
-		{
-			if ( NSOrderedSame == compare(elem1, elem2) )
+        {
+            NSComparisonResult result;
+            if (compare) {
+                result = compare(elem1, elem2);
+            }else{
+                result = [elem1 compare:elem2];
+            }
+			if ( NSOrderedSame == result )
 			{
 				[delArray addObject:elem1];
 			}
