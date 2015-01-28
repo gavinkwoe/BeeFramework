@@ -313,9 +313,13 @@ static void			__TTReleaseNoOp( CFAllocatorRef allocator, const void * value ) { 
 	NSMutableArray * delArray = [NSMutableArray nonRetainingArray];
 
     [dupArray addObjectsFromArray:self];
-    [dupArray sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        return [obj1 compare:obj2];
-    }];
+    if (compare) {
+        [dupArray sortUsingComparator:compare];
+    }else{
+        [dupArray sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            return [obj1 compare:obj2];
+        }];
+    }
 	
 	for ( NSUInteger i = 0; i < dupArray.count; ++i )
 	{
@@ -405,8 +409,8 @@ static void			__TTReleaseNoOp( CFAllocatorRef allocator, const void * value ) { 
 		else
 		{
 			NSRange range;
-			range.location = n;
-			range.length = [self count] - n;
+			range.location = [self count] - n;
+			range.length = n;
 			
 			[self removeObjectsInRange:range];
 		}
@@ -439,7 +443,7 @@ static void			__TTReleaseNoOp( CFAllocatorRef allocator, const void * value ) { 
 {
 	if ( [self count] )
 	{
-		[self removeLastObject];
+		[self removeObjectAtIndex:0];
 	}
 	
 	return self;
