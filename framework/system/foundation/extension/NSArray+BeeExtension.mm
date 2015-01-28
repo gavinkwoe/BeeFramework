@@ -343,7 +343,7 @@ static void			__TTReleaseNoOp( CFAllocatorRef allocator, const void * value ) { 
 	
 	for ( id delElem in delArray )
 	{
-		[self removeObject:delElem];
+        [self removeObjectAtIndex:[self indexOfObject:delElem]];
     }
     
     if (compare) {
