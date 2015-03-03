@@ -10,29 +10,29 @@
 	<string>BeeFramework</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>9A303A14-0F0E-452A-8253-B82ED4F04EDE</key>
+		<key>13A58E2C5CBF4246AF707E7F85E81CD15175BC78</key>
 		<string>https://github.com/gavinkwoe/BeeFramework.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>projects/BeeFramework.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>9A303A14-0F0E-452A-8253-B82ED4F04EDE</key>
+		<key>13A58E2C5CBF4246AF707E7F85E81CD15175BC78</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/gavinkwoe/BeeFramework.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>9A303A14-0F0E-452A-8253-B82ED4F04EDE</string>
+	<string>13A58E2C5CBF4246AF707E7F85E81CD15175BC78</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>9A303A14-0F0E-452A-8253-B82ED4F04EDE</string>
+			<string>13A58E2C5CBF4246AF707E7F85E81CD15175BC78</string>
 			<key>IDESourceControlWCCName</key>
 			<string>BeeFramework</string>
 		</dict>
