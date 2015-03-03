@@ -52,7 +52,7 @@
 
 + (BOOL)execute
 {
-    bee.cli.arguments = [@"schema build SideChef.json" componentsSeparatedByString:@" "];
+//    bee.cli.arguments = [@"schema build SideChef.json" componentsSeparatedByString:@" "];
 	if ( bee.cli.arguments.count == 0 )
 	{
 		[self usage];
