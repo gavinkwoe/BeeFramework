@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4A51880F1AA5BB300042D109 /* SideChef.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4A51880E1AA5BB300042D109 /* SideChef.mm */; };
 		CB5F01AD1A12466E0055CF23 /* BeeUIStack+Popover.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5F01AC1A12466E0055CF23 /* BeeUIStack+Popover.m */; };
 		CBA903ED183F578A00CB3FD5 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CBA903EB183F578A00CB3FD5 /* libxml2.dylib */; };
 		CBA903EE183F578A00CB3FD5 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CBA903EC183F578A00CB3FD5 /* libz.dylib */; };
@@ -389,6 +390,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4A5188091AA5A0AC0042D109 /* SideChef.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = SideChef.json; sourceTree = "<group>"; };
+		4A51880D1AA5BB300042D109 /* SideChef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SideChef.h; sourceTree = "<group>"; };
+		4A51880E1AA5BB300042D109 /* SideChef.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SideChef.mm; sourceTree = "<group>"; };
 		CB5F01AB1A12466E0055CF23 /* BeeUIStack+Popover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BeeUIStack+Popover.h"; sourceTree = "<group>"; };
 		CB5F01AC1A12466E0055CF23 /* BeeUIStack+Popover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "BeeUIStack+Popover.m"; sourceTree = "<group>"; };
 		CBA903EB183F578A00CB3FD5 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = ../../../../../../../usr/lib/libxml2.dylib; sourceTree = "<group>"; };
@@ -1187,6 +1191,9 @@
 		CBA9FFC3183F56E000CB3FD5 /* scaffold */ = {
 			isa = PBXGroup;
 			children = (
+				4A51880D1AA5BB300042D109 /* SideChef.h */,
+				4A51880E1AA5BB300042D109 /* SideChef.mm */,
+				4A5188091AA5A0AC0042D109 /* SideChef.json */,
 				CBA9FFCF183F570F00CB3FD5 /* module_help.h */,
 				CBA9FFD0183F570F00CB3FD5 /* module_help.m */,
 				CBA9FFD1183F570F00CB3FD5 /* module_project.h */,
@@ -2670,6 +2677,7 @@
 				E96D810419A48C8A005D467C /* Bee_Singleton.mm in Sources */,
 				E96D813019A48C8A005D467C /* Bee_HTTPWorkflow2.m in Sources */,
 				E96D812219A48C8A005D467C /* Bee_HTTPConfig.m in Sources */,
+				4A51880F1AA5BB300042D109 /* SideChef.mm in Sources */,
 				E96D814219A48C8A005D467C /* ASIInputStream.m in Sources */,
 				E96D806A19A48C8A005D467C /* Bee_UIDatePicker.m in Sources */,
 				E96D800D19A48C89005D467C /* Bee_Package.mm in Sources */,

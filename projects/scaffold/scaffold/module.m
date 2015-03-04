@@ -52,12 +52,13 @@
 
 + (BOOL)execute
 {
+//    bee.cli.arguments = [@"schema build SideChef.json" componentsSeparatedByString:@" "];
 	if ( bee.cli.arguments.count == 0 )
 	{
 		[self usage];
 		return NO;
 	}
-	
+
 	BOOL		handled = NO;
 	NSString *	command = bee.cli.arguments[0];
 	NSArray *	classes = [BeeRuntime allSubClassesOf:[module class]];
