@@ -1674,18 +1674,20 @@ DEF_INT( TYPE_OBJECT,		6 )
 				controller.response = [SchemaResponse parseKey:rspKey value:response protocol:protocol];
 			}
             
-            if (fileParam) {
-                NSMutableDictionary *fileList = [[NSMutableDictionary alloc] init];
-                for (NSString *key in fileParam) {
-                    if ( NSOrderedSame == [[[fileParam objectForKey:key] uppercaseString] compare:@"{JPG}" options:NSCaseInsensitiveSearch] ||  NSOrderedSame == [[[fileParam objectForKey:key] uppercaseString] compare:@"{PNG}" options:NSCaseInsensitiveSearch] )
-                    {
-                        [fileList setObject:@"{UIImage}" forKey:key];
-                    }else if (NSOrderedSame == [[[fileParam objectForKey:key] uppercaseString] compare:@"{FILE}" options:NSCaseInsensitiveSearch])
-                    {
-                        [fileList setObject:@"{NSData}" forKey:key];
+            if ( NSOrderedSame == [method compare:@"POST" options:NSCaseInsensitiveSearch] ) {
+                if (fileParam) {
+                    NSMutableDictionary *fileList = [[NSMutableDictionary alloc] init];
+                    for (NSString *key in fileParam) {
+                        if ( NSOrderedSame == [[[fileParam objectForKey:key] uppercaseString] compare:@"{JPG}" options:NSCaseInsensitiveSearch] ||  NSOrderedSame == [[[fileParam objectForKey:key] uppercaseString] compare:@"{PNG}" options:NSCaseInsensitiveSearch] )
+                        {
+                            [fileList setObject:@"{UIImage}" forKey:key];
+                        }else if (NSOrderedSame == [[[fileParam objectForKey:key] uppercaseString] compare:@"{FILE}" options:NSCaseInsensitiveSearch])
+                        {
+                            [fileList setObject:@"{NSData}" forKey:key];
+                        }
                     }
+                    controller.fileList = [SchemaFileList parseKey:flistKey value:fileList protocol:protocol];
                 }
-                controller.fileList = [SchemaFileList parseKey:flistKey value:fileList protocol:protocol];
             }
 		}
 	}
@@ -1929,6 +1931,10 @@ DEF_INT( TYPE_OBJECT,		6 )
 	{
 		code.LINE( [self.response h] );
 	}
+    
+    if ( self.fileList && self.fileList.properties.count ) {
+        code.LINE( [self.fileList h] );
+    }
 	
 	NSString * key = [self methodName];
 	NSString * msgKey = [[NSString stringWithFormat:@"API_%@", key] uppercaseString];
@@ -2027,17 +2033,17 @@ DEF_INT( TYPE_OBJECT,		6 )
     {
         if ( self.fileList.isContainer )
         {
-            code.LINE( @"@property (nonatomic, retain) %@%@ *	resp;", prefix, flistKey );
+            code.LINE( @"@property (nonatomic, retain) %@%@ *	fileList;", prefix, flistKey );
         }
         else
         {
             if ( self.fileList.isArray )
             {
-                code.LINE( @"@property (nonatomic, retain) NSArray *	resp;" );
+                code.LINE( @"@property (nonatomic, retain) NSArray *	fileList;" );
             }
             else
             {
-                code.LINE( @"@property (nonatomic, retain) %@%@ *	resp;", prefix, flistKey );
+                code.LINE( @"@property (nonatomic, retain) %@%@ *	fileList;", prefix, flistKey );
             }
         }
     }
@@ -2064,6 +2070,10 @@ DEF_INT( TYPE_OBJECT,		6 )
 	{
 		code.LINE( [self.response mm] );
 	}
+    
+    if ( self.fileList && self.fileList.properties.count ) {
+        code.LINE( [self.fileList mm] );
+    }
 	
 	NSString * key = [self methodName];
 	NSString * msgKey = [[NSString stringWithFormat:@"API_%@", key] uppercaseString];
@@ -2261,19 +2271,18 @@ DEF_INT( TYPE_OBJECT,		6 )
                 for (NSString *key in self.fileParam) {
                     if ( NSOrderedSame == [[[self.fileParam objectForKey:key] uppercaseString] compare:@"{JPG}" options:NSCaseInsensitiveSearch] )
                     {
-                        fileListParam = [NSString stringWithFormat:@"%@.FILE_JPG(\"%@\", self.fileList.%@)", fileListParam, key, key];
+                        fileListParam = [NSString stringWithFormat:@"%@.FILE_JPG(@\"%@\", self.fileList.%@)", fileListParam, key, key];
                     }else if (NSOrderedSame == [[[self.fileParam objectForKey:key] uppercaseString] compare:@"{PNG}" options:NSCaseInsensitiveSearch])
                     {
-                        fileListParam = [NSString stringWithFormat:@"%@.FILE_PNG(\"%@\", self.fileList.%@)", fileListParam, key, key];
+                        fileListParam = [NSString stringWithFormat:@"%@.FILE_PNG(@\"%@\", self.fileList.%@)", fileListParam, key, key];
                     }
                     else if (NSOrderedSame == [[[self.fileParam objectForKey:key] uppercaseString] compare:@"{FILE}" options:NSCaseInsensitiveSearch])
                     {
-                        fileListParam = [NSString stringWithFormat:@"%@.FILE(\"%@\", self.fileList.%@)", fileListParam, key, key];
+                        fileListParam = [NSString stringWithFormat:@"%@.FILE(@\"%@\", self.fileList.%@)", fileListParam, key, key];
                     }
                 }
             }
-//			code.LINE( @"		NSString * requestBody = [self.req objectToString];" );
-			code.LINE( @"		self.HTTP_%@( requestURI ).PARAM( [self.req objectToDictionary] )%@;", [self.method uppercaseString], fileListParam );
+			code.LINE( @"		self.HTTP_%@( requestURI ).PARAM( \"json\" [self.req objectToDictionary] )%@;", [self.method uppercaseString], fileListParam );
 		}
 	}
 	else
