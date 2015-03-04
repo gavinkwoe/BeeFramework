@@ -2282,7 +2282,7 @@ DEF_INT( TYPE_OBJECT,		6 )
                     }
                 }
             }
-			code.LINE( @"		self.HTTP_%@( requestURI ).PARAM( \"json\" [self.req objectToDictionary] )%@;", [self.method uppercaseString], fileListParam );
+			code.LINE( @"		self.HTTP_%@( requestURI ).PARAM( \"json\", [self.req objectToDictionary] )%@;", [self.method uppercaseString], fileListParam );
 		}
 	}
 	else
