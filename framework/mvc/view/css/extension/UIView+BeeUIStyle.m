@@ -649,11 +649,29 @@
 	self.layer.borderColor = [properties parseColorWithKeys:@[@"border-color"] defaultValue:[UIColor clearColor]].CGColor;
 	self.layer.borderWidth = [properties parseFloatWithKeys:@[@"border-width"] defaultValue:0.0f];
 	self.layer.cornerRadius = [properties parseFloatWithKeys:@[@"border-radius", @"corner-radius"] defaultValue:0.0f];
-
+    
 	if ( self.layer.cornerRadius > 0.0f )
 	{
 		self.layer.masksToBounds = YES;
 	}
+}
+
+- (void)applyViewCorners:(NSMutableDictionary *)properties
+{
+    float cornerRadius = [properties parseFloatWithKeys:@[@"border-radius", @"corner-radius"] defaultValue:0.0f];
+    if ( cornerRadius > 0.0f )
+    {
+        self.layer.cornerRadius = 0;
+        self.layer.mask = nil;
+        UIRectCorner corners = [properties parseViewCornersStyleWithKeys:@[@"corners"]];
+        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:self.bounds
+                                                       byRoundingCorners:corners
+                                                             cornerRadii:CGSizeMake(cornerRadius, 0.0)];
+        CAShapeLayer *maskLayer = [CAShapeLayer layer];
+        maskLayer.frame         = self.bounds;
+        maskLayer.path          = maskPath.CGPath;
+        self.layer.mask         = maskLayer;
+    }
 }
 
 - (void)applyViewContent:(NSMutableDictionary *)properties
@@ -731,6 +749,13 @@
 	[self applyViewVisibility:propertiesCopy];
 	
 	[super applyUIStyling:propertiesCopy];
+}
+
+- (void)applyUICorners:(NSDictionary *)properties
+{
+    NSMutableDictionary * propertiesCopy = [NSMutableDictionary dictionaryWithDictionary:properties];
+    
+    [self applyViewCorners:propertiesCopy];
 }
 
 @end
