@@ -430,6 +430,7 @@
 	if ( self.UIStyle )
 	{
 		[self applyUIStyling:self.UIStyle.properties];
+        [self applyUICorners:self.UIStyle.properties];
 	}
 }
 

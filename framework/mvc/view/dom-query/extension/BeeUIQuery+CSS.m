@@ -109,7 +109,6 @@
 				[v addStyleProperties:properties];
 				[v mergeStyle];
 				[v applyStyle];
-                [v applyUICorners:v.UIStyle.properties];
 			}
 		}
 
