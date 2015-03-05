@@ -648,6 +648,9 @@
 
 	self.layer.borderColor = [properties parseColorWithKeys:@[@"border-color"] defaultValue:[UIColor clearColor]].CGColor;
 	self.layer.borderWidth = [properties parseFloatWithKeys:@[@"border-width"] defaultValue:0.0f];
+    if ([properties stringOfAny:@[@"corners"] removeAll:false] != nil) {
+        return;
+    }
 	self.layer.cornerRadius = [properties parseFloatWithKeys:@[@"border-radius", @"corner-radius"] defaultValue:0.0f];
     
 	if ( self.layer.cornerRadius > 0.0f )
@@ -658,6 +661,9 @@
 
 - (void)applyViewCorners:(NSMutableDictionary *)properties
 {
+    if ([properties stringOfAny:@[@"corners"] removeAll:false] == nil) {
+        return;
+    }
     float cornerRadius = [properties parseFloatWithKeys:@[@"border-radius", @"corner-radius"] defaultValue:0.0f];
     if ( cornerRadius > 0.0f )
     {

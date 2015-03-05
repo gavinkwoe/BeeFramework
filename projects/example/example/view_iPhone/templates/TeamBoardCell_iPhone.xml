@@ -301,7 +301,10 @@ Love coding, also skilled in HTML, CSS and JS.
 			margin-top: 2px;
 			margin-left: 10px;
 			background-color: #999;
-			border-radius: 8px;
+			border-radius: 20px;
+            border-color:#000;
+            border-width:2px;
+            corners:BL-BR-TL;
 		}
 		
 		.profile-right-wrapper {
