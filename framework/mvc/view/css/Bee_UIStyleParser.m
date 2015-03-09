@@ -849,15 +849,15 @@
 - (UIRectCorner)parseCornerByString:(NSString *)str
 {
     UIRectCorner corners;
-    if ( NSOrderedSame == [str compare:@"BL" options:NSCaseInsensitiveSearch] ) {
+    if ( [str matchAnyOf:@[@"BL", @"BottomLeft"]] ) {
         corners = UIRectCornerBottomLeft;
-    }else if (NSOrderedSame == [str compare:@"BR" options:NSCaseInsensitiveSearch])
+    }else if ( [str matchAnyOf:@[@"BR", @"BottomRight"]] )
     {
         corners = UIRectCornerBottomRight;
-    }else if (NSOrderedSame == [str compare:@"TR" options:NSCaseInsensitiveSearch])
+    }else if ( [str matchAnyOf:@[@"TR", @"TopRight"]] )
     {
         corners = UIRectCornerTopRight;
-    }else if (NSOrderedSame == [str compare:@"TL" options:NSCaseInsensitiveSearch]){
+    }else if ( [str matchAnyOf:@[@"TL", @"TopLeft"]] ){
         corners = UIRectCornerTopLeft;
     }else
     {
