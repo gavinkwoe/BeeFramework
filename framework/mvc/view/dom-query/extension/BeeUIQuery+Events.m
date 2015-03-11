@@ -231,7 +231,7 @@
 		{
 			if ( [v respondsToSelector:@selector(setSelected:)] )
 			{
-				BOOL i = YES;
+				BOOL i = NO;
 				[self performMsgSendWithTarget:v sel:@selector(setSelected:) signal:(void *)&i];
 			}
 		}
