@@ -158,6 +158,11 @@ AS_INT( TYPE_OBJECT )
 
 #pragma mark -
 
+@interface SchemaFileList : SchemaModel
+@end
+
+#pragma mark -
+
 @interface SchemaController : SchemaObject
 
 @property (nonatomic, retain) NSString *			desc;
@@ -166,6 +171,8 @@ AS_INT( TYPE_OBJECT )
 @property (nonatomic, retain) NSString *			relativeUrl;
 @property (nonatomic, retain) SchemaRequest *		request;
 @property (nonatomic, retain) SchemaResponse *		response;
+@property (nonatomic, retain) SchemaFileList *      fileList;
+@property (nonatomic, retain) NSDictionary  *       fileParam;
 
 @end
 
