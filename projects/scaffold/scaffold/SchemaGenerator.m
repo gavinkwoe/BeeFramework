@@ -3024,18 +3024,25 @@ DEF_INT( TYPE_OBJECT,		6 )
 		code.LINE( [NSString stringWithFormat:@"AS_SINGLETON( %@ServerConfig )", prefix] );
 		code.LINE( nil );
 		
-		code.LINE( @"AS_INT( CONFIG_DEVELOPMENT )" );
-		code.LINE( @"AS_INT( CONFIG_TEST )" );
-		code.LINE( @"AS_INT( CONFIG_PRODUCTION )" );
+        for (NSString *key in self.server) {
+            code.LINE( [NSString stringWithFormat:@"AS_STRING( CONFIG_%@ )", [key uppercaseString] ] );
+        }
+        
+//		code.LINE( @"AS_INT( CONFIG_DEVELOPMENT )" );
+//		code.LINE( @"AS_INT( CONFIG_TEST )" );
+//		code.LINE( @"AS_INT( CONFIG_PRODUCTION )" );
 		code.LINE( nil );
 		
-		code.LINE( @"@property (nonatomic, assign) NSUInteger			config;" );
+		code.LINE( @"@property (nonatomic, assign) NSString*			config;" );
 		code.LINE( nil );
 		
 		code.LINE( @"@property (nonatomic, readonly) NSString *			url;" );
-		code.LINE( @"@property (nonatomic, readonly) NSString *			testUrl;" );
-		code.LINE( @"@property (nonatomic, readonly) NSString *			productionUrl;" );
-		code.LINE( @"@property (nonatomic, readonly) NSString *			developmentUrl;" );
+        for (NSString *key in self.server) {
+            code.LINE( [NSString stringWithFormat:@"@property (nonatomic, readonly) NSString *			%@Url;", key ] );
+        }
+//		code.LINE( @"@property (nonatomic, readonly) NSString *			testUrl;" );
+//		code.LINE( @"@property (nonatomic, readonly) NSString *			productionUrl;" );
+//		code.LINE( @"@property (nonatomic, readonly) NSString *			developmentUrl;" );
 		code.LINE( nil );
 		
 		code.LINE( @"@end" );
@@ -3070,10 +3077,6 @@ DEF_INT( TYPE_OBJECT,		6 )
 			code.LINE( [controller mm] );
 		}
 		
-		NSString * dev = [self.server objectForKey:@"development"];
-		NSString * tst = [self.server objectForKey:@"test"];
-		NSString * pro = [self.server objectForKey:@"production"];
-		
 		code.LINE( @"#pragma mark - config" );
 		code.LINE( nil );
 		
@@ -3083,61 +3086,84 @@ DEF_INT( TYPE_OBJECT,		6 )
 		code.LINE( [NSString stringWithFormat:@"DEF_SINGLETON( %@ServerConfig )", prefix] );
 		code.LINE( nil );
 		
-		code.LINE( @"DEF_INT( CONFIG_DEVELOPMENT,	0 )" );
-		code.LINE( @"DEF_INT( CONFIG_TEST,			1 )" );
-		code.LINE( @"DEF_INT( CONFIG_PRODUCTION,	2 )" );
+        for (NSString *key in self.server) {
+            code.LINE( [NSString stringWithFormat:@"DEF_STRING( CONFIG_%@,	@\"%@\" )", [key uppercaseString], key ] );
+        }
+//		code.LINE( @"DEF_INT( CONFIG_DEVELOPMENT,	0 )" );
+//		code.LINE( @"DEF_INT( CONFIG_TEST,			1 )" );
+//		code.LINE( @"DEF_INT( CONFIG_PRODUCTION,	2 )" );
 		code.LINE( nil );
 		
 		code.LINE( @"@synthesize config = _config;" );
-		code.LINE( @"@dynamic url;" );
-		code.LINE( @"@dynamic testUrl;" );
-		code.LINE( @"@dynamic productionUrl;" );
-		code.LINE( @"@dynamic developmentUrl;" );
+        code.LINE( @"@dynamic url;" );
+        for (NSString *key in self.server) {
+            code.LINE( [NSString stringWithFormat:@"@dynamic %@Url;", key] );
+        }
+		
+//		code.LINE( @"@dynamic testUrl;" );
+//		code.LINE( @"@dynamic productionUrl;" );
+//		code.LINE( @"@dynamic developmentUrl;" );
 		code.LINE( nil );
 		
 		code.LINE( @"- (NSString *)url" );
 		code.LINE( @"{" );
 		code.LINE( @"	NSString * host = nil;" );
 		code.LINE( nil );
-		code.LINE( @"	if ( self.CONFIG_DEVELOPMENT == self.config )" );
-		code.LINE( @"	{" );
-		code.LINE( @"		host = self.developmentUrl;" );
-		code.LINE( @"	}" );
-		code.LINE( @"	else if ( self.CONFIG_TEST == self.config )" );
-		code.LINE( @"	{" );
-		code.LINE( @"		host = self.testUrl;" );
-		code.LINE( @"	}" );
-		code.LINE( @"	else" );
-		code.LINE( @"	{" );
-		code.LINE( @"		host = self.productionUrl;" );
-		code.LINE( @"	}" );
-		code.LINE( nil );
-		code.LINE( @"	if ( NO == [host hasPrefix:@\"http://\"] && NO == [host hasPrefix:@\"https://\"] )" );
-		code.LINE( @"	{" );
-		code.LINE( @"		host = [@\"http://\" stringByAppendingString:host];" );
-		code.LINE( @"	}" );
-		code.LINE( nil );
-		code.LINE( @"	return host;" );
+//		code.LINE( @"	if ( self.CONFIG_DEVELOPMENT == self.config )" );
+//		code.LINE( @"	{" );
+//		code.LINE( @"		host = self.developmentUrl;" );
+//		code.LINE( @"	}" );
+//		code.LINE( @"	else if ( self.CONFIG_TEST == self.config )" );
+//		code.LINE( @"	{" );
+//		code.LINE( @"		host = self.testUrl;" );
+//		code.LINE( @"	}" );
+//		code.LINE( @"	else" );
+//		code.LINE( @"	{" );
+//		code.LINE( @"		host = self.productionUrl;" );
+//		code.LINE( @"	}" );
+        for (NSString *key in self.server) {
+            code.LINE( [NSString stringWithFormat:@"	if ( self.CONFIG_%@ == self.config )", [key uppercaseString]] );
+            code.LINE( @"	{" );
+            code.LINE( [NSString stringWithFormat:@"		host = self.%@Url;", key] );
+            code.LINE( nil );
+            code.LINE( @"       if ( NO == [host hasPrefix:@\"http://\"] && NO == [host hasPrefix:@\"https://\"] )" );
+            code.LINE( @"       {" );
+            code.LINE( @"           host = [@\"http://\" stringByAppendingString:host];" );
+            code.LINE( @"       }" );
+            code.LINE( nil );
+            code.LINE( @"       return host;" );
+            code.LINE( @"	}" );
+        }
+		code.LINE( @"	return nil;" );
 		code.LINE( @"}" );
 		code.LINE( nil );
 
-		code.LINE( @"- (NSString *)developmentUrl" );
-		code.LINE( @"{" );
-		code.LINE( [NSString stringWithFormat:@"	return @\"%@\";", dev ? dev : @""] );
-		code.LINE( @"}" );
-		code.LINE( nil );
-		
-		code.LINE( @"- (NSString *)testUrl" );
-		code.LINE( @"{" );
-		code.LINE( [NSString stringWithFormat:@"	return @\"%@\";", tst ? tst : @""] );
-		code.LINE( @"}" );
-		code.LINE( nil );
-		
-		code.LINE( @"- (NSString *)productionUrl" );
-		code.LINE( @"{" );
-		code.LINE( [NSString stringWithFormat:@"	return @\"%@\";", pro ? pro : @""] );
-		code.LINE( @"}" );
-		code.LINE( nil );
+        NSString *url = nil;
+        for (NSString *key in self.server) {
+            url = [self.server objectForKey:key];
+            code.LINE( [NSString stringWithFormat:@"- (NSString *)%@Url", key] );
+            code.LINE( @"{" );
+            code.LINE( [NSString stringWithFormat:@"	return @\"%@\";", url ? url : @""] );
+            code.LINE( @"}" );
+            code.LINE( nil );
+        }
+//		code.LINE( @"- (NSString *)developmentUrl" );
+//		code.LINE( @"{" );
+//		code.LINE( [NSString stringWithFormat:@"	return @\"%@\";", dev ? dev : @""] );
+//		code.LINE( @"}" );
+//		code.LINE( nil );
+//		
+//		code.LINE( @"- (NSString *)testUrl" );
+//		code.LINE( @"{" );
+//		code.LINE( [NSString stringWithFormat:@"	return @\"%@\";", tst ? tst : @""] );
+//		code.LINE( @"}" );
+//		code.LINE( nil );
+//		
+//		code.LINE( @"- (NSString *)productionUrl" );
+//		code.LINE( @"{" );
+//		code.LINE( [NSString stringWithFormat:@"	return @\"%@\";", pro ? pro : @""] );
+//		code.LINE( @"}" );
+//		code.LINE( nil );
 		
 		code.LINE( @"@end" );
 		code.LINE( nil );
