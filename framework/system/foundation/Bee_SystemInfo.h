@@ -69,6 +69,8 @@ AS_PACKAGE( BeePackage_System, BeeSystemInfo, info );
 #define IOS4_OR_EARLIER		( !IOS5_OR_LATER )
 #define IOS3_OR_EARLIER		( !IOS4_OR_LATER )
 
+//Note: If iPhone 6 is in zoomed mode the UI is a zoomed up version of iPhone 5. This is reflected in the macros.
+
 #define IS_SCREEN_55_INCH	IS_IPHONE_6P
 #define IS_SCREEN_47_INCH	IS_IPHONE_6
 #define IS_SCREEN_4_INCH	IS_IPHONE_5
