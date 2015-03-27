@@ -3031,7 +3031,7 @@ DEF_INT( TYPE_OBJECT,		6 )
             if ([value isKindOfClass:[NSDictionary class]]) {
                 [urlNames addObject:key];
                 for (NSString *key1 in value) {
-                    code.LINE( [NSString stringWithFormat:@"AS_STRING( %@_%@ )", [key uppercaseString], [key1 uppercaseString]]);
+                    code.LINE( [NSString stringWithFormat:@"AS_STRING( CONFIG_%@_%@ )", [key uppercaseString], [key1 uppercaseString]]);
                 }
             }else
             {
@@ -3118,7 +3118,7 @@ DEF_INT( TYPE_OBJECT,		6 )
             id value = [self.server objectForKey:key];
             if ([value isKindOfClass:[NSDictionary class]]) {
                 for (NSString *key1 in value) {
-                    code.LINE( [NSString stringWithFormat:@"DEF_STRING( %@_%@, @\"%@_%@\")", [key uppercaseString], [key1 uppercaseString], [key uppercaseString], [key1 uppercaseString]]);
+                    code.LINE( [NSString stringWithFormat:@"DEF_STRING( CONFIG_%@_%@, @\"%@_%@\")", [key uppercaseString], [key1 uppercaseString], [key uppercaseString], [key1 uppercaseString]]);
                 }
             }else
             {
@@ -3149,7 +3149,7 @@ DEF_INT( TYPE_OBJECT,		6 )
                 code.LINE( nil );
                 id value = [self.server objectForKey:[urlNames safeObjectAtIndex:i]];
                 for (NSString *key in value) {
-                    code.LINE( [NSString stringWithFormat:@"	if ( self.%@_%@ == self.Config%@ )", [[urlNames safeObjectAtIndex:i] uppercaseString], [key uppercaseString], [urlNames safeObjectAtIndex:i]] );
+                    code.LINE( [NSString stringWithFormat:@"	if ( self.CONFIG_%@_%@ == self.Config%@ )", [[urlNames safeObjectAtIndex:i] uppercaseString], [key uppercaseString], [urlNames safeObjectAtIndex:i]] );
                     code.LINE( @"	{" );
                     code.LINE( [NSString stringWithFormat:@"		host = self.%@_%@_Url;", [urlNames safeObjectAtIndex:i], key] );
                     code.LINE( @"	}" );
