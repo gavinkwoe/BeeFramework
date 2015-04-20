@@ -59,7 +59,7 @@ typedef enum CSSSelectorRelation {
     ShadowDescendant
 } CSSSelectorRelation;
 
-enum PseudoType {
+typedef enum PseudoType {
     PseudoUnknown = 0,
     PseudoEmpty,
     PseudoOther,
