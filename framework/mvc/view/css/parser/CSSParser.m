@@ -31,7 +31,10 @@
 
 #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 
+extern int cssToken;
+
 #import "CSSParser.h"
+#import "CSSTokenizer.h"
 
 @interface CSSParser()
 

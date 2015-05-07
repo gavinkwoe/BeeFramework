@@ -1802,6 +1802,8 @@ char *yytext;
 
 #import "CSSTokenizer.h"
 
+int cssToken;
+
 void yy_create_input(const char* buffer) {
     yy_scan_bytes(buffer,strlen(buffer));
 }
