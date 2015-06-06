@@ -157,8 +157,11 @@
 		self.navigationBarHidden = YES;
 	
 		[self initSelf];
-		
-		self.viewControllers = [NSArray arrayWithObject:board];
+        
+        if(board)
+            self.viewControllers = [NSArray arrayWithObject:board];
+        else
+            self.viewControllers = [NSArray array];
 //		board.view;
 	}
 	return self;
