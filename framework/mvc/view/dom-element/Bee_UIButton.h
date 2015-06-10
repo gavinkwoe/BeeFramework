@@ -72,7 +72,7 @@ AS_SIGNAL( DRAG_EXIT )			// 退出
 @property (nonatomic, retain) UIColor *				titleColor;
 @property (nonatomic, retain) UIColor *				titleShadowColor;
 @property (nonatomic, retain) UIFont *				titleFont;
-@property (nonatomic, assign) UIEdgeInsets			titleEdgeInsets;
+@property (nonatomic, assign) UIEdgeInsets			titleInsets;
 @property (nonatomic, assign) UITextAlignment		titleTextAlignment;
 @property (nonatomic, retain) UIImage *				image;
 @property (nonatomic, retain) UIImage *				backgroundImage;

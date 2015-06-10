@@ -365,7 +365,7 @@ DEF_SIGNAL( DRAG_EXIT )			// 退出
 	return _insets;
 }
 
-- (void)setTitleEdgeInsets:(UIEdgeInsets)insets
+- (void)setTitleInsets:(UIEdgeInsets)insets
 {
 	[self initLabel];
 	
@@ -627,20 +627,20 @@ DEF_SIGNAL( DRAG_EXIT )			// 退出
 
 #pragma mark -
 
-- (void)setTitle:(NSString *)title forState:(UIControlState)state
-{
-	[self setTitle:title];
-}
-
-- (void)setTitleColor:(UIColor *)color forState:(UIControlState)state
-{
-	[self setTitleColor:color];
-}
-
-- (void)setTitleShadowColor:(UIColor *)color forState:(UIControlState)state
-{
-	[self setTitleShadowColor:color];
-}
+//- (void)setTitle:(NSString *)title forState:(UIControlState)state
+//{
+//	[self setTitle:title];
+//}
+//
+//- (void)setTitleColor:(UIColor *)color forState:(UIControlState)state
+//{
+//	[self setTitleColor:color];
+//}
+//
+//- (void)setTitleShadowColor:(UIColor *)color forState:(UIControlState)state
+//{
+//	[self setTitleShadowColor:color];
+//}
 
 @end
 
