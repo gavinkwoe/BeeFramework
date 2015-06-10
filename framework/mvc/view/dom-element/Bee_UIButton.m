@@ -172,7 +172,7 @@ DEF_SIGNAL( DRAG_EXIT )			// 退出
 @dynamic titleColor;
 @dynamic titleShadowColor;
 @dynamic titleFont;
-@dynamic titleInsets;
+@dynamic titleEdgeInsets;
 @dynamic titleTextAlignment;
 @dynamic image;
 @synthesize signal = _signal;
@@ -365,7 +365,7 @@ DEF_SIGNAL( DRAG_EXIT )			// 退出
 	return _insets;
 }
 
-- (void)setTitleInsets:(UIEdgeInsets)insets
+- (void)setTitleEdgeInsets:(UIEdgeInsets)insets
 {
 	[self initLabel];
 	
