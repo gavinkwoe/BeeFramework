@@ -135,12 +135,12 @@
 		if ( color.length == 8 )
 		{
 			NSUInteger hexRGB = strtol(color.UTF8String , nil, 16);
-			return [UIColor fromHexValue:hexRGB];
+			return [UIColor fromHexValue:hexRGB alpha:alpha];
 		}
 		else if ( color.length == 6 )
 		{
 			NSUInteger hexRGB = strtol(color.UTF8String , nil, 16);
-			return [UIColor fromHexValue:hexRGB alpha:1.0f];
+			return [UIColor fromHexValue:hexRGB alpha:alpha];
 		}
 	}
     else
