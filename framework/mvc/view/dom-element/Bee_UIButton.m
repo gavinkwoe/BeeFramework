@@ -313,103 +313,84 @@ DEF_SIGNAL( DRAG_EXIT )			// 退出
 
 - (NSString *)title
 {
-//	return _label ? _label.text : @"";
-    return self.titleLabel?self.titleLabel.text:@"";
+	return _label ? _label.text : @"";
 }
 
 - (void)setTitle:(NSString *)str
 {
-//	[self initLabel];
-//
-//	_label.text = str;
-    [self setTitle:str forState:UIControlStateNormal];
-    [self setTitle:str forState:UIControlStateSelected];
-    [self setTitle:str forState:UIControlStateHighlighted];
-    [self setTitle:str forState:UIControlStateDisabled];
+	[self initLabel];
+
+	_label.text = str;
 }
 
 - (UIColor *)titleColor
 {
-//	return _label ? _label.textColor : [UIColor clearColor];
-    return self.titleLabel?self.titleLabel.textColor:[UIColor clearColor];
+	return _label ? _label.textColor : [UIColor clearColor];
 }
 
 - (void)setTitleColor:(UIColor *)color
 {
-//	[self initLabel];
-//	
-//	_label.textColor = color;
-    [self setTitleColor:color forState:UIControlStateNormal];
-    [self setTitleColor:color forState:UIControlStateHighlighted];
-    [self setTitleColor:color forState:UIControlStateSelected];
+	[self initLabel];
+	
+	_label.textColor = color;
+
 }
 
 - (UIColor *)titleShadowColor
 {
-    return self.titleLabel? self.titleLabel.shadowColor:[UIColor clearColor];
-//	return _label ? _label.shadowColor : [UIColor clearColor];
+	return _label ? _label.shadowColor : [UIColor clearColor];
 }
 
 - (void)setTitleShadowColor:(UIColor *)color
 {
-//	[self initLabel];
-//	
-//	_label.shadowColor = color;
-//	_label.shadowOffset = CGSizeMake( 0.0f, -0.5f );
-    [self setTitleShadowColor:color forState:UIControlStateNormal];
-    [self setTitleShadowColor:color forState:UIControlStateHighlighted];
-    [self setTitleShadowColor:color forState:UIControlStateSelected];
-    [self setTitleShadowColor:color forState:UIControlStateDisabled];
+	[self initLabel];
+	
+	_label.shadowColor = color;
+	_label.shadowOffset = CGSizeMake( 0.0f, -0.5f );
 }
 
 - (UIFont *)titleFont
 {
-    return self.titleLabel?self.titleLabel.font:nil;
-//	return _label ? _label.font : nil;
+	return _label ? _label.font : nil;
 }
 
 - (void)setTitleFont:(UIFont *)font
 {
-//	[self initLabel];
-//	
-//	_label.font = font;
-    self.titleLabel.font = font;
+	[self initLabel];
+	
+	_label.font = font;
 }
 
 - (UIEdgeInsets)titleInsets
 {
-//	return _insets;
-    return self.titleEdgeInsets;
+	return _insets;
 }
 
 - (void)setTitleInsets:(UIEdgeInsets)insets
 {
-//	[self initLabel];
-//	
-//	_insets = insets;
-//	
-//	CGRect frame = CGRectInset( self.bounds, insets.left, insets.top );
-//	frame.size.width -= insets.left;
-//	frame.size.height -= insets.top;
-//	frame.size.width -= insets.right;
-//	frame.size.height -= insets.bottom;
-//	
-//	_label.frame = frame;
-    [self setTitleEdgeInsets:insets];
+	[self initLabel];
+	
+	_insets = insets;
+	
+	CGRect frame = CGRectInset( self.bounds, insets.left, insets.top );
+	frame.size.width -= insets.left;
+	frame.size.height -= insets.top;
+	frame.size.width -= insets.right;
+	frame.size.height -= insets.bottom;
+	
+	_label.frame = frame;
 }
 
 - (UITextAlignment)titleTextAlignment
 {
-    return self.titleLabel?self.titleLabel.textAlignment:NSTextAlignmentCenter;
-//	return _label ? _label.textAlignment : UITextAlignmentLeft;;
+	return _label ? _label.textAlignment : UITextAlignmentLeft;;
 }
 
 - (void)setTitleTextAlignment:(UITextAlignment)alignment
 {
-//	[self initLabel];
-//	
-//    [_label setTextAlignment:alignment];
-    [self setTitleTextAlignment:alignment];
+	[self initLabel];
+	
+    [_label setTextAlignment:alignment];
 }
 
 - (UIImage *)image
