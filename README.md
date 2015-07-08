@@ -6,7 +6,7 @@ BeeFramework is a semi-hybrid framework that allows you to create mobile apps us
 
 QQ Group: 314365063
 
-## Samurai-Native
+## * Samurai-Native
 
 Yet another great UI Solution
 
