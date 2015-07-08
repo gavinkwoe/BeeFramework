@@ -2,28 +2,67 @@
 #import "Bee_UnitTest.h"
 
 #pragma mark Model
-
-
 @interface BeeQueueModel()
 {
+    NSCondition * m_lock;
 }
 @end
 
 @implementation BeeQueueModel
 
-- (id) initWithPathOfLocal:(NSString *)local andServer:(NSString *)server
+- (id) initWithLocal:(NSString *)local server:(NSString *)server action:(EQueueModeAction)action method:(EModelUploadMethod)method
 {
     if (self = [super init])
     {
-        self.data = nil;
-        self.key = [local MD5];
-        self.state = QUEUE_DATA_WAIT;
         self.serverPath = server;
         self.localPath = local;
-        self.name = [local MD5];
-        self.progress = 0.0f;
+        
+        self.action = action;
+        if (QUEUE_MODEL_UPLOAD == action && method != QUEUE_MODEL_DOWN_METHOD)
+        {
+            self.method = method;
+        }
+        else
+        {
+            self.method = QUEUE_MODEL_DOWN_METHOD;
+        }
+        
+        _key = [[local MD5] copy];
+        _state = QUEUE_DATA_WAIT;
+        
+        self.url = self.serverPath;
+        self.data = nil;
+        
+        _progress = 0.0f;
+        
+        _maxCountOfOperator = 3;
+        
+        m_lock = [[NSCondition alloc] init];
     }
     return self;
+}
+
+- (void) pauseModel
+{
+    [m_lock lock];
+    if (QUEUE_DATA_PAUSE == _state)
+    {
+        INFO(@"Model was paused! [%@]", _localPath);
+        [m_lock wait];
+    }
+    [m_lock unlock];
+}
+
+- (void) runModel
+{
+    [m_lock lock];
+    [m_lock signal];
+    [m_lock unlock];
+}
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<%@: %p,\"key = %@, local = %@, server = %@, url = %@, state = %u, action = %u, propress = %f \">", [self class], self, self.key, self.localPath, self.serverPath, self.url, self.state, self.action, self.progress];
 }
 
 - (NSString *) changeState:(EQueueModelState) eState
@@ -38,7 +77,7 @@
         return nil;
     }
     
-    self.state = eState;
+    _state = eState;
     return self.key;
 }
 
@@ -55,6 +94,16 @@
     }
     
     return NO;
+}
+
+
+- (void)whenProgress:(CGFloat)progress
+{
+    _progress = progress;
+    if (self.whenProgress)
+    {
+        self.whenProgress(progress);
+    }
 }
 
 @end
@@ -153,12 +202,14 @@ DEF_SINGLETON( BeeQueue )
     NSMutableArray * datas = [m_notActivatedPool objectForKey:queue];
     if (nil == datas)
     {
+        [m_optLock wait];
         [m_optLock unlock];
         return nil;
     }
     
     if (0 == datas.count)
     {
+        [m_optLock wait];
         [m_optLock unlock];
         return nil;
     }
@@ -306,9 +357,6 @@ DEF_SINGLETON( BeeQueue )
         BeeQueueModel * model = datas[index];
         
         [model changeState:QUEUE_DATA_PAUSE];
-        
-        // [self putModel:model ofQueue:queue toPool:m_notActivatedPool];
-        // [datas removeObjectAtIndex:index];
     }
     
     [m_optLock unlock];
