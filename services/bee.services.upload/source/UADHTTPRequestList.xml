@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui namespace="UADHTTPRequestList">
+  <!--
+    <row></row>
+  -->
+  <col class="wrapper">
+    <!-- add your UI elements here -->
+    <list id="subject-content" header="UADHTTPRequestListHeader"></list>
+  </col>
+   
+  <style type="text/css">
+    <!-- Background Begin-->
+    .wrapper {
+        width: 100%;
+        height: 100%;
+        float: center;
+    }
+    <!-- Background End-->
+    
+    <!-- Content Begin -->
+    #subject-content {
+        width: 100%;
+        height: 100%;
+        float: center;
+        background-color: red;
+    }
+    <!-- Content End -->
+  </style>
+</ui>
