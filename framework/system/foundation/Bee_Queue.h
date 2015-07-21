@@ -33,9 +33,12 @@
 #import "Bee_Package.h"
 #import "Bee_Singleton.h"
 
+#define MODEL_QUEUE_DEBUG_ 1
+#define UPYUN_UAD_DEBUG_ 1
+
 #pragma mark Model
 
-typedef void (^BeeQueueModelProgress)( void );
+typedef void (^BeeQueueModelProgress)( CGFloat );
 
 typedef enum E_QueueModelState
 {
@@ -48,18 +51,41 @@ typedef enum E_QueueModelState
     
 }EQueueModelState;
 
+typedef enum E_QueueModeAction
+{
+    QUEUE_MODEL_UPLOAD = 0, // 上传
+    QUEUE_MODEL_DOWNLOAD // 下载
+}EQueueModeAction;
 
-@interface BeeQueueModel : NSObject
-@property (nonatomic, strong) NSData * data;
-@property (nonatomic, strong) NSString * key;
-@property (nonatomic, assign) EQueueModelState state;
+typedef enum E_ModelUploadMethod
+{
+    QUEUE_MODEL_UPLOAD_ALL = 0, // 整
+    QUEUE_MODEL_UPLOAD_BLOCK, // 分块
+    QUEUE_MODEL_DOWN_METHOD
+}EModelUploadMethod;
+
+@interface BeeQueueModel : BeeModel
+@property (nonatomic, readonly) NSString * key;
+@property (atomic, readonly) EQueueModelState state;
+@property (atomic, readonly) CGFloat progress;
+
+// required
 @property (nonatomic, strong) NSString * localPath;
 @property (nonatomic, strong) NSString * serverPath;
-@property (nonatomic, strong) NSString * name;
-@property (nonatomic, assign) CGFloat progress;
+@property (nonatomic, assign) EQueueModeAction action;
+@property (nonatomic, assign) EModelUploadMethod method;
+@property (nonatomic, assign) NSUInteger maxCountOfOperator;
+// optional
+@property (nonatomic, strong) NSString * url;
+@property (nonatomic, strong) NSData * data;
+
 @property (nonatomic, copy) BeeQueueModelProgress whenProgress;
-- (id) initWithPathOfLocal:(NSString *)local andServer:(NSString *)server;
+
+- (id) initWithLocal:(NSString *)local server:(NSString *)server action:(EQueueModeAction)action method:(EModelUploadMethod)method;
 - (NSString *) changeState:(EQueueModelState) eState;
+
+- (void) pauseModel;
+- (void) runModel;
 @end
 
 

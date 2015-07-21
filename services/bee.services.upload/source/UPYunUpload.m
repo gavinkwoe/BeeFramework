@@ -169,7 +169,7 @@ static NSString * UPYUN_DATA_QUEUE = @"UPYun.Upload.Data.Queue";
     NSDictionary * info = @{@"file_blocks":@(blockCount),
                             @"file_hash":[data MD5HexDigest],
                             @"file_size":@(data.length)};
-    return [[info copy] autorelease];
+    return [info copy];
 }
 
 /*
@@ -190,7 +190,7 @@ static NSString * UPYUN_DATA_QUEUE = @"UPYun.Upload.Data.Queue";
      *  http://docs.upyun.com/api/form_api/#Policy%e5%86%85%e5%ae%b9%e8%af%a6%e8%a7%a3
      */
     
-    return [[paramGroup copy] autorelease];
+    return [paramGroup copy];
 }
 
 /*
@@ -206,7 +206,7 @@ static NSString * UPYUN_DATA_QUEUE = @"UPYun.Upload.Data.Queue";
     NSString * policy = [[paramGroup toJsonString] base64encode];
     
     
-    NSDictionary * parameter = @{@"signature":[signature UPYunMD5],
+    NSDictionary * parameter = @{@"signature":[signature MD5],
                                  @"policy":policy};
     return parameter;
 }
