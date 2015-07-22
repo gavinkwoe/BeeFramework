@@ -42,6 +42,38 @@
     return self;
 }
 
+- (id) initWithData:(NSData *)data server:(NSString *)server action:(EQueueModeAction)action method:(EModelUploadMethod)method
+{
+    if (self = [super init])
+    {
+        self.serverPath = server;
+        self.data = data;
+        self.localPath = [[data MD5] copy];
+        
+        self.action = action;
+        if (QUEUE_MODEL_UPLOAD == action && method != QUEUE_MODEL_DOWN_METHOD)
+        {
+            self.method = method;
+        }
+        else
+        {
+            self.method = QUEUE_MODEL_DOWN_METHOD;
+        }
+        
+        _key = self.localPath;
+        _state = QUEUE_DATA_WAIT;
+        
+        self.url = self.serverPath;
+        
+        _progress = 0.0f;
+        
+        _maxCountOfOperator = 3;
+        
+        m_lock = [[NSCondition alloc] init];
+    }
+    return self;
+}
+
 - (void) pauseModel
 {
     [m_lock lock];
