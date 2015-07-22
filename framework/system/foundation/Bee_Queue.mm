@@ -48,7 +48,7 @@
     {
         self.serverPath = server;
         self.data = data;
-        self.localPath = [[data MD5] copy];
+        self.localPath = [[data MD5String] copy];
         
         self.action = action;
         if (QUEUE_MODEL_UPLOAD == action && method != QUEUE_MODEL_DOWN_METHOD)
