@@ -14,6 +14,7 @@
 @property (nonatomic, assign) NSInteger indexOfBlocks;
 @property (nonatomic, strong) BeeQueueModel * model;
 @property (nonatomic, strong) NSData * block;
+@property (nonatomic, assign) NSUInteger sizeOfBlocks;
 @property (nonatomic, assign) NSInteger retryCount;
 + (NSString *) UAD_USER_INFO;
 @end

@@ -23,6 +23,14 @@
         _indexOfBlocks = index;
         _block = model.data;
         _retryCount = model.maxCountOfOperator;
+        if (QUEUE_MODEL_UPLOAD_ALL != model.method)
+        {
+            _sizeOfBlocks = 0;
+        }
+        else
+        {
+            _sizeOfBlocks = model.data.length + 1;
+        }
     }
     return self;
 }
@@ -148,18 +156,7 @@
         {
             if (QUEUE_MODEL_UPLOAD == model.action)
             {
-                NSUInteger length = model.data.length;
-                if (QUEUE_MODEL_UPLOAD_ALL != model.method)
-                {
-                    //
-                }
-                else
-                {
-                    UADLOAD_MIN_SIZE = length + 1;
-                }
-                
                 [self preupload:model];
-                
             }
             else if (QUEUE_MODEL_DOWNLOAD == model.action)
             {
@@ -207,14 +204,14 @@
     
     NSData * datas = uadUserInfo.model.data;
     NSUInteger dataLength = datas.length;
-    uadUserInfo.numberOfBlocks = (dataLength < UADLOAD_MIN_SIZE) ? 1 : (dataLength / UADLOAD_MIN_SIZE);
+    uadUserInfo.numberOfBlocks = (dataLength < uadUserInfo.sizeOfBlocks) ? 1 : (dataLength / uadUserInfo.sizeOfBlocks);
     NSUInteger lastBlocks = (uadUserInfo.numberOfBlocks -1);
     for (NSInteger index = 0; index < uadUserInfo.numberOfBlocks; ++index)
     {
         uadUserInfo.indexOfBlocks = index;
 
-        NSInteger start = index * UADLOAD_MIN_SIZE;
-        NSInteger length = (index != lastBlocks) ? UADLOAD_MIN_SIZE : dataLength - start;
+        NSInteger start = index * uadUserInfo.sizeOfBlocks;
+        NSInteger length = (index != lastBlocks) ? uadUserInfo.sizeOfBlocks : dataLength - start;
         NSData * data = [datas subdataWithRange:NSMakeRange(start, length)];
         uadUserInfo.block = data;
         

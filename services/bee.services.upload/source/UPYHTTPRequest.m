@@ -75,6 +75,14 @@ DEF_SINGLETON(UPYHTTPRequest)
         // 预处理 参数
         if (0 > uadUserInfo.numberOfBlocks && 0 > uadUserInfo.indexOfBlocks && uadUserInfo.model)
         {
+            if (QUEUE_MODEL_UPLOAD_ALL != uadUserInfo.model.method)
+            {
+                uadUserInfo.sizeOfBlocks = [UPYunUpload BLOCK_SIZE];
+            }
+            else
+            {
+                [UPYunUpload setBlockSize:uadUserInfo.sizeOfBlocks];
+            }
             NSDictionary * group = [UPYunUpload parameterGroupWithData:uadUserInfo.model.data
                                                                   path:uadUserInfo.model.serverPath];
             NSDictionary * parameter = [UPYunUpload requestParameterByParameterGroup:group
