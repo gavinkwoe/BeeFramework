@@ -149,10 +149,17 @@
             if (QUEUE_MODEL_UPLOAD == model.action)
             {
                 NSUInteger length = model.data.length;
-                if (length > UADLOAD_MAX_SIZE)
+                if (QUEUE_MODEL_UPLOAD_ALL != model.method)
                 {
-                    [self preupload:model];
+                    //
                 }
+                else
+                {
+                    UADLOAD_MIN_SIZE = length + 1;
+                }
+                
+                [self preupload:model];
+                
             }
             else if (QUEUE_MODEL_DOWNLOAD == model.action)
             {
