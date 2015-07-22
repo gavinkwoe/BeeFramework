@@ -72,20 +72,20 @@ SERVICE_AUTO_POWERON( YES )
 {
 }
 
-- (void) singleUpload
+- (void) multiUpload
 {
     // NSBlockOperation * block = [NSBlockOperation blockOperationWithBlock:^{
-    // BACKGROUND_BEGIN
+    BACKGROUND_BEGIN
     {
         FileUploadMessage * uploadMesage = [[FileUploadMessage alloc] init];
         [uploadMesage  routine];
     }
-    // BACKGROUND_COMMIT
+    BACKGROUND_COMMIT
     // }];
     // [m_queue addOperation:block];
 }
 
-- (void) multiUpload
+- (void) singleUpload
 {
     BACKGROUND_BEGIN
     {

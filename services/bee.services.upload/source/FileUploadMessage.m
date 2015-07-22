@@ -63,8 +63,19 @@
     {
         model.serverPath = [NSString stringWithFormat:@"/images/test/test_%@.txt", [[NSDate date] stringWithDateFormat:@"yyyyMMddhhmmss"]];
     }
-    
-    if (model && model.localPath)
+    if (QUEUE_MODEL_UPLOAD_ALL != model.method)
+    {
+        // 默认为 [UPYunUpload BLOCK_SIZE];
+    }
+    else
+    {
+        [UPYunUpload setBlockSize:(model.data.length + 1)];
+    }
+    if (model && model.data)
+    {
+        // 数据已存在，不用读文件
+    }
+    else if (model && model.localPath)
     {
         NSFileManager * fileManager = [NSFileManager defaultManager];
         if ([fileManager isReadableFileAtPath:model.localPath])
@@ -208,7 +219,7 @@
         
         if (1.0f == [option.cache.progress integerValue]
             || (NSOrderedSame == [option.cache.fileMD5 compare:option.model.key]
-                && YES == [option.cache existWithObject:[NSString stringWithFormat:@"%lu", index]]))
+                && YES == [option.cache existWithObject:[NSString stringWithFormat:@"%d", index]]))
         {
             continue;
         }
