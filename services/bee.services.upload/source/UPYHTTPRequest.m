@@ -47,8 +47,11 @@ DEF_SINGLETON(UPYHTTPRequest)
         {
             model.serverPath = [NSString stringWithFormat:@"/images/test/test_%@.txt", [[NSDate date] stringWithDateFormat:@"yyyyMMddhhmmss"]];
         }
-        
-        if (model && model.localPath)
+        if (model && model.data)
+        {
+            // 数据已存在，不用读文件
+        }
+        else if (model && model.localPath)
         {
             NSFileManager * fileManager = [NSFileManager defaultManager];
             if ([fileManager isReadableFileAtPath:model.localPath])

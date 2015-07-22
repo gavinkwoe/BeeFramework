@@ -70,14 +70,14 @@ typedef enum E_ModelUploadMethod
 @property (atomic, readonly) CGFloat progress;
 
 // required
-@property (nonatomic, strong) NSString * localPath;
+@property (nonatomic, strong) NSData * data;
 @property (nonatomic, strong) NSString * serverPath;
 @property (nonatomic, assign) EQueueModeAction action;
 @property (nonatomic, assign) EModelUploadMethod method;
 @property (nonatomic, assign) NSUInteger maxCountOfOperator;
 // optional
-@property (nonatomic, strong) NSString * url;
-@property (nonatomic, strong) NSData * data;
+@property (nonatomic, strong) NSString * url; // 如果该属性没有被设置，默认为UPY服务器
+@property (nonatomic, strong) NSString * localPath;  // 如果该属性被设置，data属性可以不用设置。
 
 @property (nonatomic, copy) BeeQueueModelProgress whenProgress;
 
