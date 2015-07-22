@@ -219,7 +219,7 @@
         
         if (1.0f == [option.cache.progress integerValue]
             || (NSOrderedSame == [option.cache.fileMD5 compare:option.model.key]
-                && YES == [option.cache existWithObject:[NSString stringWithFormat:@"%lu", index]]))
+                && YES == [option.cache existWithObject:[NSString stringWithFormat:@"%d", index]]))
         {
             continue;
         }
