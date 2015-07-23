@@ -83,7 +83,15 @@ typedef enum E_ModelUploadMethod
 @property (nonatomic, copy) BeeQueueModelInfo whenSucced;
 @property (nonatomic, copy) BeeQueueModelInfo whenFailed;
 
-- (id) initWithLocal:(NSString *)local server:(NSString *)server path:(NSString *)path action:(EQueueModeAction)action method:(EModelUploadMethod)method access:(NSString *)access;
+
+
+- (id) initWithLocal:(NSString *)local
+              server:(NSString *)server
+                path:(NSString *)path
+              action:(EQueueModeAction)action
+              method:(EModelUploadMethod)method
+              access:(NSString *)access;
+
 - (id) initWithData:(NSData *)data server:(NSString *)server path:(NSString *)path action:(EQueueModeAction)action method:(EModelUploadMethod)method access:(NSString *)access;
 - (NSString *) changeState:(EQueueModelState) eState;
 - (void) setProgress:(CGFloat)progress;
