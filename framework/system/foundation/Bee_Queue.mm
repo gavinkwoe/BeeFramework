@@ -216,7 +216,7 @@ DEF_SINGLETON( BeeQueue )
     
     if (!data.server || 0 == data.server.length)
     {
-        return @"目标路径 不能为空!";
+        WARN(@"目标路径为空!");
     }
     
     [m_optLock lock];

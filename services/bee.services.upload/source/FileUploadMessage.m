@@ -88,6 +88,11 @@
         }
     }
     
+    if (nil == model.server)
+    {
+        model.server = self.url;
+    }
+    
     return model;
 }
 
@@ -102,15 +107,13 @@
             __weak BeeQueueModel * model = nil;
             if (nil == (model = [BeeQueue getFirstDataByQueue:[UPYunUpload UPYUN_DATA_QUEUE]]))
             {
-                sleep(5);
+                sleep(1);
                 continue;
             }
             if (!self.url || !self.formAPI)
             {
                 [self setupParam];
             }
-            
-            model.server = self.url;
 
 #ifdef FILE_UPLOAD_MESSAGE_MULTI_THREAD
             NSBlockOperation * file = [NSBlockOperation blockOperationWithBlock:^{
