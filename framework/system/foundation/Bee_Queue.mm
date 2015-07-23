@@ -10,13 +10,27 @@
 
 @implementation BeeQueueModel
 
-- (id) initWithLocal:(NSString *)local server:(NSString *)server action:(EQueueModeAction)action method:(EModelUploadMethod)method
+- (id) initWithLocal:(NSString *)local server:(NSString *)server path:(NSString *)path action:(EQueueModeAction)action method:(EModelUploadMethod)method access:(NSString *)access
 {
     if (self = [super init])
     {
-        self.serverPath = server;
-        self.localPath = local;
+        NSString * string = nil;
+        if (nil != access)
+        {
+            string = access;
+        }
+        else
+        {
+            string = server;
+        }
+        string = [NSString stringWithFormat:@"%@/%@", string, path];
         
+        _key = [[string MD5] copy];
+        self.data = nil;
+        self.local = local;
+        self.server = server;
+        self.path = path;
+        self.visit = access;
         self.action = action;
         if (QUEUE_MODEL_UPLOAD == action && method != QUEUE_MODEL_DOWN_METHOD)
         {
@@ -27,14 +41,8 @@
             self.method = QUEUE_MODEL_DOWN_METHOD;
         }
         
-        _key = [[local MD5] copy];
         _state = QUEUE_DATA_WAIT;
-        
-        self.url = self.serverPath;
-        self.data = nil;
-        
         _progress = 0.0f;
-        
         _maxCountOfOperator = 3;
         
         m_lock = [[NSCondition alloc] init];
@@ -42,14 +50,26 @@
     return self;
 }
 
-- (id) initWithData:(NSData *)data server:(NSString *)server action:(EQueueModeAction)action method:(EModelUploadMethod)method
+- (id) initWithData:(NSData *)data server:(NSString *)server path:(NSString *)path action:(EQueueModeAction)action method:(EModelUploadMethod)method access:(NSString *)access
 {
     if (self = [super init])
     {
-        self.serverPath = server;
+        NSString * string = nil;
+        if (nil != access)
+        {
+            string = access;
+        }
+        else
+        {
+            string = server;
+        }
+        string = [NSString stringWithFormat:@"%@/%@", string, path];
+        _key = [[string MD5] copy];
+        self.local = path;
+        self.server = server;
+        self.path = path;
+        self.visit = access;
         self.data = data;
-        self.localPath = [[data MD5String] copy];
-        
         self.action = action;
         if (QUEUE_MODEL_UPLOAD == action && method != QUEUE_MODEL_DOWN_METHOD)
         {
@@ -60,13 +80,8 @@
             self.method = QUEUE_MODEL_DOWN_METHOD;
         }
         
-        _key = self.localPath;
         _state = QUEUE_DATA_WAIT;
-        
-        self.url = self.serverPath;
-        
         _progress = 0.0f;
-        
         _maxCountOfOperator = 3;
         
         m_lock = [[NSCondition alloc] init];
@@ -79,7 +94,7 @@
     [m_lock lock];
     if (QUEUE_DATA_PAUSE == _state)
     {
-        INFO(@"Model was paused! [%@]", _localPath);
+        INFO(@"Model was paused! [%@]", _local);
         [m_lock wait];
     }
     [m_lock unlock];
@@ -94,7 +109,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@: %p,\"key = %@, local = %@, server = %@, url = %@, state = %u, action = %u, propress = %f \">", [self class], self, self.key, self.localPath, self.serverPath, self.url, self.state, self.action, self.progress];
+    return [NSString stringWithFormat:@"<%@: %p,\"key = %@, local = %@, server = %@/%@, state = %u, action = %u, propress = %f \">", [self class], self, _key, _local, _server, _path, _state, _action, _progress];
 }
 
 - (NSString *) changeState:(EQueueModelState) eState
@@ -128,13 +143,12 @@
     return NO;
 }
 
-
-- (void)whenProgress:(CGFloat)progress
+- (void) setProgress:(CGFloat)progress
 {
     _progress = progress;
-    if (self.whenProgress)
+    if (self.whenUpdate)
     {
-        self.whenProgress(progress);
+        self.whenUpdate(progress);
     }
 }
 
@@ -200,9 +214,9 @@ DEF_SINGLETON( BeeQueue )
         return nil;
     }
     
-    if (!data.localPath || !data.serverPath || 0 == data.localPath.length || 0 == data.serverPath.length)
+    if (!data.server || 0 == data.server.length)
     {
-        return @"源路径|目标路径 不能为空!";
+        return @"目标路径 不能为空!";
     }
     
     [m_optLock lock];

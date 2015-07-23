@@ -39,6 +39,7 @@
 #pragma mark Model
 
 typedef void (^BeeQueueModelProgress)( CGFloat );
+typedef void (^BeeQueueModelInfo)( NSString * );
 
 typedef enum E_QueueModelState
 {
@@ -69,22 +70,23 @@ typedef enum E_ModelUploadMethod
 @property (atomic, readonly) EQueueModelState state;
 @property (atomic, readonly) CGFloat progress;
 
-// required
 @property (nonatomic, strong) NSData * data;
-@property (nonatomic, strong) NSString * serverPath;
+@property (nonatomic, strong) NSString * local;  // 如果该属性被设置，data属性可以不用设置。
+@property (nonatomic, strong) NSString * server; // 如果该属性没有被设置，默认为UPY服务器
+@property (nonatomic, strong) NSString * path; // 服务器的目录
+@property (nonatomic, strong) NSString * visit; // 访问地址
 @property (nonatomic, assign) EQueueModeAction action;
 @property (nonatomic, assign) EModelUploadMethod method;
 @property (nonatomic, assign) NSUInteger maxCountOfOperator;
-// optional
-@property (nonatomic, strong) NSString * url; // 如果该属性没有被设置，默认为UPY服务器
-@property (nonatomic, strong) NSString * localPath;  // 如果该属性被设置，data属性可以不用设置。
 
-@property (nonatomic, copy) BeeQueueModelProgress whenProgress;
+@property (nonatomic, copy) BeeQueueModelProgress whenUpdate;
+@property (nonatomic, copy) BeeQueueModelInfo whenSucced;
+@property (nonatomic, copy) BeeQueueModelInfo whenFailed;
 
-- (id) initWithLocal:(NSString *)local server:(NSString *)server action:(EQueueModeAction)action method:(EModelUploadMethod)method;
-- (id) initWithData:(NSData *)data server:(NSString *)server action:(EQueueModeAction)action method:(EModelUploadMethod)method;
+- (id) initWithLocal:(NSString *)local server:(NSString *)server path:(NSString *)path action:(EQueueModeAction)action method:(EModelUploadMethod)method access:(NSString *)access;
+- (id) initWithData:(NSData *)data server:(NSString *)server path:(NSString *)path action:(EQueueModeAction)action method:(EModelUploadMethod)method access:(NSString *)access;
 - (NSString *) changeState:(EQueueModelState) eState;
-
+- (void) setProgress:(CGFloat)progress;
 - (void) pauseModel;
 - (void) runModel;
 @end

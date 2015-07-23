@@ -10,17 +10,16 @@
 
 @interface UADHTTPCache : BeeActiveRecord
 
-@property (nonatomic, strong) NSNumber * key;
-@property (nonatomic, strong) NSString * fileMD5;
-@property (nonatomic, strong) NSString * localPath;
-@property (nonatomic, strong) NSString * serverPath;
-@property (nonatomic, strong) NSNumber * blockSize;
-@property (nonatomic, strong) NSNumber * fileSize;
+@property (nonatomic, readonly) NSString * key;
+@property (nonatomic, readonly) NSString * localPath;
+@property (nonatomic, readonly) NSString * serverPath;
+@property (nonatomic, readonly) NSNumber * allSize;
+@property (nonatomic, readonly) NSNumber * blockSize;
 
-@property (nonatomic, strong) NSString * objs;
+@property (nonatomic, readonly) NSString * bloks;
 @property (nonatomic, strong) NSNumber * progress;
 
-- (id) initWithLocalPath:(NSString *) local server:(NSString *)server blockSize:(NSUInteger)size;
+- (id) initWithKey:(NSString *)key local:(NSString *)local server:(NSString *)server sizeOfAll:(NSUInteger)all sizeOfBlock:(NSUInteger)block;
 - (BOOL) existWithObject:(NSString *)obj;
 - (void) addObject:(NSString *)obj;
 - (NSUInteger) getObjectsCount;

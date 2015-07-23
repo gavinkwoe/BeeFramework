@@ -9,50 +9,45 @@
 #import "UADHTTPCache.h"
 
 @implementation UADHTTPCache
-- (id) initWithLocalPath:(NSString *)local server:(NSString *)server blockSize:(NSUInteger)size
+- (id) initWithKey:(NSString *)key local:(NSString *)local server:(NSString *)server sizeOfAll:(NSUInteger)all sizeOfBlock:(NSUInteger)block
 
 {
     if (self = [super init])
     {
-        self.localPath = local;
-        self.serverPath = server;
-        self.blockSize = [NSNumber numberWithInteger:size];
-        self.fileMD5 = [local MD5];
+        _key = key;
+        _localPath = local;
+        _serverPath = server;
+        _allSize = [NSNumber numberWithInteger:all];
+        _blockSize = [NSNumber numberWithInteger:block];
         
-        self.progress = [[NSNumber alloc] initWithInt:0];
-        self.objs = nil;
+        _progress = [[NSNumber alloc] initWithInt:0];
+        _bloks = nil;
         
-        [self calculateKey];
+        [UADHTTPCache mapPropertyAsKey:@"key"];
     }
     return self;
 }
 
-- (void) calculateKey
-{
-    if (self.localPath)
-    {
-        NSFileManager * file = [NSFileManager defaultManager];
-        if ([file fileExistsAtPath:self.localPath])
-        {
-            NSError * fileError;
-            NSDictionary * attr = [file attributesOfItemAtPath:self.localPath error:&fileError];
-            INFO(@"%@", attr);
-            _key = [attr objectForKey:@"NSFileSystemFileNumber"];
-            NSUInteger size = [[attr objectForKey:@"NSFileSize"] integerValue];
-            _fileSize = @(size);
-        }
-    }
-}
-
 - (BOOL) existWithObject:(NSString *)obj
 {
-    if (nil == obj)
+    if (nil == obj || nil == _bloks)
     {
         return NO;
     }
+    obj = [NSString stringWithFormat:@"%@", obj];
     
-    NSArray * objcs = [self.objs componentsSeparatedByString:@","];
-    return [objcs containsObject:obj];
+    NSRange range = [_bloks rangeOfString:@","];
+    if (range.length > 0)
+    {
+        NSArray * objs = [_bloks componentsSeparatedByString:@","];
+        return [objs containsObject:obj];
+    }
+    else
+    {
+        return (NSOrderedSame == [_bloks compare:obj]);
+    }
+    
+    return NO;
 }
 
 - (void) addObject:(NSString *)obj
@@ -62,19 +57,20 @@
         return;
     }
     
-    if (nil == self.objs)
+    if (nil == _bloks)
     {
-        self.objs = obj;
+        _bloks = [NSString stringWithFormat:@"%@", obj];
     }
-    else
+    else if (![self existWithObject:obj])
     {
-        self.objs = [NSString stringWithFormat:@"%@,%@", self.objs, obj];
+        _bloks = [NSString stringWithFormat:@"%@,%@",_bloks, obj];
     }
 }
 
 - (NSUInteger) getObjectsCount
 {
-    return [self.objs componentsSeparatedByString:@","].count;
+    NSArray * objs = [_bloks componentsSeparatedByString:@","];
+    return objs.count;
 }
 
 @end
