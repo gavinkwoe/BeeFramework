@@ -43,20 +43,20 @@ DEF_SINGLETON(UPYHTTPRequest)
 {
     m_httpManage.fillModel = ^(BeeQueueModel * model)
     {
-        if (0 == model.serverPath.length)
+        if (0 == model.path.length)
         {
-            model.serverPath = [NSString stringWithFormat:@"/images/test/test_%@.txt", [[NSDate date] stringWithDateFormat:@"yyyyMMddhhmmss"]];
+            model.path = [NSString stringWithFormat:@"/images/test/test_%@.txt", [[NSDate date] stringWithDateFormat:@"yyyyMMddhhmmss"]];
         }
         if (model && model.data)
         {
             // 数据已存在，不用读文件
         }
-        else if (model && model.localPath)
+        else if (model && model.local)
         {
             NSFileManager * fileManager = [NSFileManager defaultManager];
-            if ([fileManager isReadableFileAtPath:model.localPath])
+            if ([fileManager isReadableFileAtPath:model.local])
             {
-                model.data = [NSData dataWithContentsOfFile:model.localPath];
+                model.data = [NSData dataWithContentsOfFile:model.local];
             }
             else
             {
@@ -64,7 +64,10 @@ DEF_SINGLETON(UPYHTTPRequest)
             }
         }
         
-        model.url = [NSString stringWithFormat:@"%@/%@/", [UPYunUpload API_SERVER], [UPYunUpload BUCKET]];
+        if (nil == model.server)
+        {
+            model.server = [NSString stringWithFormat:@"%@/%@/", [UPYunUpload API_SERVER], [UPYunUpload BUCKET]];
+        }
         
         return YES;
     };
@@ -84,7 +87,7 @@ DEF_SINGLETON(UPYHTTPRequest)
                 [UPYunUpload setBlockSize:uadUserInfo.sizeOfBlocks];
             }
             NSDictionary * group = [UPYunUpload parameterGroupWithData:uadUserInfo.model.data
-                                                                  path:uadUserInfo.model.serverPath];
+                                                                  path:uadUserInfo.model.path];
             NSDictionary * parameter = [UPYunUpload requestParameterByParameterGroup:group
                                                                            condition:[UPYunUpload PASSCODE]];
             option.parameter = [parameter mutableCopy];
@@ -123,12 +126,13 @@ DEF_SINGLETON(UPYHTTPRequest)
                 }
                 
                 CGFloat progress = (CGFloat)finished / upyunResult.blockNumber;
-                if (uadUserInfo.model.whenProgress)
+                [uadUserInfo.model setProgress:progress];
+                if (uadUserInfo.model.whenUpdate)
                 {
-                    uadUserInfo.model.whenProgress(progress);
+                    uadUserInfo.model.whenUpdate(progress);
                 }
                 
-                INFO(@"%@ progress %f", uadUserInfo.model.localPath, progress);
+                INFO(@"%@ progress %f", uadUserInfo.model.local, progress);
                 
                 option = [self setupOptionWithToken:upyunResult.saveToken
                                              secret:upyunResult.tokenSecret
@@ -156,7 +160,7 @@ DEF_SINGLETON(UPYHTTPRequest)
     {
         UADUserInfo * uadUserInfo = [theRequest.userInfo objectForKey:[UADUserInfo UAD_USER_INFO]];
         
-        INFO(@"文件 %@ 第 %i 块 上传失败[块大小%li]。 可重试 %i 次。 \n %@", uadUserInfo.model.localPath, uadUserInfo.indexOfBlocks, uadUserInfo.block.length, uadUserInfo.retryCount, theRequest.responseString);
+        INFO(@"文件 %@ 第 %i 块 上传失败[块大小%li]。 可重试 %i 次。 \n %@", uadUserInfo.model.local, uadUserInfo.indexOfBlocks, uadUserInfo.block.length, uadUserInfo.retryCount, theRequest.responseString);
         
         UADHTTPManageOption * option = nil;
         if (0 < uadUserInfo.retryCount)

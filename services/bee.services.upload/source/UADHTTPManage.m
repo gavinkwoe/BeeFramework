@@ -247,7 +247,7 @@
         format = ASIMultipartFormDataPostFormat;
         uploadData = @{@"file":uadUserInfo.block};
     }
-    BeeHTTPRequest * request = [UADHTTPRequestQueue POST:uadUserInfo.model.url
+    BeeHTTPRequest * request = [UADHTTPRequestQueue POST:uadUserInfo.model.server
                                                parameter:option.parameter
                                                    datas:uploadData
                                                 userInfo:option.userInfo
@@ -286,7 +286,7 @@
                 {
                     if (dataOption.finished)
                     {
-                        INFO(@"FINISHED : [%@]", uadUserInfo.model.localPath);
+                        INFO(@"FINISHED : [%@]", uadUserInfo.model.local);
                     }
                     else
                     {
@@ -297,17 +297,18 @@
                 else
                 {
                     [self saveModelCache:dataOption];
-                    INFO(@"Block was uploaded already! {FILE : [%@], BLOCK : [%d]}", uadUserInfo.model.localPath, uadUserInfo.indexOfBlocks);
+                    INFO(@"Block was uploaded already! {FILE : [%@], BLOCK : [%d]}", uadUserInfo.model.local, uadUserInfo.indexOfBlocks);
                 }
                 
-                if (uadUserInfo.model.whenProgress)
+                if (uadUserInfo.model.whenUpdate)
                 {
-                    uadUserInfo.model.whenProgress(request.uploadPercent);
+                    CGFloat percent = (CGFloat)request.uploadBytes / request.uploadTotalBytes;
+                    uadUserInfo.model.whenUpdate(percent);
                 }
             }
             else
             {
-                INFO(@"FINISHED : [%@]", uadUserInfo.model.localPath);
+                INFO(@"FINISHED : [%@]", uadUserInfo.model.local);
             }
         }
         
@@ -325,7 +326,7 @@
         }
         if (nil != dataOption)
         {
-            INFO(@"Try again ! {FILE : [%@], BLOCK : [%d]}", uadUserInfo.model.localPath, uadUserInfo.indexOfBlocks);
+            INFO(@"Try again ! {FILE : [%@], BLOCK : [%d]}", uadUserInfo.model.local, uadUserInfo.indexOfBlocks);
         }
         else
         {
@@ -357,9 +358,11 @@
 {
     UADUserInfo * userInfo = [option.userInfo objectForKey:[UADUserInfo UAD_USER_INFO]];
     
-    UADHTTPCache * cache = [[UADHTTPCache alloc] initWithLocalPath:userInfo.model.localPath
-                                                            server:userInfo.model.serverPath
-                                                         blockSize:userInfo.numberOfBlocks];
+    UADHTTPCache * cache = [[UADHTTPCache alloc] initWithKey:userInfo.model.key
+                                                       local:userInfo.model.local
+                                                      server:userInfo.model.path
+                                                   sizeOfAll:userInfo.model.data.length
+                                                 sizeOfBlock:userInfo.sizeOfBlocks];
     if (cache.LOAD())
     {
         NSString * newObj = [NSString stringWithFormat:@"%ld", (long)userInfo.indexOfBlocks];
