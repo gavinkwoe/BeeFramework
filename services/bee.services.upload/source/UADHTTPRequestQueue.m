@@ -810,11 +810,3 @@ static NSUInteger MAX_NUMBER_OF_QUEUE = 10;
 
 #pragma mark -
 
-#if defined(__BEE_UNITTEST__) && __BEE_UNITTEST__
-
-TEST_CASE( UADHTTPRequestQueue )
-{
-}
-TEST_CASE_END
-
-#endif	// #if defined(__BEE_UNITTEST__) && __BEE_UNITTEST__

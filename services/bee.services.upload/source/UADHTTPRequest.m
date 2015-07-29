@@ -269,13 +269,5 @@
 }
 
 @end
-// ----------------------------------
-// Unit test
-// ----------------------------------
-#pragma mark -
-#if defined(__BEE_UNITTEST__) && __BEE_UNITTEST__
-TEST_CASE( UADHTTPRequest )
-{
-}
-TEST_CASE_END
-#endif	// #if defined(__BEE_UNITTEST__) && __BEE_UNITTEST__
+
+

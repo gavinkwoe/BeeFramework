@@ -532,13 +532,7 @@ DEF_SINGLETON( BeeQueue )
 
 TEST_CASE( BeeQueue )
 {
-    HERE( "open and close DB", {
-        [BeeQueue putData:<#(BeeQueueModel *)#> byQueue:<#(NSString *)#>];
-        EXPECTED( nil == [BeeDatabase sharedDatabase] );
-        
-        [BeeDatabase openSharedDatabase:@"ar"];
-        EXPECTED( [BeeDatabase sharedDatabase] );
-    });
+  
 }
 TEST_CASE_END
 
