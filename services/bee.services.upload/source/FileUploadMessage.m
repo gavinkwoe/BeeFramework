@@ -152,10 +152,10 @@
         @normalize(file);
         NSDictionary * result = file.responseJSONDictionary;
         
-        
+        NSString * server = [NSString stringWithFormat:@"%@/%@", model.visit, model.path];
         UADHTTPCache * uploadCache = [[UADHTTPCache alloc] initWithKey:model.key
                                                                  local:model.local
-                                                                server:model.path
+                                                                server:server
                                                              sizeOfAll:model.data.length
                                                            sizeOfBlock:[UPYunUpload BLOCK_SIZE]];
         
@@ -226,7 +226,7 @@
         
         if (1.0f == [option.cache.progress integerValue]
             || (NSOrderedSame == [option.cache.key compare:option.model.key]
-                && YES == [option.cache existWithObject:[NSString stringWithFormat:@"%d", index]]))
+                && YES == [option.cache existWithObject:[NSString stringWithFormat:@"%ld", index]]))
         {
             ++index;
             continue;
@@ -368,7 +368,7 @@
             }
         }
         
-        option.cache.SAVE();
+        [option.cache saveCache];
     };
     
     // 处理失败
@@ -386,7 +386,7 @@
             {
                 index = [NSString stringWithFormat:@"第 %@ 块", index];
             }
-            NSString * info = [NSString stringWithFormat:@"文件 %@ %@ 第 %i 次 上传失败[块大小%li]。 \n %@", option.model.local, index, count, (unsigned long)data.length, block.responseJSONDictionary];
+            NSString * info = [NSString stringWithFormat:@"文件 %@ %@ 第 %lu 次 上传失败[块大小%li]。 \n %@", option.model.local, index, (unsigned long)count, (unsigned long)data.length, block.responseJSONDictionary];
             [self uploadBlock:userInfo count:count];
             
             if (option.model.whenFailed)

@@ -19,8 +19,14 @@
 @property (nonatomic, readonly) NSString * bloks;
 @property (nonatomic, strong) NSNumber * progress;
 
-- (id) initWithKey:(NSString *)key local:(NSString *)local server:(NSString *)server sizeOfAll:(NSUInteger)all sizeOfBlock:(NSUInteger)block;
+- (id) initWithKey:(NSString *)key
+             local:(NSString *)local
+            server:(NSString *)server
+         sizeOfAll:(NSUInteger)all
+       sizeOfBlock:(NSUInteger)block;
+
 - (BOOL) existWithObject:(NSString *)obj;
 - (void) addObject:(NSString *)obj;
 - (NSUInteger) getObjectsCount;
+- (void) saveCache;
 @end

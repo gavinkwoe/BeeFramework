@@ -7,6 +7,11 @@
 //
 
 #import "UADHTTPCache.h"
+@interface UADHTTPCache()
+{
+    NSCondition * m_lock;
+}
+@end
 
 @implementation UADHTTPCache
 - (id) initWithKey:(NSString *)key local:(NSString *)local server:(NSString *)server sizeOfAll:(NSUInteger)all sizeOfBlock:(NSUInteger)block
@@ -14,6 +19,7 @@
 {
     if (self = [super init])
     {
+        [UADHTTPCache mapPropertyAsKey:@"key"];
         _key = key;
         _localPath = local;
         _serverPath = server;
@@ -22,8 +28,7 @@
         
         _progress = [[NSNumber alloc] initWithInt:0];
         _bloks = nil;
-        
-        [UADHTTPCache mapPropertyAsKey:@"key"];
+        m_lock = [[NSCondition alloc] init];
     }
     return self;
 }
@@ -73,4 +78,10 @@
     return objs.count;
 }
 
+- (void) saveCache
+{
+    [m_lock lock];
+    self.SAVE();
+    [m_lock unlock];
+}
 @end
