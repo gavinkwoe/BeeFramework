@@ -73,8 +73,7 @@
 
 	if ( [self respondsToSelector:@selector(setMaxLength:)] )
 	{
-		[self performMsgSendWithTarget:self sel:@selector(setMaxLength:) signal:(void *)&maxLength];
-//		objc_msgSend( self, @selector(setMaxLength:), maxLength );
+        [(BeeUITextField *)self setMaxLength:maxLength];
 	}
 }
 

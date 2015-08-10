@@ -65,15 +65,13 @@
 	{
 		NSString * defaultPlaceholder = [self performSelector:@selector(placeholder)];
 		NSString * placeholder = [properties parseTextWithKeys:@[@"placeholder", @"input-placeholder"] defaultValue:defaultPlaceholder];
-		[self performMsgSendWithTarget:self sel:@selector(setPlaceholder:) signal:(void *)&placeholder];
-//		objc_msgSend( self, @selector(setPlaceholder:), placeholder );
+        [(BeeUITextView *)self setPlaceholder:placeholder];
 	}
 
 	NSInteger maxLength = [properties parseIntegerWithKeys:@[@"maxlength", @"input-max-length"] defaultValue:0];
 	if ( [self respondsToSelector:@selector(setMaxLength:)] )
 	{
-		[self performMsgSendWithTarget:self sel:@selector(setMaxLength:) signal:(void *)&maxLength];
-//		objc_msgSend( self, @selector(setMaxLength:), maxLength );
+        [(BeeUITextView *)self setMaxLength:maxLength];
 	}
 }
 

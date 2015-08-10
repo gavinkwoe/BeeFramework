@@ -181,7 +181,7 @@
 	}
 	else
 	{
-		NSString * fontFamily = @"方正兰亭纤黑_GBK"; // [self stringOfAny:@[@"font-name", @"font-family"] removeAll:YES];
+		NSString * fontFamily = [self stringOfAny:@[@"font-name", @"font-family"] removeAll:YES];
 		NSString * fontStyle = [self stringOfAny:@[@"font-style"] removeAll:YES];
 		NSString * fontWeight = [self stringOfAny:@[@"font-weight"] removeAll:YES];
 		NSString * fontSize = [self stringOfAny:@[@"font-size"] removeAll:YES];

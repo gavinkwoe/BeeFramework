@@ -126,8 +126,7 @@
 
 		if ( NO == CGSizeEqualToSize( dotSize, CGSizeZero ) )
 		{
-			[self performMsgSendWithTarget:self sel:@selector(setDotSize:) signal:(void *)&dotSize];
-//			objc_msgSend( self, @selector(setDotSize:), dotSize );
+            [(BeeUIPageControl *)self setDotSize:dotSize];
 		}
 	}
 }

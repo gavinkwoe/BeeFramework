@@ -87,14 +87,14 @@
 		{
 			if ( [view respondsToSelector:@selector(selected)] )
 			{
-				BOOL flag =	[self performMsgSendWithTarget:view sel:@selector(selected)];
+                BOOL flag =	[(UIControl *)self selected];
 				if ( flag )
 					return YES;
 			}
 
 			if ( [view respondsToSelector:@selector(state)] )
 			{
-				UIControlState state =	[self performMsgSendWithTarget:view sel:@selector(state)];
+                UIControlState state =	[(UIControl *)self state];
 				if ( state & UIControlStateSelected )
 					return YES;
 			}
@@ -115,7 +115,7 @@
 	{
 		if ( view && [view respondsToSelector:@selector(isFirstResponder)] )
 		{
-			BOOL flag =	[self performMsgSendWithTarget:view sel:@selector(isFirstResponder)];
+            BOOL flag =	[(UIControl *)self isFirstResponder];
 			if ( flag )
 				return YES;
 		}
@@ -137,7 +137,7 @@
 			if ( [v respondsToSelector:@selector(setEnabled:)] )
 			{
 				BOOL i = YES;
-				[self performMsgSendWithTarget:v sel:@selector(setEnabled:) signal:(void *)&i];
+                [(UIControl *)self setEnabled:i];
 			}
 		}
 		return self;
@@ -157,7 +157,7 @@
 			if ( [v respondsToSelector:@selector(setEnabled:)] )
 			{
 				BOOL i = NO;
-				[self performMsgSendWithTarget:v sel:@selector(setEnabled:) signal:(void *)&i];
+                [(UIControl *)self setEnabled:i];
 			}
 		}
 		return self;
@@ -213,7 +213,7 @@
 			if ( [v respondsToSelector:@selector(setSelected:)] )
 			{
 				BOOL i = YES;
-				[self performMsgSendWithTarget:v sel:@selector(setSelected:) signal:(void *)&i];
+                [(UIControl *)self setSelected:i];
 			}
 		}
 		
@@ -231,8 +231,8 @@
 		{
 			if ( [v respondsToSelector:@selector(setSelected:)] )
 			{
-				BOOL i = NO;
-				[self performMsgSendWithTarget:v sel:@selector(setSelected:) signal:(void *)&i];
+                BOOL i = YES;
+                [(UIControl *)self setSelected:i];
 			}
 		}
 		
