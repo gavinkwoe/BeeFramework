@@ -50,14 +50,7 @@
     {
         model.path = [NSString stringWithFormat:@"/images/test/test_%@.txt", [[NSDate date] stringWithDateFormat:@"yyyyMMddhhmmss"]];
     }
-    if (QUEUE_MODEL_UPLOAD_ALL != model.method)
-    {
-        // 默认为 [UPYunUpload BLOCK_SIZE];
-    }
-    else
-    {
-        [UPYunUpload setBlockSize:(model.data.length + 1)];
-    }
+    
     if (model && model.data)
     {
         // 数据已存在，不用读文件
@@ -73,6 +66,14 @@
         {
             return nil;
         }
+    }
+    if (QUEUE_MODEL_UPLOAD_ALL != model.method)
+    {
+        // 默认为 [UPYunUpload BLOCK_SIZE];
+    }
+    else
+    {
+        [UPYunUpload setBlockSize:(model.data.length + 1)];
     }
     
     if (nil == model.server)
@@ -220,9 +221,18 @@
             break ;
         }
         
-        if (1.0f == [option.cache.progress integerValue]
-            || (NSOrderedSame == [option.cache.key compare:option.model.key]
-                && YES == [option.cache existWithObject:[NSString stringWithFormat:@"%ld", (long)index]]))
+        if (1.0f == [option.cache.progress integerValue])
+        {
+            if (option.model.whenSucced)
+            {
+                NSString * server = [NSString stringWithFormat:@"%@/%@", option.model.visit, option.model.path];
+                option.model.whenSucced(server);
+            }
+            break;
+        }
+        
+        if (NSOrderedSame == [option.cache.key compare:option.model.key]
+                && YES == [option.cache existWithObject:[NSString stringWithFormat:@"%ld", (long)index]])
         {
             ++index;
             continue;
