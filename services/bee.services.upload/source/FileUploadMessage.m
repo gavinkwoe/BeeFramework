@@ -32,19 +32,6 @@
 
 @implementation FileUploadMessage
 
-- (void) setupParam
-{
-    if (!self.url)
-    {
-        self.url = [NSString stringWithFormat:@"%@/%@/", [UPYunUpload API_SERVER], [UPYunUpload BUCKET]];
-    }
-    
-    if (!self.formAPI)
-    {
-        self.formAPI = [UPYunUpload PASSCODE];
-    }
-}
-
 - (void) initParam
 {
     [UPYunUpload setBlockSize:202500];
@@ -90,8 +77,21 @@
     
     if (nil == model.server)
     {
-        model.server = self.url;
+        model.server = [UPYunUpload API_SERVER];
     }
+    
+    if (nil == model.bucket)
+    {
+        model.bucket = [UPYunUpload BUCKET];
+    }
+    
+    if (nil == model.passcode)
+    {
+        model.bucket = [UPYunUpload PASSCODE];
+    }
+    
+    self.url = [NSString stringWithFormat:@"%@/%@", model.server, model.bucket];
+    self.formAPI = model.passcode;
     
     return model;
 }
@@ -109,10 +109,6 @@
             {
                 sleep(1);
                 continue;
-            }
-            if (!self.url || !self.formAPI)
-            {
-                [self setupParam];
             }
 
 #ifdef FILE_UPLOAD_MESSAGE_MULTI_THREAD
@@ -226,7 +222,7 @@
         
         if (1.0f == [option.cache.progress integerValue]
             || (NSOrderedSame == [option.cache.key compare:option.model.key]
-                && YES == [option.cache existWithObject:[NSString stringWithFormat:@"%ld", index]]))
+                && YES == [option.cache existWithObject:[NSString stringWithFormat:@"%ld", (long)index]]))
         {
             ++index;
             continue;
