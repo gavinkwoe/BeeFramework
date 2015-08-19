@@ -84,6 +84,8 @@ typedef enum E_ModelUploadMethod
 @property (nonatomic, strong) NSString * server; // 如果该属性没有被设置，默认为UPY服务器
 @property (nonatomic, strong) NSString * path; // 服务器的目录
 @property (nonatomic, strong) NSString * visit; // 访问地址
+@property (nonatomic, strong) NSString * bucket;
+@property (nonatomic, strong) NSString * passcode;
 @property (nonatomic, assign) EQueueModeAction action;
 @property (nonatomic, assign) EModelUploadMethod method;
 @property (nonatomic, assign) NSUInteger maxCountOfOperator;
