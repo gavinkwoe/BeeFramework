@@ -88,7 +88,7 @@
     
     if (nil == model.passcode)
     {
-        model.bucket = [UPYunUpload PASSCODE];
+        model.passcode = [UPYunUpload PASSCODE];
     }
     
     self.url = [NSString stringWithFormat:@"%@/%@", model.server, model.bucket];
