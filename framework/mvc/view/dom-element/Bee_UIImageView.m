@@ -342,7 +342,7 @@ DEF_SIGNAL( LOAD_CACHE )
 		_strechInsets = UIEdgeInsetsZero;
 		
 		_inited = YES;
-
+        
 //		[self load];
 		[self performLoad];
 	}
@@ -369,7 +369,7 @@ DEF_SIGNAL( LOAD_CACHE )
 	
 	[_altLabel removeFromSuperview];
 	[_altLabel release];
-	
+    
 	[super dealloc];
 }
 
@@ -404,8 +404,14 @@ DEF_SIGNAL( LOAD_CACHE )
 ////		[self setNeedsDisplay];
 //		return;
 //	}
-
-	self.defaultImage = defaultImage;
+    if (!defaultImage)
+    {
+        self.defaultImage = [UIImage imageNamed:bee.ui.config.defaultImageName];
+    }
+    else
+    {
+        self.defaultImage = defaultImage;
+    }
 	self.loadedURL = newURL;
 
     if ( self.crop )
