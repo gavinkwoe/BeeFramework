@@ -370,7 +370,17 @@ DEF_SIGNAL( LOAD_CACHE )
 	[_altLabel removeFromSuperview];
 	[_altLabel release];
     
+    [_defaultImage release];
+    
 	[super dealloc];
+}
+
+- (UIImage*)defaultImage
+{
+    if (!_defaultImage) {
+        _defaultImage = [[UIImage imageNamed:bee.ui.config.defaultImageName] retain];
+    }
+    return _defaultImage;
 }
 
 - (void)GET:(NSString *)string useCache:(BOOL)useCache
