@@ -59,7 +59,5 @@
 #import "NSObject+BeeExtension.h"
 #import "NSSet+BeeExtension.h"
 #import "NSString+BeeEmoji.h"
-#import "NSString+NSHash.h"
-#import "NSString+Base64Encode.h"
 #import "NSString+BeeExtension.h"
 #import "NSTimer+BeeExtension.h"

@@ -39,12 +39,6 @@
 #pragma mark -
 
 @interface BeeUIView : UIView
-
-/**
- *    需要跳转的signal路由起点(可以在设置此属性让signal增加signal的传递路线，新的signal传递路线起点为jumpTarget);
- */
-@property (nonatomic,assign) id jumpTarget;
-
 @end
 
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

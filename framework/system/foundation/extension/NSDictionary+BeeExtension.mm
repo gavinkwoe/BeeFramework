@@ -479,28 +479,6 @@
     return object;
 }
 
-- (NSString *) toString
-{
-    NSArray * keys = [self allKeys];
-    NSString * string = @"";
-    keys= [keys sortedArrayUsingSelector:@selector(compare:)];
-    for (NSString * key in keys) {
-        NSString * value = self[key];
-        string = [NSString stringWithFormat:@"%@%@%@", string, key, value];
-    }
-    
-    return [[string copy] autorelease];
-}
-
-- (NSString *)toJsonString
-{
-    id paramesData = [NSJSONSerialization dataWithJSONObject:self options:0 error:nil];
-    NSString * jsonString = [[NSString alloc] initWithData:paramesData
-                                                  encoding:NSUTF8StringEncoding];
-    
-    return [[jsonString copy] autorelease];
-}
-
 @end
 
 #pragma mark -
