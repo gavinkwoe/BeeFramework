@@ -187,20 +187,6 @@
 			return NO;
 		}
 	}
-    else if ([mediaType matchAnyOf:@[@"iphone6"]])
-    {
-        if (NO == [BeeSystemInfo isPhoneRetinaHD47])
-        {
-            return NO;
-        }
-    }
-    else if ([mediaType matchAnyOf:@[@"iphone6p"]])
-    {
-        if (NO == [BeeSystemInfo isPhoneRetinaHD55])
-        {
-            return NO;
-        }
-    }
 	else if ( [mediaType matchAnyOf:@[@"ipad"]] )
 	{
 		if ( NO == [BeeSystemInfo isPad] && NO == [BeeSystemInfo isPadRetina] )

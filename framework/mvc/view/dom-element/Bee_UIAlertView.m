@@ -62,6 +62,7 @@ DEF_SIGNAL( DID_DISMISS )
 	BeeUIAlertView * alert = [[[BeeUIAlertView alloc] init] autorelease];
 	[alert setMessage:message];
 	[alert addCancelTitle:title];
+	[alert show];
 	return alert;
 }
 

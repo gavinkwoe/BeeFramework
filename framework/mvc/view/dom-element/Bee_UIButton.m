@@ -172,7 +172,7 @@ DEF_SIGNAL( DRAG_EXIT )			// 退出
 @dynamic titleColor;
 @dynamic titleShadowColor;
 @dynamic titleFont;
-@dynamic titleEdgeInsets;
+@dynamic titleInsets;
 @dynamic titleTextAlignment;
 @dynamic image;
 @synthesize signal = _signal;
@@ -333,7 +333,6 @@ DEF_SIGNAL( DRAG_EXIT )			// 退出
 	[self initLabel];
 	
 	_label.textColor = color;
-
 }
 
 - (UIColor *)titleShadowColor

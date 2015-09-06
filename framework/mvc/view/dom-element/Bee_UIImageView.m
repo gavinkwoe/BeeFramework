@@ -342,7 +342,7 @@ DEF_SIGNAL( LOAD_CACHE )
 		_strechInsets = UIEdgeInsetsZero;
 		
 		_inited = YES;
-        
+
 //		[self load];
 		[self performLoad];
 	}
@@ -369,18 +369,8 @@ DEF_SIGNAL( LOAD_CACHE )
 	
 	[_altLabel removeFromSuperview];
 	[_altLabel release];
-    
-    [_defaultImage release];
-    
+	
 	[super dealloc];
-}
-
-- (UIImage*)defaultImage
-{
-    if (!_defaultImage) {
-        _defaultImage = [[UIImage imageNamed:bee.ui.config.defaultImageName] retain];
-    }
-    return _defaultImage;
 }
 
 - (void)GET:(NSString *)string useCache:(BOOL)useCache
@@ -414,14 +404,8 @@ DEF_SIGNAL( LOAD_CACHE )
 ////		[self setNeedsDisplay];
 //		return;
 //	}
-    if (!defaultImage)
-    {
-        self.defaultImage = [UIImage imageNamed:bee.ui.config.defaultImageName];
-    }
-    else
-    {
-        self.defaultImage = defaultImage;
-    }
+
+	self.defaultImage = defaultImage;
 	self.loadedURL = newURL;
 
     if ( self.crop )

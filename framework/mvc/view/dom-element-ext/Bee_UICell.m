@@ -590,12 +590,6 @@ PERF_LEAVE_( ______unbindData2 )
 	
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [super touchesBegan:touches withEvent:event];
-    [self endEditing:YES];
-}
-
 @end
 
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

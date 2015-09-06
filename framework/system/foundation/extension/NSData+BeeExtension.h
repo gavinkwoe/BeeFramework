@@ -38,12 +38,6 @@
 @property (nonatomic, readonly) NSData *	MD5;
 @property (nonatomic, readonly) NSString *	MD5String;
 
-+(NSData *)MD5Digest:(NSData *)input;
--(NSData *)MD5Digest;
-
-+(NSString *)MD5HexDigest:(NSData *)input;
--(NSString *)MD5HexDigest;
-
 + (NSString *)fromResource:(NSString *)resName;
 
 @end

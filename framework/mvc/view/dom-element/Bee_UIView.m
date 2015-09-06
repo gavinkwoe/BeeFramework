@@ -69,11 +69,6 @@
 	[super dealloc];
 }
 
-ON_SIGNAL(signal)
-{
-    [signal forward:_jumpTarget];
-}
-
 @end
 
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
