@@ -88,6 +88,9 @@ typedef NSDictionary *	(^NSDictionaryAppendBlock)( NSString * key, id value );
 
 - (id)objectForClass:(Class)clazz;
 
+- (NSString *) toString;
+- (NSString *) toJsonString;
+
 @end
 
 #pragma mark -

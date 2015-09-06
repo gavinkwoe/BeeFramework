@@ -78,6 +78,9 @@
 
 - (UIImage *)fixOrientation;
 
++ (UIImage *)imageWithColor:(UIColor *)color andSize:(CGSize)size;
+
+
 @end
 
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

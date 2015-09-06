@@ -86,6 +86,8 @@ typedef enum
 @property (nonatomic, assign) BOOL					cacheAsyncLoad;
 @property (nonatomic, assign) BOOL					cacheAsyncSave;
 
+@property (nonatomic,retain) NSString*               defaultImageName;
+
 AS_SINGLETON( BeeUIConfig )
 
 @end

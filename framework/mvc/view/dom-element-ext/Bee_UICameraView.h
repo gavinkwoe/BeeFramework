@@ -37,18 +37,18 @@
 
 #pragma mark -
 
-#if TARGET_IPHONE_SIMULATOR
-
-#undef	AVCaptureSession
-#define	AVCaptureSession			NSObject
-
-#undef	AVCaptureVideoPreviewLayer
-#define	AVCaptureVideoPreviewLayer	NSObject
-
-#undef	AVCaptureVideoOrientation
-#define	AVCaptureVideoOrientation	NSInteger
-
-#endif	// #if TARGET_IPHONE_SIMULATOR
+//#if TARGET_IPHONE_SIMULATOR
+//
+//#undef	AVCaptureSession
+//#define	AVCaptureSession			NSObject
+//
+//#undef	AVCaptureVideoPreviewLayer
+//#define	AVCaptureVideoPreviewLayer	NSObject
+//
+//#undef	AVCaptureVideoOrientation
+//#define	AVCaptureVideoOrientation	NSInteger
+//
+//#endif	// #if TARGET_IPHONE_SIMULATOR
 
 #pragma mark -
 

@@ -67,7 +67,7 @@
 
 #undef	EXPECTED
 #define EXPECTED( __condition ) \
-		if ( NO == (__condition) ) { \
+		if ( !(__condition) ) { \
 			@throw [NSException exceptionWithName:@"" \
 										   reason:[NSString stringWithFormat:@"<%s> @ <%s(#%u)>", #__condition, __FILE__, __LINE__] \
 										 userInfo:nil]; \
