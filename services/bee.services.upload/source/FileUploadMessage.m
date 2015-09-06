@@ -393,19 +393,22 @@
                 index = [NSString stringWithFormat:@"第 %@ 块", index];
             }
             NSString * info = [NSString stringWithFormat:@"文件 %@ %@ 第 %lu 次 上传失败[块大小%li]。 \n %@", option.model.local, index, (unsigned long)count, (unsigned long)data.length, block.responseJSONDictionary];
+            INFO(@"%@", info);
             [self uploadBlock:userInfo count:count];
             
             if (option.model.whenFailed)
             {
-                option.model.whenFailed(info);
+                // option.model.whenFailed(info);
             }
         }
-        
-        [BeeQueue failedKey:option.model.key ofQueue:[UPYunUpload UPYUN_DATA_QUEUE]];
-        if (option.model.whenFailed)
+        else
         {
-            NSString * info = [NSString stringWithFormat:@"[%@]上传失败", option.model.local];
-            option.model.whenFailed(info);
+            [BeeQueue failedKey:option.model.key ofQueue:[UPYunUpload UPYUN_DATA_QUEUE]];
+            if (option.model.whenFailed)
+            {
+                NSString * info = [NSString stringWithFormat:@"[%@]上传失败", option.model.local];
+                option.model.whenFailed(info);
+            }
         }
     };
     

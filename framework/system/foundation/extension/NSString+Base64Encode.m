@@ -83,4 +83,17 @@ static const char encodingTable[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopq
     return jsonString;
 }
 
+-(id) JSONValue
+{
+    NSData * data = [self dataUsingEncoding:NSUTF8StringEncoding];
+    __autoreleasing NSError * error = nil;
+    id result = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    if (error != nil)
+    {
+        NSLog(@"json解析失败：%@",error);
+        return nil;
+    }
+    return result;
+}
+
 @end

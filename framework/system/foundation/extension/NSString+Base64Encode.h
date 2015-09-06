@@ -16,4 +16,6 @@
 
 + (NSString*) dataToJsonString:(id)object;
 
+-(id) JSONValue;
+
 @end
