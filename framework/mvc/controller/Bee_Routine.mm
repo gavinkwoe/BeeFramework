@@ -84,6 +84,11 @@
 	return self;
 }
 
+- (void)messageAddInfo:(NSString *)inString
+{
+    self.message = [NSString stringWithFormat:@"%@ ,%@", self.message, inString ];
+}
+
 - (void)dealloc
 {
 	self.userObject = nil;
@@ -118,7 +123,7 @@
 
 + (BOOL)cancel
 {
-	NSMutableArray * msgs = [NSMutableArray nonRetainingArray];// TODO:
+	NSMutableArray * msgs = [NSMutableArray nonRetainingArray];
 	
 	for ( BeeMessage * msg in [BeeMessageQueue sharedInstance].allMessages )
 	{
@@ -138,8 +143,7 @@
 
 + (BOOL)cancel:(id)target
 {
-//	NSMutableArray * msgs = [NSMutableArray nonRetainingArray];
-	NSMutableArray * msgs = [NSMutableArray array];
+	NSMutableArray * msgs = [NSMutableArray nonRetainingArray];
 	
 	for ( BeeMessage * msg in [BeeMessageQueue sharedInstance].allMessages )
 	{
@@ -153,8 +157,32 @@
 	{
 		[msg cancel];
 	}
-
+	
 	return msgs.count ? YES : NO;
+}
+
++ (BOOL)cancel_ByClassName:(NSString *)className
+{
+	NSMutableArray * msgs = [NSMutableArray nonRetainingArray];
+	
+	for ( BeeMessage * msg in [BeeMessageQueue sharedInstance].allMessages )
+	{
+		if ( [msg isKindOfClass:self] )
+		{
+            //add by LinSC on 14-02-27
+            if ((className==nil) || (msg.childClassName==nil) || (className==msg.childClassName)) {
+                [msgs addObject:msg];
+            }
+			//[msgs addObject:msg];
+		}
+	}
+	
+	for ( BeeMessage * msg in msgs )
+	{
+		[msg cancel];
+	}
+    
+	return NO;
 }
 
 - (void)routine

@@ -117,6 +117,8 @@ AS_INT( STATE_SUCCEED )			// 消息处理成功（本地或网络）
 AS_INT( STATE_FAILED )			// 消息处理失败（本地或网络）
 AS_INT( STATE_CANCELLED )		// 消息被取消了
 
+@property (nonatomic, retain)   NSString*               childClassName; //add by LinSC
+
 @property (nonatomic, readonly) BeeMessageBlockN		INPUT;
 @property (nonatomic, readonly) BeeMessageBlockN		OUTPUT;
 @property (nonatomic, readonly) BeeMessageObjectBlockN	GET_INPUT;
@@ -191,6 +193,8 @@ AS_INT( STATE_CANCELLED )		// 消息被取消了
 - (BeeMessage *)cancel;
 - (BeeMessage *)reset;
 
+- (BeeMessage *)send_ChildClassName:(NSString *)className;  //add by LinSC
+
 - (BOOL)is:(NSString *)name;
 - (BOOL)isKindOf:(NSString *)prefix;
 - (BOOL)isTwinWith:(BeeMessage *)msg;	// 与某消息同属于一个发起源，相同NAME
@@ -223,7 +227,6 @@ AS_INT( STATE_CANCELLED )		// 消息被取消了
 - (void)internalStartTimer;
 - (void)internalStopTimer;
 - (void)internalNotifySending;
-- (void)internalNotifyWaiting;
 - (void)internalNotifySucceed;
 - (void)internalNotifyFailed;
 - (void)internalNotifyCancelled;

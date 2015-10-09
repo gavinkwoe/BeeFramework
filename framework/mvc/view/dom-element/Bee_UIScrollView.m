@@ -1575,13 +1575,12 @@ DEF_SIGNAL( FOOTER_REFRESH )
 		}
 	}
     
-    item.view.hidden = YES;
-    
 	if ( shouldRemove )
 	{
 		[item.view removeFromSuperview];
 	}
-
+    
+	item.view.hidden = YES;
 	item.view = nil;
 	
     PERF_LEAVE
@@ -3088,7 +3087,6 @@ DEF_SIGNAL( FOOTER_REFRESH )
     //	{
     //		self.layer.shouldRasterize = NO;
     //	}
-    
 	if ( decelerate )
 	{
 		// header loader
@@ -3193,7 +3191,6 @@ DEF_SIGNAL( FOOTER_REFRESH )
     //	{
     //		self.layer.shouldRasterize = NO;
     //	}
-    
 	if ( _shouldNotify )
 	{
 		if ( self.enableAllEvents )

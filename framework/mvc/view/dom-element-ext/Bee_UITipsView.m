@@ -759,7 +759,7 @@ DEF_SIGNAL( DID_DISAPPEAR );
 		_labelView.textColor = [UIColor whiteColor];
         _labelView.backgroundColor = [UIColor clearColor];
         _labelView.lineBreakMode = UILineBreakModeClip;
-		_labelView.numberOfLines = 2;
+		_labelView.numberOfLines = 0;
         [self addSubview:_labelView];
 	}
 	
@@ -909,7 +909,7 @@ DEF_SIGNAL( DID_DISAPPEAR );
 	indicatorFrame.size.width = 14.0f;
 	indicatorFrame.size.height = 14.0f;
 	indicatorFrame.origin.x = (self.bounds.size.width - indicatorFrame.size.width) / 2.0f;
-	indicatorFrame.origin.y = (self.bounds.size.height - indicatorFrame.size.height) / 2.0f - 10.0f;
+	indicatorFrame.origin.y = (self.bounds.size.height - indicatorFrame.size.height) / 2.0f;
 	_indicator.frame = indicatorFrame;
 
 	CGRect labelFrame;

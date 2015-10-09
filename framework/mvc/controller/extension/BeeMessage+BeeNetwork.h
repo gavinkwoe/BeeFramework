@@ -50,6 +50,8 @@
 @property (nonatomic, readonly) BeeHTTPRequest *	request;
 @property (nonatomic, readonly) NSData *			response;
 @property (nonatomic, readonly) NSString *			responseString;
+@property (nonatomic, readonly) int                 responseCode;
+
 
 // new methods
 
@@ -61,5 +63,6 @@
 @property (nonatomic, readonly) id					HTTPResponse;
 @property (nonatomic, readonly) NSData *			HTTPResponseData;
 @property (nonatomic, readonly) NSString *			HTTPResponseString;
+@property (nonatomic, readonly) int                 HTTPResponseStatusCode;
 
 @end

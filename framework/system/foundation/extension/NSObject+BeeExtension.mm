@@ -80,36 +80,15 @@
 
 	for ( Class thisClass in classStack )
 	{
-		ImpFuncType prevImp = NULL;
-		
 		Method method = class_getInstanceMethod( thisClass, sel );
-		
 		if ( method )
 		{
-			ImpFuncType imp = (ImpFuncType)method_getImplementation( method );
-			
+			IMP imp = method_getImplementation( method );
 			if ( imp )
 			{
-				if ( imp == prevImp )
-				{
-					continue;
-				}
-				
 				imp( self, sel, nil );
-				
-				prevImp = imp;
 			}
 		}
-
-//		Method method = class_getInstanceMethod( thisClass, sel );
-//		if ( method )
-//		{
-//			IMP imp = method_getImplementation( method );
-//			if ( imp )
-//			{
-//				imp( self, sel, nil );
-//			}
-//		}
 	}
 }
 
@@ -124,36 +103,15 @@
 	
 	for ( Class thisClass in classStack )
 	{
-		ImpFuncType prevImp = NULL;
-		
 		Method method = class_getInstanceMethod( thisClass, sel );
-		
 		if ( method )
 		{
-			ImpFuncType imp = (ImpFuncType)method_getImplementation( method );
-			
+			IMP imp = method_getImplementation( method );
 			if ( imp )
 			{
-				if ( imp == prevImp )
-				{
-					continue;
-				}
-				
 				imp( self, sel, nil );
-				
-				prevImp = imp;
 			}
 		}
-
-//		Method method = class_getInstanceMethod( thisClass, sel );
-//		if ( method )
-//		{
-//			IMP imp = method_getImplementation( method );
-//			if ( imp )
-//			{
-//				imp( self, sel, nil );
-//			}
-//		}
 	}
 }
 

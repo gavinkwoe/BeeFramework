@@ -43,7 +43,7 @@
 #pragma mark -
 
 #undef	DEFAULT_TIMEOUT_SECONDS
-#define	DEFAULT_TIMEOUT_SECONDS		(30.0f)
+#define	DEFAULT_TIMEOUT_SECONDS		(10.0f)
 
 #pragma mark -
 
@@ -89,7 +89,7 @@
 	BeeMessageBlock				_whenSucceed;
 	BeeMessageBlock				_whenFailed;
 	BeeMessageBlock				_whenCancelled;
-    
+
 #if __BEE_DEVELOPMENT__
 	NSMutableArray *			_callstack;
 #endif	// #if __BEE_DEVELOPMENT__
@@ -109,7 +109,7 @@ DEF_STRING( ERROR_DOMAIN_SERVER,	@"domain.server" )
 DEF_STRING( ERROR_DOMAIN_CLIENT,	@"domain.client" )
 DEF_STRING( ERROR_DOMAIN_NETWORK,	@"domain.network" )
 
-DEF_INT( ERROR_CODE_OK,			0 )
+DEF_INT( ERROR_CODE_OK,			0 )		
 DEF_INT( ERROR_CODE_UNKNOWN,	-1 )
 DEF_INT( ERROR_CODE_TIMEOUT,	-2 )
 DEF_INT( ERROR_CODE_PARAMS,		-3 )
@@ -178,6 +178,7 @@ DEF_INT( STATE_WAITING,		5 )
 @synthesize succeed;
 @synthesize failed;
 @synthesize cancelled;
+@synthesize childClassName;
 
 @synthesize timeElapsed;
 @synthesize timeCostPending;
@@ -198,7 +199,7 @@ static NSMutableArray *			__globalExecuters = nil;
 		_seconds = DEFAULT_TIMEOUT_SECONDS;
 		_timer = nil;
 		_useCache = NO;
-        
+
 		_nextState = BeeMessage.STATE_CREATED;
 		_state = BeeMessage.STATE_CREATED;
 		_message = nil;
@@ -211,14 +212,14 @@ static NSMutableArray *			__globalExecuters = nil;
 		{
 			[_input addEntriesFromDictionary:__globalHeaders];
 		}
-        
+
 		_errorCode = BeeMessage.ERROR_CODE_OK;
 		_errorDomain = nil;
 		
 		_initTimeStamp = [NSDate timeIntervalSinceReferenceDate];
 		_sendTimeStamp = _initTimeStamp;
 		_recvTimeStamp = _initTimeStamp;
-        
+
 		_arrived = NO;
 		
 		if ( [BeeMessageQueue sharedInstance].whenCreate )
@@ -226,9 +227,9 @@ static NSMutableArray *			__globalExecuters = nil;
 			[BeeMessageQueue sharedInstance].whenCreate( self );
 		}
 		
-#if __BEE_DEVELOPMENT__
+	#if __BEE_DEVELOPMENT__
 		_callstack = [[NSMutableArray alloc] init];
-#endif	// #if __BEE_DEVELOPMENT__
+	#endif	// #if __BEE_DEVELOPMENT__
 	}
 	
 	return self;
@@ -242,12 +243,12 @@ static NSMutableArray *			__globalExecuters = nil;
 - (void)dealloc
 {
 	[self cancelRequests];
-    
+
 	[_timer invalidate];
 	[_message release];
 	[_input release];
 	[_output release];
-    
+
 	[_errorDomain release];
 	[_errorDesc release];
 	
@@ -263,7 +264,7 @@ static NSMutableArray *			__globalExecuters = nil;
 	self.whenSucceed = nil;
 	self.whenFailed = nil;
 	self.whenCancelled = nil;
-    
+
 	[super dealloc];
 }
 
@@ -276,7 +277,7 @@ static NSMutableArray *			__globalExecuters = nil;
 {
 	BeeMessage * bmsg = [[BeeMessage alloc] init];
 	bmsg.message = msg;
-	return [bmsg autorelease];
+	return [bmsg autorelease];	
 }
 
 + (BeeMessage *)message:(NSString *)msg timeoutSeconds:(NSUInteger)seconds
@@ -312,7 +313,7 @@ static NSMutableArray *			__globalExecuters = nil;
 	{
 		__globalHeaders = [[NSMutableDictionary alloc] init];
 	}
-    
+
 	return __globalHeaders;
 }
 
@@ -337,7 +338,7 @@ static NSMutableArray *			__globalExecuters = nil;
 {
 	if ( nil == key )
 		return NO;
-    
+
 	NSMutableDictionary * dict = [BeeMessage __globalHeaders];
 	if ( dict )
 	{
@@ -351,7 +352,7 @@ static NSMutableArray *			__globalExecuters = nil;
 {
 	if ( nil == key )
 		return;
-    
+
 	NSMutableDictionary * dict = [BeeMessage __globalHeaders];
 	if ( dict )
 	{
@@ -367,7 +368,7 @@ static NSMutableArray *			__globalExecuters = nil;
 	{
 		__globalExecuters = [[NSMutableArray nonRetainingArray] retain];
 	}
-    
+
 	return __globalExecuters;
 }
 
@@ -416,7 +417,7 @@ static NSMutableArray *			__globalExecuters = nil;
 	
 	self.errorCode = self.ERROR_CODE_TIMEOUT;
 	self.errorDomain = self.ERROR_DOMAIN_NETWORK;
-    
+
 	[self changeState:BeeMessage.STATE_FAILED];
 }
 
@@ -424,10 +425,10 @@ static NSMutableArray *			__globalExecuters = nil;
 {
 	if ( YES == _emitted || nil == _executer )
 		return;
-    
+
 	[_timer invalidate];
 	_timer = nil;
-    
+
 	if ( _seconds > 0.0f )
 	{
 		_timer = [NSTimer scheduledTimerWithTimeInterval:_seconds
@@ -436,7 +437,7 @@ static NSMutableArray *			__globalExecuters = nil;
 												userInfo:nil
 												 repeats:NO];
 	}
-    
+
 	_emitted = YES;
 }
 
@@ -446,7 +447,7 @@ static NSMutableArray *			__globalExecuters = nil;
 		return;
 	
 	[_timer invalidate];
-	_timer = nil;
+	_timer = nil;	
 	
 	_emitted = NO;
 }
@@ -462,46 +463,24 @@ static NSMutableArray *			__globalExecuters = nil;
 		{
 			self.whenSending();
 		}
-        
-		if ( self.whenUpdate )
-		{
-			self.whenUpdate();
-		}
-        
-		[self callResponder];
-	}
-    
-	INFO( @"Message '%@' sent", _message );
-}
 
-- (void)internalNotifyWaiting
-{
-	_recvTimeStamp = [NSDate timeIntervalSinceReferenceDate];
-	
-	if ( NO == self.disabled )
-	{
-		if ( self.whenWaiting )
-		{
-			self.whenWaiting();
-		}
-        
 		if ( self.whenUpdate )
 		{
 			self.whenUpdate();
 		}
-        
-		[self callResponder];
+
+		[self callResponder];		
 	}
-    
-	INFO( @"Message '%@' waiting", _message );
+
+	INFO( @"'%@' sent", _message );
 }
 
 - (void)internalNotifySucceed
 {
-	INFO( @"Message '%@' succeed", _message );
+	INFO( @"'%@' succeed", _message );
 	
 	_recvTimeStamp = [NSDate timeIntervalSinceReferenceDate];
-    
+	
 	if ( NO == self.disabled )
 	{
 		if ( self.whenSucceed )
@@ -520,8 +499,9 @@ static NSMutableArray *			__globalExecuters = nil;
 
 - (void)internalNotifyFailed
 {
-	ERROR( @"Message '%@' failed", _message );
-    
+    //与 (void)changeState:(NSUInteger)state 重复提示
+	//INFO( @"'%@' failed", _message );
+
 	_recvTimeStamp = [NSDate timeIntervalSinceReferenceDate];
 	
 	if ( NO == self.disabled )
@@ -535,14 +515,14 @@ static NSMutableArray *			__globalExecuters = nil;
 		{
 			self.whenUpdate();
 		}
-        
+
 		[self callResponder];
 	}
 }
 
 - (void)internalNotifyCancelled
-{
-	INFO( @"Message '%@' cancelled", _message );
+{	
+	INFO( @"'%@' cancelled", _message );
 	
 	_recvTimeStamp = [NSDate timeIntervalSinceReferenceDate];
 	
@@ -557,18 +537,19 @@ static NSMutableArray *			__globalExecuters = nil;
 		{
 			self.whenUpdate();
 		}
-        
+
 		[self callResponder];
 	}
 }
 
 - (void)internalNotifyProgressUpdated
 {
-	INFO( @"Message '%@' progress updated", _message );
-    
+	INFO( @"'%@' progress updated", _message );
+
 	if ( NO == _toldProgress )
 		return;
 	
+	_state = BeeMessage.STATE_WAITING;
 	_progressed = YES;
 	
 	if ( NO == self.disabled )
@@ -578,10 +559,10 @@ static NSMutableArray *			__globalExecuters = nil;
 			self.whenProgressed();
 		}
 		
-        //		if ( self.whenUpdate )
-        //		{
-        //			self.whenUpdate();
-        //		}
+		if ( self.whenUpdate )
+		{
+			self.whenUpdate();
+		}
 
 		[self callResponder];
 	}
@@ -598,7 +579,7 @@ static NSMutableArray *			__globalExecuters = nil;
 {
 	if ( nil == obj )
 		return;
-    
+
 	if ( self.created || self.sending )
 	{
 		if ( [obj respondsToSelector:@selector(prehandleMessage:)] )
@@ -616,10 +597,10 @@ static NSMutableArray *			__globalExecuters = nil;
 		NSArray * array = [_message componentsSeparatedByString:@"."];
 		if ( array && array.count > 2 )
 		{
-            //			NSString * prefix = (NSString *)[array objectAtIndex:0];
+//			NSString * prefix = (NSString *)[array objectAtIndex:0];
 			NSString * clazz = (NSString *)[array objectAtIndex:1];
 			NSString * name = (NSString *)[array objectAtIndex:2];
-            
+
 			if ( NO == handled )
 			{
 				NSString *	selectorName = [NSString stringWithFormat:@"handleMessage_%@_%@:", clazz, name];
@@ -632,7 +613,7 @@ static NSMutableArray *			__globalExecuters = nil;
 					handled = YES;
 				}
 			}
-            
+				
 			if ( NO == handled )
 			{
 				NSString *	selectorName = [NSString stringWithFormat:@"handleMessage_%@:", clazz];
@@ -645,30 +626,30 @@ static NSMutableArray *			__globalExecuters = nil;
 					handled = YES;
 				}
 			}
-            
+
 			if ( NO == handled )
 			{
 				NSString * selectorName;
 				SEL selector;
-                
+
 				selectorName = [NSString stringWithFormat:@"handle%@:", clazz];
 				selector = NSSelectorFromString( selectorName );
 				
 				if ( [obj respondsToSelector:selector] )
 				{
 					[obj performSelector:selector withObject:self];
-                    
+
 					handled = YES;
 				}
 			}
-		}
+		}	
 	}
 	
 	if ( NO == handled )
 	{
 		NSString *	selectorName = [NSString stringWithFormat:@"%@:", [[self class] description]];
 		SEL			selector = NSSelectorFromString(selectorName);
-        
+
 		if ( [obj respondsToSelector:selector] )
 		{
 			[obj performSelector:selector withObject:self];
@@ -676,7 +657,7 @@ static NSMutableArray *			__globalExecuters = nil;
 			handled = YES;
 		}
 	}
-    
+
 	if ( NO == handled )
 	{
 		NSString *	selectorName = [NSString stringWithFormat:@"handleMessage_%@:", [[self class] description]];
@@ -689,7 +670,7 @@ static NSMutableArray *			__globalExecuters = nil;
 			handled = YES;
 		}
 	}
-    
+
 	if ( NO == handled )
 	{
 		if ( obj && [obj respondsToSelector:@selector(handleMessage:)] )
@@ -697,7 +678,7 @@ static NSMutableArray *			__globalExecuters = nil;
 			[obj performSelector:@selector(handleMessage:) withObject:self];
 		}
 	}
-    
+
 	if ( [obj respondsToSelector:@selector(posthandleMessage:)] )
 	{
 		[obj posthandleMessage:self];
@@ -708,11 +689,25 @@ static NSMutableArray *			__globalExecuters = nil;
 {
 	if ( YES == _emitted )
 		return self;
-    
+
 #if __BEE_DEVELOPMENT__
 	[_callstack addObjectsFromArray:[BeeRuntime callstack:16]];
 #endif	// #if __BEE_DEVELOPMENT__
+
+	[[BeeMessageQueue sharedInstance] sendMessage:self];
+	return self;
+}
+
+- (BeeMessage *)send_ChildClassName:(NSString *)className
+{
+	if ( YES == _emitted )
+		return self;
     
+#if (__ON__ == __BEE_DEVELOPMENT__)
+	[_callstack addObjectsFromArray:[BeeRuntime callstack:16]];
+#endif	// #if (__ON__ == __BEE_DEVELOPMENT__)
+    
+    self.childClassName = className;
 	[[BeeMessageQueue sharedInstance] sendMessage:self];
 	return self;
 }
@@ -766,7 +761,7 @@ static NSMutableArray *			__globalExecuters = nil;
 	if ( NO == _emitted || nil == _executer )
 	{
 		[self internalStopTimer];
-        
+
 		[[BeeMessageQueue sharedInstance] removeMessage:self];
 		return self;
 	}
@@ -775,7 +770,7 @@ static NSMutableArray *			__globalExecuters = nil;
 	{
 		[self changeState:BeeMessage.STATE_CANCELLED];
 	}
-    
+
 	return self;
 }
 
@@ -783,7 +778,7 @@ static NSMutableArray *			__globalExecuters = nil;
 {
 	[self cancelRequests];
 	[self internalStopTimer];
-    
+
 	self.responder = nil;
 	
 	self.whenUpdate = nil;
@@ -793,11 +788,11 @@ static NSMutableArray *			__globalExecuters = nil;
 	self.whenSucceed = nil;
 	self.whenFailed = nil;
 	self.whenCancelled = nil;
-    
+
 	_initTimeStamp = [NSDate timeIntervalSinceReferenceDate];
 	_sendTimeStamp = _initTimeStamp;
 	_recvTimeStamp = _sendTimeStamp;
-    
+		
 	return self;
 }
 
@@ -830,9 +825,9 @@ static NSMutableArray *			__globalExecuters = nil;
 {
 	if ( self == msg )
 	{
-		return YES;
+		return YES;		
 	}
-    
+
 	if ( [_message isEqualToString:msg.message] && _responder == msg.responder )
 	{
 		return YES;
@@ -854,7 +849,7 @@ static NSMutableArray *			__globalExecuters = nil;
 {
 	self.errorCode = code;
 	self.errorDomain = BeeMessage.ERROR_DOMAIN_UNKNOWN;
-	self.errorDesc = @"unknown";
+	self.errorDesc = @"unknown";	
 }
 
 - (void)setLastError:(NSInteger)code domain:(NSString *)domain
@@ -865,7 +860,7 @@ static NSMutableArray *			__globalExecuters = nil;
 }
 
 - (void)setLastError:(NSInteger)code domain:(NSString *)domain desc:(NSString *)desc
-{
+{	
 	self.errorCode = code;
 	self.errorDomain = domain;
 	self.errorDesc = desc ? desc : @"";
@@ -967,7 +962,7 @@ static NSMutableArray *			__globalExecuters = nil;
     
 	if ( _state == newState )
 		return;
-    
+
 	_state = newState;
 	_nextState = newState;
 	
@@ -976,7 +971,7 @@ static NSMutableArray *			__globalExecuters = nil;
 		if ( NO == _arrived )
 		{
 			// TODO:
-			_arrived = YES;
+			_arrived = YES;			
 		}
 	}
 	
@@ -991,7 +986,7 @@ static NSMutableArray *			__globalExecuters = nil;
 			[executer index:self];
 		}
 	}
-    
+
 	if ( _executable )
 	{
 		[_executer route:self];
@@ -1003,7 +998,7 @@ static NSMutableArray *			__globalExecuters = nil;
 		{
 			_executer = [BeeMessageController routes:_message];
 		}
-        
+
 		if ( [_executer respondsToSelector:@selector(route:)] )
 		{
 			[_executer route:self];
@@ -1013,13 +1008,13 @@ static NSMutableArray *			__globalExecuters = nil;
 			[_executer index:self];
 		}
 	}
-    
+
 	if ( BeeMessage.ERROR_CODE_OK != _errorCode )
 	{
 		_nextState = BeeMessage.STATE_FAILED;
 		_state = BeeMessage.STATE_FAILED;
 	}
-    
+
 	if ( BeeMessage.STATE_CREATED == _state )
 	{
 		// TODO: nothing to do
@@ -1041,7 +1036,7 @@ static NSMutableArray *			__globalExecuters = nil;
 	}
 	else if ( BeeMessage.STATE_WAITING == _state )
 	{
-		[self internalNotifyWaiting];
+		// TODO: nothing to do
 	}
 	else if ( BeeMessage.STATE_SUCCEED == _state )
 	{
@@ -1063,12 +1058,12 @@ static NSMutableArray *			__globalExecuters = nil;
 		if ( _nextState == _state )
         {
 			[self internalStopTimer];
-			[self internalNotifyFailed];
-            
+			[self internalNotifyFailed];	
+
 			if ( _nextState == _state )
 			{
 				[self cancelRequests];
-                
+
 				shouldRemove = YES;
 			}
 		}
@@ -1077,23 +1072,23 @@ static NSMutableArray *			__globalExecuters = nil;
 	{
         if ( _nextState == _state )
         {
-			[self internalStopTimer];
+			[self internalStopTimer];	
 			[self internalNotifyCancelled];
-            
+
 			if ( _nextState == _state )
 			{
 				[self cancelRequests];
-                
+
 				shouldRemove = YES;
 			}
 		}
 	}
-    
+
 	if ( [BeeMessageQueue sharedInstance].whenUpdate )
 	{
 		[BeeMessageQueue sharedInstance].whenUpdate( self );
 	}
-    
+
 	if ( shouldRemove )
 	{
 		[[BeeMessageQueue sharedInstance] removeMessage:self];
@@ -1144,7 +1139,7 @@ static NSMutableArray *			__globalExecuters = nil;
 				{
 					[self.input setObject:value atPath:key];
 				}
-                
+
 				va_end( args );
 			}
 		}

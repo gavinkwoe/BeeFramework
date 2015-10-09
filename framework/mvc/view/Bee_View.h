@@ -58,8 +58,6 @@
 #import "BeeUIBoard+Popover.h"
 #import "BeeUIBoard+Traversing.h"
 
-#import "BeeUIStack+Popover.h"
-
 #import "UIView+UINavigationController.h"
 #import "UIView+UIViewController.h"
 #import "UIViewController+LifeCycle.h"

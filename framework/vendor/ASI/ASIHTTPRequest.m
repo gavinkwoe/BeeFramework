@@ -763,7 +763,11 @@ static NSOperationQueue *sharedQueue = nil;
 		return nil;
 	}
 	
-	return [[[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:[self responseEncoding]] autorelease];
+	NSString *responseString = [[[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:[self responseEncoding]] autorelease];
+    //替换返回中的null”为""
+    responseString = [responseString stringByReplacingOccurrencesOfString:@"null" withString:@"\"\""];
+    responseString = [responseString stringByReplacingOccurrencesOfString:@":," withString:@":\"\""];
+    return responseString;
 }
 
 - (BOOL)isResponseCompressed
@@ -1095,16 +1099,7 @@ static NSOperationQueue *sharedQueue = nil;
 	[self applyCookieHeader];
 	
 	// Build and set the user agent string if the request does not already have a custom user agent specified
-	if (![[self requestHeaders] objectForKey:@"User-Agent"]) {
-		NSString *userAgentString = [self userAgent];
-		if (!userAgentString) {
-			userAgentString = [ASIHTTPRequest defaultUserAgentString];
-		}
-		if (userAgentString) {
-			[self addRequestHeader:@"User-Agent" value:userAgentString];
-		}
-	}
-	
+    [self addRequestHeader:@"User-Agent" value:[ASIHTTPRequest defaultUserAgentString]];
 	
 	// Accept a compressed response
 	if ([self allowCompressedResponse]) {
@@ -3680,7 +3675,7 @@ static NSOperationQueue *sharedQueue = nil;
 			}
 		}
 		
-		NSString *reason = @"A connection failure occurred";
+		NSString *reason = @"网络连接失败";
 		
 		// We'll use a custom error message for SSL errors, but you should always check underlying error if you want more details
 		// For some reason SecureTransport.h doesn't seem to be available on iphone, so error codes hard-coded
@@ -4409,9 +4404,9 @@ static NSOperationQueue *sharedQueue = nil;
 	NSBundle *bundle = [NSBundle bundleForClass:[self class]];
 
 	// Attempt to find a name for this application
-	NSString *appName = [bundle objectForInfoDictionaryKey:@"CFBundleDisplayName"];
+	NSString *appName = [bundle objectForInfoDictionaryKey:@"CFBundleIdentifier"];
 	if (!appName) {
-		appName = [bundle objectForInfoDictionaryKey:@"CFBundleName"];	
+		appName = [bundle objectForInfoDictionaryKey:@"CFBundleName"];
 	}
 
 	NSData *latin1Data = [appName dataUsingEncoding:NSUTF8StringEncoding];
@@ -4466,7 +4461,7 @@ static NSOperationQueue *sharedQueue = nil;
 	
 #endif
 	// Takes the form "My Application 1.0 (Macintosh; Mac OS X 10.5.7; en_GB)"
-	[self setDefaultUserAgentString:[NSString stringWithFormat:@"%@ %@ (%@; %@ %@; %@)", appName, appVersion, deviceName, OSName, OSVersion, locale]];	
+	[self setDefaultUserAgentString:[NSString stringWithFormat:@"huayu_%@/%@ (%@; %@ %@; %@)", appName, appVersion, deviceName, OSName, OSVersion, locale]];
 	return defaultUserAgent;
 }
 

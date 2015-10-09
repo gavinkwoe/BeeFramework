@@ -61,6 +61,7 @@ typedef NSComparisonResult	(^NSMutableArrayCompareBlock)( id left, id right );
 @property (nonatomic, readonly) NSMutableArrayAppendBlock	APPEND;
 
 + (NSMutableArray *)nonRetainingArray;			// copy from Three20
+- (void)safeAddObject:(id)obj;
 
 - (void)addUniqueObject:(id)object compare:(NSMutableArrayCompareBlock)compare;
 - (void)addUniqueObjects:(const id [])objects count:(NSUInteger)count compare:(NSMutableArrayCompareBlock)compare;
@@ -92,5 +93,4 @@ typedef NSComparisonResult	(^NSMutableArrayCompareBlock)( id left, id right );
 
 - (void)removeObject:(NSObject *)obj usingComparator:(NSMutableArrayCompareBlock)cmptr;
 
-- (NSMutableArray *)shuffle;
 @end

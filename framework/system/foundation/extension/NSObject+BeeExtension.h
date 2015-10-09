@@ -39,8 +39,6 @@
 
 #pragma mark -
 
-typedef void ( *ImpFuncType )( id a, SEL b, void * c );
-
 @interface NSObject(BeeExtension)
 
 + (instancetype)object;

@@ -36,6 +36,7 @@
 
 #import "CSSOM.h"
 #import "CSSSelector.h"
+#import "CSSTokenizer.h"
 #import "CSSStyleSheet.h"
 
 #pragma mark -

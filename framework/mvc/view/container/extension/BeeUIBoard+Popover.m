@@ -61,7 +61,7 @@ DEF_SIGNAL( POPOVER_DID_DISMISSED )	// Popover已经隐藏
 
 - (void)setPopover:(UIPopoverController *)popover
 {
-	objc_setAssociatedObject( self, KEY_POPOVER, popover, OBJC_ASSOCIATION_RETAIN );
+	objc_setAssociatedObject( self, KEY_POPOVER, popover, OBJC_ASSOCIATION_ASSIGN );
 }
 
 #pragma mark -

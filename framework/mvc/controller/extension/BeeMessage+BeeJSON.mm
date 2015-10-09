@@ -85,6 +85,23 @@
 	return [[block copy] autorelease];
 }
 
+- (BeeMessageJSONRequestBlock)JSON_PUT
+{
+	BeeMessageJSONRequestBlock block = ^ BeeHTTPRequest * ( NSString * url, id json )
+	{
+		BeeHTTPRequest * req = self.HTTP_PUT( url );
+        
+		if ( req && json )
+		{
+			req.BODY( [json JSONData] );
+		}
+        
+		return req;
+	};
+	
+	return [[block copy] autorelease];
+}
+
 - (NSObject *)cachedResponseJSON
 {
 	return objc_getAssociatedObject( self, KEY_RESPONSE_JSON );
@@ -107,19 +124,21 @@
 	NSString * string = self.responseString;
 	if ( nil == string || 0 == string.length )
 		return nil;
-
-	NSError * error = nil;
-	
+    string = [string stringByReplacingOccurrencesOfString:@"\"\"\"\"" withString:@"\"\""];
 //	NSObject * obj = [string objectFromJSONString];
-	NSObject * obj = [string objectFromJSONStringWithParseOptions:JKParseOptionValidFlags error:&error];
-	if ( nil == obj )
+	NSObject * obj = [string objectFromJSONStringWithParseOptions:JKParseOptionValidFlags error:nil];
+	if ( obj )
 	{
-		ERROR( @"%@\n\n%@", [error description], string );
-		return nil;
+//		[self setCachedResponseJSON:obj];
+		return obj;
 	}
-	
-//	[self setCachedResponseJSON:obj];
-	return obj;
+
+	return nil;
+}
+
+- (int)responseStatusCode
+{
+    return self.responseCode;
 }
 
 - (NSDictionary *)responseJSONDictionary

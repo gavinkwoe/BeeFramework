@@ -44,7 +44,7 @@ AS_SIGNAL( POPOVER_DID_PRESENT )	// Popover已经显示
 AS_SIGNAL( POPOVER_WILL_DISMISS )	// Popover将要隐藏
 AS_SIGNAL( POPOVER_DID_DISMISSED )	// Popover已经隐藏
 
-@property (nonatomic, retain) UIPopoverController *	popover;
+@property (nonatomic, assign) UIPopoverController *	popover;
 
 - (void)presentPopoverForView:(UIView *)view
 				  contentSize:(CGSize)size

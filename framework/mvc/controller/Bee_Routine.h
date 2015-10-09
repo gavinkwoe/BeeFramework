@@ -44,7 +44,9 @@
 
 #pragma mark -
 
-@interface BeeRoutine : BeeMessage<BeeMessageExecutor>
+@interface BeeRoutine : BeeMessage<BeeMessageExecutor>{
+    NSString * _ChildClassName;
+}
 
 @property (nonatomic, retain) NSObject *	userObject;
 
@@ -58,7 +60,11 @@
 + (BOOL)sending;
 + (BOOL)cancel;
 + (BOOL)cancel:(id)target;
+//add by LinSC on 14-02-27
++ (BOOL)cancel_ByClassName:(NSString *)className;
 
 - (void)routine;
+
+- (void)messageAddInfo:(NSString *)inString;
 
 @end

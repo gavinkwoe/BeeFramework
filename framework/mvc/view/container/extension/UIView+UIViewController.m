@@ -84,20 +84,20 @@
 {
 	UIView * view = self;
 	
-//	while ( nil != view )
-//	{
-//		if ( nil == view.superview )
-//			break;
-//
-//		view = view.superview;
-//	}
-
-	UIResponder * nextResponder = [view nextResponder];
-
-	if ( nextResponder && [nextResponder isKindOfClass:[UIViewController class]] )
+	while ( nil != view )
 	{
-		return (UIViewController *)nextResponder;
-	}
+		if ( nil == view.superview )
+			break;
+
+		view = view.superview;
+
+        UIResponder * nextResponder = [view nextResponder];
+
+        if ( nextResponder && [nextResponder isKindOfClass:[UIViewController class]] )
+        {
+            return (UIViewController *)nextResponder;
+        }
+    }
 	
 	return nil;
 }

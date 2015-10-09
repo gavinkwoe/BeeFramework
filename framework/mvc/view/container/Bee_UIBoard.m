@@ -364,7 +364,7 @@ static NSMutableArray *		__allBoards = nil;
 - (void)dealloc
 {
 //	[self unload];
-	[self performUnload];
+//	[self performUnload];
 
 	[self cancelMessages];
 	[self cancelRequests];
@@ -514,7 +514,10 @@ static NSMutableArray *		__allBoards = nil;
 	}
 	else
 	{
-		self.view = [[[BeeUIBoardView alloc] initWithFrame:CGRectZero] autorelease];
+        // bee默认创建的大小为CGRectZero，修改为实际大小 LinSC
+        [super loadView];
+        self.view = [[[BeeUIBoardView alloc] initWithFrame:self.view.frame] autorelease];
+//		self.view = [[[BeeUIBoardView alloc] initWithFrame:CGRectZero] autorelease];
 		self.view.signalReceiver = self;
 //		self.view.userInteractionEnabled = YES;
 		self.view.backgroundColor = [UIColor clearColor];
@@ -955,7 +958,7 @@ static NSMutableArray *		__allBoards = nil;
 				NSArray * array = [[self.view.subviews copy] autorelease];
 				for ( UIView * view in array )
 				{
-					[view removeFromSuperview];
+//					[view removeFromSuperview];
 				}
 			}
 			
