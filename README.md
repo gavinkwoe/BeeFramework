@@ -10,7 +10,7 @@ QQ Group: 314365063
 
 Yet another great UI Solution
 
-(https://github.com/hackers-painters/samurai-native)[https://github.com/hackers-painters/samurai-native]
+[https://github.com/hackers-painters/samurai-native](https://github.com/hackers-painters/samurai-native)
 
 ## 0.6.0 New Feature - Liveload
 
