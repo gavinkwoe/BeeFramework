@@ -55,9 +55,6 @@ typedef void ( *ImpFuncType )( id a, SEL b, void * c );
 - (void)performSelectorAlongChain:(SEL)sel;
 - (void)performSelectorAlongChainReversed:(SEL)sel;
 
-- (void)performMsgSendWithTarget:(id)target sel:(SEL)sel signal:(id)signal;
-- (BOOL)performMsgSendWithTarget:(id)target sel:(SEL)sel;
-
 - (void)copyPropertiesFrom:(id)obj;
 
 @end

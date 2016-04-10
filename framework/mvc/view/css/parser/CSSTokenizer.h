@@ -219,6 +219,5 @@ extern char *       yytext;
 extern void         yy_create_input(const char* buffer);
 extern void         yy_delete_input();
 extern int          yyparse(CSSParser *parser);
-int                 cssToken;
 
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

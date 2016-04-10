@@ -205,44 +205,37 @@
 	
 	if ( [self respondsToSelector:@selector(setStrech:)] )
 	{
-		[self performMsgSendWithTarget:self sel:@selector(setStrech:) signal:(void *)&stretched];
-//		objc_msgSend( self, @selector(setStrech:), stretched );
+        [(BeeUIImageView *)self setStrech:stretched];
 	}
 	
 	if ( [self respondsToSelector:@selector(setRound:)] )
 	{
-		[self performMsgSendWithTarget:self sel:@selector(setRound:) signal:(void *)&rounded];
-//		objc_msgSend( self, @selector(setRound:), rounded );
+        [(BeeUIImageView *)self setRound:rounded];
 	}
 	
 	if ( [self respondsToSelector:@selector(setGray:)] )
 	{
-		[self performMsgSendWithTarget:self sel:@selector(setGray:) signal:(void *)&grayed];
-//		objc_msgSend( self, @selector(setGray:), grayed );
+        [(BeeUIImageView *)self setGray:grayed];
 	}
 	
 	if ( [self respondsToSelector:@selector(setPattern:)] )
 	{
-		[self performMsgSendWithTarget:self sel:@selector(setPattern:) signal:(void *)&pattern];
-//		objc_msgSend( self, @selector(setPattern:), pattern );
+        [(BeeUIImageView *)self setPattern:pattern];
 	}
 
 	if ( [self respondsToSelector:@selector(setStrechInsets:)] )
 	{
-		[self performMsgSendWithTarget:self sel:@selector(setStrechInsets:) signal:(void *)&contentInsets];
-//		objc_msgSend( self, @selector(setStrechInsets:), contentInsets );
+        [(BeeUIImageView *)self setStrechInsets:contentInsets];
 	}
     
     if ( [self respondsToSelector:@selector(setCrop:)] )
 	{
-		[self performMsgSendWithTarget:self sel:@selector(setCrop:) signal:(void *)&croped];
-//		objc_msgSend( self, @selector(setCrop:), croped );
+        [(BeeUIImageView *)self setCrop:croped];
 	}
     
     if ( [self respondsToSelector:@selector(setCropSize:)] )
     {
-		[self performMsgSendWithTarget:self sel:@selector(setCropSize:) signal:(void *)&cropSize];
-//		objc_msgSend( self, @selector(setCropSize:), cropSize );
+        [(BeeUIImageView *)self setCropSize:cropSize];
     }
 
 	self.contentMode = contentMode;
@@ -316,8 +309,7 @@
 			{
 				UIActivityIndicatorViewStyle indicatorStyle = UIActivityIndicatorViewStyleWhite;
 				
-				[self performMsgSendWithTarget:self sel:@selector(setIndicatorStyle:) signal:(void *)&indicatorStyle];
-//				objc_msgSend( self, @selector(setIndicatorStyle:), UIActivityIndicatorViewStyleWhite );
+                [(BeeUIImageView *)self setIndicatorStyle:indicatorStyle];
 			}
 		}
 		else if ( NSOrderedSame == [imageLoading compare:@"gray" options:NSCaseInsensitiveSearch] )
@@ -326,8 +318,7 @@
 			{
 				UIActivityIndicatorViewStyle indicatorStyle = UIActivityIndicatorViewStyleGray;
 				
-				[self performMsgSendWithTarget:self sel:@selector(setIndicatorStyle:) signal:(void *)&indicatorStyle];
-//				objc_msgSend( self, @selector(setIndicatorStyle:), UIActivityIndicatorViewStyleGray );
+                [(BeeUIImageView *)self setIndicatorStyle:indicatorStyle];
 			}
 		}
 		else
@@ -337,8 +328,7 @@
 				UIColor * color = [UIColor colorWithString:imageLoading];
 				if ( color )
 				{
-					[self performMsgSendWithTarget:self sel:@selector(setIndicatorStyle:) signal:(void *)&color];
-//					objc_msgSend( self, @selector(setIndicatorColor:), color );
+                    [(BeeUIImageView *)self setIndicatorColor:color];
 				}
 			}
 		}

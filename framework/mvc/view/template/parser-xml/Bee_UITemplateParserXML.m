@@ -85,7 +85,6 @@ DEF_SINGLETON( BeeUITemplateParserXML );
 	[self map:@"check"		toClass:NSClassFromString(@"BeeUICheck")];
 	[self map:@"image"		toClass:NSClassFromString(@"BeeUIImageView")];
 	[self map:@"zoom-image"	toClass:NSClassFromString(@"BeeUIZoomImageView")];
-	[self map:@"zoom-image"	toClass:NSClassFromString(@"BeeUIZoomImageView")];
 	[self map:@"label"		toClass:NSClassFromString(@"BeeUILabel")];
 	[self map:@"input"		toClass:NSClassFromString(@"BeeUITextField")];
 	[self map:@"textarea"	toClass:NSClassFromString(@"BeeUITextView")];

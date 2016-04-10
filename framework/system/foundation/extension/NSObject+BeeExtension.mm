@@ -157,31 +157,6 @@
 	}
 }
 
-- (void)performMsgSendWithTarget:(id)target sel:(SEL)sel signal:(id)signal
-{
-	NSMethodSignature * sig = [[target class] instanceMethodSignatureForSelector:sel];
-	
-	if ( sig )
-	{
-		NSInvocation * inv = [NSInvocation invocationWithMethodSignature:sig];
-		[inv setTarget:target];
-		[inv setSelector:sel];
-		[inv setArgument:signal atIndex:2];
-		[inv invoke];
-	}
-}
-- (BOOL)performMsgSendWithTarget:(id)target sel:(SEL)sel
-{
-	NSMethodSignature * sig = [[target class] instanceMethodSignatureForSelector:sel];
-	
-	if ( sig )
-	{
-		return YES;
-	}
-	
-	return NO;
-}
-
 - (void)copyPropertiesFrom:(id)obj
 {
 	for ( Class clazzType = [obj class]; clazzType != [NSObject class]; )

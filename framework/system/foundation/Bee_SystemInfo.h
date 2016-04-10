@@ -42,6 +42,20 @@ AS_PACKAGE( BeePackage_System, BeeSystemInfo, info );
 
 #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 
+#define IS_IPAD             (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+#define IS_IPHONE           (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+#define IS_RETINA           ([[UIScreen mainScreen] scale] >= 2.0)
+
+#define SCREEN_WIDTH        ([[UIScreen mainScreen] bounds].size.width)
+#define SCREEN_HEIGHT       ([[UIScreen mainScreen] bounds].size.height)
+#define SCREEN_MAX_LENGTH   (MAX(SCREEN_WIDTH, SCREEN_HEIGHT))
+#define SCREEN_MIN_LENGTH   (MIN(SCREEN_WIDTH, SCREEN_HEIGHT))
+
+#define IS_IPHONE_4_OR_LESS (IS_IPHONE && SCREEN_MAX_LENGTH < 568.0)
+#define IS_IPHONE_5         (IS_IPHONE && SCREEN_MAX_LENGTH == 568.0)
+#define IS_IPHONE_6         (IS_IPHONE && SCREEN_MAX_LENGTH == 667.0)
+#define IS_IPHONE_6P        (IS_IPHONE && SCREEN_MAX_LENGTH == 736.0)
+
 #define IOS8_OR_LATER		( [[[UIDevice currentDevice] systemVersion] compare:@"8.0"] != NSOrderedAscending )
 #define IOS7_OR_LATER		( [[[UIDevice currentDevice] systemVersion] compare:@"7.0"] != NSOrderedAscending )
 #define IOS6_OR_LATER		( [[[UIDevice currentDevice] systemVersion] compare:@"6.0"] != NSOrderedAscending )
@@ -55,10 +69,12 @@ AS_PACKAGE( BeePackage_System, BeeSystemInfo, info );
 #define IOS4_OR_EARLIER		( !IOS5_OR_LATER )
 #define IOS3_OR_EARLIER		( !IOS4_OR_LATER )
 
-#define IS_SCREEN_55_INCH	([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1080, 1920), [[UIScreen mainScreen] currentMode].size) : NO)
-#define IS_SCREEN_47_INCH	([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(750, 1334), [[UIScreen mainScreen] currentMode].size) : NO)
-#define IS_SCREEN_4_INCH	([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 1136), [[UIScreen mainScreen] currentMode].size) : NO)
-#define IS_SCREEN_35_INCH	([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 960), [[UIScreen mainScreen] currentMode].size) : NO)
+//Note: If iPhone 6 is in zoomed mode the UI is a zoomed up version of iPhone 5. This is reflected in the macros.
+
+#define IS_SCREEN_55_INCH	IS_IPHONE_6P
+#define IS_SCREEN_47_INCH	IS_IPHONE_6
+#define IS_SCREEN_4_INCH	IS_IPHONE_5
+#define IS_SCREEN_35_INCH	([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 960),  [[UIScreen mainScreen] currentMode].size) : NO)
 
 #else	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 

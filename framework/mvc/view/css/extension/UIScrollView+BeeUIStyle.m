@@ -57,8 +57,7 @@
 			if ( [self respondsToSelector:@selector(setHorizontal:)] )
 			{
 				BOOL i = YES;
-				[self performMsgSendWithTarget:self sel:@selector(setHorizontal:) signal:(void *)&i];
-//				objc_msgSend( self, @selector(setHorizontal:), YES );
+                [(BeeUIScrollView *)self setHorizontal:i];
 			}
 		}
 		else
@@ -66,8 +65,7 @@
 			if ( [self respondsToSelector:@selector(setVertical:)] )
 			{
 				BOOL i = YES;
-				[self performMsgSendWithTarget:self sel:@selector(setVertical:) signal:(void *)&i];
-//				objc_msgSend( self, @selector(setVertical:), YES );
+                [(BeeUIScrollView *)self setVertical:i];
 			}
 		}
 	}
@@ -76,8 +74,7 @@
 		if ( [self respondsToSelector:@selector(setVertical:)] )
 		{
 			BOOL i = YES;
-			[self performMsgSendWithTarget:self sel:@selector(setVertical:) signal:(void *)&i];
-//			objc_msgSend( self, @selector(setVertical:), YES );
+            [(BeeUIScrollView *)self setVertical:i];
 		}
 	}
 }
@@ -94,14 +91,12 @@
 			if ( [scrollInsets matchAnyOf:@[@"auto"]] )
 			{
 				UIEdgeInsets insets = [BeeUIConfig sharedInstance].baseInsets;
-				[self performMsgSendWithTarget:self sel:@selector(setExtInsets:) signal:(void *)&insets];
-//				objc_msgSend( self, @selector(setExtInsets:), insets );
+                [(BeeUIScrollView *)self setExtInsets:insets];
 			}
 			else
 			{
 				UIEdgeInsets insets = UIEdgeInsetsFromStringEx( scrollInsets );
-				[self performMsgSendWithTarget:self sel:@selector(setExtInsets:) signal:(void *)&insets];
-//				objc_msgSend( self, @selector(setExtInsets:), insets);
+                [(BeeUIScrollView *)self setExtInsets:insets];
 			}
 		}
 	}
@@ -121,8 +116,7 @@
 			{
 				lineCount = 1;
 			}
-			[self performMsgSendWithTarget:self sel:@selector(setLineCount:) signal:(void *)&lineCount];
-//			objc_msgSend( self, @selector(setLineCount:), lineCount);
+            [(BeeUIScrollView *)self setLineCount:lineCount];
 		}
 	}
 }

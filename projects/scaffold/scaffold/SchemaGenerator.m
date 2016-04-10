@@ -1096,114 +1096,114 @@ DEF_INT( TYPE_OBJECT,		6 )
 		}
 	}
 	
-	code.LINE( @"- (BOOL)validate" );
-	code.LINE( @"{" );
-	
-	if ( self.properties.count )
-	{
-		for ( SchemaProperty * property in self.properties )
-		{
-			if ( property.type == SchemaProperty.TYPE_ENUM )
-			{
-				if ( property.required )
-				{
-					SchemaEnum * enums = [self.protocol enumByName:property.elemClass];
-					if ( enums && enums.isString )
-					{
-						code.LINE( @"	if ( nil == self.%@ || [self.%@ isKindOfClass:[NSString class]] )", property.name, property.name );
-						code.LINE( @"	{" );
-						code.LINE( @"		return NO;" );
-						code.LINE( @"	}" );
-						code.LINE( nil );
-					}
-					else
-					{
-						code.LINE( @"	if ( nil == self.%@ || [self.%@ isKindOfClass:[NSNumber class]] )", property.name, property.name );
-						code.LINE( @"	{" );
-						code.LINE( @"		return NO;" );
-						code.LINE( @"	}" );
-						code.LINE( nil );
-					}
-				}
-			}
-			else if ( property.type == SchemaProperty.TYPE_NUMBER )
-			{
-				if ( property.required )
-				{
-					code.LINE( @"	if ( nil == self.%@ || NO == [self.%@ isKindOfClass:[NSNumber class]] )", property.name, property.name );
-					code.LINE( @"	{" );
-					code.LINE( @"		return NO;" );
-					code.LINE( @"	}" );
-					code.LINE( nil );
-				}
-			}
-			else if ( property.type == SchemaProperty.TYPE_STRING )
-			{
-				if ( property.required )
-				{
-					code.LINE( @"	if ( nil == self.%@ || NO == [self.%@ isKindOfClass:[NSString class]] )", property.name, property.name );
-					code.LINE( @"	{" );
-					code.LINE( @"		return NO;" );
-					code.LINE( @"	}" );
-					code.LINE( nil );
-				}
-			}
-			else if ( property.type == SchemaProperty.TYPE_ARRAY )
-			{
-				if ( property.required )
-				{
-					code.LINE( @"	if ( nil == self.%@ || NO == [self.%@ isKindOfClass:[NSArray class]] )", property.name, property.name );
-					code.LINE( @"	{" );
-					code.LINE( @"		return NO;" );
-					code.LINE( @"	}" );
-					code.LINE( nil );
-				}
-			}
-			else if ( property.type == SchemaProperty.TYPE_DICTIONARY )
-			{
-				if ( property.required )
-				{
-					code.LINE( @"	if ( nil == self.%@ || NO == [self.%@ isKindOfClass:[NSDictionary class]] )", property.name, property.name );
-					code.LINE( @"	{" );
-					code.LINE( @"		return NO;" );
-					code.LINE( @"	}" );
-					code.LINE( nil );
-				}
-			}
-			else if ( property.type == SchemaProperty.TYPE_OBJECT )
-			{
-				if ( property.required )
-				{
-					code.LINE( @"	if ( nil == self.%@ || NO == [self.%@ isKindOfClass:[%@%@ class]] )", property.name, property.name, prefix, property.elemClass );
-					code.LINE( @"	{" );
-					code.LINE( @"		return NO;" );
-					code.LINE( @"	}" );
-					code.LINE( nil );
-					
-					code.LINE( @"	if ( [self.%@ respondsToSelector:@selector(validate)] )", property.name );
-					code.LINE( @"	{" );
-					code.LINE( @"		return [self.%@ validate];", property.name );
-					code.LINE( @"	}" );
-					code.LINE( nil );
-				}
-			}
-			else
-			{
-				if ( property.required )
-				{
-					code.LINE( @"	if ( nil == self.%@ )", property.name );
-					code.LINE( @"	{" );
-					code.LINE( @"		return NO" );
-					code.LINE( @"	}" );
-					code.LINE( nil );
-				}
-			}
-		}
-	}
-	
-	code.LINE( @"	return YES;" );
-	code.LINE( @"}" );
-	code.LINE( nil );
+//	code.LINE( @"- (BOOL)validate" );
+//	code.LINE( @"{" );
+//	
+//	if ( self.properties.count )
+//	{
+//		for ( SchemaProperty * property in self.properties )
+//		{
+//			if ( property.type == SchemaProperty.TYPE_ENUM )
+//			{
+//				if ( property.required )
+//				{
+//					SchemaEnum * enums = [self.protocol enumByName:property.elemClass];
+//					if ( enums && enums.isString )
+//					{
+//						code.LINE( @"	if ( nil == self.%@ || [self.%@ isKindOfClass:[NSString class]] )", property.name, property.name );
+//						code.LINE( @"	{" );
+//						code.LINE( @"		return NO;" );
+//						code.LINE( @"	}" );
+//						code.LINE( nil );
+//					}
+//					else
+//					{
+//						code.LINE( @"	if ( nil == self.%@ || [self.%@ isKindOfClass:[NSNumber class]] )", property.name, property.name );
+//						code.LINE( @"	{" );
+//						code.LINE( @"		return NO;" );
+//						code.LINE( @"	}" );
+//						code.LINE( nil );
+//					}
+//				}
+//			}
+//			else if ( property.type == SchemaProperty.TYPE_NUMBER )
+//			{
+//				if ( property.required )
+//				{
+//					code.LINE( @"	if ( nil == self.%@ || NO == [self.%@ isKindOfClass:[NSNumber class]] )", property.name, property.name );
+//					code.LINE( @"	{" );
+//					code.LINE( @"		return NO;" );
+//					code.LINE( @"	}" );
+//					code.LINE( nil );
+//				}
+//			}
+//			else if ( property.type == SchemaProperty.TYPE_STRING )
+//			{
+//				if ( property.required )
+//				{
+//					code.LINE( @"	if ( nil == self.%@ || NO == [self.%@ isKindOfClass:[NSString class]] )", property.name, property.name );
+//					code.LINE( @"	{" );
+//					code.LINE( @"		return NO;" );
+//					code.LINE( @"	}" );
+//					code.LINE( nil );
+//				}
+//			}
+//			else if ( property.type == SchemaProperty.TYPE_ARRAY )
+//			{
+//				if ( property.required )
+//				{
+//					code.LINE( @"	if ( nil == self.%@ || NO == [self.%@ isKindOfClass:[NSArray class]] )", property.name, property.name );
+//					code.LINE( @"	{" );
+//					code.LINE( @"		return NO;" );
+//					code.LINE( @"	}" );
+//					code.LINE( nil );
+//				}
+//			}
+//			else if ( property.type == SchemaProperty.TYPE_DICTIONARY )
+//			{
+//				if ( property.required )
+//				{
+//					code.LINE( @"	if ( nil == self.%@ || NO == [self.%@ isKindOfClass:[NSDictionary class]] )", property.name, property.name );
+//					code.LINE( @"	{" );
+//					code.LINE( @"		return NO;" );
+//					code.LINE( @"	}" );
+//					code.LINE( nil );
+//				}
+//			}
+//			else if ( property.type == SchemaProperty.TYPE_OBJECT )
+//			{
+//				if ( property.required )
+//				{
+//					code.LINE( @"	if ( nil == self.%@ || NO == [self.%@ isKindOfClass:[%@%@ class]] )", property.name, property.name, prefix, property.elemClass );
+//					code.LINE( @"	{" );
+//					code.LINE( @"		return NO;" );
+//					code.LINE( @"	}" );
+//					code.LINE( nil );
+//					
+//					code.LINE( @"	if ( [self.%@ respondsToSelector:@selector(validate)] )", property.name );
+//					code.LINE( @"	{" );
+//					code.LINE( @"		return [self.%@ validate];", property.name );
+//					code.LINE( @"	}" );
+//					code.LINE( nil );
+//				}
+//			}
+//			else
+//			{
+//				if ( property.required )
+//				{
+//					code.LINE( @"	if ( nil == self.%@ )", property.name );
+//					code.LINE( @"	{" );
+//					code.LINE( @"		return NO" );
+//					code.LINE( @"	}" );
+//					code.LINE( nil );
+//				}
+//			}
+//		}
+//	}
+//	
+//	code.LINE( @"	return YES;" );
+//	code.LINE( @"}" );
+//	code.LINE( nil );
 	
 	code.LINE( @"@end" );
 	return code;
@@ -1455,6 +1455,111 @@ DEF_INT( TYPE_OBJECT,		6 )
 
 #pragma mark -
 
+@implementation SchemaFileList
+
+- (NSString *)MD
+{
+    NSMutableString * code = [NSMutableString string];
+    
+    code.LINE( @"\t\tName|Type" );
+    code.LINE( @"\t\t-|-" );
+    
+    for ( SchemaProperty * property in self.properties )
+    {
+        if ( property.type == SchemaProperty.TYPE_NUMBER )
+        {
+            code.LINE( @"\t\t\t%@|___INT___", property.name );
+        }
+        else if ( property.type == SchemaProperty.TYPE_STRING )
+        {
+            code.LINE( @"\t\t\t%@|___TEXT___", property.name );
+        }
+        else if ( property.type == SchemaProperty.TYPE_ARRAY )
+        {
+            code.LINE( @"\t\t\t%@|___[%@*]___", property.name, property.elemClass );
+        }
+        else if ( property.type == SchemaProperty.TYPE_DICTIONARY )
+        {
+            code.LINE( @"\t\t\t%@|___{}___", property.name );
+        }
+        else if ( property.type == SchemaProperty.TYPE_OBJECT )
+        {
+            code.LINE( @"\t\t\t%@|___%@*___", property.name, property.elemClass );
+        }
+        else if ( property.type == SchemaProperty.TYPE_ENUM )
+        {
+            code.LINE( @"\t\t\t%@|___<%@>___", property.name, property.elemClass );
+        }
+        else
+        {
+            code.LINE( @"\t\t\t%@|-", property.name );
+        }
+    }
+    
+    return code;
+}
+
+- (NSString *)DOT
+{
+    //	if ( NO == self.isContainer )
+    //		return nil;
+    
+    NSString *			prefix = self.protocol.prefix;
+    NSMutableString *	code = [NSMutableString string];
+    NSMutableString *	label = [NSMutableString string];
+    
+    //	label.APPEND( @"<name> %@%@", prefix, self.className );
+    label.APPEND( @"<name> 回应包体 Response" );
+    
+    for ( SchemaProperty * property in self.properties )
+    {
+        label.APPEND( @"| <%@>", property.name );
+        label.APPEND( @" %@", property.name );
+        
+        if ( property.type == SchemaProperty.TYPE_NUMBER )
+        {
+            label.APPEND( @" INT" );
+        }
+        else if ( property.type == SchemaProperty.TYPE_STRING )
+        {
+            label.APPEND( @" TEXT" );
+        }
+        else if ( property.type == SchemaProperty.TYPE_ARRAY )
+        {
+            label.APPEND( @" \\[%@*\\]", property.elemClass );
+        }
+        else if ( property.type == SchemaProperty.TYPE_DICTIONARY )
+        {
+            label.APPEND( @" \\{\\}" );
+        }
+        else if ( property.type == SchemaProperty.TYPE_OBJECT )
+        {
+            label.APPEND( @" (%@*)", property.elemClass );
+        }
+        else if ( property.type == SchemaProperty.TYPE_ENUM )
+        {
+            label.APPEND( @" \\<%@\\>", property.elemClass );
+        }
+        else
+        {
+            label.APPEND( @" *" );
+        }
+    }
+    
+    code.LINE( @"			\"%@%@\"", prefix, self.className );
+    code.LINE( @"			[" );
+    code.LINE( @"				color = blue;" );
+    code.LINE( @"				style = stroke;" );
+    code.LINE( @"				shape = record;" );
+    code.LINE( @"				label = \"%@\";", label );
+    code.LINE( @"			];" );
+    return code;
+}
+
+@end
+
+#pragma mark -
+
 @implementation SchemaController
 
 @synthesize method = _method;
@@ -1462,6 +1567,8 @@ DEF_INT( TYPE_OBJECT,		6 )
 @dynamic relativeUrl;
 @synthesize request = _request;
 @synthesize response = _response;
+@synthesize fileParam = _fileParam;
+@synthesize fileList = _fileList;
 
 - (NSString *)methodName
 {
@@ -1523,9 +1630,10 @@ DEF_INT( TYPE_OBJECT,		6 )
 		return nil;
 	}
 	
-	NSDictionary *	request = [value objectForKey:@"request"];
+	NSMutableDictionary *	request = [value objectForKey:@"request"];
 	NSDictionary *	response = [value objectForKey:@"response"];
-	
+    NSDictionary *  fileParam = [value objectForKey:@"fileList"];
+    
 	if ( nil == method )
 	{
 		WARN( @"method not found" );
@@ -1543,10 +1651,11 @@ DEF_INT( TYPE_OBJECT,		6 )
 	{
 		controller.method = method;
 		controller.url = url;
-		
+        controller.fileParam = fileParam;
 		NSString * key = [controller methodName];
 		NSString * reqKey = [[NSString stringWithFormat:@"REQ_%@", key] uppercaseString];
 		NSString * rspKey = [[NSString stringWithFormat:@"RESP_%@", key] uppercaseString];
+        NSString * flistKey = [[NSString stringWithFormat:@"FILELIST_%@", key] uppercaseString];
 		
 		if ( nil == request && nil == response )
 		{
@@ -1564,6 +1673,22 @@ DEF_INT( TYPE_OBJECT,		6 )
 			{
 				controller.response = [SchemaResponse parseKey:rspKey value:response protocol:protocol];
 			}
+            
+            if ( NSOrderedSame == [method compare:@"POST" options:NSCaseInsensitiveSearch] ) {
+                if (fileParam) {
+                    NSMutableDictionary *fileList = [[NSMutableDictionary alloc] init];
+                    for (NSString *key in fileParam) {
+                        if ( NSOrderedSame == [[[fileParam objectForKey:key] uppercaseString] compare:@"{JPG}" options:NSCaseInsensitiveSearch] ||  NSOrderedSame == [[[fileParam objectForKey:key] uppercaseString] compare:@"{PNG}" options:NSCaseInsensitiveSearch] )
+                        {
+                            [fileList setObject:@"{UIImage}" forKey:key];
+                        }else if (NSOrderedSame == [[[fileParam objectForKey:key] uppercaseString] compare:@"{FILE}" options:NSCaseInsensitiveSearch])
+                        {
+                            [fileList setObject:@"{NSData}" forKey:key];
+                        }
+                    }
+                    controller.fileList = [SchemaFileList parseKey:[flistKey stringByAppendingString:@"<NSObject"] value:fileList protocol:protocol];
+                }
+            }
 		}
 	}
 	
@@ -1806,12 +1931,17 @@ DEF_INT( TYPE_OBJECT,		6 )
 	{
 		code.LINE( [self.response h] );
 	}
+    
+    if ( self.fileList && self.fileList.properties.count ) {
+        code.LINE( [self.fileList h] );
+    }
 	
 	NSString * key = [self methodName];
 	NSString * msgKey = [[NSString stringWithFormat:@"API_%@", key] uppercaseString];
 	NSString * reqKey = nil;
 	NSString * rspKey = nil;
-	
+    NSString * flistKey = nil;
+    
 	if ( self.request )
 	{
 		if ( self.request.isContainer )
@@ -1837,7 +1967,21 @@ DEF_INT( TYPE_OBJECT,		6 )
 			rspKey = property.elemClass;
 		}
 	}
+    //FILELIST_
 
+    if ( self.fileList )
+    {
+        if ( self.fileList.isContainer )
+        {
+            flistKey = [[NSString stringWithFormat:@"FILELIST_%@", key] uppercaseString];
+        }
+        else
+        {
+            SchemaProperty * property = [self.fileList.properties safeObjectAtIndex:0];
+            flistKey = property.elemClass;
+        }
+    }
+    
 	code.LINE( @"@interface %@%@ : BeeAPI", prefix, msgKey );
 	
 	NSArray * params = [self methodParams];
@@ -1884,6 +2028,25 @@ DEF_INT( TYPE_OBJECT,		6 )
 			}
 		}
 	}
+    
+    if ( self.fileList && self.fileList.properties.count )
+    {
+        if ( self.fileList.isContainer )
+        {
+            code.LINE( @"@property (nonatomic, retain) %@%@ *	fileList;", prefix, flistKey );
+        }
+        else
+        {
+            if ( self.fileList.isArray )
+            {
+                code.LINE( @"@property (nonatomic, retain) NSArray *	fileList;" );
+            }
+            else
+            {
+                code.LINE( @"@property (nonatomic, retain) %@%@ *	fileList;", prefix, flistKey );
+            }
+        }
+    }
 	
 	code.LINE( @"@end" );
 	
@@ -1907,11 +2070,16 @@ DEF_INT( TYPE_OBJECT,		6 )
 	{
 		code.LINE( [self.response mm] );
 	}
+    
+    if ( self.fileList && self.fileList.properties.count ) {
+        code.LINE( [self.fileList mm] );
+    }
 	
 	NSString * key = [self methodName];
 	NSString * msgKey = [[NSString stringWithFormat:@"API_%@", key] uppercaseString];
 	NSString * reqKey = nil;
 	NSString * rspKey = nil;
+    NSString * flistKey = nil;
 	
 	if ( self.request && self.request.properties.count )
 	{
@@ -1938,6 +2106,19 @@ DEF_INT( TYPE_OBJECT,		6 )
 			rspKey = property.elemClass;
 		}
 	}
+    
+    if ( self.fileList && self.fileList.properties.count )
+    {
+        if ( self.fileList.isContainer )
+        {
+            flistKey = [[NSString stringWithFormat:@"FILELIST_%@", key] uppercaseString];
+        }
+        else
+        {
+            SchemaProperty * property = [self.fileList.properties safeObjectAtIndex:0];
+            flistKey = property.elemClass;
+        }
+    }
 	
 	code.LINE( @"@implementation %@%@", prefix, msgKey );
 	code.LINE( nil );
@@ -1958,6 +2139,11 @@ DEF_INT( TYPE_OBJECT,		6 )
 	{
 		code.LINE( @"@synthesize resp = _resp;" );
 	}
+    
+    if ( self.fileList && self.fileList.properties.count )
+    {
+        code.LINE( @"@synthesize fileList = _fileList;" );
+    }
 	
 	code.LINE( nil );
 	
@@ -1977,6 +2163,11 @@ DEF_INT( TYPE_OBJECT,		6 )
 		//		code.LINE( @"		self.resp = [[[%@ alloc] init] autorelease];", rspKey );
 		code.LINE( @"		self.resp = nil;" );
 	}
+    
+    if ( self.fileList && self.fileList.properties.count )
+    {
+        code.LINE( @"		self.fileList = [[[%@%@ alloc] init] autorelease];", prefix, flistKey );
+    }
 	
 	code.LINE( @"	}" );
 	code.LINE( @"	return self;" );
@@ -1995,6 +2186,10 @@ DEF_INT( TYPE_OBJECT,		6 )
 	{
 		code.LINE( @"	self.resp = nil;" );
 	}
+    
+    if (self.fileList && self.fileList.properties.count) {
+        code.LINE( @"	self.fileList = nil;" );
+    }
 	
 	code.LINE( @"	[super dealloc];" );
 	code.LINE( @"}" );
@@ -2070,8 +2265,24 @@ DEF_INT( TYPE_OBJECT,		6 )
 		}
 		else
 		{
-			code.LINE( @"		NSString * requestBody = [self.req objectToString];" );
-			code.LINE( @"		self.HTTP_%@( requestURI ).PARAM( @\"json\", requestBody );", [self.method uppercaseString] );
+            //philZhang todo
+            NSString *fileListParam = @"";
+            if (self.fileParam != nil) {
+                for (NSString *key in self.fileParam) {
+                    if ( NSOrderedSame == [[[self.fileParam objectForKey:key] uppercaseString] compare:@"{JPG}" options:NSCaseInsensitiveSearch] )
+                    {
+                        fileListParam = [NSString stringWithFormat:@"%@.FILE_JPG(@\"%@\", self.fileList.%@)", fileListParam, key, key];
+                    }else if (NSOrderedSame == [[[self.fileParam objectForKey:key] uppercaseString] compare:@"{PNG}" options:NSCaseInsensitiveSearch])
+                    {
+                        fileListParam = [NSString stringWithFormat:@"%@.FILE_PNG(@\"%@\", self.fileList.%@)", fileListParam, key, key];
+                    }
+                    else if (NSOrderedSame == [[[self.fileParam objectForKey:key] uppercaseString] compare:@"{FILE}" options:NSCaseInsensitiveSearch])
+                    {
+                        fileListParam = [NSString stringWithFormat:@"%@.FILE(@\"%@\", self.fileList.%@)", fileListParam, key, key];
+                    }
+                }
+            }
+			code.LINE( @"		self.HTTP_%@( requestURI ).PARAM(@\"json\", [self.req objectToDictionary] )%@;", [self.method uppercaseString], fileListParam );
 		}
 	}
 	else
