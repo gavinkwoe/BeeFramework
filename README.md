@@ -1,6 +1,10 @@
+***This project is no longer supported or updated. Please do not file issues or pull-requests against this repo. If you wish to continue to develop this code yourself, we recommend you fork it.***
+
+***Goodbye BeeFramework, Goodbye Steve Jobs era.***
+
 ![logo](https://cloud.githubusercontent.com/assets/679824/3976127/d495a6a4-2819-11e4-81cf-b27832e27e90.png)
 
-BeeFramework is a semi-hybrid framework that allows you to create mobile apps using Objective-C and XML/CSS for the iPhone and iPad and more, created and maintained by [Gavin.Kwoe](http://www.weibo.com/gavinkwoe) and [QFish](http://github.com/qfish).
+BeeFramework is a semi-hybrid framework that allows you to create mobile apps using Objective-C and XML/CSS.
 
 ## Join us
 
