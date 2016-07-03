@@ -2282,7 +2282,7 @@ DEF_INT( TYPE_OBJECT,		6 )
                     }
                 }
             }
-			code.LINE( @"		self.HTTP_%@( requestURI ).PARAM(@\"json\", [self.req objectToDictionary] )%@;", [self.method uppercaseString], fileListParam );
+            code.LINE( @"		self.HTTP_%@( requestURI ).PARAM(@\"json\", [self.req objectToDictionary] )%@;", [self.method uppercaseString], fileListParam );
 		}
 	}
 	else
@@ -3024,19 +3024,33 @@ DEF_INT( TYPE_OBJECT,		6 )
 		code.LINE( [NSString stringWithFormat:@"AS_SINGLETON( %@ServerConfig )", prefix] );
 		code.LINE( nil );
 		
-		code.LINE( @"AS_INT( CONFIG_DEVELOPMENT )" );
-		code.LINE( @"AS_INT( CONFIG_TEST )" );
-		code.LINE( @"AS_INT( CONFIG_PRODUCTION )" );
-		code.LINE( nil );
+        NSMutableArray *urlNames = [[NSMutableArray alloc] init];
+        
+        for (NSString *key in self.server) {
+            id value = [self.server objectForKey:key];
+            if ([value isKindOfClass:[NSDictionary class]]) {
+                [urlNames addObject:key];
+                for (NSString *key1 in value) {
+                    code.LINE( [NSString stringWithFormat:@"AS_STRING( CONFIG_%@_%@ )", [key uppercaseString], [key1 uppercaseString]]);
+                }
+            }else
+            {
+                code.LINE( [NSString stringWithFormat:@"AS_STRING( CONFIG_%@ )", [key uppercaseString]]);
+            }
+        }
+        code.LINE( nil );
 		
-		code.LINE( @"@property (nonatomic, assign) NSUInteger			config;" );
-		code.LINE( nil );
-		
-		code.LINE( @"@property (nonatomic, readonly) NSString *			url;" );
-		code.LINE( @"@property (nonatomic, readonly) NSString *			testUrl;" );
-		code.LINE( @"@property (nonatomic, readonly) NSString *			productionUrl;" );
-		code.LINE( @"@property (nonatomic, readonly) NSString *			developmentUrl;" );
-		code.LINE( nil );
+        if (urlNames.count) {
+            for (int i = 0; i < urlNames.count; i ++) {
+                code.LINE( [NSString stringWithFormat:@"@property (nonatomic, assign) NSString *			Config%@;", [urlNames safeObjectAtIndex:i]]  );
+                code.LINE( [NSString stringWithFormat:@"@property (nonatomic, readonly) NSString *			Url%@;", [urlNames safeObjectAtIndex:i]] );
+                code.LINE( nil );
+            }
+        }
+        
+        code.LINE( @"@property (nonatomic, assign) NSString*			config;" );
+        code.LINE( @"@property (nonatomic, readonly) NSString *			url;" );
+        code.LINE( nil );
 		
 		code.LINE( @"@end" );
 		code.LINE( nil );
@@ -3069,76 +3083,137 @@ DEF_INT( TYPE_OBJECT,		6 )
 		{
 			code.LINE( [controller mm] );
 		}
-		
-		NSString * dev = [self.server objectForKey:@"development"];
-		NSString * tst = [self.server objectForKey:@"test"];
-		NSString * pro = [self.server objectForKey:@"production"];
-		
-		code.LINE( @"#pragma mark - config" );
-		code.LINE( nil );
-		
+        
+        code.LINE( @"#pragma mark - config" );
+        code.LINE( @"@interface ServerConfig()" );
+        code.LINE( nil );
+        
+        NSMutableArray *urlNames = [[NSMutableArray alloc] init];
+        
+        for (NSString *key in self.server) {
+            id value = [self.server objectForKey:key];
+            if ([value isKindOfClass:[NSDictionary class]]) {
+                [urlNames addObject:key];
+                for (NSString *key1 in value) {
+                    code.LINE( [NSString stringWithFormat:@"@property (nonatomic, readonly) NSString *			%@_%@_Url;", key, key1]);
+                }
+            }else
+            {
+                code.LINE( [NSString stringWithFormat:@"@property (nonatomic, readonly) NSString *			%@Url;", key]);
+            }
+        }
+        code.LINE( nil );
+        code.LINE( @"@end" );
+        code.LINE( nil );
+        
+        code.LINE( @"#pragma mark - config" );
+        code.LINE( nil );
 		code.LINE( [NSString stringWithFormat:@"@implementation %@ServerConfig", prefix] );
 		code.LINE( nil );
 		
 		code.LINE( [NSString stringWithFormat:@"DEF_SINGLETON( %@ServerConfig )", prefix] );
 		code.LINE( nil );
-		
-		code.LINE( @"DEF_INT( CONFIG_DEVELOPMENT,	0 )" );
-		code.LINE( @"DEF_INT( CONFIG_TEST,			1 )" );
-		code.LINE( @"DEF_INT( CONFIG_PRODUCTION,	2 )" );
+        
+        for (NSString *key in self.server) {
+            id value = [self.server objectForKey:key];
+            if ([value isKindOfClass:[NSDictionary class]]) {
+                for (NSString *key1 in value) {
+                    code.LINE( [NSString stringWithFormat:@"DEF_STRING( CONFIG_%@_%@, @\"%@_%@\")", [key uppercaseString], [key1 uppercaseString], [key uppercaseString], [key1 uppercaseString]]);
+                }
+            }else
+            {
+                code.LINE( [NSString stringWithFormat:@"DEF_STRING( CONFIG_%@, @\"%@\" )", [key uppercaseString], [key uppercaseString]]);
+            }
+        }
+        
 		code.LINE( nil );
 		
-		code.LINE( @"@synthesize config = _config;" );
-		code.LINE( @"@dynamic url;" );
-		code.LINE( @"@dynamic testUrl;" );
-		code.LINE( @"@dynamic productionUrl;" );
-		code.LINE( @"@dynamic developmentUrl;" );
+        if (urlNames.count) {
+            for (int i = 0; i < urlNames.count; i ++) {
+                code.LINE( [NSString stringWithFormat:@"@synthesize			Config%@ = _Config%@;", [urlNames safeObjectAtIndex:i], [urlNames safeObjectAtIndex:i] ]  );
+                code.LINE( [NSString stringWithFormat:@"@synthesize			Url%@ = _Url%@;", [urlNames safeObjectAtIndex:i], [urlNames safeObjectAtIndex:i] ] );
+                code.LINE( nil );
+            }
+        }
+        code.LINE( @"@synthesize			config;" );
+        code.LINE( @"@synthesize			url;" );
+        code.LINE( nil );
+		
 		code.LINE( nil );
 		
-		code.LINE( @"- (NSString *)url" );
-		code.LINE( @"{" );
-		code.LINE( @"	NSString * host = nil;" );
+        if (urlNames.count) {
+            for (int i = 0; i < urlNames.count; i ++) {
+                code.LINE( [NSString stringWithFormat:@"- (NSString *)Url%@", [urlNames safeObjectAtIndex:i]] );
+                code.LINE( @"{" );
+                code.LINE( @"	NSString * host = nil;" );
+                code.LINE( nil );
+                id value = [self.server objectForKey:[urlNames safeObjectAtIndex:i]];
+                for (NSString *key in value) {
+                    code.LINE( [NSString stringWithFormat:@"	if ( self.CONFIG_%@_%@ == self.Config%@ )", [[urlNames safeObjectAtIndex:i] uppercaseString], [key uppercaseString], [urlNames safeObjectAtIndex:i]] );
+                    code.LINE( @"	{" );
+                    code.LINE( [NSString stringWithFormat:@"		host = self.%@_%@_Url;", [urlNames safeObjectAtIndex:i], key] );
+                    code.LINE( @"	}" );
+                }
+                code.LINE( @"   if ( NO == [host hasPrefix:@\"http://\"] && NO == [host hasPrefix:@\"https://\"] )" );
+                code.LINE( @"   {" );
+                code.LINE( @"       host = [@\"http://\" stringByAppendingString:host];" );
+                code.LINE( @"   }" );
+                code.LINE( nil );
+                code.LINE( @"   return host;" );
+                code.LINE( @"}" );
+            }
+        }
+        code.LINE( nil );
+        code.LINE( @"- (NSString *)url" );
+        code.LINE( @"{" );
+        code.LINE( @"	NSString * host = nil;" );
+        code.LINE( nil );
+        for (NSString *key in self.server) {
+            if ([[self.server objectForKey:key] isKindOfClass:[NSDictionary class]]) {
+                continue;
+            }
+            code.LINE( [NSString stringWithFormat:@"	if ( self.CONFIG_%@ == self.config )", [key uppercaseString]] );
+            code.LINE( @"	{" );
+            code.LINE( [NSString stringWithFormat:@"		host = self.%@Url;", key] );
+            code.LINE( nil );
+            code.LINE( @"       if ( NO == [host hasPrefix:@\"http://\"] && NO == [host hasPrefix:@\"https://\"] )" );
+            code.LINE( @"       {" );
+            code.LINE( @"           host = [@\"http://\" stringByAppendingString:host];" );
+            code.LINE( @"       }" );
+            code.LINE( nil );
+            code.LINE( @"       return host;" );
+            code.LINE( @"	}" );
+        }
+        code.LINE( @"	return nil;" );
+        code.LINE( @"}" );
+        
 		code.LINE( nil );
-		code.LINE( @"	if ( self.CONFIG_DEVELOPMENT == self.config )" );
-		code.LINE( @"	{" );
-		code.LINE( @"		host = self.developmentUrl;" );
-		code.LINE( @"	}" );
-		code.LINE( @"	else if ( self.CONFIG_TEST == self.config )" );
-		code.LINE( @"	{" );
-		code.LINE( @"		host = self.testUrl;" );
-		code.LINE( @"	}" );
-		code.LINE( @"	else" );
-		code.LINE( @"	{" );
-		code.LINE( @"		host = self.productionUrl;" );
-		code.LINE( @"	}" );
-		code.LINE( nil );
-		code.LINE( @"	if ( NO == [host hasPrefix:@\"http://\"] && NO == [host hasPrefix:@\"https://\"] )" );
-		code.LINE( @"	{" );
-		code.LINE( @"		host = [@\"http://\" stringByAppendingString:host];" );
-		code.LINE( @"	}" );
-		code.LINE( nil );
-		code.LINE( @"	return host;" );
-		code.LINE( @"}" );
-		code.LINE( nil );
+        
+        
 
-		code.LINE( @"- (NSString *)developmentUrl" );
-		code.LINE( @"{" );
-		code.LINE( [NSString stringWithFormat:@"	return @\"%@\";", dev ? dev : @""] );
-		code.LINE( @"}" );
-		code.LINE( nil );
-		
-		code.LINE( @"- (NSString *)testUrl" );
-		code.LINE( @"{" );
-		code.LINE( [NSString stringWithFormat:@"	return @\"%@\";", tst ? tst : @""] );
-		code.LINE( @"}" );
-		code.LINE( nil );
-		
-		code.LINE( @"- (NSString *)productionUrl" );
-		code.LINE( @"{" );
-		code.LINE( [NSString stringWithFormat:@"	return @\"%@\";", pro ? pro : @""] );
-		code.LINE( @"}" );
-		code.LINE( nil );
-		
+        NSString *url = nil;
+        for (NSString *key in self.server) {
+            id value = [self.server objectForKey:key];
+            if ([value isKindOfClass:[NSDictionary class]]) {
+                for (NSString *key1 in value) {
+                    url = [value objectForKey:key1];
+                    code.LINE( [NSString stringWithFormat:@"- (NSString *)%@_%@_Url", key, key1] );
+                    code.LINE( @"{" );
+                    code.LINE( [NSString stringWithFormat:@"	return @\"%@\";", url ? url : @""] );
+                    code.LINE( @"}" );
+                    code.LINE( nil );
+                }
+            }else
+            {
+                url = [self.server objectForKey:key];
+                code.LINE( [NSString stringWithFormat:@"- (NSString *)%@Url", key] );
+                code.LINE( @"{" );
+                code.LINE( [NSString stringWithFormat:@"	return @\"%@\";", url ? url : @""] );
+                code.LINE( @"}" );
+                code.LINE( nil );
+            }
+        }
+        
 		code.LINE( @"@end" );
 		code.LINE( nil );
 	}

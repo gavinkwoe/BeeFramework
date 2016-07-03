@@ -113,6 +113,7 @@
 - (BOOL)supportForUIStyling;
 
 - (void)applyUIStyling:(NSDictionary *)properties;
+- (void)applyUICorners:(NSDictionary *)properties;
 
 // resource loading?
 

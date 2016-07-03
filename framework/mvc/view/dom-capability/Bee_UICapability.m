@@ -112,6 +112,11 @@
 //	WARN( @"unrecognized styles for '%@':\n%@", [[self class] description], properties );
 }
 
+- (void)applyUICorners:(NSDictionary *)properties
+{
+    
+}
+
 + (BOOL)supportForUIResourceLoading
 {
 	return NO;

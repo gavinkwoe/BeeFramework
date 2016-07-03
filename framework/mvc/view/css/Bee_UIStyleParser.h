@@ -131,6 +131,9 @@
 - (UITextBorderStyle)parseTextBorderStyleWithKeys:(NSArray *)keys;
 - (UITextBorderStyle)parseTextBorderStyleWithKeys:(NSArray *)keys defaultValue:(UITextBorderStyle)defaultValue;
 
+- (UIRectCorner)parseViewCornersStyleWithKeys:(NSArray *)keys;
+- (UIRectCorner)parseViewCornersStyleWithKeys:(NSArray *)keys defaultValue:(UIRectCorner)defaultValue;
+
 @end
 
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

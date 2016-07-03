@@ -430,6 +430,7 @@
 	if ( self.UIStyle )
 	{
 		[self applyUIStyling:self.UIStyle.properties];
+        [self applyUICorners:self.UIStyle.properties];
 	}
 }
 
@@ -648,8 +649,11 @@
 
 	self.layer.borderColor = [properties parseColorWithKeys:@[@"border-color"] defaultValue:[UIColor clearColor]].CGColor;
 	self.layer.borderWidth = [properties parseFloatWithKeys:@[@"border-width"] defaultValue:0.0f];
+    if ([properties stringOfAny:@[@"corners"] removeAll:false] != nil) {
+        return;
+    }
 	self.layer.cornerRadius = [properties parseFloatWithKeys:@[@"border-radius", @"corner-radius"] defaultValue:0.0f];
-
+    
 	if ( self.layer.cornerRadius > 0.0f )
 	{
 		self.layer.masksToBounds = YES;
@@ -715,7 +719,6 @@
 	self.layer.shadowOffset = [properties parseSizeWithKeys:@[@"shadow-offset"] defaultValue:CGSizeZero];
 	self.layer.shadowOpacity = [properties parseFloatWithKeys:@[@"shadow-opacity"] defaultValue:1.0f];
 	self.layer.shadowRadius = [properties parseFloatWithKeys:@[@"shadow-radius"] defaultValue:1.0f];
-//	self.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.bounds].CGPath;
 }
 
 - (void)applyUIStyling:(NSDictionary *)properties
@@ -731,6 +734,29 @@
 	[self applyViewVisibility:propertiesCopy];
 	
 	[super applyUIStyling:propertiesCopy];
+}
+
+- (void)applyUICorners:(NSDictionary *)properties
+{
+    NSMutableDictionary * propertiesCopy = [NSMutableDictionary dictionaryWithDictionary:properties];
+    
+    if ([propertiesCopy stringOfAny:@[@"corners"] removeAll:false] == nil) {
+        return;
+    }
+    float cornerRadius = [propertiesCopy parseFloatWithKeys:@[@"border-radius", @"corner-radius"] defaultValue:0.0f];
+    if ( cornerRadius > 0.0f )
+    {
+        self.layer.cornerRadius = 0;
+        self.layer.mask = nil;
+        UIRectCorner corners = [propertiesCopy parseViewCornersStyleWithKeys:@[@"corners"]];
+        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:self.bounds
+                                                       byRoundingCorners:corners
+                                                             cornerRadii:CGSizeMake(cornerRadius, 0.0)];
+        CAShapeLayer *maskLayer = [CAShapeLayer layer];
+        maskLayer.frame         = self.bounds;
+        maskLayer.path          = maskPath.CGPath;
+        self.layer.mask         = maskLayer;
+    }
 }
 
 @end

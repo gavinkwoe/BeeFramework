@@ -824,6 +824,48 @@
 	return UITextBorderStyleNone;
 }
 
+- (UIRectCorner)parseViewCornersStyleWithKeys:(NSArray *)keys
+{
+    return [self parseViewCornersStyleWithKeys:keys defaultValue:UIRectCornerAllCorners];
+}
+
+- (UIRectCorner)parseViewCornersStyleWithKeys:(NSArray *)keys defaultValue:(UIRectCorner)defaultValue
+{
+    NSString * value = [self parseStringWithKeys:keys];
+    if ( nil == value )
+    {
+        return defaultValue;
+    }
+    
+    NSMutableArray *values = [NSMutableArray arrayWithArray:[value componentsSeparatedByString:@"-"]];
+    UIRectCorner corners = [self parseCornerByString:[values safeObjectAtIndex:0]];
+    [values removeObjectAtIndex:0];
+    for (NSString * str in values) {
+        corners = corners | [self parseCornerByString:str];
+    }
+    return corners;
+}
+
+- (UIRectCorner)parseCornerByString:(NSString *)str
+{
+    UIRectCorner corners;
+    if ( [str matchAnyOf:@[@"BL", @"BottomLeft"]] ) {
+        corners = UIRectCornerBottomLeft;
+    }else if ( [str matchAnyOf:@[@"BR", @"BottomRight"]] )
+    {
+        corners = UIRectCornerBottomRight;
+    }else if ( [str matchAnyOf:@[@"TR", @"TopRight"]] )
+    {
+        corners = UIRectCornerTopRight;
+    }else if ( [str matchAnyOf:@[@"TL", @"TopLeft"]] ){
+        corners = UIRectCornerTopLeft;
+    }else
+    {
+        corners = UIRectCornerAllCorners;
+    }
+    return corners;
+}
+
 @end
 
 #endif	// #if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)

@@ -831,6 +831,7 @@
 //					 viewFrame.size.width, viewFrame.size.height );
 
 				view.frame = viewFrame;
+                [view applyUICorners:view.UIStyle.properties];
 			}
 		}
 		
