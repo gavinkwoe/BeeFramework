@@ -120,8 +120,15 @@ DEF_NOTIFICATION( RECEIVED )
 
 #else	// #if TARGET_IPHONE_SIMULATOR && __BEE_DEVELOPMENT__
 	
-	UIRemoteNotificationType types = UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert;
-	[[UIApplication sharedApplication] registerForRemoteNotificationTypes:types];
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
+        UIUserNotificationType myTypes = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+        
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:myTypes categories:nil];
+        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    }else {
+        UIRemoteNotificationType myTypes = UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeSound;
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:myTypes];
+    }
 
 #endif	// #if TARGET_IPHONE_SIMULATOR && __BEE_DEVELOPMENT__
 }
