@@ -64,39 +64,41 @@
 	}
 	else
 	{
-		NSMutableArray * tempFeeds = [NSMutableArray array];
-		for ( NSObject * elem in self )
-		{
-			[tempFeeds addObject:elem];
-			if ( [tempFeeds count] >= count )
-				break;
-		}
-		return tempFeeds;
+//		NSMutableArray * tempFeeds = [NSMutableArray array];
+//		for ( NSObject * elem in self )
+//		{
+//			[tempFeeds addObject:elem];
+//			if ( [tempFeeds count] >= count )
+//				break;
+//		}
+//        return tempFeeds;
+        NSRange range = NSMakeRange( 0, count );
+        return [self subarrayWithRange:range];
 	}
 }
 
 - (NSArray *)tail:(NSUInteger)count
 {	
-//	if ( [self count] < count )
-//	{
-//		return self;
-//	}
-//	else
-//	{
+    if ( [self count] < count )
+    {
+        return self;
+    }
+    else
+    {
 //        NSMutableArray * tempFeeds = [NSMutableArray array];
-//		
+//        
 //        for ( NSUInteger i = 0; i < count; i++ )
-//		{
+//        {
 //            [tempFeeds insertObject:[self objectAtIndex:[self count] - i] atIndex:0];
 //        }
-//
-//		return tempFeeds;
-//	}
+//        
+//        return tempFeeds;
+        NSRange range = NSMakeRange( self.count - count, count );
+        return [self subarrayWithRange:range];
+    }
 
 // thansk @lancy, changed: NSArray tail: count
 
-	NSRange range = NSMakeRange( self.count - count, count );
-	return [self subarrayWithRange:range];
 }
 
 - (id)safeObjectAtIndex:(NSInteger)index
@@ -295,9 +297,7 @@ static void			__TTReleaseNoOp( CFAllocatorRef allocator, const void * value ) { 
 
 - (void)unique
 {
-	[self unique:^NSComparisonResult(id left, id right) {
-		return [left compare:right];
-	}];
+	[self unique:nil];
 }
 
 - (void)unique:(NSMutableArrayCompareBlock)compare
@@ -312,8 +312,14 @@ static void			__TTReleaseNoOp( CFAllocatorRef allocator, const void * value ) { 
 	NSMutableArray * dupArray = [NSMutableArray nonRetainingArray];
 	NSMutableArray * delArray = [NSMutableArray nonRetainingArray];
 
-	[dupArray addObjectsFromArray:self];
-	[dupArray sortUsingComparator:compare];
+    [dupArray addObjectsFromArray:self];
+    if (compare) {
+        [dupArray sortUsingComparator:compare];
+    }else{
+        [dupArray sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            return [obj1 compare:obj2];
+        }];
+    }
 	
 	for ( NSUInteger i = 0; i < dupArray.count; ++i )
 	{
@@ -321,8 +327,14 @@ static void			__TTReleaseNoOp( CFAllocatorRef allocator, const void * value ) { 
 		id elem2 = [dupArray safeObjectAtIndex:(i + 1)];
 		
 		if ( elem1 && elem2 )
-		{
-			if ( NSOrderedSame == compare(elem1, elem2) )
+        {
+            NSComparisonResult result;
+            if (compare) {
+                result = compare(elem1, elem2);
+            }else{
+                result = [elem1 compare:elem2];
+            }
+			if ( NSOrderedSame == result )
 			{
 				[delArray addObject:elem1];
 			}
@@ -331,8 +343,12 @@ static void			__TTReleaseNoOp( CFAllocatorRef allocator, const void * value ) { 
 	
 	for ( id delElem in delArray )
 	{
-		[self removeObject:delElem];
-	}
+        [self removeObjectAtIndex:[self indexOfObject:delElem]];
+    }
+    
+    if (compare) {
+        [self sortUsingComparator:compare];
+    }
 }
 
 - (void)sort
@@ -393,8 +409,8 @@ static void			__TTReleaseNoOp( CFAllocatorRef allocator, const void * value ) { 
 		else
 		{
 			NSRange range;
-			range.location = n;
-			range.length = [self count] - n;
+			range.location = [self count] - n;
+			range.length = n;
 			
 			[self removeObjectsInRange:range];
 		}
@@ -427,7 +443,7 @@ static void			__TTReleaseNoOp( CFAllocatorRef allocator, const void * value ) { 
 {
 	if ( [self count] )
 	{
-		[self removeLastObject];
+		[self removeObjectAtIndex:0];
 	}
 	
 	return self;
@@ -523,9 +539,12 @@ static void			__TTReleaseNoOp( CFAllocatorRef allocator, const void * value ) { 
 		{
 			[objectsWillRemove addObject:obj2];
 		}
-	}
-	
-	[self removeObjectsInArray:objectsWillRemove];
+    }
+    
+    for ( id delElem in objectsWillRemove )
+    {
+        [self removeObjectAtIndex:[self indexOfObject:delElem]];
+    }
 }
 
 - (NSMutableArray *)shuffle
