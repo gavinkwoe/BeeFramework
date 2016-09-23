@@ -1,4 +1,4 @@
-***This project is no longer supported or updated. Please do not file issues or pull-requests against this repo. If you wish to continue to develop this code yourself, we recommend you fork it.***
+***This project is no longer supported or updated. Please do not fire issues or pull-requests against this repo. If you wish to continue to develop this code yourself, we recommend you fork it.***
 
 ***Goodbye BeeFramework, Goodbye Steve Jobs era.***
 
