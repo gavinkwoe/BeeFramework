@@ -85,6 +85,10 @@
 	return [self HTTPResponseString];
 }
 
+- (int)responseCode
+{
+    return [self HTTPResponseStatusCode];
+}
 - (float)uploadProgress
 {
 	return [self HTTPUploadProgress];
@@ -188,7 +192,7 @@
 - (NSData *)HTTPResponseData
 {
 	NSArray * array = self.requests;
-    
+
 	for ( BeeHTTPRequest * req in array )
 	{
 		if ( req.succeed || req.failed )
@@ -203,7 +207,7 @@
 - (NSString *)HTTPResponseString
 {
 	NSArray * array = self.requests;
-    
+
 	for ( BeeHTTPRequest * req in array )
 	{
 		if ( req.succeed || req.failed )
@@ -215,37 +219,40 @@
 	return nil;
 }
 
+- (int)HTTPResponseStatusCode
+{
+	NSArray * array = self.requests;
+    
+	for ( BeeHTTPRequest * req in array )
+	{
+		if ( req.succeed || req.failed )
+		{
+			return req.responseStatusCode;
+		}
+	}
+	
+	return 0;
+}
+
 #pragma mark -
 
 - (void)handleRequest:(BeeHTTPRequest *)request
 {
-	if ( request.sendProgressed )
-	{
-		if ( self.toldProgress )
-		{
-			[self internalNotifyProgressUpdated];
-		}
-	}
-	else if ( request.sending )
+	if ( request.sending )
 	{
 		// TODO:
 		request.timeOutSeconds = self.seconds;
-		
-		[self changeState:BeeMessage.STATE_SENDING];
 	}
-	else if ( request.recvProgressed )
+	else if ( request.sendProgressed )
 	{
-		if ( self.toldProgress )
-		{
-			[self internalNotifyProgressUpdated];
-		}
+		[self internalNotifyProgressUpdated];
 	}
 	else if ( request.recving )
 	{
-		if ( self.toldProgress )
-		{
-			[self changeState:BeeMessage.STATE_WAITING];
-		}
+	}
+	else if ( request.recvProgressed )
+	{
+		[self internalNotifyProgressUpdated];
 	}
 	else if ( request.succeed )
 	{
@@ -265,7 +272,7 @@
 			self.errorCode = request.errorCode;
 			self.errorDesc = nil;
 		}
-        
+
 		[self changeState:BeeMessage.STATE_FAILED];
 	}
 	else if ( request.cancelled )

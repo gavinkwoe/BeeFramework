@@ -217,9 +217,8 @@ static BeeUIApplication * __sharedApp = nil;
 	{
 		UNUSED( self.window.rootViewController.view );
 	}
-
-	[self.window makeKeyAndVisible];
 	
+    [self.window makeKeyAndVisible];
 //	[self applySimulation];
 
     if ( nil != launchOptions ) // 从通知启动
@@ -240,6 +239,7 @@ static BeeUIApplication * __sharedApp = nil;
 			[self postNotification:BeeUIApplication.LAUNCHED];
 		}
 		
+
 		[self.window.rootViewController viewWillAppear:NO];
 		[self.window.rootViewController viewDidAppear:NO];
 
@@ -259,7 +259,7 @@ static BeeUIApplication * __sharedApp = nil;
 	}
 	else
 	{
-		[self postNotification:BeeUIApplication.LAUNCHED];
+        [self postNotification:BeeUIApplication.LAUNCHED];
 		
 		[self.window.rootViewController viewWillAppear:NO];
 		[self.window.rootViewController viewDidAppear:NO];

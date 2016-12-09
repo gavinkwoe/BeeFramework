@@ -34,26 +34,26 @@
 
 #pragma mark -
 
-BEE_EXTERN void echo( NSString * text, ... )
-{
-	BeeHTTPWorkflow2 * workflow = [BeeHTTPWorkflow2 processingWorkflow];
-	if ( workflow )
-	{
-		va_list args;
-		va_start( args, text );
-		
-		NSString * content = [[NSString alloc] initWithFormat:(NSString *)text arguments:args];
-		
-		if ( content )
-		{
-			[workflow.connection.response.bodyData appendData:[content asNSData]];
-
-			[content release];
-		}
-		
-		va_end( args );
-	}
-}
+//BEE_EXTERN void echo( NSString * text, ... )
+//{
+//	BeeHTTPWorkflow2 * workflow = [BeeHTTPWorkflow2 processingWorkflow];
+//	if ( workflow )
+//	{
+//		va_list args;
+//		va_start( args, text );
+//		
+//		NSString * content = [[NSString alloc] initWithFormat:(NSString *)text arguments:args];
+//		
+//		if ( content )
+//		{
+//			[workflow.connection.response.bodyData appendData:[content asNSData]];
+//
+//			[content release];
+//		}
+//		
+//		va_end( args );
+//	}
+//}
 
 BEE_EXTERN void line( NSString * text, ... )
 {

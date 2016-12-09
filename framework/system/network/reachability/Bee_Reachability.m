@@ -88,7 +88,7 @@ DEF_NOTIFICATION( CHANGED )
 	{
 		[self observeNotification:kReachabilityChangedNotification];
 		
-		_reach = [[Reachability reachabilityWithHostName:@"www.apple.com"] retain];
+		_reach = [[Reachability reachabilityForInternetConnection] retain];
 		[_reach startNotifier];
 	}
 	return self;

@@ -199,10 +199,10 @@ static NSMutableArray *	__models = nil;
 
 - (void)dealloc
 {
-	if ( self.autoSave )
-	{
-		[self saveCache];
-	}
+//	if ( self.autoSave )
+//	{
+//		[self saveCache];
+//	}
 
 //	[self unload];
 	[self performUnload];

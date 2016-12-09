@@ -1722,7 +1722,7 @@ DEF_NUMBER( INVALID_ID,	-1 )
 								}
 							}
 
-							value = [results JSONString];
+							value = [results JSONStringArr];
 						}
 						else
 						{
@@ -1741,7 +1741,7 @@ DEF_NUMBER( INVALID_ID,	-1 )
 			}
 			else if ( BeeTypeEncoding.NSDICTIONARY == type.intValue )
 			{
-				value = [(NSDictionary *)value JSONString];
+				value = [(NSDictionary *)value JSONStringDic];
 			}
 			else if ( BeeTypeEncoding.OBJECT == type.intValue )
 			{

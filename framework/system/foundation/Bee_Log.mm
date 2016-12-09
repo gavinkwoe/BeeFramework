@@ -176,16 +176,7 @@ DEF_SINGLETON( BeeLogger );
 	homePath = [NSBundle mainBundle].bundlePath;
 	homePath = [homePath stringByReplacingOccurrencesOfString:@" " withString:@"\\ "];
 
-	fprintf( stderr, "    												\n" );
-	fprintf( stderr, "    												\n" );
-	fprintf( stderr, "    	 ______    ______    ______					\n" );
-	fprintf( stderr, "    	/\\  __ \\  /\\  ___\\  /\\  ___\\			\n" );
-	fprintf( stderr, "    	\\ \\  __<  \\ \\  __\\_ \\ \\  __\\_		\n" );
-	fprintf( stderr, "    	 \\ \\_____\\ \\ \\_____\\ \\ \\_____\\		\n" );
-	fprintf( stderr, "    	  \\/_____/  \\/_____/  \\/_____/			\n" );
-	fprintf( stderr, "    												\n" );
-	fprintf( stderr, "    												\n" );
-	fprintf( stderr, "    	version %s									\n", [BEE_VERSION UTF8String] );
+	fprintf( stderr, "    	beeFramework version %s				\n", [BEE_VERSION UTF8String] );
 	fprintf( stderr, "    												\n" );
 	fprintf( stderr, "%s	\n", [BeeSystemInfo OSVersion].UTF8String );
 	fprintf( stderr, "%s	\n", [BeeSystemInfo deviceModel].UTF8String );

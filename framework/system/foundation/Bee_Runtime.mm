@@ -279,7 +279,7 @@ DEF_INT( NSDATE,		6 )
 		return YES;
 	if ( clazz == [NSObject class] )
 		return YES;
-	if ( clazz == [NSString class] )
+	if ( clazz == [NSString class] || [[clazz description] isEqualToString:@"__NSCFString"] || [[clazz description] isEqualToString:@"__NSConstantString"] )
 		return YES;
 	if ( clazz == [NSURL class] )
 		return YES;

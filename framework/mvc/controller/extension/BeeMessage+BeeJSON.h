@@ -43,9 +43,12 @@ typedef BeeHTTPRequest * (^BeeMessageJSONRequestBlock)( NSString * url, id json 
 
 @property (nonatomic, readonly) BeeMessageJSONRequestBlock	JSON_GET;
 @property (nonatomic, readonly) BeeMessageJSONRequestBlock	JSON_POST;
+@property (nonatomic, readonly) BeeMessageJSONRequestBlock	JSON_PUT;
+
 
 @property (nonatomic, readonly) id							responseJSON;
 @property (nonatomic, readonly) NSDictionary *				responseJSONDictionary;
+@property (nonatomic, assign)   int                         responseStatusCode;
 @property (nonatomic, readonly) NSArray *					responseJSONArray;
 
 @end

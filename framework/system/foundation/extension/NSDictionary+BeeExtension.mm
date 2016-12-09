@@ -372,9 +372,9 @@
 			const char *	attr = property_getAttributes(properties[i]);
 			NSUInteger		type = [BeeTypeEncoding typeOf:attr];
 			
-			BOOL readonly = [BeeTypeEncoding isReadOnly:attr];
-			if ( readonly )
-				continue;
+//			BOOL readonly = [BeeTypeEncoding isReadOnly:attr];
+//			if ( readonly )
+//				continue;
 
 			NSObject *	tempValue = [self objectForKey:propertyName];
 			NSObject *	value = nil;

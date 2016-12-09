@@ -490,7 +490,7 @@ DEF_SIGNAL( DRAG_EXIT )			// 退出
 											userInfo:nil
 											 repeats:NO];
 
-	if ( NO == [self testEvent:UIControlEventTouchDown] )
+	//if ( NO == [self testEvent:UIControlEventTouchDown] )
 	{
 		[self sendUISignal:BeeUIButton.TOUCH_DOWN];
 	}

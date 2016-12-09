@@ -34,6 +34,7 @@
 #import "Bee_UIImageLoader.h"
 #import "Bee_UIImageCache.h"
 #import "Bee_UIConfig.h"
+#import "Bee_UIImageView.h"
 
 #import "Bee_Cache.h"
 #import "Bee_Network.h"

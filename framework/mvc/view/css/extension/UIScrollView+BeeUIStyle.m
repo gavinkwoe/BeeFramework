@@ -56,16 +56,14 @@
 		{
 			if ( [self respondsToSelector:@selector(setHorizontal:)] )
 			{
-				BOOL i = YES;
-                [(BeeUIScrollView *)self setHorizontal:i];
+				((BOOL(*)(id, SEL, BOOL))objc_msgSend)( self, @selector(setHorizontal:), YES );
 			}
 		}
 		else
 		{
 			if ( [self respondsToSelector:@selector(setVertical:)] )
 			{
-				BOOL i = YES;
-                [(BeeUIScrollView *)self setVertical:i];
+				((BOOL(*)(id, SEL, BOOL))objc_msgSend)( self, @selector(setVertical:), YES );
 			}
 		}
 	}
@@ -73,8 +71,7 @@
 	{
 		if ( [self respondsToSelector:@selector(setVertical:)] )
 		{
-			BOOL i = YES;
-            [(BeeUIScrollView *)self setVertical:i];
+			((BOOL(*)(id, SEL, BOOL))objc_msgSend)( self, @selector(setVertical:), YES );
 		}
 	}
 }
@@ -91,12 +88,12 @@
 			if ( [scrollInsets matchAnyOf:@[@"auto"]] )
 			{
 				UIEdgeInsets insets = [BeeUIConfig sharedInstance].baseInsets;
-                [(BeeUIScrollView *)self setExtInsets:insets];
+				((BOOL(*)(id, SEL, UIEdgeInsets))objc_msgSend)( self, @selector(setExtInsets:), insets );
 			}
 			else
 			{
 				UIEdgeInsets insets = UIEdgeInsetsFromStringEx( scrollInsets );
-                [(BeeUIScrollView *)self setExtInsets:insets];
+				((BOOL(*)(id, SEL, UIEdgeInsets))objc_msgSend)( self, @selector(setExtInsets:), insets);
 			}
 		}
 	}
@@ -116,7 +113,8 @@
 			{
 				lineCount = 1;
 			}
-            [(BeeUIScrollView *)self setLineCount:lineCount];
+			
+			((BOOL(*)(id, SEL, NSInteger))objc_msgSend)( self, @selector(setLineCount:), lineCount);
 		}
 	}
 }

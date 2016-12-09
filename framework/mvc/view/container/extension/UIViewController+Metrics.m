@@ -84,8 +84,10 @@
 	
 	if ( UIInterfaceOrientationIsLandscape(self.interfaceOrientation) )
 	{
-		bounds.origin = CGPointMake( bounds.origin.y, bounds.origin.x );
-		bounds.size = CGSizeMake( bounds.size.height, bounds.size.width );
+        if (bounds.size.width<bounds.size.height) {
+            bounds.origin = CGPointMake( bounds.origin.y, bounds.origin.x );
+            bounds.size = CGSizeMake( bounds.size.height, bounds.size.width );
+        }
 		
 		if ( IOS6_OR_EARLIER )
 		{

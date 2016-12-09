@@ -98,7 +98,6 @@
 	NSRange range = NSMakeRange( self.count - count, count );
 	return [self subarrayWithRange:range];
 }
-
 - (id)safeObjectAtIndex:(NSInteger)index
 {
 	if ( index < 0 )
@@ -118,7 +117,7 @@
 	if ( range.location >= self.count )
 		return nil;
 
-	if ( range.location + range.length > self.count )
+	if ( range.location + range.length >= self.count )
 		return nil;
 	
 	return [self subarrayWithRange:NSMakeRange(range.location, range.length)];
@@ -189,7 +188,12 @@ static void			__TTReleaseNoOp( CFAllocatorRef allocator, const void * value ) { 
 	callbacks.release = __TTReleaseNoOp;
 	return [(NSMutableArray *)CFArrayCreateMutable( nil, 0, &callbacks ) autorelease];
 }
-
+- (void)safeAddObject:(id)obj
+{
+    if (obj) {
+        [self addObject:obj];
+    }
+}
 - (void)addUniqueObject:(id)object compare:(NSMutableArrayCompareBlock)compare
 {
 	BOOL found = NO;
@@ -526,20 +530,6 @@ static void			__TTReleaseNoOp( CFAllocatorRef allocator, const void * value ) { 
 	}
 	
 	[self removeObjectsInArray:objectsWillRemove];
-}
-
-- (NSMutableArray *)shuffle
-{
-    NSInteger count = [self count];
-    
-    for (NSInteger i = 0; i < count; ++i)
-    {
-        NSInteger temp =  (arc4random() % (count - i));
-        NSInteger n = temp + i;
-        [self exchangeObjectAtIndex:i withObjectAtIndex:n];
-    }
-    
-    return self;
 }
 
 @end

@@ -38,6 +38,7 @@
 #import "Bee_Cache.h"
 #import "Bee_Network.h"
 #import "Bee_UIActivityIndicatorView.h"
+#import "Bee_UIMetrics.h"
 
 #import "UIImage+BeeExtension.h"
 
@@ -328,7 +329,7 @@ DEF_SIGNAL( LOAD_CACHE )
 	{
 		self.hidden = NO;
 		self.backgroundColor = [UIColor clearColor];
-		self.contentMode = UIViewContentModeCenter;
+		self.contentMode = UIViewContentModeScaleAspectFit;
 		self.layer.masksToBounds = YES;
 		self.layer.opaque = YES;
 

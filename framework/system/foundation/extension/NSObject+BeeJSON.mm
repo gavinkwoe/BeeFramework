@@ -35,6 +35,7 @@
 #import "Bee_Runtime.h"
 #import "NSObject+BeeTypeConversion.h"
 #import "NSDictionary+BeeExtension.h"
+#import "JSONKit.h"
 
 // ----------------------------------
 // Source code
@@ -598,14 +599,14 @@
 			}
 		}
 
-		json = [array JSONString];
+		json = [array JSONStringArr];
 	}
 	else if ( BeeTypeEncoding.NSDICTIONARY == propertyType )
 	{
 		NSDictionary * dict = [self objectToDictionaryUntilRootClass:rootClass];
 		if ( dict )
 		{
-			json = [dict JSONString];
+			json = [dict JSONStringDic];
 		}
 	}
 	else if ( BeeTypeEncoding.NSDATE == propertyType )
@@ -620,7 +621,7 @@
 			dict = [NSDictionary dictionary];
 		}
 		
-		json = [dict JSONString];
+		json = [dict JSONStringDic];
 	}
 
 	if ( nil == json || 0 == json.length )

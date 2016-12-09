@@ -86,7 +86,9 @@
 			NSString *		propertyName = [NSString stringWithCString:name encoding:NSUTF8StringEncoding];
 			NSObject *		propertyValue = [self valueForKey:propertyName];
 
-			[desc appendString:[propertyValue description]];
+            if ([propertyValue respondsToSelector:@selector(description)]) {
+                [desc appendString:[propertyValue description]];
+            }
 			[desc appendString:@"\n"];
 		}
 
