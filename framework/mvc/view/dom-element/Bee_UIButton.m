@@ -172,7 +172,7 @@ DEF_SIGNAL( DRAG_EXIT )			// 退出
 @dynamic titleColor;
 @dynamic titleShadowColor;
 @dynamic titleFont;
-@dynamic titleInsets;
+@dynamic titleEdgeInsets;
 @dynamic titleTextAlignment;
 @dynamic image;
 @synthesize signal = _signal;
@@ -313,83 +313,103 @@ DEF_SIGNAL( DRAG_EXIT )			// 退出
 
 - (NSString *)title
 {
-	return _label ? _label.text : @"";
+//	return _label ? _label.text : @"";
+    return self.titleLabel?self.titleLabel.text:@"";
 }
 
 - (void)setTitle:(NSString *)str
 {
-	[self initLabel];
-
-	_label.text = str;
+//	[self initLabel];
+//
+//	_label.text = str;
+    [self setTitle:str forState:UIControlStateNormal];
+    [self setTitle:str forState:UIControlStateSelected];
+    [self setTitle:str forState:UIControlStateHighlighted];
+    [self setTitle:str forState:UIControlStateDisabled];
 }
 
 - (UIColor *)titleColor
 {
-	return _label ? _label.textColor : [UIColor clearColor];
+//	return _label ? _label.textColor : [UIColor clearColor];
+    return self.titleLabel?self.titleLabel.textColor:[UIColor clearColor];
 }
 
 - (void)setTitleColor:(UIColor *)color
 {
-	[self initLabel];
-	
-	_label.textColor = color;
+//	[self initLabel];
+//	
+//	_label.textColor = color;
+    [self setTitleColor:color forState:UIControlStateNormal];
+    [self setTitleColor:color forState:UIControlStateHighlighted];
+    [self setTitleColor:color forState:UIControlStateSelected];
 }
 
 - (UIColor *)titleShadowColor
 {
-	return _label ? _label.shadowColor : [UIColor clearColor];
+    return self.titleLabel? self.titleLabel.shadowColor:[UIColor clearColor];
+//	return _label ? _label.shadowColor : [UIColor clearColor];
 }
 
 - (void)setTitleShadowColor:(UIColor *)color
 {
-	[self initLabel];
-	
-	_label.shadowColor = color;
-	_label.shadowOffset = CGSizeMake( 0.0f, -0.5f );
+//	[self initLabel];
+//	
+//	_label.shadowColor = color;
+//	_label.shadowOffset = CGSizeMake( 0.0f, -0.5f );
+    [self setTitleShadowColor:color forState:UIControlStateNormal];
+    [self setTitleShadowColor:color forState:UIControlStateHighlighted];
+    [self setTitleShadowColor:color forState:UIControlStateSelected];
+    [self setTitleShadowColor:color forState:UIControlStateDisabled];
 }
 
 - (UIFont *)titleFont
 {
-	return _label ? _label.font : nil;
+    return self.titleLabel?self.titleLabel.font:nil;
+//	return _label ? _label.font : nil;
 }
 
 - (void)setTitleFont:(UIFont *)font
 {
-	[self initLabel];
-	
-	_label.font = font;
+//	[self initLabel];
+//	
+//	_label.font = font;
+    self.titleLabel.font = font;
 }
 
 - (UIEdgeInsets)titleInsets
 {
-	return _insets;
+//	return _insets;
+    return self.titleEdgeInsets;
 }
 
 - (void)setTitleInsets:(UIEdgeInsets)insets
 {
-	[self initLabel];
-	
-	_insets = insets;
-	
-	CGRect frame = CGRectInset( self.bounds, insets.left, insets.top );
-	frame.size.width -= insets.left;
-	frame.size.height -= insets.top;
-	frame.size.width -= insets.right;
-	frame.size.height -= insets.bottom;
-	
-	_label.frame = frame;
+//	[self initLabel];
+//	
+//	_insets = insets;
+//	
+//	CGRect frame = CGRectInset( self.bounds, insets.left, insets.top );
+//	frame.size.width -= insets.left;
+//	frame.size.height -= insets.top;
+//	frame.size.width -= insets.right;
+//	frame.size.height -= insets.bottom;
+//	
+//	_label.frame = frame;
+    [self setTitleEdgeInsets:insets];
 }
 
 - (UITextAlignment)titleTextAlignment
 {
-	return _label ? _label.textAlignment : UITextAlignmentLeft;;
+    return self.titleLabel?self.titleLabel.textAlignment:NSTextAlignmentCenter;
+//	return _label ? _label.textAlignment : UITextAlignmentLeft;;
 }
 
 - (void)setTitleTextAlignment:(UITextAlignment)alignment
 {
-	[self initLabel];
-	
-    [_label setTextAlignment:alignment];
+//	[self initLabel];
+//	
+//    [_label setTextAlignment:alignment];
+    [self setTitleTextAlignment:alignment];
 }
 
 - (UIImage *)image
@@ -415,6 +435,11 @@ DEF_SIGNAL( DRAG_EXIT )			// 退出
 		_stateNormal = [[BeeUIButtonState alloc] init];
 		_stateNormal.button = self;
 		_stateNormal.state = UIControlStateNormal;
+        _stateNormal.title = [self titleForState:UIControlStateNormal];
+        _stateNormal.image = [self imageForState:UIControlStateNormal];
+        _stateNormal.titleColor = [self titleColorForState:UIControlStateNormal];
+        _stateNormal.titleShadowColor = [self titleShadowColorForState:UIControlStateNormal];
+        _stateNormal.backgroundImage = [self backgroundImageForState:UIControlStateNormal];
 	}
 	
 	return _stateNormal;
@@ -427,6 +452,11 @@ DEF_SIGNAL( DRAG_EXIT )			// 退出
 		_stateHighlighted = [[BeeUIButtonState alloc] init];
 		_stateHighlighted.button = self;
 		_stateHighlighted.state = UIControlStateHighlighted;
+        _stateNormal.title = [self titleForState:UIControlStateHighlighted];
+        _stateNormal.image = [self imageForState:UIControlStateHighlighted];
+        _stateNormal.titleColor = [self titleColorForState:UIControlStateHighlighted];
+        _stateNormal.titleShadowColor = [self titleShadowColorForState:UIControlStateHighlighted];
+        _stateNormal.backgroundImage = [self backgroundImageForState:UIControlStateHighlighted];
 	}
 	
 	return _stateHighlighted;
@@ -439,6 +469,11 @@ DEF_SIGNAL( DRAG_EXIT )			// 退出
 		_stateDisabled = [[BeeUIButtonState alloc] init];
 		_stateDisabled.button = self;
 		_stateDisabled.state = UIControlStateDisabled;
+        _stateNormal.title = [self titleForState:UIControlStateDisabled];
+        _stateNormal.image = [self imageForState:UIControlStateDisabled];
+        _stateNormal.titleColor = [self titleColorForState:UIControlStateDisabled];
+        _stateNormal.titleShadowColor = [self titleShadowColorForState:UIControlStateDisabled];
+        _stateNormal.backgroundImage = [self backgroundImageForState:UIControlStateDisabled];
 	}
 	
 	return _stateDisabled;
@@ -451,6 +486,11 @@ DEF_SIGNAL( DRAG_EXIT )			// 退出
 		_stateSelected = [[BeeUIButtonState alloc] init];
 		_stateSelected.button = self;
 		_stateSelected.state = UIControlStateSelected;
+        _stateNormal.title = [self titleForState:UIControlStateSelected];
+        _stateNormal.image = [self imageForState:UIControlStateSelected];
+        _stateNormal.titleColor = [self titleColorForState:UIControlStateSelected];
+        _stateNormal.titleShadowColor = [self titleShadowColorForState:UIControlStateSelected];
+        _stateNormal.backgroundImage = [self backgroundImageForState:UIControlStateSelected];
 	}
 	
 	return _stateSelected;
@@ -627,20 +667,20 @@ DEF_SIGNAL( DRAG_EXIT )			// 退出
 
 #pragma mark -
 
-- (void)setTitle:(NSString *)title forState:(UIControlState)state
-{
-	[self setTitle:title];
-}
-
-- (void)setTitleColor:(UIColor *)color forState:(UIControlState)state
-{
-	[self setTitleColor:color];
-}
-
-- (void)setTitleShadowColor:(UIColor *)color forState:(UIControlState)state
-{
-	[self setTitleShadowColor:color];
-}
+//- (void)setTitle:(NSString *)title forState:(UIControlState)state
+//{
+////	[self setTitle:title];
+//}
+//
+//- (void)setTitleColor:(UIColor *)color forState:(UIControlState)state
+//{
+////	[self setTitleColor:color];
+//}
+//
+//- (void)setTitleShadowColor:(UIColor *)color forState:(UIControlState)state
+//{
+////	[self setTitleShadowColor:color];
+//}
 
 @end
 
